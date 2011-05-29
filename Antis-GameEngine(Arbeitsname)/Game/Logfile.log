@@ -1,0 +1,4 @@
+ENGINE:LOGFILE::Logfile open and ready to write in
+ENGINE::MAIN : Read and interpret Game.ini.
+ENGINE::MAIN : Succesfully create window.
+ENGINE:LOGFILE::Logfile shutting down...
