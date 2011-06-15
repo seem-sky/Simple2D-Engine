@@ -3,103 +3,92 @@
 
 CDirect3D::CDirect3D()
 {
-	m_pSwapChain            = 0;
-	m_pDevice               = 0;
-    m_pDeviceContext        = 0;
-	m_pRenderTargetView     = 0;
-	m_depthStencilBuffer    = 0;
-	m_depthStencilState     = 0;
-	m_depthStencilView      = 0;
-	m_rasterState           = 0;
+    m_lpD3D                         = NULL;
+    m_lpD3DDevice                   = NULL;
+    m_lpBackBuffer                  = NULL;
+    m_pLogfile                      = CLogfile::Get();
+    m_sLogLocationName              = LOGFILE_ENGINE_LOG_NAME + "Direct3D : ";
 }
 
 CDirect3D::~CDirect3D()
 {
-    Shutdown();
+    CleanUp();
 }
 
 // Direct3D initialisieren
-bool CDirect3D::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hWnd, bool fullscreen, float screenDepth, float screenNear)
+bool CDirect3D::Initialize(HWND hWnd, const UINT uiScreenWidth, const UINT uiScreenHeight, const bool bWindowed)
 {
-	// create a struct to hold information about the swap chain
-    DXGI_SWAP_CHAIN_DESC scd;
+    // create Direct3D object
+    if(FAILED(m_lpD3D = Direct3DCreate9(D3D_SDK_VERSION)))
+    {
+        // can´t create Direct3D Object
+        BASIC_LOG(m_sLogLocationName + "Unable to create Direct3D Object.");
+        return false;
+    }
 
-    // clear out the struct for use
-    ZeroMemory(&scd, sizeof(DXGI_SWAP_CHAIN_DESC));
+    D3DPRESENT_PARAMETERS PParams;
+    ZeroMemory(&PParams, sizeof(PParams));
 
-    // fill the swap chain description struct
-    scd.BufferCount = 1;                                    // one back buffer
-    scd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;     // use 32-bit color
-    scd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;      // how swap chain is to be used
-    scd.OutputWindow = hWnd;                                // the window to be used
-    scd.SampleDesc.Count = 4;                               // how many multisamples
-    scd.Windowed = TRUE;                                    // windowed/full-screen mode
+    PParams.SwapEffect       = D3DSWAPEFFECT_DISCARD;
+    PParams.hDeviceWindow    = hWnd;
+    PParams.Windowed         = bWindowed;
 
-    // create a device, device context and swap chain using the information in the scd struct
-    D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, NULL, NULL, NULL, D3D11_SDK_VERSION, &scd, &m_pSwapChain, &m_pDevice, NULL, &m_pDeviceContext);
+    PParams.BackBufferWidth  = uiScreenWidth;
+    PParams.BackBufferHeight = uiScreenHeight;
+
+    PParams.BackBufferFormat = D3DFMT_X8R8G8B8;
+
+    PParams.Flags            = D3DPRESENTFLAG_LOCKABLE_BACKBUFFER;
+
+    // create direct3D device
+    if(FAILED(m_lpD3D->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hWnd, D3DCREATE_SOFTWARE_VERTEXPROCESSING, &PParams, &m_lpD3DDevice)))
+    {
+        // can´t create direct3D device
+        BASIC_LOG(m_sLogLocationName + "Unable to create Direct3D Device.");
+        return false;
+    }
+    // pointer for the backbuffer
+    if(FAILED(m_lpD3DDevice->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &m_lpBackBuffer)))
+    {
+        // can´t create backbuffer
+        BASIC_LOG(m_sLogLocationName + "Unable to create Direct3D Backbuffer.");
+        return false;
+    }
     return true;
 }
 
-void CDirect3D::Shutdown()
+void CDirect3D::BeginScene(void)
 {
-    // close and release all existing COM objects
-    m_pSwapChain->Release();
-    m_pDevice->Release();
-    m_pDeviceContext->Release();
+    m_lpD3DDevice->Clear(0, 0, D3DCLEAR_TARGET, m_ClearColor, 0, 0);
+
+    m_lpD3DDevice->BeginScene();
 }
 
-void CDirect3D::BeginScene(float red, float green, float blue, float alpha)
+void CDirect3D::EndScene(void)
 {
-	float color[4];
+    m_lpD3DDevice->EndScene();
 
-
-	// Setup the color to clear the buffer to.
-	color[0] = red;
-	color[1] = green;
-	color[2] = blue;
-	color[3] = alpha;
-
-	// Clear the back buffer.
-	m_pDeviceContext->ClearRenderTargetView(m_pRenderTargetView, color);
-    
-	// Clear the depth buffer.
-	m_pDeviceContext->ClearDepthStencilView(m_depthStencilView, D3D10_CLEAR_DEPTH, 1.0f, 0);
-
-	return;
+    m_lpD3DDevice->Present(0, 0, 0, 0);
 }
 
-
-void CDirect3D::EndScene()
+// release objects
+void CDirect3D::CleanUp(void)
 {
-	// Present the back buffer to the screen since rendering is complete.
-	if(m_vsync_enabled)
-	{
-		// Lock to screen refresh rate.
-		m_pSwapChain->Present(1, 0);
-	}
-	else
-	{
-		// Present as fast as possible.
-		m_pSwapChain->Present(0, 0);
-	}
+    if(m_lpBackBuffer)
+    {
+        m_lpBackBuffer->Release();
+        m_lpBackBuffer = NULL;
+    }
 
-	return;
-}
+    if(m_lpD3DDevice)
+    {
+        m_lpD3DDevice->Release();
+        m_lpD3DDevice = NULL;
+    }
 
-
-ID3D11Device* CDirect3D::GetDevice()
-{
-	return m_pDevice;
-}
-
-ID3D11DeviceContext* CDirect3D::GetDeviceContext()
-{
-	return m_pDeviceContext;
-}
-
-void CDirect3D::GetVideoCardInfo(char* cardName, int& memory)
-{
-	strcpy_s(cardName, 128, m_videoCardDescription);
-	memory = m_videoCardMemory;
-	return;
+    if(m_lpD3D)
+    {
+        m_lpD3D->Release();
+        m_lpD3D = NULL;
+    }
 }

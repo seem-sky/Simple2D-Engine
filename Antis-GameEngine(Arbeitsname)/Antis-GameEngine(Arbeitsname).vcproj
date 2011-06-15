@@ -61,6 +61,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="d3d9.lib d3dx9.lib"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -93,7 +94,8 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			CharacterSet="1"
+			UseOfATL="1"
+			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -182,9 +184,61 @@
 			Name="Game"
 			>
 			<File
+				RelativePath=".\Game.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Game.h"
+				>
+			</File>
+			<File
 				RelativePath=".\main.cpp"
 				>
 			</File>
+			<Filter
+				Name="Layer"
+				>
+				<File
+					RelativePath=".\Layer.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Layer.h"
+					>
+				</File>
+				<File
+					RelativePath=".\ObjectLayer.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\ObjectLayer.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Objects"
+				>
+				<File
+					RelativePath=".\WorldObject.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\WorldObject.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Movement"
+				>
+				<File
+					RelativePath=".\MovementGenerator.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\MovementGenerator.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="File In-/Output"
@@ -206,6 +260,14 @@
 			Name="Controlling"
 			>
 			<File
+				RelativePath=".\DefaultIniData.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Global.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Logfile.cpp"
 				>
 			</File>
@@ -214,10 +276,42 @@
 				>
 			</File>
 			<File
+				RelativePath=".\RessourceManager.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\RessourceManager.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Singleton.h"
 				>
 			</File>
+			<File
+				RelativePath=".\StringAdditions.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Time.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Time.h"
+				>
+			</File>
 		</Filter>
+		<Filter
+			Name="Grafic"
+			>
+		</Filter>
+		<File
+			RelativePath=".\Unit.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Unit.h"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

@@ -1,13 +1,18 @@
 #ifndef GAME_INFO_H
 #define GAME_INFO_H
+
 #include "FileInput.h"
+#include "DefaultIniData.h"
 
 const string GAME_DATA_GAME_INI = "Game.ini";
+
+// strings for searching in ini
 const string SEARCH_STRING_PROJECT_NAME     = "Project Name =";
 const string SEARCH_STRING_SCREEN_WIDTH     = "ScreenWidth =";
 const string SEARCH_STRING_SCREEN_HEIGHT    = "ScreenHeight =";
 const string SEARCH_STRING_WINDOWED         = "Windowed =";
-const string DEFAULT_INI_DATA               = "Project Name = Anti´s GameEngine\nScreenWidth = 320\nScreenHeight = 240\nWindowed = 0";
+
+// number of data which are stored in ini
 const unsigned int MAX_DATA_TO_READ         = 4;
 
 #define SIZE_OF_DATA sizeof(m_caData) / sizeof(char) / READ_DATA_MAX_LETTER_IN_ROW
@@ -21,6 +26,7 @@ public:
     bool IsWindowed() { return m_bWindowed; }
     // create Game.ini with default stats
     void CreateIniByDefault();
+    void SaveDataToIni();
 protected:
     void InterpretFile();
     char* GetFileData();

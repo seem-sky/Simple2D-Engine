@@ -1,11 +1,10 @@
 #ifndef FILE_INPUT_H
 #define FILE_INPUT_H
-#include <string>
+
 #include <iostream>
 #include <fstream>
 #include "Logfile.h"
-
-using namespace std;
+#include "StringAdditions.h"
 
 const unsigned READ_DATA_MAX_LETTER_IN_ROW = 256;
 
@@ -16,6 +15,7 @@ public:
     TFileInput(void)
     {
         m_sFileDirectory = "";
+        m_sLogLocationName = LOGFILE_ENGINE_LOG_NAME + "TFileInput : ";
         DeleteFileData();
         m_pLogfile = CLogfile::Get();
     }
@@ -26,7 +26,7 @@ public:
         fopen_s(&Data, (m_sFileDirectory + sFileName).c_str(), "rt");
         if(!Data)
         {
-            ERROR_LOG("ENGINE::FILE_INPUT : Can´t open " + m_sFileDirectory + sFileName + ". No such file or directory.");
+            ERROR_LOG(m_sLogLocationName + "Unable to open " + m_sFileDirectory + sFileName + ". No such file or directory.");
             return false;
         }
         if (char *pFileData = GetFileData())
@@ -45,6 +45,7 @@ public:
         }
         else
         {
+            ERROR_LOG(m_sLogLocationName + "pFileData is not a valid pointer.");
             fclose(Data);
             return false;
         }
@@ -56,6 +57,7 @@ protected:
     virtual unsigned int GetFileDataRows() { return NULL; }
 
     string m_sFileDirectory;
+    string m_sLogLocationName;
     CLogfile *m_pLogfile;
 private:
     void DeleteFileData()

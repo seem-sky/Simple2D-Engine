@@ -1,4 +1,6 @@
-ENGINE:LOGFILE::Logfile open and ready to write in
-ENGINE::MAIN : Read and interpret Game.ini.
-ENGINE::MAIN : Succesfully create window.
-ENGINE:LOGFILE::Logfile shutting down...
+ENGINE::CLogfile : Logfile open and ready to write in
+ENGINE::CGame : Read and interpret Game.ini.
+ENGINE::main : Succesfully create window.
+ENGINE::CGame : Succesfully initialize Direct3D.
+ENGINE::main : Succesfully initialize Game.
+ENGINE::main : Succesfully start Time.

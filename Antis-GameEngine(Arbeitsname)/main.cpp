@@ -1,15 +1,16 @@
 #include <windows.h>
 #include <windowsx.h>
-#include "Direct3D.h"
-#include "GameInfo.h"
-//#include "DirectInput.h"
+#include "Time.h"
+#include "Game.h"
 
 // globals
 HINSTANCE g_hInst       = NULL;
 HWND g_hWnd             = NULL;
 CLogfile *m_pLogfile    = NULL;
+CTime *m_pTime          = NULL;
+CGame *m_pGame          = NULL;
 
-HRESULT InitWindow ( HINSTANCE hInstance, int nCmdShow, CGameInfo GameInfo );
+HRESULT InitWindow ( HINSTANCE hInstance, int nCmdShow, CGameInfo *GameInfo );
 LRESULT CALLBACK WndProc( HWND, UINT, WPARAM, LPARAM );
 void ReleaseObjects();
 
@@ -26,38 +27,69 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
         ReleaseObjects();
         return 0;
     }
+    string m_sLogLocationName  = LOGFILE_ENGINE_LOG_NAME + "main : ";
 
-    // read game ini data
-    CGameInfo GameInfo;
-    if (!GameInfo.ReadFile(GAME_DATA_GAME_INI))
-        GameInfo.CreateIniByDefault();
-    else
-        BASIC_LOG("ENGINE::MAIN : Read and interpret " + GAME_DATA_GAME_INI + ".");
-
-    if( FAILED(InitWindow( hInstance, nCmdShow, GameInfo) ) )
+    // create CGame and intepret game.ini
+    m_pGame = CGame::Get();
+    if (!m_pGame)
     {
-        ERROR_LOG("ENGINE::MAIN : Unable to register WindowClass or create window.");
+        ERROR_LOG(m_sLogLocationName + "Unable to create Game.");
+        ReleaseObjects();
+        return 0;
+    }
+
+    // register and create window
+    if( FAILED(InitWindow( hInstance, nCmdShow, m_pGame->GetGameInfo()) ) )
+    {
+        ERROR_LOG(m_sLogLocationName + "Unable to register WindowClass or create window.");
         ReleaseObjects();
         return 0;
     }
     else
-        BASIC_LOG("ENGINE::MAIN : Succesfully create window.");
+        BASIC_LOG(m_sLogLocationName + "Succesfully create window.");
+
+    // init game
+    if (!m_pGame->Initialize(g_hWnd))
+    {
+        ERROR_LOG(m_sLogLocationName + "Unable to initialize Game.");
+        ReleaseObjects();
+        return 0;
+    }
+    BASIC_LOG(m_sLogLocationName + "Succesfully initialize Game.");
+
+    // create and start CTime
+    m_pTime = CTime::Get();
+    if (!m_pTime)
+    {
+        ERROR_LOG(m_sLogLocationName + "Unable to create Time Object.");
+        ReleaseObjects();
+        return 0;
+    }
+    BASIC_LOG(m_sLogLocationName + "Succesfully start Time.");
 
    // enter the main loop:
     MSG msg = {0};
-    while( WM_QUIT != msg.message )
+    bool bFirstRun = true;
+    for(;;)
     {
-        if( PeekMessage( &msg, NULL, 0, 0, PM_REMOVE ) )
+        while(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
         {
-            TranslateMessage( &msg );
-            DispatchMessage( &msg );
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
         }
-        else
-        {
-            // Run game code here
-            // ...
-            // ...
-        }
+
+        if(msg.message == WM_QUIT)
+            break;
+
+        // Updating time
+        m_pTime->UpdateTime();
+
+        // Game run
+        m_pGame->Run(1, bFirstRun ? 0 : (UINT)(m_pTime->GetTimeElapsed()));
+
+        // Game render
+        m_pGame->Draw();
+        bFirstRun = false;
     }
     ReleaseObjects();
 
@@ -66,6 +98,14 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 
 void ReleaseObjects()
 {
+    // release game
+    if (m_pGame)
+        m_pGame->Del();
+
+    // release Time
+    if (m_pTime)
+        m_pTime->Del();
+
     // release logfile
     if (m_pLogfile)
         m_pLogfile->Del();
@@ -95,7 +135,7 @@ LRESULT CALLBACK WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam 
 }
 
 //Erstellt das Main Window
-HRESULT InitWindow( HINSTANCE hInstance, int nCmdShow, CGameInfo GameInfo )
+HRESULT InitWindow( HINSTANCE hInstance, int nCmdShow, CGameInfo *GameInfo )
 {
     // Register class
     WNDCLASSEX wcex;
@@ -117,13 +157,9 @@ HRESULT InitWindow( HINSTANCE hInstance, int nCmdShow, CGameInfo GameInfo )
     // Create window
     g_hInst = hInstance;
     RECT rc = { 0, 0, 640, 480 };
-    GameInfo.GetWindowSize( (unsigned int &)rc.right, (unsigned int &)rc.bottom);
+    GameInfo->GetWindowSize( (unsigned int &)rc.right, (unsigned int &)rc.bottom);
     AdjustWindowRect( &rc, WS_OVERLAPPEDWINDOW, FALSE );
-    if (GameInfo.IsWindowed())
-        g_hWnd = CreateWindow( "Engine", (LPCSTR)GameInfo.GetProgramName().c_str(), WS_OVERLAPPEDWINDOW | WS_VISIBLE,
-                           CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top, NULL, NULL, hInstance, NULL );
-    else
-        g_hWnd = CreateWindow( "Engine", (LPCSTR)GameInfo.GetProgramName().c_str(), WS_EX_TOPMOST | WS_POPUP,
+    g_hWnd = CreateWindow( "Engine", (LPCSTR)GameInfo->GetProgramName().c_str(), GameInfo->IsWindowed() ? (WS_OVERLAPPEDWINDOW | WS_VISIBLE) : (WS_EX_TOPMOST | WS_POPUP),
                            CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top, NULL, NULL, hInstance, NULL );
     if( !g_hWnd )
         return E_FAIL;

@@ -2,11 +2,12 @@
 
 CGameInfo::CGameInfo(void) : TFileInput()
 {
-    m_sFileDirectory = "Game/";
-    m_sProgramName  = "";
-    m_uiScreenWidth = NULL;
-    m_uiScreenHeight= NULL;
-    m_bWindowed     = true;
+    m_sLogLocationName  = LOGFILE_ENGINE_LOG_NAME + "CGameInfo : ";
+    m_sFileDirectory    = "Game/";
+    m_sProgramName      = "";
+    m_uiScreenWidth     = NULL;
+    m_uiScreenHeight    = NULL;
+    m_bWindowed         = true;
 }
 
 void CGameInfo::InterpretFile()
@@ -67,9 +68,9 @@ void CGameInfo::InterpretFile()
                     sFileString.erase(0, 1);
             }
             if (atoi(sFileString.c_str()))
-                m_bWindowed = false;
-            else
                 m_bWindowed = true;
+            else
+                m_bWindowed = false;
             break;
         }
         i++;
@@ -94,14 +95,21 @@ void CGameInfo::GetWindowSize(unsigned int &XSize, unsigned int &YSize)
 
 void CGameInfo::CreateIniByDefault()
 {
-    ERROR_LOG("ENGINE::GAME_INFO : Unable to find " + GAME_DATA_GAME_INI + ". Create it and set values to default.");
+    ERROR_LOG( m_sLogLocationName + "Unable to find " + m_sFileDirectory + GAME_DATA_GAME_INI + ". Create it and set values to default.");
+    m_sProgramName  = DEFAULT_PROJECT_NAME;
+    m_uiScreenWidth = DEFAULT_SCREEN_WIDTH;
+    m_uiScreenHeight= DEFAULT_SCREEN_HEIGHT;
+    m_bWindowed     = DEFAULT_WINDOWED;
+    SaveDataToIni();
+}
+
+void CGameInfo::SaveDataToIni()
+{
     FILE *GameIni = NULL;
     fopen_s(&GameIni, (m_sFileDirectory + GAME_DATA_GAME_INI).c_str(), "w");
     if(GameIni)
-        fprintf(GameIni, DEFAULT_INI_DATA.c_str());
+        fprintf(GameIni, (SEARCH_STRING_PROJECT_NAME + m_sProgramName + "\n" + SEARCH_STRING_SCREEN_WIDTH + to_string(m_uiScreenWidth) + 
+            "\n" + SEARCH_STRING_SCREEN_HEIGHT + to_string(m_uiScreenHeight) + "\n" + SEARCH_STRING_WINDOWED + to_string(m_bWindowed)).c_str());
     fclose(GameIni);
-    m_sProgramName  = "Anti´s GameEngine";
-    m_uiScreenWidth = 320;
-    m_uiScreenHeight= 240;
-    m_bWindowed     = true;
+
 }
