@@ -5,6 +5,7 @@
 #include "GameInfo.h"
 #include "Logfile.h"
 #include "ObjectLayer.h"
+#include "MapLayer.h"
 
 typedef std::list<Layer*> LayerList;
 

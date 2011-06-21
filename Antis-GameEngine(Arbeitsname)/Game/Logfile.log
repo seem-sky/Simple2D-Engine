@@ -4,3 +4,4 @@ ENGINE::main : Succesfully create window.
 ENGINE::CGame : Succesfully initialize Direct3D.
 ENGINE::main : Succesfully initialize Game.
 ENGINE::main : Succesfully start Time.
+ENGINE::CLogfile : Logfile shutting down...

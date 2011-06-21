@@ -2,6 +2,24 @@
 #define MOVEMENT_GENERATOR_H
 
 #include <d3dx9.h>
+#include <list>
+
+struct sMoveCommand
+{
+    float m_MoveX, m_MoveY;
+    UINT m_MoveTime;
+    bool m_bWithCollission;
+
+    sMoveCommand()
+    {
+        m_MoveX             = 0;
+        m_MoveY             = 0;
+        m_MoveTime          = 0;
+        m_bWithCollission   = true;
+    }
+};
+
+typedef std::list<sMoveCommand*> MoveCommandList;
 
 class MovementGenerator
 {
@@ -14,6 +32,8 @@ public:
     D3DXVECTOR3 UpdateMovement(const UINT uiCurTime, const UINT uiDiff);
     void ClearMovement();
     void Init(D3DXVECTOR2 v2Position);
+    void RemoveMovementCommand(sMoveCommand* pCommand);
+    bool IsMoveCommandListEmpty() { return m_lMoveCommands.empty(); }
 
 protected:
     D3DXVECTOR2 m_v2Position;
@@ -22,9 +42,7 @@ private:
     void Move(int x, int y);
 
     D3DXVECTOR2 m_v2CurMovement;
-    D3DXVECTOR2 m_v2CurDiffMove;
-    UINT m_uiCurMoveTime;
-    bool m_bWithCollision;
+    MoveCommandList m_lMoveCommands;
 };
 
 #endif;

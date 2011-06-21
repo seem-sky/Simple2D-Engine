@@ -5,19 +5,7 @@
 #include <d3d9.h>
 #include <string>
 #include <list>
-
-struct sTextureSource 
-{
-    std::string m_sFileName;
-    LPDIRECT3DTEXTURE9 m_pTexture;
-    D3DXIMAGE_INFO* m_pImageInfo;
-
-    sTextureSource()
-    {
-        m_pTexture      = NULL;
-        m_pImageInfo    = NULL;
-    }
-};
+#include "Texture.h"
 
 class CRessourceManager : public TSingleton<CRessourceManager>
 {
@@ -25,15 +13,18 @@ public:
     CRessourceManager(void);
     ~CRessourceManager(void);
 
-    sTextureSource* GetCharsetTexture(std::string sTextureName);
+    TextureSource* GetCharsetTexture(std::string sTextureName);
+
     void ClearCharsetTextures();
+
+    void ChangeTextureWith(TextureSource* pTexture, std::string sTextureName);
 
 protected:
     CLogfile *m_pLogfile;
 
 private:
-    sTextureSource* AddCharsetTexture(std::string sTextureName);
+    TextureSource* AddCharsetTexture(std::string sTextureName);
 
-    std::list<sTextureSource*> m_lTextures;
+    std::list<TextureSource*> m_lTextures;
 };
 #endif;

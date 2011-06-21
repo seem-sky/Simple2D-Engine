@@ -9,6 +9,7 @@ enum LAYER_TYPE
 {
     LAYER_TYPE_LAYER,
     LAYER_TYPE_OBJECT_LAYER,
+    LAYER_TYPE_MAP,
 };
 
 class Layer

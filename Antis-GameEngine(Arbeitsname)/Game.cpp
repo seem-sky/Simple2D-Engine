@@ -46,6 +46,7 @@ bool CGame::Initialize(HWND hWnd)
     CRessourceManager::Get();
 
     // init ObjectLayer
+    //m_pLayerList.push_back(new MapLayer());
     m_pLayerList.push_back(new ObjectLayer());
 
     return true;
@@ -55,7 +56,7 @@ bool CGame::Run(const UINT CurTime, const UINT CurElapsedTime)
 {
     if (!Test)
     {
-        ((ObjectLayer*)(*m_pLayerList.begin()))->AddWorldObject();
+        ((ObjectLayer*)(*m_pLayerList.begin()))->AddWorldObject("asymptome.png", D3DXVECTOR2(100, 100));
         Test = true;
     }
 
@@ -84,4 +85,9 @@ void CGame::Quit()
     // release ressource manager
     if (CRessourceManager *pRManager = CRessourceManager::Get())
         pRManager->Del();
+
+    // release all layers
+    for (LayerList::iterator itr = m_pLayerList.begin(); itr != m_pLayerList.end(); ++itr)
+        delete (*itr);
+    m_pLayerList.clear();
 }

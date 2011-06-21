@@ -61,7 +61,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="d3d9.lib d3dx9.lib"
+				AdditionalDependencies="d3d9.lib d3dx9.lib XmlLite.lib"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -207,6 +207,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\MapLayer.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\MapLayer.h"
+					>
+				</File>
+				<File
 					RelativePath=".\ObjectLayer.cpp"
 					>
 				</File>
@@ -218,6 +226,14 @@
 			<Filter
 				Name="Objects"
 				>
+				<File
+					RelativePath=".\Unit.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Unit.h"
+					>
+				</File>
 				<File
 					RelativePath=".\WorldObject.cpp"
 					>
@@ -253,6 +269,14 @@
 			</File>
 			<File
 				RelativePath=".\GameInfo.h"
+				>
+			</File>
+			<File
+				RelativePath=".\MapInput.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\MapInput.h"
 				>
 			</File>
 		</Filter>
@@ -301,17 +325,17 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Grafic"
+			Name="Grafik"
 			>
+			<File
+				RelativePath=".\Texture.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Texture.h"
+				>
+			</File>
 		</Filter>
-		<File
-			RelativePath=".\Unit.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\Unit.h"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

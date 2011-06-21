@@ -9,10 +9,13 @@ class Unit : public WorldObject
 public:
     Unit(void);
     virtual ~Unit(void);
+    void Update(const UINT uiCurTime, const UINT uiDiff);
 
 protected:
-    void Update(const UINT uiCurTime, const UINT uiDiff);
     MovementGenerator *m_pMovement;
+
+private:
+    UINT m_uiTimer;
 };
 
 #endif;

@@ -20,29 +20,32 @@ CRessourceManager::~CRessourceManager(void)
 
 
 // Charset Textures
-sTextureSource* CRessourceManager::AddCharsetTexture(std::string sTextureName)
+TextureSource* CRessourceManager::AddCharsetTexture(std::string sTextureName)
 {
     CDirect3D *pDirect3D = CDirect3D::Get();
 
     // create new texture source and store file name
-    sTextureSource* Texture = new sTextureSource();
-    Texture->m_sFileName = sTextureName;
+    TextureSource* Texture  = new TextureSource();
+    Texture->SetTextureName(sTextureName);
 
     // add directory to filename
     sTextureName = DIRECTORY_TEXTURES_OBJECTS + sTextureName;
 
     // load infos from file
-    Texture->m_pImageInfo = new D3DXIMAGE_INFO();
-    D3DXGetImageInfoFromFile(sTextureName.c_str(), Texture->m_pImageInfo);
+    Texture->SetImageInfo(new D3DXIMAGE_INFO());
+    D3DXGetImageInfoFromFile(sTextureName.c_str(), Texture->GetImageInfo());
 
     // load file
-    D3DXCreateTextureFromFileEx(pDirect3D->GetDevice(), sTextureName.c_str(), Texture->m_pImageInfo->Width, Texture->m_pImageInfo->Height, 1, 0,
-        D3DFMT_UNKNOWN, D3DPOOL_MANAGED, D3DX_FILTER_NONE, D3DX_FILTER_NONE, D3DCOLOR_XRGB(0, 0, 0), NULL, NULL, &Texture->m_pTexture);
+    LPDIRECT3DTEXTURE9 pTemp;
+    D3DXCreateTextureFromFileEx(pDirect3D->GetDevice(), sTextureName.c_str(), Texture->GetImageInfo()->Width, Texture->GetImageInfo()->Height, 1, 0,
+        D3DFMT_UNKNOWN, D3DPOOL_MANAGED, D3DX_FILTER_NONE, D3DX_FILTER_NONE, D3DCOLOR_XRGB(0, 0, 0), NULL, NULL, &pTemp);
+
+    Texture->SetTexture(pTemp);
 
     // return NULL if unable to load texture from file
-    if(!Texture->m_pTexture)
+    if(!Texture->GetTexture())
     {
-        ERROR_LOG(m_sLogLocationName + "Unable to load file" + sTextureName + ". No such file or directory.");
+        ERROR_LOG(m_sLogLocationName + "Unable to load file " + sTextureName + ". No such file or directory.");
         return NULL;
     }
 
@@ -50,11 +53,11 @@ sTextureSource* CRessourceManager::AddCharsetTexture(std::string sTextureName)
     return *m_lTextures.begin();
 }
 
-sTextureSource* CRessourceManager::GetCharsetTexture(std::string sTextureName)
+TextureSource* CRessourceManager::GetCharsetTexture(std::string sTextureName)
 {
-    for (std::list<sTextureSource*>::iterator itr = m_lTextures.begin(); itr != m_lTextures.end(); ++itr)
+    for (std::list<TextureSource*>::iterator itr = m_lTextures.begin(); itr != m_lTextures.end(); ++itr)
     {
-        if ((*itr)->m_sFileName == sTextureName)
+        if ((*itr)->GetTextureName() == sTextureName)
             return (*itr);
     }
 
@@ -64,10 +67,32 @@ sTextureSource* CRessourceManager::GetCharsetTexture(std::string sTextureName)
 
 void CRessourceManager::ClearCharsetTextures()
 {
-    for (std::list<sTextureSource*>::iterator itr = m_lTextures.begin(); itr != m_lTextures.end(); ++itr)
+    for (std::list<TextureSource*>::iterator itr = m_lTextures.begin(); itr != m_lTextures.end(); ++itr)
     {
-        (*itr)->m_pTexture->Release();
+        (*itr)->GetTexture()->Release();
         delete *itr;
     }
     m_lTextures.clear();
+}
+
+void CRessourceManager::ChangeTextureWith(TextureSource* pTexture, std::string sTextureName)
+{
+    TextureSource *pNewTexture = GetCharsetTexture(sTextureName);
+    // if new or cur Texture = NULL return
+    if (!pNewTexture || !pTexture)
+        return;
+
+    // change TextureSource with new Texture
+    for (std::list<TextureSource*>::iterator itr = m_lTextures.begin(); itr != m_lTextures.end(); ++itr)
+    {
+        if ((*itr) == pTexture)
+        {
+            TextureSource *pTemp = new TextureSource();
+            *pTemp      = *pTexture;
+            **itr       = *pNewTexture;
+            *pNewTexture= *pTemp;
+            delete pTemp;
+            return;
+        }
+    }
 }
