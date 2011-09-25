@@ -61,7 +61,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="d3d9.lib d3dx9.lib XmlLite.lib"
+				AdditionalDependencies="d3d9.lib d3dx9.lib"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -135,6 +135,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="d3d9.lib d3dx9.lib"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -227,6 +228,14 @@
 				Name="Objects"
 				>
 				<File
+					RelativePath=".\Map.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Map.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Unit.cpp"
 					>
 				</File>
@@ -277,6 +286,18 @@
 			</File>
 			<File
 				RelativePath=".\MapInput.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SpriteFiles.h"
+				>
+			</File>
+			<File
+				RelativePath=".\xmlParser.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\xmlParser.h"
 				>
 			</File>
 		</Filter>
@@ -333,6 +354,14 @@
 			</File>
 			<File
 				RelativePath=".\Texture.h"
+				>
+			</File>
+			<File
+				RelativePath=".\TileTextureSource.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\TileTextureSource.h"
 				>
 			</File>
 		</Filter>

@@ -6,15 +6,13 @@ CGame::CGame(void) : TSingleton()
     m_sLogLocationName  = LOGFILE_ENGINE_LOG_NAME + "CGame : ";
     m_pLogfile          = CLogfile::Get();
     m_pDirect3D         = CDirect3D::Get();
+    m_pWorldSession     = NULL;
 
     // read game ini data
     if (!m_GameInfo.ReadFile(GAME_DATA_GAME_INI))
         m_GameInfo.CreateIniByDefault();
     else
        BASIC_LOG(m_sLogLocationName + "Read and interpret " + GAME_DATA_GAME_INI + ".");
-
-
-    Test = false;
 }
 
 CGame::~CGame(void)
@@ -40,29 +38,28 @@ bool CGame::Initialize(HWND hWnd)
         return false;
     }
 
-    m_pDirect3D->SetClearColor(D3DCOLOR_XRGB(100, 0, 0));
+    m_pDirect3D->SetClearColor(D3DCOLOR_XRGB(0, 0, 0));
     BASIC_LOG(m_sLogLocationName + "Succesfully initialize Direct3D.");
 
     CRessourceManager::Get();
 
     // init ObjectLayer
-    //m_pLayerList.push_back(new MapLayer());
-    m_pLayerList.push_back(new ObjectLayer());
+    m_pLayerList.push_back(new MapLayer());
+    ((MapLayer*)(*m_pLayerList.begin()))->LoadNewMap("Map4.map");
+    //m_pLayerList.push_back(new ObjectLayer());
 
     return true;
 }
 
 bool CGame::Run(const UINT CurTime, const UINT CurElapsedTime)
 {
-    if (!Test)
-    {
-        ((ObjectLayer*)(*m_pLayerList.begin()))->AddWorldObject("asymptome.png", D3DXVECTOR2(100, 100));
-        Test = true;
-    }
-
     // Update all Layers
     for (LayerList::const_iterator itr = m_pLayerList.begin(); itr != m_pLayerList.end(); ++itr)
         (*itr)->UpdateLayer(CurTime, CurElapsedTime);
+
+    // Update World
+    if (m_pWorldSession)
+        m_pWorldSession->WorldUpdate(CurTime, CurElapsedTime);
 
     return true;
 }
@@ -78,6 +75,10 @@ void CGame::Draw()
 
 void CGame::Quit()
 {
+    // release WorldSession
+    if (m_pWorldSession)
+        delete m_pWorldSession;
+
     // release Direct3D
     if (m_pDirect3D)
         m_pDirect3D->Del();
@@ -91,3 +92,16 @@ void CGame::Quit()
         delete (*itr);
     m_pLayerList.clear();
 }
+
+
+//######
+//# class WorldSession
+//######
+WorldSession::WorldSession()
+{
+}
+
+WorldSession::~WorldSession()
+{
+}
+

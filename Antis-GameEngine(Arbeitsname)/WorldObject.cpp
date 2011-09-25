@@ -16,8 +16,6 @@ WorldObject::WorldObject(void)
     m_ModBlue           = 0;
     m_ModAlpha          = 0;
     m_ColorModTime      = 0;
-
-    MoveColorTo(1, 1, 1, 0, 10000);
 }
 
 WorldObject::~WorldObject(void)

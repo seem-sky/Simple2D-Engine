@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<MapSpriteData Location="MapSprites/">
+  <MapSprite FileName="gras.png"/>
+  <MapSprite FileName="stone.png"/>
+</MapSpriteData>

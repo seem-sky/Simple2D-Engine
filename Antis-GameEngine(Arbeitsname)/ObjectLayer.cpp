@@ -17,7 +17,6 @@ void ObjectLayer::Draw()
 {
     for (WorldObjectList::const_iterator itr = m_lObjects.begin(); itr != m_lObjects.end(); ++itr)
     {
-        LPDIRECT3DTEXTURE9 pTemp = (*itr)->GetTextureSource()->GetTexture();
         if ((*itr)->GetTextureSource() && (*itr)->GetTextureSource()->GetTexture())
             m_pSprite->Draw((*itr)->GetTextureSource()->GetTexture(), NULL, NULL, &(*itr)->GetPosition(), (*itr)->GetColor());
     }
@@ -29,12 +28,13 @@ void ObjectLayer::ClearObjectList()
         delete (*itr);
 }
 
-void ObjectLayer::AddWorldObject(std::string sTextureName, D3DXVECTOR2 v2Position)
+Unit* ObjectLayer::AddWorldObject(std::string sTextureName, D3DXVECTOR2 v2Position)
 {
     Unit* pObject = new Unit();
     pObject->SetPosition(v2Position);
     pObject->SetTextureSource(sTextureName);
     m_lObjects.push_back(pObject);
+	return pObject;
 }
 
 void ObjectLayer::UpdateLayer(const UINT uiCurTime, const UINT uiDiff)

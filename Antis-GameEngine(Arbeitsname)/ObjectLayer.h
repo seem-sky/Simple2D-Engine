@@ -12,7 +12,7 @@ public:
     ObjectLayer(void);
     ~ObjectLayer(void);
     void ClearObjectList();
-    void AddWorldObject(std::string sTextureName, D3DXVECTOR2 v2Position);
+    Unit* AddWorldObject(std::string sTextureName, D3DXVECTOR2 v2Position);
     void UpdateLayer(const UINT uiCurTime, const UINT uiDiff);
 
 protected:

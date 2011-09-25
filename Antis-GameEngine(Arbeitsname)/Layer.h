@@ -4,6 +4,7 @@
 #include "Direct3D.h"
 #include "Logfile.h"
 #include <list>
+#include "RessourceManager.h"
 
 enum LAYER_TYPE
 {
@@ -27,13 +28,15 @@ protected:
     virtual void Draw() { }
 
     LPD3DXSPRITE m_pSprite;
-    CDirect3D *m_pDirect3D;
     CLogfile *m_pLogfile;
+    CRessourceManager *m_pRessourceManager;
     LAYER_TYPE m_LayerType;
-    std::string m_sLogLocationName;
+    std::string m_sLogLocationName;  
 
 private:
     void Layer::BeginDraw(UINT DrawFlag = D3DXSPRITE_ALPHABLEND) { m_pSprite->Begin(DrawFlag); }
     void Layer::EndDraw() { m_pSprite->End(); }
+
+    CDirect3D *m_pDirect3D;
 };
 #endif;

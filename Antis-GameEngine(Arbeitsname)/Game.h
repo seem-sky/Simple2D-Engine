@@ -9,6 +9,16 @@
 
 typedef std::list<Layer*> LayerList;
 
+// world class, add game code here
+class WorldSession
+{
+public:
+    WorldSession();
+    virtual ~WorldSession();
+
+    virtual void WorldUpdate(const UINT CurTime, const UINT CurElapsedTime) { }
+};
+
 class CGame : public TSingleton<CGame>
 {
 public:
@@ -19,17 +29,17 @@ public:
     bool Run(const UINT CurTime, const UINT CurElapsedTime);
     void Draw();
     void Quit();
+    void SetWorldSession(WorldSession *pWorld) { m_pWorldSession = pWorld; }
 
     CGameInfo *GetGameInfo() { return &m_GameInfo; }
 
 private:
     CGameInfo m_GameInfo;
     LayerList m_pLayerList;
-    bool Test;
 
 protected:
     CLogfile *m_pLogfile;
     CDirect3D *m_pDirect3D;
+    WorldSession *m_pWorldSession;
 };
-
 #endif;

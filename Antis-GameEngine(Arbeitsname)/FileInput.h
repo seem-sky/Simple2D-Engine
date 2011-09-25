@@ -3,10 +3,9 @@
 
 #include <iostream>
 #include <fstream>
+#include <vector>
 #include "Logfile.h"
 #include "StringAdditions.h"
-
-const unsigned READ_DATA_MAX_LETTER_IN_ROW = 256;
 
 template <class T>
 class TFileInput
@@ -22,38 +21,36 @@ public:
     // open, store and interpret file
     bool ReadFile(string sFileName)
     {
-        FILE *Data;
-        fopen_s(&Data, (m_sFileDirectory + sFileName).c_str(), "rt");
+        ifstream Data((m_sFileDirectory + sFileName).c_str());
         if(!Data)
         {
             ERROR_LOG(m_sLogLocationName + "Unable to open " + m_sFileDirectory + sFileName + ". No such file or directory.");
             return false;
         }
-        if (char *pFileData = GetFileData())
+        if (std::vector<std::string> *pFileData = GetFileData())
         {
+            if (!pFileData->empty())
+                pFileData->clear();
+
+            std::string DataLine;
+
             unsigned int i = 0;
-            while(!feof(Data) && i < GetFileDataRows())
-            {
-                fgets(pFileData, READ_DATA_MAX_LETTER_IN_ROW - 1, Data);
-                for (unsigned int j = 0; j < READ_DATA_MAX_LETTER_IN_ROW; j++)
-                    ++pFileData;
-                i++;
-            }
-            fclose(Data);
+            while(std::getline(Data,DataLine))
+                pFileData->push_back(DataLine);
+
             InterpretFile();
             DeleteFileData();
         }
         else
         {
             ERROR_LOG(m_sLogLocationName + "pFileData is not a valid pointer.");
-            fclose(Data);
             return false;
         }
         return true;
     }
 protected:
     virtual void InterpretFile() { }
-    virtual char* GetFileData() { return NULL; }
+    virtual std::vector<std::string>* GetFileData() { return NULL; }
     virtual unsigned int GetFileDataRows() { return NULL; }
 
     string m_sFileDirectory;
@@ -62,19 +59,10 @@ protected:
 private:
     void DeleteFileData()
     {
-        if (char *pFileData = GetFileData())
+        if (std::vector<std::string> *pFileData = GetFileData())
         {
-            for (unsigned int i = 0; i < GetFileDataRows(); i++)
-            {
-                char *pTempData = pFileData;
-                for (unsigned int j = 0; j < READ_DATA_MAX_LETTER_IN_ROW; j++)
-                {
-                    pTempData = 0;
-                    ++pTempData;
-                }
-                for (unsigned int j = 0; j < READ_DATA_MAX_LETTER_IN_ROW; j++)
-                    ++pFileData;
-            }
+            for (unsigned int i = 0; i < pFileData->size(); i++)
+                pFileData->at(i).clear();
         }
     }
 };
