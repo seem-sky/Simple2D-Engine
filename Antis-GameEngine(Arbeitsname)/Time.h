@@ -11,10 +11,15 @@ public:
     CTime();
     ~CTime();
     bool TimeForNextFrame();
-    void NextFrame();
-    int GetCurFrameRate();
+    // calculate time for next frame
+    void NextFrame() { m_NextFrame = m_CurCount + m_Offset; }
+    // returns current frame rate
+    unsigned int GetCurFrameRate() { return m_FrameRate; }
     void UpdateTime();
-    float GetTimeElapsed();
+    // returns diff of the last frame
+    float GetTimeElapsed() { return static_cast<float>(m_CurCount - m_TimeDif)* 1000 / m_Frequency; }
+    LONGLONG GetCurTime();
+    LONGLONG GetFrenquency() { return m_Frequency; }
 
 private:
     //Frequenz des Performance Counters

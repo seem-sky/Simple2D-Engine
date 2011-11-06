@@ -4,7 +4,7 @@
 #include "Direct3D.h"
 #include <d3d9.h>
 #include <string>
-#include <list>
+#include <map>
 #include "TileTextureSource.h"
 
 class CRessourceManager : public TSingleton<CRessourceManager>
@@ -13,13 +13,13 @@ public:
     CRessourceManager(void);
     ~CRessourceManager(void);
 
-    TextureSource* GetCharsetTexture(std::string sTextureName);
+    // map texture
     TileTextureSource* GetMapTexture(std::string sTextureName);
-
-    void ClearCharsetTextures();
     void ClearTileTextures();
 
-    void ChangeCharsetTextureWith(TextureSource* pTexture, std::string sTextureName);
+    // charset texture
+    TextureSource* GetCharsetTexture(std::string sTextureName);
+    void ClearCharsetTextures();
 
 protected:
     CLogfile *m_pLogfile;
@@ -28,7 +28,7 @@ private:
     TextureSource* AddCharsetTexture(std::string sTextureName);
     TileTextureSource* AddTileTexture(std::string sTexttureName);
 
-    std::list<TextureSource*> m_lTextures;
-    std::list<TileTextureSource*> m_lTileTextures;
+    std::map<std::string, TextureSource*> m_lTextures;
+    std::map<std::string, TileTextureSource*> m_lTileTextures;
 };
 #endif;

@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "RessourceManager.h"
+#include "SpriteFiles.h"
 
 CGame::CGame(void) : TSingleton()
 {
@@ -13,6 +14,8 @@ CGame::CGame(void) : TSingleton()
         m_GameInfo.CreateIniByDefault();
     else
        BASIC_LOG(m_sLogLocationName + "Read and interpret " + GAME_DATA_GAME_INI + ".");
+
+    Test = false;
 }
 
 CGame::~CGame(void)
@@ -43,9 +46,14 @@ bool CGame::Initialize(HWND hWnd)
 
     CRessourceManager::Get();
 
+    // get all sprite names, stored in different xml files
+    SpriteFiles *pSpriteFiles = SpriteFiles::Get();
+    pSpriteFiles->LoadSpriteDataFromFile(SPRITE_TYPE_MAP);
+    pSpriteFiles->LoadSpriteDataFromFile(SPRITE_TYPE_AUTOTILE);
+    pSpriteFiles->LoadSpriteDataFromFile(SPRITE_TYPE_OBJECT);
+
     // init ObjectLayer
     m_pLayerList.push_back(new MapLayer());
-    ((MapLayer*)(*m_pLayerList.begin()))->LoadNewMap("Map4.map");
     //m_pLayerList.push_back(new ObjectLayer());
 
     return true;
@@ -53,24 +61,36 @@ bool CGame::Initialize(HWND hWnd)
 
 bool CGame::Run(const UINT CurTime, const UINT CurElapsedTime)
 {
-    // Update all Layers
-    for (LayerList::const_iterator itr = m_pLayerList.begin(); itr != m_pLayerList.end(); ++itr)
-        (*itr)->UpdateLayer(CurTime, CurElapsedTime);
+    if (!Test)
+    {
+        if (MAP_RESULT_DONE == ((MapLayer*)(*m_pLayerList.begin()))->LoadNewMap("Map2.map"))
+            Test = true;
+    }
+    else
+    {
+        // Update all Layers
+        for (LayerList::const_iterator itr = m_pLayerList.begin(); itr != m_pLayerList.end(); ++itr)
+            (*itr)->UpdateLayer(CurTime, CurElapsedTime);
 
-    // Update World
-    if (m_pWorldSession)
-        m_pWorldSession->WorldUpdate(CurTime, CurElapsedTime);
+        // Update World
+        if (m_pWorldSession)
+            m_pWorldSession->WorldUpdate(CurTime, CurElapsedTime);
+    }
 
     return true;
 }
 
-void CGame::Draw()
+DrawResult CGame::Draw()
 {
-    m_pDirect3D->BeginScene();
-    // Draw all Layers
-    for (LayerList::const_iterator itr = m_pLayerList.begin(); itr != m_pLayerList.end(); ++itr)
-        (*itr)->DrawLayer();
-    m_pDirect3D->EndScene();
+        m_pDirect3D->BeginScene();
+        // Draw all Layers
+        if (Test)
+            for (LayerList::const_iterator itr = m_pLayerList.begin(); itr != m_pLayerList.end(); ++itr)
+                (*itr)->DrawLayer();
+        if (m_pDirect3D->EndScene() == S_OK)
+            return DRAW_RESULT_OK;
+        else
+            return DRAW_RESULT_DEVICE_LOST;
 }
 
 void CGame::Quit()
@@ -89,19 +109,27 @@ void CGame::Quit()
 
     // release all layers
     for (LayerList::iterator itr = m_pLayerList.begin(); itr != m_pLayerList.end(); ++itr)
-        delete (*itr);
+        delete *itr;
+
     m_pLayerList.clear();
 }
 
-
-//######
-//# class WorldSession
-//######
-WorldSession::WorldSession()
+DrawResult CGame::ResetDrawDevice(HWND hWnd)
 {
-}
+    if (!m_pDirect3D)
+        return DRAW_RESULT_BROKEN_POINTER;
 
-WorldSession::~WorldSession()
-{
-}
+    unsigned int xSize = 0, ySize = 0;
+    m_GameInfo.GetWindowSize(xSize, ySize);
+    if (S_OK != m_pDirect3D->ResetDevice(hWnd, xSize, ySize, m_GameInfo.IsWindowed()))
+        return DRAW_RESULT_DEVICE_LOST;
 
+    // recreate sprite for all layers
+    for (LayerList::iterator itr = m_pLayerList.begin(); itr != m_pLayerList.end(); ++itr)
+    {
+        if (*itr)
+            (*itr)->CreateSprite();
+    }
+
+    return DRAW_RESULT_OK;
+}

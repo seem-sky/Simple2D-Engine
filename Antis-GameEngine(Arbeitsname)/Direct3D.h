@@ -12,9 +12,10 @@ class CDirect3D : public TSingleton<CDirect3D>
 
         bool Initialize(HWND hWnd, const UINT uiScreenWidth, const UINT uiScreenHeight, const bool bWindowed);
         void BeginScene(void);
-        void EndScene(void);
+        HRESULT EndScene(void);
         void CDirect3D::SetClearColor(D3DCOLOR Color) { m_ClearColor = Color; }
         LPDIRECT3DDEVICE9 CDirect3D::GetDevice(void) { return m_lpD3DDevice; }
+        HRESULT ResetDevice(HWND hWnd, const UINT uiScreenWidth, const UINT uiScreenHeight, const bool bWindowed);
  
    protected:
        LPDIRECT3DSURFACE9 GetBackbuffer(void) { return m_lpBackBuffer; }
@@ -24,6 +25,8 @@ class CDirect3D : public TSingleton<CDirect3D>
        LPDIRECT3D9          m_lpD3D;
        LPDIRECT3DDEVICE9    m_lpD3DDevice;                  // direct3D device
        LPDIRECT3DSURFACE9   m_lpBackBuffer;                 // surface of the backbuffer
+
+       D3DPRESENT_PARAMETERS m_PParams;
 
        CLogfile *m_pLogfile;
 };

@@ -31,16 +31,11 @@ bool CTime::TimeForNextFrame()
         return false;
 }
 
-// calculate time for next frame
-void CTime::NextFrame()
-{
-    m_NextFrame = m_CurCount + m_Offset;
-}
-
 // Update time
 void CTime::UpdateTime()
 {
     m_TimeDif = m_CurCount;
+    m_CurCount = GetCurTime();
     QueryPerformanceCounter((LARGE_INTEGER*)&m_CurCount);
     if(m_CurCount - m_LastCount > m_Frequency)
     {
@@ -49,19 +44,12 @@ void CTime::UpdateTime()
         m_Frames = 0;
     }
     else
-    {
         m_Frames++;
-    }
 }
 
-// returns current frame rate
-int CTime::GetCurFrameRate()
+LONGLONG CTime::GetCurTime()
 {
-    return m_FrameRate;
-}
-
-// returns diff of the last frame
-float CTime::GetTimeElapsed()
-{
-    return static_cast<float>(m_CurCount - m_TimeDif)* 1000 / m_Frequency;
-}
+    LONGLONG CurTime = 0;
+    QueryPerformanceCounter((LARGE_INTEGER*)&CurTime);
+    return CurTime;
+};

@@ -2,6 +2,7 @@
 #define WORLDOBJECT_H
 
 #include "RessourceManager.h"
+#include "MovementGenerator.h"
 
 enum UNIT_TYPE
 {
@@ -18,11 +19,12 @@ public:
     // position
     D3DXVECTOR3 GetPosition() { return m_v3Position; }
     void SetPosition(D3DXVECTOR2 v2NewPos);
+    void MovePosition(int XMove, int YMove, UINT time = 0);
 
     // Color
     D3DXCOLOR GetColor() { return m_Color; }
     void SetColor(float red, float green, float blue, float alpha) { m_Color = D3DXCOLOR(red, green, blue, alpha); }
-    void MoveColorTo(float red, float green, float blue, float alpha, UINT time);
+    void ModifyColorTo(float red, float green, float blue, float alpha, UINT time = 0);
 
     // texture
     void SetTextureSource(std::string sTextureName);
@@ -37,6 +39,8 @@ protected:
     UNIT_TYPE m_UnitType;
     std::string m_sLogLocationName;
     D3DXCOLOR m_Color;
+
+    MovementGenerator *m_pMovement;
 
 private:
     void UpdateColor(const UINT uiDiff);

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<Map>
+  <MapInfo MapName="blubb" MapAnnounceName="underground lair" MapSizeX="100" MapSizeY="100"/>
+  <MapData>
+    <MapTiles Tiles="0 0 0 0 0"/>
+    <MapTiles Tiles="0 1 1 1 0"/>
+    <MapTiles Tiles="0 1 1 1 0"/>
+    <MapTiles Tiles="0 1 2 1 0"/>
+    <MapTiles Tiles="0 1 2 1 0"/>
+    <MapTiles Tiles="0 1 2 1 0"/>
+    <MapTiles Tiles="0 1 2 1 0"/>
+    <MapTiles Tiles="0 1 2 1 0"/>
+    <MapTiles Tiles="0 1 2 1 0"/>
+    <MapTiles Tiles="0 1 2 1 0"/>
+    <MapTiles Tiles="0 1 2 1 0"/>
+    <MapTiles Tiles="0 1 2 1 0"/>
+    <MapTiles Tiles="0 1 2 1 0"/>
+    <MapTiles Tiles="0 1 1 1 0"/>
+    <MapTiles Tiles="0 1 1 1 0"/>
+    <MapTiles Tiles="0 0 0 0 0"/>
+  </MapData>
+</Map>

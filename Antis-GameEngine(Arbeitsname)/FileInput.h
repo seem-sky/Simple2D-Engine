@@ -1,7 +1,6 @@
 #ifndef FILE_INPUT_H
 #define FILE_INPUT_H
 
-#include <iostream>
 #include <fstream>
 #include <vector>
 #include "Logfile.h"

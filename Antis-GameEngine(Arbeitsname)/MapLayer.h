@@ -9,7 +9,7 @@ class MapLayer : public Layer
 public:
     MapLayer(void);
     ~MapLayer(void);
-    void LoadNewMap(std::string sMapName);
+    MapLoadResult LoadNewMap(std::string sMapName);
     void UpdateLayer(const UINT uiCurTime, const UINT uiDiff);
 
 protected:

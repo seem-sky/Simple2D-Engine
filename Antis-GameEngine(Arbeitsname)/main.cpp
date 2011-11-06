@@ -70,6 +70,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
    // enter the main loop:
     MSG msg = {0};
     bool bFirstRun = true;
+    DrawResult m_DrawResult = DRAW_RESULT_OK;
     for(;;)
     {
         while(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
@@ -85,10 +86,17 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
         m_pTime->UpdateTime();
 
         // Game run
-        m_pGame->Run(1, bFirstRun ? 0 : (UINT)(m_pTime->GetTimeElapsed()));
+        if (m_DrawResult == DRAW_RESULT_OK)
+            m_pGame->Run(1, bFirstRun ? 0 : (UINT)(m_pTime->GetTimeElapsed()));
 
         // Game render
-        m_pGame->Draw();
+        if (m_DrawResult == DRAW_RESULT_OK)
+            m_DrawResult = m_pGame->Draw();
+
+        // if draw device is lost, reset it
+        if (m_DrawResult == DRAW_RESULT_DEVICE_LOST)
+            m_DrawResult = m_pGame->ResetDrawDevice(g_hWnd);
+
         bFirstRun = false;
     }
     ReleaseObjects();
@@ -161,6 +169,7 @@ HRESULT InitWindow( HINSTANCE hInstance, int nCmdShow, CGameInfo *GameInfo )
     AdjustWindowRect( &rc, WS_OVERLAPPEDWINDOW, FALSE );
     g_hWnd = CreateWindow( "Engine", (LPCSTR)GameInfo->GetProgramName().c_str(), GameInfo->IsWindowed() ? (WS_OVERLAPPEDWINDOW | WS_VISIBLE) : (WS_EX_TOPMOST | WS_POPUP),
                            CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top, NULL, NULL, hInstance, NULL );
+
     if( !g_hWnd )
         return E_FAIL;
 

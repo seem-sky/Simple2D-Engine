@@ -17,9 +17,6 @@ public:
     void SetTextureName(std::string sTextureName) { m_sFileName = sTextureName; }
     std::string GetTextureName() { return m_sFileName; }
 
-    void SetImageInfo(D3DXIMAGE_INFO* pImgInfo) { m_pImageInfo = pImgInfo; }
-    D3DXIMAGE_INFO* GetImageInfo() { return m_pImageInfo; }
-
     void ChangeTexture(std::string sFileName);
 
 protected:

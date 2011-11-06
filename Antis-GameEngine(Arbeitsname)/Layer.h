@@ -17,12 +17,14 @@ class Layer
 {
 public:
     Layer(void);
-    ~Layer(void);
+    virtual ~Layer(void);
 
     LAYER_TYPE GetLayerType() { return m_LayerType; }
 
     void DrawLayer();
     virtual void UpdateLayer(const UINT uiCurTime, const UINT uiDiff) { }
+
+    HRESULT CreateSprite();
 
 protected:
     virtual void Draw() { }
@@ -34,8 +36,8 @@ protected:
     std::string m_sLogLocationName;  
 
 private:
-    void Layer::BeginDraw(UINT DrawFlag = D3DXSPRITE_ALPHABLEND) { m_pSprite->Begin(DrawFlag); }
-    void Layer::EndDraw() { m_pSprite->End(); }
+    void BeginDraw(UINT DrawFlag = D3DXSPRITE_ALPHABLEND);
+    void EndDraw();
 
     CDirect3D *m_pDirect3D;
 };

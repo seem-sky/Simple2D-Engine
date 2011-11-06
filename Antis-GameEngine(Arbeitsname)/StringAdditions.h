@@ -9,7 +9,7 @@ using namespace std;
 template< class type>
 inline string to_string( const type & value)
 {
-    std::ostringstream streamOut;
+    ostringstream streamOut;
     streamOut << value;
     return streamOut.str();
 }

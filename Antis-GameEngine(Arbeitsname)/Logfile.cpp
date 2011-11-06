@@ -25,3 +25,13 @@ void CLogfile::WriteMessage(string sMessage)
     fclose(Logfile);
     Logfile = NULL;
 }
+
+void CLogfile::WriteErrorMessage(string sMessage)
+{
+    sMessage = "ERROR! " + sMessage + "\n";
+    fopen_s(&Logfile, LOGFILE_FILENAME.c_str(), "a");
+    if(Logfile)
+        fprintf(Logfile, sMessage.c_str());
+    fclose(Logfile);
+    Logfile = NULL;
+}

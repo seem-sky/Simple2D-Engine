@@ -16,10 +16,13 @@ WorldObject::WorldObject(void)
     m_ModBlue           = 0;
     m_ModAlpha          = 0;
     m_ColorModTime      = 0;
+
+    m_pMovement         = new MovementGenerator();
 }
 
 WorldObject::~WorldObject(void)
 {
+    delete m_pMovement;
 }
 
 void WorldObject::SetTextureSource(std::string sTextureName)
@@ -39,12 +42,16 @@ void WorldObject::SetPosition(D3DXVECTOR2 v2NewPos)
 
 void WorldObject::Update(const UINT uiCurTime, const UINT uiDiff)
 {
-    // Update Color
+    // Update color
     if (m_ColorModTime)
         UpdateColor(uiDiff);
+
+    // Update movement
+    if (m_pMovement)
+        m_pMovement->UpdateMovement(uiCurTime, uiDiff);
 }
 
-void WorldObject::MoveColorTo(float red, float green, float blue, float alpha, UINT time)
+void WorldObject::ModifyColorTo(float red, float green, float blue, float alpha, UINT time)
 {
     m_ModRed            = (red - m_Color.r) / time;
     m_ModGreen          = (green - m_Color.g) / time;
@@ -96,4 +103,10 @@ void WorldObject::UpdateColor(const UINT uiDiff)
         m_Color.a = 1;
     else if (m_Color.a < 0)
         m_Color.a = 0;
+}
+
+void WorldObject::MovePosition(int XMove, int YMove, UINT time)
+{
+    if (m_pMovement)
+        m_pMovement->Move2DWithoutCollision(XMove, YMove, time);
 }

@@ -7,14 +7,21 @@
 #include "ObjectLayer.h"
 #include "MapLayer.h"
 
+enum DrawResult
+{
+    DRAW_RESULT_OK,
+    DRAW_RESULT_DEVICE_LOST,
+    DRAW_RESULT_BROKEN_POINTER,
+};
+
 typedef std::list<Layer*> LayerList;
 
 // world class, add game code here
 class WorldSession
 {
 public:
-    WorldSession();
-    virtual ~WorldSession();
+    WorldSession() { };
+    virtual ~WorldSession() { };
 
     virtual void WorldUpdate(const UINT CurTime, const UINT CurElapsedTime) { }
 };
@@ -27,15 +34,18 @@ public:
 
     bool Initialize(HWND hWnd);
     bool Run(const UINT CurTime, const UINT CurElapsedTime);
-    void Draw();
+    DrawResult Draw();
     void Quit();
     void SetWorldSession(WorldSession *pWorld) { m_pWorldSession = pWorld; }
 
     CGameInfo *GetGameInfo() { return &m_GameInfo; }
 
+    DrawResult ResetDrawDevice(HWND hWnd);
+
 private:
     CGameInfo m_GameInfo;
     LayerList m_pLayerList;
+    bool Test;
 
 protected:
     CLogfile *m_pLogfile;
