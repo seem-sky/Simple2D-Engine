@@ -4,17 +4,7 @@
 #include "Singleton.h"
 #include "GameInfo.h"
 #include "Logfile.h"
-#include "ObjectLayer.h"
-#include "MapLayer.h"
-
-enum DrawResult
-{
-    DRAW_RESULT_OK,
-    DRAW_RESULT_DEVICE_LOST,
-    DRAW_RESULT_BROKEN_POINTER,
-};
-
-typedef std::list<Layer*> LayerList;
+#include "Map.h"
 
 // world class, add game code here
 class WorldSession
@@ -34,21 +24,21 @@ public:
 
     bool Initialize(HWND hWnd);
     bool Run(const UINT CurTime, const UINT CurElapsedTime);
-    DrawResult Draw();
+    HRESULT Draw();
     void Quit();
     void SetWorldSession(WorldSession *pWorld) { m_pWorldSession = pWorld; }
 
     CGameInfo *GetGameInfo() { return &m_GameInfo; }
 
-    DrawResult ResetDrawDevice(HWND hWnd);
+    HRESULT ResetDrawDevice(HWND hWnd);
 
 private:
     CGameInfo m_GameInfo;
-    LayerList m_pLayerList;
     bool Test;
 
+    Map *m_pMap;
+
 protected:
-    CLogfile *m_pLogfile;
     CDirect3D *m_pDirect3D;
     WorldSession *m_pWorldSession;
 };

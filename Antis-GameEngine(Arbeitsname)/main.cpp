@@ -1,5 +1,4 @@
 #include <windows.h>
-#include <windowsx.h>
 #include "Time.h"
 #include "Game.h"
 
@@ -70,7 +69,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
    // enter the main loop:
     MSG msg = {0};
     bool bFirstRun = true;
-    DrawResult m_DrawResult = DRAW_RESULT_OK;
+    HRESULT m_DrawResult = S_OK;
     for(;;)
     {
         while(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
@@ -85,17 +84,18 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
         // Updating time
         m_pTime->UpdateTime();
 
-        // Game run
-        if (m_DrawResult == DRAW_RESULT_OK)
+        if (m_DrawResult == S_OK)
+        {
+            // Game run
             m_pGame->Run(1, bFirstRun ? 0 : (UINT)(m_pTime->GetTimeElapsed()));
-
-        // Game render
-        if (m_DrawResult == DRAW_RESULT_OK)
+            // Game render
             m_DrawResult = m_pGame->Draw();
-
-        // if draw device is lost, reset it
-        if (m_DrawResult == DRAW_RESULT_DEVICE_LOST)
+        }
+        else    // if draw device is lost, reset it
+        {
+            Sleep(10);
             m_DrawResult = m_pGame->ResetDrawDevice(g_hWnd);
+        }
 
         bFirstRun = false;
     }

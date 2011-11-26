@@ -3,8 +3,9 @@
 
 #include "Direct3D.h"
 #include "Logfile.h"
+#include "WorldObject.h"
 #include <list>
-#include "RessourceManager.h"
+#include <vector>
 
 enum LAYER_TYPE
 {
@@ -12,6 +13,10 @@ enum LAYER_TYPE
     LAYER_TYPE_OBJECT_LAYER,
     LAYER_TYPE_MAP,
 };
+
+class Layer;
+typedef std::vector<Layer*> LayerList;
+typedef std::vector<WorldObject*> ObjectList;
 
 class Layer
 {
@@ -22,23 +27,16 @@ public:
     LAYER_TYPE GetLayerType() { return m_LayerType; }
 
     void DrawLayer();
-    virtual void UpdateLayer(const UINT uiCurTime, const UINT uiDiff) { }
-
-    HRESULT CreateSprite();
+    virtual void UpdateLayer(const UINT uiCurTime, const UINT uiDiff) = 0;
 
 protected:
-    virtual void Draw() { }
+    virtual void Draw() = 0;
 
-    LPD3DXSPRITE m_pSprite;
-    CLogfile *m_pLogfile;
-    CRessourceManager *m_pRessourceManager;
     LAYER_TYPE m_LayerType;
     std::string m_sLogLocationName;  
 
-private:
-    void BeginDraw(UINT DrawFlag = D3DXSPRITE_ALPHABLEND);
-    void EndDraw();
+    ObjectList m_lObjects;
 
-    CDirect3D *m_pDirect3D;
+private:
 };
 #endif;

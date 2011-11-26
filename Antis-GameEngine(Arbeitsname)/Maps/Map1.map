@@ -19,4 +19,14 @@
     <MapTiles Tiles="0 1 1 1 0"/>
     <MapTiles Tiles="0 0 0 0 0"/>
   </MapData>
+  <LayerData>
+    <Layer>
+      <Object Texture="1" XPos="5" YPos="5"/>
+      <Object Texture="1" XPos="5" YPos="300"/>
+    </Layer>
+    <Layer>
+      <Object Texture="1" XPos="300" YPos="5"/>
+      <Object Texture="1" XPos="150" YPos="5"/>
+    </Layer>
+  </LayerData>
 </Map>

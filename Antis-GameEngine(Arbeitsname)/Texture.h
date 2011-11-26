@@ -19,10 +19,12 @@ public:
 
     void ChangeTexture(std::string sFileName);
 
+    void* GetPixels();
+
+    void GetTextureSize(UINT &XSize, UINT &YSize);
+
 protected:
     std::string m_sFileName;
     LPDIRECT3DTEXTURE9 m_pTexture;
-    D3DXIMAGE_INFO* m_pImageInfo;
 };
-
 #endif;

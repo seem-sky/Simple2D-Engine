@@ -15,7 +15,7 @@ public:
         m_sFileDirectory = "";
         m_sLogLocationName = LOGFILE_ENGINE_LOG_NAME + "TFileInput : ";
         DeleteFileData();
-        m_pLogfile = CLogfile::Get();
+    
     }
     // open, store and interpret file
     bool ReadFile(string sFileName)

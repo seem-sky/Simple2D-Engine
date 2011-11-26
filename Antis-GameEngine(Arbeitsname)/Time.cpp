@@ -3,7 +3,6 @@
 CTime::CTime()
 {
     m_sLogLocationName = LOGFILE_ENGINE_LOG_NAME + "CTime : ";
-    m_pLogfile = CLogfile::Get();
     if(!QueryPerformanceFrequency((LARGE_INTEGER*)&m_Frequency))
         ERROR_LOG(m_sLogLocationName + "Unable to find performance counter.");
 

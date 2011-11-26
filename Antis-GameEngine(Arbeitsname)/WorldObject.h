@@ -18,8 +18,13 @@ public:
 
     // position
     D3DXVECTOR3 GetPosition() { return m_v3Position; }
+    int GetPositionX() { return (int)m_v3Position.x; }
+    int GetPositionY() { return (int)m_v3Position.y; }
     void SetPosition(D3DXVECTOR2 v2NewPos);
     void MovePosition(int XMove, int YMove, UINT time = 0);
+    void SetPositionX(int newPos) { m_v3Position.x = (float)newPos; }
+    void SetPositionY(int newPos) { m_v3Position.y = (float)newPos; }
+    void GetObjectSize(UINT &Xsize, UINT &Ysize);
 
     // Color
     D3DXCOLOR GetColor() { return m_Color; }

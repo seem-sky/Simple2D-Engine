@@ -110,3 +110,11 @@ void WorldObject::MovePosition(int XMove, int YMove, UINT time)
     if (m_pMovement)
         m_pMovement->Move2DWithoutCollision(XMove, YMove, time);
 }
+
+void WorldObject::GetObjectSize(UINT &Xsize, UINT &Ysize)
+{
+    if (!m_pTexture)
+        return;
+
+    m_pTexture->GetTextureSize(Xsize, Ysize);
+}

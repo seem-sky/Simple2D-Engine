@@ -13,8 +13,5 @@ public:
     void UpdateLayer(const UINT uiCurTime, const UINT uiDiff);
 
 protected:
-    void Draw();
-
-    Map *m_pMap;
 };
 #endif

@@ -10,8 +10,8 @@ const string LOGFILE_FILENAME               = "Game/Logfile.log";
 const string LOGFILE_OPENING_MESSAGE        = "Logfile open and ready to write in\n";
 const string LOGFILE_CLOSING_MESSAGE        = "Logfile shutting down...";
 
-#define BASIC_LOG m_pLogfile->WriteMessage
-#define ERROR_LOG m_pLogfile->WriteErrorMessage
+#define BASIC_LOG if(CLogfile *pLog = CLogfile::Get()) pLog->WriteMessage
+#define ERROR_LOG if(CLogfile *pLog = CLogfile::Get()) pLog->WriteErrorMessage
 
 class CLogfile : public TSingleton<CLogfile>
 {

@@ -1,16 +1,16 @@
 #ifndef MAP_H
 #define MAP_H
 
+#include <vector>
+#include <d3dx9.h>
 #include "MapInput.h"
 #include "Logfile.h"
 #include "SpriteFiles.h"
-#include <d3dx9.h>
-#include "fileinput.h"
 #include "WorldObject.h"
-#include <vector>
+#include "ObjectLayer.h"
+#include "Thread.h"
 
 typedef std::vector<std::vector<float>> MapTiles;
-typedef std::vector<WorldObject*> ObjectList;
 
 // the da struct for maps
 struct MapInfo
@@ -48,12 +48,19 @@ enum MapLoadState
     MAP_STATE_DO_OBJECTS,
 };
 
+class MapLoadThread;
+
 class Map
 {
 public:
     Map(void);
     ~Map(void);
+    /*#####
+    ## Map System
+    #####*/
+    void Draw();
     MapLoadResult LoadNewMap(std::string sMapName);
+    void UpdateMap(const UINT uiCurTime, const UINT uiDiff);
 
     const MapInfo* GetMapInfo() { return &m_MapInfo; }
     const MapTiles* GetMapTiles() { return &m_v2MapTiles; }
@@ -72,18 +79,27 @@ public:
     ## objects
     #####*/
     // add new world object to map
-    WorldObject* AddNewWorldObject(std::string sFileName, int XPos, int YPos);
+    WorldObject* AddNewWorldObject(std::string sFileName, int XPos, int YPos, UINT uiLayerNr);
+
+    /*#####
+    ## color
+    #####*/
+    void SetColorTo(D3DXCOLOR color) { m_MapColor = color; }
+    void SetColorTo(float r, float g, float b, float a) { SetColorTo(D3DXCOLOR(r,g,b,a)); }
+    D3DXCOLOR GetColor() { return m_MapColor; }
+
+    /*#####
+    ## layer
+    #####*/
+    void AddLayer(Layer *pLayer);
+    void EraseLayer(UINT uiLayerNr);
+    void EraseLayer(Layer *pLayer);
+    void ClearAllLayer();
+    Layer* GetLayerAtNr(UINT uiLayerNr);
 
 protected:
-    /*#####
-    ## Map Load System
-    #####*/
-    // open map file and save data into string
-    MapLoadResult LoadDataFromFile(std::string sMapName);
-    // load info from data string
-    MapLoadResult LoadInfo();
-    // load tiles from data string
-    MapLoadResult LoadTiles();
+    void DrawMap();
+    void DrawLayer();
 
     MapLoadState m_MapLoadState;
     MapInfo m_MapInfo;
@@ -91,8 +107,8 @@ protected:
     SpriteFiles *m_pSpriteFiles;
 
     D3DXVECTOR3 m_v3Position;
+    D3DXCOLOR m_MapColor;
 
-    CLogfile *m_pLogfile;
     std::string m_sLogLocationName;
 
 private:
@@ -100,6 +116,58 @@ private:
     std::string m_sMapDataFromFile;
     std::list<std::string> m_TileByRowFromFileList;
 
-    ObjectList m_lObjects;
+    LayerList m_lLayers;
+
+    MapLoadThread *m_pMapLoadThread;
+};
+
+
+struct ObjectReadOut
+{
+    int m_TextureID;
+    int m_XPos;
+    int m_YPos;
+
+    ObjectReadOut()
+    {
+        m_TextureID = 0;
+        m_XPos      = 0;
+        m_YPos      = 0;
+    }
+};
+
+// map load object create new thread
+class MapLoadThread : public ActiveObject
+{
+public:
+    MapLoadThread(std::string sMapName);
+
+    MapLoadState GetMapLoadState() { return m_MapLoadState; }
+    void GetMapInfo(MapInfo &MapInfo, MapTiles &MapTiles, LayerList &LayerList);
+
+protected:
+    /*#####
+    ## Map Load System
+    #####*/
+    void Run ();
+    // open map file and save data into string
+    MapLoadResult LoadDataFromFile(std::string sMapName, std::string *sMapData);
+    // load info from data string
+    MapLoadResult LoadInfo(std::string *sMapData);
+    // load tiles from data string
+    MapLoadResult LoadTiles(std::string *sMapData);
+    // load layer and objects from data string
+    MapLoadResult LoadLayerAndObjects(std::string *sMapData);
+
+private:
+    // Logfile
+    std::string m_sLogLocationName;
+
+    std::string m_sMapName;
+    MapLoadState m_MapLoadState;
+
+    MapInfo m_MapInfo;
+    MapTiles m_v2MapTiles;
+    LayerList m_lLayers;
 };
 #endif;

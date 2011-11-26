@@ -5,9 +5,9 @@
 CGame::CGame(void) : TSingleton()
 {
     m_sLogLocationName  = LOGFILE_ENGINE_LOG_NAME + "CGame : ";
-    m_pLogfile          = CLogfile::Get();
     m_pDirect3D         = CDirect3D::Get();
     m_pWorldSession     = NULL;
+    m_pMap              = NULL;
 
     // read game ini data
     if (!m_GameInfo.ReadFile(GAME_DATA_GAME_INI))
@@ -52,9 +52,7 @@ bool CGame::Initialize(HWND hWnd)
     pSpriteFiles->LoadSpriteDataFromFile(SPRITE_TYPE_AUTOTILE);
     pSpriteFiles->LoadSpriteDataFromFile(SPRITE_TYPE_OBJECT);
 
-    // init ObjectLayer
-    m_pLayerList.push_back(new MapLayer());
-    //m_pLayerList.push_back(new ObjectLayer());
+    m_pMap = new Map();
 
     return true;
 }
@@ -63,14 +61,14 @@ bool CGame::Run(const UINT CurTime, const UINT CurElapsedTime)
 {
     if (!Test)
     {
-        if (MAP_RESULT_DONE == ((MapLayer*)(*m_pLayerList.begin()))->LoadNewMap("Map2.map"))
+        if (MAP_RESULT_DONE == m_pMap->LoadNewMap("Map2.map"))
             Test = true;
     }
     else
     {
-        // Update all Layers
-        for (LayerList::const_iterator itr = m_pLayerList.begin(); itr != m_pLayerList.end(); ++itr)
-            (*itr)->UpdateLayer(CurTime, CurElapsedTime);
+        // Update Map
+        if (m_pMap)
+            m_pMap->UpdateMap(CurTime, CurElapsedTime);
 
         // Update World
         if (m_pWorldSession)
@@ -80,17 +78,14 @@ bool CGame::Run(const UINT CurTime, const UINT CurElapsedTime)
     return true;
 }
 
-DrawResult CGame::Draw()
+HRESULT CGame::Draw()
 {
-        m_pDirect3D->BeginScene();
-        // Draw all Layers
-        if (Test)
-            for (LayerList::const_iterator itr = m_pLayerList.begin(); itr != m_pLayerList.end(); ++itr)
-                (*itr)->DrawLayer();
-        if (m_pDirect3D->EndScene() == S_OK)
-            return DRAW_RESULT_OK;
-        else
-            return DRAW_RESULT_DEVICE_LOST;
+    m_pDirect3D->BeginScene();
+    // Draw all Layers
+    if (Test && m_pMap)
+        m_pMap->Draw();
+
+    return m_pDirect3D->EndScene();
 }
 
 void CGame::Quit()
@@ -107,29 +102,18 @@ void CGame::Quit()
     if (CRessourceManager *pRManager = CRessourceManager::Get())
         pRManager->Del();
 
-    // release all layers
-    for (LayerList::iterator itr = m_pLayerList.begin(); itr != m_pLayerList.end(); ++itr)
-        delete *itr;
-
-    m_pLayerList.clear();
+    // delete map
+    if (m_pMap)
+        delete m_pMap;
 }
 
-DrawResult CGame::ResetDrawDevice(HWND hWnd)
+HRESULT CGame::ResetDrawDevice(HWND hWnd)
 {
     if (!m_pDirect3D)
-        return DRAW_RESULT_BROKEN_POINTER;
+        return S_FALSE;
 
     unsigned int xSize = 0, ySize = 0;
     m_GameInfo.GetWindowSize(xSize, ySize);
-    if (S_OK != m_pDirect3D->ResetDevice(hWnd, xSize, ySize, m_GameInfo.IsWindowed()))
-        return DRAW_RESULT_DEVICE_LOST;
 
-    // recreate sprite for all layers
-    for (LayerList::iterator itr = m_pLayerList.begin(); itr != m_pLayerList.end(); ++itr)
-    {
-        if (*itr)
-            (*itr)->CreateSprite();
-    }
-
-    return DRAW_RESULT_OK;
+    return m_pDirect3D->ResetDevice(hWnd, xSize, ySize, m_GameInfo.IsWindowed());
 }

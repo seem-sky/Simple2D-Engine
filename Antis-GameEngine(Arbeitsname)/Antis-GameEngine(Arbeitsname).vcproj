@@ -325,6 +325,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Thread.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Thread.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Time.cpp"
 				>
 			</File>

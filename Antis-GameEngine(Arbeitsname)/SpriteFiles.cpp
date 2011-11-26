@@ -6,7 +6,6 @@
 SpriteFiles::SpriteFiles()
 {
     m_sLogLocationName  = LOGFILE_ENGINE_LOG_NAME + "SpriteFiles : ";
-    m_pLogfile          = CLogfile::Get();
 }
 
 SpriteFileReadResult SpriteFiles::LoadSpriteDataFromFile(SpriteType SpriteType)

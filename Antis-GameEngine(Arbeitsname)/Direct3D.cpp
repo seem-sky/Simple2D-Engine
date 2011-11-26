@@ -9,6 +9,8 @@ CDirect3D::CDirect3D()
     m_lpBackBuffer                  = NULL;
     m_pLogfile                      = CLogfile::Get();
     m_sLogLocationName              = LOGFILE_ENGINE_LOG_NAME + "Direct3D : ";
+
+    m_uiSpriteIndex                 = 0;
 }
 
 CDirect3D::~CDirect3D()
@@ -73,6 +75,7 @@ HRESULT CDirect3D::EndScene(void)
         return S_FALSE;
 
     m_lpD3DDevice->EndScene();
+    m_uiSpriteIndex = 0;
 
     return m_lpD3DDevice->Present(0, 0, 0, 0);
 }
@@ -85,29 +88,43 @@ HRESULT CDirect3D::ResetDevice(HWND hWnd, const UINT uiScreenWidth, const UINT u
     m_PParams.BackBufferWidth  = uiScreenWidth;
     m_PParams.BackBufferHeight = uiScreenHeight;
 
-    if (CRessourceManager *pResMgr = CRessourceManager::Get())
+    // check if device is able to reset
+    HRESULT hr = m_lpD3DDevice->TestCooperativeLevel();
+    if (hr == D3DERR_DEVICENOTRESET)
     {
-        pResMgr->ClearCharsetTextures();
-        pResMgr->ClearTileTextures();
-    }
+        // release backbuffer
+        if(m_lpBackBuffer)
+        {
+            m_lpBackBuffer->Release();
+            m_lpBackBuffer = NULL;
+        }
+        
+        for (std::vector<LPD3DXSPRITE>::iterator itr = m_SpriteList.begin(); itr != m_SpriteList.end(); ++itr)
+        {
+            if (*itr)
+                (*itr)->OnLostDevice();
+        }
 
-    HRESULT hr = S_FALSE;
-
-    if (m_lpD3DDevice)
-        hr = m_lpD3DDevice->Reset(&m_PParams);
-
-    if (hr != S_OK)
-    {
+        // reset d3d device
         if (m_lpD3DDevice)
-            m_lpD3DDevice->Release();
+            hr = m_lpD3DDevice->Reset(&m_PParams);
 
-        m_lpD3DDevice = NULL;
+        if (hr == S_OK)
+        {
+            for (std::vector<LPD3DXSPRITE>::iterator itr = m_SpriteList.begin(); itr != m_SpriteList.end(); ++itr)
+            {
+                if (*itr)
+                    (*itr)->OnResetDevice();
+            }
 
-        // recreate direct3D device
-        hr = m_lpD3D->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hWnd, D3DCREATE_SOFTWARE_VERTEXPROCESSING, &m_PParams, &m_lpD3DDevice);
-        if(hr != S_OK)
-            // can´t create direct3D device
-            ERROR_LOG(m_sLogLocationName + "Unable to recreate Direct3D Device.");
+            // pointer for the backbuffer
+            hr = m_lpD3DDevice->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &m_lpBackBuffer);
+            if(hr == S_OK)
+                BASIC_LOG(m_sLogLocationName + "Successfully recreate Direct3D Backbuffer.");
+            else    // can´t create backbuffer
+                ERROR_LOG(m_sLogLocationName + "Unable to recreate Direct3D Backbuffer.");
+                
+        }
     }
 
     return hr;
@@ -116,6 +133,8 @@ HRESULT CDirect3D::ResetDevice(HWND hWnd, const UINT uiScreenWidth, const UINT u
 // release objects
 void CDirect3D::CleanUp(void)
 {
+    ReleaseAllSprites();
+
     if(m_lpBackBuffer)
     {
         m_lpBackBuffer->Release();
@@ -133,4 +152,54 @@ void CDirect3D::CleanUp(void)
         m_lpD3D->Release();
         m_lpD3D = NULL;
     }
+}
+
+void CDirect3D::CreateSprite()
+{
+    LPD3DXSPRITE sprite;
+    HRESULT hr = S_FALSE;
+    hr = D3DXCreateSprite(m_lpD3DDevice, &sprite);
+
+    if (hr == S_OK)
+        m_SpriteList.push_back(sprite);
+}
+
+void CDirect3D::ReleaseAllSprites()
+{
+    for (std::vector<LPD3DXSPRITE>::iterator itr = m_SpriteList.begin(); itr != m_SpriteList.end(); ++itr)
+    {
+        if (*itr)
+            (*itr)->Release();
+    }
+    m_SpriteList.clear();
+}
+
+void CDirect3D::DeleteOneSprite()
+{
+    if (m_SpriteList.empty())
+        return;
+}
+
+LPD3DXSPRITE CDirect3D::GetSpriteForDraw(UINT DrawFlag)
+{
+    // add new sprite
+    while(m_SpriteList.empty() || m_uiSpriteIndex > m_SpriteList.size() - 1)
+        CreateSprite();
+
+    if (!m_SpriteList.at(m_uiSpriteIndex))
+        return NULL;
+
+    m_SpriteList.at(m_uiSpriteIndex)->Begin(DrawFlag);
+    return m_SpriteList.at(m_uiSpriteIndex);
+}
+
+void CDirect3D::EndSpriteDraw()
+{
+    if (m_uiSpriteIndex > m_SpriteList.size() - 1)
+        return;
+
+    if (m_SpriteList.at(m_uiSpriteIndex))
+        m_SpriteList.at(m_uiSpriteIndex)->End();
+
+    m_uiSpriteIndex++;
 }

@@ -4,4 +4,10 @@
   <MapData>
     <MapTiles Tiles=""/>
   </MapData>
+  <LayerData>
+    <Layer>
+      <Object Texture="1" XPos="5" YPos="5"/>
+      <Object Texture="1" XPos="5" YPos="300"/>
+    </Layer>
+  </LayerData>
 </Map>

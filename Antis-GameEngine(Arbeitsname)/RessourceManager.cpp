@@ -6,7 +6,6 @@ const std::string DIRECTORY_TEXTURES_OBJECTS    = "Charset/";
 CRessourceManager::CRessourceManager(void) : TSingleton()
 {
     m_sLogLocationName = LOGFILE_ENGINE_LOG_NAME + "CRessourceManager : ";
-    m_pLogfile = CLogfile::Get();
 }
 
 CRessourceManager::~CRessourceManager(void)
@@ -34,16 +33,19 @@ TextureSource* CRessourceManager::AddCharsetTexture(std::string sTextureName)
     // load file
     LPDIRECT3DTEXTURE9 pTemp = NULL;
     hr = D3DXCreateTextureFromFileEx(pDirect3D->GetDevice(), sTextureName.c_str(), ImageInfo.Width, ImageInfo.Height, 1, 0,
-        D3DFMT_UNKNOWN, D3DPOOL_MANAGED, D3DX_FILTER_NONE, D3DX_FILTER_NONE, D3DCOLOR_XRGB(0, 0, 0), NULL, NULL, &pTemp);
+        D3DFMT_UNKNOWN, D3DPOOL_MANAGED, D3DX_FILTER_NONE, D3DX_FILTER_NONE, D3DCOLOR_XRGB(1, 0, 0), NULL, NULL, &pTemp);
 
     // return NULL if unable to load texture from file
-    if(FAILED(hr))
+    if (FAILED(hr))
     {
         if (!sTextureName.empty())
             ERROR_LOG(m_sLogLocationName + "Unable to load file " + sTextureName + ". No such file or directory.");
         delete pTemp;
         pTemp = NULL;
     }
+    else
+        BASIC_LOG(m_sLogLocationName + "Succesfully load file " + sTextureName + ".");
+
     Texture->SetTexture(pTemp);
     m_lTextures.insert(std::make_pair<std::string, TextureSource*>(sTextureName, Texture));
     return Texture;
