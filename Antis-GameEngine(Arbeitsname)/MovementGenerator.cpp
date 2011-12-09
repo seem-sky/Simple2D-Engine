@@ -1,9 +1,9 @@
 #include "MovementGenerator.h"
 
-MovementGenerator::MovementGenerator(void)
+MovementGenerator::MovementGenerator(D3DXVECTOR2 *pPosition)
 {
-    m_v2Position.x      = 0;
-    m_v2Position.y      = 0;
+    m_pPosition         = pPosition;
+
     m_v2CurMovement.x   = 0;
     m_v2CurMovement.y   = 0;
 }
@@ -95,11 +95,6 @@ void MovementGenerator::ClearMovement()
 
     m_v2CurMovement.x = 0;
     m_v2CurMovement.y = 0;
-}
-
-void MovementGenerator::Init(D3DXVECTOR2 v2Position)
-{
-    m_v2Position = v2Position;
 }
 
 void MovementGenerator::RemoveMovementCommand(sMoveCommand* pCommand)

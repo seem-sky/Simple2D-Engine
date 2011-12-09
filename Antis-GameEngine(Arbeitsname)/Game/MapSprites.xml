@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<SpriteData Location="MapSprites/">
-  <Sprite FileName="gras.png" passable="15" terraintype="5"/>
-  <Sprite FileName="stone.png"/>
-</SpriteData>

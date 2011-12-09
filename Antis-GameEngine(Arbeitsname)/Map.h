@@ -1,12 +1,7 @@
 #ifndef MAP_H
 #define MAP_H
 
-#include <vector>
-#include <d3dx9.h>
-#include "MapInput.h"
 #include "Logfile.h"
-#include "SpriteFiles.h"
-#include "WorldObject.h"
 #include "ObjectLayer.h"
 #include "Thread.h"
 
@@ -63,8 +58,8 @@ public:
     void UpdateMap(const UINT uiCurTime, const UINT uiDiff);
 
     const MapInfo* GetMapInfo() { return &m_MapInfo; }
-    const MapTiles* GetMapTiles() { return &m_v2MapTiles; }
-    SpriteFiles* GetSpriteFiles() { return m_pSpriteFiles; }
+    const std::vector<MapTiles>* GetMapTiles() { return &m_v2MapTiles; }
+    //SpriteFiles* GetSpriteFiles() { return m_pSpriteFiles; }
 
     /*#####
     ## position funktions
@@ -103,8 +98,7 @@ protected:
 
     MapLoadState m_MapLoadState;
     MapInfo m_MapInfo;
-    MapTiles m_v2MapTiles;
-    SpriteFiles *m_pSpriteFiles;
+    std::vector<MapTiles> m_v2MapTiles;
 
     D3DXVECTOR3 m_v3Position;
     D3DXCOLOR m_MapColor;
@@ -124,13 +118,13 @@ private:
 
 struct ObjectReadOut
 {
-    int m_TextureID;
+    int m_ObjectID;
     int m_XPos;
     int m_YPos;
 
     ObjectReadOut()
     {
-        m_TextureID = 0;
+        m_ObjectID  = 0;
         m_XPos      = 0;
         m_YPos      = 0;
     }
@@ -143,7 +137,7 @@ public:
     MapLoadThread(std::string sMapName);
 
     MapLoadState GetMapLoadState() { return m_MapLoadState; }
-    void GetMapInfo(MapInfo &MapInfo, MapTiles &MapTiles, LayerList &LayerList);
+    void GetMapInfo(MapInfo &MapInfo, std::vector<MapTiles> &MapTiles, LayerList &LayerList);
 
 protected:
     /*#####
@@ -167,7 +161,7 @@ private:
     MapLoadState m_MapLoadState;
 
     MapInfo m_MapInfo;
-    MapTiles m_v2MapTiles;
+    std::vector<MapTiles> m_v2MapTiles;
     LayerList m_lLayers;
 };
 #endif;

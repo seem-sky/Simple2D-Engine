@@ -2,12 +2,13 @@
 <Map>
   <MapInfo MapName="blubb" MapAnnounceName="underground lair"/>
   <MapData>
-    <MapTiles Tiles=""/>
+    <Layer>
+      <MapTiles Tiles=""/>
+    </Layer>
   </MapData>
   <LayerData>
     <Layer>
-      <Object Texture="1" XPos="5" YPos="5"/>
-      <Object Texture="1" XPos="5" YPos="300"/>
+      <Object ID="" XPos="" YPos=""/>
     </Layer>
   </LayerData>
 </Map>

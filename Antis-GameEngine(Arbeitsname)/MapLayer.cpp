@@ -1,6 +1,5 @@
 #include "MapLayer.h"
 #include "Game.h"
-#include <math.h>
 
 MapLayer::MapLayer(void) : Layer()
 {

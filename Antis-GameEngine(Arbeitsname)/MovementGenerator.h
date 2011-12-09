@@ -24,19 +24,18 @@ typedef std::list<sMoveCommand*> MoveCommandList;
 class MovementGenerator
 {
 public:
-    MovementGenerator(void);
+    MovementGenerator(D3DXVECTOR2 *pPosition);
     ~MovementGenerator(void);
 
     D3DXVECTOR2 Move2DWithoutCollision(int x, int y, UINT uiMSECTime);
     /*D3DXVECTOR2 Move2D(int x, int y, UINT uiMSECTime);*/
     D3DXVECTOR3 UpdateMovement(const UINT uiCurTime, const UINT uiDiff);
     void ClearMovement();
-    void Init(D3DXVECTOR2 v2Position);
     void RemoveMovementCommand(sMoveCommand* pCommand);
-    bool IsMoveCommandListEmpty() { return m_lMoveCommands.empty(); }
+    inline bool IsMoveCommandListEmpty() { return m_lMoveCommands.empty(); }
 
 protected:
-    D3DXVECTOR2 m_v2Position;
+    D3DXVECTOR2 *m_pPosition;
 
 private:
     void Move(int x, int y);

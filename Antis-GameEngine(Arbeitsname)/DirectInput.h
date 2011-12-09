@@ -7,24 +7,21 @@
 #include <dinput.h>
 #include "Singleton.h"
 
-class CDirectInput : public TSingleton<CDirectInput>
+class DirectInput : public TSingleton<DirectInput>
 {
 public:
-    CDirectInput();
-    ~CDirectInput();
-    //Prototypen
-    //
+    DirectInput();
+    ~DirectInput();
+
     BOOL Init(HINSTANCE hInstance, HWND hWnd);
     void SetKeyStateKeyboard();
     bool GetKeyStateKeyboard(int Key);
     void ClearKeyStateKeyboard();
     void ProcessInput( void );
 
-protected:
-    //Prototypen
-    //
+private:
     void CleanUp();
-    void InitMousePuffer( int PufferSize );
+    HRESULT InitMousePuffer( int PufferSize );
     //Direct Input Object
     LPDIRECTINPUT8 m_DirectInput;
     //Devices

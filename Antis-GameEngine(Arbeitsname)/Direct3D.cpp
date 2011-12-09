@@ -43,7 +43,7 @@ bool CDirect3D::Initialize(HWND hWnd, const UINT uiScreenWidth, const UINT uiScr
     m_PParams.Flags            = D3DPRESENTFLAG_LOCKABLE_BACKBUFFER;
 
     // create direct3D device
-    if(FAILED(m_lpD3D->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hWnd, D3DCREATE_SOFTWARE_VERTEXPROCESSING, &m_PParams, &m_lpD3DDevice)))
+    if(FAILED(m_lpD3D->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hWnd, D3DCREATE_MIXED_VERTEXPROCESSING+D3DCREATE_MULTITHREADED, &m_PParams, &m_lpD3DDevice)))
     {
         // can´t create direct3D device
         ERROR_LOG(m_sLogLocationName + "Unable to create Direct3D Device.");

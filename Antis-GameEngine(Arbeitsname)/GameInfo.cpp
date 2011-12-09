@@ -7,12 +7,12 @@ const string SEARCH_STRING_SCREEN_HEIGHT    = "ScreenHeight =";
 const string SEARCH_STRING_WINDOWED         = "Windowed =";
 const string SEARCH_STRING_MAPTILESIZE_X    = "MapTileSizeX =";
 const string SEARCH_STRING_MAPTILESIZE_Y    = "MapTileSizeY =";
+const string SEARCH_STRING_DATABASE         = "DatabaseLocation =";
 
 CGameInfo::CGameInfo(void) : TFileInput()
 {
     m_sLogLocationName  = LOGFILE_ENGINE_LOG_NAME + "CGameInfo : ";
     m_sFileDirectory    = "Game/";
-    m_sProgramName      = "";
     m_uiScreenWidth     = NULL;
     m_uiScreenHeight    = NULL;
     m_uiMapTileSize_X   = NULL;
@@ -96,17 +96,22 @@ void CGameInfo::InterpretFile()
 
             m_uiMapTileSize_Y = atoi(sFileString.c_str());
         }
+        // read out SpriteFileLocation
+        else if ((sFind = sFileString.find(SEARCH_STRING_DATABASE)) < sFileString.size())
+        {
+            sSearchString = SEARCH_STRING_DATABASE;
+            sFileString.erase(sFind, sFind + sSearchString.size());
+            while(sFileString[0] == 32)
+                sFileString.erase(0, 1);
+
+            m_sDatabaseLocation = sFileString.c_str();
+        }
     }
 }
 
 std::vector<std::string>* CGameInfo::GetFileData()
 {
     return &m_vData;
-}
-
-unsigned int CGameInfo::GetFileDataRows()
-{
-    return 0;
 }
 
 void CGameInfo::GetWindowSize(unsigned int &XSize, unsigned int &YSize)
@@ -118,10 +123,13 @@ void CGameInfo::GetWindowSize(unsigned int &XSize, unsigned int &YSize)
 void CGameInfo::CreateIniByDefault()
 {
     ERROR_LOG( m_sLogLocationName + "Unable to find " + m_sFileDirectory + GAME_DATA_GAME_INI + ". Create it and set values to default.");
-    m_sProgramName  = DEFAULT_PROJECT_NAME;
-    m_uiScreenWidth = DEFAULT_SCREEN_WIDTH;
-    m_uiScreenHeight= DEFAULT_SCREEN_HEIGHT;
-    m_bWindowed     = DEFAULT_WINDOWED;
+    m_sProgramName          = DEFAULT_PROJECT_NAME;
+    m_uiScreenWidth         = DEFAULT_SCREEN_WIDTH;
+    m_uiScreenHeight        = DEFAULT_SCREEN_HEIGHT;
+    m_bWindowed             = DEFAULT_WINDOWED;
+    m_uiMapTileSize_X       = DEFAULT_MAPTILESIZE_X;
+    m_uiMapTileSize_Y       = DEFAULT_MAPTILESIZE_Y;
+    m_sDatabaseLocation   = DEFAULT_DATABASE;
     SaveDataToIni();
 }
 
@@ -130,8 +138,16 @@ void CGameInfo::SaveDataToIni()
     FILE *GameIni = NULL;
     fopen_s(&GameIni, (m_sFileDirectory + GAME_DATA_GAME_INI).c_str(), "w");
     if(GameIni)
-        fprintf(GameIni, (SEARCH_STRING_PROJECT_NAME + m_sProgramName + "\n" + SEARCH_STRING_SCREEN_WIDTH + to_string(m_uiScreenWidth) + 
-            "\n" + SEARCH_STRING_SCREEN_HEIGHT + to_string(m_uiScreenHeight) + "\n" + SEARCH_STRING_WINDOWED + to_string(m_bWindowed)).c_str());
+        fprintf(GameIni,
+            (SEARCH_STRING_PROJECT_NAME + m_sProgramName + "\n" +
+            SEARCH_STRING_SCREEN_WIDTH + to_string(m_uiScreenWidth)+ "\n" +
+            SEARCH_STRING_SCREEN_HEIGHT + to_string(m_uiScreenHeight) + "\n" +
+            SEARCH_STRING_WINDOWED + to_string(m_bWindowed) + "\n\n" +
+            SEARCH_STRING_MAPTILESIZE_X + to_string(m_uiMapTileSize_X) + "\n" +
+            SEARCH_STRING_MAPTILESIZE_Y + to_string(m_uiMapTileSize_Y) + "\n\n" +
+            SEARCH_STRING_DATABASE + m_sDatabaseLocation
+            ).c_str());
+
     fclose(GameIni);
 }
 

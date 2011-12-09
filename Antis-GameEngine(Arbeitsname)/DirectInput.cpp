@@ -1,7 +1,9 @@
 #include "DirectInput.h"
 
-CDirectInput::CDirectInput()
+DirectInput::DirectInput()
 {
+    m_sLogLocationName  = LOGFILE_ENGINE_LOG_NAME + "DirectInput : ";
+
     m_DirectInput       = NULL;
     m_DIKeyboard        = NULL;
     m_DIMouse           = NULL;
@@ -12,58 +14,80 @@ CDirectInput::CDirectInput()
     ClearKeyStateKeyboard();
 }
 
-CDirectInput::~CDirectInput()
+DirectInput::~DirectInput()
 {
     CleanUp();
 }
 
-//Erzeugen des DirectInput Objects
-//returns TRUE wenn erfolgreich und FALSE wenn fehlgeschlagen
-BOOL CDirectInput::Init(HINSTANCE hInstance, HWND hWnd)
+BOOL DirectInput::Init(HINSTANCE hInstance, HWND hWnd)
 {
-    DirectInput8Create(hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8, reinterpret_cast<LPVOID*>(&m_DirectInput), NULL);
-
-    if(!m_DirectInput)
+    HRESULT hr = DirectInput8Create(hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8, (LPVOID*)(&m_DirectInput), NULL);
+    if(hr != S_OK)
         return FALSE;
+
     // init keyboard
-    m_DirectInput->CreateDevice(GUID_SysKeyboard, &m_DIKeyboard, NULL);
-    m_DIKeyboard->SetDataFormat(&c_dfDIKeyboard);
-    m_DIKeyboard->SetCooperativeLevel( hWnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE );
-    m_DIKeyboard->Acquire();
+    hr = m_DirectInput->CreateDevice(GUID_SysKeyboard, &m_DIKeyboard, NULL);
+    if(hr != S_OK)
+        return FALSE;
+
+    hr = m_DIKeyboard->SetDataFormat(&c_dfDIKeyboard);
+    if(hr != S_OK)
+        return FALSE;
+
+    hr = m_DIKeyboard->SetCooperativeLevel( hWnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE );
+    if(hr != S_OK)
+        return FALSE;
+
+    hr = m_DIKeyboard->Acquire();
+    if(hr != S_OK)
+        return FALSE;
+
     // init mouse
-    m_DirectInput->CreateDevice(GUID_SysMouse, &m_DIMouse, NULL);
-    m_DIMouse->SetDataFormat(&c_dfDIMouse);
-    m_DIMouse->SetCooperativeLevel(hWnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
-    InitMousePuffer( 20 );
+    hr = m_DirectInput->CreateDevice(GUID_SysMouse, &m_DIMouse, NULL);
+    if(hr != S_OK)
+        return FALSE;
+
+    hr = m_DIMouse->SetDataFormat(&c_dfDIMouse);
+    if(hr != S_OK)
+        return FALSE;
+
+    hr = m_DIMouse->SetCooperativeLevel(hWnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
+    if(hr != S_OK)
+        return FALSE;
+
+    hr = InitMousePuffer( 20 );
+    if(hr != S_OK)
+        return FALSE;
+
     return TRUE;
 }
+
 //free direct input object
-void CDirectInput::CleanUp()
+void DirectInput::CleanUp()
 {
-    if(NULL != m_DirectInput)
+    if(m_DirectInput)
     {
         m_DirectInput->Release();
         m_DirectInput = NULL;
     }
 }
-void CDirectInput::SetKeyStateKeyboard()
+void DirectInput::SetKeyStateKeyboard()
 {
     if(FAILED( m_DIKeyboard->GetDeviceState( sizeof(m_aKeyState), &m_aKeyState)))
         m_DIKeyboard->Acquire();
 }
 
-bool CDirectInput::GetKeyStateKeyboard(int Key)
+bool DirectInput::GetKeyStateKeyboard(int Key)
 {
     return m_aKeyState[Key];
 }
 
-void CDirectInput::ClearKeyStateKeyboard()
+void DirectInput::ClearKeyStateKeyboard()
 {
-    for(int i = 0; i < sizeof(m_aKeyState); i++)
-        m_aKeyState[i] = false;
+    memset(&m_aKeyState, NULL, sizeof(m_aKeyState));
 }
 
-void CDirectInput::InitMousePuffer(int PufferSize)
+HRESULT DirectInput::InitMousePuffer(int PufferSize)
 {
     ZeroMemory( &DIProperties, sizeof(DIProperties ));
     DIProperties.diph.dwSize            = sizeof(DIPROPDWORD);
@@ -73,10 +97,10 @@ void CDirectInput::InitMousePuffer(int PufferSize)
 
     DIProperties.dwData                 = PufferSize;
 
-    m_DIMouse->SetProperty( DIPROP_BUFFERSIZE, &DIProperties.diph );
+    return m_DIMouse->SetProperty( DIPROP_BUFFERSIZE, &DIProperties.diph );
 }
 
-void CDirectInput::ProcessInput( void )
+void DirectInput::ProcessInput( void )
 {
     DWORD NumElements = 1;
     DIDEVICEOBJECTDATA data;

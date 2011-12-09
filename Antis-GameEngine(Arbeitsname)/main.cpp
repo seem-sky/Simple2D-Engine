@@ -47,15 +47,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
     else
         BASIC_LOG(m_sLogLocationName + "Succesfully create window.");
 
-    // init game
-    if (!m_pGame->Initialize(g_hWnd))
-    {
-        ERROR_LOG(m_sLogLocationName + "Unable to initialize Game.");
-        ReleaseObjects();
-        return 0;
-    }
-    BASIC_LOG(m_sLogLocationName + "Succesfully initialize Game.");
-
     // create and start CTime
     m_pTime = CTime::Get();
     if (!m_pTime)
@@ -66,10 +57,12 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
     }
     BASIC_LOG(m_sLogLocationName + "Succesfully start Time.");
 
+    CoInitialize(NULL);
+
    // enter the main loop:
     MSG msg = {0};
-    bool bFirstRun = true;
     HRESULT m_DrawResult = S_OK;
+    GAMEINIT_STATE GameInitState = GAMEINIT_STATE_IN_PROGRESS;
     for(;;)
     {
         while(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
@@ -84,22 +77,33 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
         // Updating time
         m_pTime->UpdateTime();
 
-        if (m_DrawResult == S_OK)
-        {
-            // Game run
-            m_pGame->Run(1, bFirstRun ? 0 : (UINT)(m_pTime->GetTimeElapsed()));
-            // Game render
-            m_DrawResult = m_pGame->Draw();
-        }
-        else    // if draw device is lost, reset it
-        {
-            Sleep(10);
-            m_DrawResult = m_pGame->ResetDrawDevice(g_hWnd);
-        }
+        // init game
+        if (GameInitState == GAMEINIT_STATE_IN_PROGRESS)
+            GameInitState = m_pGame->Initialize(g_hInst, g_hWnd);
 
-        bFirstRun = false;
+        // run game
+        else if (GameInitState == GAMEINIT_STATE_OK)
+        {
+            if (m_DrawResult == S_OK)
+            {
+                // Game run
+                m_pGame->Run(1, (UINT)m_pTime->GetTimeElapsed());
+                // Game render
+                m_DrawResult = m_pGame->Draw();
+            }
+            else    // if draw device is lost, reset it
+            {
+                Sleep(100);
+                m_DrawResult = m_pGame->ResetD3DXDevice(g_hWnd);
+            }
+        }
+        // if init game failed, end game
+        else
+            break;
     }
     ReleaseObjects();
+
+    CoUninitialize();
 
     return msg.wParam;
 }

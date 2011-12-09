@@ -1,13 +1,14 @@
 #include "Game.h"
 #include "RessourceManager.h"
-#include "SpriteFiles.h"
 
 CGame::CGame(void) : TSingleton()
 {
     m_sLogLocationName  = LOGFILE_ENGINE_LOG_NAME + "CGame : ";
-    m_pDirect3D         = CDirect3D::Get();
+    m_pDirect3D         = NULL;
+    m_pDirectInput      = NULL;
     m_pWorldSession     = NULL;
     m_pMap              = NULL;
+    m_pDatabase         = NULL;
 
     // read game ini data
     if (!m_GameInfo.ReadFile(GAME_DATA_GAME_INI))
@@ -23,45 +24,90 @@ CGame::~CGame(void)
     Quit();
 }
 
-bool CGame::Initialize(HWND hWnd)
+GAMEINIT_STATE CGame::Initialize(HINSTANCE hInstance, HWND hWnd)
 {
     // create and init direct3D
-    m_pDirect3D = CDirect3D::Get();
     if (!m_pDirect3D)
     {
-        ERROR_LOG(m_sLogLocationName + "Unable to create Direct3D.");
-        return false;
+        m_pDirect3D = CDirect3D::Get();
+        if (!m_pDirect3D)
+        {
+            ERROR_LOG(m_sLogLocationName + "Unable to create Direct3D.");
+            return GAMEINIT_STATE_FAILED;
+        }
+
+        UINT ScreenWidth = 0, ScreenHeight = 0;
+        GetGameInfo()->GetWindowSize(ScreenWidth, ScreenHeight);
+        if (!m_pDirect3D->Initialize(hWnd, ScreenWidth, ScreenHeight, GetGameInfo()->IsWindowed()))
+        {
+            ERROR_LOG(m_sLogLocationName + "Unable to initialize Direct3D.");
+            return GAMEINIT_STATE_FAILED;
+        }
+
+        m_pDirect3D->SetClearColor(D3DCOLOR_XRGB(0, 0, 0));
+        BASIC_LOG(m_sLogLocationName + "Succesfully initialize Direct3D.");
     }
 
-    unsigned int ScreenWidth, ScreenHeight;
-    GetGameInfo()->GetWindowSize(ScreenWidth, ScreenHeight);
-    if (!m_pDirect3D->Initialize(hWnd, ScreenWidth, ScreenHeight, GetGameInfo()->IsWindowed()))
+    // create an init DirectInput
+    if(!m_pDirectInput)
     {
-        ERROR_LOG(m_sLogLocationName + "Unable to initialize Direct3D.");
-        return false;
+        m_pDirectInput = DirectInput::Get();
+        if (m_pDirectInput)
+        {
+            m_pDirectInput->Init(hInstance, hWnd);
+        }
+        else
+        {
+            ERROR_LOG(m_sLogLocationName + "Unable to initialize DirectInput.");
+            return GAMEINIT_STATE_FAILED;
+        }
+
     }
 
-    m_pDirect3D->SetClearColor(D3DCOLOR_XRGB(0, 0, 0));
-    BASIC_LOG(m_sLogLocationName + "Succesfully initialize Direct3D.");
+    // create new map if not done
+    if (!m_pMap) 
+        m_pMap = new Map();
 
-    CRessourceManager::Get();
+    // load complete database
+    if (!m_pDatabase)
+    {
+        m_pDatabase = GameDatabase::Get();
+        if (!m_pDatabase)
+        {
+            ERROR_LOG(m_sLogLocationName + "Unable to initialize Direct3D.");
+            return GAMEINIT_STATE_FAILED;
+        }
+    }
 
-    // get all sprite names, stored in different xml files
-    SpriteFiles *pSpriteFiles = SpriteFiles::Get();
-    pSpriteFiles->LoadSpriteDataFromFile(SPRITE_TYPE_MAP);
-    pSpriteFiles->LoadSpriteDataFromFile(SPRITE_TYPE_AUTOTILE);
-    pSpriteFiles->LoadSpriteDataFromFile(SPRITE_TYPE_OBJECT);
+    switch(m_pDatabase->LoadDatabase(GetGameInfo()->GetDatabaseLocation()))
+    {
+    case DATABASE_LOAD_RESULT_OK:
+        BASIC_LOG(m_sLogLocationName + "Successfully load Game-Database.");
+        return GAMEINIT_STATE_OK;
 
-    m_pMap = new Map();
+    case DATABASE_LOAD_RESULT_IN_PROGRESS:
+        return GAMEINIT_STATE_IN_PROGRESS;
 
-    return true;
+    case DATABASE_LOAD_RESULT_NO_FILE:
+        ERROR_LOG(m_sLogLocationName + "Unable to load Game-Database." + GetGameInfo()->GetDatabaseLocation() + " no such file or directory.");
+        return GAMEINIT_STATE_FAILED;
+
+    case DATABASE_LOAD_RESULT_CORRUPT_FILE:
+        ERROR_LOG(m_sLogLocationName + "Unable to load Game-Database." + GetGameInfo()->GetDatabaseLocation() + " is a corrupt file.");
+        return GAMEINIT_STATE_FAILED;
+
+    case DATABASE_LOAD_RESULT_FAILED:
+    default:
+        ERROR_LOG(m_sLogLocationName + "Unable to load Game-Database. Undefined error!");
+        return GAMEINIT_STATE_FAILED;
+    }
 }
 
 bool CGame::Run(const UINT CurTime, const UINT CurElapsedTime)
 {
     if (!Test)
     {
-        if (MAP_RESULT_DONE == m_pMap->LoadNewMap("Map2.map"))
+        if (MAP_RESULT_DONE == m_pMap->LoadNewMap("Map1.map"))
             Test = true;
     }
     else
@@ -98,6 +144,10 @@ void CGame::Quit()
     if (m_pDirect3D)
         m_pDirect3D->Del();
 
+    // release DirectInput
+    if (m_pDirectInput)
+        m_pDirectInput->Del();
+
     // release ressource manager
     if (CRessourceManager *pRManager = CRessourceManager::Get())
         pRManager->Del();
@@ -107,7 +157,7 @@ void CGame::Quit()
         delete m_pMap;
 }
 
-HRESULT CGame::ResetDrawDevice(HWND hWnd)
+HRESULT CGame::ResetD3DXDevice(HWND hWnd)
 {
     if (!m_pDirect3D)
         return S_FALSE;

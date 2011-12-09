@@ -29,8 +29,8 @@ void ObjectLayer::Draw()
     {
         for (std::vector<WorldObject*>::const_iterator objItr = itr->second.begin(); objItr != itr->second.end(); ++objItr)
         {
-            if ((*objItr)->GetTextureSource() && (*objItr)->GetTextureSource()->GetTexture())
-                pSprite->Draw((*objItr)->GetTextureSource()->GetTexture(), NULL, NULL, &(*objItr)->GetPosition(), (*objItr)->GetColor());
+            if (*objItr)
+                (*objItr)->DrawObject(pSprite);
         }
     }
     pDirect3D->EndSpriteDraw();

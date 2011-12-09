@@ -42,7 +42,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_DEBUG, D3D_DEBUG_INFO"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -61,7 +61,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="d3d9.lib d3dx9.lib msxml2.lib"
+				AdditionalDependencies="d3d9.lib d3dx9.lib msxml2.lib dinput8.lib dxguid.lib"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -170,18 +170,6 @@
 	</References>
 	<Files>
 		<Filter
-			Name="DirectX"
-			>
-			<File
-				RelativePath=".\Direct3D.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Direct3D.h"
-				>
-			</File>
-		</Filter>
-		<Filter
 			Name="Game"
 			>
 			<File
@@ -190,6 +178,14 @@
 			</File>
 			<File
 				RelativePath=".\Game.h"
+				>
+			</File>
+			<File
+				RelativePath=".\GameDatabase.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\GameDatabase.h"
 				>
 			</File>
 			<File
@@ -236,6 +232,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Player.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Player.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Unit.cpp"
 					>
 				</File>
@@ -278,14 +282,6 @@
 			</File>
 			<File
 				RelativePath=".\GameInfo.h"
-				>
-			</File>
-			<File
-				RelativePath=".\SpriteFiles.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\SpriteFiles.h"
 				>
 			</File>
 		</Filter>
@@ -352,12 +348,24 @@
 				RelativePath=".\Texture.h"
 				>
 			</File>
+		</Filter>
+		<Filter
+			Name="DirectX"
+			>
 			<File
-				RelativePath=".\TileTextureSource.cpp"
+				RelativePath=".\Direct3D.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\TileTextureSource.h"
+				RelativePath=".\Direct3D.h"
+				>
+			</File>
+			<File
+				RelativePath=".\DirectInput.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\DirectInput.h"
 				>
 			</File>
 		</Filter>

@@ -1,17 +1,14 @@
 #include "Map.h"
-#include <msxml2.h>
-#include "Time.h"
 #include "Game.h"
 #include "RessourceManager.h"
 #include "Direct3D.h"
+#include <msxml2.h>
 
 #import <msxml4.dll>
 
 Map::Map(void)
 {
     m_sLogLocationName  = LOGFILE_ENGINE_LOG_NAME + "Map : ";
-
-    m_pSpriteFiles      = SpriteFiles::Get();
 
     m_v3Position.x = 0;
     m_v3Position.y = 0;
@@ -67,7 +64,7 @@ WorldObject* Map::AddNewWorldObject(std::string sFileName, int XPos, int YPos, U
     if (ObjectLayer *pLayer = (ObjectLayer*)GetLayerAtNr(uiLayerNr))
     {
         pNewObject->SetPosition(D3DXVECTOR2((float)XPos, (float)YPos));
-        pNewObject->SetTextureSource(sFileName);
+        //pNewObject->SetTextureSource(sFileName);
         pLayer->AddWorldObject(pNewObject);
     }
     else
@@ -89,8 +86,8 @@ void Map::DrawMap()
     if (!pGameInfo)
         return;
 
-    CRessourceManager *pRManager = CRessourceManager::Get();
-    if (!pRManager)
+    TextureMgr *pTextureMgr = TextureMgr::Get();
+    if (!pTextureMgr)
         return;
 
     CDirect3D *pDirect3D = CDirect3D::Get();
@@ -98,15 +95,14 @@ void Map::DrawMap()
         return;
 
     // get screen resolution
-    unsigned int uiScreenWidth = 0;
-    unsigned int uiScreenHeight = 0;
+    UINT uiScreenWidth = 0;
+    UINT uiScreenHeight = 0;
     pGameInfo->GetWindowSize(uiScreenWidth, uiScreenHeight);
 
-    const MapInfo *MapInfo          = GetMapInfo();
-    const MapTiles *MapTiles        = GetMapTiles();
-    SpriteFiles *SpriteFiles        = GetSpriteFiles();
+    const MapInfo *MapInfo                  = GetMapInfo();
+    const std::vector<MapTiles> *MapTiles   = GetMapTiles();
     // return if one of the info files are corrupt
-    if (!MapInfo || !MapTiles || !SpriteFiles)
+    if (!MapInfo || !MapTiles)
         return;
     
     D3DXVECTOR3 vPosition = GetPosition();
@@ -117,12 +113,12 @@ void Map::DrawMap()
     pGameInfo->GetMapTileSize(uiMapTileSize_X, uiMapTileSize_Y);
 
     // get start pos left and up
-    unsigned int startposX = 0;
-    unsigned int startposY = 0;
+    UINT startposX = 0;
+    UINT startposY = 0;
     if (vPosition.x < 0)
-        startposX = (unsigned int)((-1) * vPosition.x / uiMapTileSize_X);
+        startposX = (UINT)((-1) * vPosition.x / uiMapTileSize_X);
     if (vPosition.y < 0)
-        startposY = (unsigned int)((-1) * vPosition.y / uiMapTileSize_Y);
+        startposY = (UINT)((-1) * vPosition.y / uiMapTileSize_Y);
 
     // if startpos greater max map tiles, set to max map tiles
     if (startposX > MapInfo->m_uiX)
@@ -131,15 +127,15 @@ void Map::DrawMap()
         startposY = MapInfo->m_uiY;
 
     // get end pos right and bottom
-    unsigned int endposX = 0;
-    unsigned int endposY = 0;
+    UINT endposX = 0;
+    UINT endposY = 0;
     if (vPosition.x + MapInfo->m_uiX * uiMapTileSize_X > uiScreenWidth)
     {
         if (vPosition.x < 0)
-            endposX = (unsigned int)(-1*(vPosition.x + startposX * uiMapTileSize_X) + uiScreenWidth ) / uiMapTileSize_X + startposX + 1;
+            endposX = (UINT)(-1*(vPosition.x + startposX * uiMapTileSize_X) + uiScreenWidth ) / uiMapTileSize_X + startposX + 1;
 
         else if (vPosition.x < uiScreenWidth)
-            endposX = (unsigned int)((uiScreenWidth - vPosition.x)/ uiMapTileSize_X + startposX + 1);
+            endposX = (UINT)((uiScreenWidth - vPosition.x)/ uiMapTileSize_X + startposX + 1);
     }
     else
         endposX = MapInfo->m_uiX;
@@ -147,9 +143,9 @@ void Map::DrawMap()
     if (vPosition.y + MapInfo->m_uiY * uiMapTileSize_Y > uiScreenHeight)
     {
         if (vPosition.y < 0)
-            endposY = (unsigned int)(-1*(vPosition.y + startposY * uiMapTileSize_X) + uiScreenHeight ) / uiMapTileSize_Y + startposY + 1;
+            endposY = (UINT)(-1*(vPosition.y + startposY * uiMapTileSize_X) + uiScreenHeight ) / uiMapTileSize_Y + startposY + 1;
         else if (vPosition.y < uiScreenHeight)
-            endposY = (unsigned int)((uiScreenHeight - vPosition.y)/ uiMapTileSize_Y + startposY + 1);            
+            endposY = (UINT)((uiScreenHeight - vPosition.y)/ uiMapTileSize_Y + startposY + 1);            
     }
     else
         endposY = MapInfo->m_uiY;
@@ -159,156 +155,160 @@ void Map::DrawMap()
     if (!pSprite)
         return;
 
-    vPosition.x = GetPositionX() + startposX * uiMapTileSize_X;
-    vPosition.y = GetPositionY() + startposY * uiMapTileSize_Y;
-
-    for (unsigned int i = startposY; i < endposY && startposX != endposX; ++i)
+    // iterate through layers
+    for (UINT layer = 0; layer < MapTiles->size(); layer++)
     {
-        // break if empty or out of range
-        if (MapTiles->empty() || MapTiles->size()-1 < i)
-            break;
+        vPosition.x = GetPositionX() + startposX * uiMapTileSize_X;
+        vPosition.y = GetPositionY() + startposY * uiMapTileSize_Y;
 
-        for (unsigned int j = startposX; j < endposX; ++j)
+        for (UINT i = startposY; i < endposY && startposX != endposX; ++i)
         {
             // break if empty or out of range
-            if (MapTiles->at(i).empty() || MapTiles->at(i).size()-1 < j)
+            if (MapTiles->at(layer).empty() || MapTiles->at(layer).size()-1 < i)
                 break;
 
-            float fMapTile = MapTiles->at(i).at(j);
-
-            // if fMapTile is a float value (e.g. x.4) its an autotile
-            if ((fMapTile / (int)fMapTile) > 1)
+            for (UINT j = startposX; j < endposX; ++j)
             {
-                if (TileTextureSource *pTexture = pRManager->GetMapTexture(SpriteFiles->GetSpriteFileAt(SPRITE_TYPE_AUTOTILE, (UINT)fMapTile)))
+                // break if empty or out of range
+                if (MapTiles->at(layer).at(i).empty() || MapTiles->at(layer).at(i).size()-1 < j)
+                    break;
+
+                float fMapTile = MapTiles->at(layer).at(i).at(j);
+
+                // if fMapTile is a float value (e.g. x.4) its an autotile
+                if ((fMapTile / (int)fMapTile) > 1)
                 {
-                    if (pTexture->GetTexture())
+                    if (const TextureSource *pTexture = pTextureMgr->GetTextureSource((UINT)fMapTile))
                     {
-                        // set source rect
-                        int iAutoTile = (int)((fMapTile +0.00005) * 10000)%10000;
-                        RECT rSrcRect;
-                        // if autotile is one tile
-                        if (iAutoTile % 1000 == 0)
+                        if (pTexture->m_pTexture)
                         {
-                            iAutoTile /= 10;
-                            rSrcRect.left = ((iAutoTile/100-1) % 3) *uiMapTileSize_X;
-                            rSrcRect.right = rSrcRect.left + uiMapTileSize_X;
-                            rSrcRect.top = ((iAutoTile/100-1) / 3) *uiMapTileSize_Y;
-                            rSrcRect.bottom = rSrcRect.top + uiMapTileSize_Y;
-                            pSprite->Draw(pTexture->GetTexture(), &rSrcRect, NULL, &vPosition, GetColor());
-                        }
-                        // if autotile is split up into 4 tiles
-                        else if (iAutoTile % 10 > 0)
-                        {
-                            D3DXVECTOR3 vPosTemp;
-                            unsigned int iCount = 1;
-                            for (int i = 0; i < 2; i++)
+                            // set source rect
+                            int iAutoTile = (int)((fMapTile +0.00005) * 10000)%10000;
+                            RECT rSrcRect;
+                            // if autotile is one tile
+                            if (iAutoTile % 1000 == 0)
                             {
-                                for (int j = 0; j < 2; j++)
+                                iAutoTile /= 10;
+                                rSrcRect.left = ((iAutoTile/100-1) % 3) *uiMapTileSize_X;
+                                rSrcRect.right = rSrcRect.left + uiMapTileSize_X;
+                                rSrcRect.top = ((iAutoTile/100-1) / 3) *uiMapTileSize_Y;
+                                rSrcRect.bottom = rSrcRect.top + uiMapTileSize_Y;
+                                pSprite->Draw(pTexture->m_pTexture, &rSrcRect, NULL, &vPosition, GetColor());
+                            }
+                            // if autotile is split up into 4 tiles
+                            else if (iAutoTile % 10 > 0)
+                            {
+                                D3DXVECTOR3 vPosTemp;
+                                UINT iCount = 1;
+                                for (int i = 0; i < 2; i++)
                                 {
-                                    // check x pos
-                                    rSrcRect.left = iAutoTile%((int)pow(10.0f, (float)iCount));
-                                    rSrcRect.left /= (int)pow(10.0f, (float)iCount-1);
-                                    rSrcRect.left--;
-                                    rSrcRect.left = rSrcRect.left % 3 *(uiMapTileSize_X / (j+1));
-                                    if (!j)
-                                        rSrcRect.left += uiMapTileSize_X / 2;
+                                    for (int j = 0; j < 2; j++)
+                                    {
+                                        // check x pos
+                                        rSrcRect.left = iAutoTile%((int)pow(10.0f, (float)iCount));
+                                        rSrcRect.left /= (int)pow(10.0f, (float)iCount-1);
+                                        rSrcRect.left--;
+                                        rSrcRect.left = rSrcRect.left % 3 *(uiMapTileSize_X / (j+1));
+                                        if (!j)
+                                            rSrcRect.left += uiMapTileSize_X / 2;
 
-                                    rSrcRect.right = rSrcRect.left + uiMapTileSize_X / 2;
+                                        rSrcRect.right = rSrcRect.left + uiMapTileSize_X / 2;
 
 
-                                    // check y pos
-                                    rSrcRect.top = iAutoTile%((int)pow(10.0f, (float)iCount));
-                                    rSrcRect.top /= (int)pow(10.0f, (float)iCount-1);
-                                    rSrcRect.top--;
-                                    rSrcRect.top = rSrcRect.top / 3 *(uiMapTileSize_Y / (i+1));
-                                    if (!i)
-                                        rSrcRect.top += uiMapTileSize_Y / 2;
+                                        // check y pos
+                                        rSrcRect.top = iAutoTile%((int)pow(10.0f, (float)iCount));
+                                        rSrcRect.top /= (int)pow(10.0f, (float)iCount-1);
+                                        rSrcRect.top--;
+                                        rSrcRect.top = rSrcRect.top / 3 *(uiMapTileSize_Y / (i+1));
+                                        if (!i)
+                                            rSrcRect.top += uiMapTileSize_Y / 2;
 
-                                    rSrcRect.bottom = rSrcRect.top + uiMapTileSize_Y / 2;
+                                        rSrcRect.bottom = rSrcRect.top + uiMapTileSize_Y / 2;
 
-                                    // calc draw pos
-                                    if (j)
-                                        vPosTemp.x = vPosition.x;
-                                    else
-                                        vPosTemp.x = vPosition.x + uiMapTileSize_X / 2;
+                                        // calc draw pos
+                                        if (j)
+                                            vPosTemp.x = vPosition.x;
+                                        else
+                                            vPosTemp.x = vPosition.x + uiMapTileSize_X / 2;
 
-                                    if (i)
-                                        vPosTemp.y = vPosition.y;
-                                    else
-                                        vPosTemp.y = vPosition.y + uiMapTileSize_Y / 2;
-                                    vPosTemp.z = vPosition.z;
+                                        if (i)
+                                            vPosTemp.y = vPosition.y;
+                                        else
+                                            vPosTemp.y = vPosition.y + uiMapTileSize_Y / 2;
+                                        vPosTemp.z = vPosition.z;
 
-                                    pSprite->Draw(pTexture->GetTexture(), &rSrcRect, NULL, &vPosTemp, GetColor());
-                                    iCount++;
+                                        pSprite->Draw(pTexture->m_pTexture, &rSrcRect, NULL, &vPosTemp, GetColor());
+                                        iCount++;
+                                    }
                                 }
                             }
-                        }
-                        // if autotile is split up into 2 tiles
-                        else
-                        {
-                            D3DXVECTOR3 vPosTemp = vPosition;
-                            iAutoTile /= 10;
-                            for (int i = 0; i < 2; i++)
+                            // if autotile is split up into 2 tiles
+                            else
                             {
-                                // if autotile is left to right split up
-                                if (iAutoTile % 10 == 0)
+                                D3DXVECTOR3 vPosTemp = vPosition;
+                                iAutoTile /= 10;
+                                for (int i = 0; i < 2; i++)
                                 {
-                                    if (i == 0)
-                                        rSrcRect.left = ((iAutoTile/100-1) % 3) *uiMapTileSize_X;
-                                    else
-                                        rSrcRect.left = ((iAutoTile/10%10-1) % 3) *uiMapTileSize_X;
-                                    rSrcRect.right = rSrcRect.left + uiMapTileSize_X;
+                                    // if autotile is left to right split up
+                                    if (iAutoTile % 10 == 0)
+                                    {
+                                        if (i == 0)
+                                            rSrcRect.left = ((iAutoTile/100-1) % 3) *uiMapTileSize_X;
+                                        else
+                                            rSrcRect.left = ((iAutoTile/10%10-1) % 3) *uiMapTileSize_X;
+                                        rSrcRect.right = rSrcRect.left + uiMapTileSize_X;
 
-                                    if (i == 0)
-                                        rSrcRect.top = ((iAutoTile/100-1) / 3) *uiMapTileSize_Y;
-                                    else
-                                        rSrcRect.top = ((iAutoTile/10%10-1) / 3) *uiMapTileSize_Y;
+                                        if (i == 0)
+                                            rSrcRect.top = ((iAutoTile/100-1) / 3) *uiMapTileSize_Y;
+                                        else
+                                            rSrcRect.top = ((iAutoTile/10%10-1) / 3) *uiMapTileSize_Y;
 
-                                    if (i == 1)
-                                        rSrcRect.top += uiMapTileSize_Y/2;
-                                    rSrcRect.bottom = rSrcRect.top + uiMapTileSize_Y/2;
+                                        if (i == 1)
+                                            rSrcRect.top += uiMapTileSize_Y/2;
+                                        rSrcRect.bottom = rSrcRect.top + uiMapTileSize_Y/2;
+                                    }
+                                    // if autotile is top to bottom split up
+                                    else
+                                    {
+                                        if (i == 0)
+                                            rSrcRect.left = ((iAutoTile/100-1) % 3) *uiMapTileSize_X;
+                                        else
+                                            rSrcRect.left = ((iAutoTile/10%10-1) % 3) *uiMapTileSize_X;
+
+                                        if (i == 1)
+                                            rSrcRect.left +=uiMapTileSize_X/2;
+                                        rSrcRect.right = rSrcRect.left + uiMapTileSize_X/2;
+
+                                        if (i == 0)
+                                            rSrcRect.top = ((iAutoTile/100-1) / 3) * uiMapTileSize_Y;
+                                        else
+                                            rSrcRect.top = ((iAutoTile/10%10-1) / 3) * uiMapTileSize_Y;
+
+                                        rSrcRect.bottom = rSrcRect.top + uiMapTileSize_Y;
+                                    }
+                                    pSprite->Draw(pTexture->m_pTexture, &rSrcRect, NULL, &vPosTemp, GetColor());
+                                    if (iAutoTile % 10 == 0)
+                                        vPosTemp.y += uiMapTileSize_Y/2;
+                                    else
+                                        vPosTemp.x += uiMapTileSize_X/2;
                                 }
-                                // if autotile is top to bottom split up
-                                else
-                                {
-                                    if (i == 0)
-                                        rSrcRect.left = ((iAutoTile/100-1) % 3) *uiMapTileSize_X;
-                                    else
-                                        rSrcRect.left = ((iAutoTile/10%10-1) % 3) *uiMapTileSize_X;
-
-                                    if (i == 1)
-                                        rSrcRect.left +=uiMapTileSize_X/2;
-                                    rSrcRect.right = rSrcRect.left + uiMapTileSize_X/2;
-
-                                    if (i == 0)
-                                        rSrcRect.top = ((iAutoTile/100-1) / 3) * uiMapTileSize_Y;
-                                    else
-                                        rSrcRect.top = ((iAutoTile/10%10-1) / 3) * uiMapTileSize_Y;
-
-                                    rSrcRect.bottom = rSrcRect.top + uiMapTileSize_Y;
-                                }
-                                pSprite->Draw(pTexture->GetTexture(), &rSrcRect, NULL, &vPosTemp, GetColor());
-                                if (iAutoTile % 10 == 0)
-                                    vPosTemp.y += uiMapTileSize_Y/2;
-                                else
-                                    vPosTemp.x += uiMapTileSize_X/2;
                             }
                         }
                     }
                 }
-            }
-            else    // normal map tile
-            {
-                if (TileTextureSource *pTexture = pRManager->GetMapTexture(SpriteFiles->GetSpriteFileAt(SPRITE_TYPE_MAP, (UINT)fMapTile)))
+                else    // normal map tile
                 {
-                    if (pTexture->GetTexture())   
-                        pSprite->Draw(pTexture->GetTexture(), NULL, NULL, &vPosition, GetColor());
+                    if (const TextureSource *pTexture = pTextureMgr->GetTextureSource((UINT)fMapTile))
+                    {
+                        if (pTexture->m_pTexture)   
+                            pSprite->Draw(pTexture->m_pTexture, NULL, NULL, &vPosition, GetColor());
+                    }
                 }
+                vPosition.x += uiMapTileSize_X;
             }
-            vPosition.x += uiMapTileSize_X;
+            vPosition.x = GetPositionX() + startposX * uiMapTileSize_X;
+            vPosition.y += uiMapTileSize_Y;
         }
-        vPosition.x = GetPositionX() + startposX * uiMapTileSize_X;
-        vPosition.y += uiMapTileSize_Y;
     }
 
     pDirect3D->EndSpriteDraw();
@@ -400,13 +400,16 @@ MapLoadThread::MapLoadThread(std::string sMapName) : ActiveObject()
 {
     m_MapLoadState      = MAP_STATE_NONE;
     m_sMapName          = sMapName;
-    m_sLogLocationName = LOGFILE_ENGINE_LOG_NAME + "MapLoadThread : ";
+    m_sLogLocationName  = LOGFILE_ENGINE_LOG_NAME + "MapLoadThread : ";
 
     _thread.Resume ();
 }
 
 void MapLoadThread::Run()
 {
+    if (FAILED(CoInitialize(NULL)))
+        ERROR_LOG(m_sLogLocationName + "Unable to initialize COM.");
+
     MapLoadResult result = MAP_RESULT_NONE;
     std::string sMapDataFromFile;
 
@@ -426,7 +429,7 @@ void MapLoadThread::Run()
             result = LoadTiles(&sMapDataFromFile);
             m_MapLoadState = MAP_STATE_DO_OBJECTS;
             break;
-        case MAP_STATE_DO_OBJECTS:                    // Load tiles
+        case MAP_STATE_DO_OBJECTS:                  // Load objects and layer
             result = LoadLayerAndObjects(&sMapDataFromFile);
             m_MapLoadState = MAP_STATE_DONE;
             break;
@@ -453,6 +456,8 @@ void MapLoadThread::Run()
             break;
         }
     }
+
+    CoUninitialize();
 }
 
 MapLoadResult MapLoadThread::LoadDataFromFile(std::string sMapName, std::string *sMapData)
@@ -471,210 +476,178 @@ MapLoadResult MapLoadThread::LoadDataFromFile(std::string sMapName, std::string 
 
 MapLoadResult MapLoadThread::LoadInfo(std::string *sMapData)
 {
-    MapLoadResult result = MAP_RESULT_NONE;
-
     // this parse the XML file:
     MSXML2::IXMLDOMDocument2Ptr pXMLDom = NULL;
     HRESULT hr;
 
-    CoInitialize(NULL);
-
     hr = pXMLDom.CreateInstance(__uuidof(DOMDocument40));
-    if (hr == S_OK)
+    if (hr != S_OK)
+        return MAP_RESULT_FAILED;
+
+    if (!sMapData->empty())
+        pXMLDom->loadXML(sMapData->c_str());
+
+    IXMLDOMNodePtr pNode = pXMLDom->selectSingleNode("Map");
+    if (!pNode)
+        return MAP_RESULT_CORRUPT_FILE;
+
+    pNode = pXMLDom->selectSingleNode("Map")->selectSingleNode("MapInfo");
+    if (!pNode)
+        return MAP_RESULT_CORRUPT_FILE;
+
+    LONG iAttributLength = 0;
+    IXMLDOMNamedNodeMapPtr pmAttributes;
+    hr = pNode->get_attributes(&pmAttributes);
+    if (hr != S_OK)
+        return MAP_RESULT_CORRUPT_FILE;
+
+    pmAttributes->get_length(&iAttributLength);
+    VARIANT value;
+    VariantInit(&value);
+    for (int i=0; i  < iAttributLength; i++)
     {
-        if (sMapData->length())
-            pXMLDom->loadXML(sMapData->c_str());
+        pmAttributes->get_item(i, &pNode);
+        if (!pNode)
+            continue;
 
-        IXMLDOMNodePtr pNode = pXMLDom->selectSingleNode("Map");
-        if (pNode)
+        hr = pNode->get_nodeValue(&value);
+        if (hr == S_OK)
         {
-            pNode = pXMLDom->selectSingleNode("Map")->selectSingleNode("MapInfo");
-            if (pNode)
+            switch(i)
             {
-                LONG iAttributLength = 0;
-                IXMLDOMNamedNodeMapPtr pmAttributes;
-                hr = pNode->get_attributes(&pmAttributes);
-                if (hr == S_OK)
-                {
-                    pmAttributes->get_length(&iAttributLength);
-                    VARIANT value;
-                    VariantInit(&value);
-                    for (int i=0; i  < iAttributLength; i++)
-                    {
-                        pmAttributes->get_item(i, &pNode);
-                        if (!pNode)
-                            continue;
-
-                        hr = pNode->get_nodeValue(&value);
-                        if (hr == S_OK)
-                        {
-                            switch(i)
-                            {
-                            case 0:                 // map name
-                                m_MapInfo.m_sMapName = _bstr_t(value.bstrVal);
-                                break;
-                            case 1:                 // announce name
-                                m_MapInfo.m_sMapAnnounceName = _bstr_t(value.bstrVal);
-                                break;
-                            case 2:                 // store map size
-                                m_MapInfo.m_uiX = atoi(_bstr_t(value.bstrVal));
-                                break;
-                            case 3:
-                                m_MapInfo.m_uiY = atoi(_bstr_t(value.bstrVal));
-                                break;
-                            default:
-                                break;
-                            }
-                        }
-                    }
-                    result = MAP_RESULT_OK;
-
-                    if (&value)
-                        VariantClear(&value);
-                }   // if (hr == S_OK)
-                else
-                    result = MAP_RESULT_CORRUPT_FILE;
-
-                if (pmAttributes)
-                    pmAttributes.Release();
-            }   // if (pNode)
-            else
-                result = MAP_RESULT_CORRUPT_FILE;
-        }   // if (pNode)
-        else
-            result = MAP_RESULT_CORRUPT_FILE;
-
-        if (pNode)
-            pNode.Release();
+            case 0:                 // map name
+                m_MapInfo.m_sMapName = _bstr_t(value.bstrVal);
+                break;
+            case 1:                 // announce name
+                m_MapInfo.m_sMapAnnounceName = _bstr_t(value.bstrVal);
+                break;
+            case 2:                 // store map size
+                m_MapInfo.m_uiX = atoi(_bstr_t(value.bstrVal));
+                break;
+            case 3:
+                m_MapInfo.m_uiY = atoi(_bstr_t(value.bstrVal));
+                break;
+            default:
+                break;
+            }
+        }
     }
-    else    // if (hr == S_OK)
-        result = MAP_RESULT_FAILED;
 
-    if (pXMLDom)
-        pXMLDom.Release();
-
-    CoUninitialize();
-
-    return result;
+    return MAP_RESULT_OK;
 }
 
 MapLoadResult MapLoadThread::LoadTiles(std::string *sMapData)
 {
-    MapLoadResult result = MAP_RESULT_NONE;
-
-    std::list<std::string> TileByRowFromFileList;
+    std::vector<std::list<std::string>> TileByRowFromFileList;
 
     // this parse the XML file:
     MSXML2::IXMLDOMDocument2Ptr pXMLDom = NULL;
     HRESULT hr;
 
-    CoInitialize(NULL);
-
     hr = pXMLDom.CreateInstance(__uuidof(DOMDocument40));
-    if (hr == S_OK)
-    {
-        if (!sMapData->empty())
-            pXMLDom->loadXML(sMapData->c_str());
+    if (hr != S_OK)
+        return MAP_RESULT_FAILED;
 
-        IXMLDOMNodePtr pNode = pXMLDom->selectSingleNode("Map");
-        if (pNode)
+    if (!sMapData->empty())
+        pXMLDom->loadXML(sMapData->c_str());
+
+    IXMLDOMNodePtr pNode = pXMLDom->selectSingleNode("Map");
+    if (!pNode)
+        return MAP_RESULT_CORRUPT_FILE;
+
+    // get tile map from file
+    pNode = pXMLDom->selectSingleNode("Map")->selectSingleNode("MapData");
+    if (!pNode)
+        return MAP_RESULT_CORRUPT_FILE;
+
+    IXMLDOMNodeListPtr pLayerNodes;
+    hr = pNode->get_childNodes(&pLayerNodes);
+    if (hr != S_OK)
+        return MAP_RESULT_CORRUPT_FILE;
+
+    // iterate through layers
+    LONG iLayerLength = 0;
+    pLayerNodes->get_length(&iLayerLength);
+    IXMLDOMNodePtr pLayer = NULL;
+    for (LONG j = 0; j < iLayerLength; j++)
+    {
+        hr = pLayerNodes->get_item(j, &pLayer);
+        if (hr != S_OK)
+            continue;
+
+        // get tiles
+        IXMLDOMNodeListPtr pMapNodes;
+        hr = pLayer->get_childNodes(&pMapNodes);
+        if (hr != S_OK)
+            continue;
+
+        LONG iNodeLength = 0;
+        pMapNodes->get_length(&iNodeLength);
+        IXMLDOMNamedNodeMapPtr pmAttributes;
+
+        BSTR attributeText = NULL;
+
+        // iterate through tiles
+        IXMLDOMNodePtr pNodeTemp = NULL;
+        std::list<std::string> tempList;
+        for (int i = 0; i < iNodeLength; i++)
         {
-            // get tile map from file
-            pNode = pXMLDom->selectSingleNode("Map")->selectSingleNode("MapData");
-            if (pNode)
+            // continue if there are no "Tiles" set
+            hr = pMapNodes->get_item(i, &pNodeTemp);
+            if (hr == S_FALSE)
+                continue;
+
+            hr = pNodeTemp->get_attributes(&pmAttributes);
+            if (hr == S_FALSE)
+                continue;
+
+            hr = pmAttributes->get_item(0, &pNodeTemp);
+            if (hr == S_FALSE)
+                continue;
+
+            hr = pNodeTemp->get_text(&attributeText);
+            if (hr == S_FALSE)
+                continue;
+
+            std::string temp = _bstr_t(attributeText);
+            tempList.push_back(temp);
+        }
+        TileByRowFromFileList.push_back(tempList);
+    }
+
+    // read out layers
+    for (UINT i = 0; i < TileByRowFromFileList.size(); i++)
+    {
+        MapTiles tempTiles;
+        // if tiles are in string, read it out and store as readable vector.
+        while(!TileByRowFromFileList.at(i).empty())
+        {
+            std::vector<float> vTempTiles;
+            std::list<std::string>::iterator itr = TileByRowFromFileList.at(i).begin();
+            // read out rows
+            while(!(*itr).empty())
             {
-                IXMLDOMNodeListPtr pMapNodes;
-                hr = pNode->get_childNodes(&pMapNodes);
-                if (hr == S_OK)
+                // if first sign is a number
+                if ((*itr).at(0) <= 57 && (*itr).at(0) >= 48)
                 {
-                    LONG iNodeLength = 0;
-                    pMapNodes->get_length(&iNodeLength);
-                    IXMLDOMNamedNodeMapPtr pmAttributes;
-
-                    BSTR attributeText = NULL;
-
-                    IXMLDOMNodePtr pNodeTemp = NULL;
-                    for (int i = 0; i < iNodeLength; i++)
-                    {
-                        // continue if there are no "Tiles" set
-                        hr = pMapNodes->get_item(i, &pNodeTemp);
-                        if (hr == S_FALSE)
-                            continue;
-
-                        hr = pNodeTemp->get_attributes(&pmAttributes);
-                        if (hr == S_FALSE)
-                            continue;
-
-                        hr = pmAttributes->get_item(0, &pNodeTemp);
-                        if (hr == S_FALSE)
-                            continue;
-
-                        hr = pNodeTemp->get_text(&attributeText);
-                        if (hr == S_FALSE)
-                            continue;
-
-                        std::string temp = _bstr_t(attributeText);
-                        TileByRowFromFileList.push_back(temp);
-                    }
-                    if (pNodeTemp)
-                        pNodeTemp.Release();
-                    if (attributeText)
-                        SysFreeString(attributeText);
-                    if (pmAttributes)
-                        pmAttributes.Release();
-
-                    result = MAP_RESULT_OK;
+                    vTempTiles.push_back((float)atof((*itr).c_str()));
+                    (*itr).erase(0, (*itr).find(32));
                 }
-                else
-                    result = MAP_RESULT_FAILED;
+                // if first sign is a not a number, delete it
+                else 
+                    (*itr).erase(0, 1);
             }
-            else
-                result = MAP_RESULT_CORRUPT_FILE;
+            tempTiles.push_back(vTempTiles);
+            TileByRowFromFileList.at(i).erase(itr);
         }
-        else
-            result = MAP_RESULT_CORRUPT_FILE;
-
-        if (pNode)
-            pNode.Release(); 
-    }
-    else
-        result = MAP_RESULT_FAILED;
-
-    if (pXMLDom)
-        pXMLDom.Release();
-
-    CoUninitialize();
-
-    // if tiles are in string, read it out and store as readable vector.
-    while(!TileByRowFromFileList.empty())
-    {
-        std::vector<float> vTempTiles;
-        std::list<std::string>::iterator itr = TileByRowFromFileList.begin();
-
-        while(!(*itr).empty())
-        {
-            // if first sign is a number
-            if ((*itr).at(0) <= 57 && (*itr).at(0) >= 48)
-            {
-                vTempTiles.push_back((float)atof((*itr).c_str()));
-                (*itr).erase(0, (*itr).find(32));
-            }
-            // if first sign is a not a number, delete it
-            else 
-                (*itr).erase(0, 1);
-        }
-
-        m_v2MapTiles.push_back(vTempTiles);
-        TileByRowFromFileList.erase(itr);
-        result  = MAP_RESULT_OK;
+        m_v2MapTiles.push_back(tempTiles);
     }
 
-    return result;
+    return MAP_RESULT_OK;
 }
 
 MapLoadResult MapLoadThread::LoadLayerAndObjects(std::string *sMapData)
 {
-    MapLoadResult result = MAP_RESULT_NONE;
     std::vector<std::vector<ObjectReadOut*>> vLayerAndObjects;
 
     std::list<std::string> TileByRowFromFileList;
@@ -683,176 +656,155 @@ MapLoadResult MapLoadThread::LoadLayerAndObjects(std::string *sMapData)
     MSXML2::IXMLDOMDocument2Ptr pXMLDom = NULL;
     HRESULT hr;
 
-    CoInitialize(NULL);
-
     hr = pXMLDom.CreateInstance(__uuidof(DOMDocument40));
-    if (hr == S_OK)
+    if (hr != S_OK)
+        return MAP_RESULT_FAILED;
+
+    if (!sMapData->empty())
+        pXMLDom->loadXML(sMapData->c_str());
+
+    IXMLDOMNodePtr pNode = pXMLDom->selectSingleNode("Map");
+    if (!pNode)
+        return MAP_RESULT_CORRUPT_FILE;
+
+    // get layer + objects from file
+    std::vector<std::vector<WorldObject*>> lLayerData;
+    pNode = pXMLDom->selectSingleNode("Map")->selectSingleNode("LayerData");
+    if (!pNode)
+        return MAP_RESULT_CORRUPT_FILE;
+
+    // read out layers
+    IXMLDOMNodeListPtr pLayerNodeList;
+    hr = pNode->get_childNodes(&pLayerNodeList);
+    if (hr != S_OK)
+        return MAP_RESULT_CORRUPT_FILE;
+
+    // iterate through layers
+    LONG iLayerNodeLength = 0;
+    pLayerNodeList->get_length(&iLayerNodeLength);
+    IXMLDOMNodePtr pLayerNode = NULL;
+    IXMLDOMNodeListPtr pObjectNodeList;
+    for (LONG i = 0; i < iLayerNodeLength; i++)
     {
-        if (!sMapData->empty())
-            pXMLDom->loadXML(sMapData->c_str());
+        // select layer
+        hr = pLayerNodeList->get_item(i, &pLayerNode);
+        if (hr == S_FALSE)
+            continue;
 
-        IXMLDOMNodePtr pNode = pXMLDom->selectSingleNode("Map");
-        if (pNode)
+        // read out objects of layer
+        pObjectNodeList.Detach();
+        hr = pLayerNode->get_childNodes(&pObjectNodeList);
+        if (hr == S_FALSE)
+            continue;
+
+        // iterate through objects
+        LONG iObjectNodeLength = 0;
+        pObjectNodeList->get_length(&iObjectNodeLength);
+        IXMLDOMNodePtr pObjectNode = NULL;
+        std::vector<ObjectReadOut*> vObjects;
+        IXMLDOMNamedNodeMapPtr pmObjectAttributes;
+        for (LONG j = 0; j < iObjectNodeLength; j++)
         {
-            // get layer + objects from file
-            std::vector<std::vector<WorldObject*>> lLayerData;
-            pNode = pXMLDom->selectSingleNode("Map")->selectSingleNode("LayerData");
-            if (pNode)
+            // select object
+            hr = pObjectNodeList->get_item(j, &pObjectNode);
+            if (hr == S_FALSE)
+                continue;
+
+            // read out object attributes
+            pmObjectAttributes.Detach();
+            hr = pObjectNode->get_attributes(&pmObjectAttributes);
+            if (hr == S_FALSE)
+                continue;
+
+            // iterate through attributes
+            LONG iAttributeLength = 0;
+            pmObjectAttributes->get_length(&iAttributeLength);
+            IXMLDOMNodePtr pSelectedAttribute = NULL;
+            VARIANT value;
+            VariantInit(&value);
+            ObjectReadOut *newObject = new ObjectReadOut();
+            for (LONG k = 0; k < iAttributeLength; k++)
             {
-                // read out layers
-                IXMLDOMNodeListPtr pLayerNodeList;
-                hr = pNode->get_childNodes(&pLayerNodeList);
-                if (hr == S_OK)
-                {
-                    // iterate through layers
-                    LONG iLayerNodeLength = 0;
-                    pLayerNodeList->get_length(&iLayerNodeLength);
-                    IXMLDOMNodePtr pLayerNode = NULL;
-                    IXMLDOMNodeListPtr pObjectNodeList;
-                    for (LONG i = 0; i < iLayerNodeLength; i++)
-                    {
-                        // select layer
-                        hr = pLayerNodeList->get_item(i, &pLayerNode);
-                        if (hr == S_FALSE)
-                            continue;
-
-                        // read out objects of layer
-                        pObjectNodeList.Detach();
-                        hr = pLayerNode->get_childNodes(&pObjectNodeList);
-                        if (hr == S_FALSE)
-                            continue;
-
-                        // iterate through objects
-                        LONG iObjectNodeLength = 0;
-                        pObjectNodeList->get_length(&iObjectNodeLength);
-                        IXMLDOMNodePtr pObjectNode = NULL;
-                        std::vector<ObjectReadOut*> vObjects;
-                        IXMLDOMNamedNodeMapPtr pmObjectAttributes;
-                        for (LONG j = 0; j < iObjectNodeLength; j++)
-                        {
-                            // select object
-                            hr = pObjectNodeList->get_item(j, &pObjectNode);
-                            if (hr == S_FALSE)
-                                continue;
-
-                            // read out object attributes
-                            pmObjectAttributes.Detach();
-                            hr = pObjectNode->get_attributes(&pmObjectAttributes);
-                            if (hr == S_FALSE)
-                                continue;
-
-                            // iterate through attributes
-                            LONG iAttributeLength = 0;
-                            pmObjectAttributes->get_length(&iAttributeLength);
-                            IXMLDOMNodePtr pSelectedAttribute = NULL;
-                            VARIANT value;
-                            VariantInit(&value);
-                            ObjectReadOut *newObject = new ObjectReadOut();
-                            for (LONG k = 0; k < iAttributeLength; k++)
-                            {
-                                // select layer
-                                hr = pmObjectAttributes->get_item(k, &pSelectedAttribute);
-                                if (hr == S_FALSE)
-                                    continue;
-
-                                pSelectedAttribute->get_nodeValue(&value);
-                                switch(k)
-                                {
-                                    // texture
-                                case 0:
-                                    newObject->m_TextureID = atoi(_bstr_t(value.bstrVal));
-                                    break;
-                                    // x pos
-                                case 1:
-                                    newObject->m_XPos = atoi(_bstr_t(value.bstrVal));
-                                    break;
-                                    // y pos
-                                case 2:
-                                    newObject->m_YPos = atoi(_bstr_t(value.bstrVal));
-                                    break;
-                                default:
-                                    break;
-                                }
-                            }
-                            vObjects.push_back(newObject);
-                            if (pSelectedAttribute)
-                                pSelectedAttribute.Release();
-                            if (pmObjectAttributes)
-                                pmObjectAttributes.Release();
-                            if (&value)
-                                VariantClear(&value);
-                        }
-                        if (pmObjectAttributes)
-                            pmObjectAttributes.Release();
-                        if (pObjectNode)
-                            pObjectNode.Release();
-
-                        vLayerAndObjects.push_back(vObjects);
-                    }
-                    if (pObjectNodeList)
-                        pObjectNodeList.Release();
-                    if (pLayerNode)
-                        pLayerNode.Release();
-
-                    result = MAP_RESULT_OK;
-                }                
-                else
-                    result = MAP_RESULT_FAILED;
-
-                if (pLayerNodeList)
-                    pLayerNodeList.Release();
-            }
-            else
-                result = MAP_RESULT_CORRUPT_FILE;
-        }
-        else
-            result = MAP_RESULT_CORRUPT_FILE;
-
-        if (pNode)
-            pNode.Release(); 
-    }
-    else
-        result = MAP_RESULT_FAILED;
-
-    if (pXMLDom)
-        pXMLDom.Release();
-
-    CoUninitialize();
-
-    if (result == MAP_RESULT_OK)
-    {
-        // iterate through vector and create layer + objects
-        if (!vLayerAndObjects.empty())
-        {
-            for (UINT i = 0; i < vLayerAndObjects.size(); i++)
-            {
-                if (vLayerAndObjects.at(i).empty())
+                // select layer
+                hr = pmObjectAttributes->get_item(k, &pSelectedAttribute);
+                if (hr == S_FALSE)
                     continue;
-                
-                ObjectLayer *pLayer = new ObjectLayer();
-                for (UINT j = 0; j < vLayerAndObjects.at(i).size(); j++)
+
+                pSelectedAttribute->get_nodeValue(&value);
+                switch(k)
                 {
-                    if (!vLayerAndObjects.at(i).at(j))
-                        continue;
+                    // entry of object
+                case 0:
+                    newObject->m_ObjectID = atoi(_bstr_t(value.bstrVal));
+                    break;
+                    // x pos
+                case 1:
+                    newObject->m_XPos = atoi(_bstr_t(value.bstrVal));
+                    break;
+                    // y pos
+                case 2:
+                    newObject->m_YPos = atoi(_bstr_t(value.bstrVal));
+                    break;
+                default:
+                    break;
+                }
+            }
+            vObjects.push_back(newObject);
+        }
+        vLayerAndObjects.push_back(vObjects);
+    }
 
-                    // add world object to temp layer
-                    WorldObject *pObject = new WorldObject();
-                    if (SpriteFiles *pSpriteFiles = SpriteFiles::Get())
-                        pObject->SetTextureSource(pSpriteFiles->GetSpriteFileAt(SPRITE_TYPE_OBJECT, vLayerAndObjects.at(i).at(j)->m_TextureID));
+    // iterate through vector and create layer + objects
+    if (!vLayerAndObjects.empty())
+    {
+        for (UINT i = 0; i < vLayerAndObjects.size(); i++)
+        {
+            if (vLayerAndObjects.at(i).empty())
+                continue;
+            
+            ObjectLayer *pLayer = new ObjectLayer();
+            for (UINT j = 0; j < vLayerAndObjects.at(i).size(); j++)
+            {
+                if (!vLayerAndObjects.at(i).at(j))
+                    continue;
 
+                WorldObject *pObject = NULL;
+                if (GameDatabase *pDatabase = GameDatabase::Get())
+                {
+                    if (const ObjectPrototype *pProto = pDatabase->GetObjectPrototype(vLayerAndObjects.at(i).at(j)->m_ObjectID))
+                    {
+                        // set new object for specific object type
+                        switch(pProto->m_uiType)
+                        {
+                        case OBJECT_TYPE_NPC:
+                            pObject = new Unit();
+                            break;
+                        case OBJECT_TYPE_MAP_OBJECT:
+                        default:
+                            pObject = new WorldObject();
+                            break;
+
+                        }
+                        pObject->SetObjectInfo(pProto);
+                    }
+
+                    // set object infos
+                    pObject->SetTextureSource(pDatabase->GetSpriteFile(pObject->GetObjectInfo()->m_uiTextureID));
                     pObject->SetPosition(D3DXVECTOR2((float)vLayerAndObjects.at(i).at(j)->m_XPos, (float)vLayerAndObjects.at(i).at(j)->m_YPos));
                     pLayer->AddWorldObject(pObject);
-                    delete vLayerAndObjects.at(i).at(j);
                 }
 
-                m_lLayers.push_back(pLayer);
+                delete vLayerAndObjects.at(i).at(j);
             }
+
+            m_lLayers.push_back(pLayer);
         }
     }
-    return result;
+
+    return MAP_RESULT_OK;
 }
 
-void MapLoadThread::GetMapInfo(MapInfo &MapInfo, MapTiles &MapTiles, LayerList &LayerList)
+void MapLoadThread::GetMapInfo(MapInfo &MapInfo, std::vector<MapTiles> &MapTiles, LayerList &LayerList)
 {
     MapInfo     = m_MapInfo;
     MapTiles    = m_v2MapTiles;

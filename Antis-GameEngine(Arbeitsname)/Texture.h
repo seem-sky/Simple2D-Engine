@@ -1,30 +1,43 @@
 #ifndef TEXTURE_SOURCE_H
 #define TEXTURE_SOURCE_H
 
-#include <string>
+#include "GameDatabase.h"
 #include <d3d9.h>
-#include <d3dx9.h>
 
-class TextureSource
+struct TextureSource
 {
-public:
-    TextureSource(void);
-    ~TextureSource(void);
-
-    LPDIRECT3DTEXTURE9 GetTexture() { return m_pTexture; }
-    void SetTexture(LPDIRECT3DTEXTURE9 pTexture) { m_pTexture = pTexture; }
-
-    void SetTextureName(std::string sTextureName) { m_sFileName = sTextureName; }
-    std::string GetTextureName() { return m_sFileName; }
-
-    void ChangeTexture(std::string sFileName);
-
-    void* GetPixels();
+    TextureSource(void)
+    {
+        m_pTexture      = NULL;
+    }
 
     void GetTextureSize(UINT &XSize, UINT &YSize);
 
-protected:
-    std::string m_sFileName;
     LPDIRECT3DTEXTURE9 m_pTexture;
+    SpritePrototype m_TextureInfo;
+};
+
+typedef std::map<UINT /*ID*/, TextureSource*> TextureList;
+
+class TextureMgr : public TSingleton<TextureMgr>
+{
+public:
+    TextureMgr();
+    ~TextureMgr();
+
+    inline TextureSource* GetTextureSource(UINT uiID)
+    {
+        TextureList::iterator itr = m_TextureList.find(uiID);
+        if (itr != m_TextureList.end())
+            return (*itr).second;
+
+        return AddTextureSource(uiID);
+    }
+
+private:
+    TextureList m_TextureList;
+
+    void ClearTextureList();
+    TextureSource* AddTextureSource(UINT uiID);
 };
 #endif;

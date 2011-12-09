@@ -17,7 +17,7 @@ public:
     unsigned int GetCurFrameRate() { return m_FrameRate; }
     void UpdateTime();
     // returns diff of the last frame
-    float GetTimeElapsed() { return static_cast<float>(m_CurCount - m_TimeDif)* 1000 / m_Frequency; }
+    LONGLONG GetTimeElapsed();
     LONGLONG GetCurTime();
     LONGLONG GetFrenquency() { return m_Frequency; }
 

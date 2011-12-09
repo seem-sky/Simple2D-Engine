@@ -2,10 +2,9 @@
 #define RESSOURCE_MANAGER_H
 
 #include "Direct3D.h"
-#include <d3d9.h>
-#include <string>
 #include <map>
-#include "TileTextureSource.h"
+
+struct SpritePrototype;
 
 class CRessourceManager : public TSingleton<CRessourceManager>
 {
@@ -13,22 +12,13 @@ public:
     CRessourceManager(void);
     ~CRessourceManager(void);
 
-    // map texture
-    TileTextureSource* GetMapTexture(std::string sTextureName);
-    void ClearTileTextures();
-
-    // charset texture
-    TextureSource* GetCharsetTexture(std::string sTextureName);
-    void ClearCharsetTextures();
-
-protected:
-    CLogfile *m_pLogfile;
+    LPDIRECT3DTEXTURE9 GetTexture(std::string sLocation, const SpritePrototype *proto);
 
 private:
-    TextureSource* AddCharsetTexture(std::string sTextureName);
-    TileTextureSource* AddTileTexture(std::string sTexttureName);
+    LPDIRECT3DTEXTURE9 AddTexture(std::string sLocation, const SpritePrototype *proto);
+    void ClearTextures();
 
-    std::map<std::string, TextureSource*> m_lTextures;
-    std::map<std::string, TileTextureSource*> m_lTileTextures;
+    // store all textures
+    std::map<std::string, LPDIRECT3DTEXTURE9> m_TextureList;
 };
 #endif;

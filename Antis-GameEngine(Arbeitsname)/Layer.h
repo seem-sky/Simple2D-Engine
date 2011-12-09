@@ -2,10 +2,7 @@
 #define LAYER_H
 
 #include "Direct3D.h"
-#include "Logfile.h"
 #include "WorldObject.h"
-#include <list>
-#include <vector>
 
 enum LAYER_TYPE
 {

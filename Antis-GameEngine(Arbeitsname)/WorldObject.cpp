@@ -16,28 +16,19 @@ WorldObject::WorldObject(void)
     m_ModBlue           = 0;
     m_ModAlpha          = 0;
     m_ColorModTime      = 0;
-
-    m_pMovement         = new MovementGenerator();
 }
 
 WorldObject::~WorldObject(void)
 {
-    delete m_pMovement;
 }
 
-void WorldObject::SetTextureSource(std::string sTextureName)
+void WorldObject::SetTextureSource(const SpritePrototype *proto)
 {
-    CRessourceManager *pRManager = CRessourceManager::Get();
-    if (!pRManager)
+    if (!proto)
         return;
 
-    m_pTexture = pRManager->GetCharsetTexture(sTextureName);
-}
-
-void WorldObject::SetPosition(D3DXVECTOR2 v2NewPos)
-{
-    m_v3Position.x = v2NewPos.x;
-    m_v3Position.y = v2NewPos.y;
+    if (TextureMgr *pTextureMgr = TextureMgr::Get())
+        m_pTexture = pTextureMgr->GetTextureSource(proto->m_uiID);
 }
 
 void WorldObject::Update(const UINT uiCurTime, const UINT uiDiff)
@@ -45,10 +36,6 @@ void WorldObject::Update(const UINT uiCurTime, const UINT uiDiff)
     // Update color
     if (m_ColorModTime)
         UpdateColor(uiDiff);
-
-    // Update movement
-    if (m_pMovement)
-        m_pMovement->UpdateMovement(uiCurTime, uiDiff);
 }
 
 void WorldObject::ModifyColorTo(float red, float green, float blue, float alpha, UINT time)
@@ -105,16 +92,16 @@ void WorldObject::UpdateColor(const UINT uiDiff)
         m_Color.a = 0;
 }
 
-void WorldObject::MovePosition(int XMove, int YMove, UINT time)
-{
-    if (m_pMovement)
-        m_pMovement->Move2DWithoutCollision(XMove, YMove, time);
-}
-
 void WorldObject::GetObjectSize(UINT &Xsize, UINT &Ysize)
 {
     if (!m_pTexture)
         return;
 
     m_pTexture->GetTextureSize(Xsize, Ysize);
+}
+
+void WorldObject::DrawObject(LPD3DXSPRITE pSprite)
+{
+    if (m_pTexture && m_pTexture->m_pTexture && pSprite)
+        pSprite->Draw(m_pTexture->m_pTexture, NULL, NULL, &GetPosition(), GetColor());
 }

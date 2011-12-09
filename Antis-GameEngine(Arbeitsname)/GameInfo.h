@@ -11,6 +11,7 @@ class CGameInfo : public TFileInput<CGameInfo>
 public:
     CGameInfo(void);
     string GetProgramName() { return m_sProgramName; }
+    string GetDatabaseLocation() { return m_sDatabaseLocation; }
     void GetWindowSize(unsigned int &XSize, unsigned int &YSize);
     void GetMapTileSize(unsigned int &XSize, unsigned int &YSize);
     bool IsWindowed() { return m_bWindowed; }
@@ -18,10 +19,11 @@ public:
     // create Game.ini with default stats
     void CreateIniByDefault();
     void SaveDataToIni();
+
 protected:
     void InterpretFile();
     std::vector<std::string>* GetFileData();
-    unsigned int GetFileDataRows();
+
 private:
     // program name
     string m_sProgramName;
@@ -33,6 +35,8 @@ private:
     unsigned int m_uiMapTileSize_Y;
     // screen windowed?
     bool m_bWindowed;
+    // spritefile store location
+    std::string m_sDatabaseLocation;
 
     std::vector<std::string> m_vData;
 };

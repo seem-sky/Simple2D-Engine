@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<Database>
+  <SpriteDatabase Tile="MapSprites/" AutoTile="MapSprites/AutoTiles/" Object="Charset/" AnimatedObect="Charset/">
+    <Sprite ID="1" FileName="gras.png" Type="0" transparent_color="0" passability="15" terraintype="5"/>
+    <Sprite ID="2" FileName="stone.png" Type="0" transparent_color="0" passability="15" terraintype="2"/>
+    <Sprite ID="3" FileName="road2.png" Type="1" transparent_color="4278190080" passability="15" terraintype="1"/>
+    <Sprite ID="100" FileName="Char1.png" Type="3" transparent_color="0" spritesX="3" spritesY="4" animation_querie="0,1,2,1"/>
+    <Sprite ID="101" FileName="tree1.png" Type="2" transparent_color="0"/>
+  </SpriteDatabase>
+  <ObjectDatabase>
+    <Object ID="1" Type="1" Texture="100" AniFrequence="100"/>
+    <Object ID="2" Type="0" Texture="101" AniFrequence="100"/>
+  </ObjectDatabase>
+</Database>
