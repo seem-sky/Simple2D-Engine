@@ -3,20 +3,28 @@
 
 Unit::Unit(void)
 {
-    m_sLogLocationName  = LOGFILE_ENGINE_LOG_NAME + "Unit : ";
-    m_UnitType          = UNIT_TYPE_UNIT;
+    m_sLogLocationName      = LOGFILE_ENGINE_LOG_NAME + "Unit : ";
+    m_UnitType              = UNIT_TYPE_UNIT;
 
-    m_pMovement         = new MovementGenerator((D3DXVECTOR2*)GetPositionPtr());
+    m_pMovement             = new MovementGenerator((D3DXVECTOR2*)GetPositionPtr());
 
-    m_uiDirection       = DIRECTION_DOWN;
-    m_uiSpriteSector    = 0;
+    m_uiDirection           = DIRECTION_DOWN;
+    m_uiSpriteSector        = 0;
     
+    m_bIsPlayer             = false;
+    m_bAnimationDirection   = false;
+    m_bAllTimeAnimation     = false;
+    m_uiAnimationTime       = ANIMATION_TIME_NORMAL;
+    m_uiAnimation_Timer     = m_uiAnimationTime;
 }
 
 Unit::~Unit(void)
 {
     if (m_pMovement)
+    {
+        m_pMovement->ClearMovement();
         delete m_pMovement;
+    }
 }
 
 void Unit::Update(const UINT uiCurTime, const UINT uiDiff)
@@ -25,10 +33,14 @@ void Unit::Update(const UINT uiCurTime, const UINT uiDiff)
     WorldObject::Update(uiCurTime, uiDiff);
 
     // Update movement
-    if (m_pMovement)
+    if (m_pMovement && !m_pMovement->IsMoveCommandListEmpty())
         m_pMovement->UpdateMovement(uiCurTime, uiDiff);
-    //if (!m_pMovement->IsMoveCommandListEmpty())
-    //    m_v3Position += m_pMovement->UpdateMovement(uiCurTime, uiDiff);
+    else
+        m_uiSpriteSector = m_uiDirection * GetTextureSource()->m_TextureInfo.Type.AnimatedObject.m_uiSpritesX + 1;
+
+    // update animation
+    if ((m_pMovement && !m_pMovement->IsMoveCommandListEmpty()) || m_bAllTimeAnimation)
+        UpdateAnimation(uiCurTime, uiDiff);
 }
 
 void Unit::DrawObject(LPD3DXSPRITE pSprite)
@@ -81,4 +93,45 @@ void Unit::MovePosition(int XMove, int YMove, UINT time)
 {
     if (m_pMovement)
         m_pMovement->Move2DWithoutCollision(XMove, YMove, time);
+}
+
+void Unit::UpdateAnimation(const UINT uiCurTime, const UINT uiDiff)
+{
+    // check animation timer
+    if (m_uiAnimation_Timer < uiDiff)
+    {
+        TextureSource *pTexture = GetTextureSource();
+        if (!pTexture)
+        {
+            ERROR_LOG(m_sLogLocationName + "Animation failed. No valid texture set.");
+            return;
+        }
+
+        UINT uiSector = GetTextureSrcRct();
+        UINT uiSpritesX = pTexture->m_TextureInfo.Type.AnimatedObject.m_uiSpritesX;
+
+        // check src rect space
+        if (m_bAnimationDirection)
+        {
+            if ((uiSector+1) % uiSpritesX == 0)
+                m_bAnimationDirection = false;
+        }
+        else
+        {
+            if ((uiSector) % uiSpritesX == 0)
+                m_bAnimationDirection = true;
+        }
+
+        // animation update
+        if (m_bAnimationDirection)
+            uiSector++;
+        else
+            uiSector--;
+
+        SetTextureSrcRct(uiSector);
+
+        m_uiAnimation_Timer = m_uiAnimationTime;
+    }
+    else
+        m_uiAnimation_Timer -= uiDiff;
 }

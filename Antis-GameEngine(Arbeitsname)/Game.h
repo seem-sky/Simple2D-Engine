@@ -5,6 +5,7 @@
 #include "Map.h"
 #include "GameDatabase.h"
 #include "DirectInput.h"
+#include "Player.h"
 
 // world class, add game code here
 class WorldSession
@@ -22,6 +23,8 @@ enum GAMEINIT_STATE
     GAMEINIT_STATE_IN_PROGRESS,
     GAMEINIT_STATE_FAILED,
 };
+
+typedef std::list<Player*> PlayerPtrList;
 
 class CGame : public TSingleton<CGame>
 {
@@ -48,5 +51,9 @@ private:
     DirectInput *m_pDirectInput;
     WorldSession *m_pWorldSession;
     GameDatabase *m_pDatabase;
+
+    PlayerPtrList PlayerList;
+
+    Player* pPlayer;
 };
 #endif;

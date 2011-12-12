@@ -17,6 +17,8 @@ CGame::CGame(void) : TSingleton()
        BASIC_LOG(m_sLogLocationName + "Read and interpret " + GAME_DATA_GAME_INI + ".");
 
     Test = false;
+
+    pPlayer = new Player();
 }
 
 CGame::~CGame(void)
@@ -108,10 +110,20 @@ bool CGame::Run(const UINT CurTime, const UINT CurElapsedTime)
     if (!Test)
     {
         if (MAP_RESULT_DONE == m_pMap->LoadNewMap("Map1.map"))
+        {
+            pPlayer->SetControledUnit((Unit*)m_pMap->AddNewWorldObject(1, 100, 100, 0));
             Test = true;
+        }
     }
     else
     {
+        // update direct input
+        m_pDirectInput->SetKeyStateKeyboard();
+
+        // Update players
+        if (pPlayer)
+            pPlayer->UpdatePlayer(CurTime, CurElapsedTime);
+
         // Update Map
         if (m_pMap)
             m_pMap->UpdateMap(CurTime, CurElapsedTime);
@@ -136,6 +148,11 @@ HRESULT CGame::Draw()
 
 void CGame::Quit()
 {
+    if (!PlayerList.empty())
+    {
+        for (PlayerPtrList::iterator itr = PlayerList.begin(); itr != PlayerList.end(); ++itr)
+            delete *itr;
+    }
     // release WorldSession
     if (m_pWorldSession)
         delete m_pWorldSession;

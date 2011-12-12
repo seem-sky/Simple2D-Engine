@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "Singleton.h"
+#include "StringAdditions.h"
 
 using namespace std;
 

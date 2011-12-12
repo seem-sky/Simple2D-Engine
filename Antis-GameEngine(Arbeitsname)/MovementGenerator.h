@@ -29,19 +29,17 @@ public:
 
     D3DXVECTOR2 Move2DWithoutCollision(int x, int y, UINT uiMSECTime);
     /*D3DXVECTOR2 Move2D(int x, int y, UINT uiMSECTime);*/
-    D3DXVECTOR3 UpdateMovement(const UINT uiCurTime, const UINT uiDiff);
+    void UpdateMovement(const UINT uiCurTime, const UINT uiDiff);
     void ClearMovement();
     void RemoveMovementCommand(sMoveCommand* pCommand);
     inline bool IsMoveCommandListEmpty() { return m_lMoveCommands.empty(); }
-
-protected:
-    D3DXVECTOR2 *m_pPosition;
 
 private:
     void Move(int x, int y);
 
     D3DXVECTOR2 m_v2CurMovement;
     MoveCommandList m_lMoveCommands;
+    D3DXVECTOR2 *m_pPosition;
 };
 
 #endif;

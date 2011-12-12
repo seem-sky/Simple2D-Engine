@@ -57,14 +57,37 @@ MapLoadResult Map::LoadNewMap(std::string sMapName)
     return result;
 }
 
-WorldObject* Map::AddNewWorldObject(std::string sFileName, int XPos, int YPos, UINT uiLayerNr)
+WorldObject* Map::AddNewWorldObject(UINT uiObjectID, int XPos, int YPos, UINT uiLayerNr)
 {
-    WorldObject *pNewObject = new WorldObject();
+    WorldObject *pNewObject = NULL;
+    GameDatabase *pDatabase = GameDatabase::Get();
+    if (!pDatabase)
+        return NULL;
+
+    ObjectPrototype const *pProto = pDatabase->GetObjectPrototype(uiObjectID);
+    if (!pProto)
+        return NULL;
+
+    switch(pProto->m_uiType)
+    {
+    case OBJECT_TYPE_MAP_OBJECT:
+        pNewObject = new WorldObject();
+        break;
+    case OBJECT_TYPE_NPC:
+        pNewObject = new Unit();
+        break;
+    default:
+        break;
+    }
+
     // insert object in a specific layer
     if (ObjectLayer *pLayer = (ObjectLayer*)GetLayerAtNr(uiLayerNr))
     {
         pNewObject->SetPosition(D3DXVECTOR2((float)XPos, (float)YPos));
-        //pNewObject->SetTextureSource(sFileName);
+        pNewObject->SetObjectInfo(pProto);
+        if (SpritePrototype const *pSpriteProto = pDatabase->GetSpriteFile(pProto->m_uiTextureID))
+            pNewObject->SetTextureSource(pSpriteProto);
+
         pLayer->AddWorldObject(pNewObject);
     }
     else

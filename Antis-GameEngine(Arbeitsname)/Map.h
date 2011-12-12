@@ -74,7 +74,7 @@ public:
     ## objects
     #####*/
     // add new world object to map
-    WorldObject* AddNewWorldObject(std::string sFileName, int XPos, int YPos, UINT uiLayerNr);
+    WorldObject* AddNewWorldObject(UINT uiObjectID, int XPos, int YPos, UINT uiLayerNr);
 
     /*#####
     ## color

@@ -15,7 +15,7 @@ public:
 
     BOOL Init(HINSTANCE hInstance, HWND hWnd);
     void SetKeyStateKeyboard();
-    bool GetKeyStateKeyboard(int Key);
+    bool GetKeyStateKeyboard(UINT Key);
     void ClearKeyStateKeyboard();
     void ProcessInput( void );
 
@@ -24,6 +24,7 @@ private:
     HRESULT InitMousePuffer( int PufferSize );
     //Direct Input Object
     LPDIRECTINPUT8 m_DirectInput;
+
     //Devices
     //
     //Tastatur
@@ -31,13 +32,11 @@ private:
     //Maus
     LPDIRECTINPUTDEVICE8 m_DIMouse;
 
-    //Variabeln
-    //
-    //Tastenstatus
+    // key state
     bool m_aKeyState[256];
-    //MausPuffer
+    // mouspuffer
     DIPROPDWORD DIProperties;
-    //Maus Koordinaten
+    // maus koord
     D3DXVECTOR2 m_v2MouseKoord;
     D3DXVECTOR2 m_v2MouseKlick;
     bool m_bMouseKlick;

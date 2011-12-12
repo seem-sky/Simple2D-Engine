@@ -5,4 +5,9 @@
 
 const std::string LOGFILE_ENGINE_LOG_NAME = "ENGINE::";
 
+#define IN_MILLISECOND  = 1000;
+#define MINUTE          = 60;
+#define HOUR            = 60;
+#define DAY             = 24;
+
 #endif;

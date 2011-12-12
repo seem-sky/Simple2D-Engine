@@ -34,52 +34,49 @@ D3DXVECTOR2 MovementGenerator::Move2DWithoutCollision(int x, int y, UINT uiMSECT
 //    return v2Result;    
 //}
 
-D3DXVECTOR3 MovementGenerator::UpdateMovement(const UINT uiCurTime, const UINT uiDiff)
+void MovementGenerator::UpdateMovement(const UINT uiCurTime, const UINT uiDiff)
 {
+    if (m_lMoveCommands.empty())
+        return;
+
     float MoveX = 0, MoveY = 0;
-    if (!m_lMoveCommands.empty())
+    // update x
+    if ((*m_lMoveCommands.begin())->m_MoveTime)
     {
-        // update x
-        if ((*m_lMoveCommands.begin())->m_MoveTime)
-        {
-            if ((*m_lMoveCommands.begin())->m_MoveTime > uiDiff)
-                m_v2CurMovement.x += (*m_lMoveCommands.begin())->m_MoveX * uiDiff;
-            else
-                m_v2CurMovement.x += (*m_lMoveCommands.begin())->m_MoveX * (*m_lMoveCommands.begin())->m_MoveTime;
+        if ((*m_lMoveCommands.begin())->m_MoveTime > uiDiff)
+            m_v2CurMovement.x += (*m_lMoveCommands.begin())->m_MoveX * uiDiff;
+        else
+            m_v2CurMovement.x += (*m_lMoveCommands.begin())->m_MoveX * (*m_lMoveCommands.begin())->m_MoveTime;
 
-            MoveX = floor (m_v2CurMovement.x);
-            m_v2CurMovement.x -= MoveX;
-        }
-
-        // update y
-        if ((*m_lMoveCommands.begin())->m_MoveTime)
-        {
-            if ((*m_lMoveCommands.begin())->m_MoveTime > uiDiff)
-                m_v2CurMovement.y += (*m_lMoveCommands.begin())->m_MoveY * uiDiff;
-            else
-                m_v2CurMovement.y += (*m_lMoveCommands.begin())->m_MoveY * (*m_lMoveCommands.begin())->m_MoveTime;
-
-            MoveY = floor (m_v2CurMovement.y);
-            m_v2CurMovement.y -= MoveY;
-        }
-
-        if (MoveX || MoveY)
-        {
-            if ((*m_lMoveCommands.begin())->m_MoveTime > uiDiff)
-                (*m_lMoveCommands.begin())->m_MoveTime -= uiDiff;
-            else
-            {
-                // if command finishes delete it
-                m_v2CurMovement.x = 0;
-                m_v2CurMovement.y = 0;
-                RemoveMovementCommand((*m_lMoveCommands.begin()));
-            }
-
-            Move((int)MoveX, (int)MoveY);
-        }
+        MoveX = floor (m_v2CurMovement.x);
+        m_v2CurMovement.x -= MoveX;
     }
 
-    return D3DXVECTOR3 (MoveX, MoveY, 0);
+    // update y
+    if ((*m_lMoveCommands.begin())->m_MoveTime)
+    {
+        if ((*m_lMoveCommands.begin())->m_MoveTime > uiDiff)
+            m_v2CurMovement.y += (*m_lMoveCommands.begin())->m_MoveY * uiDiff;
+        else
+            m_v2CurMovement.y += (*m_lMoveCommands.begin())->m_MoveY * (*m_lMoveCommands.begin())->m_MoveTime;
+
+        MoveY = floor (m_v2CurMovement.y);
+        m_v2CurMovement.y -= MoveY;
+    }
+
+    if ((*m_lMoveCommands.begin())->m_MoveTime < uiDiff)
+    {
+        // if command finishes delete it
+        m_v2CurMovement.x = 0;
+        m_v2CurMovement.y = 0;
+        RemoveMovementCommand((*m_lMoveCommands.begin()));
+    }
+    else
+    {
+        (*m_lMoveCommands.begin())->m_MoveTime -= uiDiff;
+        // update object position
+        *m_pPosition += D3DXVECTOR2 (MoveX, MoveY);
+    }
 }
 
 void MovementGenerator::Move(int x, int y)

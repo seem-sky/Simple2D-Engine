@@ -65,6 +65,20 @@ BOOL DirectInput::Init(HINSTANCE hInstance, HWND hWnd)
 //free direct input object
 void DirectInput::CleanUp()
 {
+    if (m_DIKeyboard)
+    {
+        m_DIKeyboard->Unacquire();
+        m_DIKeyboard->Release();
+        m_DIKeyboard = NULL;
+    }
+
+    if (m_DIMouse)
+    {
+        m_DIMouse->Unacquire();
+        m_DIMouse->Release();
+        m_DIMouse = NULL;
+    }
+
     if(m_DirectInput)
     {
         m_DirectInput->Release();
@@ -77,7 +91,7 @@ void DirectInput::SetKeyStateKeyboard()
         m_DIKeyboard->Acquire();
 }
 
-bool DirectInput::GetKeyStateKeyboard(int Key)
+bool DirectInput::GetKeyStateKeyboard(UINT Key)
 {
     return m_aKeyState[Key];
 }
