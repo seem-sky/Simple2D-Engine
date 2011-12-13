@@ -6,21 +6,9 @@
 
 #import <msxml4.dll>
 
-Map::Map(void)
+Map::Map(void) : m_v3Position(0,0,0), m_MapLoadState(MAP_STATE_NONE), m_pMapLoadThread(NULL), m_MapColor(1,1,1,1)
 {
     m_sLogLocationName  = LOGFILE_ENGINE_LOG_NAME + "Map : ";
-
-    m_v3Position.x = 0;
-    m_v3Position.y = 0;
-    m_v3Position.z = 0;
-
-    m_MapLoadState = MAP_STATE_NONE;
-    m_pMapLoadThread = NULL;
-
-    m_MapColor.r = 1;
-    m_MapColor.g = 1;
-    m_MapColor.b = 1;
-    m_MapColor.a = 1;
 }
 
 Map::~Map(void)

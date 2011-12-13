@@ -2,11 +2,10 @@
 #include "Map.h"
 #include "Game.h"
 
-ObjectLayer::ObjectLayer(void) : Layer()
+ObjectLayer::ObjectLayer(void) : m_pOwnerMap(NULL), Layer()
 {
     m_sLogLocationName  = LOGFILE_ENGINE_LOG_NAME + "ObjectLayer : ";
     m_LayerType         = LAYER_TYPE_OBJECT_LAYER;
-    m_pOwnerMap         = NULL;
 }
 
 ObjectLayer::~ObjectLayer(void)

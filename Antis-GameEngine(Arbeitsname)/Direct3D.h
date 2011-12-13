@@ -38,8 +38,6 @@ class CDirect3D : public TSingleton<CDirect3D>
 
        D3DPRESENT_PARAMETERS m_PParams;
 
-       CLogfile *m_pLogfile;
-
        std::vector<LPD3DXSPRITE> m_SpriteList;               // stores all sprites
        unsigned int m_uiSpriteIndex;
 };

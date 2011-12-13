@@ -1,15 +1,8 @@
 #include "DirectInput.h"
 
-DirectInput::DirectInput()
+DirectInput::DirectInput() : m_DirectInput(0), m_DIKeyboard(0), m_DIMouse(0), m_v2MouseKoord(0,0), m_bMouseKlick(false), TSingleton()
 {
     m_sLogLocationName  = LOGFILE_ENGINE_LOG_NAME + "DirectInput : ";
-
-    m_DirectInput       = NULL;
-    m_DIKeyboard        = NULL;
-    m_DIMouse           = NULL;
-    m_v2MouseKoord.x    = 0;
-    m_v2MouseKoord.y    = 0;
-    m_bMouseKlick       = false;
 
     ClearKeyStateKeyboard();
 }

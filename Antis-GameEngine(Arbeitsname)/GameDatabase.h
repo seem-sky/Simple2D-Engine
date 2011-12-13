@@ -48,10 +48,8 @@ struct ObjectPrototype
         }NPC;
     }ObjectType;
 
-    ObjectPrototype()
+    ObjectPrototype() : m_uiID(0), m_uiType(0)
     {
-        m_uiID      = 0;
-        m_uiType    = 0;
         memset(&ObjectType, 0, sizeof(ObjectType));
     }
 
@@ -60,11 +58,9 @@ struct ObjectPrototype
 
 struct ObjectDatabaseLoad : public ActiveObject
 {
-    ObjectDatabaseLoad(std::string sData) : ActiveObject()
+    ObjectDatabaseLoad(std::string sData) : m_sObjects(sData), m_LoadResult(DATABASE_LOAD_RESULT_IN_PROGRESS), ActiveObject()
     {
-        m_sObjects          = sData;
         m_sLogLocationName  = LOGFILE_ENGINE_LOG_NAME + "ObjectDatabaseLoad : ";
-        m_LoadResult        = DATABASE_LOAD_RESULT_IN_PROGRESS;
 
         _thread.Resume ();
     }
@@ -103,11 +99,8 @@ enum PassabilityFlag
 
 struct SpritePrototype
 {
-    SpritePrototype()
+    SpritePrototype() : m_uiSpriteType(SPRITE_TYPE_TILE), m_uiID(0), m_transparentColor(0)
     {
-        m_uiSpriteType      = SPRITE_TYPE_TILE;
-        m_uiID              = 0;
-        m_transparentColor  = 0;
         memset(&Type, 0, sizeof(Type));
     }
     // set data at specific position to value
@@ -150,11 +143,9 @@ typedef std::map<UINT, SpritePrototype> SpriteFilesList;
 
 struct SpriteDatabaseLoad : public ActiveObject
 {
-    SpriteDatabaseLoad(std::string sData) : ActiveObject()
+    SpriteDatabaseLoad(std::string sData) : m_sSprites(sData), m_LoadResult(DATABASE_LOAD_RESULT_IN_PROGRESS), ActiveObject()
     {
-        m_sSprites          = sData;
         m_sLogLocationName  = LOGFILE_ENGINE_LOG_NAME + "SpriteDatabaseLoad : ";
-        m_LoadResult        = DATABASE_LOAD_RESULT_IN_PROGRESS;
 
         _thread.Resume ();
     }

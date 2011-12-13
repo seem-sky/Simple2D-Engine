@@ -1,14 +1,9 @@
 #include "Game.h"
 #include "RessourceManager.h"
 
-CGame::CGame(void) : TSingleton()
+CGame::CGame(void) : m_pDirect3D(NULL), m_pDirectInput(NULL), m_pWorldSession(NULL), m_pMap(NULL), m_pDatabase(NULL), TSingleton()
 {
     m_sLogLocationName  = LOGFILE_ENGINE_LOG_NAME + "CGame : ";
-    m_pDirect3D         = NULL;
-    m_pDirectInput      = NULL;
-    m_pWorldSession     = NULL;
-    m_pMap              = NULL;
-    m_pDatabase         = NULL;
 
     // read game ini data
     if (!m_GameInfo.ReadFile(GAME_DATA_GAME_INI))

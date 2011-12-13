@@ -1,9 +1,8 @@
 #include "Logfile.h"
 
-CLogfile::CLogfile() : TSingleton()
+CLogfile::CLogfile() : Logfile(NULL), TSingleton()
 {
     m_sLogLocationName = LOGFILE_ENGINE_LOG_NAME + "CLogfile : ";
-    Logfile = NULL;
     fopen_s(&Logfile, LOGFILE_FILENAME.c_str(), "w");
     if(Logfile)
         fprintf(Logfile, (m_sLogLocationName + LOGFILE_OPENING_MESSAGE).c_str());

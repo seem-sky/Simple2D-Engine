@@ -10,10 +10,8 @@ using namespace std;
 /*#####
 # GameDatabase
 #####*/
-GameDatabase::GameDatabase(void) : TSingleton()
+GameDatabase::GameDatabase(void) : m_pObjectDatabaseLoad(NULL), m_pSpriteDatabaseLoad(NULL), TSingleton()
 {
-    m_pObjectDatabaseLoad   = NULL;
-    m_pSpriteDatabaseLoad   = NULL;
 }
 
 GameDatabase::~GameDatabase(void)

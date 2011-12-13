@@ -2,15 +2,9 @@
 #include "RessourceManager.h"
 
 
-CDirect3D::CDirect3D()
+CDirect3D::CDirect3D() : m_lpD3D(0), m_lpD3DDevice(0), m_lpBackBuffer(0), m_uiSpriteIndex(0), TSingleton()
 {
-    m_lpD3D                         = NULL;
-    m_lpD3DDevice                   = NULL;
-    m_lpBackBuffer                  = NULL;
-    m_pLogfile                      = CLogfile::Get();
     m_sLogLocationName              = LOGFILE_ENGINE_LOG_NAME + "Direct3D : ";
-
-    m_uiSpriteIndex                 = 0;
 }
 
 CDirect3D::~CDirect3D()

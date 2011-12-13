@@ -1,11 +1,7 @@
 #include "MovementGenerator.h"
 
-MovementGenerator::MovementGenerator(D3DXVECTOR2 *pPosition)
+MovementGenerator::MovementGenerator(D3DXVECTOR2 *pPosition) : m_pPosition(pPosition), m_v2CurMovement(0,0)
 {
-    m_pPosition         = pPosition;
-
-    m_v2CurMovement.x   = 0;
-    m_v2CurMovement.y   = 0;
 }
 
 MovementGenerator::~MovementGenerator(void)

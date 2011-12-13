@@ -1,17 +1,12 @@
 #include "Time.h"
 
-CTime::CTime()
+CTime::CTime() : m_CurCount(0), m_NextFrame(0), m_FrameRate(0), m_Frames(0), m_TimeDif(0), TSingleton()
 {
     m_sLogLocationName = LOGFILE_ENGINE_LOG_NAME + "CTime : ";
     if(!QueryPerformanceFrequency((LARGE_INTEGER*)&m_Frequency))
         ERROR_LOG(m_sLogLocationName + "Unable to find performance counter.");
 
     m_Offset            = m_Frequency;
-    m_CurCount          = NULL;
-    m_NextFrame         = NULL;
-    m_FrameRate         = NULL;
-    m_Frames            = NULL;
-    m_TimeDif           = NULL;
     QueryPerformanceCounter((LARGE_INTEGER*)&m_LastCount);
     m_LastCount        += m_Offset;
 }

@@ -2,16 +2,13 @@
 #include "Logfile.h"
 #include "DirectInput.h"
 
-Player::Player(void)
+Player::Player(void) : m_uiMoveBuffer(MOVE_BUFFER_NONE), m_uiLockBuffer(MOVE_BUFFER_NONE)
 {
     m_sLogLocationName = LOGFILE_ENGINE_LOG_NAME + "Player : ";
     AddKeyAction(DIK_W, 1);
     AddKeyAction(DIK_S, 2);
     AddKeyAction(DIK_D, 3);
     AddKeyAction(DIK_A, 4);
-
-    m_uiMoveBuffer = MOVE_BUFFER_NONE;
-    m_uiLockBuffer = MOVE_BUFFER_NONE;
 }
 
 Player::~Player(void)

@@ -6,10 +6,8 @@
 
 struct TextureSource
 {
-    TextureSource(void)
-    {
-        m_pTexture      = NULL;
-    }
+    TextureSource(void) : m_pTexture(NULL)
+    { }
 
     void GetTextureSize(UINT &XSize, UINT &YSize);
 

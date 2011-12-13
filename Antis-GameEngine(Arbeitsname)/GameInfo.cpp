@@ -9,15 +9,10 @@ const string SEARCH_STRING_MAPTILESIZE_X    = "MapTileSizeX =";
 const string SEARCH_STRING_MAPTILESIZE_Y    = "MapTileSizeY =";
 const string SEARCH_STRING_DATABASE         = "DatabaseLocation =";
 
-CGameInfo::CGameInfo(void) : TFileInput()
+CGameInfo::CGameInfo(void) : m_uiScreenWidth(0), m_uiScreenHeight(0), m_uiMapTileSize_X(0), m_uiMapTileSize_Y(0), m_bWindowed(false), TFileInput()
 {
     m_sLogLocationName  = LOGFILE_ENGINE_LOG_NAME + "CGameInfo : ";
     m_sFileDirectory    = "Game/";
-    m_uiScreenWidth     = NULL;
-    m_uiScreenHeight    = NULL;
-    m_uiMapTileSize_X   = NULL;
-    m_uiMapTileSize_Y   = NULL;
-    m_bWindowed         = true;
 }
 
 void CGameInfo::InterpretFile()

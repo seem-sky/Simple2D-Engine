@@ -1,21 +1,10 @@
 #include "WorldObject.h"
 
-WorldObject::WorldObject(void)
+WorldObject::WorldObject(void) : m_pTexture(NULL), m_v3Position(0,0,0), m_Color(1,1,1,1),
+    m_ModRed(0), m_ModGreen(0), m_ModBlue(0), m_ModAlpha(0), m_ColorModTime(0)
 {
     m_sLogLocationName  = LOGFILE_ENGINE_LOG_NAME + "WorldObject : ";
-    m_pTexture          = NULL;
-    m_v3Position.x      = 0;
-    m_v3Position.y      = 0;
-    m_v3Position.z      = 0;
-    m_Color             = D3DXCOLOR(1, 1, 1, 1);
-
     m_UnitType          = UNIT_TYPE_WORLDOBJECT;
-
-    m_ModRed            = 0;
-    m_ModGreen          = 0;
-    m_ModBlue           = 0;
-    m_ModAlpha          = 0;
-    m_ColorModTime      = 0;
 }
 
 WorldObject::~WorldObject(void)

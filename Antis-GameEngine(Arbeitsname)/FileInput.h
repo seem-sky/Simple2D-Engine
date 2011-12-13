@@ -12,7 +12,6 @@ class TFileInput
 public:
     TFileInput(void)
     {
-        m_sFileDirectory = "";
         m_sLogLocationName = LOGFILE_ENGINE_LOG_NAME + "TFileInput : ";
         DeleteFileData();
     

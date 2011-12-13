@@ -1,21 +1,12 @@
 #include "Unit.h"
 #include "RessourceManager.h"
 
-Unit::Unit(void)
+Unit::Unit(void) : m_uiDirection(DIRECTION_DOWN), m_uiSpriteSector(0), m_bIsPlayer(false), m_bAnimationDirection(false), m_bAllTimeAnimation(false),
+    m_uiAnimationTime(ANIMATION_TIME_NORMAL), m_uiAnimation_Timer(m_uiAnimationTime), m_pMovement(new MovementGenerator((D3DXVECTOR2*)GetPositionPtr())),
+    WorldObject()
 {
     m_sLogLocationName      = LOGFILE_ENGINE_LOG_NAME + "Unit : ";
     m_UnitType              = UNIT_TYPE_UNIT;
-
-    m_pMovement             = new MovementGenerator((D3DXVECTOR2*)GetPositionPtr());
-
-    m_uiDirection           = DIRECTION_DOWN;
-    m_uiSpriteSector        = 0;
-    
-    m_bIsPlayer             = false;
-    m_bAnimationDirection   = false;
-    m_bAllTimeAnimation     = false;
-    m_uiAnimationTime       = ANIMATION_TIME_NORMAL;
-    m_uiAnimation_Timer     = m_uiAnimationTime;
 }
 
 Unit::~Unit(void)
