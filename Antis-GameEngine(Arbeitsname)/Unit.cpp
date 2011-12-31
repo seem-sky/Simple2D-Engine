@@ -1,10 +1,11 @@
 #include "Unit.h"
 #include "RessourceManager.h"
 
-Unit::Unit(D3DXVECTOR3 pos) : m_uiDirection(DIRECTION_DOWN), m_uiSpriteSector(0), m_bIsPlayer(false), m_bAnimationDirection(false), m_bAllTimeAnimation(false),
-    m_uiAnimationTime(ANIMATION_TIME_NORMAL), m_pMovement(new MovementGenerator((D3DXVECTOR2*)GetPositionPtr())),
+Unit::Unit(D3DXVECTOR3 pos, DIRECTION dir) : m_uiDirection(dir), m_uiSpriteSector(0), m_bIsPlayer(false), m_bAnimationDirection(false), m_bAllTimeAnimation(false),
+    m_uiAnimationTime(ANIMATION_TIME_NORMAL), m_uiMovementSpeed(MOVEMENT_SPEED_NORMAL),
     WorldObject(pos)
 {
+    m_pMovement = new MovementGenerator(this);
     m_sLogLocationName      = LOGFILE_ENGINE_LOG_NAME + "Unit : ";
     m_UnitType              = UNIT_TYPE_UNIT;
     m_uiAnimation_Timer     = m_uiAnimationTime;
@@ -45,7 +46,7 @@ void Unit::DrawObject(LPD3DXSPRITE pSprite)
     UINT uiSizeX = 0, uiSizeY = 0;
     GetTextureSource()->GetTextureSize(uiSizeX, uiSizeY);
     RECT srcRect = {0,0,uiSizeX,uiSizeY};
-    if (GetTextureSource()->m_TextureInfo.m_uiSpriteType == (UINT)SPRITE_TYPE_AIMATED_OBJECT)
+    if (GetTextureSource()->m_TextureInfo.m_uiSpriteType == (UINT)SPRITE_TYPE_ANIMATED_OBJECT)
     {
         UINT uiSpritesX = GetTextureSource()->m_TextureInfo.Type.AnimatedObject.m_uiSpritesX;
         UINT uiSpritesY = GetTextureSource()->m_TextureInfo.Type.AnimatedObject.m_uiSpritesY;
@@ -73,11 +74,11 @@ void Unit::SetTextureSource(const SpritePrototype *proto)
     // set some special information for unit
     if (GetTextureSource())
     {
-        if (GetTextureSource()->m_TextureInfo.m_uiSpriteType == (UINT)SPRITE_TYPE_AIMATED_OBJECT)
+        if (GetTextureSource()->m_TextureInfo.m_uiSpriteType == (UINT)SPRITE_TYPE_ANIMATED_OBJECT)
             m_uiSpriteSector = m_uiDirection * GetTextureSource()->m_TextureInfo.Type.AnimatedObject.m_uiSpritesX + 1;
 
         else
-            ERROR_LOG(m_sLogLocationName + "Set Texture " + GetTextureSource()->m_TextureInfo.m_sFileName + " is not type SPRITE_TYPE_AIMATED_OBJECT, so "+
+            ERROR_LOG(m_sLogLocationName + "Set Texture " + GetTextureSource()->m_TextureInfo.m_sFileName + " is not type SPRITE_TYPE_ANIMATED_OBJECT, so "+
                         "walkanimation are not going to be shown.");
     }
 }
@@ -85,7 +86,7 @@ void Unit::SetTextureSource(const SpritePrototype *proto)
 void Unit::MovePosition(int XMove, int YMove, UINT time)
 {
     if (m_pMovement)
-        m_pMovement->Move2DWithoutCollision(XMove, YMove, time);
+        m_pMovement->Move2D(XMove, YMove, time);
 }
 
 void Unit::UpdateAnimation(const ULONGLONG uiCurTime, const UINT uiDiff)
@@ -127,4 +128,20 @@ void Unit::UpdateAnimation(const ULONGLONG uiCurTime, const UINT uiDiff)
     }
     else
         m_uiAnimation_Timer -= uiDiff;
+}
+
+void Unit::SetObjectInfo(const ObjectPrototype *pInfo)
+{
+    WorldObject::SetObjectInfo(pInfo);
+
+    switch(pInfo->m_uiType)
+    {
+    case 1:
+        m_uiAnimationTime   = GameDatabase::WrapAnimationTimeID(pInfo->ObjectType.NPC.m_uiAnimationFrequence);
+        m_uiAnimation_Timer = m_uiAnimationTime;
+        m_uiMovementSpeed   = GameDatabase::WrapMovementSpeedID(pInfo->ObjectType.NPC.m_uiMoveSpeed);
+        break;
+    default:
+        break;
+    }
 }

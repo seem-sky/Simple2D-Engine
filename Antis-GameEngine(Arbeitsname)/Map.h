@@ -13,14 +13,10 @@ struct MapInfo
     std::string m_sMapName;
     std::string m_sMapAnnounceName;
 
-    unsigned int m_uiX;
-    unsigned int m_uiY;
+    UINT m_uiX;
+    UINT m_uiY;
 
-    MapInfo()
-    {
-        m_uiX = 0;
-        m_uiY = 0;
-    }
+    MapInfo() : m_uiX(0), m_uiY(0) { }
 };
 
 enum MapLoadResult
@@ -59,7 +55,8 @@ public:
 
     const MapInfo* GetMapInfo() { return &m_MapInfo; }
     const std::vector<MapTiles>* GetMapTiles() { return &m_v2MapTiles; }
-    //SpriteFiles* GetSpriteFiles() { return m_pSpriteFiles; }
+
+    bool IsPassable(UINT XPos, UINT YPos, PassabilityFlag MoveDirection);
 
     /*#####
     ## position funktions
@@ -118,16 +115,12 @@ private:
 
 struct ObjectReadOut
 {
-    int m_ObjectID;
+    UINT m_ObjectID;
     int m_XPos;
     int m_YPos;
+    UINT m_uiDirection;
 
-    ObjectReadOut()
-    {
-        m_ObjectID  = 0;
-        m_XPos      = 0;
-        m_YPos      = 0;
-    }
+    ObjectReadOut() : m_ObjectID(0), m_XPos(0), m_YPos(0), m_uiDirection(0) { }
 };
 
 // map load object create new thread

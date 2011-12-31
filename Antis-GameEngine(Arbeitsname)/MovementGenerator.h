@@ -10,36 +10,31 @@ struct sMoveCommand
     UINT m_MoveTime;
     bool m_bWithCollission;
 
-    sMoveCommand()
-    {
-        m_MoveX             = 0;
-        m_MoveY             = 0;
-        m_MoveTime          = 0;
-        m_bWithCollission   = true;
-    }
+    sMoveCommand() : m_MoveX(0), m_MoveY(0), m_MoveTime(0), m_bWithCollission(true){ }
 };
 
 typedef std::list<sMoveCommand*> MoveCommandList;
 
+class Unit;
+
 class MovementGenerator
 {
 public:
-    MovementGenerator(D3DXVECTOR2 *pPosition);
+    MovementGenerator(Unit *pObj);
     ~MovementGenerator(void);
 
-    D3DXVECTOR2 Move2DWithoutCollision(int x, int y, UINT uiMSECTime);
-    /*D3DXVECTOR2 Move2D(int x, int y, UINT uiMSECTime);*/
+    D3DXVECTOR2 Move2D(int x, int y, UINT uiMSECTime, bool Collission = true);
     void UpdateMovement(const ULONGLONG uiCurTime, const UINT uiDiff);
     void ClearMovement();
     void RemoveMovementCommand(sMoveCommand* pCommand);
     inline bool IsMoveCommandListEmpty() { return m_lMoveCommands.empty(); }
 
 private:
-    void Move(int x, int y);
+    bool CanMove(D3DXVECTOR2 oldPos, D3DXVECTOR2 newPos);
 
     D3DXVECTOR2 m_v2CurMovement;
     MoveCommandList m_lMoveCommands;
-    D3DXVECTOR2 *m_pPosition;
+    Unit *m_pObj;
 };
 
 #endif;

@@ -39,7 +39,7 @@ void ObjectLayer::Draw()
 void ObjectLayer::ClearObjectList()
 {
     for (WorldObjectList::const_iterator itr = m_lObjects.begin(); itr != m_lObjects.end(); ++itr)
-        delete (*itr);
+        delete *itr;
 }
 
 void ObjectLayer::AddWorldObject(WorldObject* pObject)

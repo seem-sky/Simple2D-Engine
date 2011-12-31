@@ -4,30 +4,16 @@
 #include "WorldObject.h"
 #include "MovementGenerator.h"
 
-enum DIRECTION
-{
-    DIRECTION_UP,
-    DIRECTION_RIGHT,
-    DIRECTION_DOWN,
-    DIRECTION_LEFT,
-    DIRECTION_NONE,
-};
-
-enum ANIMATION_TIME
-{
-    ANIMATION_TIME_VERY_SLOW    = 1000,
-    ANIMATION_TIME_SLOW         = 500,
-    ANIMATION_TIME_NORMAL       = 250,
-    ANIMATION_TIME_FAST         = 125,
-    ANIMATION_TIME_VERY_FAST    = 65,
-};
-
 class Unit : public WorldObject
 {
 public:
-    Unit(D3DXVECTOR3 pos);
+    Unit(D3DXVECTOR3 pos, DIRECTION dir = DIRECTION_DOWN);
     virtual ~Unit(void);
     void Update(const ULONGLONG uiCurTime, const UINT uiDiff);
+
+    // Unit infos
+    virtual void SetObjectInfo(const ObjectPrototype* pInfo);
+    inline UINT GetMovementSpeed() { return m_uiMovementSpeed; }
 
     void MovePosition(int XMove, int YMove, UINT time = 0);
     inline bool IsMoving()
@@ -46,11 +32,15 @@ public:
     virtual void DrawObject(LPD3DXSPRITE pSprite);
     inline void SetTextureSrcRct(UINT uiSrcRct) { m_uiSpriteSector = uiSrcRct; }
     inline UINT GetTextureSrcRct() { return m_uiSpriteSector; }
+
+    // animation
     void UpdateAnimation(const ULONGLONG uiCurTime, const UINT uiDiff);
     virtual void SetAnimationTime(ANIMATION_TIME time) { m_uiAnimationTime = time; }
-
     inline void SetDirection(DIRECTION dir)
     {
+        if (!GetTextureSource())
+            return;
+
         if (dir != DIRECTION_NONE)
         {
             m_uiDirection = (UINT)dir;
@@ -72,6 +62,7 @@ private:
     bool m_bAllTimeAnimation;
     UINT m_uiAnimation_Timer;
     ANIMATION_TIME m_uiAnimationTime;
+    MOVEMENT_SPEED m_uiMovementSpeed;
 };
 
 #endif;

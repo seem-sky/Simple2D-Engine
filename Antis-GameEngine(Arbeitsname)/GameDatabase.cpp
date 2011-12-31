@@ -23,6 +23,44 @@ GameDatabase::~GameDatabase(void)
         m_pSpriteDatabaseLoad->Kill();
 }
 
+ANIMATION_TIME GameDatabase::WrapAnimationTimeID(UINT aniID)
+{
+    switch(aniID)
+    {
+    case 0:
+        return ANIMATION_TIME_VERY_SLOW;
+    case 1:
+        return ANIMATION_TIME_SLOW;
+    case 2:
+        return ANIMATION_TIME_NORMAL;
+    case 3:
+        return ANIMATION_TIME_FAST;
+    case 4:
+        return ANIMATION_TIME_VERY_FAST;
+    default:
+        return ANIMATION_TIME_NORMAL;
+    }
+}
+
+MOVEMENT_SPEED GameDatabase::WrapMovementSpeedID(UINT speedID)
+{
+    switch(speedID)
+    {
+    case 0:
+        return MOVEMENT_SPEED_VERY_SLOW;
+    case 1:
+        return MOVEMENT_SPEED_SLOW;
+    case 2:
+        return MOVEMENT_SPEED_NORMAL;
+    case 3:
+        return MOVEMENT_SPEED_FAST;
+    case 4:
+        return MOVEMENT_SPEED_VERY_FAST;
+    default:
+        return MOVEMENT_SPEED_NORMAL;
+    }
+}
+
 const ObjectPrototype* GameDatabase::GetObjectPrototype (UINT uiID)
 {
     ObjectDatabase::iterator itr = m_ObjectDatabase.find(uiID);
@@ -241,16 +279,26 @@ void ObjectPrototype::SetDataForTypeAt(UINT uiAt, UINT uiData)
     case 0:
         switch(m_uiType)
         {
-        case OBJECT_TYPE_MAP_OBJECT:
         case OBJECT_TYPE_NPC:
-            ObjectType.MapObject.m_uiAnimationFrequence = uiData;
+            ObjectType.NPC.m_uiAnimationFrequence = uiData;
+            break;
+        default:
+            break;
+        }
+        break;
+    // movement speed
+    case 1:
+        switch(m_uiType)
+        {
+        case OBJECT_TYPE_NPC:
+            ObjectType.NPC.m_uiMoveSpeed = uiData;
             break;
         default:
             break;
         }
         break;
     // hp min
-    case 1:
+    case 2:
         switch(m_uiType)
         {
         case OBJECT_TYPE_NPC:
@@ -261,7 +309,7 @@ void ObjectPrototype::SetDataForTypeAt(UINT uiAt, UINT uiData)
         }
         break;
     // hp max
-    case 2:
+    case 3:
         switch(m_uiType)
         {
         case OBJECT_TYPE_NPC:
@@ -272,7 +320,7 @@ void ObjectPrototype::SetDataForTypeAt(UINT uiAt, UINT uiData)
         }
         break;
     // level min
-    case 3:
+    case 4:
         switch(m_uiType)
         {
         case OBJECT_TYPE_NPC:
@@ -283,22 +331,11 @@ void ObjectPrototype::SetDataForTypeAt(UINT uiAt, UINT uiData)
         }
         break;
     // level max
-    case 4:
-        switch(m_uiType)
-        {
-        case OBJECT_TYPE_NPC:
-            ObjectType.NPC.m_uiLevelMax = uiData;
-            break;
-        default:
-            break;
-        }
-        break;
-    // movement speed
     case 5:
         switch(m_uiType)
         {
         case OBJECT_TYPE_NPC:
-            ObjectType.NPC.m_uiSpeed = uiData;
+            ObjectType.NPC.m_uiLevelMax = uiData;
             break;
         default:
             break;
@@ -484,7 +521,7 @@ void SpritePrototype::SetDataForTypeAt(UINT uiAt, UINT value)
             break;
 
             // count of spritesX
-        case SPRITE_TYPE_AIMATED_OBJECT:
+        case SPRITE_TYPE_ANIMATED_OBJECT:
             Type.AnimatedObject.m_uiSpritesX = value;
             break;
         default:
@@ -501,7 +538,7 @@ void SpritePrototype::SetDataForTypeAt(UINT uiAt, UINT value)
             break;
 
             // count of spritesX
-        case SPRITE_TYPE_AIMATED_OBJECT:
+        case SPRITE_TYPE_ANIMATED_OBJECT:
             Type.AnimatedObject.m_uiSpritesY = value;
             break;
         default:

@@ -204,25 +204,25 @@ void Player::MovePlayerByBuffer()
         // direction left
         if(HasMoveBuffer(MOVE_BUFFER_LEFT) && m_uiLockBuffer != MOVE_BUFFER_LEFT)
         {
-            MovePlayer(-4,0,250);
+            MovePlayer(m_pControledUnit->GetMovementSpeed()*(-1), 0, 100);
             return;
         }
         // direction up
         if(HasMoveBuffer(MOVE_BUFFER_UP) && m_uiLockBuffer != MOVE_BUFFER_UP)
         {
-            MovePlayer(0,-4,250);
+            MovePlayer(0, m_pControledUnit->GetMovementSpeed()*(-1), 100);
             return;
         }
         // direction right
         if(HasMoveBuffer(MOVE_BUFFER_RIGHT) && m_uiLockBuffer != MOVE_BUFFER_RIGHT)
         {
-            MovePlayer(4,0,250);
+            MovePlayer(m_pControledUnit->GetMovementSpeed(), 0, 100);
             return;
         }
         // direction down
         if(HasMoveBuffer(MOVE_BUFFER_DOWN) && m_uiLockBuffer != MOVE_BUFFER_DOWN)
         {
-            MovePlayer(0,4,250);
+            MovePlayer(0, m_pControledUnit->GetMovementSpeed(), 100);
             return;
         }
     }
@@ -232,25 +232,26 @@ void Player::MovePlayerByBuffer()
     // direction left
     if(HasMoveBuffer(MOVE_BUFFER_LEFT))
     {
-        MovePlayer(-4,0,250);
+        if (m_pControledUnit)
+            MovePlayer(m_pControledUnit->GetMovementSpeed()*(-1), 0, 100);
         m_uiLockBuffer = MOVE_BUFFER_LEFT;
     }
     // direction up
     else if(HasMoveBuffer(MOVE_BUFFER_UP))
     {
-        MovePlayer(0,-4,250);
+        MovePlayer(0, m_pControledUnit->GetMovementSpeed()*(-1), 100);
         m_uiLockBuffer = MOVE_BUFFER_UP;
     }
     // direction right
     else if(HasMoveBuffer(MOVE_BUFFER_RIGHT))
     {
-        MovePlayer(4,0,250);
+        MovePlayer(m_pControledUnit->GetMovementSpeed(), 0, 100);
         m_uiLockBuffer = MOVE_BUFFER_RIGHT;
     }
     // direction down
     else if(HasMoveBuffer(MOVE_BUFFER_DOWN))
     {
-        MovePlayer(0,4,250);
+        MovePlayer(0, m_pControledUnit->GetMovementSpeed(), 100);
         m_uiLockBuffer = MOVE_BUFFER_DOWN;
     }
 }

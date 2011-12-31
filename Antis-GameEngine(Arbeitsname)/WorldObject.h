@@ -20,7 +20,7 @@ public:
 
     // object info
     inline ObjectPrototype* GetObjectInfo() { return &m_ObjectInfo; }
-    inline void SetObjectInfo(const ObjectPrototype* pInfo) { if (pInfo) m_ObjectInfo = *pInfo; }
+    virtual void SetObjectInfo(const ObjectPrototype* pInfo) { if (pInfo) m_ObjectInfo = *pInfo; }
 
     inline void SetOwnerLayer(ObjectLayer *pOwner)
     {
@@ -32,6 +32,7 @@ public:
     inline ObjectLayer* GetOwnerLayer() { return m_pOwnerLayer; }
 
     // position
+    inline void ChangePosition(int XPos, int YPos) { m_v3Position += D3DXVECTOR3((float)XPos, (float)YPos, 0); }
     inline D3DXVECTOR3 GetPosition() { return m_v3Position; }
     inline D3DXVECTOR3* GetPositionPtr() { return &m_v3Position; }
     inline int GetPositionX() { return (int)m_v3Position.x; }

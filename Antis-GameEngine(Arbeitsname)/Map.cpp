@@ -411,6 +411,36 @@ void Map::UpdateMap(const ULONGLONG uiCurTime, const UINT uiDiff)
     }
 }
 
+bool Map::IsPassable(UINT XPos, UINT YPos, PassabilityFlag MoveDirection)
+{
+    if (m_MapInfo.m_uiX < XPos || m_MapInfo.m_uiY < YPos)
+        return false;
+
+    TextureMgr *pTextureMgr = TextureMgr::Get();
+    if (!pTextureMgr)
+        return false;
+
+    // iterate through layers
+    for (UINT i = 0; i < m_v2MapTiles.size(); i++)
+    {
+        if (const TextureSource *pTexture = pTextureMgr->GetTextureSource((UINT)m_v2MapTiles.at(i).at(YPos).at(XPos)))
+        {
+            switch(pTexture->m_TextureInfo.m_uiSpriteType)
+            {
+            case 0:
+            case 1:
+                if (!(pTexture->m_TextureInfo.Type.Tile.m_uiPassable & MoveDirection))
+                    return false;
+                break;
+            default:
+                break;
+            }
+        }
+    }
+
+    return true;
+}
+
 /*#####
 ## MapLoadThread
 #####*/
@@ -763,6 +793,9 @@ MapLoadResult MapLoadThread::LoadLayerAndObjects(std::string *sMapData)
                 case 2:
                     newObject->m_YPos = atoi(_bstr_t(value.bstrVal));
                     break;
+                case 3:
+                    newObject->m_uiDirection = atoi(_bstr_t(value.bstrVal));
+                    break;
                 default:
                     break;
                 }
@@ -795,19 +828,20 @@ MapLoadResult MapLoadThread::LoadLayerAndObjects(std::string *sMapData)
                         switch(pProto->m_uiType)
                         {
                         case OBJECT_TYPE_NPC:
-                            pObject = new Unit(D3DXVECTOR3((float)vLayerAndObjects.at(i).at(j)->m_XPos, (float)vLayerAndObjects.at(i).at(j)->m_YPos, 0));
+                            pObject = new Unit(D3DXVECTOR3((float)vLayerAndObjects.at(i).at(j)->m_XPos, (float)vLayerAndObjects.at(i).at(j)->m_YPos, 0),
+                                (DIRECTION)vLayerAndObjects.at(i).at(j)->m_uiDirection);
                             break;
                         case OBJECT_TYPE_MAP_OBJECT:
                         default:
                             pObject = new WorldObject(D3DXVECTOR3((float)vLayerAndObjects.at(i).at(j)->m_XPos, (float)vLayerAndObjects.at(i).at(j)->m_YPos, 0));
                             break;
-
                         }
                         pObject->SetObjectInfo(pProto);
                     }
 
                     // set object infos
                     pObject->SetTextureSource(pDatabase->GetSpriteFile(pObject->GetObjectInfo()->m_uiTextureID));
+
                     pLayer->AddWorldObject(pObject);
                 }
 
