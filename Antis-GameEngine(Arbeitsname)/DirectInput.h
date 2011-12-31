@@ -14,10 +14,11 @@ public:
     ~DirectInput();
 
     BOOL Init(HINSTANCE hInstance, HWND hWnd);
-    void SetKeyStateKeyboard();
+
     bool GetKeyStateKeyboard(UINT Key);
     void ClearKeyStateKeyboard();
-    void ProcessInput( void );
+
+    bool GetInput();
 
 private:
     void CleanUp();
@@ -40,5 +41,10 @@ private:
     D3DXVECTOR2 m_v2MouseKoord;
     D3DXVECTOR2 m_v2MouseKlick;
     bool m_bMouseKlick;
+
+    // look up key states
+    bool SetKeyStateKeyboard();
+    // look up mouse
+    bool ProcessInput( void );
 };
 #endif

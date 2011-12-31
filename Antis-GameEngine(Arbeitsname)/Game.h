@@ -6,6 +6,7 @@
 #include "GameDatabase.h"
 #include "DirectInput.h"
 #include "Player.h"
+#include "Menu.h"
 
 // world class, add game code here
 class WorldSession
@@ -14,7 +15,7 @@ public:
     WorldSession() { };
     virtual ~WorldSession() { };
 
-    virtual void WorldUpdate(const UINT CurTime, const UINT CurElapsedTime) { }
+    virtual void WorldUpdate(const ULONGLONG CurTime, const UINT CurElapsedTime) { }
 };
 
 enum GAMEINIT_STATE
@@ -33,24 +34,42 @@ public:
     ~CGame(void);
 
     GAMEINIT_STATE Initialize(HINSTANCE hInstance, HWND hWnd);
-    bool Run(const UINT CurTime, const UINT CurElapsedTime);
+    bool Run(const ULONGLONG CurTime, const UINT CurElapsedTime);
     HRESULT Draw();
     void Quit();
     void SetWorldSession(WorldSession *pWorld) { m_pWorldSession = pWorld; }
+
+    inline void CloseGame() { m_bGameClose = true; }
+
+    // game pause
+    inline void PauseGame(bool pause = true) { m_bPauseGame = pause; }
+    inline bool IsGamePaused() { return m_bPauseGame; }
 
     CGameInfo *GetGameInfo() { return &m_GameInfo; }
 
     HRESULT ResetD3DXDevice(HWND hWnd);
 
+    // menu
+    void DisplayMenu(Menu *pMenu);
+    void ShutDownMenu();
+    inline bool ShowsMenu() { return m_pShownMenu ? true : false; }
+    inline Menu* GetShownMenu() { return m_pShownMenu; }
+
 private:
     CGameInfo m_GameInfo;
     bool Test;
+
+    bool m_bGameClose;
+    bool m_bPauseGame;
 
     Map *m_pMap;
     CDirect3D *m_pDirect3D;
     DirectInput *m_pDirectInput;
     WorldSession *m_pWorldSession;
     GameDatabase *m_pDatabase;
+
+    // the main menu
+    Menu *m_pShownMenu;
 
     PlayerPtrList PlayerList;
 

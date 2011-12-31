@@ -25,9 +25,9 @@ enum ANIMATION_TIME
 class Unit : public WorldObject
 {
 public:
-    Unit(void);
+    Unit(D3DXVECTOR3 pos);
     virtual ~Unit(void);
-    void Update(const UINT uiCurTime, const UINT uiDiff);
+    void Update(const ULONGLONG uiCurTime, const UINT uiDiff);
 
     void MovePosition(int XMove, int YMove, UINT time = 0);
     inline bool IsMoving()
@@ -46,7 +46,7 @@ public:
     virtual void DrawObject(LPD3DXSPRITE pSprite);
     inline void SetTextureSrcRct(UINT uiSrcRct) { m_uiSpriteSector = uiSrcRct; }
     inline UINT GetTextureSrcRct() { return m_uiSpriteSector; }
-    void UpdateAnimation(const UINT uiCurTime, const UINT uiDiff);
+    void UpdateAnimation(const ULONGLONG uiCurTime, const UINT uiDiff);
     virtual void SetAnimationTime(ANIMATION_TIME time) { m_uiAnimationTime = time; }
 
     inline void SetDirection(DIRECTION dir)

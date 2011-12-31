@@ -11,6 +11,9 @@ enum
     ACTION_MOVE_DOWN,
     ACTION_MOVE_RIGHT,
     ACTION_MOVE_LEFT,
+    ACTION_ESCAPE,
+    ACTION_ENTER,
+    ACTION_PAUSE_GAME,
 };
 
 enum MOVE_BUFFER
@@ -28,11 +31,14 @@ struct PlayerKeyAction
     bool m_bShouldPressed;
     UINT m_uiActionID;
 
+    ULONGLONG m_uiLastTimeActive;
+
     PlayerKeyAction(void)
     {
         m_uiKey             = 0;
         m_bShouldPressed    = true;
         m_uiActionID        = 0;
+        m_uiLastTimeActive  = 0;
     }
 };
 
@@ -45,14 +51,13 @@ public:
     ~Player(void);
 
     // read out keystates and other player related stuff
-    void UpdatePlayer(const UINT CurTime, const UINT CurElapsedTime);
+    void UpdatePlayer(const ULONGLONG CurTime, const UINT CurElapsedTime);
 
     // changes controle of an unit
     void SetControledUnit(Unit *pWho);
 
     // add a key action
     void AddKeyAction(UINT uiKey, UINT actionID, bool press = true);
-    void DoActionForKey(UINT uiAction);
 
     // move player object
     void MovePlayer(int XMove, int YMove, UINT uiMoveMSec);
@@ -79,5 +84,6 @@ private:
     }
 
     void MovePlayerByBuffer();
+    void DoActionForKey(PlayerKeyAction *action, const ULONGLONG CurTime);
 };
 #endif;

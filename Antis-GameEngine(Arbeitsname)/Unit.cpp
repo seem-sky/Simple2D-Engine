@@ -1,12 +1,13 @@
 #include "Unit.h"
 #include "RessourceManager.h"
 
-Unit::Unit(void) : m_uiDirection(DIRECTION_DOWN), m_uiSpriteSector(0), m_bIsPlayer(false), m_bAnimationDirection(false), m_bAllTimeAnimation(false),
-    m_uiAnimationTime(ANIMATION_TIME_NORMAL), m_uiAnimation_Timer(m_uiAnimationTime), m_pMovement(new MovementGenerator((D3DXVECTOR2*)GetPositionPtr())),
-    WorldObject()
+Unit::Unit(D3DXVECTOR3 pos) : m_uiDirection(DIRECTION_DOWN), m_uiSpriteSector(0), m_bIsPlayer(false), m_bAnimationDirection(false), m_bAllTimeAnimation(false),
+    m_uiAnimationTime(ANIMATION_TIME_NORMAL), m_pMovement(new MovementGenerator((D3DXVECTOR2*)GetPositionPtr())),
+    WorldObject(pos)
 {
     m_sLogLocationName      = LOGFILE_ENGINE_LOG_NAME + "Unit : ";
     m_UnitType              = UNIT_TYPE_UNIT;
+    m_uiAnimation_Timer     = m_uiAnimationTime;
 }
 
 Unit::~Unit(void)
@@ -18,7 +19,7 @@ Unit::~Unit(void)
     }
 }
 
-void Unit::Update(const UINT uiCurTime, const UINT uiDiff)
+void Unit::Update(const ULONGLONG uiCurTime, const UINT uiDiff)
 {
     // WorldObject update
     WorldObject::Update(uiCurTime, uiDiff);
@@ -26,6 +27,7 @@ void Unit::Update(const UINT uiCurTime, const UINT uiDiff)
     // Update movement
     if (m_pMovement && !m_pMovement->IsMoveCommandListEmpty())
         m_pMovement->UpdateMovement(uiCurTime, uiDiff);
+
     else
         m_uiSpriteSector = m_uiDirection * GetTextureSource()->m_TextureInfo.Type.AnimatedObject.m_uiSpritesX + 1;
 
@@ -86,7 +88,7 @@ void Unit::MovePosition(int XMove, int YMove, UINT time)
         m_pMovement->Move2DWithoutCollision(XMove, YMove, time);
 }
 
-void Unit::UpdateAnimation(const UINT uiCurTime, const UINT uiDiff)
+void Unit::UpdateAnimation(const ULONGLONG uiCurTime, const UINT uiDiff)
 {
     // check animation timer
     if (m_uiAnimation_Timer < uiDiff)

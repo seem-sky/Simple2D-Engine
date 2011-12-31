@@ -30,7 +30,7 @@ D3DXVECTOR2 MovementGenerator::Move2DWithoutCollision(int x, int y, UINT uiMSECT
 //    return v2Result;    
 //}
 
-void MovementGenerator::UpdateMovement(const UINT uiCurTime, const UINT uiDiff)
+void MovementGenerator::UpdateMovement(const ULONGLONG uiCurTime, const UINT uiDiff)
 {
     if (m_lMoveCommands.empty())
         return;

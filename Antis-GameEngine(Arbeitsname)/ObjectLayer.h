@@ -15,9 +15,18 @@ public:
     ~ObjectLayer(void);
     void ClearObjectList();
     void AddWorldObject(WorldObject* pObject);
-    void UpdateLayer(const UINT uiCurTime, const UINT uiDiff);
+    void UpdateLayer(const ULONGLONG uiCurTime, const UINT uiDiff);
 
-    void SetOwnerMap(Map *pMap) { m_pOwnerMap = pMap; }
+    inline void SetOwnerMap(Map *pMap)
+    {
+        if (!pMap)
+            return;
+
+        m_pOwnerMap = pMap;
+    }
+    inline Map* GetOwnerMap() { return m_pOwnerMap; }
+
+    void ModObjectPosition(D3DXVECTOR2 oldPos, D3DXVECTOR2 newPos, WorldObject *pObj);
 
 protected:
     void Draw();

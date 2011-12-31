@@ -10,28 +10,41 @@ enum UNIT_TYPE
     UNIT_TYPE_UNIT,
 };
 
+class ObjectLayer;
+
 class WorldObject
 {
 public:
-    WorldObject(void);
+    WorldObject(D3DXVECTOR3 pos);
     virtual ~WorldObject(void);
 
     // object info
     inline ObjectPrototype* GetObjectInfo() { return &m_ObjectInfo; }
     inline void SetObjectInfo(const ObjectPrototype* pInfo) { if (pInfo) m_ObjectInfo = *pInfo; }
 
+    inline void SetOwnerLayer(ObjectLayer *pOwner)
+    {
+        if (!pOwner)
+            return;
+
+        m_pOwnerLayer = pOwner;
+    }
+    inline ObjectLayer* GetOwnerLayer() { return m_pOwnerLayer; }
+
     // position
     inline D3DXVECTOR3 GetPosition() { return m_v3Position; }
     inline D3DXVECTOR3* GetPositionPtr() { return &m_v3Position; }
     inline int GetPositionX() { return (int)m_v3Position.x; }
     inline int GetPositionY() { return (int)m_v3Position.y; }
-    void SetPosition(D3DXVECTOR2 v2NewPos)
+    inline int GetBottomPosY()
     {
-        m_v3Position.x = v2NewPos.x;
-        m_v3Position.y = v2NewPos.y;
+        UINT x = 0, y = 0;
+        GetObjectSize(x, y);
+        return GetPositionY() + y;
     }
-    inline void SetPositionX(int newPos) { m_v3Position.x = (float)newPos; }
-    inline void SetPositionY(int newPos) { m_v3Position.y = (float)newPos; }
+    UINT GetMapPosX();
+    UINT GetMapPosY();
+
     void GetObjectSize(UINT &Xsize, UINT &Ysize);
 
     // Color
@@ -44,7 +57,7 @@ public:
     inline TextureSource* GetTextureSource() { return m_pTexture; }
 
     // Update
-    virtual void Update(const UINT uiCurTime, const UINT uiDiff);
+    virtual void Update(const ULONGLONG uiCurTime, const UINT uiDiff);
 
     virtual void DrawObject(LPD3DXSPRITE pSprite);
 
@@ -55,6 +68,8 @@ protected:
 
 private:
     void UpdateColor(const UINT uiDiff);
+
+    ObjectLayer *m_pOwnerLayer;
 
     // modify color variables
     float m_ModRed, m_ModGreen, m_ModBlue, m_ModAlpha;

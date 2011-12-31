@@ -268,6 +268,30 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="Menus"
+				>
+				<File
+					RelativePath=".\DefaultMenuItems.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\DefaultMenuItems.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Menu.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Menu.h"
+					>
+				</File>
+				<File
+					RelativePath=".\MenuItem.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="File In-/Output"
@@ -358,6 +382,14 @@
 			</File>
 			<File
 				RelativePath=".\Direct3D.h"
+				>
+			</File>
+			<File
+				RelativePath=".\DirectFont.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\DirectFont.h"
 				>
 			</File>
 			<File

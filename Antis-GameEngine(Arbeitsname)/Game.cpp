@@ -1,7 +1,9 @@
 #include "Game.h"
 #include "RessourceManager.h"
+#include "DirectFont.h"
 
-CGame::CGame(void) : m_pDirect3D(NULL), m_pDirectInput(NULL), m_pWorldSession(NULL), m_pMap(NULL), m_pDatabase(NULL), TSingleton()
+CGame::CGame(void) : m_pDirect3D(NULL), m_pDirectInput(NULL), m_pWorldSession(NULL), m_pMap(NULL), m_pDatabase(NULL), m_pShownMenu(NULL),
+                m_bGameClose(false), m_bPauseGame(false), TSingleton()
 {
     m_sLogLocationName  = LOGFILE_ENGINE_LOG_NAME + "CGame : ";
 
@@ -100,11 +102,11 @@ GAMEINIT_STATE CGame::Initialize(HINSTANCE hInstance, HWND hWnd)
     }
 }
 
-bool CGame::Run(const UINT CurTime, const UINT CurElapsedTime)
+bool CGame::Run(const ULONGLONG CurTime, const UINT CurElapsedTime)
 {
     if (!Test)
     {
-        if (MAP_RESULT_DONE == m_pMap->LoadNewMap("Map1.map"))
+        if (MAP_RESULT_DONE == m_pMap->LoadNewMap("Map2.map"))
         {
             pPlayer->SetControledUnit((Unit*)m_pMap->AddNewWorldObject(1, 100, 100, 0));
             Test = true;
@@ -113,30 +115,62 @@ bool CGame::Run(const UINT CurTime, const UINT CurElapsedTime)
     else
     {
         // update direct input
-        m_pDirectInput->SetKeyStateKeyboard();
+        if (!m_pDirectInput->GetInput())
+            PauseGame();
 
         // Update players
         if (pPlayer)
             pPlayer->UpdatePlayer(CurTime, CurElapsedTime);
 
-        // Update Map
-        if (m_pMap)
-            m_pMap->UpdateMap(CurTime, CurElapsedTime);
+        if (m_pShownMenu)
+            m_pShownMenu->UpdateMenu(CurTime, CurElapsedTime);
 
-        // Update World
-        if (m_pWorldSession)
-            m_pWorldSession->WorldUpdate(CurTime, CurElapsedTime);
+        // if no menu shown or if cur menu allows updating
+        if (!m_pShownMenu || m_pShownMenu->ShouldUpdating())
+        {
+            if (m_bPauseGame)
+                return true;
+
+            // Update World
+            if (m_pWorldSession)
+                m_pWorldSession->WorldUpdate(CurTime, CurElapsedTime);
+
+            // Update Map
+            if (m_pMap)
+                m_pMap->UpdateMap(CurTime, CurElapsedTime);
+        }
     }
 
-    return true;
+    if (m_bGameClose)
+        return false;
+    else
+        return true;
 }
 
 HRESULT CGame::Draw()
 {
     m_pDirect3D->BeginScene();
     // Draw all Layers
-    if (Test && m_pMap)
-        m_pMap->Draw();
+    if (Test)
+    {
+        if (!m_pShownMenu || m_pShownMenu->ShouldDrawMap())
+        {
+            if (m_pMap)
+                m_pMap->Draw();
+
+            // if pause is pressed, show a font on screen
+            if (IsGamePaused())
+            {
+                UINT x = 0, y = 0;
+                m_GameInfo.GetWindowSize(x, y);
+                RECT rect = { 0, y / 2 -74, x, y };
+                DirectFont::DrawFont("Pause", rect, D3DXCOLOR(0.25f, 0.4f, 1, 1), 74, 1000, "Comic Sans MS");
+            }
+        }
+
+        if (m_pShownMenu)
+            m_pShownMenu->DrawMenu();
+    }
 
     return m_pDirect3D->EndScene();
 }
@@ -148,6 +182,10 @@ void CGame::Quit()
         for (PlayerPtrList::iterator itr = PlayerList.begin(); itr != PlayerList.end(); ++itr)
             delete *itr;
     }
+
+    if (m_pShownMenu)
+        m_pShownMenu->CloseAllMenus();
+
     // release WorldSession
     if (m_pWorldSession)
         delete m_pWorldSession;
@@ -178,4 +216,20 @@ HRESULT CGame::ResetD3DXDevice(HWND hWnd)
     m_GameInfo.GetWindowSize(xSize, ySize);
 
     return m_pDirect3D->ResetDevice(hWnd, xSize, ySize, m_GameInfo.IsWindowed());
+}
+
+void CGame::DisplayMenu(Menu *pMenu)
+{
+    pMenu->OnMenuOpen();
+    m_pShownMenu = pMenu;
+}
+
+void CGame::ShutDownMenu()
+{
+    if (m_pShownMenu)
+    {
+        Menu* pMenu = m_pShownMenu->GetParentMenu();
+        m_pShownMenu->CloseMenu();
+        m_pShownMenu = pMenu;
+    }
 }

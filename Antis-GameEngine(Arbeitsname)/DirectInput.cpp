@@ -78,10 +78,14 @@ void DirectInput::CleanUp()
         m_DirectInput = NULL;
     }
 }
-void DirectInput::SetKeyStateKeyboard()
+
+bool DirectInput::SetKeyStateKeyboard()
 {
     if(FAILED( m_DIKeyboard->GetDeviceState( sizeof(m_aKeyState), &m_aKeyState)))
-        m_DIKeyboard->Acquire();
+        if (FAILED(m_DIKeyboard->Acquire()))
+            return false;
+
+    return true;
 }
 
 bool DirectInput::GetKeyStateKeyboard(UINT Key)
@@ -107,7 +111,7 @@ HRESULT DirectInput::InitMousePuffer(int PufferSize)
     return m_DIMouse->SetProperty( DIPROP_BUFFERSIZE, &DIProperties.diph );
 }
 
-void DirectInput::ProcessInput( void )
+bool DirectInput::ProcessInput( void )
 {
     DWORD NumElements = 1;
     DIDEVICEOBJECTDATA data;
@@ -115,8 +119,9 @@ void DirectInput::ProcessInput( void )
     if( FAILED ( m_DIMouse->GetDeviceData( sizeof( data ), &data, &NumElements, 0 ) ) )
     {
         m_DIMouse->Acquire();
-        return;
+        return false;
     }
+
     //get mousemovement
     switch( data.dwOfs )
     {
@@ -129,4 +134,17 @@ void DirectInput::ProcessInput( void )
     case DIMOFS_BUTTON1:
         break;
     }
+
+    return true;
+}
+
+bool DirectInput::GetInput()
+{
+    if (!SetKeyStateKeyboard())
+        return false;
+
+    /*if (!ProcessInput())
+        return false;*/
+
+    return true;
 }

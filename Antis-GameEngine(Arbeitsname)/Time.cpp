@@ -45,7 +45,7 @@ LONGLONG CTime::GetCurTime()
 {
     LONGLONG CurTime = 0;
     QueryPerformanceCounter((LARGE_INTEGER*)&CurTime);
-    return CurTime;
+    return CurTime * 1000 / m_Frequency;
 };
 
 LONGLONG CTime::GetTimeElapsed()

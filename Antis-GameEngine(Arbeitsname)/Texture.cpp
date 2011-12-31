@@ -15,6 +15,24 @@ void TextureSource::GetTextureSize(UINT &XSize, UINT &YSize)
     YSize = desc.Height;
 }
 
+void TextureSource::GetShownSpriteSize(UINT &XSize, UINT &YSize)
+{
+    if (!m_pTexture)
+        return;
+
+    D3DSURFACE_DESC desc;
+    m_pTexture->GetLevelDesc(0, &desc);
+    XSize = desc.Width;
+    YSize = desc.Height;
+
+    // if texture is split up into more sprites
+    if (m_TextureInfo.m_uiSpriteType == 3)
+    {
+        XSize /= m_TextureInfo.Type.AnimatedObject.m_uiSpritesX;
+        YSize /= m_TextureInfo.Type.AnimatedObject.m_uiSpritesY;
+    }
+}
+
 /*#####
 # TextureMgr
 #####*/

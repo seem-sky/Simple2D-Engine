@@ -1,7 +1,6 @@
 #include "Map.h"
 #include "Game.h"
 #include "RessourceManager.h"
-#include "Direct3D.h"
 #include <msxml2.h>
 
 #import <msxml4.dll>
@@ -59,10 +58,10 @@ WorldObject* Map::AddNewWorldObject(UINT uiObjectID, int XPos, int YPos, UINT ui
     switch(pProto->m_uiType)
     {
     case OBJECT_TYPE_MAP_OBJECT:
-        pNewObject = new WorldObject();
+        pNewObject = new WorldObject(D3DXVECTOR3((float)XPos, (float)YPos, 0));
         break;
     case OBJECT_TYPE_NPC:
-        pNewObject = new Unit();
+        pNewObject = new Unit(D3DXVECTOR3((float)XPos, (float)YPos, 0));
         break;
     default:
         break;
@@ -71,7 +70,6 @@ WorldObject* Map::AddNewWorldObject(UINT uiObjectID, int XPos, int YPos, UINT ui
     // insert object in a specific layer
     if (ObjectLayer *pLayer = (ObjectLayer*)GetLayerAtNr(uiLayerNr))
     {
-        pNewObject->SetPosition(D3DXVECTOR2((float)XPos, (float)YPos));
         pNewObject->SetObjectInfo(pProto);
         if (SpritePrototype const *pSpriteProto = pDatabase->GetSpriteFile(pProto->m_uiTextureID))
             pNewObject->SetTextureSource(pSpriteProto);
@@ -142,21 +140,30 @@ void Map::DrawMap()
     UINT endposY = 0;
     if (vPosition.x + MapInfo->m_uiX * uiMapTileSize_X > uiScreenWidth)
     {
-        if (vPosition.x < 0)
-            endposX = (UINT)(-1*(vPosition.x + startposX * uiMapTileSize_X) + uiScreenWidth ) / uiMapTileSize_X + startposX + 1;
+        endposX = startposX + (uiScreenWidth/uiMapTileSize_X);
 
-        else if (vPosition.x < uiScreenWidth)
-            endposX = (UINT)((uiScreenWidth - vPosition.x)/ uiMapTileSize_X + startposX + 1);
+        if ((UINT)vPosition.x % uiMapTileSize_X)
+        {
+            if (startposX > 0)
+                startposX--;
+
+            endposX++;
+        }
     }
     else
         endposX = MapInfo->m_uiX;
 
     if (vPosition.y + MapInfo->m_uiY * uiMapTileSize_Y > uiScreenHeight)
     {
-        if (vPosition.y < 0)
-            endposY = (UINT)(-1*(vPosition.y + startposY * uiMapTileSize_X) + uiScreenHeight ) / uiMapTileSize_Y + startposY + 1;
-        else if (vPosition.y < uiScreenHeight)
-            endposY = (UINT)((uiScreenHeight - vPosition.y)/ uiMapTileSize_Y + startposY + 1);            
+        endposY = startposY + (uiScreenHeight/uiMapTileSize_Y);
+
+        if ((UINT)vPosition.y % uiMapTileSize_Y)
+        {
+            if (startposY > 0)
+                startposY--;
+
+            endposY++;
+        }          
     }
     else
         endposY = MapInfo->m_uiY;
@@ -175,13 +182,13 @@ void Map::DrawMap()
         for (UINT i = startposY; i < endposY && startposX != endposX; ++i)
         {
             // break if empty or out of range
-            if (MapTiles->at(layer).empty() || MapTiles->at(layer).size()-1 < i)
+            if (MapTiles->at(layer).empty() || i >= MapTiles->at(layer).size())
                 break;
 
             for (UINT j = startposX; j < endposX; ++j)
             {
                 // break if empty or out of range
-                if (MapTiles->at(layer).at(i).empty() || MapTiles->at(layer).at(i).size()-1 < j)
+                if (MapTiles->at(layer).at(i).empty() || j >= MapTiles->at(layer).at(i).size())
                     break;
 
                 float fMapTile = MapTiles->at(layer).at(i).at(j);
@@ -394,7 +401,7 @@ Layer* Map::GetLayerAtNr(UINT uiLayerNr)
     return m_lLayers.at(uiLayerNr);
 }
 
-void Map::UpdateMap(const UINT uiCurTime, const UINT uiDiff)
+void Map::UpdateMap(const ULONGLONG uiCurTime, const UINT uiDiff)
 {
     // iterate through layerlist
     for (LayerList::iterator itr = m_lLayers.begin(); itr != m_lLayers.end(); ++itr)
@@ -788,11 +795,11 @@ MapLoadResult MapLoadThread::LoadLayerAndObjects(std::string *sMapData)
                         switch(pProto->m_uiType)
                         {
                         case OBJECT_TYPE_NPC:
-                            pObject = new Unit();
+                            pObject = new Unit(D3DXVECTOR3((float)vLayerAndObjects.at(i).at(j)->m_XPos, (float)vLayerAndObjects.at(i).at(j)->m_YPos, 0));
                             break;
                         case OBJECT_TYPE_MAP_OBJECT:
                         default:
-                            pObject = new WorldObject();
+                            pObject = new WorldObject(D3DXVECTOR3((float)vLayerAndObjects.at(i).at(j)->m_XPos, (float)vLayerAndObjects.at(i).at(j)->m_YPos, 0));
                             break;
 
                         }
@@ -801,7 +808,6 @@ MapLoadResult MapLoadThread::LoadLayerAndObjects(std::string *sMapData)
 
                     // set object infos
                     pObject->SetTextureSource(pDatabase->GetSpriteFile(pObject->GetObjectInfo()->m_uiTextureID));
-                    pObject->SetPosition(D3DXVECTOR2((float)vLayerAndObjects.at(i).at(j)->m_XPos, (float)vLayerAndObjects.at(i).at(j)->m_YPos));
                     pLayer->AddWorldObject(pObject);
                 }
 

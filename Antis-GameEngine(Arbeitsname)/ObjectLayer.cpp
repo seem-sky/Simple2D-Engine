@@ -32,6 +32,7 @@ void ObjectLayer::Draw()
                 (*objItr)->DrawObject(pSprite);
         }
     }
+
     pDirect3D->EndSpriteDraw();
 }
 
@@ -45,11 +46,12 @@ void ObjectLayer::AddWorldObject(WorldObject* pObject)
 {
     if (!pObject)
         return;
+    pObject->SetOwnerLayer(this);
 
     m_lObjects.push_back(pObject);
 }
 
-void ObjectLayer::UpdateLayer(const UINT uiCurTime, const UINT uiDiff)
+void ObjectLayer::UpdateLayer(const ULONGLONG uiCurTime, const UINT uiDiff)
 {
     // clear visible objects
     m_v2VisibleObjects.clear();
@@ -62,13 +64,13 @@ void ObjectLayer::UpdateLayer(const UINT uiCurTime, const UINT uiDiff)
         // check if object is visible, if true, store in visibleobject map
         if (IsObjectVisible(*itr))
         {
-            objectItr = m_v2VisibleObjects.find((*itr)->GetPositionY());
+            objectItr = m_v2VisibleObjects.find((*itr)->GetBottomPosY());
             // if y row is not stored in visibleobjects, add it
             if (objectItr == m_v2VisibleObjects.end())
             {
                 std::vector<WorldObject*> newVector;
                 newVector.push_back(*itr);
-                m_v2VisibleObjects.insert(std::make_pair<int, std::vector<WorldObject*>>((*itr)->GetPositionY(), newVector));
+                m_v2VisibleObjects.insert(std::make_pair<int, std::vector<WorldObject*>>((*itr)->GetBottomPosY(), newVector));
             }
             else
                 objectItr->second.push_back(*itr);
@@ -113,13 +115,13 @@ bool ObjectLayer::IsObjectVisible(WorldObject *pObject)
     pGameInfo->GetWindowSize(XScreenSize, YScreenSize);
 
     // check X Pos
-    if (XMapPos + XPos + XSize < 0)
+    if ((int)(XMapPos + XPos + XSize) < 0)
         return false;
     else if (XMapPos + XPos > (int)XScreenSize)
         return false;
 
     // check Y Pos
-    if (YMapPos + YPos + YSize < 0)
+    if ((int)(YMapPos + YPos + YSize) < 0)
         return false;
     else if (YMapPos + YPos > (int)YScreenSize)
         return false;

@@ -1,7 +1,9 @@
 #include "WorldObject.h"
+#include "ObjectLayer.h"
+#include "Map.h"
 
-WorldObject::WorldObject(void) : m_pTexture(NULL), m_v3Position(0,0,0), m_Color(1,1,1,1),
-    m_ModRed(0), m_ModGreen(0), m_ModBlue(0), m_ModAlpha(0), m_ColorModTime(0)
+WorldObject::WorldObject(D3DXVECTOR3 pos) : m_pTexture(NULL), m_v3Position(pos), m_Color(1,1,1,1),
+    m_ModRed(0), m_ModGreen(0), m_ModBlue(0), m_ModAlpha(0), m_ColorModTime(0), m_pOwnerLayer(NULL)
 {
     m_sLogLocationName  = LOGFILE_ENGINE_LOG_NAME + "WorldObject : ";
     m_UnitType          = UNIT_TYPE_WORLDOBJECT;
@@ -20,7 +22,7 @@ void WorldObject::SetTextureSource(const SpritePrototype *proto)
         m_pTexture = pTextureMgr->GetTextureSource(proto->m_uiID);
 }
 
-void WorldObject::Update(const UINT uiCurTime, const UINT uiDiff)
+void WorldObject::Update(const ULONGLONG uiCurTime, const UINT uiDiff)
 {
     // Update color
     if (m_ColorModTime)
@@ -86,11 +88,35 @@ void WorldObject::GetObjectSize(UINT &Xsize, UINT &Ysize)
     if (!m_pTexture)
         return;
 
-    m_pTexture->GetTextureSize(Xsize, Ysize);
+    m_pTexture->GetShownSpriteSize(Xsize, Ysize);
 }
 
 void WorldObject::DrawObject(LPD3DXSPRITE pSprite)
 {
     if (m_pTexture && m_pTexture->m_pTexture && pSprite)
         pSprite->Draw(m_pTexture->m_pTexture, NULL, NULL, &GetPosition(), GetColor());
+}
+
+UINT WorldObject::GetMapPosX()
+{
+    if (m_pOwnerLayer)
+    {
+        if (Map *pMap = m_pOwnerLayer->GetOwnerMap())
+        {
+            return (UINT)(GetPositionX() - pMap->GetPositionX());
+        }
+    }
+    return 0;
+}
+
+UINT WorldObject::GetMapPosY()
+{
+    if (m_pOwnerLayer)
+    {
+        if (Map *pMap = m_pOwnerLayer->GetOwnerMap())
+        {
+            return (UINT)(GetPositionY() - pMap->GetPositionY());
+        }
+    }
+    return 0;
 }

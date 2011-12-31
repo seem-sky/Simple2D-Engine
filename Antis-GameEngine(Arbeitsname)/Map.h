@@ -55,7 +55,7 @@ public:
     #####*/
     void Draw();
     MapLoadResult LoadNewMap(std::string sMapName);
-    void UpdateMap(const UINT uiCurTime, const UINT uiDiff);
+    void UpdateMap(const ULONGLONG uiCurTime, const UINT uiDiff);
 
     const MapInfo* GetMapInfo() { return &m_MapInfo; }
     const std::vector<MapTiles>* GetMapTiles() { return &m_v2MapTiles; }
@@ -96,19 +96,19 @@ protected:
     void DrawMap();
     void DrawLayer();
 
-    MapLoadState m_MapLoadState;
-    MapInfo m_MapInfo;
-    std::vector<MapTiles> m_v2MapTiles;
-
-    D3DXVECTOR3 m_v3Position;
-    D3DXCOLOR m_MapColor;
-
     std::string m_sLogLocationName;
 
 private:
     // string which stores data from file
     std::string m_sMapDataFromFile;
     std::list<std::string> m_TileByRowFromFileList;
+
+    MapLoadState m_MapLoadState;
+    MapInfo m_MapInfo;
+    std::vector<MapTiles> m_v2MapTiles;
+
+    D3DXVECTOR3 m_v3Position;
+    D3DXCOLOR m_MapColor;
 
     LayerList m_lLayers;
 

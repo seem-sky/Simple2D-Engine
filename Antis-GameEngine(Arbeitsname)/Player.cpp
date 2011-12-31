@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "Logfile.h"
 #include "DirectInput.h"
+#include "Game.h"
 
 Player::Player(void) : m_uiMoveBuffer(MOVE_BUFFER_NONE), m_uiLockBuffer(MOVE_BUFFER_NONE)
 {
@@ -9,6 +10,9 @@ Player::Player(void) : m_uiMoveBuffer(MOVE_BUFFER_NONE), m_uiLockBuffer(MOVE_BUF
     AddKeyAction(DIK_S, 2);
     AddKeyAction(DIK_D, 3);
     AddKeyAction(DIK_A, 4);
+    AddKeyAction(DIK_ESCAPE, ACTION_ESCAPE);
+    AddKeyAction(DIK_RETURN, ACTION_ENTER);
+    AddKeyAction(DIK_P, ACTION_PAUSE_GAME);
 }
 
 Player::~Player(void)
@@ -21,7 +25,7 @@ Player::~Player(void)
     }
 }
 
-void Player::UpdatePlayer(const UINT CurTime, const UINT CurElapsedTime)
+void Player::UpdatePlayer(const ULONGLONG CurTime, const UINT CurElapsedTime)
 {
     // iterate through stored keys
     if (!m_KeyList.empty())
@@ -37,7 +41,7 @@ void Player::UpdatePlayer(const UINT CurTime, const UINT CurElapsedTime)
                 // little hack, because at this time true(e.g. 128) is not like true (e.g. 3)
                 // so we must check a little bit else.
                 if ((!pInput->GetKeyStateKeyboard((*itr)->m_uiKey)) != (*itr)->m_bShouldPressed)
-                    DoActionForKey((*itr)->m_uiActionID);
+                    DoActionForKey(*itr, CurTime);
             }
 
             if (m_uiMoveBuffer)
@@ -67,24 +71,103 @@ void Player::AddKeyAction(UINT uiKey, UINT actionID, bool press)
     m_KeyList.push_back(pAction);
 }
 
-void Player::DoActionForKey(UINT uiAction)
+void Player::DoActionForKey(PlayerKeyAction *action, const ULONGLONG CurTime)
 {
-    switch (uiAction)
+    if (!action)
+        return;
+
+    if (CGame *pGame = CGame::Get())
     {
-    case ACTION_NONE:
-        break;
-    case ACTION_MOVE_UP:
-        SetMoveBuffer(MOVE_BUFFER_UP);
-        break;
-    case ACTION_MOVE_DOWN:
-        SetMoveBuffer(MOVE_BUFFER_DOWN);
-        break;
-    case ACTION_MOVE_RIGHT:
-        SetMoveBuffer(MOVE_BUFFER_RIGHT);
-        break;
-    case ACTION_MOVE_LEFT:
-        SetMoveBuffer(MOVE_BUFFER_LEFT);
-        break;
+        if (action->m_uiLastTimeActive + 250 < CurTime)
+        {
+            switch (action->m_uiActionID)
+            {
+            case ACTION_PAUSE_GAME:
+                if (pGame->IsGamePaused())
+                    pGame->PauseGame(false);
+                else
+                    pGame->PauseGame();
+                break;
+            default:
+                break;
+            }
+        }
+
+        // if menu is shown
+        if (pGame->ShowsMenu())
+        {
+            Menu *pMenu = pGame->GetShownMenu();
+            if (!pMenu)
+                return;
+            if (action->m_uiLastTimeActive + 250 < CurTime)
+            {
+                switch (action->m_uiActionID)
+                {
+                case ACTION_NONE:
+                    break;
+                case ACTION_MOVE_UP:
+                    pMenu->OnMenuUp();
+                    break;
+                case ACTION_MOVE_DOWN:
+                    pMenu->OnMenuDown();
+                    break;
+                case ACTION_MOVE_RIGHT:
+                    pMenu->OnMenuRight();
+                    break;
+                case ACTION_MOVE_LEFT:
+                    pMenu->OnMenuLeft();
+                    break;
+                case ACTION_ESCAPE:
+                    pGame->ShutDownMenu();                        
+                    break;
+                case ACTION_ENTER:
+                    pMenu->OnMenuEnter();
+                    break;
+                default:
+                    break;
+                }
+                action->m_uiLastTimeActive = CurTime;
+            }
+        }
+
+        // if no menu is shown
+        else
+        {
+            switch (action->m_uiActionID)
+            {
+            case ACTION_NONE:
+                break;
+            case ACTION_MOVE_UP:
+                SetMoveBuffer(MOVE_BUFFER_UP);
+                break;
+            case ACTION_MOVE_DOWN:
+                SetMoveBuffer(MOVE_BUFFER_DOWN);
+                break;
+            case ACTION_MOVE_RIGHT:
+                SetMoveBuffer(MOVE_BUFFER_RIGHT);
+                break;
+            case ACTION_MOVE_LEFT:
+                SetMoveBuffer(MOVE_BUFFER_LEFT);
+                break;
+            default:
+                // check for last time activated
+                if (action->m_uiLastTimeActive + 250 < CurTime)
+                {
+                    switch (action->m_uiActionID)
+                    {
+                    case ACTION_ESCAPE:
+                        pGame->DisplayMenu(new MenuMainMenu(false, true));
+                        break;
+                    case ACTION_ENTER:
+                        break;
+                    default:
+                        break;
+                    }
+                    action->m_uiLastTimeActive = CurTime;
+                }
+                break;
+            }
+        }
     }
 }
 

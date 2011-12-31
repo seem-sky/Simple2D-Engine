@@ -87,7 +87,9 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
             if (m_DrawResult == S_OK)
             {
                 // Game run
-                m_pGame->Run(1, (UINT)m_pTime->GetTimeElapsed());
+                if (!m_pGame->Run(m_pTime->GetCurTime(), (UINT)m_pTime->GetTimeElapsed()))
+                    break;
+
                 // Game render
                 m_DrawResult = m_pGame->Draw();
             }

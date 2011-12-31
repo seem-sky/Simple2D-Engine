@@ -10,6 +10,7 @@ struct TextureSource
     { }
 
     void GetTextureSize(UINT &XSize, UINT &YSize);
+    void GetShownSpriteSize(UINT &XSize, UINT &YSize);
 
     LPDIRECT3DTEXTURE9 m_pTexture;
     SpritePrototype m_TextureInfo;
