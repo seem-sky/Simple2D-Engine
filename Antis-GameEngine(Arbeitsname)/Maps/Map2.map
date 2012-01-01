@@ -1010,7 +1010,7 @@
   <LayerData>
     <Layer>
       <Object ID="1" XPos="300" YPos="300" Direction="1"/>
-      <Object ID="2" XPos="5" YPos="300"/>
+      <Object ID="2" XPos="20" YPos="100"/>
     </Layer>
   </LayerData>
 </Map>

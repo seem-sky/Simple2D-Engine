@@ -71,10 +71,9 @@ void MovementGenerator::UpdateMovement(const ULONGLONG uiCurTime, const UINT uiD
     if ((*m_lMoveCommands.begin())->m_bWithCollission)
     {
         D3DXVECTOR2 result(0,0);
-        if (CanMove(oldPos, (D3DXVECTOR2)m_pObj->GetPosition() + D3DXVECTOR2 (MoveX, MoveY), result))
-            m_pObj->ChangePosition((int)MoveX, (int)MoveY);
-        else
-            m_pObj->ChangePosition((int)result.x, (int)result.y);
+        CheckMovement(oldPos, (D3DXVECTOR2)m_pObj->GetPosition() + D3DXVECTOR2 (MoveX, MoveY), result);
+        m_pObj->ChangePosition((int)result.x, (int)result.y);
+            
     }
     else
         m_pObj->ChangePosition((int)MoveX, (int)MoveY);    
@@ -113,15 +112,15 @@ void MovementGenerator::RemoveMovementCommand(sMoveCommand* pCommand)
     }
 }
 
-bool MovementGenerator::CanMove(D3DXVECTOR2 oldPos, D3DXVECTOR2 newPos, D3DXVECTOR2 &result)
+void MovementGenerator::CheckMovement(D3DXVECTOR2 oldPos, D3DXVECTOR2 newPos, D3DXVECTOR2 &result)
 {
-    result = D3DXVECTOR2(0,0);
+    result = newPos - oldPos;
     if (!m_pObj)
-        return false;
+        return;
 
     ObjectLayer *pLayer = m_pObj->GetOwnerLayer();
     if (!pLayer)
-        return false;
+        return;
 
     PassabilityFlag moveFlag = PASSABLE_NONE;
     if (oldPos.x < newPos.x)
@@ -187,9 +186,12 @@ bool MovementGenerator::CanMove(D3DXVECTOR2 oldPos, D3DXVECTOR2 newPos, D3DXVECT
                         else
                             result.x -= 1;
 
-                        return false;
+                        break;
                     }
                 }
+                // break while collission
+                if ((newPos - oldPos) != result)
+                    break;
             }
         }
         else if (moveFlag & PASSABLE_DOWN || moveFlag & PASSABLE_UP)
@@ -228,12 +230,94 @@ bool MovementGenerator::CanMove(D3DXVECTOR2 oldPos, D3DXVECTOR2 newPos, D3DXVECT
                         else
                             result.y -= 1;
 
-                        return false;
+                        break;
                     }
                 }
+                // break while collission
+                if ((newPos - oldPos) != result)
+                    break;
             }
         }
     }
 
-    return true;
+    // check collission with objects
+    const WorldObjectList *objectList = pLayer->GetObjectsOnLayer();
+    for (WorldObjectList::const_iterator itr = objectList->begin(); itr != objectList->end(); ++itr)
+    {
+        if (*itr == m_pObj)
+            continue;
+
+        newPos = result + oldPos;
+        D3DXVECTOR2 objPos = (D3DXVECTOR2)(*itr)->GetPosition();
+        RECT objBound = {0,0,0,0};
+        (*itr)->GetBoundingRect(objBound);
+        if (moveFlag & PASSABLE_LEFT)
+        {
+            if (objPos.x + objBound.right >= newPos.x + boundingRECT.left
+                && objPos.x  + objBound.right <= oldPos.x + boundingRECT.left)
+            {
+                if ((objPos.y + objBound.bottom > newPos.y + boundingRECT.top
+                    && objPos.y  + objBound.bottom < newPos.y + boundingRECT.bottom) ||
+                    (objPos.y + objBound.top > newPos.y + boundingRECT.top
+                    && objPos.y  + objBound.top < newPos.y + boundingRECT.bottom) ||
+                    (objPos.y + objBound.top <= newPos.y + boundingRECT.top
+                    && objPos.y  + objBound.bottom >= newPos.y + boundingRECT.bottom))
+                {
+                    result.x = (objPos.x + objBound.right) - (oldPos.x + boundingRECT.left);
+                    continue;
+                }
+            }
+        }
+        else if (moveFlag & PASSABLE_RIGHT)
+        {
+            if (objPos.x + objBound.left <= newPos.x + boundingRECT.right
+                && objPos.x  + objBound.left >= oldPos.x + boundingRECT.right)
+            {
+                if ((objPos.y + objBound.bottom > newPos.y + boundingRECT.top
+                    && objPos.y  + objBound.bottom < newPos.y + boundingRECT.bottom) ||
+                    (objPos.y + objBound.top > newPos.y + boundingRECT.top
+                    && objPos.y  + objBound.top < newPos.y + boundingRECT.bottom) ||
+                    (objPos.y + objBound.top <= newPos.y + boundingRECT.top
+                    && objPos.y  + objBound.bottom >= newPos.y + boundingRECT.bottom))
+                {
+                    result.x = (objPos.x + objBound.left) - (oldPos.x + boundingRECT.right);
+                    continue;
+                }
+            }
+        }
+        else if (moveFlag & PASSABLE_UP)
+        {
+            if (objPos.y + objBound.bottom >= newPos.y + boundingRECT.top
+                && objPos.y  + objBound.bottom <= oldPos.y + boundingRECT.top)
+            {
+                if ((objPos.x + objBound.right > newPos.x + boundingRECT.left
+                    && objPos.x  + objBound.right < newPos.x + boundingRECT.right) ||
+                    (objPos.x + objBound.left > newPos.x + boundingRECT.left
+                    && objPos.x  + objBound.left < newPos.x + boundingRECT.right) ||
+                    (objPos.x + objBound.left <= newPos.x + boundingRECT.left
+                    && objPos.x  + objBound.right >= newPos.x + boundingRECT.right))
+                {
+                    result.y = (objPos.y + objBound.bottom) - (oldPos.y + boundingRECT.top);
+                    continue;
+                }
+            }
+        }
+        else if (moveFlag & PASSABLE_DOWN)
+        {
+            if (objPos.y + objBound.top <= newPos.y + boundingRECT.bottom
+                && objPos.y  + objBound.top >= oldPos.y + boundingRECT.bottom)
+            {
+                if ((objPos.x + objBound.right > newPos.x + boundingRECT.left
+                    && objPos.x  + objBound.right < newPos.x + boundingRECT.right) ||
+                    (objPos.x + objBound.left > newPos.x + boundingRECT.left
+                    && objPos.x  + objBound.left < newPos.x + boundingRECT.right) ||
+                    (objPos.x + objBound.left <= newPos.x + boundingRECT.left
+                    && objPos.x  + objBound.right >= newPos.x + boundingRECT.right))
+                {
+                    result.y = (objPos.y + objBound.top) - (oldPos.y + boundingRECT.bottom);
+                    continue;
+                }
+            }
+        }
+    }
 }

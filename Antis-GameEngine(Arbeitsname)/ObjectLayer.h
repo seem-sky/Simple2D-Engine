@@ -27,6 +27,8 @@ public:
     inline Map* GetOwnerMap() { return m_pOwnerMap; }
 
     void ModObjectPosition(D3DXVECTOR2 oldPos, D3DXVECTOR2 newPos, WorldObject *pObj);
+    
+    inline const WorldObjectList* GetObjectsOnLayer() { return &m_lObjects; }
 
 protected:
     void Draw();
