@@ -35,7 +35,7 @@ protected:
     bool IsObjectVisible(WorldObject *pObject);
 
     WorldObjectList m_lObjects;
-    std::map<int, std::vector<WorldObject*>> m_v2VisibleObjects;
+    std::multimap<int, WorldObject*> m_v2VisibleObjects;
     Map *m_pOwnerMap;
 };
 #endif;

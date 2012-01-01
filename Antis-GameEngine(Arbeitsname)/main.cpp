@@ -63,6 +63,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
     MSG msg = {0};
     HRESULT m_DrawResult = S_OK;
     GAMEINIT_STATE GameInitState = GAMEINIT_STATE_IN_PROGRESS;
+
     for(;;)
     {
         while(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))

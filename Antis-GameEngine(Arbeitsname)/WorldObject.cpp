@@ -2,8 +2,8 @@
 #include "ObjectLayer.h"
 #include "Map.h"
 
-WorldObject::WorldObject(D3DXVECTOR3 pos) : m_pTexture(NULL), m_v3Position(pos), m_Color(1,1,1,1),
-    m_ModRed(0), m_ModGreen(0), m_ModBlue(0), m_ModAlpha(0), m_ColorModTime(0), m_pOwnerLayer(NULL)
+WorldObject::WorldObject(UINT uiGUID, D3DXVECTOR3 pos) : m_pTexture(NULL), m_v3Position(pos), m_Color(1,1,1,1),
+    m_ModRed(0), m_ModGreen(0), m_ModBlue(0), m_ModAlpha(0), m_ColorModTime(0), m_pOwnerLayer(NULL), m_uiGUID(uiGUID)
 {
     m_sLogLocationName  = LOGFILE_ENGINE_LOG_NAME + "WorldObject : ";
     m_UnitType          = UNIT_TYPE_WORLDOBJECT;
@@ -94,28 +94,28 @@ void WorldObject::GetObjectSize(UINT &Xsize, UINT &Ysize)
 void WorldObject::DrawObject(LPD3DXSPRITE pSprite)
 {
     if (m_pTexture && m_pTexture->m_pTexture && pSprite)
-        pSprite->Draw(m_pTexture->m_pTexture, NULL, NULL, &GetPosition(), GetColor());
+        pSprite->Draw(m_pTexture->m_pTexture, NULL, NULL, &D3DXVECTOR3((float)GetMapPosX(), (float)GetMapPosY(), 0), GetColor());
 }
 
-UINT WorldObject::GetMapPosX()
+int WorldObject::GetMapPosX()
 {
     if (m_pOwnerLayer)
     {
         if (Map *pMap = m_pOwnerLayer->GetOwnerMap())
         {
-            return (UINT)(GetPositionX() - pMap->GetPositionX());
+            return GetPositionX() + (int)pMap->GetPositionX();
         }
     }
     return 0;
 }
 
-UINT WorldObject::GetMapPosY()
+int WorldObject::GetMapPosY()
 {
     if (m_pOwnerLayer)
     {
         if (Map *pMap = m_pOwnerLayer->GetOwnerMap())
         {
-            return (UINT)(GetPositionY() - pMap->GetPositionY());
+            return GetPositionY() + (int)pMap->GetPositionY();
         }
     }
     return 0;
@@ -141,4 +141,10 @@ void WorldObject::GetBoundingRect(RECT &bound)
             break;
         }
     }
+}
+
+Map* WorldObject::GetMap()
+{
+    if (m_pOwnerLayer)
+        return m_pOwnerLayer->GetOwnerMap();
 }

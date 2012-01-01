@@ -1009,8 +1009,8 @@
   </MapData>
   <LayerData>
     <Layer>
-      <Object ID="1" XPos="300" YPos="300" Direction="1"/>
-      <Object ID="2" XPos="20" YPos="100"/>
+      <Object ID="1" GUID="1" XPos="250" YPos="250" Direction="0" Walkmode="1"/>
+      <Object ID="2" GUID="2" XPos="20" YPos="100"/>
     </Layer>
   </LayerData>
 </Map>

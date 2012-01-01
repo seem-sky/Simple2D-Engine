@@ -11,14 +11,16 @@ enum UNIT_TYPE
 };
 
 class ObjectLayer;
+class Map;
 
 class WorldObject
 {
 public:
-    WorldObject(D3DXVECTOR3 pos);
+    WorldObject(UINT m_uiGUID, D3DXVECTOR3 pos);
     virtual ~WorldObject(void);
 
     // object info
+    inline UINT GetGUID() { return m_uiGUID; }
     inline ObjectPrototype* GetObjectInfo() { return &m_ObjectInfo; }
     virtual void SetObjectInfo(const ObjectPrototype* pInfo) { if (pInfo) m_ObjectInfo = *pInfo; }
 
@@ -45,10 +47,11 @@ public:
         GetObjectSize(x, y);
         return GetPositionY() + y;
     }
-    UINT GetMapPosX();
-    UINT GetMapPosY();
+    int GetMapPosX();
+    int GetMapPosY();
 
     void GetObjectSize(UINT &Xsize, UINT &Ysize);
+    Map* GetMap();
 
     // Color
     inline D3DXCOLOR GetColor() { return m_Color; }
@@ -81,5 +84,7 @@ private:
     ObjectPrototype m_ObjectInfo;
     D3DXVECTOR3 m_v3Position;
     D3DXCOLOR m_Color;
+
+    UINT m_uiGUID;
 };
 #endif;

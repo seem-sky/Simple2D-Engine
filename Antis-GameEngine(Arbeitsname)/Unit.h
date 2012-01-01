@@ -4,16 +4,23 @@
 #include "WorldObject.h"
 #include "MovementGenerator.h"
 
+enum WALKMODE
+{
+    WALKMODE_NONE,
+    WALKMODE_RANDOM,
+};
+
 class Unit : public WorldObject
 {
 public:
-    Unit(D3DXVECTOR3 pos, DIRECTION dir = DIRECTION_DOWN);
+    Unit(UINT uiGUID, D3DXVECTOR3 pos, DIRECTION dir = DIRECTION_DOWN, WALKMODE walkmode = WALKMODE_NONE);
     virtual ~Unit(void);
     void Update(const ULONGLONG uiCurTime, const UINT uiDiff);
 
     // Unit infos
     virtual void SetObjectInfo(const ObjectPrototype* pInfo);
     inline UINT GetMovementSpeed() { return m_uiMovementSpeed; }
+    inline WALKMODE GetWalkmode() { return m_Walkmode; }
 
     void MovePosition(int XMove, int YMove, UINT time = 0);
     inline bool IsMoving()
@@ -26,6 +33,7 @@ public:
 
     // if player has controle return true
     bool IsPlayer() { return m_bIsPlayer; }
+    void SetPlayerControle(bool bControle = true) { m_bIsPlayer = bControle; }
 
     // sprite
     void SetTextureSource(const SpritePrototype *proto);
@@ -35,6 +43,7 @@ public:
 
     // animation
     void UpdateAnimation(const ULONGLONG uiCurTime, const UINT uiDiff);
+    void SetToStartSector();
     virtual void SetAnimationTime(ANIMATION_TIME time) { m_uiAnimationTime = time; }
     inline void SetDirection(DIRECTION dir)
     {
@@ -63,6 +72,8 @@ private:
     UINT m_uiAnimation_Timer;
     ANIMATION_TIME m_uiAnimationTime;
     MOVEMENT_SPEED m_uiMovementSpeed;
+
+    WALKMODE m_Walkmode;
 };
 
 #endif;

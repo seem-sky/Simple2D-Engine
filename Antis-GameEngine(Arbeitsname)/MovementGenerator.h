@@ -23,13 +23,14 @@ public:
     MovementGenerator(Unit *pObj);
     ~MovementGenerator(void);
 
-    D3DXVECTOR2 Move2D(int x, int y, UINT uiMSECTime, bool Collission = true);
+    void Move2D(int x, int y, UINT uiMSECTime, bool Collission = true);
+    void Move2DRandom(UINT uiRange, bool Collission = true);
     void UpdateMovement(const ULONGLONG uiCurTime, const UINT uiDiff);
     void ClearMovement();
     void RemoveMovementCommand(sMoveCommand* pCommand);
     inline bool IsMoveCommandListEmpty() { return m_lMoveCommands.empty(); }
 
-    void CheckMovement(D3DXVECTOR2 oldPos, D3DXVECTOR2 newPos, D3DXVECTOR2 &result);
+    bool CheckMovement(D3DXVECTOR2 oldPos, D3DXVECTOR2 newPos, D3DXVECTOR2 &result);
 
 private:
     D3DXVECTOR2 m_v2CurMovement;

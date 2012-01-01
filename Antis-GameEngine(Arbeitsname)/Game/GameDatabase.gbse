@@ -4,11 +4,11 @@
     <Sprite ID="1" FileName="gras.png" Type="0" transparent_color="0" passability="15" terraintype="5"/>
     <Sprite ID="2" FileName="stone.png" Type="0" transparent_color="0" passability="0" terraintype="2"/>
     <Sprite ID="3" FileName="road2.png" Type="1" transparent_color="65280" passability="15" terraintype="1"/>
-    <Sprite ID="100" FileName="Char1.png" Type="3" transparent_color="32896" spritesX="3" spritesY="4" boundingXBegin="4" boundingYBegin="20" boundingXRange="12" boundingYRange="16"/>
+    <Sprite ID="100" FileName="Char1.png" Type="3" transparent_color="32896" spritesX="3" spritesY="4" boundingXBegin="4" boundingYBegin="20" boundingXRange="16" boundingYRange="16"/>
     <Sprite ID="101" FileName="tree1.png" Type="2" transparent_color="32896" boundingXBegin="12" boundingYBegin="65" boundingXRange="40" boundingYRange="15"/>
   </SpriteDatabase>
   <ObjectDatabase>
-    <Object ID="1" Type="1" TextureID="100" AniFrequence="3" MoveSpeed="2"/>
+    <Object ID="1" Type="1" TextureID="100" AniFrequence="3" MoveSpeed="3"/>
     <Object ID="2" Type="0" TextureID="101"/>
   </ObjectDatabase>
 </Database>

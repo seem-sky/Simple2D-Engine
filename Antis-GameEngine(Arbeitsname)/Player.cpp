@@ -55,7 +55,8 @@ void Player::SetControledUnit(Unit *pWho)
     if (pWho)
     {
         m_pControledUnit = pWho;
-        BASIC_LOG(m_sLogLocationName + "Changes controle to Object " + to_string(pWho->GetObjectInfo()->m_uiID));
+        pWho->SetPlayerControle();
+        BASIC_LOG(m_sLogLocationName + "Changes controle to Object with GUID " + to_string(pWho->GetGUID())+".");
     }
     else
         ERROR_LOG(m_sLogLocationName + "Unable to change controle. Object is not valid");

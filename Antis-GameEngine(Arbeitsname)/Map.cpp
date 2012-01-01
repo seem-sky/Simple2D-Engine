@@ -28,7 +28,7 @@ MapLoadResult Map::LoadNewMap(std::string sMapName)
 
     if (m_pMapLoadThread && m_pMapLoadThread->GetMapLoadState() == MAP_STATE_DONE)
     {
-        m_pMapLoadThread->GetMapInfo(m_MapInfo, m_v2MapTiles, m_lLayers);
+        m_pMapLoadThread->GetMapInfo(m_MapInfo, m_v2MapTiles, m_lLayers, m_WorldObjectLIST);
         m_pMapLoadThread->Kill();
         m_pMapLoadThread = NULL;
         result = MAP_RESULT_DONE;
@@ -55,13 +55,20 @@ WorldObject* Map::AddNewWorldObject(UINT uiObjectID, int XPos, int YPos, UINT ui
     if (!pProto)
         return NULL;
 
+    UINT uiGUID = GetGUIDForNewObject();
+    if (!uiGUID)
+    {
+        ERROR_LOG(m_sLogLocationName + "Unable to get a new GUID for Object.");
+        return NULL;
+    }
+
     switch(pProto->m_uiType)
     {
     case OBJECT_TYPE_MAP_OBJECT:
-        pNewObject = new WorldObject(D3DXVECTOR3((float)XPos, (float)YPos, 0));
+        pNewObject = new WorldObject(uiGUID, D3DXVECTOR3((float)XPos, (float)YPos, 0));
         break;
     case OBJECT_TYPE_NPC:
-        pNewObject = new Unit(D3DXVECTOR3((float)XPos, (float)YPos, 0));
+        pNewObject = new Unit(uiGUID, D3DXVECTOR3((float)XPos, (float)YPos, 0));
         break;
     default:
         break;
@@ -75,6 +82,7 @@ WorldObject* Map::AddNewWorldObject(UINT uiObjectID, int XPos, int YPos, UINT ui
             pNewObject->SetTextureSource(pSpriteProto);
 
         pLayer->AddWorldObject(pNewObject);
+        m_WorldObjectLIST.insert(std::make_pair<UINT, WorldObject*>(pNewObject->GetGUID(), pNewObject));
     }
     else
     {
@@ -83,6 +91,15 @@ WorldObject* Map::AddNewWorldObject(UINT uiObjectID, int XPos, int YPos, UINT ui
     }
 
     return pNewObject;
+}
+
+UINT Map::GetGUIDForNewObject()
+{
+    if (m_WorldObjectLIST.empty())
+        return 1;
+
+    std::map<UINT, WorldObject*>::iterator itr = --m_WorldObjectLIST.end();
+    return (*itr).first + 1;
 }
 
 void Map::DrawMap()
@@ -391,6 +408,7 @@ void Map::ClearAllLayer()
             delete *itr;
     }
     m_lLayers.clear();
+    m_WorldObjectLIST.clear();
 }
 
 Layer* Map::GetLayerAtNr(UINT uiLayerNr)
@@ -413,7 +431,7 @@ void Map::UpdateMap(const ULONGLONG uiCurTime, const UINT uiDiff)
 
 bool Map::IsPassable(UINT XPos, UINT YPos, PassabilityFlag MoveDirection)
 {
-    if (m_MapInfo.m_uiX < XPos || m_MapInfo.m_uiY < YPos)
+    if (m_MapInfo.m_uiX <= XPos || m_MapInfo.m_uiY <= YPos)
         return false;
 
     TextureMgr *pTextureMgr = TextureMgr::Get();
@@ -770,6 +788,7 @@ MapLoadResult MapLoadThread::LoadLayerAndObjects(std::string *sMapData)
             IXMLDOMNodePtr pSelectedAttribute = NULL;
             VARIANT value;
             VariantInit(&value);
+            BSTR sNodeName;
             ObjectReadOut *newObject = new ObjectReadOut();
             for (LONG k = 0; k < iAttributeLength; k++)
             {
@@ -778,26 +797,46 @@ MapLoadResult MapLoadThread::LoadLayerAndObjects(std::string *sMapData)
                 if (hr == S_FALSE)
                     continue;
 
-                pSelectedAttribute->get_nodeValue(&value);
-                switch(k)
+                // get node value
+                hr = pSelectedAttribute->get_nodeValue(&value);
+                if (hr == S_FALSE)
+                    continue;
+
+                // get node name
+                hr = pSelectedAttribute->get_nodeName(&sNodeName);
+                if (hr == S_FALSE)
+                    continue;
+
+                std::string sNode = _bstr_t(sNodeName);
+                if (sNode == "ID")
                 {
-                    // entry of object
-                case 0:
-                    newObject->m_ObjectID = atoi(_bstr_t(value.bstrVal));
-                    break;
-                    // x pos
-                case 1:
-                    newObject->m_XPos = atoi(_bstr_t(value.bstrVal));
-                    break;
-                    // y pos
-                case 2:
-                    newObject->m_YPos = atoi(_bstr_t(value.bstrVal));
-                    break;
-                case 3:
-                    newObject->m_uiDirection = atoi(_bstr_t(value.bstrVal));
-                    break;
-                default:
-                    break;
+                    VariantChangeType(&value, &value, VARIANT_NOUSEROVERRIDE, VT_UINT);
+                    newObject->m_ObjectID = value.uintVal;
+                }
+                else if (sNode == "GUID")
+                {
+                    VariantChangeType(&value, &value, VARIANT_NOUSEROVERRIDE, VT_UINT);
+                    newObject->m_GUID = value.uintVal;
+                }
+                else if (sNode == "XPos")
+                {
+                    VariantChangeType(&value, &value, VARIANT_NOUSEROVERRIDE, VT_UINT);
+                    newObject->m_XPos = value.uintVal;
+                }
+                else if (sNode == "YPos")
+                {
+                    VariantChangeType(&value, &value, VARIANT_NOUSEROVERRIDE, VT_UINT);
+                    newObject->m_YPos = value.uintVal;
+                }
+                else if (sNode == "Direction")
+                {
+                    VariantChangeType(&value, &value, VARIANT_NOUSEROVERRIDE, VT_UINT);
+                    newObject->m_uiDirection = value.uintVal;
+                }
+                else if (sNode == "Walkmode")
+                {
+                    VariantChangeType(&value, &value, VARIANT_NOUSEROVERRIDE, VT_UINT);
+                    newObject->m_uiWalkmode = value.uintVal;
                 }
             }
             vObjects.push_back(newObject);
@@ -819,6 +858,11 @@ MapLoadResult MapLoadThread::LoadLayerAndObjects(std::string *sMapData)
                 if (!vLayerAndObjects.at(i).at(j))
                     continue;
 
+                // continue if there is the same guid set as we need now
+                std::map<UINT, WorldObject*>::iterator itr = m_WorldObjectLIST.find(vLayerAndObjects.at(i).at(j)->m_GUID);
+                if (itr != m_WorldObjectLIST.end())
+                    continue;
+
                 WorldObject *pObject = NULL;
                 if (GameDatabase *pDatabase = GameDatabase::Get())
                 {
@@ -828,12 +872,12 @@ MapLoadResult MapLoadThread::LoadLayerAndObjects(std::string *sMapData)
                         switch(pProto->m_uiType)
                         {
                         case OBJECT_TYPE_NPC:
-                            pObject = new Unit(D3DXVECTOR3((float)vLayerAndObjects.at(i).at(j)->m_XPos, (float)vLayerAndObjects.at(i).at(j)->m_YPos, 0),
-                                (DIRECTION)vLayerAndObjects.at(i).at(j)->m_uiDirection);
+                            pObject = new Unit(vLayerAndObjects.at(i).at(j)->m_GUID, D3DXVECTOR3((float)vLayerAndObjects.at(i).at(j)->m_XPos, (float)vLayerAndObjects.at(i).at(j)->m_YPos, 0),
+                                (DIRECTION)vLayerAndObjects.at(i).at(j)->m_uiDirection, (WALKMODE)vLayerAndObjects.at(i).at(j)->m_uiWalkmode);
                             break;
                         case OBJECT_TYPE_MAP_OBJECT:
                         default:
-                            pObject = new WorldObject(D3DXVECTOR3((float)vLayerAndObjects.at(i).at(j)->m_XPos, (float)vLayerAndObjects.at(i).at(j)->m_YPos, 0));
+                            pObject = new WorldObject(vLayerAndObjects.at(i).at(j)->m_GUID, D3DXVECTOR3((float)vLayerAndObjects.at(i).at(j)->m_XPos, (float)vLayerAndObjects.at(i).at(j)->m_YPos, 0));
                             break;
                         }
                         pObject->SetObjectInfo(pProto);
@@ -842,6 +886,7 @@ MapLoadResult MapLoadThread::LoadLayerAndObjects(std::string *sMapData)
                     // set object infos
                     pObject->SetTextureSource(pDatabase->GetSpriteFile(pObject->GetObjectInfo()->m_uiTextureID));
 
+                    m_WorldObjectLIST.insert(std::make_pair<UINT, WorldObject*>(vLayerAndObjects.at(i).at(j)->m_GUID, pObject));
                     pLayer->AddWorldObject(pObject);
                 }
 
@@ -855,9 +900,10 @@ MapLoadResult MapLoadThread::LoadLayerAndObjects(std::string *sMapData)
     return MAP_RESULT_OK;
 }
 
-void MapLoadThread::GetMapInfo(MapInfo &MapInfo, std::vector<MapTiles> &MapTiles, LayerList &LayerList)
+void MapLoadThread::GetMapInfo(MapInfo &MapInfo, std::vector<MapTiles> &MapTiles, LayerList &LayerList, std::map<UINT, WorldObject*> &objectList)
 {
     MapInfo     = m_MapInfo;
     MapTiles    = m_v2MapTiles;
     LayerList   = m_lLayers;
+    objectList  = m_WorldObjectLIST;
 }

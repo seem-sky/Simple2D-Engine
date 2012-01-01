@@ -11,7 +11,7 @@ MovementGenerator::~MovementGenerator(void)
 {
 }
 
-D3DXVECTOR2 MovementGenerator::Move2D(int x, int y, UINT uiMSECTime, bool Collision)
+void MovementGenerator::Move2D(int x, int y, UINT uiMSECTime, bool Collision)
 {
     sMoveCommand *pMove         = new sMoveCommand();
     pMove->m_bWithCollission    = Collision;
@@ -19,17 +19,54 @@ D3DXVECTOR2 MovementGenerator::Move2D(int x, int y, UINT uiMSECTime, bool Collis
     pMove->m_MoveX              = x / (float)uiMSECTime;
     pMove->m_MoveY              = y / (float)uiMSECTime;
     m_lMoveCommands.push_back(pMove);
-    D3DXVECTOR2 v2Result((float)x, (float)y);
-    return v2Result;
+}
+
+void MovementGenerator::Move2DRandom(UINT uiRange, bool Collission)
+{
+    USHORT randomMove = rand() % 4;
+    USHORT uiSteps    = rand() % 8 + 4;
+    switch(randomMove)
+    {
+        // up
+    case 0:
+        Move2D(0, uiRange * uiSteps * (-1), 100 * uiSteps);
+        m_pObj->SetDirection((DIRECTION)randomMove);
+        break;
+        // right
+    case 1:
+        Move2D(uiRange * uiSteps, 0, 100 * uiSteps);
+        m_pObj->SetDirection((DIRECTION)randomMove);
+        break;
+        // down
+    case 2:
+        Move2D(0, uiRange * uiSteps, 100 * uiSteps);
+        m_pObj->SetDirection((DIRECTION)randomMove);
+        break;
+        // left
+    case 3:
+        Move2D(uiRange * uiSteps * (-1), 0, 100 * uiSteps);
+        m_pObj->SetDirection((DIRECTION)randomMove);
+        break;
+    }
 }
 
 void MovementGenerator::UpdateMovement(const ULONGLONG uiCurTime, const UINT uiDiff)
 {
-    if (m_lMoveCommands.empty())
-        return;
-
     if (!m_pObj)
         return;
+
+    if (m_lMoveCommands.empty())
+    {
+        if (!m_pObj->IsPlayer())
+        {
+            if (m_pObj->GetWalkmode() == WALKMODE_RANDOM)
+                Move2DRandom(m_pObj->GetMovementSpeed());
+            else
+                return;
+        }
+        else
+            return;
+    }
 
     float MoveX = 0, MoveY = 0;
     D3DXVECTOR2 oldPos = (D3DXVECTOR2)m_pObj->GetPosition();
@@ -72,13 +109,23 @@ void MovementGenerator::UpdateMovement(const ULONGLONG uiCurTime, const UINT uiD
     {
         D3DXVECTOR2 result(0,0);
         CheckMovement(oldPos, (D3DXVECTOR2)m_pObj->GetPosition() + D3DXVECTOR2 (MoveX, MoveY), result);
-        m_pObj->ChangePosition((int)result.x, (int)result.y);
-            
+        MoveX = result.x;
+        MoveY = result.y;
     }
-    else
-        m_pObj->ChangePosition((int)MoveX, (int)MoveY);    
 
-    if ((*m_lMoveCommands.begin())->m_MoveTime < uiDiff)
+    // move map if its player
+    if (m_pObj->IsPlayer())
+    {
+        if (Map* pMap = m_pObj->GetMap())
+            pMap->ChangePosition(D3DXVECTOR2((float)-MoveX, (float)-MoveY));
+    }
+
+    m_pObj->ChangePosition((int)MoveX, (int)MoveY);
+    // stop animation if not moving
+    if (MoveX == 0 && MoveY == 0)
+        m_pObj->SetToStartSector();
+
+    if ((*m_lMoveCommands.begin())->m_MoveTime < uiDiff || (MoveX == 0 && MoveY == 0))
     {
         // if command finishes delete it
         m_v2CurMovement.x = 0;
@@ -112,15 +159,16 @@ void MovementGenerator::RemoveMovementCommand(sMoveCommand* pCommand)
     }
 }
 
-void MovementGenerator::CheckMovement(D3DXVECTOR2 oldPos, D3DXVECTOR2 newPos, D3DXVECTOR2 &result)
+bool MovementGenerator::CheckMovement(D3DXVECTOR2 oldPos, D3DXVECTOR2 newPos, D3DXVECTOR2 &result)
 {
     result = newPos - oldPos;
+    bool bCollission = false;
     if (!m_pObj)
-        return;
+        return true;
 
     ObjectLayer *pLayer = m_pObj->GetOwnerLayer();
     if (!pLayer)
-        return;
+        return true;
 
     PassabilityFlag moveFlag = PASSABLE_NONE;
     if (oldPos.x < newPos.x)
@@ -154,32 +202,47 @@ void MovementGenerator::CheckMovement(D3DXVECTOR2 oldPos, D3DXVECTOR2 newPos, D3
         {
             // calc start pos
             if (moveFlag & PASSABLE_LEFT)
-                XMapPos = (int)(oldPos.x - pMap->GetPositionX() + boundingRECT.left);
+                XMapPos = (int)(oldPos.x + boundingRECT.left);
             else
-                XMapPos = (int)(oldPos.x - pMap->GetPositionX() + boundingRECT.right-1);
-
-            if (XMapPos < 0)
-                XMapPos *= -1;
+                XMapPos = (int)(oldPos.x + boundingRECT.right-1);
 
             // calc end pos
             if (moveFlag & PASSABLE_LEFT)
-                XMapPosEnd = (int)(newPos.x - pMap->GetPositionX() + boundingRECT.left);
+                XMapPosEnd = (int)(newPos.x + boundingRECT.left);
             else
-                XMapPosEnd = (int)(newPos.x - pMap->GetPositionX() + boundingRECT.right-1);
+                XMapPosEnd = (int)(newPos.x + boundingRECT.right-1);
 
-            if (XMapPosEnd < 0)
-                XMapPosEnd *= -1;
+            // check map border
+            if (const MapInfo *pInfo = pMap->GetMapInfo())
+            {
+                // left border
+                if (XMapPosEnd < 0)
+                {
+                    result.x -= XMapPosEnd;
+                    bCollission = true;
+                }
+                // right border
+                else if (XMapPosEnd > (int)(pInfo->m_uiX * XTileSize))
+                {
+                    result.x -= XMapPosEnd - pInfo->m_uiX * XTileSize;
+                    bCollission = true;
+                }
+            }
 
             for (int j = XMapPos / (int)XTileSize; moveFlag & PASSABLE_LEFT ? j >= XMapPosEnd / (int)XTileSize : j <= XMapPosEnd / (int)XTileSize;
                 moveFlag & PASSABLE_LEFT ? j-- : j++)
             {
-                YMapPos = (int)(oldPos.y - pMap->GetPositionY());
+                YMapPos = (int)(oldPos.y);
                 if (YMapPos < 0)
                     YMapPos *= -1;
+
+                bool bBreak = false;
                 for (UINT i = (YMapPos  + boundingRECT.top) / YTileSize; i <= (YMapPos + boundingRECT.bottom -1) / YTileSize; i++)
                 {
                     if (!pMap->IsPassable((UINT)j , i, moveFlag))
                     {
+                        bCollission = true;
+                        bBreak = true;
                         result.x = (float)j * XTileSize - XMapPos;
                         if (moveFlag & PASSABLE_LEFT)
                             result.x += XTileSize;
@@ -190,40 +253,55 @@ void MovementGenerator::CheckMovement(D3DXVECTOR2 oldPos, D3DXVECTOR2 newPos, D3
                     }
                 }
                 // break while collission
-                if ((newPos - oldPos) != result)
+                if (bBreak)
                     break;
             }
         }
-        else if (moveFlag & PASSABLE_DOWN || moveFlag & PASSABLE_UP)
+        if (moveFlag & PASSABLE_DOWN || moveFlag & PASSABLE_UP)
         {
             // calc start pos
             if (moveFlag & PASSABLE_UP)
-                YMapPos = (int)(oldPos.y - pMap->GetPositionY() + boundingRECT.top);
+                YMapPos = (int)(oldPos.y + boundingRECT.top);
             else
-                YMapPos = (int)(oldPos.y - pMap->GetPositionY() + boundingRECT.bottom-1);
-
-            if (YMapPos < 0)
-                YMapPos *= -1;
+                YMapPos = (int)(oldPos.y + boundingRECT.bottom-1);
 
             // calc end pos
             if (moveFlag & PASSABLE_UP)
-                YMapPosEnd = (int)(newPos.y - pMap->GetPositionY() + boundingRECT.top);
+                YMapPosEnd = (int)(newPos.y + boundingRECT.top);
             else
-                YMapPosEnd = (int)(newPos.y - pMap->GetPositionY()  + boundingRECT.bottom-1);
+                YMapPosEnd = (int)(newPos.y  + boundingRECT.bottom-1);
 
-            if (YMapPosEnd < 0)
-                YMapPosEnd *= -1;
+            // check map border
+            if (const MapInfo *pInfo = pMap->GetMapInfo())
+            {
+                // left border
+                if (YMapPosEnd < 0)
+                {
+                    result.y -= YMapPosEnd;
+                    bCollission = true;
+                }
+                // right border
+                else if (YMapPosEnd > (int)(pInfo->m_uiY * YTileSize))
+                {
+                    result.y -= YMapPosEnd - pInfo->m_uiY * YTileSize;
+                    bCollission = true;
+                }
+            }
 
             for (int j = YMapPos / (int)YTileSize; moveFlag & PASSABLE_UP ? j >= YMapPosEnd / (int)YTileSize : j <= YMapPosEnd / (int)YTileSize;
                 moveFlag & PASSABLE_UP ? j-- : j++)
             {
-                XMapPos = (int)(oldPos.x - pMap->GetPositionX());
+                XMapPos = (int)(oldPos.x);
                 if (XMapPos < 0)
                     XMapPos *= -1;
+
+                bool bBreak = false;
                 for (UINT i = (XMapPos + boundingRECT.left) / XTileSize; i <= (XMapPos + boundingRECT.right-1) / XTileSize; i++)
                 {
                     if (!pMap->IsPassable(i, (UINT)j, moveFlag))
                     {
+                        bBreak = true;
+                        bCollission = true;
                         result.y = (float)j * YTileSize - YMapPos;
                         if (moveFlag & PASSABLE_UP)
                             result.y += YTileSize;
@@ -234,7 +312,7 @@ void MovementGenerator::CheckMovement(D3DXVECTOR2 oldPos, D3DXVECTOR2 newPos, D3
                     }
                 }
                 // break while collission
-                if ((newPos - oldPos) != result)
+                if (bBreak)
                     break;
             }
         }
@@ -264,6 +342,7 @@ void MovementGenerator::CheckMovement(D3DXVECTOR2 oldPos, D3DXVECTOR2 newPos, D3
                     && objPos.y  + objBound.bottom >= newPos.y + boundingRECT.bottom))
                 {
                     result.x = (objPos.x + objBound.right) - (oldPos.x + boundingRECT.left);
+                    bCollission = true;
                     continue;
                 }
             }
@@ -281,11 +360,13 @@ void MovementGenerator::CheckMovement(D3DXVECTOR2 oldPos, D3DXVECTOR2 newPos, D3
                     && objPos.y  + objBound.bottom >= newPos.y + boundingRECT.bottom))
                 {
                     result.x = (objPos.x + objBound.left) - (oldPos.x + boundingRECT.right);
+                    bCollission = true;
                     continue;
                 }
             }
         }
-        else if (moveFlag & PASSABLE_UP)
+        
+        if (moveFlag & PASSABLE_UP)
         {
             if (objPos.y + objBound.bottom >= newPos.y + boundingRECT.top
                 && objPos.y  + objBound.bottom <= oldPos.y + boundingRECT.top)
@@ -298,6 +379,7 @@ void MovementGenerator::CheckMovement(D3DXVECTOR2 oldPos, D3DXVECTOR2 newPos, D3
                     && objPos.x  + objBound.right >= newPos.x + boundingRECT.right))
                 {
                     result.y = (objPos.y + objBound.bottom) - (oldPos.y + boundingRECT.top);
+                    bCollission = true;
                     continue;
                 }
             }
@@ -315,9 +397,11 @@ void MovementGenerator::CheckMovement(D3DXVECTOR2 oldPos, D3DXVECTOR2 newPos, D3
                     && objPos.x  + objBound.right >= newPos.x + boundingRECT.right))
                 {
                     result.y = (objPos.y + objBound.top) - (oldPos.y + boundingRECT.bottom);
+                    bCollission = true;
                     continue;
                 }
             }
         }
     }
+    return bCollission;
 }

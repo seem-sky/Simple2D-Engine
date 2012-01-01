@@ -61,11 +61,12 @@ public:
     /*#####
     ## position funktions
     #####*/
-    float GetPositionX() { return m_v3Position.x; }
-    float GetPositionY() { return m_v3Position.y; }
-    float GetPositionZ() { return m_v3Position.z; }
-    D3DXVECTOR3 GetPosition() { return m_v3Position; }
-    void SetPosition(D3DXVECTOR3 v3Pos) { m_v3Position = v3Pos; }
+    inline float GetPositionX() { return m_v3Position.x; }
+    inline float GetPositionY() { return m_v3Position.y; }
+    inline float GetPositionZ() { return m_v3Position.z; }
+    inline D3DXVECTOR3 GetPosition() { return m_v3Position; }
+    inline void SetPosition(D3DXVECTOR3 v3Pos) { m_v3Position = v3Pos; }
+    inline void ChangePosition(D3DXVECTOR2 vPos) { m_v3Position += D3DXVECTOR3(vPos.x, vPos.y, 0); }
 
     /*#####
     ## objects
@@ -92,6 +93,7 @@ public:
 protected:
     void DrawMap();
     void DrawLayer();
+    UINT GetGUIDForNewObject();
 
     std::string m_sLogLocationName;
 
@@ -103,6 +105,7 @@ private:
     MapLoadState m_MapLoadState;
     MapInfo m_MapInfo;
     std::vector<MapTiles> m_v2MapTiles;
+    std::map<UINT, WorldObject*> m_WorldObjectLIST;
 
     D3DXVECTOR3 m_v3Position;
     D3DXCOLOR m_MapColor;
@@ -116,11 +119,13 @@ private:
 struct ObjectReadOut
 {
     UINT m_ObjectID;
+    UINT m_GUID;
     int m_XPos;
     int m_YPos;
     UINT m_uiDirection;
+    UINT m_uiWalkmode;
 
-    ObjectReadOut() : m_ObjectID(0), m_XPos(0), m_YPos(0), m_uiDirection(0) { }
+    ObjectReadOut() : m_ObjectID(0), m_XPos(0), m_YPos(0), m_uiDirection(0), m_GUID(0), m_uiWalkmode(0) { }
 };
 
 // map load object create new thread
@@ -130,7 +135,7 @@ public:
     MapLoadThread(std::string sMapName);
 
     MapLoadState GetMapLoadState() { return m_MapLoadState; }
-    void GetMapInfo(MapInfo &MapInfo, std::vector<MapTiles> &MapTiles, LayerList &LayerList);
+    void GetMapInfo(MapInfo &MapInfo, std::vector<MapTiles> &MapTiles, LayerList &LayerList, std::map<UINT, WorldObject*> &objectList);
 
 protected:
     /*#####
@@ -156,5 +161,7 @@ private:
     MapInfo m_MapInfo;
     std::vector<MapTiles> m_v2MapTiles;
     LayerList m_lLayers;
+
+    std::map<UINT, WorldObject*> m_WorldObjectLIST;
 };
 #endif;
