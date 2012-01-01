@@ -70,8 +70,11 @@ void MovementGenerator::UpdateMovement(const ULONGLONG uiCurTime, const UINT uiD
 
     if ((*m_lMoveCommands.begin())->m_bWithCollission)
     {
-        if (CanMove(oldPos, (D3DXVECTOR2)m_pObj->GetPosition() + D3DXVECTOR2 (MoveX, MoveY)))
+        D3DXVECTOR2 result(0,0);
+        if (CanMove(oldPos, (D3DXVECTOR2)m_pObj->GetPosition() + D3DXVECTOR2 (MoveX, MoveY), result))
             m_pObj->ChangePosition((int)MoveX, (int)MoveY);
+        else
+            m_pObj->ChangePosition((int)result.x, (int)result.y);
     }
     else
         m_pObj->ChangePosition((int)MoveX, (int)MoveY);    
@@ -110,8 +113,9 @@ void MovementGenerator::RemoveMovementCommand(sMoveCommand* pCommand)
     }
 }
 
-bool MovementGenerator::CanMove(D3DXVECTOR2 oldPos, D3DXVECTOR2 newPos)
+bool MovementGenerator::CanMove(D3DXVECTOR2 oldPos, D3DXVECTOR2 newPos, D3DXVECTOR2 &result)
 {
+    result = D3DXVECTOR2(0,0);
     if (!m_pObj)
         return false;
 
@@ -137,45 +141,96 @@ bool MovementGenerator::CanMove(D3DXVECTOR2 oldPos, D3DXVECTOR2 newPos)
 
     UINT XSize = 0, YSize = 0;
     m_pObj->GetObjectSize(XSize, YSize);
+    RECT boundingRECT = {0,0,0,0};
+    m_pObj->GetBoundingRect(boundingRECT);
 
     // check if terrain is passable
     if (Map *pMap = pLayer->GetOwnerMap())
     {
         int XMapPos = 0;
+        int XMapPosEnd = 0;
         int YMapPos = 0;
+        int YMapPosEnd = 0;
         if (moveFlag & PASSABLE_LEFT || moveFlag & PASSABLE_RIGHT)
         {
+            // calc start pos
             if (moveFlag & PASSABLE_LEFT)
-                XMapPos = (int)(newPos.x - pMap->GetPositionX());
+                XMapPos = (int)(oldPos.x - pMap->GetPositionX() + boundingRECT.left);
             else
-                XMapPos = (int)(newPos.x - pMap->GetPositionX() + XSize-1);
+                XMapPos = (int)(oldPos.x - pMap->GetPositionX() + boundingRECT.right-1);
 
             if (XMapPos < 0)
                 XMapPos *= -1;
 
-            YMapPos = (int)(oldPos.y - pMap->GetPositionY());
-            if (YMapPos < 0)
-                YMapPos *= -1;
-            for (UINT i = YMapPos / YTileSize; i <= (YMapPos + YSize-1) / YTileSize; i++)
+            // calc end pos
+            if (moveFlag & PASSABLE_LEFT)
+                XMapPosEnd = (int)(newPos.x - pMap->GetPositionX() + boundingRECT.left);
+            else
+                XMapPosEnd = (int)(newPos.x - pMap->GetPositionX() + boundingRECT.right-1);
+
+            if (XMapPosEnd < 0)
+                XMapPosEnd *= -1;
+
+            for (int j = XMapPos / (int)XTileSize; moveFlag & PASSABLE_LEFT ? j >= XMapPosEnd / (int)XTileSize : j <= XMapPosEnd / (int)XTileSize;
+                moveFlag & PASSABLE_LEFT ? j-- : j++)
             {
-                if (!pMap->IsPassable(XMapPos / XTileSize, i, moveFlag))
-                    return false;
+                YMapPos = (int)(oldPos.y - pMap->GetPositionY());
+                if (YMapPos < 0)
+                    YMapPos *= -1;
+                for (UINT i = (YMapPos  + boundingRECT.top) / YTileSize; i <= (YMapPos + boundingRECT.bottom -1) / YTileSize; i++)
+                {
+                    if (!pMap->IsPassable((UINT)j , i, moveFlag))
+                    {
+                        result.x = (float)j * XTileSize - XMapPos;
+                        if (moveFlag & PASSABLE_LEFT)
+                            result.x += XTileSize;
+                        else
+                            result.x -= 1;
+
+                        return false;
+                    }
+                }
             }
         }
         else if (moveFlag & PASSABLE_DOWN || moveFlag & PASSABLE_UP)
         {
+            // calc start pos
             if (moveFlag & PASSABLE_UP)
-                YMapPos = (int)(newPos.y - pMap->GetPositionY());
+                YMapPos = (int)(oldPos.y - pMap->GetPositionY() + boundingRECT.top);
             else
-                YMapPos = (int)(newPos.y - pMap->GetPositionY() + YSize-1);
+                YMapPos = (int)(oldPos.y - pMap->GetPositionY() + boundingRECT.bottom-1);
 
-            XMapPos = (int)(oldPos.x - pMap->GetPositionX());
-            if (XMapPos < 0)
-                XMapPos *= -1;
-            for (UINT i = XMapPos / XTileSize; i <= (XMapPos + XSize-1) / XTileSize; i++)
+            if (YMapPos < 0)
+                YMapPos *= -1;
+
+            // calc end pos
+            if (moveFlag & PASSABLE_UP)
+                YMapPosEnd = (int)(newPos.y - pMap->GetPositionY() + boundingRECT.top);
+            else
+                YMapPosEnd = (int)(newPos.y - pMap->GetPositionY()  + boundingRECT.bottom-1);
+
+            if (YMapPosEnd < 0)
+                YMapPosEnd *= -1;
+
+            for (int j = YMapPos / (int)YTileSize; moveFlag & PASSABLE_UP ? j >= YMapPosEnd / (int)YTileSize : j <= YMapPosEnd / (int)YTileSize;
+                moveFlag & PASSABLE_UP ? j-- : j++)
             {
-                if (!pMap->IsPassable(i, YMapPos / YTileSize, moveFlag))
-                    return false;
+                XMapPos = (int)(oldPos.x - pMap->GetPositionX());
+                if (XMapPos < 0)
+                    XMapPos *= -1;
+                for (UINT i = (XMapPos + boundingRECT.left) / XTileSize; i <= (XMapPos + boundingRECT.right-1) / XTileSize; i++)
+                {
+                    if (!pMap->IsPassable(i, (UINT)j, moveFlag))
+                    {
+                        result.y = (float)j * YTileSize - YMapPos;
+                        if (moveFlag & PASSABLE_UP)
+                            result.y += YTileSize;
+                        else
+                            result.y -= 1;
+
+                        return false;
+                    }
+                }
             }
         }
     }

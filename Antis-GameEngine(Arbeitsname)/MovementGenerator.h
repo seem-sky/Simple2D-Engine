@@ -29,9 +29,9 @@ public:
     void RemoveMovementCommand(sMoveCommand* pCommand);
     inline bool IsMoveCommandListEmpty() { return m_lMoveCommands.empty(); }
 
-private:
-    bool CanMove(D3DXVECTOR2 oldPos, D3DXVECTOR2 newPos);
+    bool CanMove(D3DXVECTOR2 oldPos, D3DXVECTOR2 newPos, D3DXVECTOR2 &result);
 
+private:
     D3DXVECTOR2 m_v2CurMovement;
     MoveCommandList m_lMoveCommands;
     Unit *m_pObj;

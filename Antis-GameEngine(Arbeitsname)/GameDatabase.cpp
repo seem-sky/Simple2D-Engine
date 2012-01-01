@@ -215,50 +215,28 @@ void ObjectDatabaseLoad::Run()
         VariantInit(&value);
         ObjectPrototype proto;
         UINT uiNonSpecificData = 0;
+        BSTR sNodeName;
         for (int j = 0; j < iAttributeLength; j++)
         {
             bool bSuccessRead = false;
             hr = pmAttributes->get_item(j, &pAttribute);
             if (hr == S_OK)
             {
-                // check attribute text
+                // check attribute text and name
                 hr = pAttribute->get_nodeValue(&value);
                 if (hr == S_OK)
-                    bSuccessRead = true;
+                {
+                    hr = pAttribute->get_nodeName(&sNodeName);
+                    if (hr == S_OK)
+                        bSuccessRead = true;
+                }
             }
 
-            // set attributes of object
-            switch(j)
+            // if read successs, set data
+            if (bSuccessRead)
             {
-            case 0:     // set ID
-                if (!bSuccessRead)
-                    continue;
-
-                VariantChangeType(&value, &value, VARIANT_NOUSEROVERRIDE, VT_UINT);
-                proto.m_uiID = value.uiVal;
-                break;
-            case 1:     // set type
-                if (!bSuccessRead)
-                    continue;
-
-                VariantChangeType(&value, &value, VARIANT_NOUSEROVERRIDE, VT_UINT);
-                proto.m_uiType = value.uiVal;
-                break;
-            case 2:     // set texture ID
-                if (!bSuccessRead)
-                    continue;
-
-                VariantChangeType(&value, &value, VARIANT_NOUSEROVERRIDE, VT_UINT);
-                proto.m_uiTextureID = value.uiVal;
-                break;
-            default:    // set other values
-                if (bSuccessRead)
-                {
-                    VariantChangeType(&value, &value, VARIANT_NOUSEROVERRIDE, VT_UINT);
-                    proto.SetDataForTypeAt(uiNonSpecificData, value.uiVal);
-                }
-                uiNonSpecificData++;
-                break;
+                std::string sName = _bstr_t(sNodeName);
+                proto.SetDataForTypeAt(sName, value);
             }
         }
 
@@ -270,77 +248,94 @@ void ObjectDatabaseLoad::Run()
     m_LoadResult = DATABASE_LOAD_RESULT_OK;
     CoUninitialize();
 }
-
-void ObjectPrototype::SetDataForTypeAt(UINT uiAt, UINT uiData)
+void ObjectPrototype::SetDataForTypeAt(std::string sNodeName, VARIANT value)
 {
-    switch(uiAt)
+    if (sNodeName == "ID")
     {
-    // animation frequence
-    case 0:
+        VariantChangeType(&value, &value, VARIANT_NOUSEROVERRIDE, VT_UINT);
+        m_uiID = value.uiVal;
+    }
+    else if (sNodeName == "Type")
+    {
+        VariantChangeType(&value, &value, VARIANT_NOUSEROVERRIDE, VT_UINT);
+        m_uiType = value.uiVal;
+    }
+    else if (sNodeName == "TextureID")
+    {
+        VariantChangeType(&value, &value, VARIANT_NOUSEROVERRIDE, VT_UINT);
+        m_uiTextureID = value.uiVal;
+    }
+    else if (sNodeName == "AniFrequence")
+    {
+        VariantChangeType(&value, &value, VARIANT_NOUSEROVERRIDE, VT_UINT);
         switch(m_uiType)
         {
         case OBJECT_TYPE_NPC:
-            ObjectType.NPC.m_uiAnimationFrequence = uiData;
+            ObjectType.NPC.m_uiAnimationFrequence = value.uintVal;
             break;
         default:
             break;
         }
-        break;
-    // movement speed
-    case 1:
+    }
+    else if (sNodeName == "MoveSpeed")
+    {
+        VariantChangeType(&value, &value, VARIANT_NOUSEROVERRIDE, VT_UINT);
         switch(m_uiType)
         {
         case OBJECT_TYPE_NPC:
-            ObjectType.NPC.m_uiMoveSpeed = uiData;
+            ObjectType.NPC.m_uiMoveSpeed = value.uintVal;
             break;
         default:
             break;
         }
-        break;
-    // hp min
-    case 2:
+    }
+    else if (sNodeName == "HP_min")
+    {
+        VariantChangeType(&value, &value, VARIANT_NOUSEROVERRIDE, VT_UINT);
         switch(m_uiType)
         {
         case OBJECT_TYPE_NPC:
-            ObjectType.NPC.m_uiHPmin = uiData;
+            ObjectType.NPC.m_uiHPmin = value.uintVal;
             break;
         default:
             break;
         }
-        break;
-    // hp max
-    case 3:
+    }
+    else if (sNodeName == "HP_max")
+    {
+        VariantChangeType(&value, &value, VARIANT_NOUSEROVERRIDE, VT_UINT);
         switch(m_uiType)
         {
         case OBJECT_TYPE_NPC:
-            ObjectType.NPC.m_uiHPmax = uiData;
+            ObjectType.NPC.m_uiHPmax = value.uintVal;
             break;
         default:
             break;
         }
-        break;
-    // level min
-    case 4:
+    }
+    else if (sNodeName == "Level_min")
+    {
+        VariantChangeType(&value, &value, VARIANT_NOUSEROVERRIDE, VT_UINT);
         switch(m_uiType)
         {
         case OBJECT_TYPE_NPC:
-            ObjectType.NPC.m_uiLevelMin = uiData;
+            ObjectType.NPC.m_uiLevelMin = value.uintVal;
             break;
         default:
             break;
         }
-        break;
-    // level max
-    case 5:
+    }
+    else if (sNodeName == "Level_max")
+    {
+        VariantChangeType(&value, &value, VARIANT_NOUSEROVERRIDE, VT_UINT);
         switch(m_uiType)
         {
         case OBJECT_TYPE_NPC:
-            ObjectType.NPC.m_uiLevelMax = uiData;
+            ObjectType.NPC.m_uiLevelMax = value.uintVal;
             break;
         default:
             break;
         }
-        break;
     }
 }
 
@@ -445,56 +440,28 @@ void SpriteDatabaseLoad::Run()
         VariantInit(&value);
         SpritePrototype proto;
         UINT uiNonSpecificData = 0;
+        BSTR sNodeName;
         for (int j = 0; j < iAttributeLength; j++)
         {
             bool bSuccessRead = false;
             hr = pmAttributes->get_item(j, &pAttribute);
             if (hr == S_OK)
             {
-                // check attribute text
+                // check attribute text and name
                 hr = pAttribute->get_nodeValue(&value);
                 if (hr == S_OK)
-                    bSuccessRead = true;
+                {
+                    hr = pAttribute->get_nodeName(&sNodeName);
+                    if (hr == S_OK)
+                        bSuccessRead = true;
+                }
             }
 
-            // set attributes of object
-            switch(j)
+            // if read successs, set data
+            if (bSuccessRead)
             {
-            case 0:     // set ID
-                if (!bSuccessRead)
-                    continue;
-
-                VariantChangeType(&value, &value, VARIANT_NOUSEROVERRIDE, VT_UINT);
-                proto.m_uiID = value.uiVal;
-                break;
-            case 1:     // set filename
-                if (!bSuccessRead)
-                    continue;
-
-                proto.m_sFileName = bstr_t(value);
-                break;
-            case 2:     // set sprite type
-                if (!bSuccessRead)
-                    continue;
-
-                VariantChangeType(&value, &value, VARIANT_NOUSEROVERRIDE, VT_UINT);
-                proto.m_uiSpriteType = value.uiVal;
-                break;
-            case 3:     // set transparent color
-                if (!bSuccessRead)
-                    continue;
-
-                VariantChangeType(&value, &value, VARIANT_NOUSEROVERRIDE, VT_UI4);
-                proto.m_transparentColor = value.ulVal;
-                break;
-            default:    // set other values
-                if (bSuccessRead)
-                {
-                    VariantChangeType(&value, &value, VARIANT_NOUSEROVERRIDE, VT_UINT);
-                    proto.SetDataForTypeAt(j-4, value.uiVal);
-                }
-                uiNonSpecificData++;
-                break;
+                std::string sName = _bstr_t(sNodeName);
+                proto.SetDataForTypeAt(sName, value);
             }
         }
 
@@ -506,46 +473,128 @@ void SpriteDatabaseLoad::Run()
     m_LoadResult = DATABASE_LOAD_RESULT_OK;
 }
 
-void SpritePrototype::SetDataForTypeAt(UINT uiAt, UINT value)
+void SpritePrototype::SetDataForTypeAt(std::string sNodeName, VARIANT value)
 {
-    // store data at specific position
-    switch(uiAt)
+    if (sNodeName == "ID")
     {
-    case 0:
+        VariantChangeType(&value, &value, VARIANT_NOUSEROVERRIDE, VT_UINT);
+        m_uiID = value.uiVal;
+    }
+    else if (sNodeName == "FileName")
+        m_sFileName = bstr_t(value);
+
+    else if (sNodeName == "Type")
+    {
+        VariantChangeType(&value, &value, VARIANT_NOUSEROVERRIDE, VT_UINT);
+        m_uiSpriteType = value.uiVal;
+    }
+    else if (sNodeName == "transparent_color")
+    {
+        VariantChangeType(&value, &value, VARIANT_NOUSEROVERRIDE, VT_UI4);
+        m_transparentColor = value.ulVal;
+    }
+    else if (sNodeName == "spritesX")
+    {
+        VariantChangeType(&value, &value, VARIANT_NOUSEROVERRIDE, VT_UINT);
+        switch(m_uiSpriteType)
+        {
+            // count of spritesX
+        case SPRITE_TYPE_ANIMATED_OBJECT:
+            Type.AnimatedObject.m_uiSpritesX = value.uintVal;
+            break;
+        default:
+            break;
+        }
+    }
+    else if (sNodeName == "spritesY")
+    {
+        VariantChangeType(&value, &value, VARIANT_NOUSEROVERRIDE, VT_UINT);
+        switch(m_uiSpriteType)
+        {
+            // count of spritesX
+        case SPRITE_TYPE_ANIMATED_OBJECT:
+            Type.AnimatedObject.m_uiSpritesY = value.uintVal;
+            break;
+        default:
+            break;
+        }
+    }
+    else if (sNodeName == "boundingXBegin")
+    {
+        VariantChangeType(&value, &value, VARIANT_NOUSEROVERRIDE, VT_UINT);
+        switch(m_uiSpriteType)
+        {
+        case SPRITE_TYPE_OBJECT:
+        case SPRITE_TYPE_ANIMATED_OBJECT:
+            Type.Object.m_uiBoundingXBegin = value.uintVal;
+            break;
+        default:
+            break;
+        }
+    }
+    else if (sNodeName == "boundingYBegin")
+    {
+        VariantChangeType(&value, &value, VARIANT_NOUSEROVERRIDE, VT_UINT);
+        switch(m_uiSpriteType)
+        {
+        case SPRITE_TYPE_OBJECT:
+        case SPRITE_TYPE_ANIMATED_OBJECT:
+            Type.Object.m_uiBoundingYBegin = value.uintVal;
+            break;
+        default:
+            break;
+        }
+    }
+    else if (sNodeName == "boundingXRange")
+    {
+        VariantChangeType(&value, &value, VARIANT_NOUSEROVERRIDE, VT_UINT);
+        switch(m_uiSpriteType)
+        {
+        case SPRITE_TYPE_OBJECT:
+        case SPRITE_TYPE_ANIMATED_OBJECT:
+            Type.Object.m_uiBoundingXRange = value.uintVal;
+            break;
+        default:
+            break;
+        }
+    }
+    else if (sNodeName == "boundingYRange")
+    {
+        VariantChangeType(&value, &value, VARIANT_NOUSEROVERRIDE, VT_UINT);
+        switch(m_uiSpriteType)
+        {
+        case SPRITE_TYPE_OBJECT:
+        case SPRITE_TYPE_ANIMATED_OBJECT:
+            Type.Object.m_uiBoundingYRange = value.uintVal;
+            break;
+        default:
+            break;
+        }
+    }
+    else if (sNodeName == "passability")
+    {
+        VariantChangeType(&value, &value, VARIANT_NOUSEROVERRIDE, VT_UINT);
         switch(m_uiSpriteType)
         {
             // passability
         case SPRITE_TYPE_TILE:
         case SPRITE_TYPE_AUTOTILE:
-            Type.Tile.m_uiPassable = value;
-            break;
-
-            // count of spritesX
-        case SPRITE_TYPE_ANIMATED_OBJECT:
-            Type.AnimatedObject.m_uiSpritesX = value;
+            Type.Tile.m_uiPassable = value.uintVal;
             break;
         default:
             break;
         }
-        break;
-    case 1:
+    }
+    else if (sNodeName == "terraintype")
+    {
+        VariantChangeType(&value, &value, VARIANT_NOUSEROVERRIDE, VT_UINT);
         switch(m_uiSpriteType)
         {
             // terrain type
         case SPRITE_TYPE_TILE:
         case SPRITE_TYPE_AUTOTILE:
-            Type.Tile.m_uiTerrainType = value;
-            break;
-
-            // count of spritesX
-        case SPRITE_TYPE_ANIMATED_OBJECT:
-            Type.AnimatedObject.m_uiSpritesY = value;
-            break;
-        default:
+            Type.Tile.m_uiTerrainType = value.uintVal;
             break;
         }
-        break;
-    default:
-        break;
     }
 }

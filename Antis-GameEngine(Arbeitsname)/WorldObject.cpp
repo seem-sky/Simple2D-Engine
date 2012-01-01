@@ -120,3 +120,25 @@ UINT WorldObject::GetMapPosY()
     }
     return 0;
 }
+
+void WorldObject::GetBoundingRect(RECT &bound)
+{
+    if (!m_pTexture)
+        return;
+
+    if (const SpritePrototype* pInfo = m_pTexture->GetTextureInfo())
+    {
+        switch (pInfo->m_uiSpriteType)
+        {
+        case SPRITE_TYPE_OBJECT:
+        case SPRITE_TYPE_ANIMATED_OBJECT:
+            bound.left = pInfo->Type.Object.m_uiBoundingXBegin;
+            bound.right = bound.left + pInfo->Type.Object.m_uiBoundingXRange;
+            bound.top = pInfo->Type.Object.m_uiBoundingYBegin;
+            bound.bottom = bound.top + pInfo->Type.Object.m_uiBoundingYRange;
+            break;
+        default:
+            break;
+        }
+    }
+}

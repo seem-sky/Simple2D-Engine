@@ -31,6 +31,8 @@ public:
     }
     inline ObjectLayer* GetOwnerLayer() { return m_pOwnerLayer; }
 
+    void GetBoundingRect(RECT &bound);
+
     // position
     inline void ChangePosition(int XPos, int YPos) { m_v3Position += D3DXVECTOR3((float)XPos, (float)YPos, 0); }
     inline D3DXVECTOR3 GetPosition() { return m_v3Position; }

@@ -53,7 +53,7 @@ struct ObjectPrototype
         memset(&ObjectType, 0, sizeof(ObjectType));
     }
 
-    void SetDataForTypeAt(UINT uiAt, UINT uiData);
+    void SetDataForTypeAt(std::string sNodeName, VARIANT value);
 };
 
 struct ObjectDatabaseLoad : public ActiveObject
@@ -104,7 +104,7 @@ struct SpritePrototype
         memset(&Type, 0, sizeof(Type));
     }
     // set data at specific position to value
-    void SetDataForTypeAt(UINT uiAt, UINT value);
+    void SetDataForTypeAt(std::string sNodeName, VARIANT value);
 
     UINT m_uiSpriteType;
     UINT m_uiID;
@@ -128,10 +128,14 @@ struct SpritePrototype
         // SpriteObject = 2
         struct SpriteObject
         {
+            UINT m_uiBoundingXBegin;
+            UINT m_uiBoundingYBegin;
+            UINT m_uiBoundingXRange;
+            UINT m_uiBoundingYRange;
         } Object;
 
         // SpriteAnimatedObject = 3
-        struct SpriteAnimatedObject
+        struct SpriteAnimatedObject : SpriteObject
         {
             UINT m_uiSpritesX;
             UINT m_uiSpritesY;
