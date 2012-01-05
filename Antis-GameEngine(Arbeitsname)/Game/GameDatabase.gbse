@@ -11,4 +11,7 @@
     <Object ID="1" Type="1" TextureID="100" AniFrequence="3" MoveSpeed="3"/>
     <Object ID="2" Type="0" TextureID="101"/>
   </ObjectDatabase>
+  <MapDatabase>
+    <Map ID="1" File="Map2.map"/>
+  </MapDatabase>
 </Database>

@@ -13,7 +13,7 @@ enum WALKMODE
 class Unit : public WorldObject
 {
 public:
-    Unit(UINT uiGUID, D3DXVECTOR3 pos, DIRECTION dir = DIRECTION_DOWN, WALKMODE walkmode = WALKMODE_NONE);
+    Unit(UINT uiGUID, Point<int> pos, DIRECTION dir = DIRECTION_DOWN, WALKMODE walkmode = WALKMODE_NONE);
     virtual ~Unit(void);
     void Update(const ULONGLONG uiCurTime, const UINT uiDiff);
 

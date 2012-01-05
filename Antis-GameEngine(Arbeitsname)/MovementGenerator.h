@@ -3,6 +3,7 @@
 
 #include <d3dx9.h>
 #include <list>
+#include "Point.h"
 
 struct sMoveCommand
 {
@@ -30,7 +31,8 @@ public:
     void RemoveMovementCommand(sMoveCommand* pCommand);
     inline bool IsMoveCommandListEmpty() { return m_lMoveCommands.empty(); }
 
-    bool CheckMovement(D3DXVECTOR2 oldPos, D3DXVECTOR2 newPos, D3DXVECTOR2 &result);
+    bool CheckMovement(Point<int> oldPos, Point<int> newPos, Point<int> &result);
+    void CheckScriptPoint();
 
 private:
     D3DXVECTOR2 m_v2CurMovement;

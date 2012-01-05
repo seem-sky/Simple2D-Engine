@@ -1,8 +1,9 @@
 #ifndef WORLDOBJECT_H
 #define WORLDOBJECT_H
 
-#include "MovementGenerator.h"
 #include "Texture.h"
+#include <d3dx9.h>
+#include "Point.h"
 
 enum UNIT_TYPE
 {
@@ -16,7 +17,7 @@ class Map;
 class WorldObject
 {
 public:
-    WorldObject(UINT m_uiGUID, D3DXVECTOR3 pos);
+    WorldObject(UINT m_uiGUID, Point<int> pos);
     virtual ~WorldObject(void);
 
     // object info
@@ -36,19 +37,19 @@ public:
     void GetBoundingRect(RECT &bound);
 
     // position
-    inline void ChangePosition(int XPos, int YPos) { m_v3Position += D3DXVECTOR3((float)XPos, (float)YPos, 0); }
-    inline D3DXVECTOR3 GetPosition() { return m_v3Position; }
-    inline D3DXVECTOR3* GetPositionPtr() { return &m_v3Position; }
-    inline int GetPositionX() { return (int)m_v3Position.x; }
-    inline int GetPositionY() { return (int)m_v3Position.y; }
+    inline void ChangePosition(int XPos, int YPos) { m_Position += Point<int>(XPos, YPos); }
+    inline Point<int> GetPosition() { return m_Position; }
+    inline Point<int>* GetPositionPtr() { return &m_Position; }
+    inline int GetPositionX() { return m_Position.x; }
+    inline int GetPositionY() { return m_Position.y; }
     inline int GetBottomPosY()
     {
         UINT x = 0, y = 0;
         GetObjectSize(x, y);
         return GetPositionY() + y;
     }
-    int GetMapPosX();
-    int GetMapPosY();
+    int GetScreenPosX();
+    int GetScreenPosY();
 
     void GetObjectSize(UINT &Xsize, UINT &Ysize);
     Map* GetMap();
@@ -82,7 +83,7 @@ private:
     UINT m_ColorModTime;
     TextureSource* m_pTexture;
     ObjectPrototype m_ObjectInfo;
-    D3DXVECTOR3 m_v3Position;
+    Point<int> m_Position;
     D3DXCOLOR m_Color;
 
     UINT m_uiGUID;

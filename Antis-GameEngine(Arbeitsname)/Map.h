@@ -4,8 +4,10 @@
 #include "Logfile.h"
 #include "ObjectLayer.h"
 #include "Thread.h"
+#include "ScriptPoint.h"
 
 typedef std::vector<std::vector<float>> MapTiles;
+typedef std::vector<ScriptPoint*> ScriptPointLIST;
 
 // the da struct for maps
 struct MapInfo
@@ -37,6 +39,7 @@ enum MapLoadState
     MAP_STATE_DO_INFO,
     MAP_STATE_DO_TILES,
     MAP_STATE_DO_OBJECTS,
+    MAP_STATE_DO_SCRIPT_POINTS,
 };
 
 class MapLoadThread;
@@ -55,18 +58,18 @@ public:
 
     const MapInfo* GetMapInfo() { return &m_MapInfo; }
     const std::vector<MapTiles>* GetMapTiles() { return &m_v2MapTiles; }
+    const ScriptPointLIST* GetScriptPoints() { return &m_ScriptPoints; }
 
     bool IsPassable(UINT XPos, UINT YPos, PassabilityFlag MoveDirection);
 
     /*#####
     ## position funktions
     #####*/
-    inline float GetPositionX() { return m_v3Position.x; }
-    inline float GetPositionY() { return m_v3Position.y; }
-    inline float GetPositionZ() { return m_v3Position.z; }
-    inline D3DXVECTOR3 GetPosition() { return m_v3Position; }
-    inline void SetPosition(D3DXVECTOR3 v3Pos) { m_v3Position = v3Pos; }
-    inline void ChangePosition(D3DXVECTOR2 vPos) { m_v3Position += D3DXVECTOR3(vPos.x, vPos.y, 0); }
+    inline int GetPositionX() { return m_Position.x; }
+    inline int GetPositionY() { return m_Position.y; }
+    inline Point<int> GetPosition() { return m_Position; }
+    inline void SetPosition(Point<int> pos) { m_Position = pos; }
+    inline void ChangePosition(Point<int> pos) { m_Position += pos; }
 
     /*#####
     ## objects
@@ -106,8 +109,9 @@ private:
     MapInfo m_MapInfo;
     std::vector<MapTiles> m_v2MapTiles;
     std::map<UINT, WorldObject*> m_WorldObjectLIST;
+    ScriptPointLIST m_ScriptPoints;
 
-    D3DXVECTOR3 m_v3Position;
+    Point<int> m_Position;
     D3DXCOLOR m_MapColor;
 
     LayerList m_lLayers;
@@ -135,7 +139,7 @@ public:
     MapLoadThread(std::string sMapName);
 
     MapLoadState GetMapLoadState() { return m_MapLoadState; }
-    void GetMapInfo(MapInfo &MapInfo, std::vector<MapTiles> &MapTiles, LayerList &LayerList, std::map<UINT, WorldObject*> &objectList);
+    void GetMapInfo(MapInfo &MapInfo, std::vector<MapTiles> &MapTiles, LayerList &LayerList, std::map<UINT, WorldObject*> &objectList, ScriptPointLIST &scriptPoints);
 
 protected:
     /*#####
@@ -150,6 +154,8 @@ protected:
     MapLoadResult LoadTiles(std::string *sMapData);
     // load layer and objects from data string
     MapLoadResult LoadLayerAndObjects(std::string *sMapData);
+    // load ScriptPoints from data string
+    MapLoadResult LoadScriptPoints(std::string *sMapData);
 
 private:
     // Logfile
@@ -161,6 +167,7 @@ private:
     MapInfo m_MapInfo;
     std::vector<MapTiles> m_v2MapTiles;
     LayerList m_lLayers;
+    ScriptPointLIST m_ScriptPoints;
 
     std::map<UINT, WorldObject*> m_WorldObjectLIST;
 };

@@ -5,7 +5,7 @@
 
 #import <msxml4.dll>
 
-Map::Map(void) : m_v3Position(0,0,0), m_MapLoadState(MAP_STATE_NONE), m_pMapLoadThread(NULL), m_MapColor(1,1,1,1)
+Map::Map(void) : m_Position(0,0), m_MapLoadState(MAP_STATE_NONE), m_pMapLoadThread(NULL), m_MapColor(1,1,1,1)
 {
     m_sLogLocationName  = LOGFILE_ENGINE_LOG_NAME + "Map : ";
 }
@@ -28,7 +28,7 @@ MapLoadResult Map::LoadNewMap(std::string sMapName)
 
     if (m_pMapLoadThread && m_pMapLoadThread->GetMapLoadState() == MAP_STATE_DONE)
     {
-        m_pMapLoadThread->GetMapInfo(m_MapInfo, m_v2MapTiles, m_lLayers, m_WorldObjectLIST);
+        m_pMapLoadThread->GetMapInfo(m_MapInfo, m_v2MapTiles, m_lLayers, m_WorldObjectLIST, m_ScriptPoints);
         m_pMapLoadThread->Kill();
         m_pMapLoadThread = NULL;
         result = MAP_RESULT_DONE;
@@ -65,10 +65,10 @@ WorldObject* Map::AddNewWorldObject(UINT uiObjectID, int XPos, int YPos, UINT ui
     switch(pProto->m_uiType)
     {
     case OBJECT_TYPE_MAP_OBJECT:
-        pNewObject = new WorldObject(uiGUID, D3DXVECTOR3((float)XPos, (float)YPos, 0));
+        pNewObject = new WorldObject(uiGUID, Point<int>(XPos, YPos));
         break;
     case OBJECT_TYPE_NPC:
-        pNewObject = new Unit(uiGUID, D3DXVECTOR3((float)XPos, (float)YPos, 0));
+        pNewObject = new Unit(uiGUID, Point<int>(XPos, YPos));
         break;
     default:
         break;
@@ -131,7 +131,7 @@ void Map::DrawMap()
     if (!MapInfo || !MapTiles)
         return;
     
-    D3DXVECTOR3 vPosition = GetPosition();
+    Point<int> MapPosition = GetPosition();
 
     // get maptile size
     UINT uiMapTileSize_X = 0;
@@ -141,10 +141,10 @@ void Map::DrawMap()
     // get start pos left and up
     UINT startposX = 0;
     UINT startposY = 0;
-    if (vPosition.x < 0)
-        startposX = (UINT)((-1) * vPosition.x / uiMapTileSize_X);
-    if (vPosition.y < 0)
-        startposY = (UINT)((-1) * vPosition.y / uiMapTileSize_Y);
+    if (MapPosition.x < 0)
+        startposX = (UINT)((-1) * MapPosition.x / uiMapTileSize_X);
+    if (MapPosition.y < 0)
+        startposY = (UINT)((-1) * MapPosition.y / uiMapTileSize_Y);
 
     // if startpos greater max map tiles, set to max map tiles
     if (startposX > MapInfo->m_uiX)
@@ -155,11 +155,11 @@ void Map::DrawMap()
     // get end pos right and bottom
     UINT endposX = 0;
     UINT endposY = 0;
-    if (vPosition.x + MapInfo->m_uiX * uiMapTileSize_X > uiScreenWidth)
+    if (MapPosition.x + MapInfo->m_uiX * uiMapTileSize_X > uiScreenWidth)
     {
         endposX = startposX + (uiScreenWidth/uiMapTileSize_X);
 
-        if ((UINT)vPosition.x % uiMapTileSize_X)
+        if ((UINT)MapPosition.x % uiMapTileSize_X)
         {
             if (startposX > 0)
                 startposX--;
@@ -170,11 +170,11 @@ void Map::DrawMap()
     else
         endposX = MapInfo->m_uiX;
 
-    if (vPosition.y + MapInfo->m_uiY * uiMapTileSize_Y > uiScreenHeight)
+    if (MapPosition.y + MapInfo->m_uiY * uiMapTileSize_Y > uiScreenHeight)
     {
         endposY = startposY + (uiScreenHeight/uiMapTileSize_Y);
 
-        if ((UINT)vPosition.y % uiMapTileSize_Y)
+        if ((UINT)MapPosition.y % uiMapTileSize_Y)
         {
             if (startposY > 0)
                 startposY--;
@@ -193,8 +193,8 @@ void Map::DrawMap()
     // iterate through layers
     for (UINT layer = 0; layer < MapTiles->size(); layer++)
     {
-        vPosition.x = GetPositionX() + startposX * uiMapTileSize_X;
-        vPosition.y = GetPositionY() + startposY * uiMapTileSize_Y;
+        MapPosition.x = GetPositionX() + startposX * uiMapTileSize_X;
+        MapPosition.y = GetPositionY() + startposY * uiMapTileSize_Y;
 
         for (UINT i = startposY; i < endposY && startposX != endposX; ++i)
         {
@@ -228,7 +228,7 @@ void Map::DrawMap()
                                 rSrcRect.right = rSrcRect.left + uiMapTileSize_X;
                                 rSrcRect.top = ((iAutoTile/100-1) / 3) *uiMapTileSize_Y;
                                 rSrcRect.bottom = rSrcRect.top + uiMapTileSize_Y;
-                                pSprite->Draw(pTexture->m_pTexture, &rSrcRect, NULL, &vPosition, GetColor());
+                                pSprite->Draw(pTexture->m_pTexture, &rSrcRect, NULL, &D3DXVECTOR3((float)MapPosition.x, (float)MapPosition.y, 0), GetColor());
                             }
                             // if autotile is split up into 4 tiles
                             else if (iAutoTile % 10 > 0)
@@ -262,15 +262,15 @@ void Map::DrawMap()
 
                                         // calc draw pos
                                         if (j)
-                                            vPosTemp.x = vPosition.x;
+                                            vPosTemp.x = (float)MapPosition.x;
                                         else
-                                            vPosTemp.x = vPosition.x + uiMapTileSize_X / 2;
+                                            vPosTemp.x = (float)MapPosition.x + uiMapTileSize_X / 2;
 
                                         if (i)
-                                            vPosTemp.y = vPosition.y;
+                                            vPosTemp.y = (float)MapPosition.y;
                                         else
-                                            vPosTemp.y = vPosition.y + uiMapTileSize_Y / 2;
-                                        vPosTemp.z = vPosition.z;
+                                            vPosTemp.y = (float)MapPosition.y + uiMapTileSize_Y / 2;
+                                        vPosTemp.z = 0;
 
                                         pSprite->Draw(pTexture->m_pTexture, &rSrcRect, NULL, &vPosTemp, GetColor());
                                         iCount++;
@@ -280,7 +280,7 @@ void Map::DrawMap()
                             // if autotile is split up into 2 tiles
                             else
                             {
-                                D3DXVECTOR3 vPosTemp = vPosition;
+                                D3DXVECTOR3 vPosTemp((float)MapPosition.x, (float)MapPosition.y, 0);
                                 iAutoTile /= 10;
                                 for (int i = 0; i < 2; i++)
                                 {
@@ -336,13 +336,13 @@ void Map::DrawMap()
                     if (const TextureSource *pTexture = pTextureMgr->GetTextureSource((UINT)fMapTile))
                     {
                         if (pTexture->m_pTexture)   
-                            pSprite->Draw(pTexture->m_pTexture, NULL, NULL, &vPosition, GetColor());
+                            pSprite->Draw(pTexture->m_pTexture, NULL, NULL, &D3DXVECTOR3((float)MapPosition.x, (float)MapPosition.y, 0), GetColor());
                     }
                 }
-                vPosition.x += uiMapTileSize_X;
+                MapPosition.x += uiMapTileSize_X;
             }
-            vPosition.x = GetPositionX() + startposX * uiMapTileSize_X;
-            vPosition.y += uiMapTileSize_Y;
+            MapPosition.x = GetPositionX() + startposX * uiMapTileSize_X;
+            MapPosition.y += uiMapTileSize_Y;
         }
     }
 
@@ -497,6 +497,10 @@ void MapLoadThread::Run()
             break;
         case MAP_STATE_DO_OBJECTS:                  // Load objects and layer
             result = LoadLayerAndObjects(&sMapDataFromFile);
+            m_MapLoadState = MAP_STATE_DO_SCRIPT_POINTS;
+            break;
+        case MAP_STATE_DO_SCRIPT_POINTS:            // Load script points
+            result = LoadScriptPoints(&sMapDataFromFile);
             m_MapLoadState = MAP_STATE_DONE;
             break;
         default:
@@ -872,22 +876,25 @@ MapLoadResult MapLoadThread::LoadLayerAndObjects(std::string *sMapData)
                         switch(pProto->m_uiType)
                         {
                         case OBJECT_TYPE_NPC:
-                            pObject = new Unit(vLayerAndObjects.at(i).at(j)->m_GUID, D3DXVECTOR3((float)vLayerAndObjects.at(i).at(j)->m_XPos, (float)vLayerAndObjects.at(i).at(j)->m_YPos, 0),
+                            pObject = new Unit(vLayerAndObjects.at(i).at(j)->m_GUID, Point<int>(vLayerAndObjects.at(i).at(j)->m_XPos, vLayerAndObjects.at(i).at(j)->m_YPos),
                                 (DIRECTION)vLayerAndObjects.at(i).at(j)->m_uiDirection, (WALKMODE)vLayerAndObjects.at(i).at(j)->m_uiWalkmode);
                             break;
                         case OBJECT_TYPE_MAP_OBJECT:
                         default:
-                            pObject = new WorldObject(vLayerAndObjects.at(i).at(j)->m_GUID, D3DXVECTOR3((float)vLayerAndObjects.at(i).at(j)->m_XPos, (float)vLayerAndObjects.at(i).at(j)->m_YPos, 0));
+                            pObject = new WorldObject(vLayerAndObjects.at(i).at(j)->m_GUID, Point<int>(vLayerAndObjects.at(i).at(j)->m_XPos, vLayerAndObjects.at(i).at(j)->m_YPos));
                             break;
                         }
                         pObject->SetObjectInfo(pProto);
                     }
 
-                    // set object infos
-                    pObject->SetTextureSource(pDatabase->GetSpriteFile(pObject->GetObjectInfo()->m_uiTextureID));
+                    if (pObject)
+                    {
+                        // set object infos
+                        pObject->SetTextureSource(pDatabase->GetSpriteFile(pObject->GetObjectInfo()->m_uiTextureID));
 
-                    m_WorldObjectLIST.insert(std::make_pair<UINT, WorldObject*>(vLayerAndObjects.at(i).at(j)->m_GUID, pObject));
-                    pLayer->AddWorldObject(pObject);
+                        m_WorldObjectLIST.insert(std::make_pair<UINT, WorldObject*>(vLayerAndObjects.at(i).at(j)->m_GUID, pObject));
+                        pLayer->AddWorldObject(pObject);
+                    }
                 }
 
                 delete vLayerAndObjects.at(i).at(j);
@@ -900,10 +907,158 @@ MapLoadResult MapLoadThread::LoadLayerAndObjects(std::string *sMapData)
     return MAP_RESULT_OK;
 }
 
-void MapLoadThread::GetMapInfo(MapInfo &MapInfo, std::vector<MapTiles> &MapTiles, LayerList &LayerList, std::map<UINT, WorldObject*> &objectList)
+MapLoadResult MapLoadThread::LoadScriptPoints(std::string *sMapData)
+{
+    m_ScriptPoints.clear();
+
+    // this parse the XML file:
+    MSXML2::IXMLDOMDocument2Ptr pXMLDom = NULL;
+    HRESULT hr;
+
+    hr = pXMLDom.CreateInstance(__uuidof(DOMDocument40));
+    if (hr != S_OK)
+        return MAP_RESULT_FAILED;
+
+    if (!sMapData->empty())
+        pXMLDom->loadXML(sMapData->c_str());
+
+    IXMLDOMNodePtr pNode = pXMLDom->selectSingleNode("Map");
+    if (!pNode)
+        return MAP_RESULT_CORRUPT_FILE;
+
+    // get layer + objects from file
+    std::vector<std::vector<WorldObject*>> lLayerData;
+    pNode = pXMLDom->selectSingleNode("Map")->selectSingleNode("ScriptPoints");
+    if (!pNode)
+        return MAP_RESULT_CORRUPT_FILE;
+
+    IXMLDOMNodeListPtr pObjectNodeList;
+
+    // read script points
+    pObjectNodeList.Detach();
+    hr = pNode->get_childNodes(&pObjectNodeList);
+    if (hr == S_FALSE)
+        return MAP_RESULT_CORRUPT_FILE;
+
+    // iterate through objects
+    LONG iObjectNodeLength = 0;
+    pObjectNodeList->get_length(&iObjectNodeLength);
+    IXMLDOMNodePtr pObjectNode = NULL;
+    IXMLDOMNamedNodeMapPtr pmObjectAttributes;
+    for (LONG j = 0; j < iObjectNodeLength; j++)
+    {
+        // select object
+        hr = pObjectNodeList->get_item(j, &pObjectNode);
+        if (hr == S_FALSE)
+            continue;
+
+        // read out object attributes
+        pmObjectAttributes.Detach();
+        hr = pObjectNode->get_attributes(&pmObjectAttributes);
+        if (hr == S_FALSE)
+            continue;
+
+        // iterate through attributes
+        LONG iAttributeLength = 0;
+        pmObjectAttributes->get_length(&iAttributeLength);
+        IXMLDOMNodePtr pSelectedAttribute = NULL;
+        VARIANT value;
+        VariantInit(&value);
+        BSTR sNodeName;
+        ScriptPointPrototype newPoint;
+        for (LONG k = 0; k < iAttributeLength; k++)
+        {
+            // select layer
+            hr = pmObjectAttributes->get_item(k, &pSelectedAttribute);
+            if (hr == S_FALSE)
+                continue;
+
+            // get node value
+            hr = pSelectedAttribute->get_nodeValue(&value);
+            if (hr == S_FALSE)
+                continue;
+
+            // get node name
+            hr = pSelectedAttribute->get_nodeName(&sNodeName);
+            if (hr == S_FALSE)
+                continue;
+
+            std::string sNode = _bstr_t(sNodeName);
+
+            if (sNode == "XPos")
+            {
+                VariantChangeType(&value, &value, VARIANT_NOUSEROVERRIDE, VT_UINT);
+                newPoint.m_Position.x = value.uintVal;
+            }
+            else if (sNode == "YPos")
+            {
+                VariantChangeType(&value, &value, VARIANT_NOUSEROVERRIDE, VT_UINT);
+                newPoint.m_Position.y = value.uintVal;
+            }
+            else if (sNode == "XSize")
+            {
+                VariantChangeType(&value, &value, VARIANT_NOUSEROVERRIDE, VT_UINT);
+                newPoint.m_Size.x = value.uintVal;
+            }
+            else if (sNode == "YSize")
+            {
+                VariantChangeType(&value, &value, VARIANT_NOUSEROVERRIDE, VT_UINT);
+                newPoint.m_Size.y = value.uintVal;
+            }
+            else if (sNode == "Type")
+            {
+                VariantChangeType(&value, &value, VARIANT_NOUSEROVERRIDE, VT_UINT);
+                newPoint.m_Type = WrapToScriptPointType(value.uintVal);
+            }
+            else if (sNode == "MapID")
+            {
+                VariantChangeType(&value, &value, VARIANT_NOUSEROVERRIDE, VT_UINT);
+                switch(newPoint.m_Type)
+                {
+                case SCRIPT_POINT_TELEPORT:
+                    newPoint.Type.Teleport.m_uiMapID = value.uintVal;
+                    break;
+                default:
+                    break;
+                }
+            }
+            else if (sNode == "PosX")
+            {
+                VariantChangeType(&value, &value, VARIANT_NOUSEROVERRIDE, VT_UINT);
+                switch(newPoint.m_Type)
+                {
+                case SCRIPT_POINT_TELEPORT:
+                    newPoint.Type.Teleport.m_uiTelePosX = value.uintVal;
+                    break;
+                default:
+                    break;
+                }
+            }
+            else if (sNode == "PosY")
+            {
+                VariantChangeType(&value, &value, VARIANT_NOUSEROVERRIDE, VT_UINT);
+                switch(newPoint.m_Type)
+                {
+                case SCRIPT_POINT_TELEPORT:
+                    newPoint.Type.Teleport.m_uiTelePosY = value.uintVal;
+                    break;
+                default:
+                    break;
+                }
+            }
+        }
+        ScriptPoint *pPoint = new ScriptPoint();
+        pPoint->SetScriptPointInfo(&newPoint);
+        m_ScriptPoints.push_back(pPoint);
+    }
+    return MAP_RESULT_OK;
+}
+
+void MapLoadThread::GetMapInfo(MapInfo &MapInfo, std::vector<MapTiles> &MapTiles, LayerList &LayerList, std::map<UINT, WorldObject*> &objectList, ScriptPointLIST &scriptPoints)
 {
     MapInfo     = m_MapInfo;
     MapTiles    = m_v2MapTiles;
     LayerList   = m_lLayers;
     objectList  = m_WorldObjectLIST;
+    scriptPoints= m_ScriptPoints;
 }

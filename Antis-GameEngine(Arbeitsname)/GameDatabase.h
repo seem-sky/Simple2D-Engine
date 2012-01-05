@@ -163,6 +163,39 @@ struct SpriteDatabaseLoad : public ActiveObject
 };
 
 /*#####
+# MapDatabase
+#####*/
+struct MapPrototype
+{
+    MapPrototype() : m_uiID(0)
+    { }
+
+    // set data at specific position to value
+    void SetDataForTypeAt(std::string sNodeName, VARIANT value);
+
+    UINT m_uiID;
+    // stores texture name (WITHOUT path).
+    std::string m_sFileName;
+};
+
+struct MapDatabaseLoad : public ActiveObject
+{
+    MapDatabaseLoad(std::string sData) : m_sMaps(sData), m_LoadResult(DATABASE_LOAD_RESULT_IN_PROGRESS), ActiveObject()
+    {
+        m_sLogLocationName  = LOGFILE_ENGINE_LOG_NAME + "MapDatabaseLoad : ";
+
+        _thread.Resume ();
+    }
+
+    std::string m_sMaps;
+    DATABASE_LOAD_RESULT m_LoadResult;
+    std::string m_sLogLocationName;
+
+    // load maps from data-string
+    void Run();
+};
+
+/*#####
 # GameDatabase
 #####*/
 typedef std::map<UINT, ObjectPrototype> ObjectDatabase;
@@ -198,6 +231,7 @@ class GameDatabase : public TSingleton<GameDatabase>
 {
     friend struct ObjectDatabaseLoad;
     friend struct SpriteDatabaseLoad;
+    friend struct MapDatabaseLoad;
 public:
     GameDatabase(void);
     ~GameDatabase(void);
@@ -234,6 +268,8 @@ private:
     ObjectDatabaseLoad *m_pObjectDatabaseLoad;
     // standard = NULL; only set if loading sprites from database file
     SpriteDatabaseLoad *m_pSpriteDatabaseLoad;
+    // standard = NULL; only set if loading maps from database file
+    MapDatabaseLoad *m_pMapDatabaseLoad;
 
     /*#####
     # ObjectDatabase
@@ -256,5 +292,14 @@ private:
     void AddSpriteLocation(std::pair<SpriteType, std::string> pair) { m_RessourceLocationMap.insert(pair); }
     // add new Sprite to Database
     void AddSpriteToDatabase(std::pair<UINT, SpritePrototype> pair) { m_StoredSpritesMAP.insert(pair); }
+
+    /*#####
+    # MapDatabase
+    #####*/
+    // stores all Map Prototypes
+    std::map<UINT, MapPrototype> m_MapDatabase;
+
+    // add new MapPrototype to MapDatabase
+    void AddMapToDatabase(MapPrototype proto);
 };
 #endif;

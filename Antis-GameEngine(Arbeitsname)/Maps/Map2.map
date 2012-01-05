@@ -1013,4 +1013,7 @@
       <Object ID="2" GUID="2" XPos="20" YPos="100"/>
     </Layer>
   </LayerData>
+  <ScriptPoints>
+    <ScriptPoint XPos="32" YPos="32" XSize="32" YSize="32" Type="1" MapID="1" PosX="460" PosY="500"/>
+  </ScriptPoints>
 </Map>

@@ -1,7 +1,7 @@
 #include "Unit.h"
 #include "RessourceManager.h"
 
-Unit::Unit(UINT uiGUID, D3DXVECTOR3 pos, DIRECTION dir, WALKMODE walkmode) : m_uiDirection(dir), m_uiSpriteSector(0), m_bIsPlayer(false), m_bAnimationDirection(false), m_bAllTimeAnimation(false),
+Unit::Unit(UINT uiGUID, Point<int> pos, DIRECTION dir, WALKMODE walkmode) : m_uiDirection(dir), m_uiSpriteSector(0), m_bIsPlayer(false), m_bAnimationDirection(false), m_bAllTimeAnimation(false),
     m_uiAnimationTime(ANIMATION_TIME_NORMAL), m_uiMovementSpeed(MOVEMENT_SPEED_NORMAL), m_Walkmode(walkmode),
     WorldObject(uiGUID, pos)
 {
@@ -63,7 +63,7 @@ void Unit::DrawObject(LPD3DXSPRITE pSprite)
         }
     }
 
-    pSprite->Draw(GetTextureSource()->m_pTexture, &srcRect, NULL, &D3DXVECTOR3((float)GetMapPosX(), (float)GetMapPosY(), 0), GetColor());
+    pSprite->Draw(GetTextureSource()->m_pTexture, &srcRect, NULL, &D3DXVECTOR3((float)GetScreenPosX(), (float)GetScreenPosY(), 0), GetColor());
 }
 
 void Unit::SetTextureSource(const SpritePrototype *proto)

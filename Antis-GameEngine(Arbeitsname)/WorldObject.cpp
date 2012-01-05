@@ -2,7 +2,7 @@
 #include "ObjectLayer.h"
 #include "Map.h"
 
-WorldObject::WorldObject(UINT uiGUID, D3DXVECTOR3 pos) : m_pTexture(NULL), m_v3Position(pos), m_Color(1,1,1,1),
+WorldObject::WorldObject(UINT uiGUID, Point<int> pos) : m_pTexture(NULL), m_Position(pos), m_Color(1,1,1,1),
     m_ModRed(0), m_ModGreen(0), m_ModBlue(0), m_ModAlpha(0), m_ColorModTime(0), m_pOwnerLayer(NULL), m_uiGUID(uiGUID)
 {
     m_sLogLocationName  = LOGFILE_ENGINE_LOG_NAME + "WorldObject : ";
@@ -94,10 +94,10 @@ void WorldObject::GetObjectSize(UINT &Xsize, UINT &Ysize)
 void WorldObject::DrawObject(LPD3DXSPRITE pSprite)
 {
     if (m_pTexture && m_pTexture->m_pTexture && pSprite)
-        pSprite->Draw(m_pTexture->m_pTexture, NULL, NULL, &D3DXVECTOR3((float)GetMapPosX(), (float)GetMapPosY(), 0), GetColor());
+        pSprite->Draw(m_pTexture->m_pTexture, NULL, NULL, &D3DXVECTOR3((float)GetScreenPosX(), (float)GetScreenPosY(), 0), GetColor());
 }
 
-int WorldObject::GetMapPosX()
+int WorldObject::GetScreenPosX()
 {
     if (m_pOwnerLayer)
     {
@@ -109,7 +109,7 @@ int WorldObject::GetMapPosX()
     return 0;
 }
 
-int WorldObject::GetMapPosY()
+int WorldObject::GetScreenPosY()
 {
     if (m_pOwnerLayer)
     {
@@ -147,4 +147,6 @@ Map* WorldObject::GetMap()
 {
     if (m_pOwnerLayer)
         return m_pOwnerLayer->GetOwnerMap();
+
+    return NULL;
 }

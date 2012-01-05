@@ -10,7 +10,7 @@ using namespace std;
 /*#####
 # GameDatabase
 #####*/
-GameDatabase::GameDatabase(void) : m_pObjectDatabaseLoad(NULL), m_pSpriteDatabaseLoad(NULL), TSingleton()
+GameDatabase::GameDatabase(void) : m_pObjectDatabaseLoad(NULL), m_pSpriteDatabaseLoad(NULL), m_pMapDatabaseLoad(NULL), TSingleton()
 {
 }
 
@@ -21,6 +21,9 @@ GameDatabase::~GameDatabase(void)
 
     if (m_pSpriteDatabaseLoad)
         m_pSpriteDatabaseLoad->Kill();
+
+    if (m_pMapDatabaseLoad)
+        m_pMapDatabaseLoad->Kill();
 }
 
 ANIMATION_TIME GameDatabase::WrapAnimationTimeID(UINT aniID)
@@ -112,6 +115,17 @@ DATABASE_LOAD_RESULT GameDatabase::LoadDatabase(string sFileName)
             return m_pSpriteDatabaseLoad->m_LoadResult;
     }
 
+    // start Map load thread
+    if (!m_pMapDatabaseLoad)
+        m_pMapDatabaseLoad = new MapDatabaseLoad(m_sFileData);
+
+    // progress MapLoad thread
+    else
+    {
+        if (m_pMapDatabaseLoad->m_LoadResult != DATABASE_LOAD_RESULT_OK)
+            return m_pMapDatabaseLoad->m_LoadResult;
+    }
+
 
     // release ObjectLoad
     if (m_pObjectDatabaseLoad)
@@ -125,6 +139,13 @@ DATABASE_LOAD_RESULT GameDatabase::LoadDatabase(string sFileName)
     {
         m_pSpriteDatabaseLoad->Kill();
         m_pSpriteDatabaseLoad = NULL;
+    }
+
+    // release MapLoad
+    if (m_pMapDatabaseLoad)
+    {
+        m_pMapDatabaseLoad->Kill();
+        m_pMapDatabaseLoad = NULL;
     }
 
     return DATABASE_LOAD_RESULT_OK;
@@ -596,5 +617,121 @@ void SpritePrototype::SetDataForTypeAt(std::string sNodeName, VARIANT value)
             Type.Tile.m_uiTerrainType = value.uintVal;
             break;
         }
+    }
+}
+
+void MapDatabaseLoad::Run()
+{
+    if (FAILED(CoInitialize(NULL)))
+        ERROR_LOG(m_sLogLocationName + "Unable to initialize COM.");
+
+    // this parse the XML file:
+    MSXML2::IXMLDOMDocument2Ptr pXMLDom = NULL;
+    HRESULT hr;
+
+    hr = pXMLDom.CreateInstance(__uuidof(DOMDocument40));
+    if (hr == S_FALSE)
+        m_LoadResult = DATABASE_LOAD_RESULT_FAILED;
+
+    // search for the file, if it exists
+    if (!pXMLDom->loadXML(m_sMaps.c_str()))
+        m_LoadResult = DATABASE_LOAD_RESULT_FAILED;
+
+    // checkout ObjectPrototypes
+    IXMLDOMNodePtr pNode = pXMLDom->selectSingleNode("Database");
+    if (!pNode)
+    {
+        m_LoadResult = DATABASE_LOAD_RESULT_CORRUPT_FILE;
+        return;
+    }
+
+    // checkout ObjectPrototypes
+    pNode = pXMLDom->selectSingleNode("Database")->selectSingleNode("MapDatabase");
+    if (!pNode)
+    {
+        m_LoadResult = DATABASE_LOAD_RESULT_CORRUPT_FILE;
+        return;
+    }
+
+    IXMLDOMNodeListPtr pFileNameNodes;
+    hr = pNode->get_childNodes(&pFileNameNodes);
+    if (hr == S_FALSE)
+    {
+        m_LoadResult = DATABASE_LOAD_RESULT_CORRUPT_FILE;
+        return;
+    }
+
+    LONG iFileNameLength = 0;
+    pFileNameNodes->get_length(&iFileNameLength);
+    IXMLDOMNamedNodeMapPtr pmAttributes;
+
+    for (int i = 0; i < iFileNameLength; i++)
+    {
+        // check objects
+        hr = pFileNameNodes->get_item(i, &pNode);
+        if (hr == S_FALSE)
+            continue;
+
+        hr = pNode->get_attributes(&pmAttributes);
+        if (hr == S_FALSE)
+            continue;
+
+        // check attributes
+        LONG iAttributeLength = 0;
+        pmAttributes->get_length(&iAttributeLength);
+        IXMLDOMNodePtr pAttribute = NULL;
+        VARIANT value;
+        VariantInit(&value);
+        MapPrototype proto;
+        UINT uiNonSpecificData = 0;
+        BSTR sNodeName;
+        for (int j = 0; j < iAttributeLength; j++)
+        {
+            bool bSuccessRead = false;
+            hr = pmAttributes->get_item(j, &pAttribute);
+            if (hr == S_OK)
+            {
+                // check attribute text and name
+                hr = pAttribute->get_nodeValue(&value);
+                if (hr == S_OK)
+                {
+                    hr = pAttribute->get_nodeName(&sNodeName);
+                    if (hr == S_OK)
+                        bSuccessRead = true;
+                }
+            }
+
+            // if read successs, set data
+            if (bSuccessRead)
+            {
+                std::string sName = _bstr_t(sNodeName);
+                proto.SetDataForTypeAt(sName, value);
+            }
+        }
+
+        // add Object to database
+        if (GameDatabase *pDatabase = GameDatabase::Get())
+            pDatabase->AddMapToDatabase(proto);
+    }
+
+    m_LoadResult = DATABASE_LOAD_RESULT_OK;
+    CoUninitialize();
+}
+
+void GameDatabase::AddMapToDatabase(MapPrototype proto)
+{
+    m_MapDatabase.insert(make_pair(proto.m_uiID, proto));
+}
+
+void MapPrototype::SetDataForTypeAt(std::string sNodeName, VARIANT value)
+{
+    if (sNodeName == "ID")
+    {
+        VariantChangeType(&value, &value, VARIANT_NOUSEROVERRIDE, VT_UINT);
+        m_uiID = value.uiVal;
+    }
+    else if (sNodeName == "File")
+    {
+        m_sFileName = _bstr_t(value.bstrVal);
     }
 }

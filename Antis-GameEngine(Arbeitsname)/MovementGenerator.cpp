@@ -1,5 +1,4 @@
 #include "MovementGenerator.h"
-#include "Unit.h"
 #include "Map.h"
 #include "Game.h"
 
@@ -68,8 +67,8 @@ void MovementGenerator::UpdateMovement(const ULONGLONG uiCurTime, const UINT uiD
             return;
     }
 
-    float MoveX = 0, MoveY = 0;
-    D3DXVECTOR2 oldPos = (D3DXVECTOR2)m_pObj->GetPosition();
+    int MoveX = 0, MoveY = 0;
+    Point<int> oldPos = m_pObj->GetPosition();
     if ((*m_lMoveCommands.begin())->m_MoveTime)
     {
         // update x
@@ -81,9 +80,9 @@ void MovementGenerator::UpdateMovement(const ULONGLONG uiCurTime, const UINT uiD
                 m_v2CurMovement.x += (*m_lMoveCommands.begin())->m_MoveX * (*m_lMoveCommands.begin())->m_MoveTime;
 
             if (m_v2CurMovement.x > 0)
-                MoveX = floor (m_v2CurMovement.x+0.00005f);
+                MoveX = (int)floor(m_v2CurMovement.x+0.00005f);
             else if (m_v2CurMovement.x < 0)
-                MoveX = ceil (m_v2CurMovement.x-0.00005f);
+                MoveX = (int)ceil(m_v2CurMovement.x-0.00005f);
 
             m_v2CurMovement.x -= MoveX;
         }
@@ -97,9 +96,9 @@ void MovementGenerator::UpdateMovement(const ULONGLONG uiCurTime, const UINT uiD
                 m_v2CurMovement.y += (*m_lMoveCommands.begin())->m_MoveY * (*m_lMoveCommands.begin())->m_MoveTime;
 
             if (m_v2CurMovement.y > 0)
-                MoveY = floor (m_v2CurMovement.y+0.00005f);
+                MoveY = (int)floor(m_v2CurMovement.y+0.00005f);
             else if (m_v2CurMovement.y < 0)
-                MoveY = ceil (m_v2CurMovement.y-0.00005f);
+                MoveY = (int)ceil(m_v2CurMovement.y-0.00005f);
 
             m_v2CurMovement.y -= MoveY;
         }
@@ -107,20 +106,22 @@ void MovementGenerator::UpdateMovement(const ULONGLONG uiCurTime, const UINT uiD
 
     if ((*m_lMoveCommands.begin())->m_bWithCollission)
     {
-        D3DXVECTOR2 result(0,0);
-        CheckMovement(oldPos, (D3DXVECTOR2)m_pObj->GetPosition() + D3DXVECTOR2 (MoveX, MoveY), result);
-        MoveX = result.x;
-        MoveY = result.y;
-    }
-
-    // move map if its player
-    if (m_pObj->IsPlayer())
-    {
-        if (Map* pMap = m_pObj->GetMap())
-            pMap->ChangePosition(D3DXVECTOR2((float)-MoveX, (float)-MoveY));
+        Point<int> result(0,0);
+        CheckMovement(oldPos, m_pObj->GetPosition() + Point<int>(MoveX, MoveY), result);
+        MoveX = (int)result.x;
+        MoveY = (int)result.y;
     }
 
     m_pObj->ChangePosition((int)MoveX, (int)MoveY);
+    if (m_pObj->IsPlayer())
+    {
+        // move map if its player
+        if (Map* pMap = m_pObj->GetMap())
+            pMap->ChangePosition(Point<int>(-MoveX, -MoveY));
+
+        CheckScriptPoint();
+    }
+
     // stop animation if not moving
     if (MoveX == 0 && MoveY == 0)
         m_pObj->SetToStartSector();
@@ -159,7 +160,7 @@ void MovementGenerator::RemoveMovementCommand(sMoveCommand* pCommand)
     }
 }
 
-bool MovementGenerator::CheckMovement(D3DXVECTOR2 oldPos, D3DXVECTOR2 newPos, D3DXVECTOR2 &result)
+bool MovementGenerator::CheckMovement(Point<int> oldPos, Point<int> newPos, Point<int> &result)
 {
     result = newPos - oldPos;
     bool bCollission = false;
@@ -243,7 +244,7 @@ bool MovementGenerator::CheckMovement(D3DXVECTOR2 oldPos, D3DXVECTOR2 newPos, D3
                     {
                         bCollission = true;
                         bBreak = true;
-                        result.x = (float)j * XTileSize - XMapPos;
+                        result.x = j * XTileSize - XMapPos;
                         if (moveFlag & PASSABLE_LEFT)
                             result.x += XTileSize;
                         else
@@ -302,7 +303,7 @@ bool MovementGenerator::CheckMovement(D3DXVECTOR2 oldPos, D3DXVECTOR2 newPos, D3
                     {
                         bBreak = true;
                         bCollission = true;
-                        result.y = (float)j * YTileSize - YMapPos;
+                        result.y = j * YTileSize - YMapPos;
                         if (moveFlag & PASSABLE_UP)
                             result.y += YTileSize;
                         else
@@ -326,7 +327,7 @@ bool MovementGenerator::CheckMovement(D3DXVECTOR2 oldPos, D3DXVECTOR2 newPos, D3
             continue;
 
         newPos = result + oldPos;
-        D3DXVECTOR2 objPos = (D3DXVECTOR2)(*itr)->GetPosition();
+        Point<int> objPos = (*itr)->GetPosition();
         RECT objBound = {0,0,0,0};
         (*itr)->GetBoundingRect(objBound);
         if (moveFlag & PASSABLE_LEFT)
@@ -404,4 +405,52 @@ bool MovementGenerator::CheckMovement(D3DXVECTOR2 oldPos, D3DXVECTOR2 newPos, D3
         }
     }
     return bCollission;
+}
+
+void MovementGenerator::CheckScriptPoint()
+{
+    if (!m_pObj)
+        return;
+
+    Map *pMap = m_pObj->GetMap();
+    if (!pMap)
+        return;
+
+    UINT uiObjPosX = m_pObj->GetPositionX();
+    UINT uiObjPosY = m_pObj->GetPositionY();
+
+    RECT boundingRect = { 0, 0, 0, 0 };
+    m_pObj->GetBoundingRect(boundingRect);
+
+    const ScriptPointLIST *pList = pMap->GetScriptPoints();
+    Point<UINT> PointPos, PointSize;
+    for (ScriptPointLIST::const_iterator itr = pList->begin(); itr != pList->end(); ++itr)
+    {
+        if (!(*itr))
+            continue;
+
+        PointPos = (*itr)->GetPosition();
+        PointSize = (*itr)->GetSize();
+
+        bool bSuccess = false;
+            // left side of m_pObj
+        if ((PointPos.x <= uiObjPosX + boundingRect.left && PointPos.x + PointSize.x >= uiObjPosX + boundingRect.left) ||
+            // right side of m_pObj
+            (PointPos.x <= uiObjPosX + boundingRect.right && PointPos.x + PointSize.x >= uiObjPosX + boundingRect.right))
+        {
+                // top left edge of Obj is in point
+            if ((PointPos.y <= uiObjPosY + boundingRect.top && PointPos.y + PointSize.y >= uiObjPosY + boundingRect.top) ||
+                // bottom left edge of Obj is in point
+                (PointPos.y <= uiObjPosY + boundingRect.bottom && PointPos.y + PointSize.y >= uiObjPosY + boundingRect.bottom) ||
+                // left side without edges is in point
+                (PointPos.y >= uiObjPosY + boundingRect.top && PointPos.y + PointSize.y <= uiObjPosY + boundingRect.bottom))
+            bSuccess = true;
+        }
+
+
+        if (bSuccess)
+        {
+            (*itr)->DoAction(m_pObj);
+        }
+    }
 }
