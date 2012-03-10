@@ -1,7 +1,7 @@
 #include "GameDatabase.h"
 #include "Logfile.h"
 #include <fstream>
-#include <msxml2.h>
+#include <msxml.h>
 
 #import <msxml4.dll>
 
@@ -24,44 +24,6 @@ GameDatabase::~GameDatabase(void)
 
     if (m_pMapDatabaseLoad)
         m_pMapDatabaseLoad->Kill();
-}
-
-ANIMATION_TIME GameDatabase::WrapAnimationTimeID(UINT aniID)
-{
-    switch(aniID)
-    {
-    case 0:
-        return ANIMATION_TIME_VERY_SLOW;
-    case 1:
-        return ANIMATION_TIME_SLOW;
-    case 2:
-        return ANIMATION_TIME_NORMAL;
-    case 3:
-        return ANIMATION_TIME_FAST;
-    case 4:
-        return ANIMATION_TIME_VERY_FAST;
-    default:
-        return ANIMATION_TIME_NORMAL;
-    }
-}
-
-MOVEMENT_SPEED GameDatabase::WrapMovementSpeedID(UINT speedID)
-{
-    switch(speedID)
-    {
-    case 0:
-        return MOVEMENT_SPEED_VERY_SLOW;
-    case 1:
-        return MOVEMENT_SPEED_SLOW;
-    case 2:
-        return MOVEMENT_SPEED_NORMAL;
-    case 3:
-        return MOVEMENT_SPEED_FAST;
-    case 4:
-        return MOVEMENT_SPEED_VERY_FAST;
-    default:
-        return MOVEMENT_SPEED_NORMAL;
-    }
 }
 
 const ObjectPrototype* GameDatabase::GetObjectPrototype (UINT uiID)
@@ -181,7 +143,7 @@ void ObjectDatabaseLoad::Run()
     MSXML2::IXMLDOMDocument2Ptr pXMLDom = NULL;
     HRESULT hr;
 
-    hr = pXMLDom.CreateInstance(__uuidof(DOMDocument40));
+    hr = pXMLDom.CreateInstance(__uuidof(MSXML2::DOMDocument40));
     if (hr == S_FALSE)
         m_LoadResult = DATABASE_LOAD_RESULT_FAILED;
 
@@ -372,7 +334,7 @@ void SpriteDatabaseLoad::Run()
     MSXML2::IXMLDOMDocument2Ptr pXMLDom = NULL;
     HRESULT hr;
 
-    hr = pXMLDom.CreateInstance(__uuidof(DOMDocument40));
+    hr = pXMLDom.CreateInstance(__uuidof(MSXML2::DOMDocument40));
     if (hr == S_FALSE)
         m_LoadResult = DATABASE_LOAD_RESULT_FAILED;
 
@@ -618,6 +580,17 @@ void SpritePrototype::SetDataForTypeAt(std::string sNodeName, VARIANT value)
             break;
         }
     }
+    else if (sNodeName == "BorderSize")
+    {
+        VariantChangeType(&value, &value, VARIANT_NOUSEROVERRIDE, VT_UINT);
+        switch(m_uiSpriteType)
+        {
+            // border size
+        case SPRITE_TYPE_TEXTBOX:
+            Type.Textbox.m_uiBorderSize = value.uintVal;
+            break;
+        }
+    }
 }
 
 void MapDatabaseLoad::Run()
@@ -629,7 +602,7 @@ void MapDatabaseLoad::Run()
     MSXML2::IXMLDOMDocument2Ptr pXMLDom = NULL;
     HRESULT hr;
 
-    hr = pXMLDom.CreateInstance(__uuidof(DOMDocument40));
+    hr = pXMLDom.CreateInstance(__uuidof(MSXML2::DOMDocument40));
     if (hr == S_FALSE)
         m_LoadResult = DATABASE_LOAD_RESULT_FAILED;
 

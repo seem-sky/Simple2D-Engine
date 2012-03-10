@@ -4,6 +4,8 @@
 #include "Texture.h"
 #include <d3dx9.h>
 #include "Point.h"
+#include "WrapperFunctions.h"
+#include "ObjectAI.h"
 
 enum UNIT_TYPE
 {
@@ -17,13 +19,15 @@ class Map;
 class WorldObject
 {
 public:
-    WorldObject(UINT m_uiGUID, Point<int> pos);
+    WorldObject(UINT m_uiGUID, Point<int> pos, ObjectAI* pAI = new ObjectAI());
     virtual ~WorldObject(void);
 
     // object info
     inline UINT GetGUID() { return m_uiGUID; }
     inline ObjectPrototype* GetObjectInfo() { return &m_ObjectInfo; }
     virtual void SetObjectInfo(const ObjectPrototype* pInfo) { if (pInfo) m_ObjectInfo = *pInfo; }
+
+    UNIT_TYPE GetObjectType() { return m_UnitType; }
 
     inline void SetOwnerLayer(ObjectLayer *pOwner)
     {
@@ -68,6 +72,14 @@ public:
 
     virtual void DrawObject(LPD3DXSPRITE pSprite);
 
+    // AI
+    virtual ObjectAI* GetAI() { return m_pAI; }
+    virtual void SetAI(ObjectAI* AI)
+    {
+        if (AI)
+            m_pAI = AI;
+    }
+
 protected:
     // object type
     UNIT_TYPE m_UnitType;
@@ -87,5 +99,7 @@ private:
     D3DXCOLOR m_Color;
 
     UINT m_uiGUID;
+
+    ObjectAI *m_pAI;
 };
 #endif;

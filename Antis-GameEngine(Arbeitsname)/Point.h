@@ -9,26 +9,82 @@ struct Point
 
     Point(T X = 0, T Y = 0) : x(X), y(Y) { }
 
-    Point operator +(Point p)
+    inline Point operator +(Point<T> &p)
     {
-        return Point(x + p.x, y + p.y);
+        return Point<T>(x + p.x, y + p.y);
     }
 
-    Point operator -(Point p)
+    inline Point operator -(Point<T> &p)
     {
-        return Point(x - p.x, y - p.y);
+        return Point<T>(x - p.x, y - p.y);
     }
 
-    void operator +=(Point p)
+    inline void operator +=(Point<T> &p)
     {
         x += p.x;
         y += p.y;
     }
 
-    void operator -=(Point p)
+    inline void operator -=(Point<T> &p)
     {
         x -= p.x;
         y -= p.y;
+    }
+
+    inline bool operator <(const Point<T> &p) const
+    {
+        if (x < p.x)
+            return true;
+        if (x == p.x && y < p.y)
+            return true;
+
+        return false;
+    }
+
+    inline bool operator <=(const Point<T> &p) const
+    {
+        if (x <= p.x)
+            return true;
+        if (x > p.x && y <= p.y)
+            return true;
+
+        return false;
+    }
+
+    inline bool operator >(const Point<T> &p) const
+    {
+        if (x > p.x)
+            return true;
+        if (x == p.x && y > p.y)
+            return true;
+
+        return false;
+    }
+
+    inline bool operator >=(const Point<T> &p) const
+    {
+        if (x >= p.x)
+            return true;
+        if (x < p.x && y >= p.y)
+            return true;
+
+        return false;
+    }
+
+    inline bool operator ==(const Point<T> &p) const
+    {
+        if (x == p.x && y == p.y)
+            return true;
+
+        return false;
+    }
+
+    inline bool operator !=(const Point<T> &p) const
+    {
+        if (x != p.x || y != p.y)
+            return true;
+
+        return false;
     }
 };
 #endif;

@@ -26,9 +26,10 @@ class CDirect3D : public TSingleton<CDirect3D>
         void DeleteOneSprite();
         LPD3DXSPRITE GetSpriteForDraw(UINT DrawFlag = D3DXSPRITE_ALPHABLEND);
         void EndSpriteDraw();
+
+        LPDIRECT3DSURFACE9 GetBackbuffer(void) { return m_lpBackBuffer; }
  
    protected:
-       LPDIRECT3DSURFACE9 GetBackbuffer(void) { return m_lpBackBuffer; }
        void CleanUp(void);
 
        D3DCOLOR             m_ClearColor;                   // color of the clear backbuffer

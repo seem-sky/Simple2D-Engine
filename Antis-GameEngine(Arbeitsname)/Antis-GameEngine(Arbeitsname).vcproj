@@ -232,6 +232,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\ObjectAI.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\ObjectAI.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Player.cpp"
 					>
 				</File>
@@ -248,11 +256,27 @@
 					>
 				</File>
 				<File
+					RelativePath=".\TextBox.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\TextBox.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Unit.cpp"
 					>
 				</File>
 				<File
 					RelativePath=".\Unit.h"
+					>
+				</File>
+				<File
+					RelativePath=".\UnitAI.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\UnitAI.h"
 					>
 				</File>
 				<File
@@ -268,11 +292,27 @@
 				Name="Movement"
 				>
 				<File
+					RelativePath=".\Collission.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Collission.h"
+					>
+				</File>
+				<File
 					RelativePath=".\MovementGenerator.cpp"
 					>
 				</File>
 				<File
 					RelativePath=".\MovementGenerator.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Pathfinder.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Pathfinder.h"
 					>
 				</File>
 			</Filter>
@@ -370,6 +410,10 @@
 			</File>
 			<File
 				RelativePath=".\Time.h"
+				>
+			</File>
+			<File
+				RelativePath=".\WrapperFunctions.h"
 				>
 			</File>
 		</Filter>

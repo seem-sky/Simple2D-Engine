@@ -3,7 +3,7 @@
 #include "DirectFont.h"
 
 CGame::CGame(void) : m_pDirect3D(NULL), m_pDirectInput(NULL), m_pWorldSession(NULL), m_pMap(NULL), m_pDatabase(NULL), m_pShownMenu(NULL),
-                m_bGameClose(false), m_bPauseGame(false), TSingleton()
+                m_bGameClose(false), m_bPauseGame(false), m_pShownTextBox(NULL), TSingleton()
 {
     m_sLogLocationName  = LOGFILE_ENGINE_LOG_NAME + "CGame : ";
 
@@ -106,9 +106,10 @@ bool CGame::Run(const ULONGLONG CurTime, const UINT CurElapsedTime)
 {
     if (!Test)
     {
-        if (MAP_RESULT_DONE == m_pMap->LoadNewMap("Map2.map"))
+        if (MAP_RESULT_DONE == m_pMap->LoadNewMap("Map1.map"))
         {
-            pPlayer->SetControledUnit((Unit*)m_pMap->AddNewWorldObject(1, 100, 100, 0));
+            Unit *pWho = (Unit*)m_pMap->AddNewWorldObject(1, 49, 32, 0);
+            pPlayer->SetControledUnit(pWho);
             Test = true;
         }
     }
@@ -125,8 +126,11 @@ bool CGame::Run(const ULONGLONG CurTime, const UINT CurElapsedTime)
         if (m_pShownMenu)
             m_pShownMenu->UpdateMenu(CurTime, CurElapsedTime);
 
-        // if no menu shown or if cur menu allows updating
-        if (!m_pShownMenu || m_pShownMenu->ShouldUpdating())
+        if (m_pShownTextBox)
+            m_pShownTextBox->Update(CurTime, CurElapsedTime);
+
+        // if no Textbox and no menu shown or if cur menu allows updating
+        if (!m_pShownTextBox && (!m_pShownMenu || m_pShownMenu->ShouldUpdating()))
         {
             if (m_bPauseGame)
                 return true;
@@ -157,6 +161,9 @@ HRESULT CGame::Draw()
         {
             if (m_pMap)
                 m_pMap->Draw();
+
+            if (m_pShownTextBox)
+                m_pShownTextBox->DrawTextbox();
 
             // if pause is pressed, show a font on screen
             if (IsGamePaused())
@@ -220,6 +227,9 @@ HRESULT CGame::ResetD3DXDevice(HWND hWnd)
 
 void CGame::DisplayMenu(Menu *pMenu)
 {
+    if (!pMenu)
+        return;
+
     pMenu->OnMenuOpen();
     m_pShownMenu = pMenu;
 }
@@ -231,5 +241,37 @@ void CGame::ShutDownMenu()
         Menu* pMenu = m_pShownMenu->GetParentMenu();
         m_pShownMenu->CloseMenu();
         m_pShownMenu = pMenu;
+    }
+}
+
+TextBox* CGame::ShowTextbox(TextBox *pBox)
+{
+    if (pBox)
+        m_pShownTextBox = pBox;
+
+    return pBox;
+}
+
+TextBox* CGame::ShowTextbox(std::string sMsg, UINT uiTextureID, Point<int> pos, Point<UINT> size, USHORT uiFontSize, USHORT uiBold, bool bItalic,
+                            std::string sFont, ShowLetterTime showLetter, bool ScrollAble)
+{
+    return ShowTextbox(new TextBox(sMsg, pos, size, uiTextureID, uiFontSize, uiBold, bItalic, sFont, showLetter, ScrollAble));
+}
+
+TextBox* CGame::ShowTextbox(std::string sMsg, UINT uiTextureID, Point<int> pos, USHORT uiFontSize, USHORT uiBold, bool bItalic,
+                            std::string sFont, ShowLetterTime showLetter, bool ScrollAble)
+{
+    Point<UINT> ScreenSize;
+    m_GameInfo.GetWindowSize(ScreenSize.x, ScreenSize.y);
+    Point<UINT> size(ScreenSize.x - (2*pos.x), ScreenSize.y - (pos.y + pos.x));
+    return ShowTextbox(sMsg, uiTextureID, pos, size, uiFontSize, uiBold, bItalic, sFont, showLetter, ScrollAble);
+}
+
+void CGame::ShutDownTextbox()
+{
+    if (m_pShownTextBox)
+    {
+        delete m_pShownTextBox;
+        m_pShownTextBox = NULL;
     }
 }

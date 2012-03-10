@@ -62,6 +62,8 @@ public:
 
     bool IsPassable(UINT XPos, UINT YPos, PassabilityFlag MoveDirection);
 
+    Point<UINT> CalcPixToTile(Point<UINT> uiPos);
+
     /*#####
     ## position funktions
     #####*/

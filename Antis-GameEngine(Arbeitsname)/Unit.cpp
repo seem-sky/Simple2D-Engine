@@ -1,9 +1,9 @@
 #include "Unit.h"
 #include "RessourceManager.h"
 
-Unit::Unit(UINT uiGUID, Point<int> pos, DIRECTION dir, WALKMODE walkmode) : m_uiDirection(dir), m_uiSpriteSector(0), m_bIsPlayer(false), m_bAnimationDirection(false), m_bAllTimeAnimation(false),
+Unit::Unit(UINT uiGUID, Point<int> pos, DIRECTION dir, WALKMODE walkmode, UnitAI *pAI) : m_uiDirection(dir), m_uiSpriteSector(0), m_bIsPlayer(false), m_bAnimationDirection(false), m_bAllTimeAnimation(false),
     m_uiAnimationTime(ANIMATION_TIME_NORMAL), m_uiMovementSpeed(MOVEMENT_SPEED_NORMAL), m_Walkmode(walkmode),
-    WorldObject(uiGUID, pos)
+    WorldObject(uiGUID, pos, pAI)
 {
     m_pMovement = new MovementGenerator(this);
     m_sLogLocationName      = LOGFILE_ENGINE_LOG_NAME + "Unit : ";
@@ -17,6 +17,7 @@ Unit::~Unit(void)
     {
         m_pMovement->ClearMovement();
         delete m_pMovement;
+        m_pMovement = NULL;
     }
 }
 
@@ -27,7 +28,11 @@ void Unit::Update(const ULONGLONG uiCurTime, const UINT uiDiff)
 
     // Update movement
     if (m_pMovement && (!m_pMovement->IsMoveCommandListEmpty() || GetWalkmode() != WALKMODE_NONE))
-        m_pMovement->UpdateMovement(uiCurTime, uiDiff);
+    {
+        // set to frame to start sector if not moving
+        if (!m_pMovement->UpdateMovement(uiCurTime, uiDiff))
+            SetToStartSector();
+    }
     else
         SetToStartSector();
 
@@ -86,10 +91,10 @@ void Unit::SetToStartSector()
     }
 }
 
-void Unit::MovePosition(int XMove, int YMove, UINT time)
+void Unit::MovePosition(int XMove, int YMove, DIRECTION dir, UINT time)
 {
     if (m_pMovement)
-        m_pMovement->Move2D(XMove, YMove, time);
+        m_pMovement->Move2D(XMove, YMove, time, dir);
 }
 
 void Unit::UpdateAnimation(const ULONGLONG uiCurTime, const UINT uiDiff)
@@ -140,9 +145,9 @@ void Unit::SetObjectInfo(const ObjectPrototype *pInfo)
     switch(pInfo->m_uiType)
     {
     case 1:
-        m_uiAnimationTime   = GameDatabase::WrapAnimationTimeID(pInfo->ObjectType.NPC.m_uiAnimationFrequence);
+        m_uiAnimationTime   = WrapAnimationTimeID(pInfo->ObjectType.NPC.m_uiAnimationFrequence);
         m_uiAnimation_Timer = m_uiAnimationTime;
-        m_uiMovementSpeed   = GameDatabase::WrapMovementSpeedID(pInfo->ObjectType.NPC.m_uiMoveSpeed);
+        m_uiMovementSpeed   = WrapMovementSpeedID(pInfo->ObjectType.NPC.m_uiMoveSpeed);
         break;
     default:
         break;

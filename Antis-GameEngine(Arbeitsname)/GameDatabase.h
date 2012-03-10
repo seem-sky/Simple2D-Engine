@@ -3,6 +3,7 @@
 
 #include "Singleton.h"
 #include "Thread.h"
+#include "WrapperFunctions.h"
 #include <map>
 
 enum DATABASE_LOAD_RESULT
@@ -82,6 +83,7 @@ enum SpriteType
     SPRITE_TYPE_AUTOTILE,
     SPRITE_TYPE_OBJECT,
     SPRITE_TYPE_ANIMATED_OBJECT,
+    SPRITE_TYPE_TEXTBOX,
 };
 
 // passability flag, if nothing set, its unpassable
@@ -140,6 +142,12 @@ struct SpritePrototype
             UINT m_uiSpritesX;
             UINT m_uiSpritesY;
         } AnimatedObject;
+
+        // TextBox = 4
+        struct TextBoxObject
+        {
+            UINT m_uiBorderSize;
+        } Textbox;
     } Type;
 };
 
@@ -200,33 +208,6 @@ struct MapDatabaseLoad : public ActiveObject
 #####*/
 typedef std::map<UINT, ObjectPrototype> ObjectDatabase;
 
-enum ANIMATION_TIME
-{
-    ANIMATION_TIME_VERY_SLOW    = 1000,
-    ANIMATION_TIME_SLOW         = 500,
-    ANIMATION_TIME_NORMAL       = 250,
-    ANIMATION_TIME_FAST         = 125,
-    ANIMATION_TIME_VERY_FAST    = 65,
-};
-
-enum MOVEMENT_SPEED
-{
-    MOVEMENT_SPEED_VERY_SLOW    = 1,
-    MOVEMENT_SPEED_SLOW         = 2,
-    MOVEMENT_SPEED_NORMAL       = 4,
-    MOVEMENT_SPEED_FAST         = 8,
-    MOVEMENT_SPEED_VERY_FAST    = 16,
-};
-
-enum DIRECTION
-{
-    DIRECTION_UP,
-    DIRECTION_RIGHT,
-    DIRECTION_DOWN,
-    DIRECTION_LEFT,
-    DIRECTION_NONE,
-};
-
 class GameDatabase : public TSingleton<GameDatabase>
 {
     friend struct ObjectDatabaseLoad;
@@ -241,8 +222,6 @@ public:
     #####*/
     // load complete Databas; hand over complete path + filename
     DATABASE_LOAD_RESULT LoadDatabase(std::string sFileName);
-    static ANIMATION_TIME WrapAnimationTimeID(UINT aniID);
-    static MOVEMENT_SPEED WrapMovementSpeedID(UINT speedID);
 
     /*#####
     # ObjectDatabase

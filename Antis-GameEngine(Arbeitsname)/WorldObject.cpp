@@ -2,15 +2,21 @@
 #include "ObjectLayer.h"
 #include "Map.h"
 
-WorldObject::WorldObject(UINT uiGUID, Point<int> pos) : m_pTexture(NULL), m_Position(pos), m_Color(1,1,1,1),
-    m_ModRed(0), m_ModGreen(0), m_ModBlue(0), m_ModAlpha(0), m_ColorModTime(0), m_pOwnerLayer(NULL), m_uiGUID(uiGUID)
+WorldObject::WorldObject(UINT uiGUID, Point<int> pos, ObjectAI* pAI) : m_pTexture(NULL), m_Position(pos), m_Color(1,1,1,1),
+    m_ModRed(0), m_ModGreen(0), m_ModBlue(0), m_ModAlpha(0), m_ColorModTime(0), m_pOwnerLayer(NULL), m_uiGUID(uiGUID), m_pAI(pAI)
 {
     m_sLogLocationName  = LOGFILE_ENGINE_LOG_NAME + "WorldObject : ";
     m_UnitType          = UNIT_TYPE_WORLDOBJECT;
+    m_pAI->SetOwner(this);
 }
 
 WorldObject::~WorldObject(void)
 {
+    if (m_pAI)
+    {
+        delete m_pAI;
+        m_pAI = NULL;
+    }
 }
 
 void WorldObject::SetTextureSource(const SpritePrototype *proto)
@@ -126,20 +132,17 @@ void WorldObject::GetBoundingRect(RECT &bound)
     if (!m_pTexture)
         return;
 
-    if (const SpritePrototype* pInfo = m_pTexture->GetTextureInfo())
+    switch (m_pTexture->m_TextureInfo.m_uiSpriteType)
     {
-        switch (pInfo->m_uiSpriteType)
-        {
-        case SPRITE_TYPE_OBJECT:
-        case SPRITE_TYPE_ANIMATED_OBJECT:
-            bound.left = pInfo->Type.Object.m_uiBoundingXBegin;
-            bound.right = bound.left + pInfo->Type.Object.m_uiBoundingXRange;
-            bound.top = pInfo->Type.Object.m_uiBoundingYBegin;
-            bound.bottom = bound.top + pInfo->Type.Object.m_uiBoundingYRange;
-            break;
-        default:
-            break;
-        }
+    case SPRITE_TYPE_OBJECT:
+    case SPRITE_TYPE_ANIMATED_OBJECT:
+        bound.left = m_pTexture->m_TextureInfo.Type.Object.m_uiBoundingXBegin;
+        bound.right = bound.left + m_pTexture->m_TextureInfo.Type.Object.m_uiBoundingXRange;
+        bound.top = m_pTexture->m_TextureInfo.Type.Object.m_uiBoundingYBegin;
+        bound.bottom = bound.top + m_pTexture->m_TextureInfo.Type.Object.m_uiBoundingYRange;
+        break;
+    default:
+        break;
     }
 }
 

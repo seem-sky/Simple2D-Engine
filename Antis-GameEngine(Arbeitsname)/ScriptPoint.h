@@ -5,24 +5,7 @@
 #include <string>
 #include "Unit.h"
 #include "Point.h"
-
-enum ScriptPointType
-{
-    SCRIPT_POINT_NONE,
-    SCRIPT_POINT_TELEPORT,
-};
-
-static ScriptPointType WrapToScriptPointType(UINT uiType)
-{
-    switch(uiType)
-    {
-    case 1:
-        return SCRIPT_POINT_TELEPORT;
-    case 0:
-    default:
-        return SCRIPT_POINT_NONE;
-    }
-}
+#include "WrapperFunctions.h"
 
 struct ScriptPointPrototype
 {

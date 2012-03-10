@@ -13,6 +13,4 @@ inline string to_string( const type & value)
     streamOut << value;
     return streamOut.str();
 }
-
-
 #endif;

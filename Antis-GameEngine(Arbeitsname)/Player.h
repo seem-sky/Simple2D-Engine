@@ -1,7 +1,8 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "Unit.h"
+#include <windows.h>
+#include <list>
 
 // key action ID
 enum
@@ -44,6 +45,9 @@ struct PlayerKeyAction
 
 typedef std::list<PlayerKeyAction*> KeyList;
 
+class Unit;
+class WorldObject;
+
 class Player
 {
 public:
@@ -61,6 +65,10 @@ public:
 
     // move player object
     void MovePlayer(int XMove, int YMove, UINT uiMoveMSec);
+
+    void UseCollissionObject();
+
+    bool CanUseObject(WorldObject* pWho);
 
 protected:
     std::string m_sLogLocationName;

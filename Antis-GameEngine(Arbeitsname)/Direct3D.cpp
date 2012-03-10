@@ -50,6 +50,8 @@ bool CDirect3D::Initialize(HWND hWnd, const UINT uiScreenWidth, const UINT uiScr
         ERROR_LOG(m_sLogLocationName + "Unable to create Direct3D Backbuffer.");
         return false;
     }
+
+    m_lpD3DDevice->SetRenderState(D3DRS_SCISSORTESTENABLE, true);
     return true;
 }
 

@@ -1,7 +1,7 @@
 #include "Map.h"
 #include "Game.h"
 #include "RessourceManager.h"
-#include <msxml2.h>
+#include <msxml.h>
 
 #import <msxml4.dll>
 
@@ -459,6 +459,25 @@ bool Map::IsPassable(UINT XPos, UINT YPos, PassabilityFlag MoveDirection)
     return true;
 }
 
+Point<UINT> Map::CalcPixToTile(Point<UINT> uiPos)
+{
+    Point<UINT> uiTileSize;
+    if (CGame *pGame = CGame::Get())
+    {
+        if (CGameInfo *pInfo = pGame->GetGameInfo())
+            pInfo->GetMapTileSize(uiTileSize.x , uiTileSize.y);
+    }
+
+    Point<UINT> uiTile = uiPos;
+    if (uiTileSize.x != 0)
+        uiTile.x = uiPos.x / uiTileSize.x;
+
+    if (uiTileSize.y != 0)
+        uiTile.y = uiPos.y / uiTileSize.y;
+
+    return uiTile;
+}
+
 /*#####
 ## MapLoadThread
 #####*/
@@ -550,7 +569,7 @@ MapLoadResult MapLoadThread::LoadInfo(std::string *sMapData)
     MSXML2::IXMLDOMDocument2Ptr pXMLDom = NULL;
     HRESULT hr;
 
-    hr = pXMLDom.CreateInstance(__uuidof(DOMDocument40));
+    hr = pXMLDom.CreateInstance(__uuidof(MSXML2::DOMDocument40));
     if (hr != S_OK)
         return MAP_RESULT_FAILED;
 
@@ -614,7 +633,7 @@ MapLoadResult MapLoadThread::LoadTiles(std::string *sMapData)
     MSXML2::IXMLDOMDocument2Ptr pXMLDom = NULL;
     HRESULT hr;
 
-    hr = pXMLDom.CreateInstance(__uuidof(DOMDocument40));
+    hr = pXMLDom.CreateInstance(__uuidof(MSXML2::DOMDocument40));
     if (hr != S_OK)
         return MAP_RESULT_FAILED;
 
@@ -726,7 +745,7 @@ MapLoadResult MapLoadThread::LoadLayerAndObjects(std::string *sMapData)
     MSXML2::IXMLDOMDocument2Ptr pXMLDom = NULL;
     HRESULT hr;
 
-    hr = pXMLDom.CreateInstance(__uuidof(DOMDocument40));
+    hr = pXMLDom.CreateInstance(__uuidof(MSXML2::DOMDocument40));
     if (hr != S_OK)
         return MAP_RESULT_FAILED;
 
@@ -877,7 +896,7 @@ MapLoadResult MapLoadThread::LoadLayerAndObjects(std::string *sMapData)
                         {
                         case OBJECT_TYPE_NPC:
                             pObject = new Unit(vLayerAndObjects.at(i).at(j)->m_GUID, Point<int>(vLayerAndObjects.at(i).at(j)->m_XPos, vLayerAndObjects.at(i).at(j)->m_YPos),
-                                (DIRECTION)vLayerAndObjects.at(i).at(j)->m_uiDirection, (WALKMODE)vLayerAndObjects.at(i).at(j)->m_uiWalkmode);
+                                WrapToDirection(vLayerAndObjects.at(i).at(j)->m_uiDirection), WrapToWalkmode(vLayerAndObjects.at(i).at(j)->m_uiWalkmode));
                             break;
                         case OBJECT_TYPE_MAP_OBJECT:
                         default:
@@ -915,7 +934,7 @@ MapLoadResult MapLoadThread::LoadScriptPoints(std::string *sMapData)
     MSXML2::IXMLDOMDocument2Ptr pXMLDom = NULL;
     HRESULT hr;
 
-    hr = pXMLDom.CreateInstance(__uuidof(DOMDocument40));
+    hr = pXMLDom.CreateInstance(__uuidof(MSXML2::DOMDocument40));
     if (hr != S_OK)
         return MAP_RESULT_FAILED;
 

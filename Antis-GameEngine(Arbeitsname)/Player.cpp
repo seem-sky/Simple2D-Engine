@@ -2,14 +2,15 @@
 #include "Logfile.h"
 #include "DirectInput.h"
 #include "Game.h"
+#include "Unit.h"
 
 Player::Player(void) : m_uiMoveBuffer(MOVE_BUFFER_NONE), m_uiLockBuffer(MOVE_BUFFER_NONE)
 {
     m_sLogLocationName = LOGFILE_ENGINE_LOG_NAME + "Player : ";
-    AddKeyAction(DIK_W, 1);
-    AddKeyAction(DIK_S, 2);
-    AddKeyAction(DIK_D, 3);
-    AddKeyAction(DIK_A, 4);
+    AddKeyAction(DIK_W, ACTION_MOVE_UP);
+    AddKeyAction(DIK_S, ACTION_MOVE_DOWN);
+    AddKeyAction(DIK_D, ACTION_MOVE_RIGHT);
+    AddKeyAction(DIK_A, ACTION_MOVE_LEFT);
     AddKeyAction(DIK_ESCAPE, ACTION_ESCAPE);
     AddKeyAction(DIK_RETURN, ACTION_ENTER);
     AddKeyAction(DIK_P, ACTION_PAUSE_GAME);
@@ -57,6 +58,26 @@ void Player::SetControledUnit(Unit *pWho)
         m_pControledUnit = pWho;
         pWho->SetPlayerControle();
         BASIC_LOG(m_sLogLocationName + "Changes controle to Object with GUID " + to_string(pWho->GetGUID())+".");
+        // set screen center to controled unit
+        if (CGame *pGame = CGame::Get())
+        {
+            if (CGameInfo *pInfo = pGame->GetGameInfo())
+            {
+                Point<UINT> ScreenSize;
+                pInfo->GetWindowSize(ScreenSize.x, ScreenSize.y);
+                Point<int> UnitPos = pWho->GetPosition();
+                Point<UINT> UnitSize;
+                pWho->GetObjectSize(UnitSize.x, UnitSize.y);
+                Point<int> MapPos;
+                if (Map *pMap = pWho->GetMap())
+                {
+                    /*MapPos = pMap->GetPosition();*/
+                    MapPos.x = ScreenSize.x / 2 - UnitPos.x - UnitSize.x / 2;
+                    MapPos.y = ScreenSize.y / 2 - UnitPos.y - UnitSize.y / 2;
+                    pMap->ChangePosition(MapPos);
+                }
+            }
+        }
     }
     else
         ERROR_LOG(m_sLogLocationName + "Unable to change controle. Object is not valid");
@@ -94,12 +115,43 @@ void Player::DoActionForKey(PlayerKeyAction *action, const ULONGLONG CurTime)
             }
         }
 
+        // if textbox is shown
+        if (pGame->ShowsTextbox())
+        {
+            if (action->m_uiLastTimeActive + 250 < CurTime)
+            {
+                TextBox *pBox = pGame->GetShownTextbox();
+                if (!pBox)
+                    return;
+
+                switch (action->m_uiActionID)
+                {
+                case ACTION_MOVE_UP:
+                    break;
+                case ACTION_MOVE_DOWN:
+                    break;
+                case ACTION_MOVE_RIGHT:
+                    break;
+                case ACTION_MOVE_LEFT:
+                    break;
+                case ACTION_ENTER:
+                    pBox->Use();
+                    break;
+                case ACTION_NONE:
+                default:
+                    break;
+                }
+                action->m_uiLastTimeActive = CurTime;
+            }
+        }
+
         // if menu is shown
-        if (pGame->ShowsMenu())
+        else if (pGame->ShowsMenu())
         {
             Menu *pMenu = pGame->GetShownMenu();
             if (!pMenu)
                 return;
+
             if (action->m_uiLastTimeActive + 250 < CurTime)
             {
                 switch (action->m_uiActionID)
@@ -131,7 +183,7 @@ void Player::DoActionForKey(PlayerKeyAction *action, const ULONGLONG CurTime)
             }
         }
 
-        // if no menu is shown
+        // if no menu and textbox is shown
         else
         {
             switch (action->m_uiActionID)
@@ -160,6 +212,7 @@ void Player::DoActionForKey(PlayerKeyAction *action, const ULONGLONG CurTime)
                         pGame->DisplayMenu(new MenuMainMenu(false, true));
                         break;
                     case ACTION_ENTER:
+                        UseCollissionObject();
                         break;
                     default:
                         break;
@@ -176,7 +229,6 @@ void Player::MovePlayer(int XMove, int YMove, UINT uiMoveMsec)
 {
     if (m_pControledUnit && !m_pControledUnit->IsMoving())
     {
-        m_pControledUnit->MovePosition(XMove, YMove, uiMoveMsec);
         DIRECTION dir = DIRECTION_NONE;
         if (XMove > 0)
             dir = DIRECTION_RIGHT;
@@ -186,10 +238,7 @@ void Player::MovePlayer(int XMove, int YMove, UINT uiMoveMsec)
             dir = DIRECTION_DOWN;
         else if (YMove < 0)
             dir = DIRECTION_UP;
-
-        // if another direction than before, set it.
-        if (dir != m_pControledUnit->GetDirection())
-            m_pControledUnit->SetDirection(dir);
+        m_pControledUnit->MovePosition(XMove, YMove, dir, uiMoveMsec);
     }
 }
 
@@ -255,4 +304,101 @@ void Player::MovePlayerByBuffer()
         MovePlayer(0, m_pControledUnit->GetMovementSpeed(), 100);
         m_uiLockBuffer = MOVE_BUFFER_DOWN;
     }
+}
+
+void Player::UseCollissionObject()
+{
+    if (!m_pControledUnit)
+        return;
+
+    ObjectLayer *pLayer = m_pControledUnit->GetOwnerLayer();
+    if (!pLayer)
+        return;
+
+    const WorldObjectList *pList = pLayer->GetObjectsOnLayer();
+    if (!pList)
+        return;
+
+    for (WorldObjectList::const_iterator itr = pList->begin(); itr != pList->end(); ++itr)
+    {
+        if (*itr == m_pControledUnit)
+            continue;
+
+        if (CanUseObject(*itr))
+        {
+            ObjectAI* pAI = (*itr)->GetAI();
+            if (!pAI)
+                return;
+
+            pAI->OnUse(this);
+        }
+    }
+}
+
+bool Player::CanUseObject(WorldObject *pWho)
+{
+    if (!m_pControledUnit || !pWho)
+        return false;
+
+    DIRECTION playerDir = m_pControledUnit->GetDirection();
+    Point<int> objPos = m_pControledUnit->GetPosition();
+    RECT objBounding = { 0, 0, 0, 0 };
+    m_pControledUnit->GetBoundingRect(objBounding);
+
+    Point<int> whoPos = pWho->GetPosition();
+    UINT whoXSize = 0, whoYSize = 0;
+    RECT whoBounding = { 0, 0, 0, 0 };
+    pWho->GetBoundingRect(whoBounding);
+
+    switch(playerDir)
+    {
+    case DIRECTION_UP:
+        if ((whoPos.y + whoBounding.bottom) - (objPos.y + objBounding.top) == 0)
+        {
+            if ((whoPos.x + whoBounding.left <= objPos.x + objBounding.left && whoPos.x + whoBounding.right >= objPos.x + objBounding.left) ||
+            // bottom left edge of Obj is in point
+            (whoPos.x + whoBounding.left <= objPos.x + objBounding.right && whoPos.x + whoBounding.right >= objPos.x + objBounding.right) ||
+            // left side without edges is in point
+            (whoPos.x + whoBounding.left >= objPos.x + objBounding.left && whoPos.x + whoBounding.right <= objPos.x + objBounding.right))
+                return true;
+        }
+        break;
+    case DIRECTION_DOWN:
+        if ((whoPos.y + whoBounding.top) - (objPos.y + objBounding.bottom) == 0)
+        {
+            if ((whoPos.x + whoBounding.left <= objPos.x + objBounding.left && whoPos.x + whoBounding.right >= objPos.x + objBounding.left) ||
+            // bottom left edge of Obj is in point
+            (whoPos.x + whoBounding.left <= objPos.x + objBounding.right && whoPos.x + whoBounding.right >= objPos.x + objBounding.right) ||
+            // left side without edges is in point
+            (whoPos.x + whoBounding.left >= objPos.x + objBounding.left && whoPos.x + whoBounding.right <= objPos.x + objBounding.right))
+                return true;
+        }
+        break;
+    case DIRECTION_RIGHT:
+        if ((whoPos.x + whoBounding.left) - (objPos.x + objBounding.right) == 0)
+        {
+            if ((whoPos.y + whoBounding.top <= objPos.y + objBounding.top && whoPos.y + whoBounding.bottom >= objPos.y + objBounding.top) ||
+            // bottom left edge of Obj is in point
+            (whoPos.y + whoBounding.top<= objPos.y + objBounding.bottom && whoPos.y + whoBounding.bottom >= objPos.y + objBounding.bottom) ||
+            // left side without edges is in point
+            (whoPos.y + whoBounding.top >= objPos.y + objBounding.top && whoPos.y + whoBounding.bottom <= objPos.y + objBounding.bottom))
+                return true;
+        }
+        break;
+    case DIRECTION_LEFT:
+        if ((whoPos.x + whoBounding.right) - (objPos.x + objBounding.left) == 0)
+        {
+            if ((whoPos.y + whoBounding.top <= objPos.y + objBounding.top && whoPos.y + whoBounding.bottom >= objPos.y + objBounding.top) ||
+            // bottom left edge of Obj is in point
+            (whoPos.y + whoBounding.top<= objPos.y + objBounding.bottom && whoPos.y + whoBounding.bottom >= objPos.y + objBounding.bottom) ||
+            // left side without edges is in point
+            (whoPos.y + whoBounding.top >= objPos.y + objBounding.top && whoPos.y + whoBounding.bottom <= objPos.y + objBounding.bottom))
+                return true;
+        }
+        break;
+    default:
+        return false;
+    }
+    
+    return false;
 }

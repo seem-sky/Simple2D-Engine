@@ -7,6 +7,7 @@
 #include "DirectInput.h"
 #include "Player.h"
 #include "Menu.h"
+#include "TextBox.h"
 
 // world class, add game code here
 class WorldSession
@@ -55,6 +56,17 @@ public:
     inline bool ShowsMenu() { return m_pShownMenu ? true : false; }
     inline Menu* GetShownMenu() { return m_pShownMenu; }
 
+    // textbox
+    TextBox* ShowTextbox(TextBox* pBox);
+    TextBox* ShowTextbox(std::string sMsg, UINT uiTextureID, Point<int> pos, Point<UINT> size, USHORT uiFontSize, USHORT uiBold, bool bItalic,
+                            std::string sFont, ShowLetterTime showLetter, bool ScrollAble);
+    // calc textbox size by screen size
+    TextBox* ShowTextbox(std::string sMsg, UINT uiTextureID, Point<int> pos, USHORT uiFontSize, USHORT uiBold, bool bItalic,
+                            std::string sFont, ShowLetterTime showLetter, bool ScrollAble);
+    void ShutDownTextbox();
+    inline bool ShowsTextbox() { return m_pShownTextBox ? true : false; }
+    inline TextBox* GetShownTextbox() { return m_pShownTextBox; }
+
 private:
     CGameInfo m_GameInfo;
     bool Test;
@@ -74,5 +86,7 @@ private:
     PlayerPtrList PlayerList;
 
     Player* pPlayer;
+
+    TextBox* m_pShownTextBox;
 };
 #endif;
