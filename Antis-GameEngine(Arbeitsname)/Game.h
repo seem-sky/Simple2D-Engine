@@ -46,7 +46,7 @@ public:
     inline void PauseGame(bool pause = true) { m_bPauseGame = pause; }
     inline bool IsGamePaused() { return m_bPauseGame; }
 
-    CGameInfo *GetGameInfo() { return &m_GameInfo; }
+    GameInfo *GetGameInfo() { return &m_GameInfo; }
 
     HRESULT ResetD3DXDevice(HWND hWnd);
 
@@ -68,7 +68,7 @@ public:
     inline TextBox* GetShownTextbox() { return m_pShownTextBox; }
 
 private:
-    CGameInfo m_GameInfo;
+    GameInfo m_GameInfo;
     bool Test;
 
     bool m_bGameClose;
@@ -89,4 +89,4 @@ private:
 
     TextBox* m_pShownTextBox;
 };
-#endif;
+#endif

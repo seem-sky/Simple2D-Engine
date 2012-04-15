@@ -15,7 +15,7 @@ CLogfile::~CLogfile()
     WriteMessage(m_sLogLocationName + LOGFILE_CLOSING_MESSAGE);
 }
 
-void CLogfile::WriteMessage(string sMessage)
+void CLogfile::WriteMessage(std::string sMessage)
 {
     sMessage += "\n";
     fopen_s(&Logfile, LOGFILE_FILENAME.c_str(), "a");
@@ -25,7 +25,7 @@ void CLogfile::WriteMessage(string sMessage)
     Logfile = NULL;
 }
 
-void CLogfile::WriteErrorMessage(string sMessage)
+void CLogfile::WriteErrorMessage(std::string sMessage)
 {
     sMessage = "ERROR! " + sMessage + "\n";
     fopen_s(&Logfile, LOGFILE_FILENAME.c_str(), "a");

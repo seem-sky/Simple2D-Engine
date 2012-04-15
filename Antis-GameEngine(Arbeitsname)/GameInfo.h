@@ -1,43 +1,40 @@
 #ifndef GAME_INFO_H
 #define GAME_INFO_H
 
-#include "FileInput.h"
-#include "DefaultIniData.h"
+#include "Point.h"
+#include "IniParser.h"
+#include "Logfile.h"
 
-const string GAME_DATA_GAME_INI = "Game.ini";
+const std::string GAME_DATA_GAME_INI = "Game/Game.ini";
 
-class CGameInfo : public TFileInput<CGameInfo>
+class GameInfo
 {
 public:
-    CGameInfo(void);
-    string GetProgramName() { return m_sProgramName; }
-    string GetDatabaseLocation() { return m_sDatabaseLocation; }
-    void GetWindowSize(unsigned int &XSize, unsigned int &YSize);
-    void GetMapTileSize(unsigned int &XSize, unsigned int &YSize);
+    GameInfo(void);
+    ~GameInfo();
+    std::string GetProgramName() { return m_sProgramName; }
+    std::string GetDatabaseLocation() { return m_sDatabaseLocation; }
+    Point<UINT> GetWindowSize() { return m_uiScreenSize; }
     bool IsWindowed() { return m_bWindowed; }
 
-    // create Game.ini with default stats
-    void CreateIniByDefault();
-    void SaveDataToIni();
+    Point<UINT> GetMapTileSize() { return m_uiMapTileSize; }
+
+    void SaveGameInfo();
 
 protected:
-    void InterpretFile();
-    std::vector<std::string>* GetFileData();
+    void ReadIni();
 
 private:
+    std::string m_sLogLocationName;
     // program name
-    string m_sProgramName;
+    std::string m_sProgramName;
     // screen resolution
-    unsigned int m_uiScreenWidth;
-    unsigned int m_uiScreenHeight;
+    Point<UINT> m_uiScreenSize;
     // map tile size
-    unsigned int m_uiMapTileSize_X;
-    unsigned int m_uiMapTileSize_Y;
+    Point<UINT> m_uiMapTileSize;
     // screen windowed?
     bool m_bWindowed;
     // spritefile store location
     std::string m_sDatabaseLocation;
-
-    std::vector<std::string> m_vData;
 };
-#endif;
+#endif

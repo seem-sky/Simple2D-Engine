@@ -9,7 +9,7 @@ CLogfile *m_pLogfile    = NULL;
 CTime *m_pTime          = NULL;
 CGame *m_pGame          = NULL;
 
-HRESULT InitWindow ( HINSTANCE hInstance, int nCmdShow, CGameInfo *GameInfo );
+HRESULT InitWindow ( HINSTANCE hInstance, int nCmdShow, GameInfo *GameInfo );
 LRESULT CALLBACK WndProc( HWND, UINT, WPARAM, LPARAM );
 void ReleaseObjects();
 
@@ -26,7 +26,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
         ReleaseObjects();
         return 0;
     }
-    string m_sLogLocationName  = LOGFILE_ENGINE_LOG_NAME + "main : ";
+    std::string m_sLogLocationName  = LOGFILE_ENGINE_LOG_NAME + "main : ";
 
     // create CGame and intepret game.ini
     m_pGame = CGame::Get();
@@ -150,7 +150,7 @@ LRESULT CALLBACK WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam 
 }
 
 //Erstellt das Main Window
-HRESULT InitWindow( HINSTANCE hInstance, int nCmdShow, CGameInfo *GameInfo )
+HRESULT InitWindow( HINSTANCE hInstance, int nCmdShow, GameInfo *GameInfo )
 {
     // Register class
     WNDCLASSEX wcex;
@@ -171,8 +171,8 @@ HRESULT InitWindow( HINSTANCE hInstance, int nCmdShow, CGameInfo *GameInfo )
 
     // Create window
     g_hInst = hInstance;
-    RECT rc = { 0, 0, 640, 480 };
-    GameInfo->GetWindowSize( (unsigned int &)rc.right, (unsigned int &)rc.bottom);
+    Point<UINT> windowSize = GameInfo->GetWindowSize();
+    RECT rc = { 0, 0, windowSize.x, windowSize.y };
     AdjustWindowRect( &rc, WS_OVERLAPPEDWINDOW, FALSE );
     g_hWnd = CreateWindow( "Engine", (LPCSTR)GameInfo->GetProgramName().c_str(), GameInfo->IsWindowed() ? (WS_OVERLAPPEDWINDOW | WS_VISIBLE) : (WS_EX_TOPMOST | WS_POPUP),
                            CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top, NULL, NULL, hInstance, NULL );

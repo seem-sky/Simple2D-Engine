@@ -7,12 +7,6 @@ CGame::CGame(void) : m_pDirect3D(NULL), m_pDirectInput(NULL), m_pWorldSession(NU
 {
     m_sLogLocationName  = LOGFILE_ENGINE_LOG_NAME + "CGame : ";
 
-    // read game ini data
-    if (!m_GameInfo.ReadFile(GAME_DATA_GAME_INI))
-        m_GameInfo.CreateIniByDefault();
-    else
-       BASIC_LOG(m_sLogLocationName + "Read and interpret " + GAME_DATA_GAME_INI + ".");
-
     Test = false;
 
     pPlayer = new Player();
@@ -35,9 +29,9 @@ GAMEINIT_STATE CGame::Initialize(HINSTANCE hInstance, HWND hWnd)
             return GAMEINIT_STATE_FAILED;
         }
 
-        UINT ScreenWidth = 0, ScreenHeight = 0;
-        GetGameInfo()->GetWindowSize(ScreenWidth, ScreenHeight);
-        if (!m_pDirect3D->Initialize(hWnd, ScreenWidth, ScreenHeight, GetGameInfo()->IsWindowed()))
+        Point<UINT> ScreenSize = GetGameInfo()->GetWindowSize();
+        
+        if (!m_pDirect3D->Initialize(hWnd, ScreenSize.x, ScreenSize.y, GetGameInfo()->IsWindowed()))
         {
             ERROR_LOG(m_sLogLocationName + "Unable to initialize Direct3D.");
             return GAMEINIT_STATE_FAILED;
@@ -168,9 +162,8 @@ HRESULT CGame::Draw()
             // if pause is pressed, show a font on screen
             if (IsGamePaused())
             {
-                UINT x = 0, y = 0;
-                m_GameInfo.GetWindowSize(x, y);
-                RECT rect = { 0, y / 2 -74, x, y };
+                Point<UINT> WindowSize = m_GameInfo.GetWindowSize();
+                RECT rect = { 0, WindowSize.y / 2 -74, WindowSize.x, WindowSize.y };
                 DirectFont::DrawFont("Pause", rect, D3DXCOLOR(0.25f, 0.4f, 1, 1), 74, 1000, "Comic Sans MS");
             }
         }
@@ -219,10 +212,9 @@ HRESULT CGame::ResetD3DXDevice(HWND hWnd)
     if (!m_pDirect3D)
         return S_FALSE;
 
-    unsigned int xSize = 0, ySize = 0;
-    m_GameInfo.GetWindowSize(xSize, ySize);
+    Point<UINT> windowSize = m_GameInfo.GetWindowSize();
 
-    return m_pDirect3D->ResetDevice(hWnd, xSize, ySize, m_GameInfo.IsWindowed());
+    return m_pDirect3D->ResetDevice(hWnd, windowSize.x, windowSize.y, m_GameInfo.IsWindowed());
 }
 
 void CGame::DisplayMenu(Menu *pMenu)
@@ -261,8 +253,7 @@ TextBox* CGame::ShowTextbox(std::string sMsg, UINT uiTextureID, Point<int> pos, 
 TextBox* CGame::ShowTextbox(std::string sMsg, UINT uiTextureID, Point<int> pos, USHORT uiFontSize, USHORT uiBold, bool bItalic,
                             std::string sFont, ShowLetterTime showLetter, bool ScrollAble)
 {
-    Point<UINT> ScreenSize;
-    m_GameInfo.GetWindowSize(ScreenSize.x, ScreenSize.y);
+    Point<UINT> ScreenSize = m_GameInfo.GetWindowSize();
     Point<UINT> size(ScreenSize.x - (2*pos.x), ScreenSize.y - (pos.y + pos.x));
     return ShowTextbox(sMsg, uiTextureID, pos, size, uiFontSize, uiBold, bItalic, sFont, showLetter, ScrollAble);
 }

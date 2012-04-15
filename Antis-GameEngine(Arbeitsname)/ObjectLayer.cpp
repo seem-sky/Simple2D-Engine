@@ -69,7 +69,7 @@ bool ObjectLayer::IsObjectVisible(WorldObject *pObject)
         return false;
 
     // get game info (screen resolution)
-    CGameInfo *pGameInfo = NULL;
+    GameInfo *pGameInfo = NULL;
     if (CGame *pGame = CGame::Get())
     {
         if (!(pGameInfo = pGame->GetGameInfo()))
@@ -85,19 +85,18 @@ bool ObjectLayer::IsObjectVisible(WorldObject *pObject)
     pObject->GetObjectSize(XSize, YSize);
 
     // get screen resolution
-    UINT XScreenSize = 0, YScreenSize = 0;
-    pGameInfo->GetWindowSize(XScreenSize, YScreenSize);
+    Point<UINT> windowSize = pGameInfo->GetWindowSize();
 
     // check X Pos
     if ((int)(XPos + XSize) < 0)
         return false;
-    else if (XPos > (int)XScreenSize)
+    else if (XPos > (int)windowSize.x)
         return false;
 
     // check Y Pos
     if ((int)(YPos + YSize) < 0)
         return false;
-    else if (YPos > (int)YScreenSize)
+    else if (YPos > (int)windowSize.y)
         return false;
 
     return true;

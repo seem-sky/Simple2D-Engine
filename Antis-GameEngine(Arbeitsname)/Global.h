@@ -10,4 +10,4 @@ const std::string LOGFILE_ENGINE_LOG_NAME = "ENGINE::";
 #define HOUR            = 60;
 #define DAY             = 24;
 
-#endif;
+#endif

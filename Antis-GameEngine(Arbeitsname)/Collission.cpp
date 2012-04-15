@@ -23,10 +23,10 @@ bool Collission::CheckTileCollission(Unit* pWho, Point<int> oldPos, Point<int> n
     else if (oldPos.y > newPos.y)
         moveFlag = PASSABLE_UP;
 
-    UINT XTileSize = 0, YTileSize = 0;
+    Point<UINT> tileSize;
     if (CGame *pGame = CGame::Get())
-        if (CGameInfo *pInfo = pGame->GetGameInfo())
-            pInfo->GetMapTileSize(XTileSize, YTileSize);
+        if (GameInfo *pInfo = pGame->GetGameInfo())
+            tileSize = pInfo->GetMapTileSize();
 
     UINT XSize = 0, YSize = 0;
     pWho->GetObjectSize(XSize, YSize);
@@ -61,11 +61,11 @@ bool Collission::CheckTileCollission(Unit* pWho, Point<int> oldPos, Point<int> n
                 if (XMapPosEnd < 0)
                     result.x -= XMapPosEnd;
                 // right border
-                else if (XMapPosEnd > (int)(pInfo->m_uiX * XTileSize))
-                    result.x -= XMapPosEnd - pInfo->m_uiX * XTileSize;
+                else if (XMapPosEnd > (int)(pInfo->m_uiX * tileSize.x))
+                    result.x -= XMapPosEnd - pInfo->m_uiX * tileSize.x;
             }
 
-            for (int j = XMapPos / (int)XTileSize; moveFlag & PASSABLE_LEFT ? j >= XMapPosEnd / (int)XTileSize : j <= XMapPosEnd / (int)XTileSize;
+            for (int j = XMapPos / (int)tileSize.x; moveFlag & PASSABLE_LEFT ? j >= XMapPosEnd / (int)tileSize.x : j <= XMapPosEnd / (int)tileSize.x;
                 moveFlag & PASSABLE_LEFT ? j-- : j++)
             {
                 YMapPos = (int)(oldPos.y);
@@ -73,14 +73,14 @@ bool Collission::CheckTileCollission(Unit* pWho, Point<int> oldPos, Point<int> n
                     YMapPos *= -1;
 
                 bool bBreak = false;
-                for (UINT i = (YMapPos  + boundingRECT.top) / YTileSize; i <= (YMapPos + boundingRECT.bottom -1) / YTileSize; i++)
+                for (UINT i = (YMapPos  + boundingRECT.top) / tileSize.y; i <= (YMapPos + boundingRECT.bottom -1) / tileSize.y; i++)
                 {
                     if (!pMap->IsPassable((UINT)j , i, moveFlag))
                     {
                         bBreak = true;
-                        result.x = j * XTileSize - XMapPos;
+                        result.x = j * tileSize.x - XMapPos;
                         if (moveFlag & PASSABLE_LEFT)
-                            result.x += XTileSize;
+                            result.x += tileSize.x;
                         else
                             result.x -= 1;
 
@@ -113,11 +113,11 @@ bool Collission::CheckTileCollission(Unit* pWho, Point<int> oldPos, Point<int> n
                 if (YMapPosEnd < 0)
                     result.y -= YMapPosEnd;
                 // right border
-                else if (YMapPosEnd > (int)(pInfo->m_uiY * YTileSize))
-                    result.y -= YMapPosEnd - pInfo->m_uiY * YTileSize;
+                else if (YMapPosEnd > (int)(pInfo->m_uiY * tileSize.y))
+                    result.y -= YMapPosEnd - pInfo->m_uiY * tileSize.y;
             }
 
-            for (int j = YMapPos / (int)YTileSize; moveFlag & PASSABLE_UP ? j >= YMapPosEnd / (int)YTileSize : j <= YMapPosEnd / (int)YTileSize;
+            for (int j = YMapPos / (int)tileSize.y; moveFlag & PASSABLE_UP ? j >= YMapPosEnd / (int)tileSize.y : j <= YMapPosEnd / (int)tileSize.y;
                 moveFlag & PASSABLE_UP ? j-- : j++)
             {
                 XMapPos = (int)(oldPos.x);
@@ -125,14 +125,14 @@ bool Collission::CheckTileCollission(Unit* pWho, Point<int> oldPos, Point<int> n
                     XMapPos *= -1;
 
                 bool bBreak = false;
-                for (UINT i = (XMapPos + boundingRECT.left) / XTileSize; i <= (XMapPos + boundingRECT.right-1) / XTileSize; i++)
+                for (UINT i = (XMapPos + boundingRECT.left) / tileSize.x; i <= (XMapPos + boundingRECT.right-1) / tileSize.x; i++)
                 {
                     if (!pMap->IsPassable(i, (UINT)j, moveFlag))
                     {
                         bBreak = true;
-                        result.y = j * YTileSize - YMapPos;
+                        result.y = j * tileSize.y - YMapPos;
                         if (moveFlag & PASSABLE_UP)
-                            result.y += YTileSize;
+                            result.y += tileSize.y;
                         else
                             result.y -= 1;
 

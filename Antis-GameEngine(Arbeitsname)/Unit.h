@@ -43,6 +43,7 @@ public:
 
     // animation
     void UpdateAnimation(const ULONGLONG uiCurTime, const UINT uiDiff);
+    void FacingObject(WorldObject *pWho);
     void SetToStartSector();
     virtual void SetAnimationTime(ANIMATION_TIME time) { m_uiAnimationTime = time; }
     inline void SetDirection(DIRECTION dir)

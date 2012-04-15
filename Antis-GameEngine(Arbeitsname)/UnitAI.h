@@ -15,5 +15,8 @@ public:
 
     // movement
     void OnPathComplete();
+
+    // 
+    virtual void OnUse(Player *pWho);
 };
 #endif;

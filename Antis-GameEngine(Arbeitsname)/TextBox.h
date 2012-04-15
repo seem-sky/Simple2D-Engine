@@ -4,6 +4,20 @@
 #include "Point.h"
 #include "Texture.h"
 #include "DirectFont.h"
+#include <vector>
+#include <list>
+
+struct TextChoice
+{
+    TextChoice(std::string sText)
+    {
+        m_sText = sText;
+    }
+
+    std::string m_sText;
+};
+
+typedef std::list<TextChoice> ChoiceList;
 
 class TextBox
 {
@@ -35,19 +49,21 @@ public:
 
     void SetAnimation(Point<int> moveTo, UINT uiTimeInMsec);
 
-    bool CanUsed();
     bool AnimationFinished();
     bool AllLettersShown();
-    bool IsScrolling();
-
-    void Use();
+    inline bool IsScrolling() { return m_bIsScrolling; }
     inline bool CanScroll() { return m_bScrollText; }
+
+    bool CanUsed();
+    void Use();
+
+    void MoveTextToLine(UINT uiLine, UINT uiTimePerLine);
 
 protected:
     virtual void DrawTextboxPic();
     virtual void DrawTextboxMsg();
 
-    void ConvertMsg();
+    void ConvertMsg(std::string sText);
 
     std::string m_sLogLocationName;
 
@@ -55,9 +71,11 @@ private:
     Point<int> m_Position;
     Point<UINT> m_uiSize;
 
+    ChoiceList m_ChoiceLIST;
+
     DirectFont m_DirectFont;
 
-    std::string m_sTextMsg;
+    std::vector<std::string> m_TextMsg;
     TextureSource* m_pTexture;
 
     bool m_bScrollText;
@@ -74,7 +92,6 @@ private:
     UINT m_uiShownLetterTime;
 
     // scrolling
-    UINT m_uiRows;
     int m_MsgYPos;
     int m_NewMsgYPos;
     int m_StartMsgYPos;
@@ -82,6 +99,7 @@ private:
     UINT m_uiCurRowShown;
     UINT m_uiScrollTime;
     UINT m_uiScroll_Timer;
+    bool m_bIsScrolling;
 
     // side
     UINT m_uiMaxRowsShown;

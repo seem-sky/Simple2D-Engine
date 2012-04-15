@@ -4,17 +4,17 @@
 
 TextBox::TextBox(std::string sMsg, Point<int> pos, Point<UINT> size, UINT uiTextureID, USHORT uiLetterSize, USHORT uiBold, bool bItalic, std::string sFont,
                  ShowLetterTime showLetter, bool ScrollAble)
-: m_pTexture(NULL), m_sTextMsg(sMsg), m_Position(pos), m_uiSize(size), m_uiAniTime(0), m_uiStartAniTime(0), m_LetterTimer(showLetter),
-m_uiShownLetterTime(showLetter), m_uiShownLetters(0), m_uiRows(0), m_MsgYPos(0), m_uiCurRow(0), m_NewMsgYPos(0), m_uiScrollTime(0), m_uiScroll_Timer(0),
-m_uiCurRowShown(0), m_StartMsgYPos(0), m_bScrollText(ScrollAble), m_bNextSide(false), m_DirectFont(uiLetterSize, uiBold, sFont, bItalic)
+: m_pTexture(NULL), m_Position(pos), m_uiSize(size), m_uiAniTime(0), m_uiStartAniTime(0), m_LetterTimer(showLetter),
+m_uiShownLetterTime(showLetter), m_uiShownLetters(0), m_MsgYPos(0), m_NewMsgYPos(0), m_uiCurRow(0), m_uiScrollTime(0), m_uiScroll_Timer(0),
+m_uiCurRowShown(0), m_StartMsgYPos(0), m_bScrollText(ScrollAble), m_bIsScrolling(false), m_bNextSide(false), m_DirectFont(uiLetterSize, uiBold, sFont, bItalic)
 {
     m_sLogLocationName = LOGFILE_ENGINE_LOG_NAME + "Textbox : ";
     if (uiTextureID)
         SetTexture(uiTextureID);
-    ConvertMsg();
+    ConvertMsg(sMsg);
 
     // show letter instant is useless for scrolling if text has more lines than can draw
-    if (m_LetterTimer == SHOW_LETTER_INSTANT && CanScroll() && (m_uiSize.y - 2*GetTexturBorderSize()) / m_DirectFont.GetFontSize() < m_uiRows)
+    if (m_LetterTimer == SHOW_LETTER_INSTANT && CanScroll() && (m_uiSize.y - 2*GetTexturBorderSize()) / m_DirectFont.GetFontSize() < m_TextMsg.size())
     {
         m_LetterTimer = SHOW_LETTER_VERY_FAST;
         m_uiShownLetterTime = SHOW_LETTER_VERY_FAST;
@@ -24,6 +24,11 @@ m_uiCurRowShown(0), m_StartMsgYPos(0), m_bScrollText(ScrollAble), m_bNextSide(fa
     UINT borderSize = GetTexturBorderSize();
     m_MsgYPos += borderSize;
     m_uiMaxRowsShown = (m_uiSize.y- 2*borderSize)/ m_DirectFont.GetFontSize();
+
+    //m_ChoiceLIST.push_back(TextChoice("Test1"));
+    //m_ChoiceLIST.push_back(TextChoice("Test2"));
+    //m_ChoiceLIST.push_back(TextChoice("Test3"));
+    //m_ChoiceLIST.push_back(TextChoice("Test4"));
 }
 
 TextBox::~TextBox(void)
@@ -90,7 +95,7 @@ void TextBox::DrawTextboxPic()
 
 void TextBox::DrawTextboxMsg()
 {
-    if (m_sTextMsg.empty())
+    if (m_TextMsg.empty())
         return;
 
     CDirect3D *pDirect3D = CDirect3D::Get();
@@ -98,8 +103,14 @@ void TextBox::DrawTextboxMsg()
         return;
 
     UINT uiBorderSize = GetTexturBorderSize();
-
-    std::string sMsg = m_sTextMsg.substr(0, m_uiShownLetters+1);
+    std::string sMsg;
+    for (UINT uiRow = 0; uiRow <= m_uiCurRow; ++uiRow)
+    {
+        if (uiRow == m_uiCurRow)
+            sMsg += m_TextMsg.at(uiRow).substr(0, m_uiShownLetters);
+        else
+            sMsg += m_TextMsg.at(uiRow);
+    }
 
     RECT pos = {m_Position.x + uiBorderSize, m_Position.y + uiBorderSize, m_Position.x + m_uiSize.x - uiBorderSize, m_Position.y + m_uiSize.y - uiBorderSize };
     // set scissor rect to msgbox area
@@ -115,16 +126,23 @@ void TextBox::DrawTextboxMsg()
     LPD3DXSPRITE pSprite = pDirect3D->GetSpriteForDraw();
 
     pos.top = m_MsgYPos;
+
+    //// add all choice to sMsg
+    //if (AllLettersShown() && !IsScrolling())
+    //{
+    //    for (ChoiceList::iterator itr = m_ChoiceLIST.begin(); itr != m_ChoiceLIST.end(); ++itr)
+    //        sMsg += "\n" + itr->m_sText;
+    //}
+
     m_DirectFont.DrawFont(sMsg, pos, D3DXCOLOR(0.5f, 0.4f, 0.6f, 1), pSprite, DT_LEFT);
 
     pDirect3D->EndSpriteDraw();
     // set scissor rect to window size
     if (CGame *pGame = CGame::Get())
     {
-        if (CGameInfo *pInfo = pGame->GetGameInfo())
+        if (GameInfo *pInfo = pGame->GetGameInfo())
         {
-            Point<UINT> ScreenSize;
-            pInfo->GetWindowSize(ScreenSize.x, ScreenSize.y);
+            Point<UINT> ScreenSize = pInfo->GetWindowSize();
             pRect.left = 0;
             pRect.top = 0;
             pRect.right = ScreenSize.x;
@@ -196,51 +214,60 @@ void TextBox::Update(const ULONGLONG time, const UINT uiDiff)
         {
             if (m_LetterTimer == SHOW_LETTER_INSTANT)
             {
-                UINT uiNCounter = 0;
-                while(uiNCounter < m_uiMaxRowsShown)
-                {
-                    // if is new line
-                    if (m_sTextMsg.at(m_uiShownLetters) == 10)
-                        uiNCounter++;
+                //UINT uiNCounter = 0;
+                //while(uiNCounter < m_uiMaxRowsShown)
+                //{
+                //    // if is new line
+                //    if (m_sTextMsg.at(m_uiShownLetters) == 10)
+                //        uiNCounter++;
 
-                    m_uiShownLetters++;
-                    if (m_uiShownLetters >= m_sTextMsg.size())  
-                        return;
-                }
-                m_uiCurRow += uiNCounter;
-                m_bNextSide = true;
+                //    m_uiShownLetters++;
+                //    if (m_uiShownLetters >= m_sTextMsg.size())  
+                //        return;
+                //}
+                //m_uiCurRow += uiNCounter;
+                //m_bNextSide = true;
             }
             else
             {
-                if (m_uiShownLetterTime < uiDiff)
+                if (!IsScrolling())
                 {
-                    m_uiShownLetterTime = m_LetterTimer;
-                    m_uiShownLetters++;
-
-                    // update rows
-                    if (m_sTextMsg.at(m_uiShownLetters) == 10)
+                    if (m_uiShownLetterTime < uiDiff)
                     {
-                        m_uiCurRow++;
-                        if (CanScroll())
+                        m_uiShownLetterTime = m_LetterTimer;
+                        m_uiShownLetters++;
+
+                        // update rows
+                        if (m_TextMsg.at(m_uiCurRow).size() <= m_uiShownLetters && m_TextMsg.size()-1 > m_uiCurRow)
                         {
-                            if (m_uiSize.y / m_DirectFont.GetFontSize() <= (m_uiCurRow+2)-m_uiCurRowShown && m_uiCurRow < m_uiRows)
+                            m_uiShownLetters = 0;
+                            m_uiCurRow++;
+                            if (CanScroll())
                             {
-                                m_uiCurRowShown++;
-                                m_uiScrollTime = 500;
-                                m_uiScroll_Timer = m_uiScrollTime;
-                                m_NewMsgYPos = m_MsgYPos - m_DirectFont.GetFontSize();
-                                m_StartMsgYPos = m_MsgYPos;
+                                if (m_uiSize.y / m_DirectFont.GetFontSize() <= (m_uiCurRow+2)-m_uiCurRowShown && m_uiCurRow < m_TextMsg.size()-1)
+                                    MoveTextToLine(m_uiCurRowShown+1, 500);
+                            }
+                            else
+                            {
+                                if (m_uiCurRow - m_uiCurRowShown >= m_uiMaxRowsShown)
+                                    m_bNextSide = true;
                             }
                         }
-                        else
+
+                        // if all letters shown and choice list not empty
+                        if (AllLettersShown() && !m_ChoiceLIST.empty())
                         {
-                            if (m_uiCurRow - m_uiCurRowShown >= m_uiMaxRowsShown)
-                                m_bNextSide = true;
+                            m_uiCurRow += 2;
+                            m_uiCurRowShown += 2;
+                            m_uiScrollTime += 1000;
+                            m_uiScroll_Timer += m_uiScrollTime;
+                            m_NewMsgYPos = m_MsgYPos - (2*m_DirectFont.GetFontSize());
+                            m_StartMsgYPos = m_MsgYPos;
                         }
                     }
+                    else
+                        m_uiShownLetterTime -= uiDiff;      
                 }
-                else
-                    m_uiShownLetterTime -= uiDiff;      
             }
         }
 
@@ -253,6 +280,8 @@ void TextBox::Update(const ULONGLONG time, const UINT uiDiff)
                 m_uiScroll_Timer = 0;
                 m_uiScrollTime = 0;
                 m_StartMsgYPos = 0;
+                m_NewMsgYPos = 0;
+                m_bIsScrolling = false;
             }
             else
             {
@@ -297,10 +326,10 @@ bool TextBox::AnimationFinished()
 
 bool TextBox::AllLettersShown()
 {
-    if (m_uiShownLetters < m_sTextMsg.size()-1)
-        return false;
+    if (m_TextMsg.at(m_uiCurRow).size() <= m_uiShownLetters && m_TextMsg.size()-1 <= m_uiCurRow)
+        return true;
 
-    return true;
+    return false;
 }
 
 void TextBox::Use()
@@ -311,42 +340,38 @@ void TextBox::Use()
     // if is side system
     if (!CanScroll())
     {
-        if (m_bNextSide)
-        {
-            m_MsgYPos -= m_uiMaxRowsShown*m_DirectFont.GetFontSize();
-            m_bNextSide = false;
-            m_uiCurRow++;
-            m_uiCurRowShown = m_uiCurRow;
-            return;
-        }
-        else if (m_uiShownLetters < m_sTextMsg.size())
-        {
-            UINT uiNCounter = m_uiCurRow-m_uiCurRowShown;
-            while(uiNCounter < m_uiMaxRowsShown)
-            {
-                // if is new line
-                if (m_sTextMsg.at(m_uiShownLetters) == 10)
-                    uiNCounter++;
+        //if (m_bNextSide)
+        //{
+        //    m_MsgYPos -= m_uiMaxRowsShown*m_DirectFont.GetFontSize();
+        //    m_bNextSide = false;
+        //    m_uiCurRow++;
+        //    m_uiCurRowShown = m_uiCurRow;
+        //    return;
+        //}
+        //else if (m_uiShownLetters < m_sTextMsg.size())
+        //{
+        //    UINT uiNCounter = m_uiCurRow-m_uiCurRowShown;
+        //    while(uiNCounter < m_uiMaxRowsShown)
+        //    {
+        //        // if is new line
+        //        if (m_sTextMsg.at(m_uiShownLetters) == 10)
+        //            uiNCounter++;
 
-                m_uiShownLetters++;
-                if (m_uiShownLetters >= m_sTextMsg.size())  
-                    return;
-            }
-            m_uiCurRow += uiNCounter;
-            m_bNextSide = true;
-            return;
-        }
+        //        m_uiShownLetters++;
+        //        if (m_uiShownLetters >= m_sTextMsg.size())  
+        //            return;
+        //    }
+        //    m_uiCurRow += uiNCounter;
+        //    m_bNextSide = true;
+        //    return;
+        //}
     }
-    // if its scroll system and is scrolling atm
-    else if (!AllLettersShown() || IsScrolling())
+    // if its scroll system
+    else if (CanScroll() && !AllLettersShown())
     {
-        m_uiShownLetters = m_sTextMsg.size()-1;
-        m_MsgYPos = m_Position.y;
-        UINT borderSize = GetTexturBorderSize();
-        if (m_uiRows+1 > (m_uiSize.y-borderSize*2) / m_DirectFont.GetFontSize())
-            m_MsgYPos -= m_DirectFont.GetFontSize() * ((m_uiRows+1) - (m_uiSize.y-borderSize*2) / m_DirectFont.GetFontSize());
-
-        m_MsgYPos += borderSize;
+        m_uiShownLetters = m_TextMsg.at(m_TextMsg.size()-1).size();
+        m_uiCurRow = m_TextMsg.size()-1;
+        MoveTextToLine(m_uiCurRow+1 - (m_uiSize.y-2*GetTexturBorderSize()) / m_DirectFont.GetFontSize(), 0);
         return;
     }
 
@@ -354,20 +379,18 @@ void TextBox::Use()
             pGame->ShutDownTextbox();
 }
 
-void TextBox::ConvertMsg()
+void TextBox::ConvertMsg(std::string sText)
 {
-    if (m_sTextMsg.empty())
-        return;
-
     RECT size = {0,0,0,0};
     std::string sSub;
     UINT borderSize = GetTexturBorderSize();
-    UINT lastBreak = 0;
-    while(lastBreak < m_sTextMsg.size())
+    while(!sText.empty())
     {
-        sSub = m_sTextMsg.substr(lastBreak, m_sTextMsg.find(10, lastBreak)-lastBreak);
+        if (sText.find(10) < sText.size())
+            sSub = sText.substr(0, sText.find(10)+1);
+        else
+            sSub = sText;
 
-        // if the "new line" signe is in range for the next line
         m_DirectFont.DrawFont(sSub, size, D3DXCOLOR(1, 1, 1, 1), NULL, DT_CALCRECT);
         while ((UINT)size.right > m_uiSize.x - 2*borderSize)
         {
@@ -378,19 +401,31 @@ void TextBox::ConvertMsg()
             sSub = sSub.substr(0, sSub.find_last_of(32));
             m_DirectFont.DrawFont(sSub, size, D3DXCOLOR(1, 1, 1, 1), NULL, DT_CALCRECT);
         }
-        lastBreak += sSub.size()+1;
-        if (lastBreak-1 < m_sTextMsg.size())
+        
+        if (!sSub.empty())
         {
-            m_sTextMsg.at(lastBreak-1) = 10;
-            m_uiRows++;
+            sText.erase(0, sSub.size());
+            if (sSub.at(sSub.size()-1) != 10 && !sText.empty() && sText.at(0) == 32)
+            {
+                sSub.push_back(10);
+                sText.erase(0,1);
+            }
+            m_TextMsg.push_back(sSub);
         }
     }
 }
 
-bool TextBox::IsScrolling()
+void TextBox::MoveTextToLine(UINT uiLine, UINT uiTimePerLine)
 {
-    if (m_uiScrollTime)
-        return true;
+    int LineDiff = uiLine-m_uiCurRowShown;
+    m_uiCurRowShown = uiLine;
+    // set scroll time
+    m_uiScrollTime = LineDiff > 0 ? uiTimePerLine*LineDiff : (-1)*uiTimePerLine*LineDiff;
+    m_uiScroll_Timer = m_uiScrollTime;
 
-    return false;
+    // set position
+    m_NewMsgYPos = m_Position.y + GetTexturBorderSize() - (m_DirectFont.GetFontSize()*uiLine);
+    m_StartMsgYPos = m_MsgYPos;
+
+    m_bIsScrolling = true;
 }

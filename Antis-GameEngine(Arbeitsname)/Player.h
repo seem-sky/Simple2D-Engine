@@ -70,6 +70,8 @@ public:
 
     bool CanUseObject(WorldObject* pWho);
 
+    inline Unit* GetControledUnit() { return m_pControledUnit; }
+
 protected:
     std::string m_sLogLocationName;
 

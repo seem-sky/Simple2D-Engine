@@ -39,6 +39,6 @@ protected:
 
     static DWORD WINAPI ThreadEntry (void *pArg);
 
-    Thread          _thread;
+    Thread _thread;
 };
-#endif;
+#endif

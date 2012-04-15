@@ -61,10 +61,9 @@ void Player::SetControledUnit(Unit *pWho)
         // set screen center to controled unit
         if (CGame *pGame = CGame::Get())
         {
-            if (CGameInfo *pInfo = pGame->GetGameInfo())
+            if (GameInfo *pInfo = pGame->GetGameInfo())
             {
-                Point<UINT> ScreenSize;
-                pInfo->GetWindowSize(ScreenSize.x, ScreenSize.y);
+                Point<UINT> ScreenSize = pInfo->GetWindowSize();
                 Point<int> UnitPos = pWho->GetPosition();
                 Point<UINT> UnitSize;
                 pWho->GetObjectSize(UnitSize.x, UnitSize.y);

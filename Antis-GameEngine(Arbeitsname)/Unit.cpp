@@ -153,3 +153,36 @@ void Unit::SetObjectInfo(const ObjectPrototype *pInfo)
         break;
     }
 }
+
+void Unit::FacingObject(WorldObject *pWho)
+{
+    if (!pWho)
+        return;
+
+    Point<int> iThisPos = GetPosition();
+    Point<int> iObjPos = pWho->GetPosition();
+
+    Point<int> iDiff = iThisPos - iObjPos;
+    const Point<int> iDiffCheck = iThisPos - iObjPos;
+
+    if (iDiff.x < 0)
+        iDiff.x *= -1;
+
+    if (iDiff.y < 0)
+        iDiff.y *= -1;
+
+    if (iDiff.x > iDiff.y)
+    {
+        if (iDiffCheck.x > 0)
+            SetDirection(DIRECTION_LEFT);
+        else
+            SetDirection(DIRECTION_RIGHT);
+    }
+    else
+    {
+        if (iDiffCheck.y > 0)
+            SetDirection(DIRECTION_UP);
+        else
+            SetDirection(DIRECTION_DOWN);
+    }
+}

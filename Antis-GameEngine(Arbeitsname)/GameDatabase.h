@@ -281,4 +281,4 @@ private:
     // add new MapPrototype to MapDatabase
     void AddMapToDatabase(MapPrototype proto);
 };
-#endif;
+#endif

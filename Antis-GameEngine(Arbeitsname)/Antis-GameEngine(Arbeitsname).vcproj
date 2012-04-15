@@ -345,10 +345,6 @@
 			Name="File In-/Output"
 			>
 			<File
-				RelativePath=".\FileInput.h"
-				>
-			</File>
-			<File
 				RelativePath=".\GameInfo.cpp"
 				>
 			</File>
@@ -356,14 +352,18 @@
 				RelativePath=".\GameInfo.h"
 				>
 			</File>
+			<File
+				RelativePath=".\IniParser.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\IniParser.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Controlling"
 			>
-			<File
-				RelativePath=".\DefaultIniData.h"
-				>
-			</File>
 			<File
 				RelativePath=".\Global.h"
 				>

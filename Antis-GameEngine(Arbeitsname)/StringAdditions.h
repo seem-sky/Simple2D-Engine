@@ -4,13 +4,11 @@
 #include <string>
 #include <sstream> 
 
-using namespace std;
-
-template< class type>
-inline string to_string( const type & value)
+template< class T>
+inline std::string to_string(const T &value)
 {
-    ostringstream streamOut;
+    std::ostringstream streamOut;
     streamOut << value;
     return streamOut.str();
 }
-#endif;
+#endif

@@ -180,8 +180,8 @@ bool Pathfinder::GetValidPath(Point<UINT> uiStartPos, Point<UINT> uiEndPos)
     USHORT lastDirCount = 1;
     Point<UINT> uiTileSize;
     if (CGame *pGame = CGame::Get())
-        if (CGameInfo *pInfo = pGame->GetGameInfo())
-            pInfo->GetMapTileSize(uiTileSize.x, uiTileSize.y);
+        if (GameInfo *pInfo = pGame->GetGameInfo())
+            uiTileSize = pInfo->GetMapTileSize();
 
     Point<int> uiStart;
     uiStart.x = (int)uiStartPos.x;

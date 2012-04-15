@@ -108,7 +108,7 @@ void Map::DrawMap()
     if (!pGame)
         return;
 
-    CGameInfo *pGameInfo = pGame->GetGameInfo();
+    GameInfo *pGameInfo = pGame->GetGameInfo();
     if (!pGameInfo)
         return;
 
@@ -121,10 +121,7 @@ void Map::DrawMap()
         return;
 
     // get screen resolution
-    UINT uiScreenWidth = 0;
-    UINT uiScreenHeight = 0;
-    pGameInfo->GetWindowSize(uiScreenWidth, uiScreenHeight);
-
+    Point<UINT> windowSize                  = pGameInfo->GetWindowSize();
     const MapInfo *MapInfo                  = GetMapInfo();
     const std::vector<MapTiles> *MapTiles   = GetMapTiles();
     // return if one of the info files are corrupt
@@ -134,17 +131,15 @@ void Map::DrawMap()
     Point<int> MapPosition = GetPosition();
 
     // get maptile size
-    UINT uiMapTileSize_X = 0;
-    UINT uiMapTileSize_Y = 0;
-    pGameInfo->GetMapTileSize(uiMapTileSize_X, uiMapTileSize_Y);
+    Point<UINT> tileSize = pGameInfo->GetMapTileSize();
 
     // get start pos left and up
     UINT startposX = 0;
     UINT startposY = 0;
     if (MapPosition.x < 0)
-        startposX = (UINT)((-1) * MapPosition.x / uiMapTileSize_X);
+        startposX = (UINT)((-1) * MapPosition.x / tileSize.x);
     if (MapPosition.y < 0)
-        startposY = (UINT)((-1) * MapPosition.y / uiMapTileSize_Y);
+        startposY = (UINT)((-1) * MapPosition.y / tileSize.y);
 
     // if startpos greater max map tiles, set to max map tiles
     if (startposX > MapInfo->m_uiX)
@@ -155,11 +150,11 @@ void Map::DrawMap()
     // get end pos right and bottom
     UINT endposX = 0;
     UINT endposY = 0;
-    if (MapPosition.x + MapInfo->m_uiX * uiMapTileSize_X > uiScreenWidth)
+    if (MapPosition.x + MapInfo->m_uiX * tileSize.x > windowSize.x)
     {
-        endposX = startposX + (uiScreenWidth/uiMapTileSize_X);
+        endposX = startposX + (windowSize.x/tileSize.x);
 
-        if ((UINT)MapPosition.x % uiMapTileSize_X)
+        if ((UINT)MapPosition.x % tileSize.x)
         {
             if (startposX > 0)
                 startposX--;
@@ -170,11 +165,11 @@ void Map::DrawMap()
     else
         endposX = MapInfo->m_uiX;
 
-    if (MapPosition.y + MapInfo->m_uiY * uiMapTileSize_Y > uiScreenHeight)
+    if (MapPosition.y + MapInfo->m_uiY * tileSize.y > windowSize.y)
     {
-        endposY = startposY + (uiScreenHeight/uiMapTileSize_Y);
+        endposY = startposY + (windowSize.y/tileSize.y);
 
-        if ((UINT)MapPosition.y % uiMapTileSize_Y)
+        if ((UINT)MapPosition.y % tileSize.y)
         {
             if (startposY > 0)
                 startposY--;
@@ -193,8 +188,8 @@ void Map::DrawMap()
     // iterate through layers
     for (UINT layer = 0; layer < MapTiles->size(); layer++)
     {
-        MapPosition.x = GetPositionX() + startposX * uiMapTileSize_X;
-        MapPosition.y = GetPositionY() + startposY * uiMapTileSize_Y;
+        MapPosition.x = GetPositionX() + startposX * tileSize.x;
+        MapPosition.y = GetPositionY() + startposY * tileSize.y;
 
         for (UINT i = startposY; i < endposY && startposX != endposX; ++i)
         {
@@ -224,10 +219,10 @@ void Map::DrawMap()
                             if (iAutoTile % 1000 == 0)
                             {
                                 iAutoTile /= 10;
-                                rSrcRect.left = ((iAutoTile/100-1) % 3) *uiMapTileSize_X;
-                                rSrcRect.right = rSrcRect.left + uiMapTileSize_X;
-                                rSrcRect.top = ((iAutoTile/100-1) / 3) *uiMapTileSize_Y;
-                                rSrcRect.bottom = rSrcRect.top + uiMapTileSize_Y;
+                                rSrcRect.left = ((iAutoTile/100-1) % 3) *tileSize.x;
+                                rSrcRect.right = rSrcRect.left + tileSize.x;
+                                rSrcRect.top = ((iAutoTile/100-1) / 3) *tileSize.y;
+                                rSrcRect.bottom = rSrcRect.top + tileSize.y;
                                 pSprite->Draw(pTexture->m_pTexture, &rSrcRect, NULL, &D3DXVECTOR3((float)MapPosition.x, (float)MapPosition.y, 0), GetColor());
                             }
                             // if autotile is split up into 4 tiles
@@ -243,33 +238,33 @@ void Map::DrawMap()
                                         rSrcRect.left = iAutoTile%((int)pow(10.0f, (float)iCount));
                                         rSrcRect.left /= (int)pow(10.0f, (float)iCount-1);
                                         rSrcRect.left--;
-                                        rSrcRect.left = rSrcRect.left % 3 *(uiMapTileSize_X / (j+1));
+                                        rSrcRect.left = rSrcRect.left % 3 *(tileSize.x / (j+1));
                                         if (!j)
-                                            rSrcRect.left += uiMapTileSize_X / 2;
+                                            rSrcRect.left += tileSize.x / 2;
 
-                                        rSrcRect.right = rSrcRect.left + uiMapTileSize_X / 2;
+                                        rSrcRect.right = rSrcRect.left + tileSize.x / 2;
 
 
                                         // check y pos
                                         rSrcRect.top = iAutoTile%((int)pow(10.0f, (float)iCount));
                                         rSrcRect.top /= (int)pow(10.0f, (float)iCount-1);
                                         rSrcRect.top--;
-                                        rSrcRect.top = rSrcRect.top / 3 *(uiMapTileSize_Y / (i+1));
+                                        rSrcRect.top = rSrcRect.top / 3 *(tileSize.y / (i+1));
                                         if (!i)
-                                            rSrcRect.top += uiMapTileSize_Y / 2;
+                                            rSrcRect.top += tileSize.y / 2;
 
-                                        rSrcRect.bottom = rSrcRect.top + uiMapTileSize_Y / 2;
+                                        rSrcRect.bottom = rSrcRect.top + tileSize.y / 2;
 
                                         // calc draw pos
                                         if (j)
                                             vPosTemp.x = (float)MapPosition.x;
                                         else
-                                            vPosTemp.x = (float)MapPosition.x + uiMapTileSize_X / 2;
+                                            vPosTemp.x = (float)MapPosition.x + tileSize.x / 2;
 
                                         if (i)
                                             vPosTemp.y = (float)MapPosition.y;
                                         else
-                                            vPosTemp.y = (float)MapPosition.y + uiMapTileSize_Y / 2;
+                                            vPosTemp.y = (float)MapPosition.y + tileSize.y / 2;
                                         vPosTemp.z = 0;
 
                                         pSprite->Draw(pTexture->m_pTexture, &rSrcRect, NULL, &vPosTemp, GetColor());
@@ -288,44 +283,44 @@ void Map::DrawMap()
                                     if (iAutoTile % 10 == 0)
                                     {
                                         if (i == 0)
-                                            rSrcRect.left = ((iAutoTile/100-1) % 3) *uiMapTileSize_X;
+                                            rSrcRect.left = ((iAutoTile/100-1) % 3) *tileSize.x;
                                         else
-                                            rSrcRect.left = ((iAutoTile/10%10-1) % 3) *uiMapTileSize_X;
-                                        rSrcRect.right = rSrcRect.left + uiMapTileSize_X;
+                                            rSrcRect.left = ((iAutoTile/10%10-1) % 3) *tileSize.x;
+                                        rSrcRect.right = rSrcRect.left + tileSize.x;
 
                                         if (i == 0)
-                                            rSrcRect.top = ((iAutoTile/100-1) / 3) *uiMapTileSize_Y;
+                                            rSrcRect.top = ((iAutoTile/100-1) / 3) *tileSize.y;
                                         else
-                                            rSrcRect.top = ((iAutoTile/10%10-1) / 3) *uiMapTileSize_Y;
+                                            rSrcRect.top = ((iAutoTile/10%10-1) / 3) *tileSize.y;
 
                                         if (i == 1)
-                                            rSrcRect.top += uiMapTileSize_Y/2;
-                                        rSrcRect.bottom = rSrcRect.top + uiMapTileSize_Y/2;
+                                            rSrcRect.top += tileSize.y/2;
+                                        rSrcRect.bottom = rSrcRect.top + tileSize.y/2;
                                     }
                                     // if autotile is top to bottom split up
                                     else
                                     {
                                         if (i == 0)
-                                            rSrcRect.left = ((iAutoTile/100-1) % 3) *uiMapTileSize_X;
+                                            rSrcRect.left = ((iAutoTile/100-1) % 3) *tileSize.x;
                                         else
-                                            rSrcRect.left = ((iAutoTile/10%10-1) % 3) *uiMapTileSize_X;
+                                            rSrcRect.left = ((iAutoTile/10%10-1) % 3) *tileSize.x;
 
                                         if (i == 1)
-                                            rSrcRect.left +=uiMapTileSize_X/2;
-                                        rSrcRect.right = rSrcRect.left + uiMapTileSize_X/2;
+                                            rSrcRect.left +=tileSize.x/2;
+                                        rSrcRect.right = rSrcRect.left + tileSize.x/2;
 
                                         if (i == 0)
-                                            rSrcRect.top = ((iAutoTile/100-1) / 3) * uiMapTileSize_Y;
+                                            rSrcRect.top = ((iAutoTile/100-1) / 3) * tileSize.y;
                                         else
-                                            rSrcRect.top = ((iAutoTile/10%10-1) / 3) * uiMapTileSize_Y;
+                                            rSrcRect.top = ((iAutoTile/10%10-1) / 3) * tileSize.y;
 
-                                        rSrcRect.bottom = rSrcRect.top + uiMapTileSize_Y;
+                                        rSrcRect.bottom = rSrcRect.top + tileSize.y;
                                     }
                                     pSprite->Draw(pTexture->m_pTexture, &rSrcRect, NULL, &vPosTemp, GetColor());
                                     if (iAutoTile % 10 == 0)
-                                        vPosTemp.y += uiMapTileSize_Y/2;
+                                        vPosTemp.y += tileSize.y/2;
                                     else
-                                        vPosTemp.x += uiMapTileSize_X/2;
+                                        vPosTemp.x += tileSize.x/2;
                                 }
                             }
                         }
@@ -339,10 +334,10 @@ void Map::DrawMap()
                             pSprite->Draw(pTexture->m_pTexture, NULL, NULL, &D3DXVECTOR3((float)MapPosition.x, (float)MapPosition.y, 0), GetColor());
                     }
                 }
-                MapPosition.x += uiMapTileSize_X;
+                MapPosition.x += tileSize.x;
             }
-            MapPosition.x = GetPositionX() + startposX * uiMapTileSize_X;
-            MapPosition.y += uiMapTileSize_Y;
+            MapPosition.x = GetPositionX() + startposX * tileSize.x;
+            MapPosition.y += tileSize.y;
         }
     }
 
@@ -464,8 +459,8 @@ Point<UINT> Map::CalcPixToTile(Point<UINT> uiPos)
     Point<UINT> uiTileSize;
     if (CGame *pGame = CGame::Get())
     {
-        if (CGameInfo *pInfo = pGame->GetGameInfo())
-            pInfo->GetMapTileSize(uiTileSize.x , uiTileSize.y);
+        if (GameInfo *pInfo = pGame->GetGameInfo())
+            uiTileSize = pInfo->GetMapTileSize();
     }
 
     Point<UINT> uiTile = uiPos;
@@ -552,7 +547,7 @@ void MapLoadThread::Run()
 MapLoadResult MapLoadThread::LoadDataFromFile(std::string sMapName, std::string *sMapData)
 {
     // this open and store the XML file:
-    ifstream Data(("Maps/" + sMapName).c_str());
+    std::ifstream Data(("Maps/" + sMapName).c_str());
     if(!Data)
         return MAP_RESULT_NO_FILE;
 

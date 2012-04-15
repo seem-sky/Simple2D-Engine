@@ -1,153 +1,44 @@
 #include "GameInfo.h"
 
-// strings for searching in ini
-const string SEARCH_STRING_PROJECT_NAME     = "Project Name =";
-const string SEARCH_STRING_SCREEN_WIDTH     = "ScreenWidth =";
-const string SEARCH_STRING_SCREEN_HEIGHT    = "ScreenHeight =";
-const string SEARCH_STRING_WINDOWED         = "Windowed =";
-const string SEARCH_STRING_MAPTILESIZE_X    = "MapTileSizeX =";
-const string SEARCH_STRING_MAPTILESIZE_Y    = "MapTileSizeY =";
-const string SEARCH_STRING_DATABASE         = "DatabaseLocation =";
-
-CGameInfo::CGameInfo(void) : m_uiScreenWidth(0), m_uiScreenHeight(0), m_uiMapTileSize_X(0), m_uiMapTileSize_Y(0), m_bWindowed(false), TFileInput()
+GameInfo::GameInfo(void) : m_bWindowed(false)
 {
-    m_sLogLocationName  = LOGFILE_ENGINE_LOG_NAME + "CGameInfo : ";
-    m_sFileDirectory    = "Game/";
+    m_sLogLocationName  = LOGFILE_ENGINE_LOG_NAME + "GameInfo : ";
+
+    ReadIni();
 }
 
-void CGameInfo::InterpretFile()
+GameInfo::~GameInfo()
 {
-    string sFileString;
-    string sSearchString;
-    size_t sFind;
-
-    for (unsigned int i = 0; i < m_vData.size(); ++i)
-    {
-        sFileString = m_vData.at(i);
-        // if sFileString is empty, continue with next line
-        if (sFileString.empty())
-            continue;
-
-        // read out program name
-        if ((sFind = sFileString.find(SEARCH_STRING_PROJECT_NAME)) < sFileString.size())
-        {
-            sSearchString = SEARCH_STRING_PROJECT_NAME;
-            sFileString.erase(sFind, sFind + sSearchString.size());
-            while(sFileString[0] == 32)
-                sFileString.erase(0, 1);
-
-            m_sProgramName = sFileString;
-        }
-        // read screen width
-        else if ((sFind = sFileString.find(SEARCH_STRING_SCREEN_WIDTH)) < sFileString.size())
-        {
-            sSearchString = SEARCH_STRING_SCREEN_WIDTH;
-            sFileString.erase(sFind, sFind + sSearchString.size());
-            while(sFileString[0] == 32)
-                sFileString.erase(0, 1);
-
-            m_uiScreenWidth = atoi(sFileString.c_str());
-        }
-        // read screen height
-        else if ((sFind = sFileString.find(SEARCH_STRING_SCREEN_HEIGHT)) < sFileString.size())
-        {
-            sSearchString = SEARCH_STRING_SCREEN_HEIGHT;
-            sFileString.erase(sFind, sFind + sSearchString.size());
-            while(sFileString[0] == 32)
-                sFileString.erase(0, 1);
-
-            m_uiScreenHeight = atoi(sFileString.c_str());
-        }
-        // windowed?
-        else if ((sFind = sFileString.find(SEARCH_STRING_WINDOWED)) < sFileString.size())
-        {
-            sSearchString = SEARCH_STRING_WINDOWED;
-            sFileString.erase(sFind, sFind + sSearchString.size());
-            while(sFileString[0] == 32)
-                sFileString.erase(0, 1);
-
-            if (atoi(sFileString.c_str()))
-                m_bWindowed = true;
-            else
-                m_bWindowed = false;
-        }
-        // read out maptile size x
-        else if ((sFind = sFileString.find(SEARCH_STRING_MAPTILESIZE_X)) < sFileString.size())
-        {
-            sSearchString = SEARCH_STRING_MAPTILESIZE_X;
-            sFileString.erase(sFind, sFind + sSearchString.size());
-            while(sFileString[0] == 32)
-                sFileString.erase(0, 1);
-
-            m_uiMapTileSize_X = atoi(sFileString.c_str());
-        }
-        // read out maptile size y
-        else if ((sFind = sFileString.find(SEARCH_STRING_MAPTILESIZE_Y)) < sFileString.size())
-        {
-            sSearchString = SEARCH_STRING_MAPTILESIZE_Y;
-            sFileString.erase(sFind, sFind + sSearchString.size());
-            while(sFileString[0] == 32)
-                sFileString.erase(0, 1);
-
-            m_uiMapTileSize_Y = atoi(sFileString.c_str());
-        }
-        // read out SpriteFileLocation
-        else if ((sFind = sFileString.find(SEARCH_STRING_DATABASE)) < sFileString.size())
-        {
-            sSearchString = SEARCH_STRING_DATABASE;
-            sFileString.erase(sFind, sFind + sSearchString.size());
-            while(sFileString[0] == 32)
-                sFileString.erase(0, 1);
-
-            m_sDatabaseLocation = sFileString.c_str();
-        }
-    }
+    SaveGameInfo();
 }
 
-std::vector<std::string>* CGameInfo::GetFileData()
+void GameInfo::ReadIni()
 {
-    return &m_vData;
+    IniParser newIni;
+    newIni.readFile(GAME_DATA_GAME_INI);
+
+    m_sProgramName = newIni.getString("ProgramName", "Engine", "Anti´s Game Engine");
+    m_sDatabaseLocation = newIni.getString("DatabaseLocation", "Engine", "Game/GameDatabase.gbse");
+    m_uiScreenSize.x = newIni.getUINT("ScreenWidth", "Engine", 320);
+    m_uiScreenSize.y = newIni.getUINT("ScreenHeight", "Engine", 240);
+    m_bWindowed = newIni.getBool("Windowed?", "Engine", false);
+
+    m_uiMapTileSize.x = newIni.getUINT("MapTileSizeX", "Map", 32);
+    m_uiMapTileSize.y = newIni.getUINT("MapTileSizeY", "Map", 32);
+
+    BASIC_LOG(m_sLogLocationName + "Successfully read and store " + GAME_DATA_GAME_INI + ".");
 }
 
-void CGameInfo::GetWindowSize(unsigned int &XSize, unsigned int &YSize)
+void GameInfo::SaveGameInfo()
 {
-    XSize = m_uiScreenWidth;
-    YSize = m_uiScreenHeight;
-}
+    IniParser newIni;
+    newIni.addData("ProgramName", "Engine", m_sProgramName);
+    newIni.addData("DatabaseLocation", "Engine", m_sDatabaseLocation);
+    newIni.addData("ScreenWidth", "Engine", to_string(m_uiScreenSize.x));
+    newIni.addData("ScreenHeight", "Engine", to_string(m_uiScreenSize.y));
+    newIni.addData("Windowed?", "Engine", to_string(m_bWindowed));
+    newIni.addData("MapTileSizeX", "Map", to_string(m_uiMapTileSize.x));
+    newIni.addData("MapTileSizeY", "Map", to_string(m_uiMapTileSize.y));
 
-void CGameInfo::CreateIniByDefault()
-{
-    ERROR_LOG( m_sLogLocationName + "Unable to find " + m_sFileDirectory + GAME_DATA_GAME_INI + ". Create it and set values to default.");
-    m_sProgramName          = DEFAULT_PROJECT_NAME;
-    m_uiScreenWidth         = DEFAULT_SCREEN_WIDTH;
-    m_uiScreenHeight        = DEFAULT_SCREEN_HEIGHT;
-    m_bWindowed             = DEFAULT_WINDOWED;
-    m_uiMapTileSize_X       = DEFAULT_MAPTILESIZE_X;
-    m_uiMapTileSize_Y       = DEFAULT_MAPTILESIZE_Y;
-    m_sDatabaseLocation   = DEFAULT_DATABASE;
-    SaveDataToIni();
-}
-
-void CGameInfo::SaveDataToIni()
-{
-    FILE *GameIni = NULL;
-    fopen_s(&GameIni, (m_sFileDirectory + GAME_DATA_GAME_INI).c_str(), "w");
-    if(GameIni)
-        fprintf(GameIni,
-            (SEARCH_STRING_PROJECT_NAME + m_sProgramName + "\n" +
-            SEARCH_STRING_SCREEN_WIDTH + to_string(m_uiScreenWidth)+ "\n" +
-            SEARCH_STRING_SCREEN_HEIGHT + to_string(m_uiScreenHeight) + "\n" +
-            SEARCH_STRING_WINDOWED + to_string(m_bWindowed) + "\n\n" +
-            SEARCH_STRING_MAPTILESIZE_X + to_string(m_uiMapTileSize_X) + "\n" +
-            SEARCH_STRING_MAPTILESIZE_Y + to_string(m_uiMapTileSize_Y) + "\n\n" +
-            SEARCH_STRING_DATABASE + m_sDatabaseLocation
-            ).c_str());
-
-    fclose(GameIni);
-}
-
-void CGameInfo::GetMapTileSize(unsigned int &XSize, unsigned int &YSize)
-{
-    XSize = m_uiMapTileSize_X;
-    YSize = m_uiMapTileSize_Y;
+    newIni.saveDataToFile(GAME_DATA_GAME_INI);
 }
