@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <Database>
-  <SpriteDatabase Tile="MapSprites/" AutoTile="MapSprites/AutoTiles/" Object="Charset/" AnimatedObject="Charset/" TextBox="Textbox/">
+  <SpriteDatabase>
+    <SpritePath ID="0" Path="MapSprites/"/>
+    <SpritePath ID="1" Path="MapSprites/AutoTiles/"/>
+    <SpritePath ID="2" Path="Charset/"/>
+    <SpritePath ID="3" Path="Charset/"/>
+    <SpritePath ID="4" Path="Textbox"/>
     <Sprite ID="1" FileName="gras.png" Type="0" transparent_color="0" passability="15" terraintype="5"/>
     <Sprite ID="2" FileName="stone.png" Type="0" transparent_color="0" passability="0" terraintype="2"/>
     <Sprite ID="3" FileName="road2.png" Type="1" transparent_color="65280" passability="15" terraintype="1"/>
@@ -15,4 +20,5 @@
   <MapDatabase>
     <Map ID="1" File="Map2.map"/>
   </MapDatabase>
-</Database>
+  <StartConditions MapID="1" HeroeID="1" StartPosX="55" StartPosY="90"/>    
+  </Database>

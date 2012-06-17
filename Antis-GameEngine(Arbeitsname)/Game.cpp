@@ -2,12 +2,10 @@
 #include "RessourceManager.h"
 #include "DirectFont.h"
 
-CGame::CGame(void) : m_pDirect3D(NULL), m_pDirectInput(NULL), m_pWorldSession(NULL), m_pMap(NULL), m_pDatabase(NULL), m_pShownMenu(NULL),
-                m_bGameClose(false), m_bPauseGame(false), m_pShownTextBox(NULL), TSingleton()
+CGame::CGame(void) : m_pDirect3D(NULL), m_pDirectInput(NULL), m_pWorldSession(NULL), m_pMap(NULL), m_pGameDB(NULL), m_pShownMenu(NULL),
+                m_pShownTextBox(NULL), m_GameState(GAME_NONE), TSingleton()
 {
     m_sLogLocationName  = LOGFILE_ENGINE_LOG_NAME + "CGame : ";
-
-    Test = false;
 
     pPlayer = new Player();
 }
@@ -62,34 +60,38 @@ GAMEINIT_STATE CGame::Initialize(HINSTANCE hInstance, HWND hWnd)
         m_pMap = new Map();
 
     // load complete database
-    if (!m_pDatabase)
+    if (!m_pGameDB)
     {
-        m_pDatabase = GameDatabase::Get();
-        if (!m_pDatabase)
+        m_pGameDB = DATABASE::Database::Get();
+        if (!m_pGameDB)
         {
-            ERROR_LOG(m_sLogLocationName + "Unable to initialize Direct3D.");
+            ERROR_LOG(m_sLogLocationName + "Unable to initialize Game Database.");
             return GAMEINIT_STATE_FAILED;
         }
+
+        m_pGameDB->LoadDB(GetGameInfo()->GetDatabaseLocation());
     }
 
-    switch(m_pDatabase->LoadDatabase(GetGameInfo()->GetDatabaseLocation()))
+    // check DB state
+    switch(m_pGameDB->GetDBState())
     {
-    case DATABASE_LOAD_RESULT_OK:
+    case XML_Reader::XML_DONE:
         BASIC_LOG(m_sLogLocationName + "Successfully load Game-Database.");
         return GAMEINIT_STATE_OK;
+        break;
 
-    case DATABASE_LOAD_RESULT_IN_PROGRESS:
+    case XML_Reader::XML_IN_PROGRESS:
         return GAMEINIT_STATE_IN_PROGRESS;
 
-    case DATABASE_LOAD_RESULT_NO_FILE:
+    case XML_Reader::XML_NO_FILE:
         ERROR_LOG(m_sLogLocationName + "Unable to load Game-Database." + GetGameInfo()->GetDatabaseLocation() + " no such file or directory.");
         return GAMEINIT_STATE_FAILED;
 
-    case DATABASE_LOAD_RESULT_CORRUPT_FILE:
+    case XML_Reader::XML_CORRUPT_FILE:
         ERROR_LOG(m_sLogLocationName + "Unable to load Game-Database." + GetGameInfo()->GetDatabaseLocation() + " is a corrupt file.");
         return GAMEINIT_STATE_FAILED;
 
-    case DATABASE_LOAD_RESULT_FAILED:
+    case XML_Reader::XML_FAILED:
     default:
         ERROR_LOG(m_sLogLocationName + "Unable to load Game-Database. Undefined error!");
         return GAMEINIT_STATE_FAILED;
@@ -98,17 +100,13 @@ GAMEINIT_STATE CGame::Initialize(HINSTANCE hInstance, HWND hWnd)
 
 bool CGame::Run(const ULONGLONG CurTime, const UINT CurElapsedTime)
 {
-    if (!Test)
+    switch(m_GameState)
     {
-        if (MAP_RESULT_DONE == m_pMap->LoadNewMap("Map1.map"))
-        {
-            Unit *pWho = (Unit*)m_pMap->AddNewWorldObject(1, 49, 32, 0);
-            pPlayer->SetControledUnit(pWho);
-            Test = true;
-        }
-    }
-    else
-    {
+    case GAME_NONE:
+        CreateNewGame();
+        break;
+    case GAME_RUN:
+    case GAME_PAUSE:
         // update direct input
         if (!m_pDirectInput->GetInput())
             PauseGame();
@@ -126,7 +124,7 @@ bool CGame::Run(const ULONGLONG CurTime, const UINT CurElapsedTime)
         // if no Textbox and no menu shown or if cur menu allows updating
         if (!m_pShownTextBox && (!m_pShownMenu || m_pShownMenu->ShouldUpdating()))
         {
-            if (m_bPauseGame)
+            if (IsGamePaused())
                 return true;
 
             // Update World
@@ -137,9 +135,16 @@ bool CGame::Run(const ULONGLONG CurTime, const UINT CurElapsedTime)
             if (m_pMap)
                 m_pMap->UpdateMap(CurTime, CurElapsedTime);
         }
+        break;
+    case GAME_LOAD_NEW_GAME:
+        if (m_pMap->LoadNewMap() == MAP_RESULT_DONE)
+            InitNewGame();
+        break;
+    case GAME_LOAD_GAME:
+        break;
     }
 
-    if (m_bGameClose)
+    if (m_GameState == GAME_END)
         return false;
     else
         return true;
@@ -149,7 +154,7 @@ HRESULT CGame::Draw()
 {
     m_pDirect3D->BeginScene();
     // Draw all Layers
-    if (Test)
+    if (m_GameState == GAME_RUN || m_GameState == GAME_PAUSE)
     {
         if (!m_pShownMenu || m_pShownMenu->ShouldDrawMap())
         {
@@ -177,6 +182,8 @@ HRESULT CGame::Draw()
 
 void CGame::Quit()
 {
+    m_GameState = GAME_END;
+
     if (!PlayerList.empty())
     {
         for (PlayerPtrList::iterator itr = PlayerList.begin(); itr != PlayerList.end(); ++itr)
@@ -265,4 +272,33 @@ void CGame::ShutDownTextbox()
         delete m_pShownTextBox;
         m_pShownTextBox = NULL;
     }
+}
+
+void CGame::CreateNewGame()
+{
+    if (!m_pGameDB)
+        return;
+
+    DATABASE::StartConditionsPrototype t_StartProto;
+    if (!m_pGameDB->GetStartConditions(t_StartProto))
+        return;
+
+    m_pMap->LoadNewMap(m_pGameDB->GetMapName(t_StartProto.m_uiMapID));
+
+    m_GameState = GAME_LOAD_NEW_GAME;
+}
+
+void CGame::InitNewGame()
+{
+    if (!m_pGameDB)
+        return;
+
+    DATABASE::StartConditionsPrototype t_StartProto;
+    if (!m_pGameDB->GetStartConditions(t_StartProto))
+        return;
+
+    Unit *pWho = (Unit*)m_pMap->AddNewWorldObject(1, t_StartProto.m_uiStartPos.x, t_StartProto.m_uiStartPos.y, 0);
+    pPlayer->SetControledUnit(pWho);
+
+    m_GameState = GAME_RUN;
 }

@@ -6,6 +6,7 @@
 #include "Point.h"
 #include "WrapperFunctions.h"
 #include "ObjectAI.h"
+#include "Database.h"
 
 enum UNIT_TYPE
 {
@@ -24,8 +25,8 @@ public:
 
     // object info
     inline UINT GetGUID() { return m_uiGUID; }
-    inline ObjectPrototype* GetObjectInfo() { return &m_ObjectInfo; }
-    virtual void SetObjectInfo(const ObjectPrototype* pInfo) { if (pInfo) m_ObjectInfo = *pInfo; }
+    inline DATABASE::ObjectPrototype* GetObjectInfo() { return &m_ObjectInfo; }
+    virtual void SetObjectInfo(const DATABASE::ObjectPrototype* pInfo) { if (pInfo) m_ObjectInfo = *pInfo; }
 
     UNIT_TYPE GetObjectType() { return m_UnitType; }
 
@@ -64,7 +65,7 @@ public:
     void ModifyColorTo(float red, float green, float blue, float alpha, UINT time = 0);
 
     // texture
-    virtual void SetTextureSource(const SpritePrototype *proto);
+    virtual void SetTextureSource(const DATABASE::SpritePrototype *proto);
     inline TextureSource* GetTextureSource() { return m_pTexture; }
 
     // Update
@@ -94,7 +95,7 @@ private:
     float m_ModRed, m_ModGreen, m_ModBlue, m_ModAlpha;
     UINT m_ColorModTime;
     TextureSource* m_pTexture;
-    ObjectPrototype m_ObjectInfo;
+    DATABASE::ObjectPrototype m_ObjectInfo;
     Point<int> m_Position;
     D3DXCOLOR m_Color;
 

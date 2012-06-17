@@ -5,8 +5,6 @@
 #include "IniParser.h"
 #include "Logfile.h"
 
-const std::string GAME_DATA_GAME_INI = "Game/Game.ini";
-
 class GameInfo
 {
 public:

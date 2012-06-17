@@ -50,7 +50,7 @@ void Unit::DrawObject(LPD3DXSPRITE pSprite)
     UINT uiSizeX = 0, uiSizeY = 0;
     GetTextureSource()->GetTextureSize(uiSizeX, uiSizeY);
     RECT srcRect = {0,0,uiSizeX,uiSizeY};
-    if (GetTextureSource()->m_TextureInfo.m_uiSpriteType == (UINT)SPRITE_TYPE_ANIMATED_OBJECT)
+    if (GetTextureSource()->m_TextureInfo.m_uiSpriteType == (UINT)DATABASE::SPRITE_TYPE_ANIMATED_OBJECT)
     {
         UINT uiSpritesX = GetTextureSource()->m_TextureInfo.Type.AnimatedObject.m_uiSpritesX;
         UINT uiSpritesY = GetTextureSource()->m_TextureInfo.Type.AnimatedObject.m_uiSpritesY;
@@ -71,7 +71,7 @@ void Unit::DrawObject(LPD3DXSPRITE pSprite)
     pSprite->Draw(GetTextureSource()->m_pTexture, &srcRect, NULL, &D3DXVECTOR3((float)GetScreenPosX(), (float)GetScreenPosY(), 0), GetColor());
 }
 
-void Unit::SetTextureSource(const SpritePrototype *proto)
+void Unit::SetTextureSource(const DATABASE::SpritePrototype *proto)
 {
     WorldObject::SetTextureSource(proto);
 
@@ -82,7 +82,7 @@ void Unit::SetToStartSector()
 {
     if (GetTextureSource())
     {
-        if (GetTextureSource()->m_TextureInfo.m_uiSpriteType == (UINT)SPRITE_TYPE_ANIMATED_OBJECT)
+        if (GetTextureSource()->m_TextureInfo.m_uiSpriteType == (UINT)DATABASE::SPRITE_TYPE_ANIMATED_OBJECT)
             m_uiSpriteSector = m_uiDirection * GetTextureSource()->m_TextureInfo.Type.AnimatedObject.m_uiSpritesX + 1;
 
         else
@@ -138,7 +138,7 @@ void Unit::UpdateAnimation(const ULONGLONG uiCurTime, const UINT uiDiff)
         m_uiAnimation_Timer -= uiDiff;
 }
 
-void Unit::SetObjectInfo(const ObjectPrototype *pInfo)
+void Unit::SetObjectInfo(const DATABASE::ObjectPrototype *pInfo)
 {
     WorldObject::SetObjectInfo(pInfo);
 

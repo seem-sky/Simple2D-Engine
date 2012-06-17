@@ -13,7 +13,7 @@ public:
     void Update(const ULONGLONG uiCurTime, const UINT uiDiff);
 
     // Unit infos
-    virtual void SetObjectInfo(const ObjectPrototype* pInfo);
+    virtual void SetObjectInfo(const DATABASE::ObjectPrototype* pInfo);
 
     inline MovementGenerator* GetMovementGenerator() { return m_pMovement; }
     inline UINT GetMovementSpeed() { return m_uiMovementSpeed; }
@@ -36,7 +36,7 @@ public:
     void SetPlayerControle(bool bControle = true) { m_bIsPlayer = bControle; }
 
     // sprite
-    void SetTextureSource(const SpritePrototype *proto);
+    void SetTextureSource(const DATABASE::SpritePrototype *proto);
     virtual void DrawObject(LPD3DXSPRITE pSprite);
     inline void SetTextureSrcRct(UINT uiSrcRct) { m_uiSpriteSector = uiSrcRct; }
     inline UINT GetTextureSrcRct() { return m_uiSpriteSector; }

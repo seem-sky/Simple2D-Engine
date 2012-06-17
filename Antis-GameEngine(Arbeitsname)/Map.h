@@ -53,7 +53,7 @@ public:
     ## Map System
     #####*/
     void Draw();
-    MapLoadResult LoadNewMap(std::string sMapName);
+    MapLoadResult LoadNewMap(std::string sMapName = "");
     void UpdateMap(const ULONGLONG uiCurTime, const UINT uiDiff);
 
     const MapInfo* GetMapInfo() { return &m_MapInfo; }

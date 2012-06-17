@@ -1,5 +1,4 @@
 #include "RessourceManager.h"
-#include "GameDatabase.h"
 
 //directory for charsets
 const std::string DIRECTORY_TEXTURES_OBJECTS    = "Charset/";
@@ -14,7 +13,7 @@ CRessourceManager::~CRessourceManager(void)
     ClearTextures();
 }
 
-LPDIRECT3DTEXTURE9 CRessourceManager::GetTexture(std::string sLocation, const SpritePrototype *proto)
+LPDIRECT3DTEXTURE9 CRessourceManager::GetTexture(std::string sLocation, const DATABASE::SpritePrototype *proto)
 {
     if (!proto)
         return NULL;
@@ -27,7 +26,7 @@ LPDIRECT3DTEXTURE9 CRessourceManager::GetTexture(std::string sLocation, const Sp
     return AddTexture(sLocation, proto);
 }
 
-LPDIRECT3DTEXTURE9 CRessourceManager::AddTexture(std::string sLocation, const SpritePrototype *proto)
+LPDIRECT3DTEXTURE9 CRessourceManager::AddTexture(std::string sLocation, const DATABASE::SpritePrototype *proto)
 {
     if (!proto)
         return NULL;

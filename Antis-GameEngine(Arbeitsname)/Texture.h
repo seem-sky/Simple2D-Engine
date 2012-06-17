@@ -1,8 +1,8 @@
 #ifndef TEXTURE_SOURCE_H
 #define TEXTURE_SOURCE_H
 
-#include "GameDatabase.h"
 #include <d3d9.h>
+#include "Database.h"
 
 struct TextureSource
 {
@@ -12,7 +12,7 @@ struct TextureSource
     void GetShownSpriteSize(UINT &XSize, UINT &YSize);
 
     LPDIRECT3DTEXTURE9 m_pTexture;
-    SpritePrototype m_TextureInfo;
+    DATABASE::SpritePrototype m_TextureInfo;
 };
 
 typedef std::map<UINT /*ID*/, TextureSource*> TextureList;
@@ -25,6 +25,9 @@ public:
 
     inline TextureSource* GetTextureSource(UINT uiID)
     {
+        if (uiID == 0)
+            return NULL;
+
         TextureList::iterator itr = m_TextureList.find(uiID);
         if (itr != m_TextureList.end())
             return (*itr).second;

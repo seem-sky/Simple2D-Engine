@@ -19,7 +19,7 @@ WorldObject::~WorldObject(void)
     }
 }
 
-void WorldObject::SetTextureSource(const SpritePrototype *proto)
+void WorldObject::SetTextureSource(const DATABASE::SpritePrototype *proto)
 {
     if (!proto)
         return;
@@ -134,8 +134,8 @@ void WorldObject::GetBoundingRect(RECT &bound)
 
     switch (m_pTexture->m_TextureInfo.m_uiSpriteType)
     {
-    case SPRITE_TYPE_OBJECT:
-    case SPRITE_TYPE_ANIMATED_OBJECT:
+    case DATABASE::SPRITE_TYPE_OBJECT:
+    case DATABASE::SPRITE_TYPE_ANIMATED_OBJECT:
         bound.left = m_pTexture->m_TextureInfo.Type.Object.m_uiBoundingXBegin;
         bound.right = bound.left + m_pTexture->m_TextureInfo.Type.Object.m_uiBoundingXRange;
         bound.top = m_pTexture->m_TextureInfo.Type.Object.m_uiBoundingYBegin;

@@ -3,11 +3,11 @@
 
 #include "GameInfo.h"
 #include "Map.h"
-#include "GameDatabase.h"
 #include "DirectInput.h"
 #include "Player.h"
 #include "Menu.h"
 #include "TextBox.h"
+#include "Database.h"
 
 // world class, add game code here
 class WorldSession
@@ -26,6 +26,16 @@ enum GAMEINIT_STATE
     GAMEINIT_STATE_FAILED,
 };
 
+enum GAME_STATE
+{
+    GAME_NONE,
+    GAME_RUN,
+    GAME_LOAD_NEW_GAME,
+    GAME_LOAD_GAME,
+    GAME_PAUSE,
+    GAME_END,
+};
+
 typedef std::list<Player*> PlayerPtrList;
 
 class CGame : public TSingleton<CGame>
@@ -40,11 +50,11 @@ public:
     void Quit();
     void SetWorldSession(WorldSession *pWorld) { m_pWorldSession = pWorld; }
 
-    inline void CloseGame() { m_bGameClose = true; }
+    inline void CloseGame() { m_GameState = GAME_END; }
 
     // game pause
-    inline void PauseGame(bool pause = true) { m_bPauseGame = pause; }
-    inline bool IsGamePaused() { return m_bPauseGame; }
+    inline void PauseGame(bool pause = true) { pause ? m_GameState = GAME_PAUSE : m_GameState = GAME_RUN; }
+    inline bool IsGamePaused() { return m_GameState == GAME_PAUSE ? true : false; }
 
     GameInfo *GetGameInfo() { return &m_GameInfo; }
 
@@ -68,17 +78,14 @@ public:
     inline TextBox* GetShownTextbox() { return m_pShownTextBox; }
 
 private:
+    GAME_STATE m_GameState;
     GameInfo m_GameInfo;
-    bool Test;
-
-    bool m_bGameClose;
-    bool m_bPauseGame;
 
     Map *m_pMap;
     CDirect3D *m_pDirect3D;
     DirectInput *m_pDirectInput;
     WorldSession *m_pWorldSession;
-    GameDatabase *m_pDatabase;
+    DATABASE::Database *m_pGameDB;
 
     // the main menu
     Menu *m_pShownMenu;
@@ -88,5 +95,8 @@ private:
     Player* pPlayer;
 
     TextBox* m_pShownTextBox;
+
+    void CreateNewGame();
+    void InitNewGame();
 };
 #endif

@@ -47,11 +47,11 @@ MapLoadResult Map::LoadNewMap(std::string sMapName)
 WorldObject* Map::AddNewWorldObject(UINT uiObjectID, int XPos, int YPos, UINT uiLayerNr)
 {
     WorldObject *pNewObject = NULL;
-    GameDatabase *pDatabase = GameDatabase::Get();
-    if (!pDatabase)
+    DATABASE::Database *t_pDB = DATABASE::Database::Get();
+    if (!t_pDB)
         return NULL;
 
-    ObjectPrototype const *pProto = pDatabase->GetObjectPrototype(uiObjectID);
+    DATABASE::ObjectPrototype const *pProto = t_pDB->GetObjectPrototype(uiObjectID);
     if (!pProto)
         return NULL;
 
@@ -64,10 +64,10 @@ WorldObject* Map::AddNewWorldObject(UINT uiObjectID, int XPos, int YPos, UINT ui
 
     switch(pProto->m_uiType)
     {
-    case OBJECT_TYPE_MAP_OBJECT:
+    case DATABASE::OBJECT_TYPE_MAP_OBJECT:
         pNewObject = new WorldObject(uiGUID, Point<int>(XPos, YPos));
         break;
-    case OBJECT_TYPE_NPC:
+    case DATABASE::OBJECT_TYPE_NPC:
         pNewObject = new Unit(uiGUID, Point<int>(XPos, YPos));
         break;
     default:
@@ -78,7 +78,7 @@ WorldObject* Map::AddNewWorldObject(UINT uiObjectID, int XPos, int YPos, UINT ui
     if (ObjectLayer *pLayer = (ObjectLayer*)GetLayerAtNr(uiLayerNr))
     {
         pNewObject->SetObjectInfo(pProto);
-        if (SpritePrototype const *pSpriteProto = pDatabase->GetSpriteFile(pProto->m_uiTextureID))
+        if (DATABASE::SpritePrototype const *pSpriteProto = t_pDB->GetSpritePrototype(pProto->m_uiTextureID))
             pNewObject->SetTextureSource(pSpriteProto);
 
         pLayer->AddWorldObject(pNewObject);
@@ -882,18 +882,18 @@ MapLoadResult MapLoadThread::LoadLayerAndObjects(std::string *sMapData)
                     continue;
 
                 WorldObject *pObject = NULL;
-                if (GameDatabase *pDatabase = GameDatabase::Get())
+                if (DATABASE::Database *t_pDB = DATABASE::Database::Get())
                 {
-                    if (const ObjectPrototype *pProto = pDatabase->GetObjectPrototype(vLayerAndObjects.at(i).at(j)->m_ObjectID))
+                    if (const DATABASE::ObjectPrototype *pProto = t_pDB->GetObjectPrototype(vLayerAndObjects.at(i).at(j)->m_ObjectID))
                     {
                         // set new object for specific object type
                         switch(pProto->m_uiType)
                         {
-                        case OBJECT_TYPE_NPC:
+                        case DATABASE::OBJECT_TYPE_NPC:
                             pObject = new Unit(vLayerAndObjects.at(i).at(j)->m_GUID, Point<int>(vLayerAndObjects.at(i).at(j)->m_XPos, vLayerAndObjects.at(i).at(j)->m_YPos),
                                 WrapToDirection(vLayerAndObjects.at(i).at(j)->m_uiDirection), WrapToWalkmode(vLayerAndObjects.at(i).at(j)->m_uiWalkmode));
                             break;
-                        case OBJECT_TYPE_MAP_OBJECT:
+                        case DATABASE::OBJECT_TYPE_MAP_OBJECT:
                         default:
                             pObject = new WorldObject(vLayerAndObjects.at(i).at(j)->m_GUID, Point<int>(vLayerAndObjects.at(i).at(j)->m_XPos, vLayerAndObjects.at(i).at(j)->m_YPos));
                             break;
@@ -903,8 +903,7 @@ MapLoadResult MapLoadThread::LoadLayerAndObjects(std::string *sMapData)
 
                     if (pObject)
                     {
-                        // set object infos
-                        pObject->SetTextureSource(pDatabase->GetSpriteFile(pObject->GetObjectInfo()->m_uiTextureID));
+                        pObject->SetTextureSource(t_pDB->GetSpritePrototype(pObject->GetObjectInfo()->m_uiTextureID));
 
                         m_WorldObjectLIST.insert(std::make_pair<UINT, WorldObject*>(vLayerAndObjects.at(i).at(j)->m_GUID, pObject));
                         pLayer->AddWorldObject(pObject);

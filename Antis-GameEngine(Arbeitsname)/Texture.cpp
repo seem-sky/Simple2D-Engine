@@ -59,17 +59,17 @@ void TextureMgr::ClearTextureList()
 
 TextureSource* TextureMgr::AddTextureSource(UINT uiID)
 {
-    if (CRessourceManager *pResMgr = CRessourceManager::Get())
+    if (CRessourceManager *t_pResMgr = CRessourceManager::Get())
     {
-        if (GameDatabase *pDatabase = GameDatabase::Get())
+        if (DATABASE::Database *t_pDB = DATABASE::Database::Get())
         {
-            if (const SpritePrototype *pProto = pDatabase->GetSpriteFile(uiID))
+            if (const DATABASE::SpritePrototype *t_pProto = t_pDB->GetSpritePrototype(uiID))
             {
-                TextureSource *pTexture = new TextureSource();
-                pTexture->m_TextureInfo = *pProto;
-                pTexture->m_pTexture    = pResMgr->GetTexture(pDatabase->GetFileLocation((SpriteType)pProto->m_uiSpriteType), pProto);
-                m_TextureList.insert(std::make_pair<UINT, TextureSource*>(pTexture->m_TextureInfo.m_uiID, pTexture));
-                return pTexture;
+                TextureSource *t_pTexture   = new TextureSource();
+                t_pTexture->m_TextureInfo   = *t_pProto;
+                t_pTexture->m_pTexture      = t_pResMgr->GetTexture(t_pDB->GetSpritePath(t_pProto->m_uiSpriteType), t_pProto);
+                m_TextureList.insert(std::make_pair<UINT, TextureSource*>(t_pTexture->m_TextureInfo.m_uiID, t_pTexture));
+                return t_pTexture;
             }
         }
     }

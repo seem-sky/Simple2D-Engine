@@ -2,6 +2,7 @@
 #define RESSOURCE_MANAGER_H
 
 #include "Direct3D.h"
+#include "Database.h"
 #include <map>
 
 struct SpritePrototype;
@@ -12,10 +13,10 @@ public:
     CRessourceManager(void);
     ~CRessourceManager(void);
 
-    LPDIRECT3DTEXTURE9 GetTexture(std::string sLocation, const SpritePrototype *proto);
+    LPDIRECT3DTEXTURE9 GetTexture(std::string sLocation, const DATABASE::SpritePrototype *proto);
 
 private:
-    LPDIRECT3DTEXTURE9 AddTexture(std::string sLocation, const SpritePrototype *proto);
+    LPDIRECT3DTEXTURE9 AddTexture(std::string sLocation, const DATABASE::SpritePrototype *proto);
     void ClearTextures();
 
     // store all textures

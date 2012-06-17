@@ -4,6 +4,7 @@
 #include "Point.h"
 #include "Texture.h"
 #include "DirectFont.h"
+#include "WrapperFunctions.h"
 #include <vector>
 #include <list>
 
@@ -34,7 +35,7 @@ public:
     {
         if (m_pTexture)
         {
-            if (m_pTexture->m_TextureInfo.m_uiSpriteType == (UINT)SPRITE_TYPE_TEXTBOX)
+            if (m_pTexture->m_TextureInfo.m_uiSpriteType == (UINT)DATABASE::SPRITE_TYPE_TEXTBOX)
                 return m_pTexture->m_TextureInfo.Type.Textbox.m_uiBorderSize;
         }
         return 0;
@@ -62,8 +63,10 @@ public:
 protected:
     virtual void DrawTextboxPic();
     virtual void DrawTextboxMsg();
+    virtual void DrawTextboxChoices();
 
     void ConvertMsg(std::string sText);
+    void ShowAllLettersOnPage();
 
     std::string m_sLogLocationName;
 
@@ -101,8 +104,10 @@ private:
     UINT m_uiScroll_Timer;
     bool m_bIsScrolling;
 
-    // side
+    // page
     UINT m_uiMaxRowsShown;
-    bool m_bNextSide;
+    bool m_bNextPage;
+    UINT m_uiCurPage;
+    bool m_bOwnChoicePage;
 };
-#endif;
+#endif

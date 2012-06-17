@@ -28,6 +28,7 @@ Player::~Player(void)
 
 void Player::UpdatePlayer(const ULONGLONG CurTime, const UINT CurElapsedTime)
 {
+    Point<int> x = GetControledUnit()->GetPosition();
     // iterate through stored keys
     if (!m_KeyList.empty())
     {

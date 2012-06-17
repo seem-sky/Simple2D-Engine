@@ -1,8 +1,0 @@
-ENGINE::CLogfile : Logfile open and ready to write in
-ENGINE::GameInfo : Successfully read and store Game/Game.ini.
-ENGINE::main : Succesfully create window.
-ENGINE::main : Succesfully start Time.
-ERROR! ENGINE::Direct3D : Unable to create Direct3D Device.
-ERROR! ENGINE::CGame : Unable to initialize Direct3D.
-ENGINE::CRessourceManager : Remove stored textures from memory.
-ENGINE::CLogfile : Logfile shutting down...
