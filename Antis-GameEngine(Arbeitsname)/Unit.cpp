@@ -1,5 +1,5 @@
 #include "Unit.h"
-#include "RessourceManager.h"
+#include "ResourceManager.h"
 
 Unit::Unit(UINT uiGUID, Point<int> pos, DIRECTION dir, WALKMODE walkmode, UnitAI *pAI) : m_uiDirection(dir), m_uiSpriteSector(0), m_bIsPlayer(false), m_bAnimationDirection(false), m_bAllTimeAnimation(false),
     m_uiAnimationTime(ANIMATION_TIME_NORMAL), m_uiMovementSpeed(MOVEMENT_SPEED_NORMAL), m_Walkmode(walkmode),
@@ -145,7 +145,7 @@ void Unit::SetObjectInfo(const DATABASE::ObjectPrototype *pInfo)
     switch(pInfo->m_uiType)
     {
     case 1:
-        m_uiAnimationTime   = WrapAnimationTimeID(pInfo->ObjectType.NPC.m_uiAnimationFrequence);
+        m_uiAnimationTime   = WrapAnimationTimeID(pInfo->ObjectType.NPC.m_uiAnimationFrequency);
         m_uiAnimation_Timer = m_uiAnimationTime;
         m_uiMovementSpeed   = WrapMovementSpeedID(pInfo->ObjectType.NPC.m_uiMoveSpeed);
         break;

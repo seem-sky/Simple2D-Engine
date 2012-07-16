@@ -1,5 +1,5 @@
 #include "Direct3D.h"
-#include "RessourceManager.h"
+#include "ResourceManager.h"
 
 
 CDirect3D::CDirect3D() : m_lpD3D(0), m_lpD3DDevice(0), m_lpBackBuffer(0), m_uiSpriteIndex(0), TSingleton()

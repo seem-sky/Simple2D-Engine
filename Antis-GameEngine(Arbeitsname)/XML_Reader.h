@@ -35,11 +35,16 @@ public:
     };
 
     XML_Reader(std::string sData);
-    ~XML_Reader(void);
+    virtual ~XML_Reader(void);
 
     void Run();
     inline XML_STATE GetReaderState() { return m_XMLState; }
     inline ChildList* GetXMLData() { return m_pChildList; }
+    inline void ClearChildList() { m_pChildList->clear(); }
+
+protected:
+    ChildList* CheckoutChilds(IXMLDOMNodePtr p_pNode, HRESULT &p_hr);
+    AttributeList* CheckoutAttributes(IXMLDOMNodePtr p_pNode, HRESULT &p_hr);
 
 private:
     XML_STATE m_XMLState;
@@ -47,9 +52,6 @@ private:
     std::string m_sLogLocationName;
 
     ChildList *m_pChildList;
-
-    ChildList* CheckoutChilds(IXMLDOMNodePtr p_pNode, HRESULT &p_hr);
-    AttributeList* CheckoutAttributes(IXMLDOMNodePtr p_pNode, HRESULT &p_hr);
 };
 
 #endif

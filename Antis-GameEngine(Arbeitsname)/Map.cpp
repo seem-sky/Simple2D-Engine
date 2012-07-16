@@ -1,34 +1,83 @@
 #include "Map.h"
 #include "Game.h"
-#include "RessourceManager.h"
+#include "ResourceManager.h"
+#include "MapAI.h"
 #include <msxml.h>
 
 #import <msxml4.dll>
 
-Map::Map(void) : m_Position(0,0), m_MapLoadState(MAP_STATE_NONE), m_pMapLoadThread(NULL), m_MapColor(1,1,1,1)
+Map::Map(void) : m_Position(0,0), m_MapLoadState(MAP_STATE_NONE), m_pMapLoadThread(NULL), m_MapColor(1,1,1,1), m_pMapAI(NULL)
 {
     m_sLogLocationName  = LOGFILE_ENGINE_LOG_NAME + "Map : ";
 }
 
 Map::~Map(void)
 {
-    if (m_pMapLoadThread)
-        m_pMapLoadThread->Kill();
-
-    // clear all layers
-    ClearAllLayer();
+    ClearMap();
 }
 
-MapLoadResult Map::LoadNewMap(std::string sMapName)
+void Map::ClearMap()
+{
+    if (m_pMapAI)
+    {
+        m_pMapAI->OnClose();
+        delete m_pMapAI;
+        m_pMapAI = NULL;
+    }
+
+    // clear layer
+    ClearAllLayer();
+    // clear mapInfo
+    m_MapInfo.Clear();
+    // cleare tiles
+    m_v2MapTiles.clear();
+    // clear ScriptPoints
+    ClearScriptPoints();
+
+    if (m_pMapLoadThread)
+    {
+        m_pMapLoadThread->Kill();
+        m_pMapLoadThread = NULL;
+    }
+}
+
+WorldObject* Map::GetObject(UINT t_uiObjGUID)
+{
+    std::map<UINT, WorldObject*>::iterator t_itr = m_WorldObjectLIST.find(t_uiObjGUID);
+    if (t_itr == m_WorldObjectLIST.end())
+        return NULL;
+    
+    return t_itr->second;
+}
+
+void Map::ClearScriptPoints()
+{
+    for (ScriptPointLIST::iterator t_itr = m_ScriptPoints.begin(); t_itr != m_ScriptPoints.end(); ++t_itr)
+    {
+        if (*t_itr)
+            delete *t_itr;
+    }
+    m_ScriptPoints.clear();
+}
+
+MapLoadResult Map::LoadNewMap(UINT p_uiID)
 {
     MapLoadResult result = MAP_RESULT_NONE;
 
     if (!m_pMapLoadThread)
-        m_pMapLoadThread = new MapLoadThread(sMapName);
+    {
+        if (DATABASE::Database *t_pDB = DATABASE::Database::Get())
+        {
+            m_MapInfo.m_uiID = p_uiID;
+            m_pMapLoadThread = new MapLoadThread(t_pDB->GetMapName(p_uiID), m_MapInfo, m_v2MapTiles, m_lLayers, m_WorldObjectLIST, m_ScriptPoints);
+            return MAP_RESULT_IN_PROGRESS;
+        }
+        else
+            result = MAP_RESULT_FAILED;
+    }
 
     if (m_pMapLoadThread && m_pMapLoadThread->GetMapLoadState() == MAP_STATE_DONE)
     {
-        m_pMapLoadThread->GetMapInfo(m_MapInfo, m_v2MapTiles, m_lLayers, m_WorldObjectLIST, m_ScriptPoints);
         m_pMapLoadThread->Kill();
         m_pMapLoadThread = NULL;
         result = MAP_RESULT_DONE;
@@ -39,6 +88,9 @@ MapLoadResult Map::LoadNewMap(std::string sMapName)
             if (pLayer)
                 pLayer->SetOwnerMap(this);
         }
+
+        if (m_pMapAI)
+            m_pMapAI->OnLoad();
     }
 
     return result;
@@ -89,6 +141,9 @@ WorldObject* Map::AddNewWorldObject(UINT uiObjectID, int XPos, int YPos, UINT ui
         delete pNewObject;
         pNewObject = NULL;
     }
+
+    if (m_pMapAI && pNewObject)
+        m_pMapAI->OnObjectCreate(pNewObject);
 
     return pNewObject;
 }
@@ -152,7 +207,7 @@ void Map::DrawMap()
     UINT endposY = 0;
     if (MapPosition.x + MapInfo->m_uiX * tileSize.x > windowSize.x)
     {
-        endposX = startposX + (windowSize.x/tileSize.x);
+        endposX = startposX + ((windowSize.x+tileSize.x/2)/tileSize.x);
 
         if ((UINT)MapPosition.x % tileSize.x)
         {
@@ -167,7 +222,7 @@ void Map::DrawMap()
 
     if (MapPosition.y + MapInfo->m_uiY * tileSize.y > windowSize.y)
     {
-        endposY = startposY + (windowSize.y/tileSize.y);
+        endposY = startposY + ((windowSize.y+tileSize.y/2)/tileSize.y);
 
         if ((UINT)MapPosition.y % tileSize.y)
         {
@@ -476,7 +531,8 @@ Point<UINT> Map::CalcPixToTile(Point<UINT> uiPos)
 /*#####
 ## MapLoadThread
 #####*/
-MapLoadThread::MapLoadThread(std::string sMapName) : ActiveObject()
+MapLoadThread::MapLoadThread(std::string sMapName, MapInfo &MapInfo, std::vector<MapTiles> &MapTiles, LayerList &LayerList, std::map<UINT, WorldObject*> &objectList, ScriptPointLIST &scriptPoints)
+    : m_MapInfo(MapInfo), m_v2MapTiles(MapTiles), m_lLayers(LayerList), m_ScriptPoints(scriptPoints), m_WorldObjectLIST(objectList), ActiveObject()
 {
     m_MapLoadState      = MAP_STATE_NONE;
     m_sMapName          = sMapName;
@@ -1065,13 +1121,4 @@ MapLoadResult MapLoadThread::LoadScriptPoints(std::string *sMapData)
         m_ScriptPoints.push_back(pPoint);
     }
     return MAP_RESULT_OK;
-}
-
-void MapLoadThread::GetMapInfo(MapInfo &MapInfo, std::vector<MapTiles> &MapTiles, LayerList &LayerList, std::map<UINT, WorldObject*> &objectList, ScriptPointLIST &scriptPoints)
-{
-    MapInfo     = m_MapInfo;
-    MapTiles    = m_v2MapTiles;
-    LayerList   = m_lLayers;
-    objectList  = m_WorldObjectLIST;
-    scriptPoints= m_ScriptPoints;
 }

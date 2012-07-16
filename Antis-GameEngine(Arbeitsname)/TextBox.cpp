@@ -7,7 +7,7 @@ TextBox::TextBox(std::string sMsg, Point<int> pos, Point<UINT> size, UINT uiText
 : m_pTexture(NULL), m_Position(pos), m_uiSize(size), m_uiAniTime(0), m_uiStartAniTime(0), m_LetterTimer(showLetter),
 m_uiShownLetterTime(showLetter), m_uiShownLetters(0), m_MsgYPos(0), m_NewMsgYPos(0), m_uiCurRow(0), m_uiScrollTime(0), m_uiScroll_Timer(0),
 m_uiCurRowShown(0), m_StartMsgYPos(0), m_bScrollText(ScrollAble), m_bIsScrolling(false), m_bNextPage(false), m_uiCurPage(0), m_bOwnChoicePage(false),
-m_DirectFont(uiLetterSize, uiBold, sFont, bItalic)
+m_bFastScroll(false), m_DirectFont(uiLetterSize, uiBold, sFont, bItalic)
 {
     m_sLogLocationName = LOGFILE_ENGINE_LOG_NAME + "Textbox : ";
     if (uiTextureID)
@@ -49,7 +49,7 @@ void TextBox::DrawTextbox()
 
 void TextBox::DrawTextboxPic()
 {
-    if (!m_pTexture)
+    if (!m_pTexture || !m_pTexture->m_pTexture)
         return;
 
     CDirect3D *pDirect3D = CDirect3D::Get();
@@ -174,7 +174,10 @@ void TextBox::DrawTextboxChoices()
     {
         if (CanScroll())
         {
-            MoveTextToLine(12, 500);
+            if (m_bFastScroll)
+                MoveTextToLine(12, 0);
+            else
+                MoveTextToLine(12, 250);
         }
         else
         {
@@ -421,6 +424,7 @@ void TextBox::Use()
         m_uiShownLetters = m_TextMsg.at(m_TextMsg.size()-1).size();
         m_uiCurRow = m_TextMsg.size()-1;
         MoveTextToLine(m_uiCurRow+1 - (m_uiSize.y-2*GetTexturBorderSize()) / m_DirectFont.GetFontSize(), 0);
+        m_bFastScroll = true;
         return;
     }
 

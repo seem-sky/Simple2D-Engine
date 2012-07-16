@@ -8,7 +8,7 @@ void MenuItemCloseGame::OnItemEnter()
         pGame->DisplayMenu(new MenuCloseGame(false, true, pGame->GetShownMenu()));
 }
 
-void MenuItemCloseGameConfirme::OnItemEnter()
+void MenuItemCloseGameConfirm::OnItemEnter()
 {
     if (CGame *pGame = CGame::Get())
         pGame->CloseGame();

@@ -82,6 +82,7 @@ private:
     TextureSource* m_pTexture;
 
     bool m_bScrollText;
+    bool m_bFastScroll;
 
     // animation
     Point<int> m_MoveTo;

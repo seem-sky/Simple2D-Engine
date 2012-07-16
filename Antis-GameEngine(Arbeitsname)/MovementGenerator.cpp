@@ -1,7 +1,7 @@
 #include "MovementGenerator.h"
 #include "Map.h"
 #include "Game.h"
-#include "Collission.h"
+#include "Collision.h"
 
 MovementGenerator::MovementGenerator(Unit *pObj) : m_pObj(pObj), m_PathObj(pObj), m_bNewCommand(true), m_uiCurMoveTime(0)
 {
@@ -140,7 +140,7 @@ bool MovementGenerator::UpdateMovement(const ULONGLONG uiCurTime, const UINT uiD
         Collission_Type CollissionWith = CheckMovement(m_pObj->GetPosition(), m_pObj->GetPosition() + Point<int>((int)MoveX, (int)MoveY), result);
         MoveX = (float)result.x;
         MoveY = (float)result.y;
-        // collission while moved by pathfinder
+        // collision while moved by pathfinder
         if (CollissionWith != COLLISSION_NONE && (*m_lMoveCommands.begin())->m_bPathfinderMove)
         {
             MovePointByPathfinder(m_PathObj.GetStoredEndPoint());
@@ -219,13 +219,13 @@ void MovementGenerator::RemoveMovementCommand(sMoveCommand* pCommand)
 Collission_Type MovementGenerator::CheckMovement(Point<int> oldPos, Point<int> newPos, Point<int> &result)
 {
     Collission_Type CollissionWith = COLLISSION_NONE;
-    if (Collission::CheckTileCollission(m_pObj, oldPos, newPos, result))
+    if (Collision::CheckTileCollision(m_pObj, oldPos, newPos, result))
         CollissionWith = COLLISSION_TILE;
 
     if (result.x != 0 || result.y != 0)
     {
         newPos = oldPos + result;
-        if (Collission::CheckObjectCollission(m_pObj, oldPos, newPos, result))
+        if (Collision::CheckObjectCollision(m_pObj, oldPos, newPos, result))
             CollissionWith = COLLISSION_OBJECT;
     }
 

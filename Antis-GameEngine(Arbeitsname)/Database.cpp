@@ -83,6 +83,7 @@ namespace DATABASE
                 t_sFileData += DataLine;
 
             m_pXMLReader = new XML_Reader(t_sFileData);
+            Data.close();
         }
     }
 
@@ -203,13 +204,13 @@ namespace DATABASE
                             VariantChangeType(&t_AttrItr->second, &t_AttrItr->second, VARIANT_NOUSEROVERRIDE, VT_UINT);
                             t_proto.m_uiTextureID = t_AttrItr->second.uiVal;
                         }
-                        else if (t_AttrItr->first == "AniFrequence")
+                        else if (t_AttrItr->first == "AniFrequency")
                         {
                             VariantChangeType(&t_AttrItr->second, &t_AttrItr->second, VARIANT_NOUSEROVERRIDE, VT_UINT);
                             switch(t_proto.m_uiType)
                             {
                             case OBJECT_TYPE_NPC:
-                                t_proto.ObjectType.NPC.m_uiAnimationFrequence = t_AttrItr->second.uintVal;
+                                t_proto.ObjectType.NPC.m_uiAnimationFrequency = t_AttrItr->second.uintVal;
                                 break;
                             default:
                                 break;

@@ -2,7 +2,7 @@
 #include "Map.h"
 #include "Unit.h"
 #include "Game.h"
-#include "Collission.h"
+#include "Collision.h"
 
 Pathfinder::Pathfinder(Unit *pOwner) : m_pOwner(pOwner)
 {
@@ -45,7 +45,7 @@ bool Pathfinder::GetValidPath(Point<UINT> uiStartPos, Point<UINT> uiEndPos)
             {
                 // top
             case 0:
-                if (!Collission::CheckTileCollission(m_pOwner, Point<int>(CurNode->m_uiPos.x, CurNode->m_uiPos.y), Point<int>(CurNode->m_uiPos.x, CurNode->m_uiPos.y-1), move))
+                if (!Collision::CheckTileCollision(m_pOwner, Point<int>(CurNode->m_uiPos.x, CurNode->m_uiPos.y), Point<int>(CurNode->m_uiPos.x, CurNode->m_uiPos.y-1), move))
                 {
                     range = GetRangeBetween(Point<UINT>(CurNode->m_uiPos.x, CurNode->m_uiPos.y -1), uiEndPos);
                     NewNode = new PathNode(Point<UINT>(CurNode->m_uiPos.x, CurNode->m_uiPos.y -1), PATH_UP, CurNode->m_uiGPrice + 1, range.x + range.y, CurNode);
@@ -55,7 +55,7 @@ bool Pathfinder::GetValidPath(Point<UINT> uiStartPos, Point<UINT> uiEndPos)
                 break;
                 // left
             case 1:
-                if (!Collission::CheckTileCollission(m_pOwner, Point<int>(CurNode->m_uiPos.x, CurNode->m_uiPos.y), Point<int>(CurNode->m_uiPos.x-1, CurNode->m_uiPos.y), move))
+                if (!Collision::CheckTileCollision(m_pOwner, Point<int>(CurNode->m_uiPos.x, CurNode->m_uiPos.y), Point<int>(CurNode->m_uiPos.x-1, CurNode->m_uiPos.y), move))
                 {
                     range = GetRangeBetween(Point<UINT>(CurNode->m_uiPos.x -1, CurNode->m_uiPos.y), uiEndPos);
                     NewNode = new PathNode(Point<UINT>(CurNode->m_uiPos.x -1, CurNode->m_uiPos.y), PATH_LEFT, CurNode->m_uiGPrice + 1, range.x + range.y, CurNode);
@@ -65,7 +65,7 @@ bool Pathfinder::GetValidPath(Point<UINT> uiStartPos, Point<UINT> uiEndPos)
                 break;
                 // bottom
             case 2:
-                if (!Collission::CheckTileCollission(m_pOwner, Point<int>(CurNode->m_uiPos.x, CurNode->m_uiPos.y), Point<int>(CurNode->m_uiPos.x, CurNode->m_uiPos.y+1), move))
+                if (!Collision::CheckTileCollision(m_pOwner, Point<int>(CurNode->m_uiPos.x, CurNode->m_uiPos.y), Point<int>(CurNode->m_uiPos.x, CurNode->m_uiPos.y+1), move))
                 {
                     range = GetRangeBetween(Point<UINT>(CurNode->m_uiPos.x, CurNode->m_uiPos.y +1), uiEndPos);
                     NewNode = new PathNode(Point<UINT>(CurNode->m_uiPos.x, CurNode->m_uiPos.y +1), PATH_DOWN, CurNode->m_uiGPrice + 1, range.x + range.y, CurNode);
@@ -75,7 +75,7 @@ bool Pathfinder::GetValidPath(Point<UINT> uiStartPos, Point<UINT> uiEndPos)
                 break;
                 // right
             case 3:
-                if (!Collission::CheckTileCollission(m_pOwner, Point<int>(CurNode->m_uiPos.x, CurNode->m_uiPos.y), Point<int>(CurNode->m_uiPos.x+1, CurNode->m_uiPos.y), move))
+                if (!Collision::CheckTileCollision(m_pOwner, Point<int>(CurNode->m_uiPos.x, CurNode->m_uiPos.y), Point<int>(CurNode->m_uiPos.x+1, CurNode->m_uiPos.y), move))
                 {
                     range = GetRangeBetween(Point<UINT>(CurNode->m_uiPos.x +1, CurNode->m_uiPos.y), uiEndPos);
                     NewNode = new PathNode(Point<UINT>(CurNode->m_uiPos.x +1, CurNode->m_uiPos.y), PATH_RIGHT, CurNode->m_uiGPrice + 1,  range.x + range.y, CurNode);

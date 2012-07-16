@@ -115,7 +115,7 @@ namespace DATABASE
             // 1 = NPC
             struct sNPC : sMapObject
             {
-                UINT m_uiAnimationFrequence;
+                UINT m_uiAnimationFrequency;
                 UINT m_uiHPmin;
                 UINT m_uiHPmax;
                 UINT m_uiLevelMin;

@@ -1,5 +1,5 @@
 #include "Game.h"
-#include "RessourceManager.h"
+#include "ResourceManager.h"
 #include "DirectFont.h"
 
 CGame::CGame(void) : m_pDirect3D(NULL), m_pDirectInput(NULL), m_pWorldSession(NULL), m_pMap(NULL), m_pGameDB(NULL), m_pShownMenu(NULL),
@@ -7,7 +7,7 @@ CGame::CGame(void) : m_pDirect3D(NULL), m_pDirectInput(NULL), m_pWorldSession(NU
 {
     m_sLogLocationName  = LOGFILE_ENGINE_LOG_NAME + "CGame : ";
 
-    pPlayer = new Player();
+    m_pPlayer = new Player();
 }
 
 CGame::~CGame(void)
@@ -100,11 +100,19 @@ GAMEINIT_STATE CGame::Initialize(HINSTANCE hInstance, HWND hWnd)
 
 bool CGame::Run(const ULONGLONG CurTime, const UINT CurElapsedTime)
 {
+    // do game events
+    for (EventLIST::iterator t_EventItr = m_GameEvents.begin(); t_EventItr != m_GameEvents.end(); ++t_EventItr)
+        if (!DoEventAction(&(*t_EventItr)))
+            return false;
+
+    m_GameEvents.clear();
+
     switch(m_GameState)
     {
     case GAME_NONE:
         CreateNewGame();
         break;
+
     case GAME_RUN:
     case GAME_PAUSE:
         // update direct input
@@ -112,8 +120,8 @@ bool CGame::Run(const ULONGLONG CurTime, const UINT CurElapsedTime)
             PauseGame();
 
         // Update players
-        if (pPlayer)
-            pPlayer->UpdatePlayer(CurTime, CurElapsedTime);
+        if (m_pPlayer)
+            m_pPlayer->UpdatePlayer(CurTime, CurElapsedTime);
 
         if (m_pShownMenu)
             m_pShownMenu->UpdateMenu(CurTime, CurElapsedTime);
@@ -124,30 +132,31 @@ bool CGame::Run(const ULONGLONG CurTime, const UINT CurElapsedTime)
         // if no Textbox and no menu shown or if cur menu allows updating
         if (!m_pShownTextBox && (!m_pShownMenu || m_pShownMenu->ShouldUpdating()))
         {
-            if (IsGamePaused())
-                return true;
+            if (!IsGamePaused())
+            {
+                // Update World
+                if (m_pWorldSession)
+                    m_pWorldSession->WorldUpdate(CurTime, CurElapsedTime);
 
-            // Update World
-            if (m_pWorldSession)
-                m_pWorldSession->WorldUpdate(CurTime, CurElapsedTime);
-
-            // Update Map
-            if (m_pMap)
-                m_pMap->UpdateMap(CurTime, CurElapsedTime);
+                // Update Map
+                if (m_pMap)
+                    m_pMap->UpdateMap(CurTime, CurElapsedTime);
+            }
         }
         break;
     case GAME_LOAD_NEW_GAME:
-        if (m_pMap->LoadNewMap() == MAP_RESULT_DONE)
+        if (m_pMap->LoadNewMap(1) == MAP_RESULT_DONE)
+            InitNewGame();
+        break;
+    case GAME_MAP_CHANGE:
+        if (m_pMap->LoadNewMap(1) == MAP_RESULT_DONE)
             InitNewGame();
         break;
     case GAME_LOAD_GAME:
         break;
     }
 
-    if (m_GameState == GAME_END)
-        return false;
-    else
-        return true;
+    return true;
 }
 
 HRESULT CGame::Draw()
@@ -182,14 +191,6 @@ HRESULT CGame::Draw()
 
 void CGame::Quit()
 {
-    m_GameState = GAME_END;
-
-    if (!PlayerList.empty())
-    {
-        for (PlayerPtrList::iterator itr = PlayerList.begin(); itr != PlayerList.end(); ++itr)
-            delete *itr;
-    }
-
     if (m_pShownMenu)
         m_pShownMenu->CloseAllMenus();
 
@@ -205,9 +206,9 @@ void CGame::Quit()
     if (m_pDirectInput)
         m_pDirectInput->Del();
 
-    // release ressource manager
-    if (CRessourceManager *pRManager = CRessourceManager::Get())
-        pRManager->Del();
+    // release resource manager
+    if (ResourceMgr *pResMgr = ResourceMgr::Get())
+        pResMgr->Del();
 
     // delete map
     if (m_pMap)
@@ -283,7 +284,7 @@ void CGame::CreateNewGame()
     if (!m_pGameDB->GetStartConditions(t_StartProto))
         return;
 
-    m_pMap->LoadNewMap(m_pGameDB->GetMapName(t_StartProto.m_uiMapID));
+    m_pMap->LoadNewMap(t_StartProto.m_uiMapID);
 
     m_GameState = GAME_LOAD_NEW_GAME;
 }
@@ -298,7 +299,34 @@ void CGame::InitNewGame()
         return;
 
     Unit *pWho = (Unit*)m_pMap->AddNewWorldObject(1, t_StartProto.m_uiStartPos.x, t_StartProto.m_uiStartPos.y, 0);
-    pPlayer->SetControledUnit(pWho);
+    m_pPlayer->SetControledUnit(pWho);
 
     m_GameState = GAME_RUN;
+}
+
+bool CGame::DoEventAction(GameEvent *p_pEvent)
+{
+    if (!p_pEvent)
+        return true;
+
+    switch(p_pEvent->m_EventType)
+    {
+    case EVENT_MAP_CHANGE:
+        if (!m_pMap)
+            return true;
+
+        m_pMap->ClearMap();
+        m_pMap->LoadNewMap(p_pEvent->EventType.MapChange.m_uiMapID);
+        m_GameState = GAME_MAP_CHANGE;
+        break;
+
+    case EVENT_CLOSE_GAME:
+        return false;
+
+    case EVENT_NONE:
+    default:
+        break;
+    }
+
+    return true;
 }

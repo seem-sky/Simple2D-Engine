@@ -22,25 +22,25 @@ public:
 
 private:
     void CleanUp();
-    HRESULT InitMousePuffer( int PufferSize );
+    HRESULT InitMouseBuffer( int BufferSize );
     //Direct Input Object
     LPDIRECTINPUT8 m_DirectInput;
 
     //Devices
     //
-    //Tastatur
+    //keyboard
     LPDIRECTINPUTDEVICE8 m_DIKeyboard;
-    //Maus
+    //mouse
     LPDIRECTINPUTDEVICE8 m_DIMouse;
 
     // key state
     bool m_aKeyState[256];
-    // mouspuffer
+    // mousebuffer
     DIPROPDWORD DIProperties;
-    // maus koord
-    D3DXVECTOR2 m_v2MouseKoord;
-    D3DXVECTOR2 m_v2MouseKlick;
-    bool m_bMouseKlick;
+    //mouse coord
+    D3DXVECTOR2 m_v2MouseCoord;
+    D3DXVECTOR2 m_v2MouseClick;
+    bool m_bMouseClick;
 
     // look up key states
     bool SetKeyStateKeyboard();

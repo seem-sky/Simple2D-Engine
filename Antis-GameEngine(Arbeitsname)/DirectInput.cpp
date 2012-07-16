@@ -1,6 +1,6 @@
 #include "DirectInput.h"
 
-DirectInput::DirectInput() : m_DirectInput(0), m_DIKeyboard(0), m_DIMouse(0), m_v2MouseKoord(0,0), m_bMouseKlick(false), TSingleton()
+DirectInput::DirectInput() : m_DirectInput(0), m_DIKeyboard(0), m_DIMouse(0), m_v2MouseCoord(0,0), m_bMouseClick(false), TSingleton()
 {
     m_sLogLocationName  = LOGFILE_ENGINE_LOG_NAME + "DirectInput : ";
 
@@ -48,7 +48,7 @@ BOOL DirectInput::Init(HINSTANCE hInstance, HWND hWnd)
     if(hr != S_OK)
         return FALSE;
 
-    hr = InitMousePuffer( 20 );
+    hr = InitMouseBuffer( 20 );
     if(hr != S_OK)
         return FALSE;
 
@@ -98,7 +98,7 @@ void DirectInput::ClearKeyStateKeyboard()
     memset(&m_aKeyState, NULL, sizeof(m_aKeyState));
 }
 
-HRESULT DirectInput::InitMousePuffer(int PufferSize)
+HRESULT DirectInput::InitMouseBuffer(int BufferSize)
 {
     ZeroMemory( &DIProperties, sizeof(DIProperties ));
     DIProperties.diph.dwSize            = sizeof(DIPROPDWORD);
@@ -106,7 +106,7 @@ HRESULT DirectInput::InitMousePuffer(int PufferSize)
     DIProperties.diph.dwObj             = 0;
     DIProperties.diph.dwHow             = DIPH_DEVICE;
 
-    DIProperties.dwData                 = PufferSize;
+    DIProperties.dwData                 = BufferSize;
 
     return m_DIMouse->SetProperty( DIPROP_BUFFERSIZE, &DIProperties.diph );
 }
@@ -126,10 +126,10 @@ bool DirectInput::ProcessInput( void )
     switch( data.dwOfs )
     {
     case DIMOFS_X:
-        m_v2MouseKoord.x += data.dwData;        //move in X
+        m_v2MouseCoord.x += data.dwData;        //move in X
         break;
     case DIMOFS_Y:
-        m_v2MouseKoord.y += data.dwData;        //move in Y
+        m_v2MouseCoord.y += data.dwData;        //move in Y
         break;
     case DIMOFS_BUTTON1:
         break;

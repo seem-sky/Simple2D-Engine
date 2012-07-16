@@ -4,7 +4,7 @@
 #include "Game.h"
 #include "Unit.h"
 
-Player::Player(void) : m_uiMoveBuffer(MOVE_BUFFER_NONE), m_uiLockBuffer(MOVE_BUFFER_NONE)
+Player::Player(void) : m_pControledUnit(NULL), m_uiMoveBuffer(MOVE_BUFFER_NONE), m_uiLockBuffer(MOVE_BUFFER_NONE)
 {
     m_sLogLocationName = LOGFILE_ENGINE_LOG_NAME + "Player : ";
     AddKeyAction(DIK_W, ACTION_MOVE_UP);
@@ -54,6 +54,13 @@ void Player::UpdatePlayer(const ULONGLONG CurTime, const UINT CurElapsedTime)
 
 void Player::SetControledUnit(Unit *pWho)
 {
+    // release old object
+    if (m_pControledUnit)
+    {
+        m_pControledUnit->SetPlayerControle(false);
+        m_pControledUnit = NULL;
+    }
+
     if (pWho)
     {
         m_pControledUnit = pWho;
@@ -71,10 +78,9 @@ void Player::SetControledUnit(Unit *pWho)
                 Point<int> MapPos;
                 if (Map *pMap = pWho->GetMap())
                 {
-                    /*MapPos = pMap->GetPosition();*/
                     MapPos.x = ScreenSize.x / 2 - UnitPos.x - UnitSize.x / 2;
                     MapPos.y = ScreenSize.y / 2 - UnitPos.y - UnitSize.y / 2;
-                    pMap->ChangePosition(MapPos);
+                    pMap->SetPosition(MapPos);
                 }
             }
         }

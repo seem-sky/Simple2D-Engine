@@ -141,5 +141,5 @@ MenuCloseGame::MenuCloseGame(bool UpdateGame, bool DrawMap, Menu *pParentMenu, b
     MenuItem *pItem = new MenuItemCloseMenu();
     pItem->SetItemName("Nein");
     m_MenuItemList.push_back(pItem);
-    m_MenuItemList.push_back(new MenuItemCloseGameConfirme());
+    m_MenuItemList.push_back(new MenuItemCloseGameConfirm());
 }

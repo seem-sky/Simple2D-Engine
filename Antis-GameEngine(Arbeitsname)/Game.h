@@ -32,9 +32,39 @@ enum GAME_STATE
     GAME_RUN,
     GAME_LOAD_NEW_GAME,
     GAME_LOAD_GAME,
+    GAME_MAP_CHANGE,
     GAME_PAUSE,
-    GAME_END,
 };
+
+enum GameEventType
+{
+    EVENT_NONE,
+    EVENT_MAP_CHANGE,
+    EVENT_CLOSE_GAME,
+};
+
+struct GameEvent
+{
+    GameEvent() : m_EventType(EVENT_NONE)
+    {
+        memset(&EventType, 0, sizeof(EventType));
+    }
+
+    GameEventType m_EventType;
+
+    union
+    {
+        struct sMapChange
+        {
+            UINT m_uiMapID;
+            UINT m_uiNewPlayerPosX;
+            UINT m_uiNewPlayerPosY;
+        }MapChange;
+    }EventType;
+
+};
+
+typedef std::list<GameEvent> EventLIST;
 
 typedef std::list<Player*> PlayerPtrList;
 
@@ -49,8 +79,6 @@ public:
     HRESULT Draw();
     void Quit();
     void SetWorldSession(WorldSession *pWorld) { m_pWorldSession = pWorld; }
-
-    inline void CloseGame() { m_GameState = GAME_END; }
 
     // game pause
     inline void PauseGame(bool pause = true) { pause ? m_GameState = GAME_PAUSE : m_GameState = GAME_RUN; }
@@ -77,6 +105,18 @@ public:
     inline bool ShowsTextbox() { return m_pShownTextBox ? true : false; }
     inline TextBox* GetShownTextbox() { return m_pShownTextBox; }
 
+    // GameEvents
+    inline void AddGameEvent(GameEvent t_newEvent) { m_GameEvents.push_back(t_newEvent); }
+    inline void CloseGame()
+    {
+        GameEvent t_Event;
+        t_Event.m_EventType = EVENT_CLOSE_GAME;
+        AddGameEvent(t_Event);
+    }
+
+    // player
+    Player* GetPlayer() { return m_pPlayer; }
+
 private:
     GAME_STATE m_GameState;
     GameInfo m_GameInfo;
@@ -87,16 +127,18 @@ private:
     WorldSession *m_pWorldSession;
     DATABASE::Database *m_pGameDB;
 
+    EventLIST m_GameEvents;
+
     // the main menu
     Menu *m_pShownMenu;
 
-    PlayerPtrList PlayerList;
-
-    Player* pPlayer;
+    Player* m_pPlayer;
 
     TextBox* m_pShownTextBox;
 
     void CreateNewGame();
     void InitNewGame();
+
+    bool DoEventAction(GameEvent *p_pEvent);
 };
 #endif

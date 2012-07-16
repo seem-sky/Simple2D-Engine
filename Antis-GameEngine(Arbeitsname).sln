@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Antis-GameEngine(Arbeitsname)", "Antis-GameEngine(Arbeitsname)\Antis-GameEngine(Arbeitsname).vcproj", "{D8A9B640-5A61-4087-9133-8DC208D7FDFD}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MapEditor", "MapEditor\MapEditor.vcproj", "{88755B49-72E2-42CE-8332-213BD4CBE137}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D8A9B640-5A61-4087-9133-8DC208D7FDFD} = {D8A9B640-5A61-4087-9133-8DC208D7FDFD}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

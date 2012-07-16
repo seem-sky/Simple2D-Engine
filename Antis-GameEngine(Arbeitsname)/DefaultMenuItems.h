@@ -7,7 +7,7 @@
 ## menu item AIs
 #####
  - MenuItemCloseGame (Open close game menu)
- - MenuItemCloseGameConfirme (Close Game)
+ - MenuItemCloseGameConfirm (Close Game)
  - MenuItemCloseMenu (Close Menu)
 */
 
@@ -23,9 +23,9 @@ struct MenuItemCloseGame : public MenuItem
 };
 
 /* Close Game */
-struct MenuItemCloseGameConfirme : public MenuItem
+struct MenuItemCloseGameConfirm : public MenuItem
 {
-    MenuItemCloseGameConfirme(void) : MenuItem()
+    MenuItemCloseGameConfirm(void) : MenuItem()
     {
         SetItemName("Ja");
     }

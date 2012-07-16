@@ -235,14 +235,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\ObjectAI.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\ObjectAI.h"
-					>
-				</File>
-				<File
 					RelativePath=".\Player.cpp"
 					>
 				</File>
@@ -275,14 +267,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\UnitAI.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\UnitAI.h"
-					>
-				</File>
-				<File
 					RelativePath=".\WorldObject.cpp"
 					>
 				</File>
@@ -295,11 +279,11 @@
 				Name="Movement"
 				>
 				<File
-					RelativePath=".\Collission.cpp"
+					RelativePath=".\Collision.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Collission.h"
+					RelativePath=".\Collision.h"
 					>
 				</File>
 				<File
@@ -343,6 +327,46 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="AI"
+				>
+				<File
+					RelativePath=".\AI_Loader.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\AI_Manager.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\AI_Manager.h"
+					>
+				</File>
+				<File
+					RelativePath=".\MapAI.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\MapAI.h"
+					>
+				</File>
+				<File
+					RelativePath=".\ObjectAI.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\ObjectAI.h"
+					>
+				</File>
+				<File
+					RelativePath=".\UnitAI.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\UnitAI.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="File In-/Output"
@@ -376,6 +400,10 @@
 			Name="Controlling"
 			>
 			<File
+				RelativePath=".\AI_Loader.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Global.h"
 				>
 			</File>
@@ -392,11 +420,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\RessourceManager.cpp"
+				RelativePath=".\ResourceManager.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\RessourceManager.h"
+				RelativePath=".\ResourceManager.h"
 				>
 			</File>
 			<File

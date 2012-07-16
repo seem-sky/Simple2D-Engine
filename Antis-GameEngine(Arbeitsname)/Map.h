@@ -9,16 +9,29 @@
 typedef std::vector<std::vector<float>> MapTiles;
 typedef std::vector<ScriptPoint*> ScriptPointLIST;
 
-// the da struct for maps
+// info struct for maps
 struct MapInfo
 {
     std::string m_sMapName;
     std::string m_sMapAnnounceName;
+    std::string m_sAIName;
 
     UINT m_uiX;
     UINT m_uiY;
 
-    MapInfo() : m_uiX(0), m_uiY(0) { }
+    UINT m_uiID;
+
+    MapInfo() : m_uiID(0), m_uiX(0), m_uiY(0) { }
+
+    void Clear()
+    {
+        m_uiX = 0;
+        m_uiY = 0;
+        m_uiID = 0;
+        m_sMapName.clear();
+        m_sMapAnnounceName.clear();
+        m_sAIName.clear();
+    }
 };
 
 enum MapLoadResult
@@ -43,6 +56,7 @@ enum MapLoadState
 };
 
 class MapLoadThread;
+class MapAI;
 
 class Map
 {
@@ -53,7 +67,8 @@ public:
     ## Map System
     #####*/
     void Draw();
-    MapLoadResult LoadNewMap(std::string sMapName = "");
+    MapLoadResult LoadNewMap(UINT p_uiID);
+    void ClearMap();
     void UpdateMap(const ULONGLONG uiCurTime, const UINT uiDiff);
 
     const MapInfo* GetMapInfo() { return &m_MapInfo; }
@@ -70,7 +85,7 @@ public:
     inline int GetPositionX() { return m_Position.x; }
     inline int GetPositionY() { return m_Position.y; }
     inline Point<int> GetPosition() { return m_Position; }
-    inline void SetPosition(Point<int> pos) { m_Position = pos; }
+    inline void SetPosition(Point<int> pos) {m_Position = pos; }
     inline void ChangePosition(Point<int> pos) { m_Position += pos; }
 
     /*#####
@@ -78,6 +93,7 @@ public:
     #####*/
     // add new world object to map
     WorldObject* AddNewWorldObject(UINT uiObjectID, int XPos, int YPos, UINT uiLayerNr);
+    WorldObject* GetObject(UINT t_uiObjectGUID);
 
     /*#####
     ## color
@@ -95,6 +111,11 @@ public:
     void ClearAllLayer();
     Layer* GetLayerAtNr(UINT uiLayerNr);
 
+    /*#####
+    ## scriptpoints
+    #####*/
+    void ClearScriptPoints();
+
 protected:
     void DrawMap();
     void DrawLayer();
@@ -103,24 +124,20 @@ protected:
     std::string m_sLogLocationName;
 
 private:
-    // string which stores data from file
-    std::string m_sMapDataFromFile;
-    std::list<std::string> m_TileByRowFromFileList;
-
     MapLoadState m_MapLoadState;
     MapInfo m_MapInfo;
     std::vector<MapTiles> m_v2MapTiles;
+    LayerList m_lLayers;
     std::map<UINT, WorldObject*> m_WorldObjectLIST;
     ScriptPointLIST m_ScriptPoints;
 
     Point<int> m_Position;
     D3DXCOLOR m_MapColor;
 
-    LayerList m_lLayers;
-
     MapLoadThread *m_pMapLoadThread;
-};
 
+    MapAI *m_pMapAI;
+};
 
 struct ObjectReadOut
 {
@@ -138,10 +155,9 @@ struct ObjectReadOut
 class MapLoadThread : public ActiveObject
 {
 public:
-    MapLoadThread(std::string sMapName);
+    MapLoadThread(std::string sMapName, MapInfo &MapInfo, std::vector<MapTiles> &MapTiles, LayerList &LayerList, std::map<UINT, WorldObject*> &objectList, ScriptPointLIST &scriptPoints);
 
     MapLoadState GetMapLoadState() { return m_MapLoadState; }
-    void GetMapInfo(MapInfo &MapInfo, std::vector<MapTiles> &MapTiles, LayerList &LayerList, std::map<UINT, WorldObject*> &objectList, ScriptPointLIST &scriptPoints);
 
 protected:
     /*#####
@@ -166,11 +182,11 @@ private:
     std::string m_sMapName;
     MapLoadState m_MapLoadState;
 
-    MapInfo m_MapInfo;
-    std::vector<MapTiles> m_v2MapTiles;
-    LayerList m_lLayers;
-    ScriptPointLIST m_ScriptPoints;
+    MapInfo &m_MapInfo;
+    std::vector<MapTiles> &m_v2MapTiles;
+    LayerList &m_lLayers;
+    ScriptPointLIST &m_ScriptPoints;
 
-    std::map<UINT, WorldObject*> m_WorldObjectLIST;
+    std::map<UINT, WorldObject*> &m_WorldObjectLIST;
 };
 #endif;
