@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="MapEditor"
-	ProjectGUID="{88755B49-72E2-42CE-8332-213BD4CBE137}"
-	RootNamespace="MapEditor"
+	Name="EngineSupport"
+	ProjectGUID="{EF50DD0D-6C98-4570-8036-AB5D9874C997}"
+	RootNamespace="EngineSupport"
 	TargetFrameworkVersion="196613"
 	>
 	<Platforms>
@@ -19,7 +19,7 @@
 			Name="Debug|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="1"
+			ConfigurationType="4"
 			CharacterSet="2"
 			>
 			<Tool
@@ -27,9 +27,9 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
-				CommandLine="qmake -project&#x0D;&#x0A;qmake&#x0D;&#x0A;&#x0D;&#x0A;"
-				AdditionalDependencies=""
-				Outputs="QT_BUILD"
+				Description="Ein benutzerdefinierter Buildschritt wird ausgeführt."
+				CommandLine=""
+				Outputs=""
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -59,16 +59,11 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="QTGuid4.lib QTCored4.lib EngineSupportd.lib"
-				GenerateDebugInformation="true"
-				TargetMachine="1"
+				Name="VCLibrarianTool"
+				OutputFile="$(SolutionDir)\$(ProjectName)d.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -80,9 +75,6 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
@@ -90,7 +82,7 @@
 			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="1"
+			ConfigurationType="4"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
@@ -99,6 +91,9 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
+				Description="Ein benutzerdefinierter Buildschritt wird ausgeführt."
+				CommandLine=""
+				Outputs=""
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -128,18 +123,11 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="QTGui4.lib QTCore4.lib EngineSupport.lib"
-				GenerateDebugInformation="true"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				TargetMachine="1"
+				Name="VCLibrarianTool"
+				OutputFile="$(SolutionDir)\$(ProjectName).lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -151,9 +139,6 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
@@ -162,99 +147,71 @@
 	</References>
 	<Files>
 		<Filter
-			Name="MainWindow"
+			Name="Quelldateien"
+			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
+			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\MainWindow.cpp"
+				RelativePath=".\Database.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\MainWindow.h"
+				RelativePath=".\Logfile.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="MainWindow moc created"
-						CommandLine="moc -o moc_$(InputFileName) $(InputFileName)&#x0D;&#x0A;"
-						AdditionalDependencies="MainWindow.cpp"
-						Outputs="this"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\UI\MainWindow.ui"
+				RelativePath=".\Thread.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="compile MainWindow.ui"
-						CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)&#x0D;&#x0A;"
-						Outputs="MainWindow"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\UI\UI_MainWindow.h"
+				RelativePath=".\XML_Reader.cpp"
 				>
 			</File>
 		</Filter>
 		<Filter
-			Name="Database"
+			Name="Headerdateien"
+			Filter="h;hpp;hxx;hm;inl;inc;xsd"
+			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\UI\Database.ui"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="compile Database.ui"
-						CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)&#x0D;&#x0A;"
-						Outputs="Database"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\DatabaseWindow.cpp"
+				RelativePath=".\Database.h"
 				>
 			</File>
 			<File
-				RelativePath=".\DatabaseWindow.h"
+				RelativePath=".\Global.h"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="DatabaseWindow.moc created."
-						CommandLine="moc -o moc_$(InputFileName) $(InputFileName)&#x0D;&#x0A;"
-						AdditionalDependencies="DatabaseWindow.cpp"
-						Outputs="DatabaseWindow"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\UI\UI_Database.h"
+				RelativePath=".\Logfile.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Point.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Singleton.h"
+				>
+			</File>
+			<File
+				RelativePath=".\StringAdditions.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Thread.h"
+				>
+			</File>
+			<File
+				RelativePath=".\XML_Reader.h"
 				>
 			</File>
 		</Filter>
-		<File
-			RelativePath=".\DatabaseOutput.cpp"
+		<Filter
+			Name="Ressourcendateien"
+			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
+			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
-		</File>
-		<File
-			RelativePath=".\DatabaseOutput.h"
-			>
-		</File>
-		<File
-			RelativePath=".\main.cpp"
-			>
-		</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>

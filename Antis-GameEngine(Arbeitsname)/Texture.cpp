@@ -63,15 +63,15 @@ TextureSource* TextureMgr::AddTextureSource(UINT uiID)
     {
         if (DATABASE::Database *t_pDB = DATABASE::Database::Get())
         {
-            if (const DATABASE::SpritePrototype *t_pProto = t_pDB->GetSpritePrototype(uiID))
-            {
-                std::string test = t_pDB->GetSpritePath(t_pProto->m_uiSpriteType);
-                TextureSource *t_pTexture   = new TextureSource();
-                t_pTexture->m_TextureInfo   = *t_pProto;
-                t_pTexture->m_pTexture      = t_pResMgr->GetTexture(t_pDB->GetSpritePath(t_pProto->m_uiSpriteType), t_pProto);
-                m_TextureList.insert(std::make_pair<UINT, TextureSource*>(t_pTexture->m_TextureInfo.m_uiID, t_pTexture));
-                return t_pTexture;
-            }
+            //if (const DATABASE::SpritePrototype *t_pProto = t_pDB->GetSpritePrototype(uiID))
+            //{
+            //    std::string test = t_pDB->GetSpritePath(t_pProto->m_uiSpriteType);
+            //    TextureSource *t_pTexture   = new TextureSource();
+            //    t_pTexture->m_TextureInfo   = *t_pProto;
+            //    t_pTexture->m_pTexture      = t_pResMgr->GetTexture(t_pDB->GetSpritePath(t_pProto->m_uiSpriteType), t_pProto);
+            //    m_TextureList.insert(std::make_pair<UINT, TextureSource*>(t_pTexture->m_TextureInfo.m_uiID, t_pTexture));
+            //    return t_pTexture;
+            //}
         }
     }
 

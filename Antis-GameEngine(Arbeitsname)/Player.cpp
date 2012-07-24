@@ -65,7 +65,7 @@ void Player::SetControledUnit(Unit *pWho)
     {
         m_pControledUnit = pWho;
         pWho->SetPlayerControle();
-        BASIC_LOG(m_sLogLocationName + "Changes controle to Object with GUID " + to_string(pWho->GetGUID())+".");
+        BASIC_LOG(m_sLogLocationName + "Changes controle to Object with GUID " + ToString(pWho->GetGUID())+".");
         // set screen center to controled unit
         if (CGame *pGame = CGame::Get())
         {

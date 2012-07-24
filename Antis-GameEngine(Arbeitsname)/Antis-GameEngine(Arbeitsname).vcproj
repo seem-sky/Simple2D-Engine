@@ -62,8 +62,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="d3d9.lib d3dx9.lib msxml2.lib dinput8.lib dxguid.lib"
-				LinkIncremental="2"
+				AdditionalDependencies="d3d9.lib d3dx9.lib msxml2.lib dinput8.lib dxguid.lib EngineSupportd.lib"
+				LinkIncremental="0"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -137,7 +137,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="d3d9.lib d3dx9.lib msxml2.lib dinput8.lib dxguid.lib"
+				AdditionalDependencies="d3d9.lib d3dx9.lib msxml2.lib dinput8.lib dxguid.lib EngineSupport.lib"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -175,14 +175,6 @@
 		<Filter
 			Name="Game"
 			>
-			<File
-				RelativePath=".\Database.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Database.h"
-				>
-			</File>
 			<File
 				RelativePath=".\Game.cpp"
 				>
@@ -387,32 +379,12 @@
 				RelativePath=".\IniParser.h"
 				>
 			</File>
-			<File
-				RelativePath=".\XML_Reader.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\XML_Reader.h"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Controlling"
 			>
 			<File
 				RelativePath=".\AI_Loader.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Global.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Logfile.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Logfile.h"
 				>
 			</File>
 			<File
@@ -425,22 +397,6 @@
 			</File>
 			<File
 				RelativePath=".\ResourceManager.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Singleton.h"
-				>
-			</File>
-			<File
-				RelativePath=".\StringAdditions.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Thread.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Thread.h"
 				>
 			</File>
 			<File

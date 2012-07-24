@@ -130,8 +130,8 @@ WorldObject* Map::AddNewWorldObject(UINT uiObjectID, int XPos, int YPos, UINT ui
     if (ObjectLayer *pLayer = (ObjectLayer*)GetLayerAtNr(uiLayerNr))
     {
         pNewObject->SetObjectInfo(pProto);
-        if (DATABASE::SpritePrototype const *pSpriteProto = t_pDB->GetSpritePrototype(pProto->m_uiTextureID))
-            pNewObject->SetTextureSource(pSpriteProto);
+        //if (DATABASE::SpritePrototype const *pSpriteProto = t_pDB->GetSpritePrototype(pProto->m_uiTextureID))
+        //    pNewObject->SetTextureSource(pSpriteProto);
 
         pLayer->AddWorldObject(pNewObject);
         m_WorldObjectLIST.insert(std::make_pair<UINT, WorldObject*>(pNewObject->GetGUID(), pNewObject));
@@ -959,7 +959,7 @@ MapLoadResult MapLoadThread::LoadLayerAndObjects(std::string *sMapData)
 
                     if (pObject)
                     {
-                        pObject->SetTextureSource(t_pDB->GetSpritePrototype(pObject->GetObjectInfo()->m_uiTextureID));
+                        /*pObject->SetTextureSource(t_pDB->GetSpritePrototype(pObject->GetObjectInfo()->m_uiTextureID));*/
 
                         m_WorldObjectLIST.insert(std::make_pair<UINT, WorldObject*>(vLayerAndObjects.at(i).at(j)->m_GUID, pObject));
                         pLayer->AddWorldObject(pObject);
