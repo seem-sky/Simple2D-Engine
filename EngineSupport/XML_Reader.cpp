@@ -2,11 +2,9 @@
 #include "Logfile.h"
 #include <fstream>
 
-#import <msxml4.dll>
-
 namespace XML
 {
-    #define FAILED_CHECK if (p_hr == S_FALSE) { m_XMLState = XML_FAILED;; return NULL; }
+    #define FAILED_CHECK if (p_hr == S_FALSE) { m_XMLState = XML_FAILED; return NULL; }
     #define returnRun CoUninitialize(); return;
 
     XML_Reader::XML_Reader(std::string sData) : m_XMLState(XML_IN_PROGRESS), m_sData(sData), m_sLogLocationName(LOGFILE_ENGINE_LOG_NAME + "XML_Reader : "),
@@ -30,18 +28,23 @@ namespace XML
         }
 
         MSXML2::IXMLDOMDocument2Ptr t_pXMLDom = NULL;
-        HRESULT p_hr = t_pXMLDom.CreateInstance(__uuidof(MSXML2::DOMDocument40));
-        if (p_hr == S_FALSE)
+        if (FAILED(t_pXMLDom.CreateInstance(__uuidof(MSXML2::DOMDocument60))))
         {
+            ERROR_LOG(m_sLogLocationName + "Unable to create DOM instance.");
             m_XMLState = XML_FAILED;
             returnRun;
         }
 
-        // interpret string
-        t_pXMLDom->loadXML(m_sData.c_str());
+        if (!t_pXMLDom->loadXML(_bstr_t(m_sData.c_str())))
+        {
+            ERROR_LOG(m_sLogLocationName + "Unable to load XML string.");
+            m_XMLState = XML_FAILED;
+            returnRun;
+        }
 
+        HRESULT p_hr;
         m_pChildList = CheckoutChildren(t_pXMLDom, p_hr);
-        if (p_hr == S_FALSE)
+        if (FAILED(p_hr))
         {
             m_XMLState = XML_FAILED;
             returnRun;

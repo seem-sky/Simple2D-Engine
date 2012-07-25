@@ -4,7 +4,7 @@
 #include "XML_Reader.h"
 #include <msxml.h>
 
-#import <msxml4.dll>
+#import <msxml6.dll>
 
 namespace XML
 {
@@ -18,7 +18,7 @@ namespace XML
         bool GetChildNode(IXMLDOMNodePtr p_pNode, std::string p_sNodeName, IXMLDOMNodePtr &p_pResultNode);
         bool GetChildNodeByAttribute(IXMLDOMNodePtr p_pNode, std::string p_sNodeName, std::string p_sAttributeName, VARIANT p_value, IXMLDOMNodePtr &p_pResultNode);
 
-        IXMLDOMNodePtr* AddChildNode(IXMLDOMNodePtr p_pNode, std::string p_sNodeName);
+        IXMLDOMNodePtr AddChildNode(IXMLDOMNodePtr p_pNode, std::string p_sNodeName);
 
     private:
         XML_STATE m_XMLState;

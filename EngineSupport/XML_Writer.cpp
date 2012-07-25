@@ -23,7 +23,7 @@ namespace XML
         }
 
         MSXML2::IXMLDOMDocument2Ptr t_pXMLDom = NULL;
-        HRESULT p_hr = t_pXMLDom.CreateInstance(__uuidof(MSXML2::DOMDocument40));
+        HRESULT p_hr = t_pXMLDom.CreateInstance(__uuidof(MSXML2::DOMDocument60));
         if (p_hr == S_FALSE)
         {
             m_XMLState = XML_FAILED;
@@ -98,5 +98,11 @@ namespace XML
         }
 
         return false;
+    }
+
+    IXMLDOMNodePtr XML_Writer::AddChildNode(IXMLDOMNodePtr p_pNode, std::string p_sNodeName)
+    {
+        //IXMLDOMNodePtr t_pNewNode = new IXMLDOMNode(;
+        return NULL;
     }
 }

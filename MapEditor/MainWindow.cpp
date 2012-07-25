@@ -103,6 +103,8 @@ void MainWindow::CustomUpdate()
             switch(t_pDB->GetDBState())
             {
             case XML_IN_PROGRESS:
+                if (m_pTimer)
+                    m_pTimer->start(100);
                 return;
             case XML_CORRUPT_FILE:
             case XML_FAILED:

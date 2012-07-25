@@ -6,7 +6,7 @@
 #include <map>
 #include <msxml.h>
 
-#import <msxml4.dll>
+#import <msxml6.dll>
 
 namespace XML
 {

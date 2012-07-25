@@ -4,7 +4,7 @@
 #include "MapAI.h"
 #include <msxml.h>
 
-#import <msxml4.dll>
+#import <msxml6.dll>
 
 Map::Map(void) : m_Position(0,0), m_MapLoadState(MAP_STATE_NONE), m_pMapLoadThread(NULL), m_MapColor(1,1,1,1), m_pMapAI(NULL)
 {
