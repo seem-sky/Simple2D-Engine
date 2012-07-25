@@ -3,8 +3,10 @@
 
 namespace DATABASE
 {
+    using namespace XML;
     Database::Database(void) : m_pXMLReader(NULL), TSingleton()
     {
+        m_sLogLocationName = LOGFILE_ENGINE_LOG_NAME + "Database : ";
     }
 
     Database::~Database(void)
@@ -87,19 +89,20 @@ namespace DATABASE
         }
     }
 
-    XML_Reader::XML_STATE Database::GetDBState()
+    XML_STATE Database::GetDBState()
     {
         // progress XML Reader
         if (m_pXMLReader)
         {
-            XML_Reader::XML_STATE t_State = m_pXMLReader->GetReaderState();
+            XML_STATE t_State = m_pXMLReader->GetReaderState();
             switch(t_State)
             {
-            case XML_Reader::XML_IN_PROGRESS:
-                return XML_Reader::XML_IN_PROGRESS;
-            case XML_Reader::XML_DONE:
+            case XML_IN_PROGRESS:
+                return XML_IN_PROGRESS;
+            case XML_DONE:
                 m_pDatabase = *m_pXMLReader->GetXMLData();
                 StoreSpritePaths();
+                BASIC_LOG(m_sLogLocationName + "Database load complete.");
                 break;
             default:
                 break;
@@ -109,9 +112,9 @@ namespace DATABASE
             return t_State;
         }
         else if (!m_pDatabase.empty())
-            return XML_Reader::XML_DONE;
+            return XML_DONE;
         else
-            return XML_Reader::XML_NONE;
+            return XML_NONE;
     }
 
     bool Database::GetStartConditions(StartConditionsPrototype &p_proto)
@@ -150,7 +153,6 @@ namespace DATABASE
                 p_proto.m_uiStartPos.y = t_AttrItr->second.uintVal;
             }
         }
-
         return true;
     }
 
@@ -288,8 +290,13 @@ namespace DATABASE
 
     const SpritePrototype* Database::GetSpritePrototype(std::string p_sType, UINT p_uiID)
     {
-        if (m_SpriteDB.find(p_sType) != m_SpriteDB.end() && m_SpriteDB.find(p_sType)->second.find(p_uiID) != m_SpriteDB.find(p_sType)->second.end())
-                return &m_SpriteDB.find(p_sType)->second.find(p_uiID)->second;
+        SpriteList::iterator t_CacheItr = m_SpriteDB.find(p_sType);
+        if (t_CacheItr != m_SpriteDB.end())
+        {
+            std::map<UINT, SpritePrototype>::iterator t_SpriteItr = t_CacheItr->second.find(p_uiID);
+            if (t_SpriteItr != t_CacheItr->second.end())
+                return &t_SpriteItr->second;
+        }
 
         std::string t_sDir[] = {"SpriteDatabase", p_sType};
         std::list<std::string> t_DirList(t_sDir, t_sDir + sizeof(t_sDir) / sizeof(std::string));
@@ -540,5 +547,37 @@ namespace DATABASE
                 p_lTextureNames.insert(std::make_pair(t_AttrItr->second.uiVal, t_sName));
             }
         }
+    }
+
+    bool Database::HasSprite(std::string p_sType, UINT p_uiID)
+    {
+        SpriteList::iterator t_CacheItr = m_SpriteDB.find(p_sType);
+        if (t_CacheItr != m_SpriteDB.end())
+        {
+            std::map<UINT, SpritePrototype>::iterator t_SpriteItr = t_CacheItr->second.find(p_uiID);
+            if (t_SpriteItr != t_CacheItr->second.end())
+                return true;
+        }
+
+        std::string t_sDir[] = {"SpriteDatabase", p_sType};
+        std::list<std::string> t_DirList(t_sDir, t_sDir + sizeof(t_sDir) / sizeof(std::string));
+        ChildList::iterator t_DBitr;
+        if (!ChangeDBdir(t_DirList, t_DBitr))
+            return true;
+
+        VARIANT t_value;
+        for (ChildList::iterator t_DBitr2 = t_DBitr->second.m_ChildList.find("Sprite");
+            t_DBitr2 != t_DBitr->second.m_ChildList.end() && t_DBitr2->first == "Sprite"; ++t_DBitr2)
+        {
+            if (t_DBitr2->second.GetAttributeValue("ID", t_value))
+                VariantChangeType(&t_value, &t_value, VARIANT_NOUSEROVERRIDE, VT_UINT);
+            else
+                continue;
+
+            if (t_value.uintVal == p_uiID)
+                return true;
+        }
+
+        return false;
     }
 };

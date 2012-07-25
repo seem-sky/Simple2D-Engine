@@ -2,7 +2,7 @@
 #include "moc_DatabaseWindow.h"
 #include "MainWindow.h"
 #include <QTGui/QFileDialog>
-#include <Database.h>
+#include "DatabaseOutput.h"
 #include <StringAdditions.h>
 
 using namespace DATABASE;
@@ -76,7 +76,6 @@ void DatabaseWindow::TextureBoxChangeCur(int p_Index)
     TextureName->clear();
     TextureView->clear();
     TextureIDLabel->clear();
-    TextureTypeLabel->clear();
 
     if (p_Index != -1)
     {
@@ -97,7 +96,6 @@ bool DatabaseWindow::SelectTexture(std::string p_sType, UINT p_uiID)
                 TextureView->setPixmap(QPixmap(t_pParent->GetProjectDir() + QString(("/" + t_pDB->GetSpritePath(t_pProto->m_uiSpriteType) + t_pProto->m_sFileName).c_str())));
                 TextureName->setText(QString(t_pProto->m_sFileName.c_str()));
                 TextureIDLabel->setText(QString(ToString(t_pProto->m_uiID).c_str()));
-                TextureTypeLabel->setText(QString(ToString(t_pProto->m_uiSpriteType).c_str()));
 
                 return true;
             }
@@ -109,9 +107,32 @@ bool DatabaseWindow::SelectTexture(std::string p_sType, UINT p_uiID)
 void DatabaseWindow::ClickButtonNewTexture()
 {
     // TODO: get new ID
-    TextureBox->addItem("");
-    TextureBox->setCurrentIndex(TextureBox->findText(""));
+    DatabaseOutput *t_pDBOut = DatabaseOutput::Get();
+    if (!t_pDBOut)
+        return;
 
+    Database *t_pDB = Database::Get();
+    if (!t_pDB)
+        return;
+
+    std::string t_sType = TextureTabs->tabText(TextureTabs->currentIndex()).toStdString();
+    UINT t_uiI = 1;
+    for (; t_uiI < (UINT)(0-1); ++t_uiI)
+    {
+        if (t_pDB->HasSprite(t_sType, t_uiI))
+            continue;
+
+        if (!t_pDBOut->HasSprite(t_sType, t_uiI))
+            break;
+    }
+    if (t_uiI == (UINT)(0-1))
+        return;
+
+    SpritePrototype t_NewProto;
+    t_NewProto.m_uiID = t_uiI;
+    t_pDBOut->ChangeSprite(t_sType, t_NewProto);
+    TextureBox->addItem(QString((ToString(t_uiI) + ":").c_str()));
+    TextureBox->setCurrentIndex(TextureBox->findText(QString((ToString(t_uiI) + ":").c_str())));
 }
 
 void DatabaseWindow::ClickButtonDeleteTexture()

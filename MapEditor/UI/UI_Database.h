@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'Database.ui'
 **
-** Created: Tue 24. Jul 17:41:53 2012
+** Created: Wed 25. Jul 18:06:27 2012
 **      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -41,8 +41,6 @@ public:
     QLineEdit *TextureName;
     QLabel *label;
     QLineEdit *TextureIDLabel;
-    QLineEdit *TextureTypeLabel;
-    QLabel *label_2;
     QPushButton *NewTexture;
     QPushButton *DeleteTexture;
     QWidget *TabMapObjects;
@@ -80,7 +78,7 @@ public:
         TextureTabs->addTab(TabTextureUnit, QString());
         TextureView = new QLabel(TabTextures);
         TextureView->setObjectName(QString::fromUtf8("TextureView"));
-        TextureView->setGeometry(QRect(10, 160, 131, 121));
+        TextureView->setGeometry(QRect(10, 130, 131, 121));
         TextureView->setAutoFillBackground(true);
         TextureView->setFrameShape(QFrame::Box);
         TextureView->setFrameShadow(QFrame::Plain);
@@ -101,17 +99,9 @@ public:
         font.setWeight(75);
         label->setFont(font);
         TextureIDLabel = new QLineEdit(TabTextures);
-        TextureIDLabel->setObjectName(QString::fromUtf8("IDLabel"));
+        TextureIDLabel->setObjectName(QString::fromUtf8("TextureIDLabel"));
         TextureIDLabel->setGeometry(QRect(40, 100, 101, 20));
         TextureIDLabel->setReadOnly(true);
-        TextureTypeLabel = new QLineEdit(TabTextures);
-        TextureTypeLabel->setObjectName(QString::fromUtf8("TypeLabel"));
-        TextureTypeLabel->setGeometry(QRect(80, 130, 61, 20));
-        TextureTypeLabel->setReadOnly(true);
-        label_2 = new QLabel(TabTextures);
-        label_2->setObjectName(QString::fromUtf8("label_2"));
-        label_2->setGeometry(QRect(10, 130, 71, 21));
-        label_2->setFont(font);
         NewTexture = new QPushButton(TabTextures);
         NewTexture->setObjectName(QString::fromUtf8("NewTexture"));
         NewTexture->setGeometry(QRect(10, 10, 61, 23));
@@ -154,7 +144,6 @@ public:
         TextureTabs->setTabText(TextureTabs->indexOf(TabTextureUnit), QApplication::translate("Database", "NPCs", 0, QApplication::UnicodeUTF8));
         TextureView->setText(QString());
         label->setText(QApplication::translate("Database", "ID:", 0, QApplication::UnicodeUTF8));
-        label_2->setText(QApplication::translate("Database", "TypeID:", 0, QApplication::UnicodeUTF8));
         NewTexture->setText(QApplication::translate("Database", "New", 0, QApplication::UnicodeUTF8));
         DeleteTexture->setText(QApplication::translate("Database", "Delete", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(TabTextures), QApplication::translate("Database", "Textures", 0, QApplication::UnicodeUTF8));

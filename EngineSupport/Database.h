@@ -5,6 +5,7 @@
 #include "Singleton.h"
 #include <list>
 #include "Point.h"
+#include "Logfile.h"
 
 // passability flag, if nothing set, its unpassable
 enum PassabilityFlag
@@ -142,12 +143,13 @@ namespace DATABASE
         void GetTextureNames(std::string p_sType, std::map<UINT, std::string> &p_lTextureNames);
 
         const SpritePrototype* GetSpritePrototype(std::string p_sType, UINT p_uiID);
+        bool HasSprite(std::string p_sType, UINT p_uiID);
 
         void LoadDB(std::string p_sFileName);
-        XML_Reader::XML_STATE GetDBState();
+        XML::XML_STATE GetDBState();
 
     private:
-        ChildList m_pDatabase;
+        XML::ChildList m_pDatabase;
         // objectDB
         ObjectList m_ObjectDB;
         // sprite paths
@@ -155,11 +157,11 @@ namespace DATABASE
         // spriteDB
         SpriteList m_SpriteDB;
 
-        bool ChangeDBdir(std::list<std::string> p_DirList, ChildList::iterator &p_itr);
+        bool ChangeDBdir(std::list<std::string> p_DirList, XML::ChildList::iterator &p_itr);
         void StoreSpritePaths();
 
         // load DB
-        XML_Reader *m_pXMLReader;
+        XML::XML_Reader *m_pXMLReader;
         inline void KillXMLThread()
         {
             if (m_pXMLReader)

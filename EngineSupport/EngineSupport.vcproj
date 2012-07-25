@@ -167,6 +167,10 @@
 				RelativePath=".\XML_Reader.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\XML_Writer.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Headerdateien"
@@ -203,6 +207,10 @@
 			</File>
 			<File
 				RelativePath=".\XML_Reader.h"
+				>
+			</File>
+			<File
+				RelativePath=".\XML_Writer.h"
 				>
 			</File>
 		</Filter>

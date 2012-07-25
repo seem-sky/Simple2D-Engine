@@ -8,23 +8,12 @@
 
 #import <msxml4.dll>
 
-struct XML_Data;
-typedef std::multimap<std::string, XML_Data> ChildList;
-typedef std::map<std::string, VARIANT> AttributeList;
-
-struct XML_Data
+namespace XML
 {
-    ChildList m_ChildList;
-    AttributeList m_AttributeList;
+    struct XML_Data;
+    typedef std::multimap<std::string, XML_Data> ChildList;
+    typedef std::map<std::string, VARIANT> AttributeList;
 
-    inline bool HasChilds() { return !m_ChildList.empty(); }
-    inline bool HasAttributes() { return !m_AttributeList.empty(); }
-    bool GetAttributeValue(std::string p_sName, VARIANT &p_Value);
-};
-
-class XML_Reader : public ActiveObject
-{
-public:
     enum XML_STATE
     {
         XML_NONE,
@@ -35,24 +24,38 @@ public:
         XML_DONE,
     };
 
-    XML_Reader(std::string sData);
-    virtual ~XML_Reader(void);
+    struct XML_Data
+    {
+        ChildList m_ChildList;
+        AttributeList m_AttributeList;
 
-    void Run();
-    inline XML_STATE GetReaderState() { return m_XMLState; }
-    inline ChildList* GetXMLData() { return m_pChildList; }
-    inline void ClearChildList() { m_pChildList->clear(); }
+        inline bool HasChilds() { return !m_ChildList.empty(); }
+        inline bool HasAttributes() { return !m_AttributeList.empty(); }
+        bool GetAttributeValue(std::string p_sName, VARIANT &p_Value);
+    };
 
-protected:
-    ChildList* CheckoutChilds(IXMLDOMNodePtr p_pNode, HRESULT &p_hr);
-    AttributeList* CheckoutAttributes(IXMLDOMNodePtr p_pNode, HRESULT &p_hr);
+    class XML_Reader : public ActiveObject
+    {
+    public:
+        XML_Reader(std::string sData);
+        virtual ~XML_Reader(void);
 
-private:
-    XML_STATE m_XMLState;
-    std::string m_sData;
-    std::string m_sLogLocationName;
+        void Run();
+        inline XML_STATE GetReaderState() { return m_XMLState; }
+        inline ChildList* GetXMLData() { return m_pChildList; }
+        inline void ClearChildList() { m_pChildList->clear(); }
 
-    ChildList *m_pChildList;
-};
+    protected:
+        ChildList* CheckoutChildren(IXMLDOMNodePtr p_pNode, HRESULT &p_hr);
+        AttributeList* CheckoutAttributes(IXMLDOMNodePtr p_pNode, HRESULT &p_hr);
 
+    private:
+        XML_STATE m_XMLState;
+        std::string m_sData;
+        std::string m_sLogLocationName;
+
+        ChildList *m_pChildList;
+    };
+
+}
 #endif

@@ -1,12 +1,12 @@
 #include "Logfile.h"
 
-const std::string LOGFILE_FILENAME               = "Game/Logfile.log";
+const std::string LOGFILE_FILENAME               = "Logfile.log";
 const std::string LOGFILE_OPENING_MESSAGE        = "Logfile open and ready to write in";
 const std::string LOGFILE_CLOSING_MESSAGE        = "Logfile shutting down...";
 
 CLogfile::CLogfile() : TSingleton()
 {
-    m_sLogLocationName = LOGFILE_ENGINE_LOG_NAME + "CLogfile : ";
+    m_sLogLocationName = LOGFILE_ENGINE_LOG_NAME + "Logfile : ";
     WriteMessage(m_sLogLocationName + LOGFILE_OPENING_MESSAGE, std::ios::out);
 }
 

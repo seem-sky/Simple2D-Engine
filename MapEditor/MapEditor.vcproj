@@ -220,6 +220,14 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\DatabaseOutput.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\DatabaseOutput.h"
+				>
+			</File>
+			<File
 				RelativePath=".\DatabaseWindow.cpp"
 				>
 			</File>
@@ -243,14 +251,6 @@
 				>
 			</File>
 		</Filter>
-		<File
-			RelativePath=".\DatabaseOutput.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\DatabaseOutput.h"
-			>
-		</File>
 		<File
 			RelativePath=".\main.cpp"
 			>

@@ -2,6 +2,8 @@
 #include "ResourceManager.h"
 #include "DirectFont.h"
 
+using namespace XML;
+
 CGame::CGame(void) : m_pDirect3D(NULL), m_pDirectInput(NULL), m_pWorldSession(NULL), m_pMap(NULL), m_pGameDB(NULL), m_pShownMenu(NULL),
                 m_pShownTextBox(NULL), m_GameState(GAME_NONE), TSingleton()
 {
@@ -75,23 +77,23 @@ GAMEINIT_STATE CGame::Initialize(HINSTANCE hInstance, HWND hWnd)
     // check DB state
     switch(m_pGameDB->GetDBState())
     {
-    case XML_Reader::XML_DONE:
+    case XML_DONE:
         BASIC_LOG(m_sLogLocationName + "Successfully load Game-Database.");
         return GAMEINIT_STATE_OK;
         break;
 
-    case XML_Reader::XML_IN_PROGRESS:
+    case XML_IN_PROGRESS:
         return GAMEINIT_STATE_IN_PROGRESS;
 
-    case XML_Reader::XML_NO_FILE:
+    case XML_NO_FILE:
         ERROR_LOG(m_sLogLocationName + "Unable to load Game-Database." + GetGameInfo()->GetDatabaseLocation() + " no such file or directory.");
         return GAMEINIT_STATE_FAILED;
 
-    case XML_Reader::XML_CORRUPT_FILE:
+    case XML_CORRUPT_FILE:
         ERROR_LOG(m_sLogLocationName + "Unable to load Game-Database." + GetGameInfo()->GetDatabaseLocation() + " is a corrupt file.");
         return GAMEINIT_STATE_FAILED;
 
-    case XML_Reader::XML_FAILED:
+    case XML_FAILED:
     default:
         ERROR_LOG(m_sLogLocationName + "Unable to load Game-Database. Undefined error!");
         return GAMEINIT_STATE_FAILED;

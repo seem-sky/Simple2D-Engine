@@ -8,8 +8,10 @@
 #include <QtCore/QTimer>
 #include <QtGui/QErrorMessage>
 #include <Database.h>
+#include <Logfile.h>
 
 using namespace DATABASE;
+using namespace XML;
 
 MainWindow::MainWindow(QMainWindow *p_pParent) : QMainWindow(p_pParent), m_WindowAction(WINDOW_DO), m_pTimer(NULL)
 {
@@ -65,7 +67,7 @@ void MainWindow::NewProject()
 void MainWindow::LoadProject()
 {
     QDir t_sAppDir = QDir::current();
-    QString t_sFileName = QFileDialog::getExistingDirectory(this, tr("Open Project"), t_sAppDir.path()+"/projects", QFileDialog::ShowDirsOnly|QFileDialog::DontResolveSymlinks);
+    QString t_sFileName = QFileDialog::getExistingDirectory(this, tr("Open Project"), t_sAppDir.path()+"/projects", QFileDialog::ShowDirsOnly);
     QDir t_dir(t_sFileName + "/Game");
     bool t_bSuccess = false;
     if (t_dir.exists())
@@ -100,16 +102,16 @@ void MainWindow::CustomUpdate()
         {
             switch(t_pDB->GetDBState())
             {
-            case XML_Reader::XML_IN_PROGRESS:
+            case XML_IN_PROGRESS:
                 return;
-            case XML_Reader::XML_CORRUPT_FILE:
-            case XML_Reader::XML_FAILED:
-            case XML_Reader::XML_NO_FILE:
+            case XML_CORRUPT_FILE:
+            case XML_FAILED:
+            case XML_NO_FILE:
             {
                 QErrorMessage *t_Msg = new QErrorMessage(this);
                 t_Msg->showMessage("Unable to read GameDatabase.");
             }
-            case XML_Reader::XML_DONE:
+            case XML_DONE:
             default:
                 break;
             }
