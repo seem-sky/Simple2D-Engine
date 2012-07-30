@@ -407,10 +407,6 @@
 				RelativePath=".\Time.h"
 				>
 			</File>
-			<File
-				RelativePath=".\WrapperFunctions.h"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Grafik"

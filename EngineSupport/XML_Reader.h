@@ -4,15 +4,17 @@
 #include "Thread.h"
 #include <string>
 #include <map>
-#include <msxml.h>
+#include <atlcomcli.h>
+#include <atlbase.h>
 
+#include <msxml.h>
 #import <msxml6.dll>
 
 namespace XML
 {
     struct XML_Data;
     typedef std::multimap<std::string, XML_Data> ChildList;
-    typedef std::map<std::string, VARIANT> AttributeList;
+    typedef std::map<std::string, CComVariant> AttributeList;
 
     enum XML_STATE
     {
@@ -56,6 +58,5 @@ namespace XML
 
         ChildList *m_pChildList;
     };
-
 }
 #endif

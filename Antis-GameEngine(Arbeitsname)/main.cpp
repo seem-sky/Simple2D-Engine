@@ -5,7 +5,7 @@
 // globals
 HINSTANCE g_hInst       = NULL;
 HWND g_hWnd             = NULL;
-CLogfile *m_pLogfile    = NULL;
+Logfile *m_pLogfile    = NULL;
 CTime *m_pTime          = NULL;
 CGame *m_pGame          = NULL;
 
@@ -20,7 +20,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
     UNREFERENCED_PARAMETER( lpCmdLine );
 
     // start logfile
-    m_pLogfile = CLogfile::Get();
+    m_pLogfile = Logfile::Get();
     if(!m_pLogfile)
     {
         ReleaseObjects();

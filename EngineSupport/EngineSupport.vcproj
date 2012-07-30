@@ -206,6 +206,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\WrapperFunctions.h"
+				>
+			</File>
+			<File
 				RelativePath=".\XML_Reader.h"
 				>
 			</File>

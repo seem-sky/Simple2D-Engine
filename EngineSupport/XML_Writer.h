@@ -8,22 +8,48 @@
 
 namespace XML
 {
-    class XML_Writer : ActiveObject
+    enum XML_WRITE_STATE
+    {
+        XML_WRITE_NONE,
+        XML_WRITE_ADD,
+        XML_WRITE_DELETE,
+        XML_WRITE_CHANGE,
+    };
+
+    struct XML_WriteData;
+    typedef std::multimap<std::string, XML_WriteData> WriteChildList;
+
+    struct XML_WriteData : XML_Data
+    {
+        XML_WriteData() : m_WriteState(XML_WRITE_NONE), XML_Data() {}
+
+        inline XML_WRITE_STATE GetWriteState() { return m_WriteState; }
+        inline void SetWriteState(XML_WRITE_STATE p_State) { m_WriteState = p_State; }
+
+        XML_WRITE_STATE m_WriteState;
+        WriteChildList m_ChildList;
+    };
+
+    class XML_Writer : public ActiveObject
     {
     public:
-        XML_Writer(std::string p_sFileName, bool p_bNew);
+        XML_Writer(std::string p_sData, XML_WriteData *p_tData);
         ~XML_Writer(void);
 
         void Run();
-        bool GetChildNode(IXMLDOMNodePtr p_pNode, std::string p_sNodeName, IXMLDOMNodePtr &p_pResultNode);
-        bool GetChildNodeByAttribute(IXMLDOMNodePtr p_pNode, std::string p_sNodeName, std::string p_sAttributeName, VARIANT p_value, IXMLDOMNodePtr &p_pResultNode);
+        XML_STATE GetWriterState() { return m_XMLState; }
+        IXMLDOMNodePtr GetChildNodeByAttribute(IXMLDOMNodePtr p_pNode, std::string p_sNodeName, std::string p_sAttributeName, CComVariant p_value);
 
-        IXMLDOMNodePtr AddChildNode(IXMLDOMNodePtr p_pNode, std::string p_sNodeName);
+        void AddChildNode(MSXML2::IXMLDOMDocument2Ptr p_pDOM, MSXML2::IXMLDOMElementPtr p_pParent, std::string p_sNodeName, AttributeList *p_plAttributes);
+        void AddChildNodes(MSXML2::IXMLDOMDocument2Ptr p_pDOM, IXMLDOMNodePtr p_pParent, WriteChildList *p_plChildren);
+        void ChangeNode(IXMLDOMNodePtr p_pElement, AttributeList *p_plAttributes);
 
     private:
         XML_STATE m_XMLState;
         std::string m_sFileName;
-        bool m_bNew;
+        XML_WriteData *m_pData;
+
+        std::string m_sLogLocationName;
     };
 }
 #endif

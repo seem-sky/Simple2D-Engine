@@ -20,6 +20,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
+			UseOfATL="0"
 			CharacterSet="2"
 			>
 			<Tool
@@ -177,9 +178,20 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MainWindow moc created"
-						CommandLine="moc -o moc_$(InputFileName) $(InputFileName)&#x0D;&#x0A;"
+						CommandLine="moc -o moc_$(InputFileName) $(InputFileName)"
 						AdditionalDependencies="MainWindow.cpp"
-						Outputs="this"
+						Outputs="MainWindow"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="MainWindow moc created"
+						CommandLine="moc -o moc_$(InputFileName) $(InputFileName)"
+						AdditionalDependencies="MainWindow.cpp"
+						Outputs="MainWindow"
 					/>
 				</FileConfiguration>
 			</File>
@@ -250,6 +262,68 @@
 				RelativePath=".\UI\UI_Database.h"
 				>
 			</File>
+			<Filter
+				Name="Transparency"
+				>
+				<File
+					RelativePath=".\UI\ChoseTransparency.ui"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="compile TransparencyWindow"
+							CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)"
+							Outputs="ChoseTransparency"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="compile TransparencyWindow"
+							CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)"
+							Outputs="TransparencyWindow"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\TransparencyWindow.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\TransparencyWindow.h"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="TransparencyWindow.moc created."
+							CommandLine="moc -o moc_$(InputFileName) $(InputFileName)"
+							AdditionalDependencies="TransparencyWindow.cpp"
+							Outputs="TransparencyWindow"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="TransparencyWindow.moc created."
+							CommandLine="moc -o moc_$(InputFileName) $(InputFileName)"
+							AdditionalDependencies="TransparencyWindow.cpp"
+							Outputs="TransparencyWindow"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\UI\UI_ChoseTransparency.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<File
 			RelativePath=".\main.cpp"

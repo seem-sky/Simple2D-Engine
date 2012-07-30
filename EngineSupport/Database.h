@@ -25,7 +25,6 @@ namespace DATABASE
     enum SpriteType
     {
         SPRITE_TYPE_TILE,
-        SPRITE_TYPE_AUTOTILE,
         SPRITE_TYPE_OBJECT,
         SPRITE_TYPE_ANIMATED_OBJECT,
         SPRITE_TYPE_TEXTBOX,
@@ -40,6 +39,7 @@ namespace DATABASE
 
         UINT m_uiSpriteType;
         UINT m_uiID;
+        std::string m_sTransparentColor;
         DWORD m_transparentColor;
         std::string m_sFileName;        // stores texture name (WITHOUT path).
 
@@ -50,6 +50,7 @@ namespace DATABASE
             {
                 UINT m_uiPassable;      // 0 passability
                 UINT m_uiTerrainType;   // 1 terrain type
+                bool m_bAutotile;       // 2 is autotile?
             } Tile;
 
             // SpriteAutoTile = 1
@@ -60,10 +61,10 @@ namespace DATABASE
             // SpriteObject = 2
             struct SpriteObject
             {
-                UINT m_uiBoundingXBegin;
-                UINT m_uiBoundingYBegin;
-                UINT m_uiBoundingXRange;
-                UINT m_uiBoundingYRange;
+                int m_uiBoundingXBegin;
+                int m_uiBoundingYBegin;
+                int m_uiBoundingXRange;
+                int m_uiBoundingYRange;
             } Object;
 
             // SpriteAnimatedObject = 3
@@ -89,9 +90,9 @@ namespace DATABASE
 
     struct StartConditionsPrototype
     {
-        StartConditionsPrototype() : m_uiMapID(0), m_uiHeroeID(0) { }
+        StartConditionsPrototype() : m_uiMapID(0), m_uiHeroID(0) { }
         UINT m_uiMapID;
-        UINT m_uiHeroeID;
+        UINT m_uiHeroID;
         Point<UINT> m_uiStartPos;
     };
 
@@ -156,6 +157,8 @@ namespace DATABASE
         std::map<UINT, std::string> m_SpritePaths;
         // spriteDB
         SpriteList m_SpriteDB;
+
+        void ClearDB();
 
         bool ChangeDBdir(std::list<std::string> p_DirList, XML::ChildList::iterator &p_itr);
         void StoreSpritePaths();

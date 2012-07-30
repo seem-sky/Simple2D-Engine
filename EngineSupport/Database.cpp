@@ -1,5 +1,6 @@
 #include "Database.h"
 #include <fstream>
+#include <atlcomcli.h>
 
 namespace DATABASE
 {
@@ -14,6 +15,16 @@ namespace DATABASE
         KillXMLThread();
     }
 
+    void Database::ClearDB()
+    {
+        m_pDatabase.clear();
+
+        m_ObjectDB.clear();
+        m_SpriteDB.clear();
+        
+        m_SpritePaths.clear();
+    }
+
     const std::string Database::GetMapName(UINT p_uiID)
     {
         std::string t_sDir[] = {"MapDatabase"};
@@ -23,6 +34,7 @@ namespace DATABASE
             return "";
 
         AttributeList::iterator t_AttrItr;
+        CComVariant t_Value;
         for (ChildList::iterator t_DBitr2 = t_DBitr->second.m_ChildList.find("Map");
              t_DBitr2 != t_DBitr->second.m_ChildList.end() && t_DBitr2->first == "Map"; ++t_DBitr2)
         {
@@ -32,9 +44,11 @@ namespace DATABASE
                 if (t_AttrItr == t_DBitr2->second.m_AttributeList.end())
                     continue;
 
+                if (FAILED(t_Value.ChangeType(VT_UINT, &t_AttrItr->second)))
+                    continue;
+
                 // check MapID
-                VariantChangeType(&t_AttrItr->second, &t_AttrItr->second, VARIANT_NOUSEROVERRIDE, VT_UINT);
-                if (t_AttrItr->second.uintVal == p_uiID)
+                if (t_Value.uintVal == p_uiID)
                 {
                     // return MapName
                     t_AttrItr = t_DBitr2->second.m_AttributeList.find("File");
@@ -46,7 +60,6 @@ namespace DATABASE
                 }
             }
         }
-
         return "";
     }
 
@@ -72,8 +85,7 @@ namespace DATABASE
 
     void Database::LoadDB(std::string p_sFileName)
     {
-        m_ObjectDB.clear();
-        m_SpriteDB.clear();
+        ClearDB();
         // start XML Reader
         std::string t_sFileData;
         // this open and store the XML file:
@@ -125,33 +137,28 @@ namespace DATABASE
         if (!ChangeDBdir(t_DirList, t_DBitr))
             return false;
 
+        CComVariant t_Value;
         for (AttributeList::iterator t_AttrItr = t_DBitr->second.m_AttributeList.begin();
              t_AttrItr != t_DBitr->second.m_AttributeList.end(); ++t_AttrItr)
         {
+            if (FAILED(t_Value.ChangeType(VT_UINT, &t_AttrItr->second)))
+                continue;
+
             // MapID
             if (t_AttrItr->first == "MapID")
-            {
-                VariantChangeType(&t_AttrItr->second, &t_AttrItr->second, VARIANT_NOUSEROVERRIDE, VT_UINT);
-                p_proto.m_uiMapID = t_AttrItr->second.uintVal;
-            }
-            // HeroeID
+                p_proto.m_uiMapID = t_Value.uintVal;
+
+            // HeroID
             else if (t_AttrItr->first == "HeroeID")
-            {
-                VariantChangeType(&t_AttrItr->second, &t_AttrItr->second, VARIANT_NOUSEROVERRIDE, VT_UINT);
-                p_proto.m_uiHeroeID = t_AttrItr->second.uintVal;
-            }
+                p_proto.m_uiHeroID = t_Value.uintVal;
+
             // X starting pos
             else if (t_AttrItr->first == "StartPosX")
-            {
-                VariantChangeType(&t_AttrItr->second, &t_AttrItr->second, VARIANT_NOUSEROVERRIDE, VT_UINT);
-                p_proto.m_uiStartPos.x = t_AttrItr->second.uintVal;
-            }
+                p_proto.m_uiStartPos.x = t_Value.uintVal;
+
             // Y starting pos
             else if (t_AttrItr->first == "StartPosY")
-            {
-                VariantChangeType(&t_AttrItr->second, &t_AttrItr->second, VARIANT_NOUSEROVERRIDE, VT_UINT);
-                p_proto.m_uiStartPos.y = t_AttrItr->second.uintVal;
-            }
+                p_proto.m_uiStartPos.y = t_Value.uintVal;
         }
         return true;
     }
@@ -170,6 +177,7 @@ namespace DATABASE
 
         AttributeList::iterator t_AttrItr;
         ObjectPrototype t_proto;
+        CComVariant t_Value;
         for (ChildList::iterator t_DBitr2 = t_DBitr->second.m_ChildList.find("Object");
              t_DBitr2 != t_DBitr->second.m_ChildList.end() && t_DBitr2->first == "Object"; ++t_DBitr2)
         {
@@ -180,39 +188,40 @@ namespace DATABASE
                     continue;
 
                 // check ID
-                VariantChangeType(&t_AttrItr->second, &t_AttrItr->second, VARIANT_NOUSEROVERRIDE, VT_UINT);
-                if (t_AttrItr->second.uintVal == p_uiID)
+                if (FAILED(t_Value.ChangeType(VT_UINT, &t_AttrItr->second)))
+                    continue;
+                if (t_Value.uintVal == p_uiID)
                 {
                     // store type before other
                     t_AttrItr = t_DBitr2->second.m_AttributeList.find("Type");
                     if (t_AttrItr == t_DBitr2->second.m_AttributeList.end())
                         return NULL;
-                    VariantChangeType(&t_AttrItr->second, &t_AttrItr->second, VARIANT_NOUSEROVERRIDE, VT_UINT);
-                    t_proto.m_uiType = t_AttrItr->second.uiVal;
+
+                    if (FAILED(t_Value.ChangeType(VT_UINT, &t_AttrItr->second)))
+                        continue;
+                    t_proto.m_uiType = t_Value.uiVal;
 
                     for (t_AttrItr = t_DBitr2->second.m_AttributeList.begin();
                     t_AttrItr != t_DBitr2->second.m_AttributeList.end(); ++t_AttrItr)
                     {
+                        if (FAILED(t_Value.ChangeType(VT_UINT, &t_AttrItr->second)))
+                            continue;
+
                         if (t_AttrItr->first == "ID")
-                        {
-                            VariantChangeType(&t_AttrItr->second, &t_AttrItr->second, VARIANT_NOUSEROVERRIDE, VT_UINT);
-                            t_proto.m_uiID = t_AttrItr->second.uiVal;
-                        }
+                            t_proto.m_uiID = t_Value.uiVal;
+
                         else if (t_AttrItr->first == "Type")
                             continue;
 
                         else if (t_AttrItr->first == "TextureID")
-                        {
-                            VariantChangeType(&t_AttrItr->second, &t_AttrItr->second, VARIANT_NOUSEROVERRIDE, VT_UINT);
-                            t_proto.m_uiTextureID = t_AttrItr->second.uiVal;
-                        }
+                            t_proto.m_uiTextureID = t_Value.uiVal;
+
                         else if (t_AttrItr->first == "AniFrequency")
                         {
-                            VariantChangeType(&t_AttrItr->second, &t_AttrItr->second, VARIANT_NOUSEROVERRIDE, VT_UINT);
                             switch(t_proto.m_uiType)
                             {
                             case OBJECT_TYPE_NPC:
-                                t_proto.ObjectType.NPC.m_uiAnimationFrequency = t_AttrItr->second.uintVal;
+                                t_proto.ObjectType.NPC.m_uiAnimationFrequency = t_Value.uintVal;
                                 break;
                             default:
                                 break;
@@ -220,11 +229,10 @@ namespace DATABASE
                         }
                         else if (t_AttrItr->first == "MoveSpeed")
                         {
-                            VariantChangeType(&t_AttrItr->second, &t_AttrItr->second, VARIANT_NOUSEROVERRIDE, VT_UINT);
                             switch(t_proto.m_uiType)
                             {
                             case OBJECT_TYPE_NPC:
-                                t_proto.ObjectType.NPC.m_uiMoveSpeed = t_AttrItr->second.uintVal;
+                                t_proto.ObjectType.NPC.m_uiMoveSpeed = t_Value.uintVal;
                                 break;
                             default:
                                 break;
@@ -232,11 +240,10 @@ namespace DATABASE
                         }
                         else if (t_AttrItr->first == "HP_min")
                         {
-                            VariantChangeType(&t_AttrItr->second, &t_AttrItr->second, VARIANT_NOUSEROVERRIDE, VT_UINT);
                             switch(t_proto.m_uiType)
                             {
                             case OBJECT_TYPE_NPC:
-                                t_proto.ObjectType.NPC.m_uiHPmin = t_AttrItr->second.uintVal;
+                                t_proto.ObjectType.NPC.m_uiHPmin = t_Value.uintVal;
                                 break;
                             default:
                                 break;
@@ -244,11 +251,10 @@ namespace DATABASE
                         }
                         else if (t_AttrItr->first == "HP_max")
                         {
-                            VariantChangeType(&t_AttrItr->second, &t_AttrItr->second, VARIANT_NOUSEROVERRIDE, VT_UINT);
                             switch(t_proto.m_uiType)
                             {
                             case OBJECT_TYPE_NPC:
-                                t_proto.ObjectType.NPC.m_uiHPmax = t_AttrItr->second.uintVal;
+                                t_proto.ObjectType.NPC.m_uiHPmax = t_Value.uintVal;
                                 break;
                             default:
                                 break;
@@ -256,11 +262,10 @@ namespace DATABASE
                         }
                         else if (t_AttrItr->first == "Level_min")
                         {
-                            VariantChangeType(&t_AttrItr->second, &t_AttrItr->second, VARIANT_NOUSEROVERRIDE, VT_UINT);
                             switch(t_proto.m_uiType)
                             {
                             case OBJECT_TYPE_NPC:
-                                t_proto.ObjectType.NPC.m_uiLevelMin = t_AttrItr->second.uintVal;
+                                t_proto.ObjectType.NPC.m_uiLevelMin = t_Value.uintVal;
                                 break;
                             default:
                                 break;
@@ -268,11 +273,10 @@ namespace DATABASE
                         }
                         else if (t_AttrItr->first == "Level_max")
                         {
-                            VariantChangeType(&t_AttrItr->second, &t_AttrItr->second, VARIANT_NOUSEROVERRIDE, VT_UINT);
                             switch(t_proto.m_uiType)
                             {
                             case OBJECT_TYPE_NPC:
-                                t_proto.ObjectType.NPC.m_uiLevelMax = t_AttrItr->second.uintVal;
+                                t_proto.ObjectType.NPC.m_uiLevelMax = t_Value.uintVal;
                                 break;
                             default:
                                 break;
@@ -306,6 +310,7 @@ namespace DATABASE
 
         AttributeList::iterator t_AttrItr;
         SpritePrototype t_proto;
+        CComVariant t_Value;
         for (ChildList::iterator t_DBitr2 = t_DBitr->second.m_ChildList.find("Sprite");
              t_DBitr2 != t_DBitr->second.m_ChildList.end() && t_DBitr2->first == "Sprite"; ++t_DBitr2)
         {
@@ -316,43 +321,58 @@ namespace DATABASE
                     continue;
 
                 // check ID
-                VariantChangeType(&t_AttrItr->second, &t_AttrItr->second, VARIANT_NOUSEROVERRIDE, VT_UINT);
-                if (t_AttrItr->second.uintVal == p_uiID)
+                if (FAILED(t_Value.ChangeType(VT_UINT, &t_AttrItr->second)))
+                    continue;
+
+                if (t_Value.uintVal == p_uiID)
                 {
                     // store type before other
                     t_AttrItr = t_DBitr2->second.m_AttributeList.find("Type");
                     if (t_AttrItr == t_DBitr2->second.m_AttributeList.end())
                         return NULL;
-                    VariantChangeType(&t_AttrItr->second, &t_AttrItr->second, VARIANT_NOUSEROVERRIDE, VT_UINT);
-                    t_proto.m_uiSpriteType = t_AttrItr->second.uiVal;
+
+                    if (FAILED(t_Value.ChangeType(VT_UINT, &t_AttrItr->second)))
+                        continue;
+                    t_proto.m_uiSpriteType = t_Value.uintVal;
 
                     for (t_AttrItr = t_DBitr2->second.m_AttributeList.begin();
                     t_AttrItr != t_DBitr2->second.m_AttributeList.end(); ++t_AttrItr)
                     {
-                        if (t_AttrItr->first == "ID")
+                        // check first for different variable types than UINT
+                        if (t_AttrItr->first == "FileName")
                         {
-                            VariantChangeType(&t_AttrItr->second, &t_AttrItr->second, VARIANT_NOUSEROVERRIDE, VT_UINT);
-                            t_proto.m_uiID = t_AttrItr->second.uiVal;
-                        }
-                        else if (t_AttrItr->first == "FileName")
                             t_proto.m_sFileName = bstr_t(t_AttrItr->second);
+                            continue;
+                        }
+                        if (t_AttrItr->first == "transparent_color")
+                        {
+                            t_proto.m_sTransparentColor = bstr_t(t_AttrItr->second);
+                            continue;
+                        }
+                        else if (t_AttrItr->first == "transparent_color")
+                        {
+                            if (FAILED(t_Value.ChangeType(VT_UI4, &t_AttrItr->second)))
+                                continue;
+                            t_proto.m_transparentColor = t_Value.ulVal;
+                        }
+
+                        // check the UINT variables
+                        if (FAILED(t_Value.ChangeType(VT_UINT, &t_AttrItr->second)))
+                            continue;
+
+                        if (t_AttrItr->first == "ID")
+                            t_proto.m_uiID = t_Value.uintVal;
 
                         else if (t_AttrItr->first == "Type")
                             continue;
 
-                        else if (t_AttrItr->first == "transparent_color")
-                        {
-                            VariantChangeType(&t_AttrItr->second, &t_AttrItr->second, VARIANT_NOUSEROVERRIDE, VT_UI4);
-                            t_proto.m_transparentColor = t_AttrItr->second.ulVal;
-                        }
                         else if (t_AttrItr->first == "spritesX")
                         {
-                            VariantChangeType(&t_AttrItr->second, &t_AttrItr->second, VARIANT_NOUSEROVERRIDE, VT_UINT);
                             switch(t_proto.m_uiSpriteType)
                             {
                                 // count of spritesX
                             case SPRITE_TYPE_ANIMATED_OBJECT:
-                                t_proto.Type.AnimatedObject.m_uiSpritesX = t_AttrItr->second.uintVal;
+                                t_proto.Type.AnimatedObject.m_uiSpritesX = t_Value.uintVal;
                                 break;
                             default:
                                 break;
@@ -360,12 +380,11 @@ namespace DATABASE
                         }
                         else if (t_AttrItr->first == "spritesY")
                         {
-                            VariantChangeType(&t_AttrItr->second, &t_AttrItr->second, VARIANT_NOUSEROVERRIDE, VT_UINT);
                             switch(t_proto.m_uiSpriteType)
                             {
                                 // count of spritesX
                             case SPRITE_TYPE_ANIMATED_OBJECT:
-                                t_proto.Type.AnimatedObject.m_uiSpritesY = t_AttrItr->second.uintVal;
+                                t_proto.Type.AnimatedObject.m_uiSpritesY = t_Value.uintVal;
                                 break;
                             default:
                                 break;
@@ -373,12 +392,13 @@ namespace DATABASE
                         }
                         else if (t_AttrItr->first == "boundingXBegin")
                         {
-                            VariantChangeType(&t_AttrItr->second, &t_AttrItr->second, VARIANT_NOUSEROVERRIDE, VT_UINT);
+                            if (FAILED(t_Value.ChangeType(VT_INT, &t_AttrItr->second)))
+                                continue;
                             switch(t_proto.m_uiSpriteType)
                             {
                             case SPRITE_TYPE_OBJECT:
                             case SPRITE_TYPE_ANIMATED_OBJECT:
-                                t_proto.Type.Object.m_uiBoundingXBegin = t_AttrItr->second.uintVal;
+                                t_proto.Type.Object.m_uiBoundingXBegin = t_Value.intVal;
                                 break;
                             default:
                                 break;
@@ -386,12 +406,13 @@ namespace DATABASE
                         }
                         else if (t_AttrItr->first == "boundingYBegin")
                         {
-                            VariantChangeType(&t_AttrItr->second, &t_AttrItr->second, VARIANT_NOUSEROVERRIDE, VT_UINT);
+                            if (FAILED(t_Value.ChangeType(VT_INT, &t_AttrItr->second)))
+                                continue;
                             switch(t_proto.m_uiSpriteType)
                             {
                             case SPRITE_TYPE_OBJECT:
                             case SPRITE_TYPE_ANIMATED_OBJECT:
-                                t_proto.Type.Object.m_uiBoundingYBegin = t_AttrItr->second.uintVal;
+                                t_proto.Type.Object.m_uiBoundingYBegin = t_Value.intVal;
                                 break;
                             default:
                                 break;
@@ -399,12 +420,13 @@ namespace DATABASE
                         }
                         else if (t_AttrItr->first == "boundingXRange")
                         {
-                            VariantChangeType(&t_AttrItr->second, &t_AttrItr->second, VARIANT_NOUSEROVERRIDE, VT_UINT);
+                            if (FAILED(t_Value.ChangeType(VT_INT, &t_AttrItr->second)))
+                                continue;
                             switch(t_proto.m_uiSpriteType)
                             {
                             case SPRITE_TYPE_OBJECT:
                             case SPRITE_TYPE_ANIMATED_OBJECT:
-                                t_proto.Type.Object.m_uiBoundingXRange = t_AttrItr->second.uintVal;
+                                t_proto.Type.Object.m_uiBoundingXRange = t_Value.intVal;
                                 break;
                             default:
                                 break;
@@ -412,12 +434,13 @@ namespace DATABASE
                         }
                         else if (t_AttrItr->first == "boundingYRange")
                         {
-                            VariantChangeType(&t_AttrItr->second, &t_AttrItr->second, VARIANT_NOUSEROVERRIDE, VT_UINT);
+                            if (FAILED(t_Value.ChangeType(VT_INT, &t_AttrItr->second)))
+                                continue;
                             switch(t_proto.m_uiSpriteType)
                             {
                             case SPRITE_TYPE_OBJECT:
                             case SPRITE_TYPE_ANIMATED_OBJECT:
-                                t_proto.Type.Object.m_uiBoundingYRange = t_AttrItr->second.uintVal;
+                                t_proto.Type.Object.m_uiBoundingYRange = t_Value.intVal;
                                 break;
                             default:
                                 break;
@@ -425,13 +448,11 @@ namespace DATABASE
                         }
                         else if (t_AttrItr->first == "passability")
                         {
-                            VariantChangeType(&t_AttrItr->second, &t_AttrItr->second, VARIANT_NOUSEROVERRIDE, VT_UINT);
                             switch(t_proto.m_uiSpriteType)
                             {
                                 // passability
                             case SPRITE_TYPE_TILE:
-                            case SPRITE_TYPE_AUTOTILE:
-                                t_proto.Type.Tile.m_uiPassable = t_AttrItr->second.uintVal;
+                                t_proto.Type.Tile.m_uiPassable = t_Value.uintVal;
                                 break;
                             default:
                                 break;
@@ -439,24 +460,31 @@ namespace DATABASE
                         }
                         else if (t_AttrItr->first == "terraintype")
                         {
-                            VariantChangeType(&t_AttrItr->second, &t_AttrItr->second, VARIANT_NOUSEROVERRIDE, VT_UINT);
                             switch(t_proto.m_uiSpriteType)
                             {
                                 // terrain type
                             case SPRITE_TYPE_TILE:
-                            case SPRITE_TYPE_AUTOTILE:
-                                t_proto.Type.Tile.m_uiTerrainType = t_AttrItr->second.uintVal;
+                                t_proto.Type.Tile.m_uiTerrainType = t_Value.uintVal;
+                                break;
+                            }
+                        }
+                        else if (t_AttrItr->first == "auto_tile")
+                        {
+                            switch(t_proto.m_uiSpriteType)
+                            {
+                                // auto_tile
+                            case SPRITE_TYPE_TILE:
+                                t_proto.Type.Tile.m_bAutotile = t_Value.uintVal != 0 ? true : false;
                                 break;
                             }
                         }
                         else if (t_AttrItr->first == "BorderSize")
                         {
-                            VariantChangeType(&t_AttrItr->second, &t_AttrItr->second, VARIANT_NOUSEROVERRIDE, VT_UINT);
                             switch(t_proto.m_uiSpriteType)
                             {
                                 // border size
                             case SPRITE_TYPE_TEXTBOX:
-                                t_proto.Type.Textbox.m_uiBorderSize = t_AttrItr->second.uintVal;
+                                t_proto.Type.Textbox.m_uiBorderSize = t_Value.uintVal;
                                 break;
                             }
                         }
@@ -488,6 +516,7 @@ namespace DATABASE
         AttributeList::iterator t_AttrItr;
         UINT t_uiID = 0;
         std::string t_sPath;
+        CComVariant t_Value;
         for (ChildList::iterator t_DBitr2 = t_DBitr->second.m_ChildList.find("SpritePath");
              t_DBitr2 != t_DBitr->second.m_ChildList.end() && t_DBitr2->first == "SpritePath"; ++t_DBitr2)
         {
@@ -496,8 +525,10 @@ namespace DATABASE
             {
                 if (t_AttrItr->first == "ID")
                 {
-                    VariantChangeType(&t_AttrItr->second, &t_AttrItr->second, VARIANT_NOUSEROVERRIDE, VT_UINT);
-                    t_uiID = t_AttrItr->second.uintVal;
+                    if (FAILED(t_Value.ChangeType(VT_UINT, &t_AttrItr->second)))
+                        continue;
+
+                    t_uiID = t_Value.uintVal;
                 }
                 else if (t_AttrItr->first == "Path")
                     t_sPath = bstr_t(t_AttrItr->second);
@@ -527,6 +558,7 @@ namespace DATABASE
 
         std::string t_sName;
         AttributeList::iterator t_AttrItr;
+        CComVariant t_Value;
         for (ChildList::iterator t_DBitr2 = t_DBitr->second.m_ChildList.find("Sprite");
             t_DBitr2 != t_DBitr->second.m_ChildList.end() && t_DBitr2->first == "Sprite"; ++t_DBitr2)
         {
@@ -542,9 +574,10 @@ namespace DATABASE
                 if (t_AttrItr == t_DBitr2->second.m_AttributeList.end())
                     continue;
 
-                VariantChangeType(&t_AttrItr->second, &t_AttrItr->second, VARIANT_NOUSEROVERRIDE, VT_UINT);
+                if (FAILED(t_Value.ChangeType(VT_UINT, &t_AttrItr->second)))
+                    continue;
                 
-                p_lTextureNames.insert(std::make_pair(t_AttrItr->second.uiVal, t_sName));
+                p_lTextureNames.insert(std::make_pair(t_Value.uintVal, t_sName));
             }
         }
     }
@@ -565,19 +598,16 @@ namespace DATABASE
         if (!ChangeDBdir(t_DirList, t_DBitr))
             return true;
 
-        VARIANT t_value;
+        CComVariant t_Value;
         for (ChildList::iterator t_DBitr2 = t_DBitr->second.m_ChildList.find("Sprite");
             t_DBitr2 != t_DBitr->second.m_ChildList.end() && t_DBitr2->first == "Sprite"; ++t_DBitr2)
         {
-            if (t_DBitr2->second.GetAttributeValue("ID", t_value))
-                VariantChangeType(&t_value, &t_value, VARIANT_NOUSEROVERRIDE, VT_UINT);
-            else
+            if (!t_DBitr2->second.GetAttributeValue("ID", t_Value) || FAILED(t_Value.ChangeType(VT_UINT)))
                 continue;
 
-            if (t_value.uintVal == p_uiID)
+            if (t_Value.uintVal == p_uiID)
                 return true;
         }
-
         return false;
     }
 };

@@ -4,18 +4,18 @@ const std::string LOGFILE_FILENAME               = "Logfile.log";
 const std::string LOGFILE_OPENING_MESSAGE        = "Logfile open and ready to write in";
 const std::string LOGFILE_CLOSING_MESSAGE        = "Logfile shutting down...";
 
-CLogfile::CLogfile() : TSingleton()
+Logfile::Logfile() : TSingleton()
 {
     m_sLogLocationName = LOGFILE_ENGINE_LOG_NAME + "Logfile : ";
     WriteMessage(m_sLogLocationName + LOGFILE_OPENING_MESSAGE, std::ios::out);
 }
 
-CLogfile::~CLogfile()
+Logfile::~Logfile()
 {
     WriteMessage(m_sLogLocationName + LOGFILE_CLOSING_MESSAGE);
 }
 
-void CLogfile::WriteMessage(std::string ps_msg, std::ios_base::openmode p_mode)
+void Logfile::WriteMessage(std::string ps_msg, std::ios_base::openmode p_mode)
 {
     ps_msg += "\n";
     std::fstream t_file;
@@ -24,7 +24,7 @@ void CLogfile::WriteMessage(std::string ps_msg, std::ios_base::openmode p_mode)
     t_file.close();
 }
 
-void CLogfile::WriteErrorMessage(std::string ps_msg, std::ios_base::openmode p_mode)
+void Logfile::WriteErrorMessage(std::string ps_msg, std::ios_base::openmode p_mode)
 {
     ps_msg = "ERROR! " + ps_msg;
     WriteMessage(ps_msg, p_mode);

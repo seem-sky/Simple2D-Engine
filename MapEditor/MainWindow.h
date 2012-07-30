@@ -5,6 +5,13 @@
 
 #include "UI/UI_MainWindow.h"
 
+enum WINDOW_ACTION
+{
+    WINDOW_DO,
+    WINDOW_LOAD_DB,
+    WINDOW_SAVE_DB,
+};
+
 class MainWindow : public QMainWindow, public Ui_MainWindow
 {
     Q_OBJECT
@@ -14,17 +21,18 @@ public:
 
     QString GetProjectDir() { return m_sProjectDir; }
 
-protected:
-    enum WINDOW_ACTION
+    inline void SetNewTimer(QTimer *p_pTimer)
     {
-        WINDOW_DO,
-        WINDOW_LOAD_DB,
-    };
+        if (p_pTimer)
+            m_pTimer = p_pTimer;
+    }
+
+    inline void SetWindowAction(WINDOW_ACTION p_Action) { m_WindowAction = p_Action; }
 
 private:
+    bool LoadDB();
     WINDOW_ACTION m_WindowAction;
     QTimer *m_pTimer;
-
     QString m_sProjectDir;
 
 private slots:
@@ -32,5 +40,8 @@ private slots:
     void NewProject();
     void LoadProject();
     void CustomUpdate();
+
+signals:
+    void WindowActionDone();
 };
 #endif

@@ -5,8 +5,7 @@
 namespace XML
 {
     #define FAILED_CHECK if (p_hr == S_FALSE) { m_XMLState = XML_FAILED; return NULL; }
-    #define returnRun CoUninitialize(); return;
-
+    
     XML_Reader::XML_Reader(std::string sData) : m_XMLState(XML_IN_PROGRESS), m_sData(sData), m_sLogLocationName(LOGFILE_ENGINE_LOG_NAME + "XML_Reader : "),
         m_pChildList(NULL), ActiveObject()
     {
@@ -15,9 +14,14 @@ namespace XML
 
     XML_Reader::~XML_Reader(void)
     {
-        delete m_pChildList;
+        if (m_pChildList)
+        {
+            delete m_pChildList;
+            m_pChildList = NULL;
+        }
     }
 
+    #define returnRun CoUninitialize(); return;
     void XML_Reader::Run()
     {
         if (FAILED(CoInitialize(NULL)))
@@ -67,11 +71,12 @@ namespace XML
         p_hr = p_pNode->get_childNodes(&t_pChildList);
         FAILED_CHECK
 
-            // get child count
-            LONG t_ChildrenCount = 0;
+        // get child count
+        LONG t_ChildrenCount = 0;
         p_hr = t_pChildList->get_length(&t_ChildrenCount);
         FAILED_CHECK
-            IXMLDOMNodePtr t_pTempNode;
+
+        IXMLDOMNodePtr t_pTempNode;
         XML_Data t_NewChild;
         BSTR sNodeName;
         std::string sName;
@@ -79,26 +84,30 @@ namespace XML
         {
             p_hr = t_pChildList->get_item(i, &t_pTempNode);
             FAILED_CHECK
-                // get children
-                ChildList *t_pTempData = CheckoutChildren(t_pTempNode, p_hr);
-            FAILED_CHECK
-                if (t_pTempData)
-                    t_NewChild.m_ChildList = *t_pTempData;
 
-            delete t_pTempData;
+            // get children
+            ChildList *t_pTempData = CheckoutChildren(t_pTempNode, p_hr);
+            FAILED_CHECK
+
+            if (t_pTempData)
+                t_NewChild.m_ChildList = *t_pTempData;
+
+            t_pTempData = NULL;
 
             // get attributes
             AttributeList *t_pTempAttributes = CheckoutAttributes(t_pTempNode, p_hr);
             FAILED_CHECK
-                if (t_pTempData)
-                    t_NewChild.m_AttributeList = *t_pTempAttributes;
 
-            delete t_pTempAttributes;
+            if (t_pTempAttributes)
+                t_NewChild.m_AttributeList = *t_pTempAttributes;
+
+            t_pTempAttributes = NULL;
 
             // insert child in data map
             p_hr = t_pTempNode->get_nodeName(&sNodeName);
             FAILED_CHECK
-                sName = _bstr_t(sNodeName);
+
+            sName = _bstr_t(sNodeName);
             t_pNewData->insert(std::make_pair(sName, t_NewChild));
         }
 
@@ -117,11 +126,12 @@ namespace XML
         p_hr = p_pNode->get_attributes(&t_pAttributeList);
         FAILED_CHECK
 
-            // get attribute count
-            LONG iAttributes = 0;
+        // get attribute count
+        LONG iAttributes = 0;
         p_hr = t_pAttributeList->get_length(&iAttributes);
         FAILED_CHECK
-            IXMLDOMNodePtr t_pTempNode;
+
+        IXMLDOMNodePtr t_pTempNode;
         VARIANT value;
         VariantInit(&value);
         BSTR sNodeName;
@@ -130,11 +140,14 @@ namespace XML
         {
             p_hr = t_pAttributeList->get_item(i, &t_pTempNode);
             FAILED_CHECK
-                p_hr = t_pTempNode->get_nodeValue(&value);
+
+            p_hr = t_pTempNode->get_nodeValue(&value);
             FAILED_CHECK
-                p_hr = t_pTempNode->get_nodeName(&sNodeName);
+
+            p_hr = t_pTempNode->get_nodeName(&sNodeName);
             FAILED_CHECK
-                sName = _bstr_t(sNodeName);
+
+            sName = _bstr_t(sNodeName);
             t_pNewData->insert(std::make_pair(sName, value));
         }
 
@@ -146,8 +159,8 @@ namespace XML
         AttributeList::iterator t_Itr = m_AttributeList.find(p_sName);
         if (t_Itr != m_AttributeList.end())
         {
-            p_Value = t_Itr->second;
-            return true;
+            if (SUCCEEDED(VariantCopy(&p_Value, &t_Itr->second)))
+                return true;
         }
 
         return false;

@@ -39,6 +39,9 @@
     <addaction name="actionClose"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="title">
      <string>Edit</string>
     </property>

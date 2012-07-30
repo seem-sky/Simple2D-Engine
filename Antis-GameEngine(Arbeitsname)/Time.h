@@ -40,6 +40,6 @@ private:
     int m_FrameRate;
 
     //Zeiger auf Logfile
-    CLogfile *m_pLogfile;
+    Logfile *m_pLogfile;
 };
 #endif
