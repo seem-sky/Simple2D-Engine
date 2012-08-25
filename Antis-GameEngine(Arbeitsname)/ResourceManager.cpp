@@ -26,9 +26,9 @@ LPDIRECT3DTEXTURE9 ResourceMgr::GetTexture(std::string sLocation, const DATABASE
     return AddTexture(sLocation, proto);
 }
 
-LPDIRECT3DTEXTURE9 ResourceMgr::AddTexture(std::string sLocation, const DATABASE::SpritePrototype *proto)
+LPDIRECT3DTEXTURE9 ResourceMgr::AddTexture(std::string p_sLocation, const DATABASE::SpritePrototype *p_pProto)
 {
-    if (!proto)
+    if (!p_pProto)
         return NULL;
 
     HRESULT hr;
@@ -37,24 +37,30 @@ LPDIRECT3DTEXTURE9 ResourceMgr::AddTexture(std::string sLocation, const DATABASE
 
     // load infos from file
     D3DXIMAGE_INFO ImageInfo;
-    D3DXGetImageInfoFromFile((sLocation+proto->m_sFileName).c_str(), &ImageInfo);
+    D3DXGetImageInfoFromFile((p_sLocation+p_pProto->m_sFileName).c_str(), &ImageInfo);
 
     // load file
     LPDIRECT3DTEXTURE9 pTexture = NULL;
-    hr = D3DXCreateTextureFromFileEx(pDirect3D->GetDevice(), (sLocation+proto->m_sFileName).c_str(), ImageInfo.Width, ImageInfo.Height, 1, 0,
-        D3DFMT_UNKNOWN, D3DPOOL_MANAGED, D3DX_FILTER_NONE, D3DX_FILTER_NONE, proto->m_transparentColor, NULL, NULL, &pTexture);
+
+    // parse transparency color
+    std::string t_sColorString = p_pProto->m_sTransparentColor;
+    UINT t_uiColorRed = atoi(t_sColorString.substr((t_sColorString.find("R"))).c_str());
+    UINT t_uiColorBlue = atoi(t_sColorString.substr((t_sColorString.find("B"))).c_str());
+    UINT t_uiColorGreen = atoi(t_sColorString.substr((t_sColorString.find("G"))).c_str());
+    hr = D3DXCreateTextureFromFileEx(pDirect3D->GetDevice(), (p_sLocation+p_pProto->m_sFileName).c_str(), ImageInfo.Width, ImageInfo.Height, 1, 0,
+        D3DFMT_UNKNOWN, D3DPOOL_MANAGED, D3DX_FILTER_NONE, D3DX_FILTER_NONE, D3DCOLOR_XRGB(t_uiColorRed, t_uiColorGreen, t_uiColorBlue), NULL, NULL, &pTexture);
 
     // return NULL if unable to load texture from file
     if (FAILED(hr))
     {
-        if (!proto->m_sFileName.empty())
-            ERROR_LOG(m_sLogLocationName + "Unable to load file " + sLocation+proto->m_sFileName + ". No such file or directory.");
+        if (!p_pProto->m_sFileName.empty())
+            ERROR_LOG(m_sLogLocationName + "Unable to load file " + p_sLocation+p_pProto->m_sFileName + ". No such file or directory.");
     }
     else
-        BASIC_LOG(m_sLogLocationName + "Succesfully load file " + sLocation+proto->m_sFileName + ".");
+        BASIC_LOG(m_sLogLocationName + "Succesfully load file " + p_sLocation+p_pProto->m_sFileName + ".");
 
     // add texture to list
-    m_TextureList.insert(std::make_pair<std::string, LPDIRECT3DTEXTURE9>((sLocation+proto->m_sFileName).c_str(), pTexture));
+    m_TextureList.insert(std::make_pair<std::string, LPDIRECT3DTEXTURE9>((p_sLocation+p_pProto->m_sFileName).c_str(), pTexture));
 
     return pTexture;
 }

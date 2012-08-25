@@ -22,6 +22,9 @@ enum PassabilityFlag
 
 namespace DATABASE
 {
+    /*####
+    # SpritePrototype
+    ####*/
     enum SpriteType
     {
         SPRITE_TYPE_TILE,
@@ -32,7 +35,7 @@ namespace DATABASE
 
     struct SpritePrototype
     {
-        SpritePrototype() : m_uiSpriteType(SPRITE_TYPE_TILE), m_uiID(0), m_transparentColor(0)
+        SpritePrototype() : m_uiSpriteType(SPRITE_TYPE_TILE), m_uiID(0)
         {
             memset(&Type, 0, sizeof(Type));
         }
@@ -40,7 +43,6 @@ namespace DATABASE
         UINT m_uiSpriteType;
         UINT m_uiID;
         std::string m_sTransparentColor;
-        DWORD m_transparentColor;
         std::string m_sFileName;        // stores texture name (WITHOUT path).
 
         union                           // different sprite types have different attributes
@@ -53,12 +55,7 @@ namespace DATABASE
                 bool m_bAutotile;       // 2 is autotile?
             } Tile;
 
-            // SpriteAutoTile = 1
-            struct SpriteAutoTile : SpriteTile
-            {
-            } AutoTile;
-
-            // SpriteObject = 2
+            // SpriteObject = 1
             struct SpriteObject
             {
                 int m_uiBoundingXBegin;
@@ -67,14 +64,14 @@ namespace DATABASE
                 int m_uiBoundingYRange;
             } Object;
 
-            // SpriteAnimatedObject = 3
+            // SpriteAnimatedObject = 2
             struct SpriteAnimatedObject : SpriteObject
             {
                 UINT m_uiSpritesX;
                 UINT m_uiSpritesY;
             } AnimatedObject;
 
-            // TextBox = 4
+            // TextBox = 3
             struct TextBoxObject
             {
                 UINT m_uiBorderSize;
@@ -82,18 +79,39 @@ namespace DATABASE
         } Type;
     };
 
-    enum OBJECT_TYPE
-    {
-        OBJECT_TYPE_MAP_OBJECT,
-        OBJECT_TYPE_NPC,
-    };
-
+    /*####
+    # StartConditionsPrototype
+    ####*/
     struct StartConditionsPrototype
     {
         StartConditionsPrototype() : m_uiMapID(0), m_uiHeroID(0) { }
         UINT m_uiMapID;
         UINT m_uiHeroID;
         Point<UINT> m_uiStartPos;
+    };
+
+    /*####
+    # ObjectPrototype
+    ####*/
+    template <class T>
+    struct TObjectVariable
+    {
+        TObjectVariable() : m_uiID(0), m_Value() {}
+
+        UINT m_uiID;
+        std::string m_sName;
+        T m_Value;
+    };
+
+    typedef std::map<UINT, TObjectVariable<bool>> ObjectBoolList;
+    typedef std::map<UINT, TObjectVariable<int>> ObjectIntegerList;
+    typedef std::map<UINT, TObjectVariable<float>> ObjectFloatList;
+    typedef std::map<UINT, TObjectVariable<std::string>> ObjectStringList;
+
+    enum OBJECT_TYPE
+    {
+        OBJECT_TYPE_MAP_OBJECT,
+        OBJECT_TYPE_NPC,
     };
 
     struct ObjectPrototype
@@ -106,6 +124,12 @@ namespace DATABASE
         UINT m_uiID;
         UINT m_uiType;
         UINT m_uiTextureID;
+        std::string m_sName;
+
+        ObjectBoolList m_ObjectBoolList;
+        ObjectIntegerList m_ObjectIntegerList;
+        ObjectFloatList m_ObjectFloatList;
+        ObjectStringList m_ObjectStringList;
 
         union
         {
@@ -138,16 +162,18 @@ namespace DATABASE
 
         const std::string GetMapName(UINT p_uiID);
         bool GetStartConditions(StartConditionsPrototype &p_proto);
+
+        void GetObjectNames(std::map<UINT, std::string> &p_lObjectNames);
         const ObjectPrototype* GetObjectPrototype(UINT p_uiID);
-        const std::string GetSpritePath(UINT p_uiID);
 
         void GetTextureNames(std::string p_sType, std::map<UINT, std::string> &p_lTextureNames);
-
         const SpritePrototype* GetSpritePrototype(std::string p_sType, UINT p_uiID);
         bool HasSprite(std::string p_sType, UINT p_uiID);
+        const std::string GetSpritePath(UINT p_uiID);
 
         void LoadDB(std::string p_sFileName);
         XML::XML_STATE GetDBState();
+        bool IsDBEmpty() { return m_pDatabase.empty(); }
 
     private:
         XML::ChildList m_pDatabase;

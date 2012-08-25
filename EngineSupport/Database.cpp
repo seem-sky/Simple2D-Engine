@@ -112,9 +112,14 @@ namespace DATABASE
             case XML_IN_PROGRESS:
                 return XML_IN_PROGRESS;
             case XML_DONE:
-                m_pDatabase = *m_pXMLReader->GetXMLData();
-                StoreSpritePaths();
-                BASIC_LOG(m_sLogLocationName + "Database load complete.");
+                if (m_pXMLReader->GetXMLData())
+                {
+                    m_pDatabase = *m_pXMLReader->GetXMLData();
+                    StoreSpritePaths();
+                    BASIC_LOG(m_sLogLocationName + "Database load complete.");
+                }
+                else
+                    ERROR_LOG(m_sLogLocationName + "Database load complete, but got no Data from file.");
                 break;
             default:
                 break;
@@ -178,13 +183,13 @@ namespace DATABASE
         AttributeList::iterator t_AttrItr;
         ObjectPrototype t_proto;
         CComVariant t_Value;
-        for (ChildList::iterator t_DBitr2 = t_DBitr->second.m_ChildList.find("Object");
-             t_DBitr2 != t_DBitr->second.m_ChildList.end() && t_DBitr2->first == "Object"; ++t_DBitr2)
+        for (ChildList::iterator t_ObjItr = t_DBitr->second.m_ChildList.find("Object");
+             t_ObjItr != t_DBitr->second.m_ChildList.end() && t_ObjItr->first == "Object"; ++t_ObjItr)
         {
-            if (t_DBitr2->second.HasAttributes())
+            if (t_ObjItr->second.HasAttributes())
             {
-                t_AttrItr = t_DBitr2->second.m_AttributeList.find("ID");
-                if (t_AttrItr == t_DBitr2->second.m_AttributeList.end())
+                t_AttrItr = t_ObjItr->second.m_AttributeList.find("ID");
+                if (t_AttrItr == t_ObjItr->second.m_AttributeList.end())
                     continue;
 
                 // check ID
@@ -192,31 +197,32 @@ namespace DATABASE
                     continue;
                 if (t_Value.uintVal == p_uiID)
                 {
+                    t_proto.m_uiID = t_Value.uintVal;
                     // store type before other
-                    t_AttrItr = t_DBitr2->second.m_AttributeList.find("Type");
-                    if (t_AttrItr == t_DBitr2->second.m_AttributeList.end())
+                    t_AttrItr = t_ObjItr->second.m_AttributeList.find("Type");
+                    if (t_AttrItr == t_ObjItr->second.m_AttributeList.end())
                         return NULL;
 
                     if (FAILED(t_Value.ChangeType(VT_UINT, &t_AttrItr->second)))
                         continue;
                     t_proto.m_uiType = t_Value.uiVal;
 
-                    for (t_AttrItr = t_DBitr2->second.m_AttributeList.begin();
-                    t_AttrItr != t_DBitr2->second.m_AttributeList.end(); ++t_AttrItr)
+                    for (t_AttrItr = t_ObjItr->second.m_AttributeList.begin();
+                    t_AttrItr != t_ObjItr->second.m_AttributeList.end(); ++t_AttrItr)
                     {
-                        if (FAILED(t_Value.ChangeType(VT_UINT, &t_AttrItr->second)))
-                            continue;
-
-                        if (t_AttrItr->first == "ID")
-                            t_proto.m_uiID = t_Value.uiVal;
-
+                        if (t_AttrItr->first == "ObjectName")
+                            t_proto.m_sName = bstr_t(t_AttrItr->second);
+                        else if (t_AttrItr->first == "ID")
+                                continue;
                         else if (t_AttrItr->first == "Type")
                             continue;
 
-                        else if (t_AttrItr->first == "TextureID")
-                            t_proto.m_uiTextureID = t_Value.uiVal;
+                        if (FAILED(t_Value.ChangeType(VT_UINT, &t_AttrItr->second)))
+                            continue;
 
-                        else if (t_AttrItr->first == "AniFrequency")
+                        if (t_AttrItr->first == "TextureID")
+                            t_proto.m_uiTextureID = t_Value.intVal;
+                        else if (t_AttrItr->first == "AnimationFrequency")
                         {
                             switch(t_proto.m_uiType)
                             {
@@ -227,7 +233,7 @@ namespace DATABASE
                                 break;
                             }
                         }
-                        else if (t_AttrItr->first == "MoveSpeed")
+                        else if (t_AttrItr->first == "MovementSpeed")
                         {
                             switch(t_proto.m_uiType)
                             {
@@ -280,6 +286,113 @@ namespace DATABASE
                                 break;
                             default:
                                 break;
+                            }
+                        }
+                    }
+
+                    // check child list
+                    for (ChildList::iterator t_ChildItr = t_ObjItr->second.m_ChildList.begin(); t_ChildItr != t_ObjItr->second.m_ChildList.end(); ++t_ChildItr)
+                    {
+                        // check variables
+                        if (t_ChildItr->first == "Variables")
+                        {
+                            for (ChildList::iterator t_VTypeItr = t_ChildItr->second.m_ChildList.begin(); t_VTypeItr != t_ChildItr->second.m_ChildList.end(); ++t_VTypeItr)
+                            {
+                                // bool value
+                                if (t_VTypeItr->first == "bool")
+                                {
+                                    TObjectVariable<bool> t_NewBool;
+                                    for (AttributeList::iterator t_VAttrItr = t_VTypeItr->second.m_AttributeList.begin(); t_VAttrItr != t_VTypeItr->second.m_AttributeList.end(); ++t_VAttrItr)
+                                    {
+                                        if (t_VAttrItr->first == "name")
+                                            t_NewBool.m_sName = bstr_t(t_VAttrItr->second);
+                                        else if (t_VAttrItr->first == "ID")
+                                        {
+                                            if (FAILED(t_Value.ChangeType(VT_UINT, &t_VAttrItr->second)))
+                                                continue;
+
+                                            t_NewBool.m_uiID = t_Value.uintVal;
+                                        }
+                                        else if (t_VAttrItr->first == "value")
+                                        {
+                                            if (FAILED(t_Value.ChangeType(VT_BOOL, &t_VAttrItr->second)))
+                                                continue;
+
+                                            t_NewBool.m_Value = t_Value.boolVal == VARIANT_FALSE ? false : true;
+                                        }
+                                    }
+                                    t_proto.m_ObjectBoolList.insert(std::make_pair(t_NewBool.m_uiID, t_NewBool));
+                                }
+                                // int value
+                                else if (t_VTypeItr->first == "integer")
+                                {
+                                    TObjectVariable<int> t_NewInt;
+                                    for (AttributeList::iterator t_VAttrItr = t_VTypeItr->second.m_AttributeList.begin(); t_VAttrItr != t_VTypeItr->second.m_AttributeList.end(); ++t_VAttrItr)
+                                    {
+                                        if (t_VAttrItr->first == "name")
+                                            t_NewInt.m_sName = bstr_t(t_VAttrItr->second);
+                                        else if (t_VAttrItr->first == "ID")
+                                        {
+                                            if (FAILED(t_Value.ChangeType(VT_UINT, &t_VAttrItr->second)))
+                                                continue;
+
+                                            t_NewInt.m_uiID = t_Value.uintVal;
+                                        }
+                                        else if (t_VAttrItr->first == "value")
+                                        {
+                                            if (FAILED(t_Value.ChangeType(VT_INT, &t_VAttrItr->second)))
+                                                continue;
+
+                                            t_NewInt.m_Value = t_Value.intVal;
+                                        }
+                                    }
+                                    t_proto.m_ObjectIntegerList.insert(std::make_pair(t_NewInt.m_uiID, t_NewInt));
+                                }
+                                // float value
+                                else if (t_VTypeItr->first == "float")
+                                {
+                                    TObjectVariable<float> t_NewFloat;
+                                    for (AttributeList::iterator t_VAttrItr = t_VTypeItr->second.m_AttributeList.begin(); t_VAttrItr != t_VTypeItr->second.m_AttributeList.end(); ++t_VAttrItr)
+                                    {
+                                        if (t_VAttrItr->first == "name")
+                                            t_NewFloat.m_sName = bstr_t(t_VAttrItr->second);
+                                        else if (t_VAttrItr->first == "ID")
+                                        {
+                                            if (FAILED(t_Value.ChangeType(VT_UINT, &t_VAttrItr->second)))
+                                                continue;
+
+                                            t_NewFloat.m_uiID = t_Value.uintVal;
+                                        }
+                                        else if (t_VAttrItr->first == "value")
+                                        {
+                                            if (FAILED(t_Value.ChangeType(VT_R4, &t_VAttrItr->second)))
+                                                continue;
+
+                                            t_NewFloat.m_Value = t_Value.fltVal;
+                                        }
+                                    }
+                                    t_proto.m_ObjectFloatList.insert(std::make_pair(t_NewFloat.m_uiID, t_NewFloat));
+                                }
+                                // string value
+                                else if (t_VTypeItr->first == "string")
+                                {
+                                    TObjectVariable<std::string> t_NewString;
+                                    for (AttributeList::iterator t_VAttrItr = t_VTypeItr->second.m_AttributeList.begin(); t_VAttrItr != t_VTypeItr->second.m_AttributeList.end(); ++t_VAttrItr)
+                                    {
+                                        if (t_VAttrItr->first == "name")
+                                            t_NewString.m_sName = bstr_t(t_VAttrItr->second);
+                                        else if (t_VAttrItr->first == "ID")
+                                        {
+                                            if (FAILED(t_Value.ChangeType(VT_UINT, &t_VAttrItr->second)))
+                                                continue;
+
+                                            t_NewString.m_uiID = t_Value.uintVal;
+                                        }
+                                        else if (t_VAttrItr->first == "value")
+                                            t_NewString.m_Value = bstr_t(t_VAttrItr->second);
+                                    }
+                                    t_proto.m_ObjectStringList.insert(std::make_pair(t_NewString.m_uiID, t_NewString));
+                                }
                             }
                         }
                     }
@@ -344,16 +457,10 @@ namespace DATABASE
                             t_proto.m_sFileName = bstr_t(t_AttrItr->second);
                             continue;
                         }
-                        if (t_AttrItr->first == "transparent_color")
+                        else if (t_AttrItr->first == "transparent_color")
                         {
                             t_proto.m_sTransparentColor = bstr_t(t_AttrItr->second);
                             continue;
-                        }
-                        else if (t_AttrItr->first == "transparent_color")
-                        {
-                            if (FAILED(t_Value.ChangeType(VT_UI4, &t_AttrItr->second)))
-                                continue;
-                            t_proto.m_transparentColor = t_Value.ulVal;
                         }
 
                         // check the UINT variables
@@ -549,7 +656,6 @@ namespace DATABASE
 
     void Database::GetTextureNames(std::string p_sType, std::map<UINT, std::string> &p_lTextureNames)
     {
-        p_lTextureNames.clear();
         std::string t_sDir[] = {"SpriteDatabase", p_sType};
         std::list<std::string> t_DirList(t_sDir, t_sDir + sizeof(t_sDir) / sizeof(std::string));
         ChildList::iterator t_DBitr;
@@ -609,5 +715,39 @@ namespace DATABASE
                 return true;
         }
         return false;
+    }
+
+    void Database::GetObjectNames(std::map<UINT, std::string> &p_lObjectNames)
+    {
+        std::string t_sDir[] = {"ObjectDatabase"};
+        std::list<std::string> t_DirList(t_sDir, t_sDir + sizeof(t_sDir) / sizeof(std::string));
+        ChildList::iterator t_DBitr;
+        if (!ChangeDBdir(t_DirList, t_DBitr))
+            return;
+
+        std::string t_sName;
+        AttributeList::iterator t_AttrItr;
+        CComVariant t_Value;
+        for (ChildList::iterator t_DBitr2 = t_DBitr->second.m_ChildList.find("Object");
+            t_DBitr2 != t_DBitr->second.m_ChildList.end() && t_DBitr2->first == "Object"; ++t_DBitr2)
+        {
+            if (t_DBitr2->second.HasAttributes())
+            {
+                t_AttrItr = t_DBitr2->second.m_AttributeList.find("ObjectName");
+                if (t_AttrItr == t_DBitr2->second.m_AttributeList.end())
+                    continue;
+
+                t_sName = bstr_t(t_AttrItr->second);
+
+                t_AttrItr = t_DBitr2->second.m_AttributeList.find("ID");
+                if (t_AttrItr == t_DBitr2->second.m_AttributeList.end())
+                    continue;
+
+                if (FAILED(t_Value.ChangeType(VT_UINT, &t_AttrItr->second)))
+                    continue;
+
+                p_lObjectNames.insert(std::make_pair(t_Value.uintVal, t_sName));
+            }
+        }
     }
 };

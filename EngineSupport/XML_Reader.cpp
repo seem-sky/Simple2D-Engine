@@ -165,4 +165,16 @@ namespace XML
 
         return false;
     }
+
+    bool XML_Data::HasChild(std::string p_sName)
+    {
+        ChildList::iterator t_Itr = m_ChildList.find(p_sName);
+        return t_Itr != m_ChildList.end() ? true : false;
+    }
+
+    XML_Data* XML_Data::GetChild(std::string p_sName)
+    {
+        ChildList::iterator t_Itr = m_ChildList.find(p_sName);
+        return t_Itr != m_ChildList.end() ? &t_Itr->second : NULL;
+    }
 }

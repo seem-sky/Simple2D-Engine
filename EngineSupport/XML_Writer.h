@@ -21,10 +21,14 @@ namespace XML
 
     struct XML_WriteData : XML_Data
     {
-        XML_WriteData() : m_WriteState(XML_WRITE_NONE), XML_Data() {}
+        XML_WriteData(XML_WRITE_STATE p_WriterState = XML_WRITE_NONE) : m_WriteState(p_WriterState), XML_Data() {}
 
         inline XML_WRITE_STATE GetWriteState() { return m_WriteState; }
         inline void SetWriteState(XML_WRITE_STATE p_State) { m_WriteState = p_State; }
+
+        virtual bool HasChilds() { return !m_ChildList.empty(); }
+        virtual bool HasChild(std::string p_sName);
+        virtual XML_Data* GetChild(std::string p_sName);
 
         XML_WRITE_STATE m_WriteState;
         WriteChildList m_ChildList;

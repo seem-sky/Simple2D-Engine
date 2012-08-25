@@ -7,6 +7,15 @@
 
 namespace DATABASE
 {
+    enum CUSTOM_VARIABLE_TYPE
+    {
+        VARIABLE_NONE,
+        VARIABLE_BOOL,
+        VARIABLE_INT,
+        VARIABLE_FLOAT,
+        VARIABLE_STRING,
+    };
+
     class DatabaseOutput : public TSingleton<DatabaseOutput>
     {
     public:
@@ -20,14 +29,28 @@ namespace DATABASE
         bool IsSpritePrototypeDeleted(std::string p_sType, UINT p_uiID);
         void GetTextureNames(std::string p_sType, std::map<UINT, std::string> &p_lTextureNames);
 
+        /*#####
+        # Objects
+        #####*/
+        ObjectPrototype* GetObjectPrototype(UINT p_uiID);
+        void ChangeObjectPrototype(ObjectPrototype &p_ChangedProto);
+        void DeleteObjectPrototype(ObjectPrototype &p_DelProto);
+        bool IsObjectPrototypeDeleted(UINT p_uiID);
+        void GetObjectNames(std::map<UINT, std::string> &p_lObjectNames);
+        // Objects - Custom Variables
+        UINT AddNewCustomObjectVariable(UINT p_uiObjectID, CUSTOM_VARIABLE_TYPE p_Type);
+        bool DeleteCustomObjectVariable(UINT p_uiObjectID, CUSTOM_VARIABLE_TYPE p_Type, UINT p_uiVariableID);
+
         XML::XML_STATE GetDBState();
 
         void SaveChangesTo(std::string p_sFileName);
 
     private:
-        bool ParseSpriteChange(XML::XML_WriteData *p_pElement, SpritePrototype *p_pProto);
+        bool ParseSpriteChange(XML::XML_WriteData *p_pElement, const SpritePrototype *p_pProto);
+        bool ParseObjectChange(XML::XML_WriteData *p_pElement, const ObjectPrototype *p_pProto);
 
         SpriteList m_ChangedSprites;
+        ObjectList m_ChangedObjects;
         XML::XML_Writer *m_pWriter;
         inline void KillXMLThread()
         {

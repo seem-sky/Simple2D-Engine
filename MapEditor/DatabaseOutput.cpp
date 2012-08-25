@@ -18,6 +18,7 @@ namespace DATABASE
     void DatabaseOutput::ClearOutput()
     {
         m_ChangedSprites.clear();
+        m_ChangedObjects.clear();
     }
 
     void DatabaseOutput::ChangeSpritePrototype(std::string p_sType, SpritePrototype &p_ChangedProto)
@@ -74,56 +75,227 @@ namespace DATABASE
     {
         if (m_pWriter)
             return;
-
-        XML_WriteData t_NewChildren;
-        t_NewChildren.m_ChildList.insert(std::make_pair("SpriteDatabase", XML_WriteData()));
+        XML_WriteData *t_DBChanges = new XML_WriteData();
 
         // parse sprite changes
-        WriteChildList::iterator t_DBItr = t_NewChildren.m_ChildList.find("SpriteDatabase");
-        if (t_DBItr != t_NewChildren.m_ChildList.end())
+        if (!m_ChangedSprites.empty())
         {
-            // iterate through type
-            for (SpriteList::iterator t_TypeItr = m_ChangedSprites.begin(); t_TypeItr != m_ChangedSprites.end(); ++t_TypeItr)
-            {
-                WriteChildList::iterator t_InsertTypeItr = t_DBItr->second.m_ChildList.find(t_TypeItr->first);
-                if (t_InsertTypeItr == t_DBItr->second.m_ChildList.end())
-                {
-                    t_DBItr->second.m_ChildList.insert(std::make_pair(t_TypeItr->first, XML_WriteData()));
-                    t_InsertTypeItr = t_DBItr->second.m_ChildList.find(t_TypeItr->first);
-                }
+            XML_WriteData t_NewChildren;
+            t_NewChildren.m_ChildList.insert(std::make_pair("SpriteDatabase", XML_WriteData()));
 
+            WriteChildList::iterator t_DBItr = t_NewChildren.m_ChildList.find("SpriteDatabase");
+            if (t_DBItr != t_NewChildren.m_ChildList.end())
+            {
+                // iterate through type
+                for (SpriteList::iterator t_TypeItr = m_ChangedSprites.begin(); t_TypeItr != m_ChangedSprites.end(); ++t_TypeItr)
+                {
+                    WriteChildList::iterator t_InsertTypeItr = t_DBItr->second.m_ChildList.find(t_TypeItr->first);
+                    if (t_InsertTypeItr == t_DBItr->second.m_ChildList.end())
+                    {
+                        t_DBItr->second.m_ChildList.insert(std::make_pair(t_TypeItr->first, XML_WriteData()));
+                        t_InsertTypeItr = t_DBItr->second.m_ChildList.find(t_TypeItr->first);
+                    }
+
+                    // iterate through prototypes
+                    for (std::map<UINT, SpritePrototype>::iterator t_SpriteItr = t_TypeItr->second.begin(); t_SpriteItr != t_TypeItr->second.end(); ++t_SpriteItr)
+                    {
+                        XML_WriteData t_NewElement;
+                        // parse added or changed sprites
+                        if (t_SpriteItr->second.m_uiID != 0)
+                        {
+                            if (ParseSpriteChange(&t_NewElement, &t_SpriteItr->second))
+                                t_InsertTypeItr->second.m_ChildList.insert(std::make_pair("Sprite", t_NewElement));
+                        }
+                        // deleted sprite
+                        else
+                        {
+                            CComVariant t_Value;
+                            t_Value.uintVal = t_SpriteItr->first;
+                            t_NewElement.m_AttributeList.insert(std::make_pair("ID", t_Value));
+                            t_NewElement.SetWriteState(XML_WRITE_DELETE);
+                            t_InsertTypeItr->second.m_ChildList.insert(std::make_pair("Sprite", t_NewElement));
+                        }
+                    }
+                }
+            }
+            t_DBChanges->m_ChildList.insert(std::make_pair("Database", t_NewChildren));
+        }
+
+        // parse object changes
+        if (!m_ChangedObjects.empty())
+        {
+            XML_WriteData t_NewChildren;
+            t_NewChildren.m_ChildList.insert(std::make_pair("ObjectDatabase", XML_WriteData()));
+
+            WriteChildList::iterator t_DBItr = t_NewChildren.m_ChildList.find("ObjectDatabase");
+            if (t_DBItr != t_NewChildren.m_ChildList.end())
+            {
                 // iterate through prototypes
-                for (std::map<UINT, SpritePrototype>::iterator t_SpriteItr = t_TypeItr->second.begin(); t_SpriteItr != t_TypeItr->second.end(); ++t_SpriteItr)
+                for (std::map<UINT, ObjectPrototype>::iterator t_ObjectItr = m_ChangedObjects.begin(); t_ObjectItr != m_ChangedObjects.end(); ++t_ObjectItr)
                 {
                     XML_WriteData t_NewElement;
                     // parse added or changed sprites
-                    if (t_SpriteItr->second.m_uiID != 0)
+                    if (t_ObjectItr->second.m_uiID != 0)
                     {
-                        if (ParseSpriteChange(&t_NewElement, &t_SpriteItr->second))
-                            t_InsertTypeItr->second.m_ChildList.insert(std::make_pair("Sprite", t_NewElement));
+                        if (ParseObjectChange(&t_NewElement, &t_ObjectItr->second))
+                            t_DBItr->second.m_ChildList.insert(std::make_pair("Object", t_NewElement));
                     }
                     // deleted sprite
                     else
                     {
-                        VARIANT t_Value;
-                        VariantInit(&t_Value);
-                        t_Value.vt = VT_UINT;
-                        t_Value.uintVal = t_SpriteItr->first;
+                        CComVariant t_Value;
+                        t_Value.uintVal = t_ObjectItr->first;
                         t_NewElement.m_AttributeList.insert(std::make_pair("ID", t_Value));
                         t_NewElement.SetWriteState(XML_WRITE_DELETE);
-                        t_InsertTypeItr->second.m_ChildList.insert(std::make_pair("Sprite", t_NewElement));
+                        t_DBItr->second.m_ChildList.insert(std::make_pair("Object", t_NewElement));
                     }
                 }
             }
+            WriteChildList::iterator t_ChangeItr = t_DBChanges->m_ChildList.find("Database");
+            if (t_ChangeItr != t_DBChanges->m_ChildList.end())
+            {
+                WriteChildList::iterator t_ObjectDBItr = t_NewChildren.m_ChildList.find("ObjectDatabase");
+                if (t_ObjectDBItr != t_NewChildren.m_ChildList.end())
+                    t_ChangeItr->second.m_ChildList.insert(std::make_pair(t_ObjectDBItr->first, t_ObjectDBItr->second));
+            }
+            else
+                t_DBChanges->m_ChildList.insert(std::make_pair("Database", t_NewChildren));
         }
-        XML_WriteData *t_DBChanges = new XML_WriteData();
-        t_DBChanges->m_ChildList.insert(std::make_pair("Database", t_NewChildren));
 
         m_pWriter = new XML_Writer(p_sFileName, t_DBChanges);
         ClearOutput();
     }
 
-    bool DatabaseOutput::ParseSpriteChange(XML_WriteData *p_pElement, SpritePrototype *p_pProto)
+    bool DatabaseOutput::ParseObjectChange(XML::XML_WriteData *p_pElement, const ObjectPrototype *p_pProto)
+    {
+        if (!p_pElement || !p_pProto)
+            return false;
+
+        // filename
+        p_pElement->m_AttributeList.insert(std::make_pair("ObjectName", (LPCOLESTR)_bstr_t(p_pProto->m_sName.c_str())));
+
+        // ID
+        p_pElement->m_AttributeList.insert(std::make_pair("ID", p_pProto->m_uiID));
+
+        // Type
+        p_pElement->m_AttributeList.insert(std::make_pair("Type", p_pProto->m_uiType));
+
+        // Texture ID
+        p_pElement->m_AttributeList.insert(std::make_pair("TextureID", p_pProto->m_uiTextureID));
+
+        switch(p_pProto->m_uiType)
+        {
+        case OBJECT_TYPE_NPC:
+            // animation frequency
+            p_pElement->m_AttributeList.insert(std::make_pair("AnimationFrequency", p_pProto->ObjectType.NPC.m_uiAnimationFrequency));
+
+            // movement speed
+            p_pElement->m_AttributeList.insert(std::make_pair("MovementSpeed", p_pProto->ObjectType.NPC.m_uiMoveSpeed));
+
+            // HP_min
+            p_pElement->m_AttributeList.insert(std::make_pair("HP_min", p_pProto->ObjectType.NPC.m_uiHPmin));
+
+            // HP_max
+            p_pElement->m_AttributeList.insert(std::make_pair("HP_max", p_pProto->ObjectType.NPC.m_uiHPmax));
+        case OBJECT_TYPE_MAP_OBJECT:
+            break;
+        default:
+            break;
+        }
+
+        // parse custom variables
+        if (!p_pProto->m_ObjectBoolList.empty() || !p_pProto->m_ObjectIntegerList.empty() || !p_pProto->m_ObjectFloatList.empty() || !p_pProto->m_ObjectStringList.empty())
+        {
+            if (!p_pElement->HasChild("Variables"))
+                p_pElement->m_ChildList.insert(std::make_pair("Variables", XML_WriteData(XML::XML_WRITE_CHANGE)));
+
+            if (XML_WriteData* t_pVariables = (XML_WriteData*)p_pElement->GetChild("Variables"))
+            {
+                for (ObjectBoolList::const_iterator t_Itr = p_pProto->m_ObjectBoolList.begin(); t_Itr != p_pProto->m_ObjectBoolList.end(); ++t_Itr)
+                {
+                    XML_WriteData t_NewVariable(XML::XML_WRITE_CHANGE);
+                    // 0 == delete mode
+                    if (t_Itr->second.m_uiID != 0)
+                    {
+                        t_NewVariable.m_AttributeList.insert(std::make_pair("name", (LPCOLESTR)_bstr_t(t_Itr->second.m_sName.c_str())));
+                        t_NewVariable.m_AttributeList.insert(std::make_pair("ID", t_Itr->second.m_uiID));
+                        t_NewVariable.m_AttributeList.insert(std::make_pair("value", t_Itr->second.m_Value));
+                    }
+                    else
+                    {
+                        t_NewVariable.SetWriteState(XML_WRITE_DELETE);
+                        t_NewVariable.m_AttributeList.insert(std::make_pair("ID", t_Itr->first));
+                    }
+
+                    t_pVariables->m_ChildList.insert(std::make_pair("bool", t_NewVariable));
+                }
+
+                for (ObjectIntegerList::const_iterator t_Itr = p_pProto->m_ObjectIntegerList.begin(); t_Itr != p_pProto->m_ObjectIntegerList.end(); ++t_Itr)
+                {
+                    XML_WriteData t_NewVariable(XML::XML_WRITE_CHANGE);
+                    // 0 == delete mode
+                    if (t_Itr->second.m_uiID != 0)
+                    {
+                        t_NewVariable.m_AttributeList.insert(std::make_pair("name", (LPCOLESTR)_bstr_t(t_Itr->second.m_sName.c_str())));
+                        t_NewVariable.m_AttributeList.insert(std::make_pair("ID", t_Itr->second.m_uiID));
+                        t_NewVariable.m_AttributeList.insert(std::make_pair("value", t_Itr->second.m_Value));
+                    }
+                    else
+                    {
+                        t_NewVariable.SetWriteState(XML_WRITE_DELETE);
+                        t_NewVariable.m_AttributeList.insert(std::make_pair("ID", t_Itr->first));
+                    }
+
+                    t_pVariables->m_ChildList.insert(std::make_pair("integer", t_NewVariable));
+                }
+
+                for (ObjectFloatList::const_iterator t_Itr = p_pProto->m_ObjectFloatList.begin(); t_Itr != p_pProto->m_ObjectFloatList.end(); ++t_Itr)
+                {
+                    XML_WriteData t_NewVariable(XML::XML_WRITE_CHANGE);
+                    // 0 == delete mode
+                    if (t_Itr->second.m_uiID != 0)
+                    {
+                        t_NewVariable.m_AttributeList.insert(std::make_pair("name", (LPCOLESTR)_bstr_t(t_Itr->second.m_sName.c_str())));
+                        t_NewVariable.m_AttributeList.insert(std::make_pair("ID", t_Itr->second.m_uiID));
+                        t_NewVariable.m_AttributeList.insert(std::make_pair("value", t_Itr->second.m_Value));
+                    }
+                    else
+                    {
+                        t_NewVariable.SetWriteState(XML_WRITE_DELETE);
+                        t_NewVariable.m_AttributeList.insert(std::make_pair("ID", t_Itr->first));
+                    }
+
+                    t_pVariables->m_ChildList.insert(std::make_pair("float", t_NewVariable));
+                }
+
+                for (ObjectStringList::const_iterator t_Itr = p_pProto->m_ObjectStringList.begin(); t_Itr != p_pProto->m_ObjectStringList.end(); ++t_Itr)
+                {
+                    XML_WriteData t_NewVariable(XML::XML_WRITE_CHANGE);
+                    // 0 == delete mode
+                    if (t_Itr->second.m_uiID != 0)
+                    {
+                        t_NewVariable.m_AttributeList.insert(std::make_pair("name", (LPCOLESTR)_bstr_t(t_Itr->second.m_sName.c_str())));
+                        t_NewVariable.m_AttributeList.insert(std::make_pair("ID", t_Itr->second.m_uiID));
+                        t_NewVariable.m_AttributeList.insert(std::make_pair("value", (LPCOLESTR)_bstr_t(t_Itr->second.m_Value.c_str())));
+                    }
+                    else
+                    {
+                        t_NewVariable.SetWriteState(XML_WRITE_DELETE);
+                        t_NewVariable.m_AttributeList.insert(std::make_pair("ID", t_Itr->first));
+                    }
+
+                    t_pVariables->m_ChildList.insert(std::make_pair("string", t_NewVariable));
+                }
+            }
+        }
+
+        // set change flag
+        p_pElement->SetWriteState(XML_WRITE_CHANGE);
+
+        return true;
+    }
+
+    bool DatabaseOutput::ParseSpriteChange(XML_WriteData *p_pElement, const SpritePrototype *p_pProto)
     {
         if (!p_pElement || !p_pProto)
             return false;
@@ -154,6 +326,13 @@ namespace DATABASE
             p_pElement->m_AttributeList.insert(std::make_pair("auto_tile", (UINT)p_pProto->Type.Tile.m_bAutotile));
         	break;
 
+        case SPRITE_TYPE_ANIMATED_OBJECT:
+            // columns
+            p_pElement->m_AttributeList.insert(std::make_pair("spritesX", p_pProto->Type.AnimatedObject.m_uiSpritesX));
+
+            // rows
+            p_pElement->m_AttributeList.insert(std::make_pair("spritesY", p_pProto->Type.AnimatedObject.m_uiSpritesY));
+
         case SPRITE_TYPE_OBJECT:
             // bounding rect
             p_pElement->m_AttributeList.insert(std::make_pair("boundingXBegin", p_pProto->Type.Object.m_uiBoundingXBegin));
@@ -182,10 +361,11 @@ namespace DATABASE
         for (std::map<UINT, SpritePrototype>::iterator t_SpriteItr = t_TypeItr->second.begin(); t_SpriteItr != t_TypeItr->second.end(); ++t_SpriteItr)
         {
             t_NameItr = p_lTextureNames.find(t_SpriteItr->first);
-            if (t_NameItr != p_lTextureNames.end())
-                t_NameItr->second = t_SpriteItr->second.m_sFileName;
-            else
+            if (t_NameItr == p_lTextureNames.end())
                 p_lTextureNames.insert(std::make_pair(t_SpriteItr->first, t_SpriteItr->second.m_sFileName));
+
+            else
+                t_NameItr->second = t_SpriteItr->second.m_sFileName;
         }
     }
 
@@ -208,5 +388,275 @@ namespace DATABASE
             }
         }
         return t_State;
+    }
+
+    ObjectPrototype* DatabaseOutput::GetObjectPrototype(unsigned int p_uiID)
+    {
+        ObjectList::iterator t_ObjItr = m_ChangedObjects.find(p_uiID);
+        if (t_ObjItr != m_ChangedObjects.end())
+            return &t_ObjItr->second;
+
+        return NULL;
+    }
+
+    void DatabaseOutput::ChangeObjectPrototype(ObjectPrototype &p_ChangedProto)
+    {
+        // find prototype and overwrite it, or create it
+        ObjectList::iterator t_ObjItr = m_ChangedObjects.find(p_ChangedProto.m_uiID);
+        if (t_ObjItr == m_ChangedObjects.end())
+            m_ChangedObjects.insert(std::make_pair(p_ChangedProto.m_uiID, p_ChangedProto));
+        else
+            t_ObjItr->second = p_ChangedProto;
+    }
+
+    void DatabaseOutput::DeleteObjectPrototype(ObjectPrototype &p_DelProto)
+    {
+        ChangeObjectPrototype(p_DelProto);
+        if (ObjectPrototype *t_pProto = GetObjectPrototype(p_DelProto.m_uiID))
+            t_pProto->m_uiID = 0;
+    }
+
+    bool DatabaseOutput::IsObjectPrototypeDeleted(UINT p_uiID)
+    {
+        if (ObjectPrototype *t_pProto = GetObjectPrototype(p_uiID))
+            if (t_pProto->m_uiID == 0)
+                return true;
+
+        return false;
+    }
+
+    void DatabaseOutput::GetObjectNames(std::map<UINT, std::string> &p_lObjectNames)
+    {
+        std::map<UINT, std::string>::iterator t_NameItr;
+        for (ObjectList::iterator t_ObjectItr = m_ChangedObjects.begin(); t_ObjectItr != m_ChangedObjects.end(); ++t_ObjectItr)
+        {
+            t_NameItr = p_lObjectNames.find(t_ObjectItr->first);
+            if (t_NameItr == p_lObjectNames.end())
+                p_lObjectNames.insert(std::make_pair(t_ObjectItr->first, t_ObjectItr->second.m_sName));
+
+            else
+                t_NameItr->second = t_ObjectItr->second.m_sName;
+        }
+    }
+
+    UINT DatabaseOutput::AddNewCustomObjectVariable(UINT p_uiObjectID, CUSTOM_VARIABLE_TYPE p_Type)
+    {
+        ObjectPrototype t_Proto;
+        if (GetObjectPrototype(p_uiObjectID))
+            t_Proto = *GetObjectPrototype(p_uiObjectID);
+        else
+        {
+            if (Database *t_pDB = Database::Get())
+                if (t_pDB->GetObjectPrototype(p_uiObjectID))
+                    t_Proto = *t_pDB->GetObjectPrototype(p_uiObjectID);
+        }
+
+        UINT t_uiIDCheck = 1;
+        bool t_bSuccess = false;
+        switch(p_Type)
+        {
+        case VARIABLE_BOOL:
+            for (ObjectBoolList::iterator t_Itr = t_Proto.m_ObjectBoolList.begin(); t_Itr != t_Proto.m_ObjectBoolList.end(); ++t_Itr)
+            {
+                // 0 == delete mode
+                if (t_uiIDCheck < t_Itr->first)
+                {
+                    TObjectVariable<bool> t_Variable;
+                    t_Variable.m_uiID = t_uiIDCheck;
+                    t_Proto.m_ObjectBoolList.insert(std::make_pair(t_uiIDCheck, t_Variable));
+                    t_bSuccess = true;
+                    break;
+                }
+                else if (t_Itr->second.m_uiID == 0)
+                {
+                    t_Itr->second.m_uiID = t_uiIDCheck;
+                    t_bSuccess = true;
+                    break;
+                }
+                ++t_uiIDCheck;
+            }
+
+            if (!t_bSuccess)
+            {
+                TObjectVariable<bool> t_Variable;
+                t_Variable.m_uiID = t_uiIDCheck;
+                t_Proto.m_ObjectBoolList.insert(std::make_pair(t_uiIDCheck, t_Variable));
+                t_bSuccess = true;
+            }
+
+            break;
+        case VARIABLE_INT:
+            for (ObjectIntegerList::iterator t_Itr = t_Proto.m_ObjectIntegerList.begin(); t_Itr != t_Proto.m_ObjectIntegerList.end(); ++t_Itr)
+            {
+                // 0 == delete mode
+                if (t_uiIDCheck < t_Itr->first)
+                {
+                    TObjectVariable<int> t_Variable;
+                    t_Variable.m_uiID = t_uiIDCheck;
+                    t_Proto.m_ObjectIntegerList.insert(std::make_pair(t_uiIDCheck, t_Variable));
+                    t_bSuccess = true;
+                    break;
+                }
+                else if (t_Itr->second.m_uiID == 0)
+                {
+                    t_Itr->second.m_uiID = t_uiIDCheck;
+                    t_bSuccess = true;
+                    break;
+                }
+
+                ++t_uiIDCheck;
+            }
+
+            if (!t_bSuccess)
+            {
+                TObjectVariable<int> t_Variable;
+                t_Variable.m_uiID = t_uiIDCheck;
+                t_Proto.m_ObjectIntegerList.insert(std::make_pair(t_uiIDCheck, t_Variable));
+                t_bSuccess = true;
+            }
+            break;
+        case VARIABLE_FLOAT:
+            for (ObjectFloatList::iterator t_Itr = t_Proto.m_ObjectFloatList.begin(); t_Itr != t_Proto.m_ObjectFloatList.end(); ++t_Itr)
+            {
+                // 0 == delete mode
+                if (t_uiIDCheck < t_Itr->first)
+                {
+                    TObjectVariable<float> t_Variable;
+                    t_Variable.m_uiID = t_uiIDCheck;
+                    t_Proto.m_ObjectFloatList.insert(std::make_pair(t_uiIDCheck, t_Variable));
+                    t_bSuccess = true;
+                    break;
+                }
+                else if (t_Itr->second.m_uiID == 0)
+                {
+                    t_Itr->second.m_uiID = t_uiIDCheck;
+                    t_bSuccess = true;
+                    break;
+                }
+
+                ++t_uiIDCheck;
+            }
+
+            if (!t_bSuccess)
+            {
+                TObjectVariable<float> t_Variable;
+                t_Variable.m_uiID = t_uiIDCheck;
+                t_Proto.m_ObjectFloatList.insert(std::make_pair(t_uiIDCheck, t_Variable));
+                t_bSuccess = true;
+            }
+            break;
+        case VARIABLE_STRING:
+            for (ObjectStringList::iterator t_Itr = t_Proto.m_ObjectStringList.begin(); t_Itr != t_Proto.m_ObjectStringList.end(); ++t_Itr)
+            {
+                // 0 == delete mode
+                if (t_uiIDCheck < t_Itr->first)
+                {
+                    TObjectVariable<std::string> t_Variable;
+                    t_Variable.m_uiID = t_uiIDCheck;
+                    t_Proto.m_ObjectStringList.insert(std::make_pair(t_uiIDCheck, t_Variable));
+                    t_bSuccess = true;
+                    break;
+                }
+                else if (t_Itr->second.m_uiID == 0)
+                {
+                    t_Itr->second.m_uiID = t_uiIDCheck;
+                    t_bSuccess = true;
+                    break;
+                }
+
+                ++t_uiIDCheck;
+            }
+
+            if (!t_bSuccess)
+            {
+                TObjectVariable<std::string> t_Variable;
+                t_Variable.m_uiID = t_uiIDCheck;
+                t_Proto.m_ObjectStringList.insert(std::make_pair(t_uiIDCheck, t_Variable));
+                t_bSuccess = true;
+            }
+            break;
+        default:
+            break;
+        }
+
+        if (t_bSuccess)
+        {
+            ChangeObjectPrototype(t_Proto);
+            return t_uiIDCheck;
+        }
+
+        return 0;
+    }
+
+    bool DatabaseOutput::DeleteCustomObjectVariable(UINT p_uiObjectID, CUSTOM_VARIABLE_TYPE p_Type, UINT p_uiVariableID)
+    {
+        ObjectPrototype t_Proto;
+        if (GetObjectPrototype(p_uiObjectID))
+            t_Proto = *GetObjectPrototype(p_uiObjectID);
+        else
+        {
+            if (Database *t_pDB = Database::Get())
+                if (t_pDB->GetObjectPrototype(p_uiObjectID))
+                    t_Proto = *t_pDB->GetObjectPrototype(p_uiObjectID);
+        }
+
+        bool t_bSuccess = false;
+        switch(p_Type)
+        {
+        case VARIABLE_BOOL:
+            {
+                ObjectBoolList::iterator t_Itr = t_Proto.m_ObjectBoolList.find(p_uiVariableID);
+                if (t_Itr != t_Proto.m_ObjectBoolList.end())
+                {
+                    t_Itr->second.m_uiID = 0;
+                    t_bSuccess = true;
+                }
+
+                break;
+            }
+        case VARIABLE_INT:
+            {
+                ObjectIntegerList::iterator t_Itr = t_Proto.m_ObjectIntegerList.find(p_uiVariableID);
+                if (t_Itr != t_Proto.m_ObjectIntegerList.end())
+                {
+                    t_Itr->second.m_uiID = 0;
+                    t_bSuccess = true;
+                }
+
+                break;
+            }
+            break;
+        case VARIABLE_FLOAT:
+            {
+                ObjectFloatList::iterator t_Itr = t_Proto.m_ObjectFloatList.find(p_uiVariableID);
+                if (t_Itr != t_Proto.m_ObjectFloatList.end())
+                {
+                    t_Itr->second.m_uiID = 0;
+                    t_bSuccess = true;
+                }
+
+                break;
+            }
+            break;
+        case VARIABLE_STRING:
+            {
+                ObjectStringList::iterator t_Itr = t_Proto.m_ObjectStringList.find(p_uiVariableID);
+                if (t_Itr != t_Proto.m_ObjectStringList.end())
+                {
+                    t_Itr->second.m_uiID = 0;
+                    t_bSuccess = true;
+                }
+
+                break;
+            }
+            break;
+        default:
+            break;
+        }
+
+        if (t_bSuccess)
+            ChangeObjectPrototype(t_Proto);
+
+        return t_bSuccess;
     }
 }

@@ -31,7 +31,10 @@ namespace XML
         ChildList m_ChildList;
         AttributeList m_AttributeList;
 
-        inline bool HasChilds() { return !m_ChildList.empty(); }
+        virtual bool HasChilds() { return !m_ChildList.empty(); }
+        virtual bool HasChild(std::string p_sName);
+        virtual XML_Data* GetChild(std::string p_sName);
+
         inline bool HasAttributes() { return !m_AttributeList.empty(); }
         bool GetAttributeValue(std::string p_sName, VARIANT &p_Value);
     };

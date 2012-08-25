@@ -42,7 +42,6 @@ enum MOVEMENT_SPEED
     MOVEMENT_SPEED_NORMAL       = 4,
     MOVEMENT_SPEED_FAST         = 8,
     MOVEMENT_SPEED_VERY_FAST    = 16,
-    MOVEMENT_SPEED_TEST         = 100,
 };
 
 static MOVEMENT_SPEED WrapMovementSpeedID(UINT speedID)
@@ -59,8 +58,6 @@ static MOVEMENT_SPEED WrapMovementSpeedID(UINT speedID)
         return MOVEMENT_SPEED_FAST;
     case 4:
         return MOVEMENT_SPEED_VERY_FAST;
-    case 5:
-        return MOVEMENT_SPEED_TEST;
     default:
         return MOVEMENT_SPEED_NORMAL;
     }

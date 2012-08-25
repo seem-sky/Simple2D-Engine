@@ -42,6 +42,8 @@ void MainWindow::OpenDatabase()
     t_pDB->show();
     setEnabled(false);
     t_pDB->setEnabled(true);
+    t_pDB->activateWindow();
+    t_pDB->raise();
 }
 
 void MainWindow::NewProject()

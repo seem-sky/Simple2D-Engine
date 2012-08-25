@@ -178,7 +178,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MainWindow moc created"
-						CommandLine="moc -o moc_$(InputFileName) $(InputFileName)"
+						CommandLine="moc -o moc_$(InputFileName) $(InputFileName)&#x0D;&#x0A;"
 						AdditionalDependencies="MainWindow.cpp"
 						Outputs="MainWindow"
 					/>
@@ -189,7 +189,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MainWindow moc created"
-						CommandLine="moc -o moc_$(InputFileName) $(InputFileName)"
+						CommandLine="moc -o moc_$(InputFileName) $(InputFileName)&#x0D;&#x0A;"
 						AdditionalDependencies="MainWindow.cpp"
 						Outputs="MainWindow"
 					/>
@@ -226,7 +226,17 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="compile Database.ui"
-						CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)&#x0D;&#x0A;"
+						CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)"
+						Outputs="Database"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="compile Database.ui"
+						CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)"
 						Outputs="Database"
 					/>
 				</FileConfiguration>
@@ -257,6 +267,17 @@
 						Outputs="DatabaseWindow"
 					/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="DatabaseWindow.moc created"
+						CommandLine="moc -o moc_$(InputFileName) $(InputFileName)"
+						AdditionalDependencies="DatabaseWindow.cpp"
+						Outputs="DatabaseWindow"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\UI\UI_Database.h"
@@ -274,7 +295,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="compile TransparencyWindow"
-							CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)"
+							CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)&#x0D;&#x0A;"
 							Outputs="ChoseTransparency"
 						/>
 					</FileConfiguration>
@@ -284,7 +305,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="compile TransparencyWindow"
-							CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)"
+							CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)&#x0D;&#x0A;"
 							Outputs="TransparencyWindow"
 						/>
 					</FileConfiguration>
@@ -302,7 +323,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="TransparencyWindow.moc created."
-							CommandLine="moc -o moc_$(InputFileName) $(InputFileName)"
+							CommandLine="moc -o moc_$(InputFileName) $(InputFileName)&#x0D;&#x0A;"
 							AdditionalDependencies="TransparencyWindow.cpp"
 							Outputs="TransparencyWindow"
 						/>
@@ -313,7 +334,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="TransparencyWindow.moc created."
-							CommandLine="moc -o moc_$(InputFileName) $(InputFileName)"
+							CommandLine="moc -o moc_$(InputFileName) $(InputFileName)&#x0D;&#x0A;"
 							AdditionalDependencies="TransparencyWindow.cpp"
 							Outputs="TransparencyWindow"
 						/>
@@ -324,6 +345,52 @@
 					>
 				</File>
 			</Filter>
+		</Filter>
+		<Filter
+			Name="EventEditor"
+			>
+			<File
+				RelativePath=".\EventEditor.ui"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="compile EventEditor.ui"
+						CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)"
+						Outputs="EventEditor"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="compile EventEditor.ui"
+						CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)"
+						Outputs="EventEditor"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\EventEditorWidget.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\EventEditorWidget.h"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="create moc_EventEditorWidget.h"
+						CommandLine="moc -o moc_$(InputFileName) $(InputFileName)"
+						Outputs="moc_EventEditorWidget.h"
+					/>
+				</FileConfiguration>
+			</File>
 		</Filter>
 		<File
 			RelativePath=".\main.cpp"

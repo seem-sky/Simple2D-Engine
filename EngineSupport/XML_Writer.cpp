@@ -189,4 +189,16 @@ namespace XML
         for (AttributeList::iterator t_Itr = p_plAttributes->begin(); t_Itr != p_plAttributes->end(); ++t_Itr)
             p_pElement->setAttribute(_bstr_t(t_Itr->first.c_str()), t_Itr->second);
     }
+
+    bool XML_WriteData::HasChild(std::string p_sName)
+    {
+        WriteChildList::iterator t_Itr = m_ChildList.find(p_sName);
+        return t_Itr != m_ChildList.end() ? true : false;
+    }
+
+    XML_Data* XML_WriteData::GetChild(std::string p_sName)
+    {
+        WriteChildList::iterator t_Itr = m_ChildList.find(p_sName);
+        return t_Itr != m_ChildList.end() ? &t_Itr->second : NULL;
+    }
 }

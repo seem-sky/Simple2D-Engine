@@ -5,7 +5,7 @@
 // globals
 HINSTANCE g_hInst       = NULL;
 HWND g_hWnd             = NULL;
-Logfile *m_pLogfile    = NULL;
+Logfile *m_pLogfile     = NULL;
 CTime *m_pTime          = NULL;
 CGame *m_pGame          = NULL;
 
