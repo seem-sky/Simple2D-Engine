@@ -173,10 +173,10 @@ namespace DATABASE
 
         void LoadDB(std::string p_sFileName);
         XML::XML_STATE GetDBState();
-        bool IsDBEmpty() { return m_pDatabase.empty(); }
+        bool IsDBEmpty() { return m_Database.empty(); }
 
     private:
-        XML::ChildList m_pDatabase;
+        XML::ReadChildList m_Database;
         // objectDB
         ObjectList m_ObjectDB;
         // sprite paths
@@ -186,7 +186,7 @@ namespace DATABASE
 
         void ClearDB();
 
-        bool ChangeDBdir(std::list<std::string> p_DirList, XML::ChildList::iterator &p_itr);
+        bool ChangeDBdir(std::list<std::string> p_DirList, XML::XML_ReadData &p_Dir);
         void StoreSpritePaths();
 
         // load DB

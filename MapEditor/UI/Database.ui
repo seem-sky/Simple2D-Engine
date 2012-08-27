@@ -948,9 +948,9 @@
       <property name="geometry">
        <rect>
         <x>480</x>
-        <y>0</y>
+        <y>40</y>
         <width>311</width>
-        <height>531</height>
+        <height>491</height>
        </rect>
       </property>
       <property name="tabPosition">
@@ -1160,7 +1160,7 @@
        </rect>
       </property>
       <property name="currentIndex">
-       <number>3</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="ObjectVariablesBool">
        <attribute name="title">
@@ -1817,6 +1817,26 @@
       </property>
       <property name="text">
        <string>Open Event Editor</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_31">
+      <property name="geometry">
+       <rect>
+        <x>480</x>
+        <y>10</y>
+        <width>151</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>type specific stuff:</string>
       </property>
      </widget>
     </widget>

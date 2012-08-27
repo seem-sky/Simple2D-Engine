@@ -7,7 +7,7 @@ AI_Manager::AI_Manager(void)
 
 AI_Manager::~AI_Manager(void)
 {
-    for (ScriptList::iterator t_itr = m_ScriptList.begin(); t_itr != m_ScriptList.end(); ++t_itr)
+    for (ScriptPage::iterator t_itr = m_ScriptList.begin(); t_itr != m_ScriptList.end(); ++t_itr)
         delete t_itr->second;
 }
 

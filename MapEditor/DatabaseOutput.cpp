@@ -81,19 +81,17 @@ namespace DATABASE
         if (!m_ChangedSprites.empty())
         {
             XML_WriteData t_NewChildren;
-            t_NewChildren.m_ChildList.insert(std::make_pair("SpriteDatabase", XML_WriteData()));
-
-            WriteChildList::iterator t_DBItr = t_NewChildren.m_ChildList.find("SpriteDatabase");
-            if (t_DBItr != t_NewChildren.m_ChildList.end())
+            t_NewChildren.AddChild("SpriteDatabase", XML_WriteData());
+            if (XML_WriteData *p_pSpriteDB = t_NewChildren.GetChild("SpriteDatabase"))
             {
                 // iterate through type
                 for (SpriteList::iterator t_TypeItr = m_ChangedSprites.begin(); t_TypeItr != m_ChangedSprites.end(); ++t_TypeItr)
                 {
-                    WriteChildList::iterator t_InsertTypeItr = t_DBItr->second.m_ChildList.find(t_TypeItr->first);
-                    if (t_InsertTypeItr == t_DBItr->second.m_ChildList.end())
+                    XML_WriteData *p_pSpriteType = p_pSpriteDB->GetChild(t_TypeItr->first);
+                    if (!p_pSpriteType)
                     {
-                        t_DBItr->second.m_ChildList.insert(std::make_pair(t_TypeItr->first, XML_WriteData()));
-                        t_InsertTypeItr = t_DBItr->second.m_ChildList.find(t_TypeItr->first);
+                        p_pSpriteDB->AddChild(t_TypeItr->first, XML_WriteData());
+                        p_pSpriteType = p_pSpriteDB->GetChild(t_TypeItr->first);
                     }
 
                     // iterate through prototypes
@@ -104,31 +102,31 @@ namespace DATABASE
                         if (t_SpriteItr->second.m_uiID != 0)
                         {
                             if (ParseSpriteChange(&t_NewElement, &t_SpriteItr->second))
-                                t_InsertTypeItr->second.m_ChildList.insert(std::make_pair("Sprite", t_NewElement));
+                                p_pSpriteType->AddChild("Sprite", t_NewElement);
                         }
                         // deleted sprite
                         else
                         {
                             CComVariant t_Value;
                             t_Value.uintVal = t_SpriteItr->first;
-                            t_NewElement.m_AttributeList.insert(std::make_pair("ID", t_Value));
+                            t_NewElement.AddAttribute("ID", t_Value);
                             t_NewElement.SetWriteState(XML_WRITE_DELETE);
-                            t_InsertTypeItr->second.m_ChildList.insert(std::make_pair("Sprite", t_NewElement));
+                            p_pSpriteType->AddChild("Sprite", t_NewElement);
                         }
                     }
                 }
             }
-            t_DBChanges->m_ChildList.insert(std::make_pair("Database", t_NewChildren));
+            t_DBChanges->AddChild("Database", t_NewChildren);
         }
 
         // parse object changes
         if (!m_ChangedObjects.empty())
         {
             XML_WriteData t_NewChildren;
-            t_NewChildren.m_ChildList.insert(std::make_pair("ObjectDatabase", XML_WriteData()));
+            t_NewChildren.AddChild("ObjectDatabase", XML_WriteData());
 
-            WriteChildList::iterator t_DBItr = t_NewChildren.m_ChildList.find("ObjectDatabase");
-            if (t_DBItr != t_NewChildren.m_ChildList.end())
+            XML_WriteData *t_pObjDB = t_NewChildren.GetChild("ObjectDatabase");
+            if (t_pObjDB)
             {
                 // iterate through prototypes
                 for (std::map<UINT, ObjectPrototype>::iterator t_ObjectItr = m_ChangedObjects.begin(); t_ObjectItr != m_ChangedObjects.end(); ++t_ObjectItr)
@@ -138,28 +136,29 @@ namespace DATABASE
                     if (t_ObjectItr->second.m_uiID != 0)
                     {
                         if (ParseObjectChange(&t_NewElement, &t_ObjectItr->second))
-                            t_DBItr->second.m_ChildList.insert(std::make_pair("Object", t_NewElement));
+                            t_pObjDB->AddChild("Object", t_NewElement);
                     }
                     // deleted sprite
                     else
                     {
                         CComVariant t_Value;
                         t_Value.uintVal = t_ObjectItr->first;
-                        t_NewElement.m_AttributeList.insert(std::make_pair("ID", t_Value));
+                        t_NewElement.AddAttribute("ID", t_Value);
                         t_NewElement.SetWriteState(XML_WRITE_DELETE);
-                        t_DBItr->second.m_ChildList.insert(std::make_pair("Object", t_NewElement));
+                        t_pObjDB->AddChild("Object", t_NewElement);
                     }
                 }
             }
-            WriteChildList::iterator t_ChangeItr = t_DBChanges->m_ChildList.find("Database");
-            if (t_ChangeItr != t_DBChanges->m_ChildList.end())
+
+            XML_WriteData *t_pDB = t_DBChanges->GetChild("Database");
+            if (t_pDB)
             {
-                WriteChildList::iterator t_ObjectDBItr = t_NewChildren.m_ChildList.find("ObjectDatabase");
-                if (t_ObjectDBItr != t_NewChildren.m_ChildList.end())
-                    t_ChangeItr->second.m_ChildList.insert(std::make_pair(t_ObjectDBItr->first, t_ObjectDBItr->second));
+                XML_WriteData *t_ObjDB = t_NewChildren.GetChild("ObjectDatabase");
+                if (t_ObjDB)
+                    t_pDB->AddChild("ObjectDatabase", *t_ObjDB);
             }
             else
-                t_DBChanges->m_ChildList.insert(std::make_pair("Database", t_NewChildren));
+                t_DBChanges->AddChild("Database", t_NewChildren);
         }
 
         m_pWriter = new XML_Writer(p_sFileName, t_DBChanges);
@@ -172,31 +171,31 @@ namespace DATABASE
             return false;
 
         // filename
-        p_pElement->m_AttributeList.insert(std::make_pair("ObjectName", (LPCOLESTR)_bstr_t(p_pProto->m_sName.c_str())));
+        p_pElement->AddAttribute("ObjectName", (LPCOLESTR)_bstr_t(p_pProto->m_sName.c_str()));
 
         // ID
-        p_pElement->m_AttributeList.insert(std::make_pair("ID", p_pProto->m_uiID));
+        p_pElement->AddAttribute("ID", p_pProto->m_uiID);
 
         // Type
-        p_pElement->m_AttributeList.insert(std::make_pair("Type", p_pProto->m_uiType));
+        p_pElement->AddAttribute("Type", p_pProto->m_uiType);
 
         // Texture ID
-        p_pElement->m_AttributeList.insert(std::make_pair("TextureID", p_pProto->m_uiTextureID));
+        p_pElement->AddAttribute("TextureID", p_pProto->m_uiTextureID);
 
         switch(p_pProto->m_uiType)
         {
         case OBJECT_TYPE_NPC:
             // animation frequency
-            p_pElement->m_AttributeList.insert(std::make_pair("AnimationFrequency", p_pProto->ObjectType.NPC.m_uiAnimationFrequency));
+            p_pElement->AddAttribute("AnimationFrequency", p_pProto->ObjectType.NPC.m_uiAnimationFrequency);
 
             // movement speed
-            p_pElement->m_AttributeList.insert(std::make_pair("MovementSpeed", p_pProto->ObjectType.NPC.m_uiMoveSpeed));
+            p_pElement->AddAttribute("MovementSpeed", p_pProto->ObjectType.NPC.m_uiMoveSpeed);
 
             // HP_min
-            p_pElement->m_AttributeList.insert(std::make_pair("HP_min", p_pProto->ObjectType.NPC.m_uiHPmin));
+            p_pElement->AddAttribute("HP_min", p_pProto->ObjectType.NPC.m_uiHPmin);
 
             // HP_max
-            p_pElement->m_AttributeList.insert(std::make_pair("HP_max", p_pProto->ObjectType.NPC.m_uiHPmax));
+            p_pElement->AddAttribute("HP_max", p_pProto->ObjectType.NPC.m_uiHPmax);
         case OBJECT_TYPE_MAP_OBJECT:
             break;
         default:
@@ -207,7 +206,7 @@ namespace DATABASE
         if (!p_pProto->m_ObjectBoolList.empty() || !p_pProto->m_ObjectIntegerList.empty() || !p_pProto->m_ObjectFloatList.empty() || !p_pProto->m_ObjectStringList.empty())
         {
             if (!p_pElement->HasChild("Variables"))
-                p_pElement->m_ChildList.insert(std::make_pair("Variables", XML_WriteData(XML::XML_WRITE_CHANGE)));
+                p_pElement->AddChild("Variables", XML_WriteData(XML::XML_WRITE_CHANGE));
 
             if (XML_WriteData* t_pVariables = (XML_WriteData*)p_pElement->GetChild("Variables"))
             {
@@ -217,17 +216,17 @@ namespace DATABASE
                     // 0 == delete mode
                     if (t_Itr->second.m_uiID != 0)
                     {
-                        t_NewVariable.m_AttributeList.insert(std::make_pair("name", (LPCOLESTR)_bstr_t(t_Itr->second.m_sName.c_str())));
-                        t_NewVariable.m_AttributeList.insert(std::make_pair("ID", t_Itr->second.m_uiID));
-                        t_NewVariable.m_AttributeList.insert(std::make_pair("value", t_Itr->second.m_Value));
+                        t_NewVariable.AddAttribute("name", (LPCOLESTR)_bstr_t(t_Itr->second.m_sName.c_str()));
+                        t_NewVariable.AddAttribute("ID", t_Itr->second.m_uiID);
+                        t_NewVariable.AddAttribute("value", t_Itr->second.m_Value);
                     }
                     else
                     {
                         t_NewVariable.SetWriteState(XML_WRITE_DELETE);
-                        t_NewVariable.m_AttributeList.insert(std::make_pair("ID", t_Itr->first));
+                        t_NewVariable.AddAttribute("ID", t_Itr->first);
                     }
 
-                    t_pVariables->m_ChildList.insert(std::make_pair("bool", t_NewVariable));
+                    t_pVariables->AddChild("bool", t_NewVariable);
                 }
 
                 for (ObjectIntegerList::const_iterator t_Itr = p_pProto->m_ObjectIntegerList.begin(); t_Itr != p_pProto->m_ObjectIntegerList.end(); ++t_Itr)
@@ -236,17 +235,17 @@ namespace DATABASE
                     // 0 == delete mode
                     if (t_Itr->second.m_uiID != 0)
                     {
-                        t_NewVariable.m_AttributeList.insert(std::make_pair("name", (LPCOLESTR)_bstr_t(t_Itr->second.m_sName.c_str())));
-                        t_NewVariable.m_AttributeList.insert(std::make_pair("ID", t_Itr->second.m_uiID));
-                        t_NewVariable.m_AttributeList.insert(std::make_pair("value", t_Itr->second.m_Value));
+                        t_NewVariable.AddAttribute("name", (LPCOLESTR)_bstr_t(t_Itr->second.m_sName.c_str()));
+                        t_NewVariable.AddAttribute("ID", t_Itr->second.m_uiID);
+                        t_NewVariable.AddAttribute("value", t_Itr->second.m_Value);
                     }
                     else
                     {
                         t_NewVariable.SetWriteState(XML_WRITE_DELETE);
-                        t_NewVariable.m_AttributeList.insert(std::make_pair("ID", t_Itr->first));
+                        t_NewVariable.AddAttribute("ID", t_Itr->first);
                     }
 
-                    t_pVariables->m_ChildList.insert(std::make_pair("integer", t_NewVariable));
+                    t_pVariables->AddChild("integer", t_NewVariable);
                 }
 
                 for (ObjectFloatList::const_iterator t_Itr = p_pProto->m_ObjectFloatList.begin(); t_Itr != p_pProto->m_ObjectFloatList.end(); ++t_Itr)
@@ -255,17 +254,17 @@ namespace DATABASE
                     // 0 == delete mode
                     if (t_Itr->second.m_uiID != 0)
                     {
-                        t_NewVariable.m_AttributeList.insert(std::make_pair("name", (LPCOLESTR)_bstr_t(t_Itr->second.m_sName.c_str())));
-                        t_NewVariable.m_AttributeList.insert(std::make_pair("ID", t_Itr->second.m_uiID));
-                        t_NewVariable.m_AttributeList.insert(std::make_pair("value", t_Itr->second.m_Value));
+                        t_NewVariable.AddAttribute("name", (LPCOLESTR)_bstr_t(t_Itr->second.m_sName.c_str()));
+                        t_NewVariable.AddAttribute("ID", t_Itr->second.m_uiID);
+                        t_NewVariable.AddAttribute("value", t_Itr->second.m_Value);
                     }
                     else
                     {
                         t_NewVariable.SetWriteState(XML_WRITE_DELETE);
-                        t_NewVariable.m_AttributeList.insert(std::make_pair("ID", t_Itr->first));
+                        t_NewVariable.AddAttribute("ID", t_Itr->first);
                     }
 
-                    t_pVariables->m_ChildList.insert(std::make_pair("float", t_NewVariable));
+                    t_pVariables->AddChild("float", t_NewVariable);
                 }
 
                 for (ObjectStringList::const_iterator t_Itr = p_pProto->m_ObjectStringList.begin(); t_Itr != p_pProto->m_ObjectStringList.end(); ++t_Itr)
@@ -274,17 +273,17 @@ namespace DATABASE
                     // 0 == delete mode
                     if (t_Itr->second.m_uiID != 0)
                     {
-                        t_NewVariable.m_AttributeList.insert(std::make_pair("name", (LPCOLESTR)_bstr_t(t_Itr->second.m_sName.c_str())));
-                        t_NewVariable.m_AttributeList.insert(std::make_pair("ID", t_Itr->second.m_uiID));
-                        t_NewVariable.m_AttributeList.insert(std::make_pair("value", (LPCOLESTR)_bstr_t(t_Itr->second.m_Value.c_str())));
+                        t_NewVariable.AddAttribute("name", (LPCOLESTR)_bstr_t(t_Itr->second.m_sName.c_str()));
+                        t_NewVariable.AddAttribute("ID", t_Itr->second.m_uiID);
+                        t_NewVariable.AddAttribute("value", (LPCOLESTR)_bstr_t(t_Itr->second.m_Value.c_str()));
                     }
                     else
                     {
                         t_NewVariable.SetWriteState(XML_WRITE_DELETE);
-                        t_NewVariable.m_AttributeList.insert(std::make_pair("ID", t_Itr->first));
+                        t_NewVariable.AddAttribute("ID", t_Itr->first);
                     }
 
-                    t_pVariables->m_ChildList.insert(std::make_pair("string", t_NewVariable));
+                    t_pVariables->AddChild("string", t_NewVariable);
                 }
             }
         }
@@ -301,44 +300,44 @@ namespace DATABASE
             return false;
 
         // filename
-        p_pElement->m_AttributeList.insert(std::make_pair("FileName", (LPCOLESTR)_bstr_t(p_pProto->m_sFileName.c_str())));
+        p_pElement->AddAttribute("FileName", (LPCOLESTR)_bstr_t(p_pProto->m_sFileName.c_str()));
 
         // ID
-        p_pElement->m_AttributeList.insert(std::make_pair("ID", p_pProto->m_uiID));
+        p_pElement->AddAttribute("ID", p_pProto->m_uiID);
 
         // Type
-        p_pElement->m_AttributeList.insert(std::make_pair("Type", p_pProto->m_uiSpriteType));
+        p_pElement->AddAttribute("Type", p_pProto->m_uiSpriteType);
 
         // transparent_color
-        p_pElement->m_AttributeList.insert(std::make_pair("transparent_color", (LPCOLESTR)_bstr_t(p_pProto->m_sTransparentColor.c_str())));
+        p_pElement->AddAttribute("transparent_color", (LPCOLESTR)_bstr_t(p_pProto->m_sTransparentColor.c_str()));
 
         // type specific stuff
         switch (p_pProto->m_uiSpriteType)
         {
         case SPRITE_TYPE_TILE:
             // passability
-            p_pElement->m_AttributeList.insert(std::make_pair("passability", p_pProto->Type.Tile.m_uiPassable));
+            p_pElement->AddAttribute("passability", p_pProto->Type.Tile.m_uiPassable);
 
             // terraintype
-            p_pElement->m_AttributeList.insert(std::make_pair("terraintype", p_pProto->Type.Tile.m_uiTerrainType));
+            p_pElement->AddAttribute("terraintype", p_pProto->Type.Tile.m_uiTerrainType);
 
             // is autotile
-            p_pElement->m_AttributeList.insert(std::make_pair("auto_tile", (UINT)p_pProto->Type.Tile.m_bAutotile));
+            p_pElement->AddAttribute("auto_tile", (UINT)p_pProto->Type.Tile.m_bAutotile);
         	break;
 
         case SPRITE_TYPE_ANIMATED_OBJECT:
             // columns
-            p_pElement->m_AttributeList.insert(std::make_pair("spritesX", p_pProto->Type.AnimatedObject.m_uiSpritesX));
+            p_pElement->AddAttribute("spritesX", p_pProto->Type.AnimatedObject.m_uiSpritesX);
 
             // rows
-            p_pElement->m_AttributeList.insert(std::make_pair("spritesY", p_pProto->Type.AnimatedObject.m_uiSpritesY));
+            p_pElement->AddAttribute("spritesY", p_pProto->Type.AnimatedObject.m_uiSpritesY);
 
         case SPRITE_TYPE_OBJECT:
             // bounding rect
-            p_pElement->m_AttributeList.insert(std::make_pair("boundingXBegin", p_pProto->Type.Object.m_uiBoundingXBegin));
-            p_pElement->m_AttributeList.insert(std::make_pair("boundingXRange", p_pProto->Type.Object.m_uiBoundingXRange));
-            p_pElement->m_AttributeList.insert(std::make_pair("boundingYBegin", p_pProto->Type.Object.m_uiBoundingYBegin));
-            p_pElement->m_AttributeList.insert(std::make_pair("boundingYRange", p_pProto->Type.Object.m_uiBoundingYRange));
+            p_pElement->AddAttribute("boundingXBegin", p_pProto->Type.Object.m_uiBoundingXBegin);
+            p_pElement->AddAttribute("boundingXRange", p_pProto->Type.Object.m_uiBoundingXRange);
+            p_pElement->AddAttribute("boundingYBegin", p_pProto->Type.Object.m_uiBoundingYBegin);
+            p_pElement->AddAttribute("boundingYRange", p_pProto->Type.Object.m_uiBoundingYRange);
             break;
         default:
             break;

@@ -7,6 +7,7 @@
 #include <QtGui/QPainter>
 #include <QtGui/QGraphicsPixmapItem>
 #include "TransparencyWindow.h"
+#include "EventEditorWindow.h"
 
 using namespace DATABASE;
 const QString PASSABLE_RIGHT_ICON   = "icons/arrow-right.png";
@@ -47,6 +48,7 @@ DatabaseWindow::DatabaseWindow(QMainWindow *p_pParent) : m_DirPressed(PASSABLE_N
     connect(TextureTabs, SIGNAL(currentChanged(int)), this, SLOT(TextureTabChangeCur(int)));
     connect(TextureTransparentColor, SIGNAL(editingFinished()), this, SLOT(TextureTransparencyColorEntered()));
 
+    connect(ButtonObjectsOpenEventEditor, SIGNAL(clicked()), this, SLOT(ButtonObjectOpenEventEditor()));
     connect(ObjectsNewBUTTON, SIGNAL(clicked()), this, SLOT(ClickButtonNewObject()));
     connect(ObjectsDeleteBUTTON, SIGNAL(clicked()), this, SLOT(ClickButtonDeleteObject()));
     connect(ObjectsBox, SIGNAL(currentIndexChanged(int)), this, SLOT(ObjectBoxChangeCur(int)));
@@ -1457,4 +1459,12 @@ void DatabaseWindow::ObjectVariableIndexChanged(int p_Index)
     t_sText.truncate(t_sText.indexOf(":"));
     UINT t_uiID = t_sText.toUInt();
     SelectObjectCustomVariable(t_Type, t_uiID);
+}
+
+void DatabaseWindow::ButtonObjectOpenEventEditor()
+{
+    EventEditorWindow *t_pEE = new EventEditorWindow(this);
+    t_pEE->show();
+    setEnabled(false);
+    t_pEE->setEnabled(true);
 }

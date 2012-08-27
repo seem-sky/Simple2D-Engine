@@ -16,7 +16,7 @@ struct AIScript
     void RegisterSelf();
 };
 
-typedef std::map<std::string, AIScript*> ScriptList;
+typedef std::map<std::string, AIScript*> ScriptPage;
 
 class AI_Manager : public TSingleton<AI_Manager>
 {
@@ -29,6 +29,6 @@ public:
     void AddMapScript(AIScript* p_pScript);
 private:
 
-    ScriptList m_ScriptList;
+    ScriptPage m_ScriptList;
 };
 #endif

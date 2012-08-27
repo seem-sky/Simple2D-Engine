@@ -51,6 +51,7 @@ private slots:
     void ChangeObjectType(int p_Index);
     void ChangeObjectTextureID(int p_Index, bool p_bChangeData = true);
     void ChangeObjectNPCAttribute(int p_Index);
+    void ButtonObjectOpenEventEditor();
 
     // Custom Variables
     void ClickButtonNewObjectVariable();

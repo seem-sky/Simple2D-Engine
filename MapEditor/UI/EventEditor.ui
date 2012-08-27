@@ -16,12 +16,6 @@
     <height>480</height>
    </size>
   </property>
-  <property name="maximumSize">
-   <size>
-    <width>640</width>
-    <height>480</height>
-   </size>
-  </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
@@ -35,13 +29,8 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>-1</number>
    </property>
-   <widget class="QWidget" name="EventEditorPage1">
-    <attribute name="title">
-     <string>Page1</string>
-    </attribute>
-   </widget>
   </widget>
   <widget class="QLabel" name="label_13">
    <property name="geometry">

@@ -374,12 +374,46 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\UI\EventEditorMainWindow.ui"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="compile EventEditorWindow"
+						CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)"
+						Outputs="EventEditorWindow"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="compile EventEditorWindow"
+						CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)"
+						Outputs="EventEditorWindow"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath=".\EventEditorWidget.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\EventEditorWidget.h"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="create EventEditorWidget"
+						CommandLine="moc -o moc_$(InputFileName) $(InputFileName)"
+						Outputs="EventEditorWidget"
+					/>
+				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32"
 					>
@@ -390,6 +424,18 @@
 						Outputs="moc_EventEditorWidget.h"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\EventEditorWindow.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\EventEditorWindow.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\UI_EventEditorMainWindow.h"
+				>
 			</File>
 		</Filter>
 		<File

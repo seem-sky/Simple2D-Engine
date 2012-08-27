@@ -4,21 +4,16 @@
 
 namespace XML
 {
-    #define FAILED_CHECK if (p_hr == S_FALSE) { m_XMLState = XML_FAILED; return NULL; }
+    #define FAILED_CHECK if (FAILED(t_HR)) { m_XMLState = XML_FAILED; return t_HR; }
     
     XML_Reader::XML_Reader(std::string sData) : m_XMLState(XML_IN_PROGRESS), m_sData(sData), m_sLogLocationName(LOGFILE_ENGINE_LOG_NAME + "XML_Reader : "),
-        m_pChildList(NULL), ActiveObject()
+        ActiveObject()
     {
         _thread.Resume();
     }
 
     XML_Reader::~XML_Reader(void)
     {
-        if (m_pChildList)
-        {
-            delete m_pChildList;
-            m_pChildList = NULL;
-        }
     }
 
     #define returnRun CoUninitialize(); return;
@@ -46,9 +41,8 @@ namespace XML
             returnRun;
         }
 
-        HRESULT p_hr;
-        m_pChildList = CheckoutChildren(t_pXMLDom, p_hr);
-        if (FAILED(p_hr))
+        HRESULT t_HR = CheckoutChildren(t_pXMLDom, m_ChildList);
+        if (FAILED(t_HR))
         {
             m_XMLState = XML_FAILED;
             returnRun;
@@ -59,122 +53,128 @@ namespace XML
         returnRun;
     }
 
-    ChildList* XML_Reader::CheckoutChildren(IXMLDOMNodePtr p_pNode, HRESULT &p_hr)
+    HRESULT XML_Reader::CheckoutChildren(IXMLDOMNodePtr p_pNode, ReadChildList &p_DestList)
     {
+        p_DestList.clear();
         if (!p_pNode)
             return NULL;
 
-        ChildList *t_pNewData = new ChildList();
-
         // get all childs
         IXMLDOMNodeListPtr t_pChildList;
-        p_hr = p_pNode->get_childNodes(&t_pChildList);
+        HRESULT t_HR = p_pNode->get_childNodes(&t_pChildList);
         FAILED_CHECK
 
         // get child count
         LONG t_ChildrenCount = 0;
-        p_hr = t_pChildList->get_length(&t_ChildrenCount);
+        t_HR = t_pChildList->get_length(&t_ChildrenCount);
         FAILED_CHECK
 
         IXMLDOMNodePtr t_pTempNode;
-        XML_Data t_NewChild;
+        XML_ReadData t_NewChild;
         BSTR sNodeName;
         std::string sName;
         for (LONG i = 0; i < t_ChildrenCount; ++i)
         {
-            p_hr = t_pChildList->get_item(i, &t_pTempNode);
+            t_HR = t_pChildList->get_item(i, &t_pTempNode);
             FAILED_CHECK
 
             // get children
-            ChildList *t_pTempData = CheckoutChildren(t_pTempNode, p_hr);
+            ReadChildList t_TempData;
+            t_HR = CheckoutChildren(t_pTempNode, t_TempData);
             FAILED_CHECK
 
-            if (t_pTempData)
-                t_NewChild.m_ChildList = *t_pTempData;
-
-            t_pTempData = NULL;
+            t_NewChild.SetChildList(t_TempData);
 
             // get attributes
-            AttributeList *t_pTempAttributes = CheckoutAttributes(t_pTempNode, p_hr);
+            AttributeList t_TempAttributes;
+            t_HR = CheckoutAttributes(t_pTempNode, t_TempAttributes);
             FAILED_CHECK
 
-            if (t_pTempAttributes)
-                t_NewChild.m_AttributeList = *t_pTempAttributes;
-
-            t_pTempAttributes = NULL;
+            t_NewChild.SetAttributeList(t_TempAttributes);
 
             // insert child in data map
-            p_hr = t_pTempNode->get_nodeName(&sNodeName);
+            t_HR = t_pTempNode->get_nodeName(&sNodeName);
             FAILED_CHECK
 
             sName = _bstr_t(sNodeName);
-            t_pNewData->insert(std::make_pair(sName, t_NewChild));
+            p_DestList.insert(std::make_pair(sName, t_NewChild));
         }
 
-        return t_pNewData;
+        return t_HR;
     }
 
-    AttributeList* XML_Reader::CheckoutAttributes(IXMLDOMNodePtr p_pNode, HRESULT &p_hr)
+    HRESULT XML_Reader::CheckoutAttributes(IXMLDOMNodePtr p_pNode, AttributeList &p_DestList)
     {
+        p_DestList.clear();
+
         if (!p_pNode)
             return NULL;
 
-        AttributeList *t_pNewData = new AttributeList();
-
         // get all attributes
         IXMLDOMNamedNodeMapPtr t_pAttributeList;
-        p_hr = p_pNode->get_attributes(&t_pAttributeList);
+        HRESULT t_HR = p_pNode->get_attributes(&t_pAttributeList);
         FAILED_CHECK
 
         // get attribute count
         LONG iAttributes = 0;
-        p_hr = t_pAttributeList->get_length(&iAttributes);
+        t_HR = t_pAttributeList->get_length(&iAttributes);
         FAILED_CHECK
 
         IXMLDOMNodePtr t_pTempNode;
-        VARIANT value;
-        VariantInit(&value);
+        CComVariant t_Value;
         BSTR sNodeName;
         std::string sName;
         for (LONG i = 0; i < iAttributes; ++i)
         {
-            p_hr = t_pAttributeList->get_item(i, &t_pTempNode);
+            t_HR = t_pAttributeList->get_item(i, &t_pTempNode);
             FAILED_CHECK
 
-            p_hr = t_pTempNode->get_nodeValue(&value);
+            t_HR = t_pTempNode->get_nodeValue(&t_Value);
             FAILED_CHECK
 
-            p_hr = t_pTempNode->get_nodeName(&sNodeName);
+            t_HR = t_pTempNode->get_nodeName(&sNodeName);
             FAILED_CHECK
 
             sName = _bstr_t(sNodeName);
-            t_pNewData->insert(std::make_pair(sName, value));
+            p_DestList.insert(std::make_pair(sName, t_Value));
         }
 
-        return t_pNewData;
+        return t_HR;
     }
 
-    bool XML_Data::GetAttributeValue(std::string p_sName, VARIANT &p_Value)
+    bool XML_Data::GetAttributeValue(std::string p_sName, CComVariant &p_Value) const
     {
-        AttributeList::iterator t_Itr = m_AttributeList.find(p_sName);
+        AttributeList::const_iterator t_Itr = m_AttributeList.find(p_sName);
         if (t_Itr != m_AttributeList.end())
         {
-            if (SUCCEEDED(VariantCopy(&p_Value, &t_Itr->second)))
-                return true;
+            p_Value = t_Itr->second;
+            return true;
         }
 
         return false;
     }
 
-    bool XML_Data::HasChild(std::string p_sName)
+    bool XML_Data::HasAttribute(std::string p_sName) const
     {
-        ChildList::iterator t_Itr = m_ChildList.find(p_sName);
+        AttributeList::const_iterator t_Itr = m_AttributeList.find(p_sName);
+        return t_Itr != m_AttributeList.end() ? true : false;
+    }
+
+    bool XML_ReadData::HasChild(std::string p_sName) const
+    {
+        ReadChildList::const_iterator t_Itr = m_ChildList.find(p_sName);
         return t_Itr != m_ChildList.end() ? true : false;
     }
 
-    XML_Data* XML_Data::GetChild(std::string p_sName)
+    XML_ReadData* XML_ReadData::GetChild(std::string p_sName)
     {
-        ChildList::iterator t_Itr = m_ChildList.find(p_sName);
+        ReadChildList::iterator t_Itr = m_ChildList.find(p_sName);
+        return t_Itr != m_ChildList.end() ? &t_Itr->second : NULL;
+    }
+
+    const XML_ReadData* XML_ReadData::GetChild(std::string p_sName) const
+    {
+        ReadChildList::const_iterator t_Itr = m_ChildList.find(p_sName);
         return t_Itr != m_ChildList.end() ? &t_Itr->second : NULL;
     }
 }

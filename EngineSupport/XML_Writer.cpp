@@ -50,7 +50,7 @@ namespace XML
             returnRun;
         }
 
-        AddChildNodes(t_pXMLDom, t_pXMLDom, &m_pData->m_ChildList);
+        AddChildNodes(t_pXMLDom, t_pXMLDom, m_pData->GetChildList());
         _variant_t t_Path = m_sFileName.c_str();
         t_pXMLDom->save(t_Path);
         m_XMLState = XML_DONE;
@@ -100,7 +100,7 @@ namespace XML
         return NULL;
     }
 
-    void XML_Writer::AddChildNode(MSXML2::IXMLDOMDocument2Ptr p_pDOM, MSXML2::IXMLDOMElementPtr p_pParent, std::string p_sNodeName, AttributeList *p_plAttributes)
+    void XML_Writer::AddChildNode(MSXML2::IXMLDOMDocument2Ptr p_pDOM, MSXML2::IXMLDOMElementPtr p_pParent, std::string p_sNodeName, const AttributeList *p_plAttributes)
     {
         if (!p_pDOM)
             return;
@@ -114,7 +114,7 @@ namespace XML
         if (p_plAttributes)
         {
             MSXML2::IXMLDOMAttributePtr t_Attribute;
-            for (AttributeList::iterator t_Itr = p_plAttributes->begin(); t_Itr != p_plAttributes->end(); ++t_Itr)
+            for (AttributeList::const_iterator t_Itr = p_plAttributes->begin(); t_Itr != p_plAttributes->end(); ++t_Itr)
             {
                 t_Attribute = p_pDOM->createAttribute(t_Itr->first.c_str());
                 t_Attribute->value = t_Itr->second;
@@ -125,23 +125,24 @@ namespace XML
         p_pParent->appendChild(t_Node);
     }
 
-    void XML_Writer::AddChildNodes(MSXML2::IXMLDOMDocument2Ptr p_pDOM, IXMLDOMNodePtr p_pParent, WriteChildList *p_plChildren)
+    void XML_Writer::AddChildNodes(MSXML2::IXMLDOMDocument2Ptr p_pDOM, IXMLDOMNodePtr p_pParent, const WriteChildList *p_plChildren)
     {
         if (!p_pDOM || !p_pParent || !p_plChildren)
             return;
 
-        for (WriteChildList::iterator t_Itr = p_plChildren->begin(); t_Itr != p_plChildren->end(); ++t_Itr)
+        for (WriteChildList::const_iterator t_Itr = p_plChildren->begin(); t_Itr != p_plChildren->end(); ++t_Itr)
         {
             IXMLDOMNodePtr t_pNewNode = NULL;
             // if node has no attribute named "ID" its a single node
-            AttributeList::iterator t_AttrItr = t_Itr->second.m_AttributeList.find("ID");
+            const AttributeList *t_AttrList = t_Itr->second.GetAttributeList();
+            AttributeList::const_iterator t_AttrItr = t_AttrList->find("ID");
             // single node
-            if (t_AttrItr == t_Itr->second.m_AttributeList.end())
+            if (t_AttrItr == t_AttrList->end())
                 p_pParent->selectSingleNode(_bstr_t(t_Itr->first.c_str()), &t_pNewNode);
 
             else    // decide between different ID´s
             {
-                VARIANT t_Value = t_AttrItr->second;
+                CComVariant t_Value = t_AttrItr->second;
                 t_pNewNode = GetChildNodeByAttribute(p_pParent, t_Itr->first, "ID", t_Value);
             }
 
@@ -160,11 +161,11 @@ namespace XML
             case XML_WRITE_CHANGE:
             case XML_WRITE_ADD:
                 if (t_pNewNode)
-                    ChangeNode(t_pNewNode, &t_Itr->second.m_AttributeList);
+                    ChangeNode(t_pNewNode, t_Itr->second.GetAttributeList());
 
                 else
                 {
-                    AddChildNode(p_pDOM, p_pParent, t_Itr->first, &t_Itr->second.m_AttributeList);
+                    AddChildNode(p_pDOM, p_pParent, t_Itr->first, t_Itr->second.GetAttributeList());
                     p_pParent->selectSingleNode(_bstr_t(t_Itr->first.c_str()), &t_pNewNode);
                 }
                 break;
@@ -174,31 +175,47 @@ namespace XML
                 break;
             }
 
-            if (t_Itr->second.m_ChildList.size())
-                AddChildNodes(p_pDOM, t_pNewNode, &t_Itr->second.m_ChildList);
+            if (t_Itr->second.GetChildList() && t_Itr->second.GetChildList()->size())
+                AddChildNodes(p_pDOM, t_pNewNode, t_Itr->second.GetChildList());
         }
     }
 
-    void XML_Writer::ChangeNode(IXMLDOMNodePtr p_pNode, AttributeList *p_plAttributes)
+    void XML_Writer::ChangeNode(IXMLDOMNodePtr p_pNode, const AttributeList *p_plAttributes)
     {
         if (!p_pNode || !p_plAttributes)
             return;
 
         IXMLDOMElementPtr p_pElement = p_pNode;
 
-        for (AttributeList::iterator t_Itr = p_plAttributes->begin(); t_Itr != p_plAttributes->end(); ++t_Itr)
+        for (AttributeList::const_iterator t_Itr = p_plAttributes->begin(); t_Itr != p_plAttributes->end(); ++t_Itr)
             p_pElement->setAttribute(_bstr_t(t_Itr->first.c_str()), t_Itr->second);
     }
 
-    bool XML_WriteData::HasChild(std::string p_sName)
+    bool XML_WriteData::HasChild(std::string p_sName) const
     {
-        WriteChildList::iterator t_Itr = m_ChildList.find(p_sName);
+        WriteChildList::const_iterator t_Itr = m_ChildList.find(p_sName);
         return t_Itr != m_ChildList.end() ? true : false;
     }
 
-    XML_Data* XML_WriteData::GetChild(std::string p_sName)
+    XML_WriteData* XML_WriteData::GetChild(std::string p_sName)
     {
         WriteChildList::iterator t_Itr = m_ChildList.find(p_sName);
         return t_Itr != m_ChildList.end() ? &t_Itr->second : NULL;
+    }
+
+    const XML_WriteData* XML_WriteData::GetChild(std::string p_sName) const
+    {
+        WriteChildList::const_iterator t_Itr = m_ChildList.find(p_sName);
+        return t_Itr != m_ChildList.end() ? &t_Itr->second : NULL;
+    }
+
+    void XML_WriteData::AddChild(std::string p_sName, XML::XML_WriteData p_NewChild)
+    {
+        m_ChildList.insert(std::make_pair(p_sName, p_NewChild));
+    }
+
+    void XML_WriteData::AddAttribute(std::string p_sName, CComVariant p_NewAttribute)
+    {
+        m_AttributeList.insert(std::make_pair(p_sName, p_NewAttribute));
     }
 }

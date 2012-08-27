@@ -160,6 +160,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ScriptDatabase.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Thread.cpp"
 				>
 			</File>
@@ -191,6 +195,10 @@
 			</File>
 			<File
 				RelativePath=".\Point.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ScriptDatabase.h"
 				>
 			</File>
 			<File
