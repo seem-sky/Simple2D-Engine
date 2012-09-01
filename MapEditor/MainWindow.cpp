@@ -8,7 +8,7 @@
 #include <QtCore/QTimer>
 #include <QtGui/QErrorMessage>
 #include "DatabaseOutput.h"
-#include <Logfile.h>
+#include "EditorConfig.h"
 
 using namespace DATABASE;
 using namespace XML;
@@ -68,7 +68,9 @@ bool MainWindow::LoadDB()
 {
     if (Database *t_pDB = Database::Get())
     {
-        t_pDB->LoadDB(m_sProjectDir.toStdString()+"/Game/GameDatabase.db");
+        if (EditorConfig *t_pConf = EditorConfig::Get())
+            t_pDB->LoadDB(t_pConf->GetProjectDirectory()+"/Game/GameDatabase.db");
+
         if (!m_pTimer)
             m_pTimer = new QTimer(this);
         connect(m_pTimer,SIGNAL(timeout()),SLOT(CustomUpdate()));
@@ -89,7 +91,9 @@ void MainWindow::LoadProject()
         return;
 
     QDir t_dir(t_sFileName + "/Game");
-    m_sProjectDir = t_sFileName;
+    if (EditorConfig *t_pConfig = EditorConfig::Get())
+        t_pConfig->SetProjectDirectory(t_sFileName.toStdString());
+
     bool t_bSuccess = false;
     if (t_dir.exists())
     {

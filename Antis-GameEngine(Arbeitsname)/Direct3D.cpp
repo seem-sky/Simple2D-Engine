@@ -13,7 +13,7 @@ CDirect3D::~CDirect3D()
 }
 
 // Direct3D initialisieren
-bool CDirect3D::Initialize(HWND hWnd, const UINT uiScreenWidth, const UINT uiScreenHeight, const bool bWindowed)
+bool CDirect3D::Initialize(HWND hWnd, const uint32 uiScreenWidth, const uint32 uiScreenHeight, const bool bWindowed)
 {
     // create Direct3D object
     if(FAILED(m_lpD3D = Direct3DCreate9(D3D_SDK_VERSION)))
@@ -76,7 +76,7 @@ HRESULT CDirect3D::EndScene(void)
     return m_lpD3DDevice->Present(0, 0, 0, 0);
 }
 
-HRESULT CDirect3D::ResetDevice(HWND hWnd, const UINT uiScreenWidth, const UINT uiScreenHeight, const bool bWindowed)
+HRESULT CDirect3D::ResetDevice(HWND hWnd, const uint32 uiScreenWidth, const uint32 uiScreenHeight, const bool bWindowed)
 {
     m_PParams.hDeviceWindow    = hWnd;
     m_PParams.Windowed         = bWindowed;
@@ -176,7 +176,7 @@ void CDirect3D::DeleteOneSprite()
         return;
 }
 
-LPD3DXSPRITE CDirect3D::GetSpriteForDraw(UINT DrawFlag)
+LPD3DXSPRITE CDirect3D::GetSpriteForDraw(uint32 DrawFlag)
 {
     // add new sprite
     while(m_SpriteList.empty() || m_uiSpriteIndex > m_SpriteList.size() - 1)

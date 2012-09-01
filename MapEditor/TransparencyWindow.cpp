@@ -18,7 +18,6 @@ TransparencyWindow::~TransparencyWindow(void)
 void TransparencyWindow::closeEvent(QCloseEvent *p_Event)
 {
     p_Event->accept();
-
     delete this;
 }
 

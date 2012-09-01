@@ -1,6 +1,6 @@
 #include "IniParser.h"
 
-bool IniParser::readFile(std::string ps_fileName)
+bool IniParser::ReadFile(std::string ps_fileName)
 {
     std::ifstream t_data(ps_fileName.c_str());
     if(!t_data)
@@ -12,12 +12,12 @@ bool IniParser::readFile(std::string ps_fileName)
     while(std::getline(t_data,ts_dataLine))
         tl_FileData.push_back(ts_dataLine);
 
-    interpretFile(&tl_FileData);
+    InterpretFile(&tl_FileData);
 
     return true;
 }
 
-void IniParser::interpretFile(DataStrings *pl_data)
+void IniParser::InterpretFile(DataStrings *pl_data)
 {
     if (!pl_data)
         return;
@@ -45,20 +45,20 @@ void IniParser::interpretFile(DataStrings *pl_data)
             // work with index
             ts_indexBuffer = (*t_itr).substr(0, (*t_itr).find_first_of("="));
             // delete space
-            deleteStringFront(" ", ts_indexBuffer);
-            deleteStringBack(" ", ts_indexBuffer);
+            DeleteStringFront(" ", ts_indexBuffer);
+            DeleteStringBack(" ", ts_indexBuffer);
             // delete tabs
-            deleteStringFront("	", ts_indexBuffer);
-            deleteStringBack("	", ts_indexBuffer);
+            DeleteStringFront("	", ts_indexBuffer);
+            DeleteStringBack("	", ts_indexBuffer);
 
             // work with data
             ts_dataBuffer = (*t_itr).substr((*t_itr).find_first_of("=")+1);
             // delete space
-            deleteStringFront(" ", ts_dataBuffer);
-            deleteStringBack(" ", ts_dataBuffer);
+            DeleteStringFront(" ", ts_dataBuffer);
+            DeleteStringBack(" ", ts_dataBuffer);
             // delete tabs
-            deleteStringFront("	", ts_dataBuffer);
-            deleteStringBack("	", ts_dataBuffer);
+            DeleteStringFront("	", ts_dataBuffer);
+            DeleteStringBack("	", ts_dataBuffer);
 
             tl_newData.insert(std::make_pair(ts_indexBuffer, ts_dataBuffer));
         }
@@ -69,7 +69,7 @@ void IniParser::interpretFile(DataStrings *pl_data)
             // store data
             if (!tl_newData.empty())
             {
-                ml_fileData.insert(std::make_pair(ts_sectorBuffer, tl_newData));
+                m_lFileData.insert(std::make_pair(ts_sectorBuffer, tl_newData));
                 tl_newData.clear();
             }
 
@@ -77,26 +77,26 @@ void IniParser::interpretFile(DataStrings *pl_data)
             ts_sectorBuffer = (*t_itr).substr((*t_itr).find_first_of("[")+1);
             ts_sectorBuffer = ts_sectorBuffer.substr(0, ts_sectorBuffer.find_first_of("]"));
             // delete space
-            deleteStringFront(" ", ts_sectorBuffer);
-            deleteStringBack(" ", ts_sectorBuffer);
+            DeleteStringFront(" ", ts_sectorBuffer);
+            DeleteStringBack(" ", ts_sectorBuffer);
             // delete tabs
-            deleteStringFront("	", ts_sectorBuffer);
-            deleteStringBack("	", ts_sectorBuffer);
+            DeleteStringFront("	", ts_sectorBuffer);
+            DeleteStringBack("	", ts_sectorBuffer);
         }
     }
 
     // last data store
     if (!tl_newData.empty())
     {
-        ml_fileData.insert(std::make_pair(ts_sectorBuffer, tl_newData));
+        m_lFileData.insert(std::make_pair(ts_sectorBuffer, tl_newData));
         tl_newData.clear();
     }
 }
 
-std::string IniParser::getString(std::string ps_key, std::string ps_sector, std::string ps_default)
+std::string IniParser::GetString(std::string ps_key, std::string ps_sector, std::string ps_default)
 {
-    SectorData::iterator t_sectorItr = ml_fileData.find(ps_sector);
-    if (t_sectorItr == ml_fileData.end())
+    SectorData::iterator t_sectorItr = m_lFileData.find(ps_sector);
+    if (t_sectorItr == m_lFileData.end())
         return ps_default;
 
     DataMultimap::iterator t_keyItr = t_sectorItr->second.find(ps_key);
@@ -106,10 +106,10 @@ std::string IniParser::getString(std::string ps_key, std::string ps_sector, std:
     return t_keyItr->second;
 }
 
-void IniParser::getAllStrings(std::string ps_key, std::string ps_sector, DataStrings &pl_data)
+void IniParser::GetAllStrings(std::string ps_key, std::string ps_sector, DataStrings &pl_data)
 {
-    SectorData::iterator t_sectorItr = ml_fileData.find(ps_sector);
-    if (t_sectorItr == ml_fileData.end())
+    SectorData::iterator t_sectorItr = m_lFileData.find(ps_sector);
+    if (t_sectorItr == m_lFileData.end())
         return;
 
     for (DataMultimap::iterator t_keyItr = t_sectorItr->second.find(ps_key); t_keyItr != t_sectorItr->second.end(); ++t_keyItr)
@@ -119,49 +119,49 @@ void IniParser::getAllStrings(std::string ps_key, std::string ps_sector, DataStr
     }
 }
 
-int IniParser::getInt(std::string ps_key, std::string ps_sector, int p_default)
+int IniParser::GetInt(std::string ps_key, std::string ps_sector, int p_default)
 {
-    std::string ts_result = getString(ps_key, ps_sector, "");
+    std::string ts_result = GetString(ps_key, ps_sector, "");
     return ts_result.empty() ? p_default : atoi(ts_result.c_str());
 }
 
-bool IniParser::getBool(std::string ps_key, std::string ps_sector, bool p_default)
+bool IniParser::GetBool(std::string ps_key, std::string ps_sector, bool p_default)
 {
-    std::string ts_result = getString(ps_key, ps_sector, "");
+    std::string ts_result = GetString(ps_key, ps_sector, "");
     return ts_result.empty() ? p_default : atoi(ts_result.c_str()) ? true : false;
 }
 
-UINT IniParser::getUINT(std::string ps_key, std::string ps_sector, UINT p_default)
+uint32 IniParser::GetUInt(std::string ps_key, std::string ps_sector, uint32 p_default)
 {
-    std::string ts_result = getString(ps_key, ps_sector, "");
+    std::string ts_result = GetString(ps_key, ps_sector, "");
     return ts_result.empty() || atoi(ts_result.c_str()) < 0 ? p_default : atoi(ts_result.c_str());
 }
 
-void IniParser::addData(std::string sKey, std::string sSector, std::string sData)
+void IniParser::AddData(std::string sKey, std::string sSector, std::string sData)
 {
     if (sKey.empty() || sData.empty())
         return;
 
-    SectorData::iterator itr = ml_fileData.find(sSector);
-    if (itr != ml_fileData.end())
+    SectorData::iterator itr = m_lFileData.find(sSector);
+    if (itr != m_lFileData.end())
         (*itr).second.insert(std::make_pair(sKey, sData));
 
     else
     {
         DataMultimap buffer;
         buffer.insert(std::make_pair(sKey, sData));
-        ml_fileData.insert(std::make_pair(sSector, buffer));
+        m_lFileData.insert(std::make_pair(sSector, buffer));
     }
 }
 
-void IniParser::saveDataToFile(std::string sFileName)
+void IniParser::SaveDataToFile(std::string sFileName)
 {
     FILE *GameIni = NULL;
     fopen_s(&GameIni, sFileName.c_str(), "w");
     if(!GameIni)
         return;
 
-    for (SectorData::iterator sectorItr = ml_fileData.begin(); sectorItr != ml_fileData.end(); ++sectorItr)
+    for (SectorData::iterator sectorItr = m_lFileData.begin(); sectorItr != m_lFileData.end(); ++sectorItr)
     {
         fprintf(GameIni, ("[" + sectorItr->first + "]\n").c_str());
         for (DataMultimap::iterator keyItr = (*sectorItr).second.begin(); keyItr != (*sectorItr).second.end(); ++keyItr)

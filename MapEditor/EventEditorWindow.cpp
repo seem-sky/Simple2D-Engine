@@ -1,6 +1,6 @@
 #include "EventEditorWindow.h"
 
-EventEditorWindow::EventEditorWindow(QMainWindow *p_pParent) : QMainWindow(p_pParent), Ui_EventEditorWindow()
+EventEditorWindow::EventEditorWindow(QWidget *p_pParent) : QMainWindow(p_pParent), Ui_EventEditorWindow()
 {
     setupUi(this);
 

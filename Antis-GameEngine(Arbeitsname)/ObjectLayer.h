@@ -15,7 +15,7 @@ public:
     ~ObjectLayer(void);
     void ClearObjectList();
     void AddWorldObject(WorldObject* pObject);
-    void UpdateLayer(const ULONGLONG uiCurTime, const UINT uiDiff);
+    void UpdateLayer(const ULONGLONG uiCurTime, const uint32 uiDiff);
 
     inline void SetOwnerMap(Map *pMap)
     {

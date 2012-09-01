@@ -12,10 +12,10 @@ public:
     ~GameInfo();
     std::string GetProgramName() { return m_sProgramName; }
     std::string GetDatabaseLocation() { return m_sDatabaseLocation; }
-    Point<UINT> GetWindowSize() { return m_uiScreenSize; }
+    Point<uint32> GetWindowSize() { return m_uiScreenSize; }
     bool IsWindowed() { return m_bWindowed; }
 
-    Point<UINT> GetMapTileSize() { return m_uiMapTileSize; }
+    Point<uint32> GetMapTileSize() { return m_uiMapTileSize; }
 
     void SaveGameInfo();
 
@@ -27,9 +27,9 @@ private:
     // program name
     std::string m_sProgramName;
     // screen resolution
-    Point<UINT> m_uiScreenSize;
+    Point<uint32> m_uiScreenSize;
     // map tile size
-    Point<UINT> m_uiMapTileSize;
+    Point<uint32> m_uiMapTileSize;
     // screen windowed?
     bool m_bWindowed;
     // spritefile store location

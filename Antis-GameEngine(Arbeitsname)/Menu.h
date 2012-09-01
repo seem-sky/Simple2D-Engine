@@ -3,6 +3,7 @@
 
 #include "DefaultMenuItems.h"
 #include "vector"
+#include "Global.h"
 
 typedef std::vector<MenuItem*> MenuItems;
 
@@ -30,7 +31,7 @@ public:
     inline bool ShouldDrawMap() { return m_bDrawMap; }
 
     virtual void DrawMenu();
-    virtual void UpdateMenu(const ULONGLONG CurTime, const UINT CurElapsedTime) {};
+    virtual void UpdateMenu(const ULONGLONG CurTime, const uint32 CurElapsedTime) {};
 
     void CloseMenu();
     void CloseAllMenus();
@@ -61,7 +62,7 @@ private:
     bool m_bDrawMap;
 
     // stored menu items
-    UINT m_uiSelectedItem;
+    uint32 m_uiSelectedItem;
 
     // parent menu
     Menu *m_pParentMenu;

@@ -1,7 +1,7 @@
 #include "DirectFont.h"
 #include "Direct3D.h"
 
-void DirectFont::DrawFont(std::string sText, RECT &pos, D3DXCOLOR color, UINT uiTextSize, UINT uiBoldness, std::string font, DWORD format, bool bItalic, LPD3DXSPRITE pSprite)
+void DirectFont::DrawFont(std::string sText, RECT &pos, D3DXCOLOR color, uint32 uiTextSize, uint32 uiBoldness, std::string font, DWORD format, bool bItalic, LPD3DXSPRITE pSprite)
 {
     LPD3DXFONT pFontObj = NULL;
     CDirect3D *pDirect3D = CDirect3D::Get();
@@ -24,7 +24,7 @@ void DirectFont::DrawFont(std::string sText, RECT &pos, D3DXCOLOR color, UINT ui
     }
 }
 
-DirectFont::DirectFont(UINT uiTextSize, UINT uiBoldness, std::string font, bool bItalic) : m_pFontObj(NULL)
+DirectFont::DirectFont(uint32 uiTextSize, uint32 uiBoldness, std::string font, bool bItalic) : m_pFontObj(NULL)
 {
     m_sLogLocationName = LOGFILE_ENGINE_LOG_NAME + "DirectFont : ";
 

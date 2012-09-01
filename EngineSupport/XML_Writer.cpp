@@ -134,17 +134,16 @@ namespace XML
         {
             IXMLDOMNodePtr t_pNewNode = NULL;
             // if node has no attribute named "ID" its a single node
-            const AttributeList *t_AttrList = t_Itr->second.GetAttributeList();
-            AttributeList::const_iterator t_AttrItr = t_AttrList->find("ID");
-            // single node
-            if (t_AttrItr == t_AttrList->end())
-                p_pParent->selectSingleNode(_bstr_t(t_Itr->first.c_str()), &t_pNewNode);
-
-            else    // decide between different ID´s
+            CComVariant t_Value;
+            if (t_Itr->second.GetAttributeValue("ID", t_Value))
             {
-                CComVariant t_Value = t_AttrItr->second;
-                t_pNewNode = GetChildNodeByAttribute(p_pParent, t_Itr->first, "ID", t_Value);
+                 if (FAILED(t_Value.ChangeType(VT_UINT)))
+                    continue;
+
+                 t_pNewNode = GetChildNodeByAttribute(p_pParent, t_Itr->first, "ID", t_Value);
             }
+            else
+                p_pParent->selectSingleNode(_bstr_t(t_Itr->first.c_str()), &t_pNewNode);
 
             switch (t_Itr->second.GetWriteState())
             {

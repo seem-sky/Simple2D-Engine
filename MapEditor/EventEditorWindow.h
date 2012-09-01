@@ -7,7 +7,7 @@
 class EventEditorWindow : public QMainWindow, Ui_EventEditorWindow
 {
 public:
-    EventEditorWindow(QMainWindow *p_pParent = NULL);
+    EventEditorWindow(QWidget *p_pParent = NULL);
     ~EventEditorWindow(void);
 
 protected:

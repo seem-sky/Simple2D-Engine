@@ -2,7 +2,7 @@
 #include "Logfile.h"
 #include "Game.h"
 
-TextBox::TextBox(std::string sMsg, Point<int> pos, Point<UINT> size, UINT uiTextureID, USHORT uiLetterSize, USHORT uiBold, bool bItalic, std::string sFont,
+TextBox::TextBox(std::string sMsg, Point<int> pos, Point<uint32> size, uint32 uiTextureID, USHORT uiLetterSize, USHORT uiBold, bool bItalic, std::string sFont,
                  ShowLetterTime showLetter, bool ScrollAble)
 : m_pTexture(NULL), m_Position(pos), m_uiSize(size), m_uiAniTime(0), m_uiStartAniTime(0), m_LetterTimer(showLetter),
 m_uiShownLetterTime(showLetter), m_uiShownLetters(0), m_MsgYPos(0), m_NewMsgYPos(0), m_uiCurRow(0), m_uiScrollTime(0), m_uiScroll_Timer(0),
@@ -22,7 +22,7 @@ m_bFastScroll(false), m_DirectFont(uiLetterSize, uiBold, sFont, bItalic)
     }
 
     m_MsgYPos = m_Position.y;
-    UINT borderSize = GetTexturBorderSize();
+    uint32 borderSize = GetTexturBorderSize();
     m_MsgYPos += borderSize;
     m_uiMaxRowsShown = (m_uiSize.y- 2*borderSize)/ m_DirectFont.GetFontSize();
 
@@ -58,14 +58,14 @@ void TextBox::DrawTextboxPic()
 
     LPD3DXSPRITE pSprite = pDirect3D->GetSpriteForDraw();
 
-    Point<UINT> TextureSize;
+    Point<uint32> TextureSize;
     m_pTexture->GetTextureSize(TextureSize.x, TextureSize.y);
 
-    UINT uiSrcRow = 0;
+    uint32 uiSrcRow = 0;
     RECT src = {0,0,0,0};
 
     D3DXVECTOR3 vCenter((float)(m_Position.x *2 + m_uiSize.x)/2, (float)(m_Position.y + m_Position.x + m_uiSize.y)/2, 0);
-    for (UINT i = 0; i <= ceil((float)(m_uiSize.y / (TextureSize.y / 3))); i++)
+    for (uint32 i = 0; i <= ceil((float)(m_uiSize.y / (TextureSize.y / 3))); i++)
     {
         float fYPos = (float)m_Position.y + i*(TextureSize.y/3);
         if (i > ceil((float)(m_uiSize.y / (TextureSize.y / 3))) -1)
@@ -86,7 +86,7 @@ void TextBox::DrawTextboxPic()
 
         src.left = TextureSize.x / 3;
         src.right = (TextureSize.x / 3)*2;
-        for (UINT j = 1; j <= ceil((float)(m_uiSize.x / (TextureSize.x / 3)))-1; j++)
+        for (uint32 j = 1; j <= ceil((float)(m_uiSize.x / (TextureSize.x / 3)))-1; j++)
             pSprite->Draw(m_pTexture->m_pTexture, &src, NULL, &D3DXVECTOR3((float)m_Position.x + j*(TextureSize.x/3), fYPos, 0), D3DXCOLOR(1,1,1,1));
 
         src.left = (TextureSize.x / 3)*2;
@@ -107,9 +107,9 @@ void TextBox::DrawTextboxMsg()
     if (!pDirect3D)
         return;
 
-    UINT uiBorderSize = GetTexturBorderSize();
+    uint32 uiBorderSize = GetTexturBorderSize();
     std::string sMsg;
-    for (UINT uiRow = 0; uiRow <= m_uiCurRow && uiRow < m_TextMsg.size() ; ++uiRow)
+    for (uint32 uiRow = 0; uiRow <= m_uiCurRow && uiRow < m_TextMsg.size() ; ++uiRow)
     {
         if (uiRow == m_uiCurRow)
             sMsg += m_TextMsg.at(uiRow).substr(0, m_uiShownLetters);
@@ -139,7 +139,7 @@ void TextBox::DrawTextboxMsg()
     {
         if (GameInfo *pInfo = pGame->GetGameInfo())
         {
-            Point<UINT> ScreenSize = pInfo->GetWindowSize();
+            Point<uint32> ScreenSize = pInfo->GetWindowSize();
             pRect.left = 0;
             pRect.top = 0;
             pRect.right = ScreenSize.x;
@@ -157,7 +157,7 @@ void TextBox::DrawTextboxChoices()
     if (!pDirect3D)
         return;
 
-    UINT uiBorderSize = GetTexturBorderSize();
+    uint32 uiBorderSize = GetTexturBorderSize();
     std::string sMsg;
     for (ChoiceList::iterator itr = m_ChoiceLIST.begin(); itr != m_ChoiceLIST.end(); ++itr)
         sMsg += (*itr).m_sText + "\n";
@@ -204,7 +204,7 @@ void TextBox::DrawTextboxChoices()
     {
         if (GameInfo *pInfo = pGame->GetGameInfo())
         {
-            Point<UINT> ScreenSize = pInfo->GetWindowSize();
+            Point<uint32> ScreenSize = pInfo->GetWindowSize();
             pRect.left = 0;
             pRect.top = 0;
             pRect.right = ScreenSize.x;
@@ -216,7 +216,7 @@ void TextBox::DrawTextboxChoices()
     }
 }
 
-void TextBox::SetTexture(UINT uiTextureID)
+void TextBox::SetTexture(uint32 uiTextureID)
 {
     if (TextureMgr *pMgr = TextureMgr::Get())
         SetTexture(pMgr->GetTextureSource(uiTextureID));
@@ -237,7 +237,7 @@ void TextBox::SetTexture(TextureSource *pTexture)
     BASIC_LOG(m_sLogLocationName + "Change texture with " + pTexture->m_TextureInfo.m_sFileName +".");
 }
 
-void TextBox::Update(const ULONGLONG time, const UINT uiDiff)
+void TextBox::Update(const ULONGLONG time, const uint32 uiDiff)
 {
     // update transition
     if (m_uiStartAniTime != 0)
@@ -258,7 +258,7 @@ void TextBox::Update(const ULONGLONG time, const UINT uiDiff)
         else
         {
             m_uiAniTime -= uiDiff;
-            UINT diff = m_uiStartAniTime - m_uiAniTime;
+            uint32 diff = m_uiStartAniTime - m_uiAniTime;
             m_Position.x = (int)(((float)(m_MoveTo.x - m_StartPos.x)/100)*(float)((m_uiStartAniTime - m_uiAniTime)*100/m_uiStartAniTime));
             m_Position.x += m_StartPos.x;
             m_Position.y = (int)(((float)(m_MoveTo.y - m_StartPos.y)/100)*(float)((m_uiStartAniTime - m_uiAniTime)*100/m_uiStartAniTime));
@@ -344,7 +344,7 @@ void TextBox::Update(const ULONGLONG time, const UINT uiDiff)
             else
             {
                 m_uiScroll_Timer -= uiDiff;
-                UINT diff = m_uiScrollTime - m_uiScroll_Timer;
+                uint32 diff = m_uiScrollTime - m_uiScroll_Timer;
                 m_MsgYPos = (int)(((float)(m_NewMsgYPos - m_StartMsgYPos)/100)*(float)((m_uiScrollTime - m_uiScroll_Timer)*100/m_uiScrollTime));
                 m_MsgYPos += m_StartMsgYPos;
             }
@@ -352,7 +352,7 @@ void TextBox::Update(const ULONGLONG time, const UINT uiDiff)
     }
 }
 
-void TextBox::SetAnimation(Point<int> moveTo, UINT uiTimeInMsec)
+void TextBox::SetAnimation(Point<int> moveTo, uint32 uiTimeInMsec)
 {
     m_StartPos = m_Position;
     m_MoveTo = moveTo;
@@ -436,7 +436,7 @@ void TextBox::ConvertMsg(std::string sText)
 {
     RECT size = {0,0,0,0};
     std::string sSub;
-    UINT borderSize = GetTexturBorderSize();
+    uint32 borderSize = GetTexturBorderSize();
     while(!sText.empty())
     {
         if (sText.find(10) < sText.size())
@@ -445,7 +445,7 @@ void TextBox::ConvertMsg(std::string sText)
             sSub = sText;
 
         m_DirectFont.DrawFont(sSub, size, D3DXCOLOR(1, 1, 1, 1), NULL, DT_CALCRECT);
-        while ((UINT)size.right > m_uiSize.x - 2*borderSize)
+        while ((uint32)size.right > m_uiSize.x - 2*borderSize)
         {
             // check if there is any space in string
             if (sSub.find(32) >= sSub.size())
@@ -468,7 +468,7 @@ void TextBox::ConvertMsg(std::string sText)
     }
 }
 
-void TextBox::MoveTextToLine(UINT uiLine, UINT uiTimePerLine)
+void TextBox::MoveTextToLine(uint32 uiLine, uint32 uiTimePerLine)
 {
     int LineDiff = uiLine-m_uiCurRowShown;
     m_uiCurRowShown = uiLine;

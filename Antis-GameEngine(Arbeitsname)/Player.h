@@ -3,6 +3,7 @@
 
 #include <windows.h>
 #include <list>
+#include "Global.h"
 
 // key action ID
 enum
@@ -28,9 +29,9 @@ enum MOVE_BUFFER
 
 struct PlayerKeyAction
 {
-    UINT m_uiKey;
+    uint32 m_uiKey;
     bool m_bShouldPressed;
-    UINT m_uiActionID;
+    uint32 m_uiActionID;
 
     ULONGLONG m_uiLastTimeActive;
 
@@ -55,16 +56,16 @@ public:
     ~Player(void);
 
     // read out keystates and other player related stuff
-    void UpdatePlayer(const ULONGLONG CurTime, const UINT CurElapsedTime);
+    void UpdatePlayer(const ULONGLONG CurTime, const uint32 CurElapsedTime);
 
     // changes controle of an unit
     void SetControledUnit(Unit *pWho);
 
     // add a key action
-    void AddKeyAction(UINT uiKey, UINT actionID, bool press = true);
+    void AddKeyAction(uint32 uiKey, uint32 actionID, bool press = true);
 
     // move player object
-    void MovePlayer(int XMove, int YMove, UINT uiMoveMSec);
+    void MovePlayer(int XMove, int YMove, uint32 uiMoveMSec);
 
     void UseCollissionObject();
 
@@ -81,7 +82,7 @@ private:
     KeyList m_KeyList;
 
     // move
-    UINT m_uiMoveBuffer;
+    uint32 m_uiMoveBuffer;
     MOVE_BUFFER m_uiLockBuffer;
     inline bool HasMoveBuffer(MOVE_BUFFER flag)
     {

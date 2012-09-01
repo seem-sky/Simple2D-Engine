@@ -16,10 +16,10 @@ struct MapInfo
     std::string m_sMapAnnounceName;
     std::string m_sAIName;
 
-    UINT m_uiX;
-    UINT m_uiY;
+    uint32 m_uiX;
+    uint32 m_uiY;
 
-    UINT m_uiID;
+    uint32 m_uiID;
 
     MapInfo() : m_uiID(0), m_uiX(0), m_uiY(0) { }
 
@@ -67,17 +67,17 @@ public:
     ## Map System
     #####*/
     void Draw();
-    MapLoadResult LoadNewMap(UINT p_uiID);
+    MapLoadResult LoadNewMap(uint32 p_uiID);
     void ClearMap();
-    void UpdateMap(const ULONGLONG uiCurTime, const UINT uiDiff);
+    void UpdateMap(const ULONGLONG uiCurTime, const uint32 uiDiff);
 
     const MapInfo* GetMapInfo() { return &m_MapInfo; }
     const std::vector<MapTiles>* GetMapTiles() { return &m_v2MapTiles; }
     const ScriptPointLIST* GetScriptPoints() { return &m_ScriptPoints; }
 
-    bool IsPassable(UINT XPos, UINT YPos, PassabilityFlag MoveDirection);
+    bool IsPassable(uint32 XPos, uint32 YPos, PassabilityFlag MoveDirection);
 
-    Point<UINT> CalcPixToTile(Point<UINT> uiPos);
+    Point<uint32> CalcPixToTile(Point<uint32> uiPos);
 
     /*#####
     ## position funktions
@@ -92,8 +92,8 @@ public:
     ## objects
     #####*/
     // add new world object to map
-    WorldObject* AddNewWorldObject(UINT uiObjectID, int XPos, int YPos, UINT uiLayerNr);
-    WorldObject* GetObject(UINT t_uiObjectGUID);
+    WorldObject* AddNewWorldObject(uint32 uiObjectID, int XPos, int YPos, uint32 uiLayerNr);
+    WorldObject* GetObject(uint32 t_uiObjectGUID);
 
     /*#####
     ## color
@@ -106,10 +106,10 @@ public:
     ## layer
     #####*/
     void AddLayer(Layer *pLayer);
-    void EraseLayer(UINT uiLayerNr);
+    void EraseLayer(uint32 uiLayerNr);
     void EraseLayer(Layer *pLayer);
     void ClearAllLayer();
-    Layer* GetLayerAtNr(UINT uiLayerNr);
+    Layer* GetLayerAtNr(uint32 uiLayerNr);
 
     /*#####
     ## scriptpoints
@@ -119,7 +119,7 @@ public:
 protected:
     void DrawMap();
     void DrawLayer();
-    UINT GetGUIDForNewObject();
+    uint32 GetGUIDForNewObject();
 
     std::string m_sLogLocationName;
 
@@ -128,7 +128,7 @@ private:
     MapInfo m_MapInfo;
     std::vector<MapTiles> m_v2MapTiles;
     LayerList m_lLayers;
-    std::map<UINT, WorldObject*> m_WorldObjectLIST;
+    std::map<uint32, WorldObject*> m_WorldObjectLIST;
     ScriptPointLIST m_ScriptPoints;
 
     Point<int> m_Position;
@@ -141,12 +141,12 @@ private:
 
 struct ObjectReadOut
 {
-    UINT m_ObjectID;
-    UINT m_GUID;
+    uint32 m_ObjectID;
+    uint32 m_GUID;
     int m_XPos;
     int m_YPos;
-    UINT m_uiDirection;
-    UINT m_uiWalkmode;
+    uint32 m_uiDirection;
+    uint32 m_uiWalkmode;
 
     ObjectReadOut() : m_ObjectID(0), m_XPos(0), m_YPos(0), m_uiDirection(0), m_GUID(0), m_uiWalkmode(0) { }
 };
@@ -155,7 +155,7 @@ struct ObjectReadOut
 class MapLoadThread : public ActiveObject
 {
 public:
-    MapLoadThread(std::string sMapName, MapInfo &MapInfo, std::vector<MapTiles> &MapTiles, LayerList &LayerList, std::map<UINT, WorldObject*> &objectList, ScriptPointLIST &scriptPoints);
+    MapLoadThread(std::string sMapName, MapInfo &MapInfo, std::vector<MapTiles> &MapTiles, LayerList &LayerList, std::map<uint32, WorldObject*> &objectList, ScriptPointLIST &scriptPoints);
 
     MapLoadState GetMapLoadState() { return m_MapLoadState; }
 
@@ -187,6 +187,6 @@ private:
     LayerList &m_lLayers;
     ScriptPointLIST &m_ScriptPoints;
 
-    std::map<UINT, WorldObject*> &m_WorldObjectLIST;
+    std::map<uint32, WorldObject*> &m_WorldObjectLIST;
 };
 #endif;

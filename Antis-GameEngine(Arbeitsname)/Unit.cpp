@@ -1,7 +1,7 @@
 #include "Unit.h"
 #include "ResourceManager.h"
 
-Unit::Unit(UINT uiGUID, Point<int> pos, DIRECTION dir, WALKMODE walkmode, UnitAI *pAI) : m_uiDirection(dir), m_uiSpriteSector(0), m_bIsPlayer(false), m_bAnimationDirection(false), m_bAllTimeAnimation(false),
+Unit::Unit(uint32 uiGUID, Point<int> pos, DIRECTION dir, WALKMODE walkmode, UnitAI *pAI) : m_uiDirection(dir), m_uiSpriteSector(0), m_bIsPlayer(false), m_bAnimationDirection(false), m_bAllTimeAnimation(false),
     m_uiAnimationTime(ANIMATION_TIME_NORMAL), m_uiMovementSpeed(MOVEMENT_SPEED_NORMAL), m_Walkmode(walkmode),
     WorldObject(uiGUID, pos, pAI)
 {
@@ -21,7 +21,7 @@ Unit::~Unit(void)
     }
 }
 
-void Unit::Update(const ULONGLONG uiCurTime, const UINT uiDiff)
+void Unit::Update(const ULONGLONG uiCurTime, const uint32 uiDiff)
 {
     // WorldObject update
     WorldObject::Update(uiCurTime, uiDiff);
@@ -47,13 +47,13 @@ void Unit::DrawObject(LPD3DXSPRITE pSprite)
         return;
 
     // get sprite size and calc sprite sector
-    UINT uiSizeX = 0, uiSizeY = 0;
+    uint32 uiSizeX = 0, uiSizeY = 0;
     GetTextureSource()->GetTextureSize(uiSizeX, uiSizeY);
     RECT srcRect = {0,0,uiSizeX,uiSizeY};
-    if (GetTextureSource()->m_TextureInfo.m_uiSpriteType == (UINT)DATABASE::SPRITE_TYPE_ANIMATED_OBJECT)
+    if (GetTextureSource()->m_TextureInfo.m_uiSpriteType == (uint32)DATABASE::SPRITE_TYPE_ANIMATED_OBJECT)
     {
-        UINT uiSpritesX = GetTextureSource()->m_TextureInfo.Type.AnimatedObject.m_uiSpritesX;
-        UINT uiSpritesY = GetTextureSource()->m_TextureInfo.Type.AnimatedObject.m_uiSpritesY;
+        uint32 uiSpritesX = GetTextureSource()->m_TextureInfo.Type.AnimatedObject.m_uiSpritesX;
+        uint32 uiSpritesY = GetTextureSource()->m_TextureInfo.Type.AnimatedObject.m_uiSpritesY;
 
         if (uiSpritesX)
         {
@@ -82,7 +82,7 @@ void Unit::SetToStartSector()
 {
     if (GetTextureSource())
     {
-        if (GetTextureSource()->m_TextureInfo.m_uiSpriteType == (UINT)DATABASE::SPRITE_TYPE_ANIMATED_OBJECT)
+        if (GetTextureSource()->m_TextureInfo.m_uiSpriteType == (uint32)DATABASE::SPRITE_TYPE_ANIMATED_OBJECT)
             m_uiSpriteSector = m_uiDirection * GetTextureSource()->m_TextureInfo.Type.AnimatedObject.m_uiSpritesX + 1;
 
         else
@@ -91,13 +91,13 @@ void Unit::SetToStartSector()
     }
 }
 
-void Unit::MovePosition(int XMove, int YMove, DIRECTION dir, UINT time)
+void Unit::MovePosition(int XMove, int YMove, DIRECTION dir, uint32 time)
 {
     if (m_pMovement)
         m_pMovement->Move2D(XMove, YMove, time, dir);
 }
 
-void Unit::UpdateAnimation(const ULONGLONG uiCurTime, const UINT uiDiff)
+void Unit::UpdateAnimation(const ULONGLONG uiCurTime, const uint32 uiDiff)
 {
     // check animation timer
     if (m_uiAnimation_Timer < uiDiff)
@@ -109,8 +109,8 @@ void Unit::UpdateAnimation(const ULONGLONG uiCurTime, const UINT uiDiff)
             return;
         }
 
-        UINT uiSector = GetTextureSrcRct();
-        UINT uiSpritesX = pTexture->m_TextureInfo.Type.AnimatedObject.m_uiSpritesX;
+        uint32 uiSector = GetTextureSrcRct();
+        uint32 uiSpritesX = pTexture->m_TextureInfo.Type.AnimatedObject.m_uiSpritesX;
 
         // check src rect space
         if (m_bAnimationDirection)

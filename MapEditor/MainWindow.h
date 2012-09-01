@@ -19,8 +19,6 @@ public:
     MainWindow(QMainWindow *parent = 0);
     ~MainWindow(void);
 
-    QString GetProjectDir() { return m_sProjectDir; }
-
     inline void SetNewTimer(QTimer *p_pTimer)
     {
         if (p_pTimer)
@@ -33,7 +31,6 @@ private:
     bool LoadDB();
     WINDOW_ACTION m_WindowAction;
     QTimer *m_pTimer;
-    QString m_sProjectDir;
 
 private slots:
     void OpenDatabase();

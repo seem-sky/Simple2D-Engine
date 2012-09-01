@@ -28,16 +28,16 @@ GameInfo::~GameInfo()
 void GameInfo::ReadIni()
 {
     IniParser newIni;
-    newIni.readFile(GAME_DATA_GAME_INI);
+    newIni.ReadFile(GAME_DATA_GAME_INI);
 
-    m_sProgramName = newIni.getString(GAME_DATA_PROGRAM_NAME, INI_SECTOR_ENGINE, "Anti´s Game Engine");
-    m_sDatabaseLocation = newIni.getString(GAME_DATA_DATABASE_LOCATION, INI_SECTOR_ENGINE, "Game/GameDatabase.gbse");
-    m_uiScreenSize.x = newIni.getUINT(GAME_DATA_SCREEN_WIDTH, INI_SECTOR_ENGINE, 320);
-    m_uiScreenSize.y = newIni.getUINT(GAME_DATA_SCREEN_HEIGHT, INI_SECTOR_ENGINE, 240);
-    m_bWindowed = newIni.getBool(GAME_DATA_WINDOWED, INI_SECTOR_ENGINE, false);
+    m_sProgramName = newIni.GetString(GAME_DATA_PROGRAM_NAME, INI_SECTOR_ENGINE, "Anti´s Game Engine");
+    m_sDatabaseLocation = newIni.GetString(GAME_DATA_DATABASE_LOCATION, INI_SECTOR_ENGINE, "Game/GameDatabase.gbse");
+    m_uiScreenSize.x = newIni.GetUInt(GAME_DATA_SCREEN_WIDTH, INI_SECTOR_ENGINE, 320);
+    m_uiScreenSize.y = newIni.GetUInt(GAME_DATA_SCREEN_HEIGHT, INI_SECTOR_ENGINE, 240);
+    m_bWindowed = newIni.GetBool(GAME_DATA_WINDOWED, INI_SECTOR_ENGINE, false);
 
-    m_uiMapTileSize.x = newIni.getUINT(GAME_DATA_TILE_SIZE_X, INI_SECTOR_MAP, 32);
-    m_uiMapTileSize.y = newIni.getUINT(GAME_DATA_TILE_SIZE_Y, INI_SECTOR_MAP, 32);
+    m_uiMapTileSize.x = newIni.GetUInt(GAME_DATA_TILE_SIZE_X, INI_SECTOR_MAP, 32);
+    m_uiMapTileSize.y = newIni.GetUInt(GAME_DATA_TILE_SIZE_Y, INI_SECTOR_MAP, 32);
 
     BASIC_LOG(m_sLogLocationName + "Successfully read and store " + GAME_DATA_GAME_INI + ".");
 }
@@ -45,13 +45,13 @@ void GameInfo::ReadIni()
 void GameInfo::SaveGameInfo()
 {
     IniParser newIni;
-    newIni.addData(GAME_DATA_PROGRAM_NAME, INI_SECTOR_ENGINE, m_sProgramName);
-    newIni.addData(GAME_DATA_DATABASE_LOCATION, INI_SECTOR_ENGINE, m_sDatabaseLocation);
-    newIni.addData(GAME_DATA_SCREEN_WIDTH, INI_SECTOR_ENGINE, ToString(m_uiScreenSize.x));
-    newIni.addData(GAME_DATA_SCREEN_HEIGHT, INI_SECTOR_ENGINE, ToString(m_uiScreenSize.y));
-    newIni.addData(GAME_DATA_WINDOWED, INI_SECTOR_ENGINE, ToString(m_bWindowed));
-    newIni.addData(GAME_DATA_TILE_SIZE_X, INI_SECTOR_MAP, ToString(m_uiMapTileSize.x));
-    newIni.addData(GAME_DATA_TILE_SIZE_Y, INI_SECTOR_MAP, ToString(m_uiMapTileSize.y));
+    newIni.AddData(GAME_DATA_PROGRAM_NAME, INI_SECTOR_ENGINE, m_sProgramName);
+    newIni.AddData(GAME_DATA_DATABASE_LOCATION, INI_SECTOR_ENGINE, m_sDatabaseLocation);
+    newIni.AddData(GAME_DATA_SCREEN_WIDTH, INI_SECTOR_ENGINE, ToString(m_uiScreenSize.x));
+    newIni.AddData(GAME_DATA_SCREEN_HEIGHT, INI_SECTOR_ENGINE, ToString(m_uiScreenSize.y));
+    newIni.AddData(GAME_DATA_WINDOWED, INI_SECTOR_ENGINE, ToString(m_bWindowed));
+    newIni.AddData(GAME_DATA_TILE_SIZE_X, INI_SECTOR_MAP, ToString(m_uiMapTileSize.x));
+    newIni.AddData(GAME_DATA_TILE_SIZE_Y, INI_SECTOR_MAP, ToString(m_uiMapTileSize.y));
 
-    newIni.saveDataToFile(GAME_DATA_GAME_INI);
+    newIni.SaveDataToFile(GAME_DATA_GAME_INI);
 }

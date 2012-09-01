@@ -11,12 +11,12 @@ class CDirect3D : public TSingleton<CDirect3D>
         CDirect3D();
         ~CDirect3D();
 
-        bool Initialize(HWND hWnd, const UINT uiScreenWidth, const UINT uiScreenHeight, const bool bWindowed);
+        bool Initialize(HWND hWnd, const uint32 uiScreenWidth, const uint32 uiScreenHeight, const bool bWindowed);
         void BeginScene(void);
         HRESULT EndScene(void);
         void SetClearColor(D3DCOLOR Color) { m_ClearColor = Color; }
         LPDIRECT3DDEVICE9 GetDevice(void) { return m_lpD3DDevice; }
-        HRESULT ResetDevice(HWND hWnd, const UINT uiScreenWidth, const UINT uiScreenHeight, const bool bWindowed);
+        HRESULT ResetDevice(HWND hWnd, const uint32 uiScreenWidth, const uint32 uiScreenHeight, const bool bWindowed);
 
         /*#####
         ## sprites
@@ -24,7 +24,7 @@ class CDirect3D : public TSingleton<CDirect3D>
         void CreateSprite();
         void ReleaseAllSprites();
         void DeleteOneSprite();
-        LPD3DXSPRITE GetSpriteForDraw(UINT DrawFlag = D3DXSPRITE_ALPHABLEND);
+        LPD3DXSPRITE GetSpriteForDraw(uint32 DrawFlag = D3DXSPRITE_ALPHABLEND);
         void EndSpriteDraw();
 
         LPDIRECT3DSURFACE9 GetBackbuffer(void) { return m_lpBackBuffer; }
@@ -40,6 +40,6 @@ class CDirect3D : public TSingleton<CDirect3D>
        D3DPRESENT_PARAMETERS m_PParams;
 
        std::vector<LPD3DXSPRITE> m_SpriteList;               // stores all sprites
-       unsigned int m_uiSpriteIndex;
+       uint32 m_uiSpriteIndex;
 };
 #endif

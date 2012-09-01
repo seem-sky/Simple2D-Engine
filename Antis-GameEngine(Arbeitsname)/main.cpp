@@ -10,7 +10,7 @@ CTime *m_pTime          = NULL;
 CGame *m_pGame          = NULL;
 
 HRESULT InitWindow ( HINSTANCE hInstance, int nCmdShow, GameInfo *GameInfo );
-LRESULT CALLBACK WndProc( HWND, UINT, WPARAM, LPARAM );
+LRESULT CALLBACK WndProc( HWND, uint32, WPARAM, LPARAM );
 void ReleaseObjects();
 
 // the entry point for any Windows program
@@ -88,7 +88,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
             if (m_DrawResult == S_OK)
             {
                 // Game run
-                if (!m_pGame->Run(m_pTime->GetCurTime(), (UINT)m_pTime->GetTimeElapsed()))
+                if (!m_pGame->Run(m_pTime->GetCurTime(), (uint32)m_pTime->GetTimeElapsed()))
                     break;
 
                 // Game render
@@ -127,7 +127,7 @@ void ReleaseObjects()
 }
 
 // this is the main message handler for the program
-LRESULT CALLBACK WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
+LRESULT CALLBACK WndProc( HWND hWnd, uint32 message, WPARAM wParam, LPARAM lParam )
 {
     PAINTSTRUCT ps;
     HDC hdc;
@@ -171,7 +171,7 @@ HRESULT InitWindow( HINSTANCE hInstance, int nCmdShow, GameInfo *GameInfo )
 
     // Create window
     g_hInst = hInstance;
-    Point<UINT> windowSize = GameInfo->GetWindowSize();
+    Point<uint32> windowSize = GameInfo->GetWindowSize();
     RECT rc = { 0, 0, windowSize.x, windowSize.y };
     AdjustWindowRect( &rc, WS_OVERLAPPEDWINDOW, FALSE );
     g_hWnd = CreateWindow( "Engine", (LPCSTR)GameInfo->GetProgramName().c_str(), GameInfo->IsWindowed() ? (WS_OVERLAPPEDWINDOW | WS_VISIBLE) : (WS_EX_TOPMOST | WS_POPUP),

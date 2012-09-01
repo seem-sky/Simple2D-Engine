@@ -41,9 +41,9 @@ void Map::ClearMap()
     }
 }
 
-WorldObject* Map::GetObject(UINT t_uiObjGUID)
+WorldObject* Map::GetObject(uint32 t_uiObjGUID)
 {
-    std::map<UINT, WorldObject*>::iterator t_itr = m_WorldObjectLIST.find(t_uiObjGUID);
+    std::map<uint32, WorldObject*>::iterator t_itr = m_WorldObjectLIST.find(t_uiObjGUID);
     if (t_itr == m_WorldObjectLIST.end())
         return NULL;
     
@@ -60,7 +60,7 @@ void Map::ClearScriptPoints()
     m_ScriptPoints.clear();
 }
 
-MapLoadResult Map::LoadNewMap(UINT p_uiID)
+MapLoadResult Map::LoadNewMap(uint32 p_uiID)
 {
     MapLoadResult result = MAP_RESULT_NONE;
 
@@ -96,7 +96,7 @@ MapLoadResult Map::LoadNewMap(UINT p_uiID)
     return result;
 }
 
-WorldObject* Map::AddNewWorldObject(UINT uiObjectID, int XPos, int YPos, UINT uiLayerNr)
+WorldObject* Map::AddNewWorldObject(uint32 uiObjectID, int XPos, int YPos, uint32 uiLayerNr)
 {
     WorldObject *pNewObject = NULL;
     DATABASE::Database *t_pDB = DATABASE::Database::Get();
@@ -107,7 +107,7 @@ WorldObject* Map::AddNewWorldObject(UINT uiObjectID, int XPos, int YPos, UINT ui
     if (!pProto)
         return NULL;
 
-    UINT uiGUID = GetGUIDForNewObject();
+    uint32 uiGUID = GetGUIDForNewObject();
     if (!uiGUID)
     {
         ERROR_LOG(m_sLogLocationName + "Unable to get a new GUID for Object.");
@@ -134,7 +134,7 @@ WorldObject* Map::AddNewWorldObject(UINT uiObjectID, int XPos, int YPos, UINT ui
         //    pNewObject->SetTextureSource(pSpriteProto);
 
         pLayer->AddWorldObject(pNewObject);
-        m_WorldObjectLIST.insert(std::make_pair<UINT, WorldObject*>(pNewObject->GetGUID(), pNewObject));
+        m_WorldObjectLIST.insert(std::make_pair<uint32, WorldObject*>(pNewObject->GetGUID(), pNewObject));
     }
     else
     {
@@ -148,12 +148,12 @@ WorldObject* Map::AddNewWorldObject(UINT uiObjectID, int XPos, int YPos, UINT ui
     return pNewObject;
 }
 
-UINT Map::GetGUIDForNewObject()
+uint32 Map::GetGUIDForNewObject()
 {
     if (m_WorldObjectLIST.empty())
         return 1;
 
-    std::map<UINT, WorldObject*>::iterator itr = --m_WorldObjectLIST.end();
+    std::map<uint32, WorldObject*>::iterator itr = --m_WorldObjectLIST.end();
     return (*itr).first + 1;
 }
 
@@ -176,7 +176,7 @@ void Map::DrawMap()
         return;
 
     // get screen resolution
-    Point<UINT> windowSize                  = pGameInfo->GetWindowSize();
+    Point<uint32> windowSize                  = pGameInfo->GetWindowSize();
     const MapInfo *MapInfo                  = GetMapInfo();
     const std::vector<MapTiles> *MapTiles   = GetMapTiles();
     // return if one of the info files are corrupt
@@ -186,15 +186,15 @@ void Map::DrawMap()
     Point<int> MapPosition = GetPosition();
 
     // get maptile size
-    Point<UINT> tileSize = pGameInfo->GetMapTileSize();
+    Point<uint32> tileSize = pGameInfo->GetMapTileSize();
 
     // get start pos left and up
-    UINT startposX = 0;
-    UINT startposY = 0;
+    uint32 startposX = 0;
+    uint32 startposY = 0;
     if (MapPosition.x < 0)
-        startposX = (UINT)((-1) * MapPosition.x / tileSize.x);
+        startposX = (uint32)((-1) * MapPosition.x / tileSize.x);
     if (MapPosition.y < 0)
-        startposY = (UINT)((-1) * MapPosition.y / tileSize.y);
+        startposY = (uint32)((-1) * MapPosition.y / tileSize.y);
 
     // if startpos greater max map tiles, set to max map tiles
     if (startposX > MapInfo->m_uiX)
@@ -203,13 +203,13 @@ void Map::DrawMap()
         startposY = MapInfo->m_uiY;
 
     // get end pos right and bottom
-    UINT endposX = 0;
-    UINT endposY = 0;
+    uint32 endposX = 0;
+    uint32 endposY = 0;
     if (MapPosition.x + MapInfo->m_uiX * tileSize.x > windowSize.x)
     {
         endposX = startposX + ((windowSize.x+tileSize.x/2)/tileSize.x);
 
-        if ((UINT)MapPosition.x % tileSize.x)
+        if ((uint32)MapPosition.x % tileSize.x)
         {
             if (startposX > 0)
                 startposX--;
@@ -224,7 +224,7 @@ void Map::DrawMap()
     {
         endposY = startposY + ((windowSize.y+tileSize.y/2)/tileSize.y);
 
-        if ((UINT)MapPosition.y % tileSize.y)
+        if ((uint32)MapPosition.y % tileSize.y)
         {
             if (startposY > 0)
                 startposY--;
@@ -241,18 +241,18 @@ void Map::DrawMap()
         return;
 
     // iterate through layers
-    for (UINT layer = 0; layer < MapTiles->size(); layer++)
+    for (uint32 layer = 0; layer < MapTiles->size(); layer++)
     {
         MapPosition.x = GetPositionX() + startposX * tileSize.x;
         MapPosition.y = GetPositionY() + startposY * tileSize.y;
 
-        for (UINT i = startposY; i < endposY && startposX != endposX; ++i)
+        for (uint32 i = startposY; i < endposY && startposX != endposX; ++i)
         {
             // break if empty or out of range
             if (MapTiles->at(layer).empty() || i >= MapTiles->at(layer).size())
                 break;
 
-            for (UINT j = startposX; j < endposX; ++j)
+            for (uint32 j = startposX; j < endposX; ++j)
             {
                 // break if empty or out of range
                 if (MapTiles->at(layer).at(i).empty() || j >= MapTiles->at(layer).at(i).size())
@@ -263,7 +263,7 @@ void Map::DrawMap()
                 // if fMapTile is a float value (e.g. x.4) its an autotile
                 if ((fMapTile / (int)fMapTile) > 1)
                 {
-                    if (const TextureSource *pTexture = pTextureMgr->GetTextureSource((UINT)fMapTile))
+                    if (const TextureSource *pTexture = pTextureMgr->GetTextureSource((uint32)fMapTile))
                     {
                         if (pTexture->m_pTexture)
                         {
@@ -284,7 +284,7 @@ void Map::DrawMap()
                             else if (iAutoTile % 10 > 0)
                             {
                                 D3DXVECTOR3 vPosTemp;
-                                UINT iCount = 1;
+                                uint32 iCount = 1;
                                 for (int i = 0; i < 2; i++)
                                 {
                                     for (int j = 0; j < 2; j++)
@@ -383,7 +383,7 @@ void Map::DrawMap()
                 }
                 else    // normal map tile
                 {
-                    if (const TextureSource *pTexture = pTextureMgr->GetTextureSource((UINT)fMapTile))
+                    if (const TextureSource *pTexture = pTextureMgr->GetTextureSource((uint32)fMapTile))
                     {
                         if (pTexture->m_pTexture)   
                             pSprite->Draw(pTexture->m_pTexture, NULL, NULL, &D3DXVECTOR3((float)MapPosition.x, (float)MapPosition.y, 0), GetColor());
@@ -423,7 +423,7 @@ void Map::AddLayer(Layer *pLayer)
     m_lLayers.push_back(pLayer);
 }
 
-void Map::EraseLayer(UINT uiLayerNr)
+void Map::EraseLayer(uint32 uiLayerNr)
 {
     if (m_lLayers.empty() || uiLayerNr > m_lLayers.size() -1)
         return;
@@ -461,7 +461,7 @@ void Map::ClearAllLayer()
     m_WorldObjectLIST.clear();
 }
 
-Layer* Map::GetLayerAtNr(UINT uiLayerNr)
+Layer* Map::GetLayerAtNr(uint32 uiLayerNr)
 {
     if (m_lLayers.empty() || uiLayerNr > m_lLayers.size() -1)
         return NULL;
@@ -469,7 +469,7 @@ Layer* Map::GetLayerAtNr(UINT uiLayerNr)
     return m_lLayers.at(uiLayerNr);
 }
 
-void Map::UpdateMap(const ULONGLONG uiCurTime, const UINT uiDiff)
+void Map::UpdateMap(const ULONGLONG uiCurTime, const uint32 uiDiff)
 {
     // iterate through layerlist
     for (LayerList::iterator itr = m_lLayers.begin(); itr != m_lLayers.end(); ++itr)
@@ -479,7 +479,7 @@ void Map::UpdateMap(const ULONGLONG uiCurTime, const UINT uiDiff)
     }
 }
 
-bool Map::IsPassable(UINT XPos, UINT YPos, PassabilityFlag MoveDirection)
+bool Map::IsPassable(uint32 XPos, uint32 YPos, PassabilityFlag MoveDirection)
 {
     if (m_MapInfo.m_uiX <= XPos || m_MapInfo.m_uiY <= YPos)
         return false;
@@ -489,9 +489,9 @@ bool Map::IsPassable(UINT XPos, UINT YPos, PassabilityFlag MoveDirection)
         return false;
 
     // iterate through layers
-    for (UINT i = 0; i < m_v2MapTiles.size(); i++)
+    for (uint32 i = 0; i < m_v2MapTiles.size(); i++)
     {
-        if (const TextureSource *pTexture = pTextureMgr->GetTextureSource((UINT)m_v2MapTiles.at(i).at(YPos).at(XPos)))
+        if (const TextureSource *pTexture = pTextureMgr->GetTextureSource((uint32)m_v2MapTiles.at(i).at(YPos).at(XPos)))
         {
             switch(pTexture->m_TextureInfo.m_uiSpriteType)
             {
@@ -509,16 +509,16 @@ bool Map::IsPassable(UINT XPos, UINT YPos, PassabilityFlag MoveDirection)
     return true;
 }
 
-Point<UINT> Map::CalcPixToTile(Point<UINT> uiPos)
+Point<uint32> Map::CalcPixToTile(Point<uint32> uiPos)
 {
-    Point<UINT> uiTileSize;
+    Point<uint32> uiTileSize;
     if (CGame *pGame = CGame::Get())
     {
         if (GameInfo *pInfo = pGame->GetGameInfo())
             uiTileSize = pInfo->GetMapTileSize();
     }
 
-    Point<UINT> uiTile = uiPos;
+    Point<uint32> uiTile = uiPos;
     if (uiTileSize.x != 0)
         uiTile.x = uiPos.x / uiTileSize.x;
 
@@ -531,7 +531,7 @@ Point<UINT> Map::CalcPixToTile(Point<UINT> uiPos)
 /*#####
 ## MapLoadThread
 #####*/
-MapLoadThread::MapLoadThread(std::string sMapName, MapInfo &MapInfo, std::vector<MapTiles> &MapTiles, LayerList &LayerList, std::map<UINT, WorldObject*> &objectList, ScriptPointLIST &scriptPoints)
+MapLoadThread::MapLoadThread(std::string sMapName, MapInfo &MapInfo, std::vector<MapTiles> &MapTiles, LayerList &LayerList, std::map<uint32, WorldObject*> &objectList, ScriptPointLIST &scriptPoints)
     : m_MapInfo(MapInfo), m_v2MapTiles(MapTiles), m_lLayers(LayerList), m_ScriptPoints(scriptPoints), m_WorldObjectLIST(objectList), ActiveObject()
 {
     m_MapLoadState      = MAP_STATE_NONE;
@@ -756,7 +756,7 @@ MapLoadResult MapLoadThread::LoadTiles(std::string *sMapData)
     }
 
     // read out layers
-    for (UINT i = 0; i < TileByRowFromFileList.size(); i++)
+    for (uint32 i = 0; i < TileByRowFromFileList.size(); i++)
     {
         MapTiles tempTiles;
         // if tiles are in string, read it out and store as readable vector.
@@ -921,19 +921,19 @@ MapLoadResult MapLoadThread::LoadLayerAndObjects(std::string *sMapData)
     // iterate through vector and create layer + objects
     if (!vLayerAndObjects.empty())
     {
-        for (UINT i = 0; i < vLayerAndObjects.size(); i++)
+        for (uint32 i = 0; i < vLayerAndObjects.size(); i++)
         {
             if (vLayerAndObjects.at(i).empty())
                 continue;
             
             ObjectLayer *pLayer = new ObjectLayer();
-            for (UINT j = 0; j < vLayerAndObjects.at(i).size(); j++)
+            for (uint32 j = 0; j < vLayerAndObjects.at(i).size(); j++)
             {
                 if (!vLayerAndObjects.at(i).at(j))
                     continue;
 
                 // continue if there is the same guid set as we need now
-                std::map<UINT, WorldObject*>::iterator itr = m_WorldObjectLIST.find(vLayerAndObjects.at(i).at(j)->m_GUID);
+                std::map<uint32, WorldObject*>::iterator itr = m_WorldObjectLIST.find(vLayerAndObjects.at(i).at(j)->m_GUID);
                 if (itr != m_WorldObjectLIST.end())
                     continue;
 
@@ -961,7 +961,7 @@ MapLoadResult MapLoadThread::LoadLayerAndObjects(std::string *sMapData)
                     {
                         /*pObject->SetTextureSource(t_pDB->GetSpritePrototype(pObject->GetObjectInfo()->m_uiTextureID));*/
 
-                        m_WorldObjectLIST.insert(std::make_pair<UINT, WorldObject*>(vLayerAndObjects.at(i).at(j)->m_GUID, pObject));
+                        m_WorldObjectLIST.insert(std::make_pair<uint32, WorldObject*>(vLayerAndObjects.at(i).at(j)->m_GUID, pObject));
                         pLayer->AddWorldObject(pObject);
                     }
                 }

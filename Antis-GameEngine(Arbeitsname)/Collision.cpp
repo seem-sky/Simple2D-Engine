@@ -23,12 +23,12 @@ bool Collision::CheckTileCollision(Unit* pWho, Point<int> oldPos, Point<int> new
     else if (oldPos.y > newPos.y)
         moveFlag = PASSABLE_UP;
 
-    Point<UINT> tileSize;
+    Point<uint32> tileSize;
     if (CGame *pGame = CGame::Get())
         if (GameInfo *pInfo = pGame->GetGameInfo())
             tileSize = pInfo->GetMapTileSize();
 
-    UINT XSize = 0, YSize = 0;
+    uint32 XSize = 0, YSize = 0;
     pWho->GetObjectSize(XSize, YSize);
     RECT boundingRECT = {0,0,0,0};
     pWho->GetBoundingRect(boundingRECT);
@@ -73,9 +73,9 @@ bool Collision::CheckTileCollision(Unit* pWho, Point<int> oldPos, Point<int> new
                     YMapPos *= -1;
 
                 bool bBreak = false;
-                for (UINT i = (YMapPos  + boundingRECT.top) / tileSize.y; i <= (YMapPos + boundingRECT.bottom -1) / tileSize.y; i++)
+                for (uint32 i = (YMapPos  + boundingRECT.top) / tileSize.y; i <= (YMapPos + boundingRECT.bottom -1) / tileSize.y; i++)
                 {
-                    if (!pMap->IsPassable((UINT)j , i, moveFlag))
+                    if (!pMap->IsPassable((uint32)j , i, moveFlag))
                     {
                         bBreak = true;
                         result.x = j * tileSize.x - XMapPos;
@@ -125,9 +125,9 @@ bool Collision::CheckTileCollision(Unit* pWho, Point<int> oldPos, Point<int> new
                     XMapPos *= -1;
 
                 bool bBreak = false;
-                for (UINT i = (XMapPos + boundingRECT.left) / tileSize.x; i <= (XMapPos + boundingRECT.right-1) / tileSize.x; i++)
+                for (uint32 i = (XMapPos + boundingRECT.left) / tileSize.x; i <= (XMapPos + boundingRECT.right-1) / tileSize.x; i++)
                 {
-                    if (!pMap->IsPassable(i, (UINT)j, moveFlag))
+                    if (!pMap->IsPassable(i, (uint32)j, moveFlag))
                     {
                         bBreak = true;
                         result.y = j * tileSize.y - YMapPos;
@@ -201,7 +201,7 @@ bool Collision::CheckObjectCollision(Unit* pWho, Point<int> oldPos, Point<int> n
         moveFlag = PASSABLE_UP;
 
     // get bounding rect size
-    UINT XSize = 0, YSize = 0;
+    uint32 XSize = 0, YSize = 0;
     pWho->GetObjectSize(XSize, YSize);
     RECT boundingRECT = {0,0,0,0};
     pWho->GetBoundingRect(boundingRECT);

@@ -29,7 +29,7 @@ GAMEINIT_STATE CGame::Initialize(HINSTANCE hInstance, HWND hWnd)
             return GAMEINIT_STATE_FAILED;
         }
 
-        Point<UINT> ScreenSize = GetGameInfo()->GetWindowSize();
+        Point<uint32> ScreenSize = GetGameInfo()->GetWindowSize();
         
         if (!m_pDirect3D->Initialize(hWnd, ScreenSize.x, ScreenSize.y, GetGameInfo()->IsWindowed()))
         {
@@ -100,7 +100,7 @@ GAMEINIT_STATE CGame::Initialize(HINSTANCE hInstance, HWND hWnd)
     }
 }
 
-bool CGame::Run(const ULONGLONG CurTime, const UINT CurElapsedTime)
+bool CGame::Run(const ULONGLONG CurTime, const uint32 CurElapsedTime)
 {
     // do game events
     for (EventLIST::iterator t_EventItr = m_GameEvents.begin(); t_EventItr != m_GameEvents.end(); ++t_EventItr)
@@ -178,7 +178,7 @@ HRESULT CGame::Draw()
             // if pause is pressed, show a font on screen
             if (IsGamePaused())
             {
-                Point<UINT> WindowSize = m_GameInfo.GetWindowSize();
+                Point<uint32> WindowSize = m_GameInfo.GetWindowSize();
                 RECT rect = { 0, WindowSize.y / 2 -74, WindowSize.x, WindowSize.y };
                 DirectFont::DrawFont("Pause", rect, D3DXCOLOR(0.25f, 0.4f, 1, 1), 74, 1000, "Comic Sans MS");
             }
@@ -222,7 +222,7 @@ HRESULT CGame::ResetD3DXDevice(HWND hWnd)
     if (!m_pDirect3D)
         return S_FALSE;
 
-    Point<UINT> windowSize = m_GameInfo.GetWindowSize();
+    Point<uint32> windowSize = m_GameInfo.GetWindowSize();
 
     return m_pDirect3D->ResetDevice(hWnd, windowSize.x, windowSize.y, m_GameInfo.IsWindowed());
 }
@@ -254,17 +254,17 @@ TextBox* CGame::ShowTextbox(TextBox *pBox)
     return pBox;
 }
 
-TextBox* CGame::ShowTextbox(std::string sMsg, UINT uiTextureID, Point<int> pos, Point<UINT> size, USHORT uiFontSize, USHORT uiBold, bool bItalic,
+TextBox* CGame::ShowTextbox(std::string sMsg, uint32 uiTextureID, Point<int> pos, Point<uint32> size, USHORT uiFontSize, USHORT uiBold, bool bItalic,
                             std::string sFont, ShowLetterTime showLetter, bool ScrollAble)
 {
     return ShowTextbox(new TextBox(sMsg, pos, size, uiTextureID, uiFontSize, uiBold, bItalic, sFont, showLetter, ScrollAble));
 }
 
-TextBox* CGame::ShowTextbox(std::string sMsg, UINT uiTextureID, Point<int> pos, USHORT uiFontSize, USHORT uiBold, bool bItalic,
+TextBox* CGame::ShowTextbox(std::string sMsg, uint32 uiTextureID, Point<int> pos, USHORT uiFontSize, USHORT uiBold, bool bItalic,
                             std::string sFont, ShowLetterTime showLetter, bool ScrollAble)
 {
-    Point<UINT> ScreenSize = m_GameInfo.GetWindowSize();
-    Point<UINT> size(ScreenSize.x - (2*pos.x), ScreenSize.y - (pos.y + pos.x));
+    Point<uint32> ScreenSize = m_GameInfo.GetWindowSize();
+    Point<uint32> size(ScreenSize.x - (2*pos.x), ScreenSize.y - (pos.y + pos.x));
     return ShowTextbox(sMsg, uiTextureID, pos, size, uiFontSize, uiBold, bItalic, sFont, showLetter, ScrollAble);
 }
 

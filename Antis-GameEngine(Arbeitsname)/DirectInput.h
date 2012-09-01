@@ -15,7 +15,7 @@ public:
 
     BOOL Init(HINSTANCE hInstance, HWND hWnd);
 
-    bool GetKeyStateKeyboard(UINT Key);
+    bool GetKeyStateKeyboard(uint32 Key);
     void ClearKeyStateKeyboard();
 
     bool GetInput();

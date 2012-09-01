@@ -3,15 +3,16 @@
 
 #include <d3dx9.h>
 #include <string>
+#include "Global.h"
 
 class DirectFont
 {
 public:
-    DirectFont(UINT uiTextSize, UINT uiBoldness, std::string font, bool bItalic);
+    DirectFont(uint32 uiTextSize, uint32 uiBoldness, std::string font, bool bItalic);
     ~DirectFont();
 
     // draw string
-    static void DrawFont(std::string sText, RECT &pos, D3DXCOLOR color, UINT uiTextSize, UINT uiBoldness,
+    static void DrawFont(std::string sText, RECT &pos, D3DXCOLOR color, uint32 uiTextSize, uint32 uiBoldness,
         std::string font, DWORD format = DT_CENTER, bool bItalic = false, LPD3DXSPRITE pSprite = NULL);
 
     void DrawFont(std::string sText, RECT &pos, D3DXCOLOR color, LPD3DXSPRITE pSprite = NULL, DWORD format = DT_CENTER);

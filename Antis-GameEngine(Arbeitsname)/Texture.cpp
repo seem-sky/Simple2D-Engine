@@ -4,7 +4,7 @@
 /*#####
 # TextureSource
 #####*/
-void TextureSource::GetTextureSize(UINT &XSize, UINT &YSize)
+void TextureSource::GetTextureSize(uint32 &XSize, uint32 &YSize)
 {
     if (!m_pTexture)
         return;
@@ -15,7 +15,7 @@ void TextureSource::GetTextureSize(UINT &XSize, UINT &YSize)
     YSize = desc.Height;
 }
 
-void TextureSource::GetShownSpriteSize(UINT &XSize, UINT &YSize)
+void TextureSource::GetShownSpriteSize(uint32 &XSize, uint32 &YSize)
 {
     if (!m_pTexture)
         return;
@@ -57,7 +57,7 @@ void TextureMgr::ClearTextureList()
     BASIC_LOG(m_sLogLocationName + "Clear Texture Manager.");
 }
 
-TextureSource* TextureMgr::AddTextureSource(UINT uiID)
+TextureSource* TextureMgr::AddTextureSource(uint32 uiID)
 {
     if (ResourceMgr *t_pResMgr = ResourceMgr::Get())
     {
@@ -69,7 +69,7 @@ TextureSource* TextureMgr::AddTextureSource(UINT uiID)
             //    TextureSource *t_pTexture   = new TextureSource();
             //    t_pTexture->m_TextureInfo   = *t_pProto;
             //    t_pTexture->m_pTexture      = t_pResMgr->GetTexture(t_pDB->GetSpritePath(t_pProto->m_uiSpriteType), t_pProto);
-            //    m_TextureList.insert(std::make_pair<UINT, TextureSource*>(t_pTexture->m_TextureInfo.m_uiID, t_pTexture));
+            //    m_TextureList.insert(std::make_pair<uint32, TextureSource*>(t_pTexture->m_TextureInfo.m_uiID, t_pTexture));
             //    return t_pTexture;
             //}
         }

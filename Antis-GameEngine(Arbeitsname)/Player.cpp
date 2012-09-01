@@ -26,7 +26,7 @@ Player::~Player(void)
     }
 }
 
-void Player::UpdatePlayer(const ULONGLONG CurTime, const UINT CurElapsedTime)
+void Player::UpdatePlayer(const ULONGLONG CurTime, const uint32 CurElapsedTime)
 {
     Point<int> x = GetControledUnit()->GetPosition();
     // iterate through stored keys
@@ -71,9 +71,9 @@ void Player::SetControledUnit(Unit *pWho)
         {
             if (GameInfo *pInfo = pGame->GetGameInfo())
             {
-                Point<UINT> ScreenSize = pInfo->GetWindowSize();
+                Point<uint32> ScreenSize = pInfo->GetWindowSize();
                 Point<int> UnitPos = pWho->GetPosition();
-                Point<UINT> UnitSize;
+                Point<uint32> UnitSize;
                 pWho->GetObjectSize(UnitSize.x, UnitSize.y);
                 Point<int> MapPos;
                 if (Map *pMap = pWho->GetMap())
@@ -89,7 +89,7 @@ void Player::SetControledUnit(Unit *pWho)
         ERROR_LOG(m_sLogLocationName + "Unable to change controle. Object is not valid");
 }
 
-void Player::AddKeyAction(UINT uiKey, UINT actionID, bool press)
+void Player::AddKeyAction(uint32 uiKey, uint32 actionID, bool press)
 {
     PlayerKeyAction *pAction = new PlayerKeyAction();
     pAction->m_uiKey = uiKey;
@@ -231,7 +231,7 @@ void Player::DoActionForKey(PlayerKeyAction *action, const ULONGLONG CurTime)
     }
 }
 
-void Player::MovePlayer(int XMove, int YMove, UINT uiMoveMsec)
+void Player::MovePlayer(int XMove, int YMove, uint32 uiMoveMsec)
 {
     if (m_pControledUnit && !m_pControledUnit->IsMoving())
     {
@@ -352,7 +352,7 @@ bool Player::CanUseObject(WorldObject *pWho)
     m_pControledUnit->GetBoundingRect(objBounding);
 
     Point<int> whoPos = pWho->GetPosition();
-    UINT whoXSize = 0, whoYSize = 0;
+    uint32 whoXSize = 0, whoYSize = 0;
     RECT whoBounding = { 0, 0, 0, 0 };
     pWho->GetBoundingRect(whoBounding);
 

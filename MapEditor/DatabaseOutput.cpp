@@ -27,20 +27,20 @@ namespace DATABASE
         SpriteList::iterator t_TypeItr = m_ChangedSprites.find(p_sType);
         if (t_TypeItr == m_ChangedSprites.end())
         {
-            std::map<UINT, SpritePrototype> t_NewMap;
+            std::map<uint32, SpritePrototype> t_NewMap;
             m_ChangedSprites.insert(std::make_pair(p_sType, t_NewMap));
             t_TypeItr = m_ChangedSprites.find(p_sType);
         }
 
         // find prototype and overwrite it, or create it
-        std::map<UINT, SpritePrototype>::iterator t_SpriteItr = t_TypeItr->second.find(p_ChangedProto.m_uiID);
+        std::map<uint32, SpritePrototype>::iterator t_SpriteItr = t_TypeItr->second.find(p_ChangedProto.m_uiID);
         if (t_SpriteItr == t_TypeItr->second.end())
             t_TypeItr->second.insert(std::make_pair(p_ChangedProto.m_uiID, p_ChangedProto));
         else
             t_SpriteItr->second = p_ChangedProto;
     }
 
-    SpritePrototype* DatabaseOutput::GetSpritePrototype(std::string p_sType, UINT p_uiID)
+    SpritePrototype* DatabaseOutput::GetSpritePrototype(std::string p_sType, uint32 p_uiID)
     {
         // find type
         SpriteList::iterator t_TypeItr = m_ChangedSprites.find(p_sType);
@@ -48,7 +48,7 @@ namespace DATABASE
             return NULL;
 
         // find sprite
-        std::map<UINT, SpritePrototype>::iterator t_SpriteItr = t_TypeItr->second.find(p_uiID);
+        std::map<uint32, SpritePrototype>::iterator t_SpriteItr = t_TypeItr->second.find(p_uiID);
         if (t_SpriteItr == t_TypeItr->second.end())
             return NULL;
 
@@ -62,7 +62,7 @@ namespace DATABASE
             t_pProto->m_uiID = 0;
     }
 
-    bool DatabaseOutput::IsSpritePrototypeDeleted(std::string p_sType, UINT p_uiID)
+    bool DatabaseOutput::IsSpritePrototypeDeleted(std::string p_sType, uint32 p_uiID)
     {
         if (SpritePrototype *t_pProto = GetSpritePrototype(p_sType, p_uiID))
             if (t_pProto->m_uiID == 0)
@@ -95,7 +95,7 @@ namespace DATABASE
                     }
 
                     // iterate through prototypes
-                    for (std::map<UINT, SpritePrototype>::iterator t_SpriteItr = t_TypeItr->second.begin(); t_SpriteItr != t_TypeItr->second.end(); ++t_SpriteItr)
+                    for (std::map<uint32, SpritePrototype>::iterator t_SpriteItr = t_TypeItr->second.begin(); t_SpriteItr != t_TypeItr->second.end(); ++t_SpriteItr)
                     {
                         XML_WriteData t_NewElement;
                         // parse added or changed sprites
@@ -107,9 +107,7 @@ namespace DATABASE
                         // deleted sprite
                         else
                         {
-                            CComVariant t_Value;
-                            t_Value.uintVal = t_SpriteItr->first;
-                            t_NewElement.AddAttribute("ID", t_Value);
+                            t_NewElement.AddAttribute("ID", t_SpriteItr->first);
                             t_NewElement.SetWriteState(XML_WRITE_DELETE);
                             p_pSpriteType->AddChild("Sprite", t_NewElement);
                         }
@@ -129,7 +127,7 @@ namespace DATABASE
             if (t_pObjDB)
             {
                 // iterate through prototypes
-                for (std::map<UINT, ObjectPrototype>::iterator t_ObjectItr = m_ChangedObjects.begin(); t_ObjectItr != m_ChangedObjects.end(); ++t_ObjectItr)
+                for (std::map<uint32, ObjectPrototype>::iterator t_ObjectItr = m_ChangedObjects.begin(); t_ObjectItr != m_ChangedObjects.end(); ++t_ObjectItr)
                 {
                     XML_WriteData t_NewElement;
                     // parse added or changed sprites
@@ -141,9 +139,7 @@ namespace DATABASE
                     // deleted sprite
                     else
                     {
-                        CComVariant t_Value;
-                        t_Value.uintVal = t_ObjectItr->first;
-                        t_NewElement.AddAttribute("ID", t_Value);
+                        t_NewElement.AddAttribute("ID", t_ObjectItr->first);
                         t_NewElement.SetWriteState(XML_WRITE_DELETE);
                         t_pObjDB->AddChild("Object", t_NewElement);
                     }
@@ -309,7 +305,7 @@ namespace DATABASE
         p_pElement->AddAttribute("Type", p_pProto->m_uiSpriteType);
 
         // transparent_color
-        p_pElement->AddAttribute("transparent_color", (LPCOLESTR)_bstr_t(p_pProto->m_sTransparentColor.c_str()));
+        p_pElement->AddAttribute("transparent_color", (LPCOLESTR)_bstr_t(p_pProto->m_sTransparencyColor.c_str()));
 
         // type specific stuff
         switch (p_pProto->m_uiSpriteType)
@@ -322,7 +318,7 @@ namespace DATABASE
             p_pElement->AddAttribute("terraintype", p_pProto->Type.Tile.m_uiTerrainType);
 
             // is autotile
-            p_pElement->AddAttribute("auto_tile", (UINT)p_pProto->Type.Tile.m_bAutotile);
+            p_pElement->AddAttribute("auto_tile", (uint32)p_pProto->Type.Tile.m_bAutotile);
         	break;
 
         case SPRITE_TYPE_ANIMATED_OBJECT:
@@ -349,15 +345,15 @@ namespace DATABASE
         return true;
     }
 
-    void DatabaseOutput::GetTextureNames(std::string p_sType, std::map<UINT, std::string> &p_lTextureNames)
+    void DatabaseOutput::GetTextureNames(std::string p_sType, std::map<uint32, std::string> &p_lTextureNames)
     {
         // find type
         SpriteList::iterator t_TypeItr = m_ChangedSprites.find(p_sType);
         if (t_TypeItr == m_ChangedSprites.end())
             return;
 
-        std::map<UINT, std::string>::iterator t_NameItr;
-        for (std::map<UINT, SpritePrototype>::iterator t_SpriteItr = t_TypeItr->second.begin(); t_SpriteItr != t_TypeItr->second.end(); ++t_SpriteItr)
+        std::map<uint32, std::string>::iterator t_NameItr;
+        for (std::map<uint32, SpritePrototype>::iterator t_SpriteItr = t_TypeItr->second.begin(); t_SpriteItr != t_TypeItr->second.end(); ++t_SpriteItr)
         {
             t_NameItr = p_lTextureNames.find(t_SpriteItr->first);
             if (t_NameItr == p_lTextureNames.end())
@@ -389,7 +385,7 @@ namespace DATABASE
         return t_State;
     }
 
-    ObjectPrototype* DatabaseOutput::GetObjectPrototype(unsigned int p_uiID)
+    ObjectPrototype* DatabaseOutput::GetObjectPrototype(uint32 p_uiID)
     {
         ObjectList::iterator t_ObjItr = m_ChangedObjects.find(p_uiID);
         if (t_ObjItr != m_ChangedObjects.end())
@@ -415,7 +411,7 @@ namespace DATABASE
             t_pProto->m_uiID = 0;
     }
 
-    bool DatabaseOutput::IsObjectPrototypeDeleted(UINT p_uiID)
+    bool DatabaseOutput::IsObjectPrototypeDeleted(uint32 p_uiID)
     {
         if (ObjectPrototype *t_pProto = GetObjectPrototype(p_uiID))
             if (t_pProto->m_uiID == 0)
@@ -424,9 +420,9 @@ namespace DATABASE
         return false;
     }
 
-    void DatabaseOutput::GetObjectNames(std::map<UINT, std::string> &p_lObjectNames)
+    void DatabaseOutput::GetObjectNames(std::map<uint32, std::string> &p_lObjectNames)
     {
-        std::map<UINT, std::string>::iterator t_NameItr;
+        std::map<uint32, std::string>::iterator t_NameItr;
         for (ObjectList::iterator t_ObjectItr = m_ChangedObjects.begin(); t_ObjectItr != m_ChangedObjects.end(); ++t_ObjectItr)
         {
             t_NameItr = p_lObjectNames.find(t_ObjectItr->first);
@@ -438,7 +434,7 @@ namespace DATABASE
         }
     }
 
-    UINT DatabaseOutput::AddNewCustomObjectVariable(UINT p_uiObjectID, CUSTOM_VARIABLE_TYPE p_Type)
+    uint32 DatabaseOutput::AddNewCustomObjectVariable(uint32 p_uiObjectID, CUSTOM_VARIABLE_TYPE p_Type)
     {
         ObjectPrototype t_Proto;
         if (GetObjectPrototype(p_uiObjectID))
@@ -450,7 +446,7 @@ namespace DATABASE
                     t_Proto = *t_pDB->GetObjectPrototype(p_uiObjectID);
         }
 
-        UINT t_uiIDCheck = 1;
+        uint32 t_uiIDCheck = 1;
         bool t_bSuccess = false;
         switch(p_Type)
         {
@@ -587,7 +583,7 @@ namespace DATABASE
         return 0;
     }
 
-    bool DatabaseOutput::DeleteCustomObjectVariable(UINT p_uiObjectID, CUSTOM_VARIABLE_TYPE p_Type, UINT p_uiVariableID)
+    bool DatabaseOutput::DeleteCustomObjectVariable(uint32 p_uiObjectID, CUSTOM_VARIABLE_TYPE p_Type, uint32 p_uiVariableID)
     {
         ObjectPrototype t_Proto;
         if (GetObjectPrototype(p_uiObjectID))

@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ObjectDatabase</class>
+ <widget class="QWidget" name="ObjectDatabase">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>801</width>
+    <height>368</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>ObjectDatabase</string>
+  </property>
+  <widget class="QLabel" name="m_pTextureView">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>220</y>
+     <width>131</width>
+     <height>131</height>
+    </rect>
+   </property>
+   <property name="autoFillBackground">
+    <bool>true</bool>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::Box</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Plain</enum>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_16">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>10</y>
+     <width>151</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>custom variables:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_31">
+   <property name="geometry">
+    <rect>
+     <x>470</x>
+     <y>10</y>
+     <width>151</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>type specific stuff:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_18">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>160</y>
+     <width>101</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>Texture:</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="m_pTextureBox">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>190</y>
+     <width>131</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="insertPolicy">
+    <enum>QComboBox::InsertAlphabetically</enum>
+   </property>
+  </widget>
+  <widget class="QTabWidget" name="m_pType">
+   <property name="geometry">
+    <rect>
+     <x>470</x>
+     <y>40</y>
+     <width>311</width>
+     <height>491</height>
+    </rect>
+   </property>
+   <property name="tabPosition">
+    <enum>QTabWidget::East</enum>
+   </property>
+   <property name="currentIndex">
+    <number>1</number>
+   </property>
+   <widget class="QWidget" name="m_pObjectTab">
+    <attribute name="title">
+     <string>Map Object</string>
+    </attribute>
+   </widget>
+   <widget class="QWidget" name="m_pNPCTab">
+    <attribute name="title">
+     <string>NPC</string>
+    </attribute>
+    <widget class="QComboBox" name="m_pNPCAniFrequency">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>10</y>
+       <width>81</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="currentIndex">
+      <number>2</number>
+     </property>
+     <item>
+      <property name="text">
+       <string>very slow</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>slow</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>normal</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>fast</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>very fast</string>
+      </property>
+     </item>
+    </widget>
+    <widget class="QLabel" name="label_14">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>181</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>animation frequency:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_15">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>40</y>
+       <width>181</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>movement speed:</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="m_pNPCSpeed">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>40</y>
+       <width>81</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="currentIndex">
+      <number>2</number>
+     </property>
+     <item>
+      <property name="text">
+       <string>very slow</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>slow</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>normal</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>fast</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>very fast</string>
+      </property>
+     </item>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QPushButton" name="m_pEventEditorButton">
+   <property name="geometry">
+    <rect>
+     <x>180</x>
+     <y>200</y>
+     <width>251</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Open Event Editor</string>
+   </property>
+  </widget>
+  <widget class="QTabWidget" name="m_pCustomVariables">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>40</y>
+     <width>311</width>
+     <height>151</height>
+    </rect>
+   </property>
+   <property name="currentIndex">
+    <number>0</number>
+   </property>
+   <widget class="CustomVariableBoolPageWidget" name="m_pBools">
+    <attribute name="title">
+     <string>bool</string>
+    </attribute>
+   </widget>
+   <widget class="CustomVariableIntPageWidget" name="m_pInteger">
+    <attribute name="title">
+     <string>integer</string>
+    </attribute>
+   </widget>
+   <widget class="CustomVariableFloatPageWidget" name="m_pFloats">
+    <attribute name="title">
+     <string>float</string>
+    </attribute>
+   </widget>
+   <widget class="CustomVariableStringPageWidget" name="m_pStrings">
+    <attribute name="title">
+     <string>string</string>
+    </attribute>
+   </widget>
+  </widget>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>CustomVariableBoolPageWidget</class>
+   <extends>QWidget</extends>
+   <header>customvariableboolpagewidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CustomVariableIntPageWidget</class>
+   <extends>QWidget</extends>
+   <header>customvariableintpagewidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CustomVariableFloatPageWidget</class>
+   <extends>QWidget</extends>
+   <header>customvariablefloatpagewidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CustomVariableStringPageWidget</class>
+   <extends>QWidget</extends>
+   <header>customvariablestringpagewidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>m_pTextureBox</tabstop>
+  <tabstop>m_pType</tabstop>
+  <tabstop>m_pEventEditorButton</tabstop>
+  <tabstop>m_pCustomVariables</tabstop>
+  <tabstop>m_pNPCAniFrequency</tabstop>
+  <tabstop>m_pNPCSpeed</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

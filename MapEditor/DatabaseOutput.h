@@ -23,23 +23,23 @@ namespace DATABASE
         ~DatabaseOutput(void);
 
         void ClearOutput();
-        SpritePrototype* GetSpritePrototype(std::string p_sType, UINT p_uiID);
+        SpritePrototype* GetSpritePrototype(std::string p_sType, uint32 p_uiID);
         void ChangeSpritePrototype(std::string p_sType, SpritePrototype &p_ChangedProto);
         void DeleteSpritePrototype(std::string p_sType, SpritePrototype &p_DelProto);
-        bool IsSpritePrototypeDeleted(std::string p_sType, UINT p_uiID);
-        void GetTextureNames(std::string p_sType, std::map<UINT, std::string> &p_lTextureNames);
+        bool IsSpritePrototypeDeleted(std::string p_sType, uint32 p_uiID);
+        void GetTextureNames(std::string p_sType, std::map<uint32, std::string> &p_lTextureNames);
 
         /*#####
         # Objects
         #####*/
-        ObjectPrototype* GetObjectPrototype(UINT p_uiID);
+        ObjectPrototype* GetObjectPrototype(uint32 p_uiID);
         void ChangeObjectPrototype(ObjectPrototype &p_ChangedProto);
         void DeleteObjectPrototype(ObjectPrototype &p_DelProto);
-        bool IsObjectPrototypeDeleted(UINT p_uiID);
-        void GetObjectNames(std::map<UINT, std::string> &p_lObjectNames);
+        bool IsObjectPrototypeDeleted(uint32 p_uiID);
+        void GetObjectNames(std::map<uint32, std::string> &p_lObjectNames);
         // Objects - Custom Variables
-        UINT AddNewCustomObjectVariable(UINT p_uiObjectID, CUSTOM_VARIABLE_TYPE p_Type);
-        bool DeleteCustomObjectVariable(UINT p_uiObjectID, CUSTOM_VARIABLE_TYPE p_Type, UINT p_uiVariableID);
+        uint32 AddNewCustomObjectVariable(uint32 p_uiObjectID, CUSTOM_VARIABLE_TYPE p_Type);
+        bool DeleteCustomObjectVariable(uint32 p_uiObjectID, CUSTOM_VARIABLE_TYPE p_Type, uint32 p_uiVariableID);
 
         XML::XML_STATE GetDBState();
 

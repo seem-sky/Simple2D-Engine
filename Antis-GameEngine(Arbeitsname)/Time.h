@@ -14,7 +14,7 @@ public:
     // calculate time for next frame
     void NextFrame() { m_NextFrame = m_CurCount + m_Offset; }
     // returns current frame rate
-    unsigned int GetCurFrameRate() { return m_FrameRate; }
+    uint32 GetCurFrameRate() { return m_FrameRate; }
     void UpdateTime();
     // returns diff of the last frame
     LONGLONG GetTimeElapsed();

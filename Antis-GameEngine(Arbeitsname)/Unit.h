@@ -8,21 +8,21 @@
 class Unit : public WorldObject
 {
 public:
-    Unit(UINT uiGUID, Point<int> pos, DIRECTION dir = DIRECTION_DOWN, WALKMODE walkmode = WALKMODE_NONE, UnitAI *pAI = new UnitAI());
+    Unit(uint32 uiGUID, Point<int> pos, DIRECTION dir = DIRECTION_DOWN, WALKMODE walkmode = WALKMODE_NONE, UnitAI *pAI = new UnitAI());
     virtual ~Unit(void);
-    void Update(const ULONGLONG uiCurTime, const UINT uiDiff);
+    void Update(const ULONGLONG uiCurTime, const uint32 uiDiff);
 
     // Unit infos
     virtual void SetObjectInfo(const DATABASE::ObjectPrototype* pInfo);
 
     inline MovementGenerator* GetMovementGenerator() { return m_pMovement; }
-    inline UINT GetMovementSpeed() { return m_uiMovementSpeed; }
-    inline void SetMovementSpeed(UINT uiID) { SetMovementSpeed(WrapMovementSpeedID(uiID)); }
+    inline uint32 GetMovementSpeed() { return m_uiMovementSpeed; }
+    inline void SetMovementSpeed(uint32 uiID) { SetMovementSpeed(WrapMovementSpeedID(uiID)); }
     inline void SetMovementSpeed(MOVEMENT_SPEED speed) { m_uiMovementSpeed = speed; }
 
     inline WALKMODE GetWalkmode() { return m_Walkmode; }
 
-    void MovePosition(int XMove, int YMove, DIRECTION dir, UINT time = 0);
+    void MovePosition(int XMove, int YMove, DIRECTION dir, uint32 time = 0);
     inline bool IsMoving()
     {
         if (m_pMovement)
@@ -38,11 +38,11 @@ public:
     // sprite
     void SetTextureSource(const DATABASE::SpritePrototype *proto);
     virtual void DrawObject(LPD3DXSPRITE pSprite);
-    inline void SetTextureSrcRct(UINT uiSrcRct) { m_uiSpriteSector = uiSrcRct; }
-    inline UINT GetTextureSrcRct() { return m_uiSpriteSector; }
+    inline void SetTextureSrcRct(uint32 uiSrcRct) { m_uiSpriteSector = uiSrcRct; }
+    inline uint32 GetTextureSrcRct() { return m_uiSpriteSector; }
 
     // animation
-    void UpdateAnimation(const ULONGLONG uiCurTime, const UINT uiDiff);
+    void UpdateAnimation(const ULONGLONG uiCurTime, const uint32 uiDiff);
     void FacingObject(WorldObject *pWho);
     void SetToStartSector();
     virtual void SetAnimationTime(ANIMATION_TIME time) { m_uiAnimationTime = time; }
@@ -53,7 +53,7 @@ public:
 
         if (dir != DIRECTION_NONE)
         {
-            m_uiDirection = (UINT)dir;
+            m_uiDirection = (uint32)dir;
             m_uiSpriteSector = m_uiDirection * GetTextureSource()->m_TextureInfo.Type.AnimatedObject.m_uiSpritesX + 1;
         }
     }
@@ -75,8 +75,8 @@ public:
     }
 
 private:
-    UINT m_uiSpriteSector;
-    UINT m_uiDirection;
+    uint32 m_uiSpriteSector;
+    uint32 m_uiDirection;
     MovementGenerator *m_pMovement;
 
     // is player?
@@ -85,7 +85,7 @@ private:
     // animation direction
     bool m_bAnimationDirection;
     bool m_bAllTimeAnimation;
-    UINT m_uiAnimation_Timer;
+    uint32 m_uiAnimation_Timer;
     ANIMATION_TIME m_uiAnimationTime;
     MOVEMENT_SPEED m_uiMovementSpeed;
 

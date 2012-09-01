@@ -24,7 +24,7 @@ public:
     LAYER_TYPE GetLayerType() { return m_LayerType; }
 
     void DrawLayer();
-    virtual void UpdateLayer(const ULONGLONG uiCurTime, const UINT uiDiff) = 0;
+    virtual void UpdateLayer(const ULONGLONG uiCurTime, const uint32 uiDiff) = 0;
 
 protected:
     virtual void Draw() = 0;

@@ -23,32 +23,32 @@ typedef std::list<TextChoice> ChoiceList;
 class TextBox
 {
 public:
-    TextBox(std::string sMsg, Point<int> pos, Point<UINT> size, UINT uiTextureID, USHORT uiLetterSize, USHORT uiBold, bool bItalic, std::string sFont,
+    TextBox(std::string sMsg, Point<int> pos, Point<uint32> size, uint32 uiTextureID, USHORT uiLetterSize, USHORT uiBold, bool bItalic, std::string sFont,
                 ShowLetterTime showLetter = SHOW_LETTER_NORMAL, bool ScrollAble = true);
     virtual ~TextBox(void);
 
     inline Point<int> GetPosition() { return m_Position; }
     inline void SetPosition(Point<int> pos) { m_Position = pos; }
 
-    inline Point<UINT> GetSize() { return m_uiSize; }
-    inline UINT GetTexturBorderSize()
+    inline Point<uint32> GetSize() { return m_uiSize; }
+    inline uint32 GetTexturBorderSize()
     {
         if (m_pTexture)
         {
-            if (m_pTexture->m_TextureInfo.m_uiSpriteType == (UINT)DATABASE::SPRITE_TYPE_TEXTBOX)
+            if (m_pTexture->m_TextureInfo.m_uiSpriteType == (uint32)DATABASE::SPRITE_TYPE_TEXTBOX)
                 return m_pTexture->m_TextureInfo.Type.Textbox.m_uiBorderSize;
         }
         return 0;
     }
 
     void SetTexture(TextureSource* pTexture);
-    void SetTexture(UINT uiTextureID);
+    void SetTexture(uint32 uiTextureID);
 
     void DrawTextbox();
 
-    void Update(const ULONGLONG time, const UINT uiDiff);
+    void Update(const ULONGLONG time, const uint32 uiDiff);
 
-    void SetAnimation(Point<int> moveTo, UINT uiTimeInMsec);
+    void SetAnimation(Point<int> moveTo, uint32 uiTimeInMsec);
 
     bool AnimationFinished();
     bool AllLettersShown();
@@ -58,7 +58,7 @@ public:
     bool CanUsed();
     void Use();
 
-    void MoveTextToLine(UINT uiLine, UINT uiTimePerLine);
+    void MoveTextToLine(uint32 uiLine, uint32 uiTimePerLine);
 
 protected:
     virtual void DrawTextboxPic();
@@ -72,7 +72,7 @@ protected:
 
 private:
     Point<int> m_Position;
-    Point<UINT> m_uiSize;
+    Point<uint32> m_uiSize;
 
     ChoiceList m_ChoiceLIST;
 
@@ -87,28 +87,28 @@ private:
     // animation
     Point<int> m_MoveTo;
     Point<int> m_StartPos;
-    UINT m_uiAniTime;
-    UINT m_uiStartAniTime;
+    uint32 m_uiAniTime;
+    uint32 m_uiStartAniTime;
 
     // letter animation
-    UINT m_uiShownLetters;
+    uint32 m_uiShownLetters;
     ShowLetterTime m_LetterTimer;
-    UINT m_uiShownLetterTime;
+    uint32 m_uiShownLetterTime;
 
     // scrolling
     int m_MsgYPos;
     int m_NewMsgYPos;
     int m_StartMsgYPos;
-    UINT m_uiCurRow;
-    UINT m_uiCurRowShown;
-    UINT m_uiScrollTime;
-    UINT m_uiScroll_Timer;
+    uint32 m_uiCurRow;
+    uint32 m_uiCurRowShown;
+    uint32 m_uiScrollTime;
+    uint32 m_uiScroll_Timer;
     bool m_bIsScrolling;
 
     // page
-    UINT m_uiMaxRowsShown;
+    uint32 m_uiMaxRowsShown;
     bool m_bNextPage;
-    UINT m_uiCurPage;
+    uint32 m_uiCurPage;
     bool m_bOwnChoicePage;
 };
 #endif

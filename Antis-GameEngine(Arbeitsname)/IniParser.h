@@ -6,6 +6,7 @@
 #include <vector>
 #include <map>
 #include <windows.h>
+#include "Global.h"
 
 typedef std::multimap<std::string, std::string> DataMultimap;
 typedef std::map<std::string, DataMultimap> SectorData;
@@ -14,11 +15,11 @@ typedef std::vector<std::string> DataStrings;
 class IniParser
 {
 private:
-    SectorData ml_fileData;
+    SectorData m_lFileData;
 
 protected:
     // interpret file data
-    virtual void interpretFile(DataStrings *pl_data);
+    virtual void InterpretFile(DataStrings *pl_data);
 
 public:
     IniParser() { }
@@ -28,29 +29,29 @@ public:
     ## ini reader
     #####*/
     // open and read file
-    bool readFile(std::string ps_fileName);
+    bool ReadFile(std::string ps_fileName);
 
-    static inline void deleteStringFront(char* ps_sign, std::string &ps_data)
+    static inline void DeleteStringFront(char* ps_sign, std::string &ps_data)
     {
         ps_data = ps_data.substr(ps_data.find_first_not_of(ps_sign));
     }
 
-    static inline void deleteStringBack(char* ps_sign, std::string &ps_data)
+    static inline void DeleteStringBack(char* ps_sign, std::string &ps_data)
     {
         ps_data = ps_data.substr(0, ps_data.find_last_not_of(ps_sign)+1);
     }
 
-    std::string getString(std::string ps_key, std::string ps_sector, std::string ps_default = "");
-    void getAllStrings(std::string ps_key, std::string ps_sector, DataStrings &pl_data);
+    std::string GetString(std::string ps_key, std::string ps_sector, std::string ps_default = "");
+    void GetAllStrings(std::string ps_key, std::string ps_sector, DataStrings &pl_data);
 
-    int getInt(std::string ps_key, std::string ps_sector, int p_default = 0);
-    UINT getUINT(std::string ps_key, std::string ps_sector, UINT p_default = 0);
-    bool getBool(std::string ps_key, std::string ps_sector, bool p_default = false);
+    int GetInt(std::string ps_key, std::string ps_sector, int p_default = 0);
+    uint32 GetUInt(std::string ps_key, std::string ps_sector, uint32 p_default = 0);
+    bool GetBool(std::string ps_key, std::string ps_sector, bool p_default = false);
 
     /*#####
     ## ini writer
     #####*/
-    void addData(std::string sKey, std::string sSector, std::string sData);
-    void saveDataToFile(std::string sFileName);
+    void AddData(std::string sKey, std::string sSector, std::string sData);
+    void SaveDataToFile(std::string sFileName);
 };
 #endif

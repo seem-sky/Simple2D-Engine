@@ -11,7 +11,7 @@ CTime::CTime() : m_CurCount(0), m_NextFrame(0), m_FrameRate(0), m_Frames(0), m_T
     m_LastCount        += m_Offset;
 
     // init random
-    srand ((UINT)m_LastCount);
+    srand ((uint32)m_LastCount);
 }
 
 CTime::~CTime()

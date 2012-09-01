@@ -11,7 +11,7 @@ MovementGenerator::~MovementGenerator(void)
 {
 }
 
-void MovementGenerator::Move2D(int x, int y, UINT uiMSECTime, DIRECTION dir, bool Collision)
+void MovementGenerator::Move2D(int x, int y, uint32 uiMSECTime, DIRECTION dir, bool Collision)
 {
     sMoveCommand *pMove         = new sMoveCommand();
     pMove->m_bWithCollission    = Collision;
@@ -22,7 +22,7 @@ void MovementGenerator::Move2D(int x, int y, UINT uiMSECTime, DIRECTION dir, boo
     m_lMoveCommands.push_back(pMove);
 }
 
-void MovementGenerator::Move2DRandom(UINT uiRange, bool Collission)
+void MovementGenerator::Move2DRandom(uint32 uiRange, bool Collission)
 {
     USHORT randomMove = rand() % 4;
     USHORT uiSteps    = rand() % 8 + 4;
@@ -47,7 +47,7 @@ void MovementGenerator::Move2DRandom(UINT uiRange, bool Collission)
     }
 }
 
-bool MovementGenerator::UpdateMovement(const ULONGLONG uiCurTime, const UINT uiDiff)
+bool MovementGenerator::UpdateMovement(const ULONGLONG uiCurTime, const uint32 uiDiff)
 {
     if (!m_pObj)
         return false;
@@ -241,14 +241,14 @@ void MovementGenerator::CheckScriptPoint()
     if (!pMap)
         return;
 
-    UINT uiObjPosX = m_pObj->GetPositionX();
-    UINT uiObjPosY = m_pObj->GetPositionY();
+    uint32 uiObjPosX = m_pObj->GetPositionX();
+    uint32 uiObjPosY = m_pObj->GetPositionY();
 
     RECT boundingRect = { 0, 0, 0, 0 };
     m_pObj->GetBoundingRect(boundingRect);
 
     const ScriptPointLIST *pList = pMap->GetScriptPoints();
-    Point<UINT> PointPos, PointSize;
+    Point<uint32> PointPos, PointSize;
     for (ScriptPointLIST::const_iterator itr = pList->begin(); itr != pList->end(); ++itr)
     {
         if (!(*itr))
@@ -273,10 +273,10 @@ void MovementGenerator::CheckScriptPoint()
     }
 }
 
-void MovementGenerator::MovePointByPathfinder(Point<UINT> uiPoint)
+void MovementGenerator::MovePointByPathfinder(Point<uint32> uiPoint)
 {
     ClearMovement();
-    m_PathObj.GetValidPath(Point<UINT>((UINT)m_pObj->GetPositionX(), (UINT)m_pObj->GetPositionY()), uiPoint);
+    m_PathObj.GetValidPath(Point<uint32>((uint32)m_pObj->GetPositionX(), (uint32)m_pObj->GetPositionY()), uiPoint);
     // set all path commands as "MoveByPathfinder"
     for (MoveCommandList::iterator itr = m_lMoveCommands.begin(); itr != m_lMoveCommands.end(); ++itr)
     {

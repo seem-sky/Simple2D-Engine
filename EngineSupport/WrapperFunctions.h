@@ -13,7 +13,7 @@ enum ANIMATION_TIME
     ANIMATION_TIME_VERY_FAST    = 65,
 };
 
-static ANIMATION_TIME WrapAnimationTimeID(UINT aniID)
+static ANIMATION_TIME WrapAnimationTimeID(uint32 aniID)
 {
     switch(aniID)
     {
@@ -44,7 +44,7 @@ enum MOVEMENT_SPEED
     MOVEMENT_SPEED_VERY_FAST    = 16,
 };
 
-static MOVEMENT_SPEED WrapMovementSpeedID(UINT speedID)
+static MOVEMENT_SPEED WrapMovementSpeedID(uint32 speedID)
 {
     switch(speedID)
     {
@@ -72,7 +72,7 @@ enum ScriptPointType
     SCRIPT_POINT_TELEPORT,
 };
 
-static ScriptPointType WrapToScriptPointType(UINT uiType)
+static ScriptPointType WrapToScriptPointType(uint32 uiType)
 {
     switch(uiType)
     {
@@ -96,7 +96,7 @@ enum DIRECTION
     DIRECTION_NONE,
 };
 
-static DIRECTION WrapToDirection(UINT uiDir)
+static DIRECTION WrapToDirection(uint32 uiDir)
 {
     switch(uiDir)
     {
@@ -122,7 +122,7 @@ enum WALKMODE
     WALKMODE_RANDOM,
 };
 
-static WALKMODE WrapToWalkmode(UINT uiDir)
+static WALKMODE WrapToWalkmode(uint32 uiDir)
 {
     switch(uiDir)
     {
@@ -147,7 +147,7 @@ enum ShowLetterTime
     SHOW_LETTER_VERY_SLOW   = 240,
 };
 
-static ShowLetterTime WrapToShowLetterTime(UINT uiDir)
+static ShowLetterTime WrapToShowLetterTime(uint32 uiDir)
 {
     switch(uiDir)
     {

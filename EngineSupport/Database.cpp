@@ -25,7 +25,7 @@ namespace DATABASE
         m_SpritePaths.clear();
     }
 
-    const std::string Database::GetMapName(UINT p_uiID)
+    const std::string Database::GetMapName(uint32 p_uiID)
     {
         std::string t_sDir[] = {"MapDatabase"};
         std::list<std::string> t_DirList(t_sDir, t_sDir + sizeof(t_sDir) / sizeof(std::string));
@@ -175,7 +175,7 @@ namespace DATABASE
         return true;
     }
 
-    const ObjectPrototype* Database::GetObjectPrototype(UINT p_uiID)
+    const ObjectPrototype* Database::GetObjectPrototype(uint32 p_uiID)
     {
         ObjectList::const_iterator t_ObjItr = m_ObjectDB.find(p_uiID);
         if (t_ObjItr != m_ObjectDB.end())
@@ -433,12 +433,12 @@ namespace DATABASE
         return NULL;
     }
 
-    const SpritePrototype* Database::GetSpritePrototype(std::string p_sType, UINT p_uiID)
+    const SpritePrototype* Database::GetSpritePrototype(std::string p_sType, uint32 p_uiID)
     {
         SpriteList::iterator t_CacheItr = m_SpriteDB.find(p_sType);
         if (t_CacheItr != m_SpriteDB.end())
         {
-            std::map<UINT, SpritePrototype>::iterator t_SpriteItr = t_CacheItr->second.find(p_uiID);
+            std::map<uint32, SpritePrototype>::iterator t_SpriteItr = t_CacheItr->second.find(p_uiID);
             if (t_SpriteItr != t_CacheItr->second.end())
                 return &t_SpriteItr->second;
         }
@@ -476,7 +476,7 @@ namespace DATABASE
                         continue;
                     for (AttributeList::const_iterator t_AttrItr = t_pAttrList->begin(); t_AttrItr != t_pAttrList->end(); ++t_AttrItr)
                     {
-                        // check first for different variable types than UINT
+                        // check first for different variable types than uint32
                         if (t_AttrItr->first == "FileName")
                         {
                             t_proto.m_sFileName = bstr_t(t_AttrItr->second);
@@ -484,11 +484,11 @@ namespace DATABASE
                         }
                         else if (t_AttrItr->first == "transparent_color")
                         {
-                            t_proto.m_sTransparentColor = bstr_t(t_AttrItr->second);
+                            t_proto.m_sTransparencyColor = bstr_t(t_AttrItr->second);
                             continue;
                         }
 
-                        // check the UINT variables
+                        // check the uint32 variables
                         if (FAILED(t_Value.ChangeType(VT_UINT, &t_AttrItr->second)))
                             continue;
 
@@ -624,7 +624,7 @@ namespace DATABASE
 
                     if (m_SpriteDB.find(p_sType) == m_SpriteDB.end())
                     {
-                        std::map<UINT, SpritePrototype> t_Map;
+                        std::map<uint32, SpritePrototype> t_Map;
                         m_SpriteDB.insert(std::make_pair(p_sType, t_Map));
                     }
 
@@ -652,7 +652,7 @@ namespace DATABASE
             if (!t_pAttrList)
                 continue;
 
-            UINT t_uiID = 0;
+            uint32 t_uiID = 0;
             std::string t_sPath;
             for (AttributeList::const_iterator t_AttrItr = t_pAttrList->begin(); t_AttrItr != t_pAttrList->end(); ++t_AttrItr)
             {
@@ -672,16 +672,16 @@ namespace DATABASE
         }
     }
 
-    const std::string Database::GetSpritePath(UINT p_uiID)
+    const std::string Database::GetSpritePath(uint32 p_uiID)
     {
-        std::map<UINT, std::string>::iterator t_itr = m_SpritePaths.find(p_uiID);
+        std::map<uint32, std::string>::iterator t_itr = m_SpritePaths.find(p_uiID);
         if (t_itr == m_SpritePaths.end())
             return "";
 
         return t_itr->second;
     }
 
-    void Database::GetTextureNames(std::string p_sType, std::map<UINT, std::string> &p_lTextureNames)
+    void Database::GetTextureNames(std::string p_sType, std::map<uint32, std::string> &p_lTextureNames)
     {
         std::string t_sDir[] = {"SpriteDatabase", p_sType};
         std::list<std::string> t_DirList(t_sDir, t_sDir + sizeof(t_sDir) / sizeof(std::string));
@@ -710,12 +710,12 @@ namespace DATABASE
         }
     }
 
-    bool Database::HasSprite(std::string p_sType, UINT p_uiID)
+    bool Database::HasSprite(std::string p_sType, uint32 p_uiID)
     {
         SpriteList::iterator t_CacheItr = m_SpriteDB.find(p_sType);
         if (t_CacheItr != m_SpriteDB.end())
         {
-            std::map<UINT, SpritePrototype>::iterator t_SpriteItr = t_CacheItr->second.find(p_uiID);
+            std::map<uint32, SpritePrototype>::iterator t_SpriteItr = t_CacheItr->second.find(p_uiID);
             if (t_SpriteItr != t_CacheItr->second.end())
                 return true;
         }
@@ -742,7 +742,7 @@ namespace DATABASE
         return false;
     }
 
-    void Database::GetObjectNames(std::map<UINT, std::string> &p_lObjectNames)
+    void Database::GetObjectNames(std::map<uint32, std::string> &p_lObjectNames)
     {
         std::string t_sDir[] = {"ObjectDatabase"};
         std::list<std::string> t_DirList(t_sDir, t_sDir + sizeof(t_sDir) / sizeof(std::string));
@@ -767,6 +767,19 @@ namespace DATABASE
 
                 p_lObjectNames.insert(std::make_pair(t_Value.uintVal, t_sName));
             }
+        }
+    }
+
+    std::string ObjectPrototype::GetRightTextureType(DATABASE::OBJECT_TYPE p_Type)
+    {
+        switch(p_Type)
+        {
+        case OBJECT_TYPE_NPC:
+            return "NPCs";
+        case OBJECT_TYPE_MAP_OBJECT:
+            return "Objects";
+        default:
+            return "";
         }
     }
 };

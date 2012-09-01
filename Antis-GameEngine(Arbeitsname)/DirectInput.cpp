@@ -88,7 +88,7 @@ bool DirectInput::SetKeyStateKeyboard()
     return true;
 }
 
-bool DirectInput::GetKeyStateKeyboard(UINT Key)
+bool DirectInput::GetKeyStateKeyboard(uint32 Key)
 {
     return m_aKeyState[Key];
 }

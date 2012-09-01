@@ -11,7 +11,7 @@ MapLayer::~MapLayer(void)
 {
 }
 
-void MapLayer::UpdateLayer(const UINT uicCurTime, const UINT uiDiff)
+void MapLayer::UpdateLayer(const uint32 uicCurTime, const uint32 uiDiff)
 {
     /*if (m_pMap)
     {

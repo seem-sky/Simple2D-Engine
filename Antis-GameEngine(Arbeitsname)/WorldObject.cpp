@@ -2,7 +2,7 @@
 #include "ObjectLayer.h"
 #include "Map.h"
 
-WorldObject::WorldObject(UINT uiGUID, Point<int> pos, ObjectAI* pAI) : m_pTexture(NULL), m_Position(pos), m_Color(1,1,1,1),
+WorldObject::WorldObject(uint32 uiGUID, Point<int> pos, ObjectAI* pAI) : m_pTexture(NULL), m_Position(pos), m_Color(1,1,1,1),
     m_ModRed(0), m_ModGreen(0), m_ModBlue(0), m_ModAlpha(0), m_ColorModTime(0), m_pOwnerLayer(NULL), m_uiGUID(uiGUID), m_pAI(pAI)
 {
     m_sLogLocationName  = LOGFILE_ENGINE_LOG_NAME + "WorldObject : ";
@@ -28,14 +28,14 @@ void WorldObject::SetTextureSource(const DATABASE::SpritePrototype *proto)
         m_pTexture = pTextureMgr->GetTextureSource(proto->m_uiID);
 }
 
-void WorldObject::Update(const ULONGLONG uiCurTime, const UINT uiDiff)
+void WorldObject::Update(const ULONGLONG uiCurTime, const uint32 uiDiff)
 {
     // Update color
     if (m_ColorModTime)
         UpdateColor(uiDiff);
 }
 
-void WorldObject::ModifyColorTo(float red, float green, float blue, float alpha, UINT time)
+void WorldObject::ModifyColorTo(float red, float green, float blue, float alpha, uint32 time)
 {
     m_ModRed            = (red - m_Color.r) / time;
     m_ModGreen          = (green - m_Color.g) / time;
@@ -44,7 +44,7 @@ void WorldObject::ModifyColorTo(float red, float green, float blue, float alpha,
     m_ColorModTime      = time;
 }
 
-void WorldObject::UpdateColor(const UINT uiDiff)
+void WorldObject::UpdateColor(const uint32 uiDiff)
 {
     float red, green, blue, alpha;
     if (m_ColorModTime > uiDiff)
@@ -89,7 +89,7 @@ void WorldObject::UpdateColor(const UINT uiDiff)
         m_Color.a = 0;
 }
 
-void WorldObject::GetObjectSize(UINT &Xsize, UINT &Ysize)
+void WorldObject::GetObjectSize(uint32 &Xsize, uint32 &Ysize)
 {
     if (!m_pTexture)
         return;

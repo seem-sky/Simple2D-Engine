@@ -9,8 +9,8 @@
 
 struct ScriptPointPrototype
 {
-    Point<UINT> m_Position;
-    Point<UINT> m_Size;
+    Point<uint32> m_Position;
+    Point<uint32> m_Size;
 
     ScriptPointType m_Type;
 
@@ -23,9 +23,9 @@ struct ScriptPointPrototype
     {
         struct ScriptPointTeleport
         {
-            UINT m_uiTelePosX;
-            UINT m_uiTelePosY;
-            UINT m_uiMapID;
+            uint32 m_uiTelePosX;
+            uint32 m_uiTelePosY;
+            uint32 m_uiMapID;
         }Teleport;
     }Type;
 };
@@ -36,14 +36,14 @@ public:
     ScriptPoint(void);
     ~ScriptPoint(void);
 
-    void Update(const UINT uiDiff, const UINT uiTime);
+    void Update(const uint32 uiDiff, const uint32 uiTime);
 
-    inline void SetPositionX(UINT x) { m_ScriptPointInfo.m_Position.x = x; }
-    inline void SetPositionY(UINT y) { m_ScriptPointInfo.m_Position.y = y; }
-    inline Point<UINT> GetPosition() { return m_ScriptPointInfo.m_Position; }
-    inline void SetSizeX(UINT x) { m_ScriptPointInfo.m_Size.x = x; }
-    inline void SetSizeY(UINT y) { m_ScriptPointInfo.m_Size.y = y; }
-    inline Point<UINT> GetSize() { return m_ScriptPointInfo.m_Size; }
+    inline void SetPositionX(uint32 x) { m_ScriptPointInfo.m_Position.x = x; }
+    inline void SetPositionY(uint32 y) { m_ScriptPointInfo.m_Position.y = y; }
+    inline Point<uint32> GetPosition() { return m_ScriptPointInfo.m_Position; }
+    inline void SetSizeX(uint32 x) { m_ScriptPointInfo.m_Size.x = x; }
+    inline void SetSizeY(uint32 y) { m_ScriptPointInfo.m_Size.y = y; }
+    inline Point<uint32> GetSize() { return m_ScriptPointInfo.m_Size; }
     inline void SetType(ScriptPointType type) { m_ScriptPointInfo.m_Type = type; }
 
     void SetScriptPointInfo(ScriptPointPrototype* pInfo);
@@ -51,7 +51,7 @@ public:
     void DoAction(Unit *pWho);
 
 private:
-    virtual void UpdatePoint(const UINT uiDiff, const UINT uiTime) { }
+    virtual void UpdatePoint(const uint32 uiDiff, const uint32 uiTime) { }
 
     ScriptPointPrototype m_ScriptPointInfo;
 };

@@ -20,11 +20,11 @@ class Map;
 class WorldObject
 {
 public:
-    WorldObject(UINT m_uiGUID, Point<int> pos, ObjectAI* pAI = new ObjectAI());
+    WorldObject(uint32 m_uiGUID, Point<int> pos, ObjectAI* pAI = new ObjectAI());
     virtual ~WorldObject(void);
 
     // object info
-    inline UINT GetGUID() { return m_uiGUID; }
+    inline uint32 GetGUID() { return m_uiGUID; }
     inline DATABASE::ObjectPrototype* GetObjectInfo() { return &m_ObjectInfo; }
     virtual void SetObjectInfo(const DATABASE::ObjectPrototype* pInfo) { if (pInfo) m_ObjectInfo = *pInfo; }
 
@@ -49,27 +49,27 @@ public:
     inline int GetPositionY() { return m_Position.y; }
     inline int GetBottomPosY()
     {
-        UINT x = 0, y = 0;
+        uint32 x = 0, y = 0;
         GetObjectSize(x, y);
         return GetPositionY() + y;
     }
     int GetScreenPosX();
     int GetScreenPosY();
 
-    void GetObjectSize(UINT &Xsize, UINT &Ysize);
+    void GetObjectSize(uint32 &Xsize, uint32 &Ysize);
     Map* GetMap();
 
     // Color
     inline D3DXCOLOR GetColor() { return m_Color; }
     inline void SetColor(float red, float green, float blue, float alpha) { m_Color = D3DXCOLOR(red, green, blue, alpha); }
-    void ModifyColorTo(float red, float green, float blue, float alpha, UINT time = 0);
+    void ModifyColorTo(float red, float green, float blue, float alpha, uint32 time = 0);
 
     // texture
     virtual void SetTextureSource(const DATABASE::SpritePrototype *proto);
     inline TextureSource* GetTextureSource() { return m_pTexture; }
 
     // Update
-    virtual void Update(const ULONGLONG uiCurTime, const UINT uiDiff);
+    virtual void Update(const ULONGLONG uiCurTime, const uint32 uiDiff);
 
     virtual void DrawObject(LPD3DXSPRITE pSprite);
 
@@ -87,19 +87,19 @@ protected:
     std::string m_sLogLocationName;
 
 private:
-    void UpdateColor(const UINT uiDiff);
+    void UpdateColor(const uint32 uiDiff);
 
     ObjectLayer *m_pOwnerLayer;
 
     // modify color variables
     float m_ModRed, m_ModGreen, m_ModBlue, m_ModAlpha;
-    UINT m_ColorModTime;
+    uint32 m_ColorModTime;
     TextureSource* m_pTexture;
     DATABASE::ObjectPrototype m_ObjectInfo;
     Point<int> m_Position;
     D3DXCOLOR m_Color;
 
-    UINT m_uiGUID;
+    uint32 m_uiGUID;
 
     ObjectAI *m_pAI;
 };

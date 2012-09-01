@@ -45,7 +45,7 @@ void ObjectLayer::AddWorldObject(WorldObject* pObject)
     m_lObjects.push_back(pObject);
 }
 
-void ObjectLayer::UpdateLayer(const ULONGLONG uiCurTime, const UINT uiDiff)
+void ObjectLayer::UpdateLayer(const ULONGLONG uiCurTime, const uint32 uiDiff)
 {
     // clear visible objects
     m_v2VisibleObjects.clear();
@@ -81,11 +81,11 @@ bool ObjectLayer::IsObjectVisible(WorldObject *pObject)
     // get object resolution
     int XPos = pObject->GetScreenPosX();
     int YPos = pObject->GetScreenPosY();
-    UINT XSize = 0, YSize = 0;
+    uint32 XSize = 0, YSize = 0;
     pObject->GetObjectSize(XSize, YSize);
 
     // get screen resolution
-    Point<UINT> windowSize = pGameInfo->GetWindowSize();
+    Point<uint32> windowSize = pGameInfo->GetWindowSize();
 
     // check X Pos
     if ((int)(XPos + XSize) < 0)

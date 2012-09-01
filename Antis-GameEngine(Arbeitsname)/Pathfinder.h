@@ -4,6 +4,7 @@
 #include "point.h"
 #include "windows.h"
 #include <map>
+#include "Global.h"
 
 class Unit;
 
@@ -19,17 +20,17 @@ enum PathDir
 
 struct PathNode
 {
-    PathNode(Point<UINT> uiPos, PathDir pathDir, UINT uiGPrice, UINT uiHCalc, PathNode *LastNode) : m_pLastNode(LastNode), m_uiPos(uiPos), m_uiGPrice(uiGPrice),
+    PathNode(Point<uint32> uiPos, PathDir pathDir, uint32 uiGPrice, uint32 uiHCalc, PathNode *LastNode) : m_pLastNode(LastNode), m_uiPos(uiPos), m_uiGPrice(uiGPrice),
     m_uiHCalc(uiHCalc), m_PathDir(pathDir)
     {}
 
     PathDir m_PathDir;
     PathNode *m_pLastNode;
-    Point<UINT> m_uiPos;
-    UINT m_uiGPrice;
-    UINT m_uiHCalc;
+    Point<uint32> m_uiPos;
+    uint32 m_uiGPrice;
+    uint32 m_uiHCalc;
 };
-typedef std::map<Point<UINT>, PathNode*> NodeList;
+typedef std::map<Point<uint32>, PathNode*> NodeList;
 
 class Pathfinder
 {
@@ -37,21 +38,21 @@ public:
     Pathfinder(Unit *pOwner);
     ~Pathfinder(void);
 
-    bool GetValidPath(Point<UINT> uiStartPos, Point<UINT> uiEndPos);
-    Point<UINT> GetRangeBetween(Point<UINT> start, Point<UINT> end);
-    Point<UINT> GetStoredEndPoint() { return m_uiStoredEndPoint; }
+    bool GetValidPath(Point<uint32> uiStartPos, Point<uint32> uiEndPos);
+    Point<uint32> GetRangeBetween(Point<uint32> start, Point<uint32> end);
+    Point<uint32> GetStoredEndPoint() { return m_uiStoredEndPoint; }
 
 private:
     bool IsStoredInClosedList(PathNode *Node);
     bool IsStoredInOpenList(PathNode *Node);
     void ResetPath();
-    PathNode* GetStoredPathNode(Point<UINT> uiTile);
+    PathNode* GetStoredPathNode(Point<uint32> uiTile);
 
     NodeList m_OpenNodes;
     NodeList m_ClosedNodes;
 
     Unit *m_pOwner;
 
-    Point<UINT> m_uiStoredEndPoint;
+    Point<uint32> m_uiStoredEndPoint;
 };
 #endif;

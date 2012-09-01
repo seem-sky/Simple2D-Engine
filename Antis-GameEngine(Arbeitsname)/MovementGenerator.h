@@ -5,11 +5,12 @@
 #include "Point.h"
 #include "Pathfinder.h"
 #include "WrapperFunctions.h"
+#include "Global.h"
 
 struct sMoveCommand
 {
     int m_MoveX, m_MoveY;
-    UINT m_MoveTime;
+    uint32 m_MoveTime;
     bool m_bWithCollission;
     DIRECTION m_Dir;
     bool m_bPathfinderMove;
@@ -34,11 +35,11 @@ public:
     MovementGenerator(Unit *pObj);
     ~MovementGenerator(void);
 
-    void Move2D(int x, int y, UINT uiMSECTime, DIRECTION dir, bool Collission = true);
-    void Move2DRandom(UINT uiRange, bool Collission = true);
-    void MovePointByPathfinder(Point<UINT> uiPoint);
+    void Move2D(int x, int y, uint32 uiMSECTime, DIRECTION dir, bool Collission = true);
+    void Move2DRandom(uint32 uiRange, bool Collission = true);
+    void MovePointByPathfinder(Point<uint32> uiPoint);
 
-    bool UpdateMovement(const ULONGLONG uiCurTime, const UINT uiDiff);
+    bool UpdateMovement(const ULONGLONG uiCurTime, const uint32 uiDiff);
     void ClearMovement();
     void RemoveMovementCommand(sMoveCommand* pCommand);
     inline bool IsMoveCommandListEmpty() { return m_lMoveCommands.empty(); }
@@ -48,7 +49,7 @@ public:
 
 private:
     Point<float> m_fCurMovement;
-    UINT m_uiCurMoveTime;
+    uint32 m_uiCurMoveTime;
     MoveCommandList m_lMoveCommands;
     Unit *m_pObj;
     Pathfinder m_PathObj;

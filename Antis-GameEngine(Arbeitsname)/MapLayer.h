@@ -9,7 +9,7 @@ class MapLayer : public Layer
 public:
     MapLayer(void);
     ~MapLayer(void);
-    void UpdateLayer(const UINT uiCurTime, const UINT uiDiff);
+    void UpdateLayer(const uint32 uiCurTime, const uint32 uiDiff);
 
 protected:
 };

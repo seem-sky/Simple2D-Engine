@@ -66,7 +66,7 @@ void Menu::DrawMenu()
 
     // iterate through items
     RECT rect = { 0, 0, 640, 480 };
-    for (UINT i = 0; i < m_MenuItemList.size(); i++)
+    for (uint32 i = 0; i < m_MenuItemList.size(); i++)
     {
         DirectFont::DrawFont(m_MenuItemList[i]->GetItemName(), rect, D3DXCOLOR(1, 0.25, 0.75, 1), i+1 == m_uiSelectedItem ? 32 : 24, 500, "Comic Sans MS");
         rect.top += 50;

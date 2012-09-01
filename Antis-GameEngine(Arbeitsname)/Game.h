@@ -16,7 +16,7 @@ public:
     WorldSession() { };
     virtual ~WorldSession() { };
 
-    virtual void WorldUpdate(const ULONGLONG CurTime, const UINT CurElapsedTime) { }
+    virtual void WorldUpdate(const ULONGLONG CurTime, const uint32 CurElapsedTime) { }
 };
 
 enum GAMEINIT_STATE
@@ -56,9 +56,9 @@ struct GameEvent
     {
         struct sMapChange
         {
-            UINT m_uiMapID;
-            UINT m_uiNewPlayerPosX;
-            UINT m_uiNewPlayerPosY;
+            uint32 m_uiMapID;
+            uint32 m_uiNewPlayerPosX;
+            uint32 m_uiNewPlayerPosY;
         }MapChange;
     }EventType;
 
@@ -75,7 +75,7 @@ public:
     ~CGame(void);
 
     GAMEINIT_STATE Initialize(HINSTANCE hInstance, HWND hWnd);
-    bool Run(const ULONGLONG CurTime, const UINT CurElapsedTime);
+    bool Run(const ULONGLONG CurTime, const uint32 CurElapsedTime);
     HRESULT Draw();
     void Quit();
     void SetWorldSession(WorldSession *pWorld) { m_pWorldSession = pWorld; }
@@ -96,10 +96,10 @@ public:
 
     // textbox
     TextBox* ShowTextbox(TextBox* pBox);
-    TextBox* ShowTextbox(std::string sMsg, UINT uiTextureID, Point<int> pos, Point<UINT> size, USHORT uiFontSize, USHORT uiBold, bool bItalic,
+    TextBox* ShowTextbox(std::string sMsg, uint32 uiTextureID, Point<int> pos, Point<uint32> size, USHORT uiFontSize, USHORT uiBold, bool bItalic,
                             std::string sFont, ShowLetterTime showLetter, bool ScrollAble);
     // calc textbox size by screen size
-    TextBox* ShowTextbox(std::string sMsg, UINT uiTextureID, Point<int> pos, USHORT uiFontSize, USHORT uiBold, bool bItalic,
+    TextBox* ShowTextbox(std::string sMsg, uint32 uiTextureID, Point<int> pos, USHORT uiFontSize, USHORT uiBold, bool bItalic,
                             std::string sFont, ShowLetterTime showLetter, bool ScrollAble);
     void ShutDownTextbox();
     inline bool ShowsTextbox() { return m_pShownTextBox ? true : false; }

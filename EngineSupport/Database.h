@@ -40,9 +40,9 @@ namespace DATABASE
             memset(&Type, 0, sizeof(Type));
         }
 
-        UINT m_uiSpriteType;
-        UINT m_uiID;
-        std::string m_sTransparentColor;
+        uint32 m_uiSpriteType;
+        uint32 m_uiID;
+        std::string m_sTransparencyColor;
         std::string m_sFileName;        // stores texture name (WITHOUT path).
 
         union                           // different sprite types have different attributes
@@ -50,8 +50,8 @@ namespace DATABASE
             // SpriteTile = 0
             struct SpriteTile
             {
-                UINT m_uiPassable;      // 0 passability
-                UINT m_uiTerrainType;   // 1 terrain type
+                uint32 m_uiPassable;      // 0 passability
+                uint32 m_uiTerrainType;   // 1 terrain type
                 bool m_bAutotile;       // 2 is autotile?
             } Tile;
 
@@ -67,14 +67,14 @@ namespace DATABASE
             // SpriteAnimatedObject = 2
             struct SpriteAnimatedObject : SpriteObject
             {
-                UINT m_uiSpritesX;
-                UINT m_uiSpritesY;
+                uint32 m_uiSpritesX;
+                uint32 m_uiSpritesY;
             } AnimatedObject;
 
             // TextBox = 3
             struct TextBoxObject
             {
-                UINT m_uiBorderSize;
+                uint32 m_uiBorderSize;
             } Textbox;
         } Type;
     };
@@ -85,9 +85,9 @@ namespace DATABASE
     struct StartConditionsPrototype
     {
         StartConditionsPrototype() : m_uiMapID(0), m_uiHeroID(0) { }
-        UINT m_uiMapID;
-        UINT m_uiHeroID;
-        Point<UINT> m_uiStartPos;
+        uint32 m_uiMapID;
+        uint32 m_uiHeroID;
+        Point<uint32> m_uiStartPos;
     };
 
     /*####
@@ -98,15 +98,15 @@ namespace DATABASE
     {
         TObjectVariable() : m_uiID(0), m_Value() {}
 
-        UINT m_uiID;
+        uint32 m_uiID;
         std::string m_sName;
         T m_Value;
     };
 
-    typedef std::map<UINT, TObjectVariable<bool>> ObjectBoolList;
-    typedef std::map<UINT, TObjectVariable<int>> ObjectIntegerList;
-    typedef std::map<UINT, TObjectVariable<float>> ObjectFloatList;
-    typedef std::map<UINT, TObjectVariable<std::string>> ObjectStringList;
+    typedef std::map<uint32, TObjectVariable<bool>> ObjectBoolList;
+    typedef std::map<uint32, TObjectVariable<int>> ObjectIntegerList;
+    typedef std::map<uint32, TObjectVariable<float>> ObjectFloatList;
+    typedef std::map<uint32, TObjectVariable<std::string>> ObjectStringList;
 
     enum OBJECT_TYPE
     {
@@ -121,9 +121,16 @@ namespace DATABASE
             memset(&ObjectType, 0, sizeof(ObjectType));
         }
 
-        UINT m_uiID;
-        UINT m_uiType;
-        UINT m_uiTextureID;
+        std::string GetRightTextureType() const
+        {
+            return GetRightTextureType((OBJECT_TYPE)m_uiType);
+        }
+
+        static std::string GetRightTextureType(OBJECT_TYPE p_Type);
+
+        uint32 m_uiID;
+        uint32 m_uiType;
+        uint32 m_uiTextureID;
         std::string m_sName;
 
         ObjectBoolList m_ObjectBoolList;
@@ -141,18 +148,18 @@ namespace DATABASE
             // 1 = NPC
             struct sNPC : sMapObject
             {
-                UINT m_uiAnimationFrequency;
-                UINT m_uiHPmin;
-                UINT m_uiHPmax;
-                UINT m_uiLevelMin;
-                UINT m_uiLevelMax;
-                UINT m_uiMoveSpeed;
+                uint32 m_uiAnimationFrequency;
+                uint32 m_uiHPmin;
+                uint32 m_uiHPmax;
+                uint32 m_uiLevelMin;
+                uint32 m_uiLevelMax;
+                uint32 m_uiMoveSpeed;
             }NPC;
         }ObjectType;
     };
 
-    typedef std::map<UINT, ObjectPrototype> ObjectList;
-    typedef std::map<std::string, std::map<UINT, SpritePrototype>> SpriteList;
+    typedef std::map<uint32, ObjectPrototype> ObjectList;
+    typedef std::map<std::string, std::map<uint32, SpritePrototype>> SpriteList;
 
     class Database : public TSingleton<Database>
     {
@@ -160,16 +167,16 @@ namespace DATABASE
         Database(void);
         ~Database(void);
 
-        const std::string GetMapName(UINT p_uiID);
+        const std::string GetMapName(uint32 p_uiID);
         bool GetStartConditions(StartConditionsPrototype &p_proto);
 
-        void GetObjectNames(std::map<UINT, std::string> &p_lObjectNames);
-        const ObjectPrototype* GetObjectPrototype(UINT p_uiID);
+        void GetObjectNames(std::map<uint32, std::string> &p_lObjectNames);
+        const ObjectPrototype* GetObjectPrototype(uint32 p_uiID);
 
-        void GetTextureNames(std::string p_sType, std::map<UINT, std::string> &p_lTextureNames);
-        const SpritePrototype* GetSpritePrototype(std::string p_sType, UINT p_uiID);
-        bool HasSprite(std::string p_sType, UINT p_uiID);
-        const std::string GetSpritePath(UINT p_uiID);
+        void GetTextureNames(std::string p_sType, std::map<uint32, std::string> &p_lTextureNames);
+        const SpritePrototype* GetSpritePrototype(std::string p_sType, uint32 p_uiID);
+        bool HasSprite(std::string p_sType, uint32 p_uiID);
+        const std::string GetSpritePath(uint32 p_uiID);
 
         void LoadDB(std::string p_sFileName);
         XML::XML_STATE GetDBState();
@@ -180,7 +187,7 @@ namespace DATABASE
         // objectDB
         ObjectList m_ObjectDB;
         // sprite paths
-        std::map<UINT, std::string> m_SpritePaths;
+        std::map<uint32, std::string> m_SpritePaths;
         // spriteDB
         SpriteList m_SpriteDB;
 

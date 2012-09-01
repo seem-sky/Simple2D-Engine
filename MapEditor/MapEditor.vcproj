@@ -226,7 +226,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="compile Database.ui"
-						CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)"
+						CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)&#x0D;&#x0A;"
 						Outputs="Database"
 					/>
 				</FileConfiguration>
@@ -236,7 +236,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="compile Database.ui"
-						CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)"
+						CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)&#x0D;&#x0A;"
 						Outputs="Database"
 					/>
 				</FileConfiguration>
@@ -261,7 +261,7 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="DatabaseWindow.moc created."
+						Description="create moc_DatabaseWindow.h"
 						CommandLine="moc -o moc_$(InputFileName) $(InputFileName)&#x0D;&#x0A;"
 						AdditionalDependencies="DatabaseWindow.cpp"
 						Outputs="DatabaseWindow"
@@ -272,8 +272,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="DatabaseWindow.moc created"
-						CommandLine="moc -o moc_$(InputFileName) $(InputFileName)"
+						Description="create moc_DatabaseWindow.h"
+						CommandLine="moc -o moc_$(InputFileName) $(InputFileName)&#x0D;&#x0A;"
 						AdditionalDependencies="DatabaseWindow.cpp"
 						Outputs="DatabaseWindow"
 					/>
@@ -345,6 +345,486 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="Pages"
+				>
+				<File
+					RelativePath=".\DatabasePageTemplate.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\DatabasePageTemplate.h"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="create moc_DatabasePageTemplate.h"
+							CommandLine="moc -o moc_$(InputFileName) $(InputFileName)"
+							Outputs="moc_DatabasePageTemplate.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="create moc_DatabasePageTemplate.h"
+							CommandLine="moc -o moc_$(InputFileName) $(InputFileName)"
+							Outputs="moc_DatabasePageTemplate.h"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\UI\DatabasePageTemplate.ui"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="compile DatabasePageTemplate.ui"
+							CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)"
+							Outputs="DatabasePageTemplate.ui"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="compile DatabasePageTemplate.ui"
+							CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)"
+							Outputs="DatabasePageTemplate.ui"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\UI\UI_DatabasePageTemplate.h"
+					>
+				</File>
+				<Filter
+					Name="Texture"
+					>
+					<File
+						RelativePath=".\UI\TextureDatabase.ui"
+						>
+						<FileConfiguration
+							Name="Debug|Win32"
+							>
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="compile TextureDatabase.ui"
+								CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)"
+								Outputs="TextureDatabase.ui"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="compile TextureDatabase.ui"
+								CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)"
+								Outputs="TextureDatabase.ui"
+							/>
+						</FileConfiguration>
+					</File>
+					<File
+						RelativePath=".\TextureDatabaseWindow.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\TextureDatabaseWindow.h"
+						>
+						<FileConfiguration
+							Name="Debug|Win32"
+							>
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="create moc_TextureDatabaseWindow.h"
+								CommandLine="moc -o moc_$(InputFileName) $(InputFileName)"
+								Outputs="moc_TextureDatabaseWindow.h"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="create moc_TextureDatabaseWindow.h"
+								CommandLine="moc -o moc_$(InputFileName) $(InputFileName)"
+								Outputs="moc_TextureDatabaseWindow.h"
+							/>
+						</FileConfiguration>
+					</File>
+					<File
+						RelativePath=".\UI\UI_TextureDatabase.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="Object"
+					>
+					<File
+						RelativePath=".\UI\ObjectDatabase.ui"
+						>
+						<FileConfiguration
+							Name="Debug|Win32"
+							>
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="compile ObjectDatabase.ui"
+								CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)"
+								Outputs="ObjectDatabase.ui"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="compile ObjectDatabase.ui"
+								CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)"
+								Outputs="ObjectDatabase.ui"
+							/>
+						</FileConfiguration>
+					</File>
+					<File
+						RelativePath=".\ObjectDatabaseWindow.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\ObjectDatabaseWindow.h"
+						>
+						<FileConfiguration
+							Name="Debug|Win32"
+							>
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="create moc_ObjectDatabaseWindow"
+								CommandLine="moc -o moc_$(InputFileName) $(InputFileName)"
+								Outputs="moc_ObjectDatabaseWindow"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="create moc_ObjectDatabaseWindow"
+								CommandLine="moc -o moc_$(InputFileName) $(InputFileName)"
+								Outputs="moc_ObjectDatabaseWindow"
+							/>
+						</FileConfiguration>
+					</File>
+					<File
+						RelativePath=".\UI\UI_ObjectDatabase.h"
+						>
+					</File>
+				</Filter>
+			</Filter>
+			<Filter
+				Name="CustomVariable"
+				>
+				<File
+					RelativePath=".\UI\CustomVariablePageTemplate.ui"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="compile CustomVariablePageTemplate.ui"
+							CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)"
+							Outputs="CustomVariablePageTemplate.ui"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="compile CustomVariablePageTemplate.ui"
+							CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)"
+							Outputs="CustomVariablePageTemplate.ui"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\CustomVariablePageTemplateWidget.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\CustomVariablePageTemplateWidget.h"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="create moc_CustomVariablePageTemplateWidget.h"
+							CommandLine="moc -o moc_$(InputFileName) $(InputFileName)"
+							Outputs="moc_CustomVariablePageTemplateWidget.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="create moc_CustomVariablePageTemplateWidget.h"
+							CommandLine="moc -o moc_$(InputFileName) $(InputFileName)"
+							Outputs="moc_CustomVariablePageTemplateWidget.h"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\UI\UI_CustomVariableTemplate.h"
+					>
+				</File>
+				<Filter
+					Name="Bool"
+					>
+					<File
+						RelativePath=".\UI\CustomVariableBoolPage.ui"
+						>
+						<FileConfiguration
+							Name="Debug|Win32"
+							>
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="compile CustomVariableBoolPage.ui"
+								CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)"
+								Outputs="CustomVariableBoolPage.ui"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="compile CustomVariableBoolPage.ui"
+								CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)"
+								Outputs="CustomVariableBoolPage.ui"
+							/>
+						</FileConfiguration>
+					</File>
+					<File
+						RelativePath=".\CustomVariableBoolPageWidget.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\CustomVariableBoolPageWidget.h"
+						>
+						<FileConfiguration
+							Name="Debug|Win32"
+							>
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="create moc_CustomVariableBoolPageWidget.h"
+								CommandLine="moc -o moc_$(InputFileName) $(InputFileName)"
+								Outputs="moc_CustomVariableBoolPageWidget.h"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="create moc_CustomVariableBoolPageWidget.h"
+								CommandLine="moc -o moc_$(InputFileName) $(InputFileName)"
+								Outputs="moc_CustomVariableBoolPageWidget.h"
+							/>
+						</FileConfiguration>
+					</File>
+					<File
+						RelativePath=".\UI\UI_CustomVariableBoolPage.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="Int"
+					>
+					<File
+						RelativePath=".\UI\CustomVariableIntPage.ui"
+						>
+						<FileConfiguration
+							Name="Debug|Win32"
+							>
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="compile CustomVariableIntPage.ui"
+								CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)"
+								Outputs="CustomVariableIntPage.ui"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="compile CustomVariableIntPage.ui"
+								CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)"
+								Outputs="CustomVariableIntPage.ui"
+							/>
+						</FileConfiguration>
+					</File>
+					<File
+						RelativePath=".\CustomVariableIntPageWidget.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\CustomVariableIntPageWidget.h"
+						>
+						<FileConfiguration
+							Name="Debug|Win32"
+							>
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="create moc_CustomVariableIntPageWidget.h"
+								CommandLine="moc -o moc_$(InputFileName) $(InputFileName)"
+								Outputs="moc_CustomVariableIntPageWidget"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="create moc_CustomVariableIntPageWidget.h"
+								CommandLine="moc -o moc_$(InputFileName) $(InputFileName)"
+								Outputs="moc_CustomVariableIntPageWidget"
+							/>
+						</FileConfiguration>
+					</File>
+					<File
+						RelativePath=".\UI\UI_CustomVariableIntPage.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="String"
+					>
+					<File
+						RelativePath=".\UI\CustomVariableStringPage.ui"
+						>
+						<FileConfiguration
+							Name="Debug|Win32"
+							>
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="compile CustomVariableStringPage.ui"
+								CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)"
+								Outputs="CustomVariableStringPage.ui"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="compile CustomVariableStringPage.ui"
+								CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)"
+								Outputs="CustomVariableStringPage.ui"
+							/>
+						</FileConfiguration>
+					</File>
+					<File
+						RelativePath=".\CustomVariableStringPageWidget.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\CustomVariableStringPageWidget.h"
+						>
+						<FileConfiguration
+							Name="Debug|Win32"
+							>
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="create moc_CustomVariableStringPageWidget.h"
+								CommandLine="moc -o moc_$(InputFileName) $(InputFileName)"
+								Outputs="moc_CustomVariableStringPageWidget.h"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="create moc_CustomVariableStringPageWidget.h"
+								CommandLine="moc -o moc_$(InputFileName) $(InputFileName)"
+								Outputs="moc_CustomVariableStringPageWidget.h"
+							/>
+						</FileConfiguration>
+					</File>
+					<File
+						RelativePath=".\UI\UI_CustomVariableStringPage.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="Float"
+					>
+					<File
+						RelativePath=".\UI\CustomVariableFloatPage.ui"
+						>
+						<FileConfiguration
+							Name="Debug|Win32"
+							>
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="compile CustomVariableFloatPage.ui"
+								CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)"
+								Outputs="CustomVariableFloatPage.ui"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="compile CustomVariableFloatPage.ui"
+								CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)"
+								Outputs="CustomVariableFloatPage.ui"
+							/>
+						</FileConfiguration>
+					</File>
+					<File
+						RelativePath=".\CustomVariableFloatPageWidget.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\CustomVariableFloatPageWidget.h"
+						>
+						<FileConfiguration
+							Name="Debug|Win32"
+							>
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="create moc_CustomVariableFloatPageWidget.h"
+								CommandLine="moc -o moc_$(InputFileName) $(InputFileName)"
+								Outputs="moc_CustomVariableFloatPageWidget.h"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="create moc_CustomVariableFloatPageWidget.h"
+								CommandLine="moc -o moc_$(InputFileName) $(InputFileName)"
+								Outputs="moc_CustomVariableFloatPageWidget.h"
+							/>
+						</FileConfiguration>
+					</File>
+					<File
+						RelativePath=".\UI\UI_CustomVariableFloatPage.h"
+						>
+					</File>
+				</Filter>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="EventEditor"
@@ -358,7 +838,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="compile EventEditor.ui"
-						CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)"
+						CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)&#x0D;&#x0A;"
 						Outputs="EventEditor"
 					/>
 				</FileConfiguration>
@@ -368,7 +848,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="compile EventEditor.ui"
-						CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)"
+						CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)&#x0D;&#x0A;"
 						Outputs="EventEditor"
 					/>
 				</FileConfiguration>
@@ -382,7 +862,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="compile EventEditorWindow"
-						CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)"
+						CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)&#x0D;&#x0A;"
 						Outputs="EventEditorWindow"
 					/>
 				</FileConfiguration>
@@ -392,7 +872,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="compile EventEditorWindow"
-						CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)"
+						CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)&#x0D;&#x0A;"
 						Outputs="EventEditorWindow"
 					/>
 				</FileConfiguration>
@@ -410,7 +890,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="create EventEditorWidget"
-						CommandLine="moc -o moc_$(InputFileName) $(InputFileName)"
+						CommandLine="moc -o moc_$(InputFileName) $(InputFileName)&#x0D;&#x0A;"
 						Outputs="EventEditorWidget"
 					/>
 				</FileConfiguration>
@@ -420,7 +900,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="create moc_EventEditorWidget.h"
-						CommandLine="moc -o moc_$(InputFileName) $(InputFileName)"
+						CommandLine="moc -o moc_$(InputFileName) $(InputFileName)&#x0D;&#x0A;"
 						Outputs="moc_EventEditorWidget.h"
 					/>
 				</FileConfiguration>
@@ -438,10 +918,30 @@
 				>
 			</File>
 		</Filter>
-		<File
-			RelativePath=".\main.cpp"
+		<Filter
+			Name="EditorCore"
 			>
-		</File>
+			<File
+				RelativePath=".\EditorConfig.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\EditorConfig.h"
+				>
+			</File>
+			<File
+				RelativePath=".\main.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ResizeWidget.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ResizeWidget.h"
+				>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>
