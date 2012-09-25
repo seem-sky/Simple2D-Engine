@@ -114,7 +114,7 @@ void TextureDatabaseWindow::ChangeItem(uint32 p_uiID, bool p_bDelete)
                 t_NewProto.Type.AnimatedObject.m_uiSpritesY = m_pNPCRow->value();
 
                 // columns
-                t_NewProto.Type.AnimatedObject.m_uiSpritesY = m_pNPCColumn->value();
+                t_NewProto.Type.AnimatedObject.m_uiSpritesX = m_pNPCColumn->value();
             }
 
             t_pDBOut->ChangeSpritePrototype(t_sCurTextureType.toStdString(), t_NewProto);
@@ -222,8 +222,8 @@ void TextureDatabaseWindow::ConnectWidgets()
     connect(m_pNPCBoundingUp, SIGNAL(valueChanged(int)), this, SLOT(BoundingChanged(int)));
     connect(m_pNPCBoundingLeft, SIGNAL(valueChanged(int)), this, SLOT(BoundingChanged(int)));
     connect(m_pNPCBoundingRight, SIGNAL(valueChanged(int)), this, SLOT(BoundingChanged(int)));
-    connect(m_pNPCRow, SIGNAL(valueChanged(int)), this, SLOT(TextureNPCSpriteCountChanged(int)));
-    connect(m_pNPCColumn, SIGNAL(valueChanged(int)), this, SLOT(TextureNPCSpriteCountChanged(int)));
+    connect(m_pNPCRow, SIGNAL(valueChanged(int)), this, SLOT(NPCSpriteCountChanged(int)));
+    connect(m_pNPCColumn, SIGNAL(valueChanged(int)), this, SLOT(NPCSpriteCountChanged(int)));
 }
 
 void TextureDatabaseWindow::DisconnectWidgets()
@@ -250,8 +250,8 @@ void TextureDatabaseWindow::DisconnectWidgets()
     disconnect(m_pNPCBoundingUp, SIGNAL(valueChanged(int)), this, SLOT(BoundingChanged(int)));
     disconnect(m_pNPCBoundingLeft, SIGNAL(valueChanged(int)), this, SLOT(BoundingChanged(int)));
     disconnect(m_pNPCBoundingRight, SIGNAL(valueChanged(int)), this, SLOT(BoundingChanged(int)));
-    disconnect(m_pNPCRow, SIGNAL(valueChanged(int)), this, SLOT(TextureNPCSpriteCountChanged(int)));
-    disconnect(m_pNPCColumn, SIGNAL(valueChanged(int)), this, SLOT(TextureNPCSpriteCountChanged(int)));
+    disconnect(m_pNPCRow, SIGNAL(valueChanged(int)), this, SLOT(NPCSpriteCountChanged(int)));
+    disconnect(m_pNPCColumn, SIGNAL(valueChanged(int)), this, SLOT(NPCSpriteCountChanged(int)));
 }
 
 const SpritePrototype* TextureDatabaseWindow::GetLatestPrototype(std::string p_sType, uint32 p_uiID)
@@ -430,7 +430,7 @@ bool TextureDatabaseWindow::eventFilter(QObject *p_pObj, QEvent *p_pEvent)
         }
     }
     // open "TransparencyWindow"
-    if (p_pObj == m_pView)
+    else if (p_pObj == m_pView)
     {
         if (p_pEvent->type() == QEvent::MouseButtonDblClick)
         {

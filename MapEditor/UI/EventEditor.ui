@@ -10,16 +10,10 @@
     <height>480</height>
    </rect>
   </property>
-  <property name="minimumSize">
-   <size>
-    <width>640</width>
-    <height>480</height>
-   </size>
-  </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QTabWidget" name="EventEditorPages">
+  <widget class="QTabWidget" name="m_pEventEditorPages">
    <property name="geometry">
     <rect>
      <x>160</x>
@@ -31,12 +25,15 @@
    <property name="currentIndex">
     <number>-1</number>
    </property>
+   <property name="movable">
+    <bool>true</bool>
+   </property>
   </widget>
   <widget class="QLabel" name="label_13">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>10</y>
+     <y>70</y>
      <width>141</width>
      <height>21</height>
     </rect>
@@ -52,22 +49,22 @@
     <string>Page Conditions:</string>
    </property>
   </widget>
-  <widget class="QListView" name="ListPageCondition">
+  <widget class="QListView" name="m_pListPageCondition">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>40</y>
-     <width>131</width>
+     <y>100</y>
+     <width>141</width>
      <height>111</height>
     </rect>
    </property>
   </widget>
-  <widget class="QPushButton" name="ButtonNewCondition">
+  <widget class="QPushButton" name="m_pButtonNewCondition">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>160</y>
-     <width>131</width>
+     <y>220</y>
+     <width>141</width>
      <height>21</height>
     </rect>
    </property>
@@ -75,12 +72,12 @@
     <string>New Condition</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="ButtonEditCondition">
+  <widget class="QPushButton" name="m_pButtonEditCondition">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>190</y>
-     <width>131</width>
+     <y>250</y>
+     <width>141</width>
      <height>21</height>
     </rect>
    </property>
@@ -88,12 +85,12 @@
     <string>Edit Condition</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="ButtonDeleteCondition">
+  <widget class="QPushButton" name="m_pButtonDeleteCondition">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>220</y>
-     <width>131</width>
+     <y>280</y>
+     <width>141</width>
      <height>21</height>
     </rect>
    </property>
@@ -101,7 +98,7 @@
     <string>Delete Condition</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="ButtonNewPage">
+  <widget class="QPushButton" name="m_pButtonNewPage">
    <property name="geometry">
     <rect>
      <x>160</x>
@@ -120,7 +117,7 @@
     <string>New Page</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="ButtonDeletePage">
+  <widget class="QPushButton" name="m_pButtonDeletePage">
    <property name="geometry">
     <rect>
      <x>290</x>
@@ -131,6 +128,36 @@
    </property>
    <property name="text">
     <string>Delete Page</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_14">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>141</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>Page Name:</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="m_pName">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>40</y>
+     <width>141</width>
+     <height>20</height>
+    </rect>
    </property>
   </widget>
  </widget>

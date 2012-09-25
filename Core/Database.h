@@ -6,6 +6,10 @@
 #include <list>
 #include "Point.h"
 #include "Logfile.h"
+#include "GlobalVariables.h"
+#include <set>
+
+typedef std::set<uint32> IDList;
 
 // passability flag, if nothing set, its unpassable
 enum PassabilityFlag
@@ -22,6 +26,20 @@ enum PassabilityFlag
 
 namespace DATABASE
 {
+    /*#####
+    # Prototype Superclass
+    #####*/
+    struct Prototype
+    {
+        Prototype() : m_uiID(0) {}
+        bool IsChildrenOf(uint32 p_uiID) const;
+        inline const IDList* GetParentList() const { return &m_uilParentList; }
+
+        uint32 m_uiID;
+        std::string m_sName;
+        IDList m_uilParentList;
+    };
+
     /*####
     # SpritePrototype
     ####*/
@@ -93,30 +111,15 @@ namespace DATABASE
     /*####
     # ObjectPrototype
     ####*/
-    template <class T>
-    struct TObjectVariable
-    {
-        TObjectVariable() : m_uiID(0), m_Value() {}
-
-        uint32 m_uiID;
-        std::string m_sName;
-        T m_Value;
-    };
-
-    typedef std::map<uint32, TObjectVariable<bool>> ObjectBoolList;
-    typedef std::map<uint32, TObjectVariable<int>> ObjectIntegerList;
-    typedef std::map<uint32, TObjectVariable<float>> ObjectFloatList;
-    typedef std::map<uint32, TObjectVariable<std::string>> ObjectStringList;
-
     enum OBJECT_TYPE
     {
         OBJECT_TYPE_MAP_OBJECT,
         OBJECT_TYPE_NPC,
     };
 
-    struct ObjectPrototype
+    struct ObjectPrototype : public Prototype
     {
-        ObjectPrototype() : m_uiID(0), m_uiType(0), m_uiTextureID(0)
+        ObjectPrototype() : m_uiType(0), m_uiTextureID(0)
         {
             memset(&ObjectType, 0, sizeof(ObjectType));
         }
@@ -128,15 +131,13 @@ namespace DATABASE
 
         static std::string GetRightTextureType(OBJECT_TYPE p_Type);
 
-        uint32 m_uiID;
         uint32 m_uiType;
         uint32 m_uiTextureID;
-        std::string m_sName;
 
-        ObjectBoolList m_ObjectBoolList;
-        ObjectIntegerList m_ObjectIntegerList;
-        ObjectFloatList m_ObjectFloatList;
-        ObjectStringList m_ObjectStringList;
+        VariableBoolList m_ObjectBoolList;
+        VariableIntegerList m_ObjectIntegerList;
+        VariableFloatList m_ObjectFloatList;
+        VariableStringList m_ObjectStringList;
 
         union
         {
@@ -178,6 +179,7 @@ namespace DATABASE
         bool HasSprite(std::string p_sType, uint32 p_uiID);
         const std::string GetSpritePath(uint32 p_uiID);
 
+        void LoadGlobalVariables();
         void LoadDB(std::string p_sFileName);
         XML::XML_STATE GetDBState();
         bool IsDBEmpty() { return m_Database.empty(); }
@@ -195,6 +197,12 @@ namespace DATABASE
 
         bool ChangeDBdir(std::list<std::string> p_DirList, XML::XML_ReadData &p_Dir);
         void StoreSpritePaths();
+
+        // load variables
+        void LoadBools();
+        void LoadIntegers();
+        void LoadFloats();
+        void LoadStrings();
 
         // load DB
         XML::XML_Reader *m_pXMLReader;

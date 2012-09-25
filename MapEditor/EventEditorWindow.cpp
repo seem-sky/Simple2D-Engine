@@ -4,15 +4,10 @@ EventEditorWindow::EventEditorWindow(QWidget *p_pParent) : QMainWindow(p_pParent
 {
     setupUi(this);
 
-    // set minimum window size
-    QRect t_TabGeo = EventEditor->geometry();
-    const int BORDER = t_TabGeo.top();
-    QSize t_ButtonSize = ButtonApply->size();
-    QSize t_EEminSize = EventEditor->minimumSize();
-    QSize t_MinWindowSize;
-    t_MinWindowSize.setWidth(t_TabGeo.left() + t_TabGeo.right() + BORDER);
-    t_MinWindowSize.setHeight(t_TabGeo.top() + t_TabGeo.bottom() + BORDER + t_ButtonSize.height());
-    setMinimumSize(t_MinWindowSize);
+    m_ResizeObj.AddResizeWidget(m_pEventEditor, QPoint(10, 10+m_pButtonApply->height()));
+    m_ResizeObj.AddMoveWidget(m_pButtonApply, QPoint(10, 10));
+    m_ResizeObj.AddMoveWidget(m_pButtonCancel, QPoint(m_pButtonApply->width()+10, 10));
+    m_ResizeObj.AddMoveWidget(m_pButtonOK, QPoint(m_pButtonApply->width()+m_pButtonCancel->width()+10, 10));
 }
 
 EventEditorWindow::~EventEditorWindow(void)
@@ -26,19 +21,4 @@ void EventEditorWindow::closeEvent(QCloseEvent *p_Event)
     p_Event->accept();
 
     delete this;
-}
-void EventEditorWindow::resizeEvent(QResizeEvent *p_Event)
-{
-    QRect t_TabGeo = EventEditor->geometry();
-    const int BORDER = t_TabGeo.top();
-    QSize t_WidgetSize = size();
-    QSize t_ButtonSize = ButtonApply->size();
-    
-    // resize editor widget
-    EventEditor->resize(t_WidgetSize.width() - t_TabGeo.left() - BORDER, t_WidgetSize.height() - t_TabGeo.top() - BORDER - t_ButtonSize.height());
-
-    // repos buttons
-    ButtonApply->move(t_WidgetSize.width() - ButtonApply->width() - BORDER, t_WidgetSize.height() - ButtonApply->height() - BORDER);
-    ButtonCancel->move(t_WidgetSize.width() - ButtonCancel->width()*2 - BORDER, t_WidgetSize.height() - ButtonCancel->height() - BORDER);
-    ButtonOK->move(t_WidgetSize.width() - ButtonOK->width()*3 - BORDER, t_WidgetSize.height() - ButtonOK->height() - BORDER);
 }

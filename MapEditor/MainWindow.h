@@ -1,8 +1,6 @@
 #ifndef MAIN_WINDOW_H
 #define MAIN_WINDOW_H
 
-#define EDITOR
-
 #include "UI/UI_MainWindow.h"
 
 enum WINDOW_ACTION

@@ -1,6 +1,7 @@
 #include "Database.h"
 #include <fstream>
 #include <atlcomcli.h>
+#include "GlobalVariables.h"
 
 namespace DATABASE
 {
@@ -120,6 +121,7 @@ namespace DATABASE
                 {
                     m_Database = *m_pXMLReader->GetXMLData();
                     StoreSpritePaths();
+                    LoadGlobalVariables();
                     BASIC_LOG(m_sLogLocationName + "Database load complete.");
                 }
                 else
@@ -225,7 +227,7 @@ namespace DATABASE
                             continue;
 
                         if (t_AttrItr->first == "TextureID")
-                            t_Proto.m_uiTextureID = t_Value.intVal;
+                            t_Proto.m_uiTextureID = t_Value.uintVal;
                         else if (t_AttrItr->first == "AnimationFrequency")
                         {
                             switch(t_Proto.m_uiType)
@@ -301,8 +303,24 @@ namespace DATABASE
 
                     for (ReadChildList::const_iterator t_ChildItr = t_pChildList->begin(); t_ChildItr != t_pChildList->end(); ++t_ChildItr)
                     {
+                        // check parents
+                        if (t_ChildItr->first == "Parents")
+                        {
+                            const ReadChildList *t_ParentList = t_ChildItr->second.GetChildList();
+                            if (!t_ParentList)
+                                continue;
+
+                            for (ReadChildList::const_iterator t_ParentItr = t_ParentList->begin(); t_ParentItr != t_ParentList->end(); ++t_ParentItr)
+                            {
+                                CComVariant t_IDValue;
+                                if (!t_ParentItr->second.GetAttributeValue("ID", t_IDValue) || FAILED(t_IDValue.ChangeType(VT_UINT)))
+                                    continue;
+
+                                t_Proto.m_uilParentList.insert(t_IDValue.uintVal);
+                            }
+                        }
                         // check variables
-                        if (t_ChildItr->first == "Variables")
+                        else if (t_ChildItr->first == "Variables")
                         {
                             const ReadChildList *t_pVariableList = t_ChildItr->second.GetChildList();
                             if (!t_pVariableList)
@@ -313,7 +331,7 @@ namespace DATABASE
                                 // bool value
                                 if (t_VTypeItr->first == "bool")
                                 {
-                                    TObjectVariable<bool> t_NewBool;
+                                    TVariable<bool> t_NewBool;
                                     const AttributeList *t_pVAttrList = t_VTypeItr->second.GetAttributeList();
                                     if (!t_pVAttrList)
                                         continue;
@@ -342,7 +360,7 @@ namespace DATABASE
                                 // int value
                                 else if (t_VTypeItr->first == "integer")
                                 {
-                                    TObjectVariable<int> t_NewInt;
+                                    TVariable<int> t_NewInt;
                                     const AttributeList *t_pVAttrList = t_VTypeItr->second.GetAttributeList();
                                     if (!t_pVAttrList)
                                         continue;
@@ -371,7 +389,7 @@ namespace DATABASE
                                 // float value
                                 else if (t_VTypeItr->first == "float")
                                 {
-                                    TObjectVariable<float> t_NewFloat;
+                                    TVariable<float> t_NewFloat;
                                     const AttributeList *t_pVAttrList = t_VTypeItr->second.GetAttributeList();
                                     if (!t_pVAttrList)
                                         continue;
@@ -400,7 +418,7 @@ namespace DATABASE
                                 // string value
                                 else if (t_VTypeItr->first == "string")
                                 {
-                                    TObjectVariable<std::string> t_NewString;
+                                    TVariable<std::string> t_NewString;
                                     const AttributeList *t_pVAttrList = t_VTypeItr->second.GetAttributeList();
                                     if (!t_pVAttrList)
                                         continue;
@@ -770,6 +788,150 @@ namespace DATABASE
         }
     }
 
+    void Database::LoadBools()
+    {
+        std::string t_sDir[] = {"GlobalVariables", "GlobalBools"};
+        std::list<std::string> t_DirList(t_sDir, t_sDir + sizeof(t_sDir) / sizeof(std::string));
+        XML_ReadData t_DBData;
+        if (!ChangeDBdir(t_DirList, t_DBData))
+            return;
+
+        const ReadChildList *t_pChildList = t_DBData.GetChildList();
+        if (!t_pChildList)
+            return;
+        for (ReadChildList::const_iterator t_DBitr = t_pChildList->begin(); t_DBitr != t_pChildList->end(); ++t_DBitr)
+        {
+            if (t_DBitr->second.HasAttributes())
+            {
+                TVariable<bool> t_BoolVar;
+                CComVariant t_Value;
+                if (!t_DBitr->second.GetAttributeValue("ID", t_Value) || FAILED(t_Value.ChangeType(VT_UINT)))
+                    continue;
+                t_BoolVar.m_uiID = t_Value.uintVal;
+
+                if (!t_DBitr->second.GetAttributeValue("name", t_Value))
+                    continue;
+                t_BoolVar.m_sName = bstr_t(t_Value);
+
+                if (!t_DBitr->second.GetAttributeValue("value", t_Value) || FAILED(t_Value.ChangeType(VT_BOOL)))
+                    continue;
+                t_BoolVar.m_Value = t_Value.boolVal ? true : false;
+                if (GlobalVariables *t_pGlobalVariables = GlobalVariables::Get())
+                    t_pGlobalVariables->AddBool(t_BoolVar);
+            }
+        }
+    }
+
+    void Database::LoadIntegers()
+    {
+        std::string t_sDir[] = {"GlobalVariables", "GlobalInts"};
+        std::list<std::string> t_DirList(t_sDir, t_sDir + sizeof(t_sDir) / sizeof(std::string));
+        XML_ReadData t_DBData;
+        if (!ChangeDBdir(t_DirList, t_DBData))
+            return;
+
+        const ReadChildList *t_pChildList = t_DBData.GetChildList();
+        if (!t_pChildList)
+            return;
+        for (ReadChildList::const_iterator t_DBitr = t_pChildList->begin(); t_DBitr != t_pChildList->end(); ++t_DBitr)
+        {
+            if (t_DBitr->second.HasAttributes())
+            {
+                TVariable<int> t_IntVar;
+                CComVariant t_Value;
+                if (!t_DBitr->second.GetAttributeValue("ID", t_Value) || FAILED(t_Value.ChangeType(VT_UINT)))
+                    continue;
+                t_IntVar.m_uiID = t_Value.uintVal;
+
+                if (!t_DBitr->second.GetAttributeValue("name", t_Value))
+                    continue;
+                t_IntVar.m_sName = bstr_t(t_Value);
+
+                if (!t_DBitr->second.GetAttributeValue("value", t_Value) || FAILED(t_Value.ChangeType(VT_INT)))
+                    continue;
+                t_IntVar.m_Value = t_Value.intVal;
+                if (GlobalVariables *t_pGlobalVariables = GlobalVariables::Get())
+                    t_pGlobalVariables->AddInteger(t_IntVar);
+            }
+        }
+    }
+
+    void Database::LoadFloats()
+    {
+        std::string t_sDir[] = {"GlobalVariables", "GlobalFloats"};
+        std::list<std::string> t_DirList(t_sDir, t_sDir + sizeof(t_sDir) / sizeof(std::string));
+        XML_ReadData t_DBData;
+        if (!ChangeDBdir(t_DirList, t_DBData))
+            return;
+
+        const ReadChildList *t_pChildList = t_DBData.GetChildList();
+        if (!t_pChildList)
+            return;
+        for (ReadChildList::const_iterator t_DBitr = t_pChildList->begin(); t_DBitr != t_pChildList->end(); ++t_DBitr)
+        {
+            if (t_DBitr->second.HasAttributes())
+            {
+                TVariable<float> t_FloatVar;
+                CComVariant t_Value;
+                if (!t_DBitr->second.GetAttributeValue("ID", t_Value) || FAILED(t_Value.ChangeType(VT_UINT)))
+                    continue;
+                t_FloatVar.m_uiID = t_Value.uintVal;
+
+                if (!t_DBitr->second.GetAttributeValue("name", t_Value))
+                    continue;
+                t_FloatVar.m_sName = bstr_t(t_Value);
+
+                if (!t_DBitr->second.GetAttributeValue("value", t_Value) || FAILED(t_Value.ChangeType(VT_R4)))
+                    continue;
+                t_FloatVar.m_Value = t_Value.fltVal;
+                if (GlobalVariables *t_pGlobalVariables = GlobalVariables::Get())
+                    t_pGlobalVariables->AddFloat(t_FloatVar);
+            }
+        }
+    }
+
+    void Database::LoadStrings()
+    {
+        std::string t_sDir[] = {"GlobalVariables", "GlobalStrings"};
+        std::list<std::string> t_DirList(t_sDir, t_sDir + sizeof(t_sDir) / sizeof(std::string));
+        XML_ReadData t_DBData;
+        if (!ChangeDBdir(t_DirList, t_DBData))
+            return;
+
+        const ReadChildList *t_pChildList = t_DBData.GetChildList();
+        if (!t_pChildList)
+            return;
+        for (ReadChildList::const_iterator t_DBitr = t_pChildList->begin(); t_DBitr != t_pChildList->end(); ++t_DBitr)
+        {
+            if (t_DBitr->second.HasAttributes())
+            {
+                TVariable<std::string> t_StringVar;
+                CComVariant t_Value;
+                if (!t_DBitr->second.GetAttributeValue("ID", t_Value) || FAILED(t_Value.ChangeType(VT_UINT)))
+                    continue;
+                t_StringVar.m_uiID = t_Value.uintVal;
+
+                if (!t_DBitr->second.GetAttributeValue("name", t_Value))
+                    continue;
+                t_StringVar.m_sName = bstr_t(t_Value);
+
+                if (!t_DBitr->second.GetAttributeValue("value", t_Value))
+                    continue;
+                t_StringVar.m_Value = bstr_t(t_Value);
+                if (GlobalVariables *t_pGlobalVariables = GlobalVariables::Get())
+                    t_pGlobalVariables->AddString(t_StringVar);
+            }
+        }
+    }
+
+    void Database::LoadGlobalVariables()
+    {
+        LoadBools();
+        LoadIntegers();
+        LoadFloats();
+        LoadStrings();
+    }
+
     std::string ObjectPrototype::GetRightTextureType(DATABASE::OBJECT_TYPE p_Type)
     {
         switch(p_Type)
@@ -781,5 +943,17 @@ namespace DATABASE
         default:
             return "";
         }
+    }
+
+    bool Prototype::IsChildrenOf(uint32 p_uiID) const
+    {
+        if (!p_uiID)
+            return false;
+
+        IDList::const_iterator t_Itr = m_uilParentList.find(p_uiID);
+        if (t_Itr != m_uilParentList.end())
+            return true;
+
+        return false;
     }
 };

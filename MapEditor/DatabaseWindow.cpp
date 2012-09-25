@@ -15,10 +15,10 @@ DatabaseWindow::DatabaseWindow(QMainWindow *p_pParent) : QMainWindow(p_pParent),
 {
     setupUi(this);
 
-    m_ResizeObj.AddResizeWidget(m_pSections, QPoint(10, ButtonCancel->height()));
-    m_ResizeObj.AddMoveWidget(ButtonApply);
-    m_ResizeObj.AddMoveWidget(ButtonCancel, QPoint(ButtonApply->width(), 0));
-    m_ResizeObj.AddMoveWidget(ButtonOK, QPoint(ButtonApply->width()+ButtonOK->width(), 0));
+    m_ResizeObj.AddResizeWidget(m_pSections, QPoint(10, ButtonCancel->height()+10));
+    m_ResizeObj.AddMoveWidget(ButtonApply, QPoint(10, 10));
+    m_ResizeObj.AddMoveWidget(ButtonCancel, QPoint(ButtonApply->width()+10, 10));
+    m_ResizeObj.AddMoveWidget(ButtonOK, QPoint(ButtonApply->width()+ButtonOK->width()+10, 10));
 
     m_sLogLocationName = LOGFILE_ENGINE_LOG_NAME + "DatabaseWindow : ";
 

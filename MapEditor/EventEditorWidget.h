@@ -4,26 +4,30 @@
 #include "UI/UI_EventEditor.h"
 #include <QtGui/QListWidget>
 #include "ScriptDatabase.h"
+#include "ResizeWidget.h"
 
-class ScriptPage : public QWidget
+class ScriptPage : public QListWidget
 {
 public:
     ScriptPage(QWidget *p_pParent = NULL);
 
-protected:
-    void resizeEvent(QResizeEvent *p_Event);
+    void AddNewCommandLine(EVENT_SCRIPT::EventScriptCommand *p_pCommand);
 
-private:
-    QListWidget *m_pEventList;
+protected:
+    bool eventFilter(QObject *p_pObj, QEvent *p_pEvent);
 };
 
 class ScriptLine : public QListWidgetItem
 {
 public:
-    ScriptLine(QListWidget *p_pParent);
+    ScriptLine(EVENT_SCRIPT::EventScriptCommand *p_pCommandParent, QListWidget *p_pWidgetParent) : m_pCommand(p_pCommandParent), QListWidgetItem(p_pWidgetParent)
+    {
+        if (m_pCommand)
+            setText(QString(m_pCommand->GetCommandText().c_str()));
+    }
 
 private:
-    EVENT_SCRIPT::EventCommand m_Command;
+    EVENT_SCRIPT::EventScriptCommand *m_pCommand;
 };
 
 class EventEditorWidget : public QWidget, Ui_EventEditor
@@ -34,9 +38,14 @@ public:
     ~EventEditorWidget(void);
 
 protected:
-    void resizeEvent(QResizeEvent *p_Event);
+    void resizeEvent(QResizeEvent *p_pEvent) { m_ResizeObj.ResizeEvent(this); }
 
 private slots:
-    void ButtonAddPage();
+    void ButtonEventPageAdded();
+    void ButtonEventPageDeleted();
+    void PageNameChanged();
+
+private:
+    ResizeWidget m_ResizeObj;
 };
 #endif

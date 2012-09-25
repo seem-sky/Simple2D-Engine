@@ -12,6 +12,9 @@ public:
 
 protected:
     void closeEvent(QCloseEvent *p_Event);
-    void resizeEvent(QResizeEvent *p_Event);
+    void resizeEvent(QResizeEvent *p_pEvent) { m_ResizeObj.ResizeEvent(this); }
+
+private:
+    ResizeWidget m_ResizeObj;
 };
 #endif

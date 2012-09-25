@@ -4,6 +4,7 @@
 #include "EditorConfig.h"
 #include "EventEditorWindow.h"
 #include "CustomVariableBoolPageWidget.h"
+#include <QtGui/QMessageBox>
 
 using namespace DATABASE;
 
@@ -14,6 +15,8 @@ ObjectDatabaseWindow::ObjectDatabaseWindow(QWidget *p_pParent) : DatabasePageTem
     m_ResizeObj.AddResizeWidget(m_pType);
 
     connect(m_pEventEditorButton, SIGNAL(clicked()), this, SLOT(ClickOpenEventEditor()));
+    connect(m_pParentAddButton, SIGNAL(clicked()), this, SLOT(ParentObjectAdded()));
+    connect(m_pParentRemoveButton, SIGNAL(clicked()), this, SLOT(ParentObjectRemoved()));
 
     LoadObjects();
 }
@@ -84,24 +87,8 @@ void ObjectDatabaseWindow::ClearWidgets()
     m_pTextureView->clear();
     m_pNPCAniFrequency->setCurrentIndex(2);
     m_pNPCSpeed->setCurrentIndex(2);
-    ConnectWidgets();
-}
-
-const ObjectPrototype* ObjectDatabaseWindow::GetLatestPrototype(uint32 p_uiID)
-{
-    if (Database *t_pDB = Database::Get())
-    {
-        if (DatabaseOutput *t_pDBOut = DatabaseOutput::Get())
-        {
-            const ObjectPrototype *t_pProto = t_pDBOut->GetObjectPrototype(p_uiID);
-            if (!t_pProto)
-                t_pProto = t_pDB->GetObjectPrototype(p_uiID);
-
-            return t_pProto;
-        }
-    }
-
-    return NULL;
+    m_pObjectList->clear();
+    m_pParentList->clear();
 }
 
 bool ObjectDatabaseWindow::SelectItem(uint32 p_uiID)
@@ -109,7 +96,7 @@ bool ObjectDatabaseWindow::SelectItem(uint32 p_uiID)
     ClearWidgets();
     DisconnectWidgets();
     bool t_bSuccess = false;
-    if (const ObjectPrototype *t_pProto = GetLatestPrototype(p_uiID))
+    if (const ObjectPrototype *t_pProto = DatabaseOutput::GetLatestObjectPrototype(p_uiID))
     {
         // ID
         m_pID->setValue(p_uiID);
@@ -119,6 +106,9 @@ bool ObjectDatabaseWindow::SelectItem(uint32 p_uiID)
 
         // type
         m_pType->setCurrentIndex(t_pProto->m_uiType);
+
+        // parent object
+        FillObjectAndParentBox();
 
         // textures
         std::string t_sTextureType = t_pProto->GetRightTextureType();
@@ -189,6 +179,9 @@ void ObjectDatabaseWindow::DisconnectWidgets()
 void ObjectDatabaseWindow::ChangeItem(uint32 p_uiID, bool p_Delete)
 {
     ObjectPrototype t_NewProto;
+    if (const ObjectPrototype *t_pProto = DatabaseOutput::GetLatestObjectPrototype(p_uiID))
+        t_NewProto = *t_pProto;
+
     // ID
     t_NewProto.m_uiID = p_uiID;
 
@@ -197,7 +190,7 @@ void ObjectDatabaseWindow::ChangeItem(uint32 p_uiID, bool p_Delete)
         if (p_Delete)
         {
             t_pDBOut->DeleteObjectPrototype(t_NewProto);
-            std::set<uint32>::iterator t_Itr = m_uilIDCache.find(p_uiID);
+            IDList::iterator t_Itr = m_uilIDCache.find(p_uiID);
             if (t_Itr != m_uilIDCache.end())
                 m_uilIDCache.erase(t_Itr);
         }
@@ -208,6 +201,19 @@ void ObjectDatabaseWindow::ChangeItem(uint32 p_uiID, bool p_Delete)
 
             // object name
             t_NewProto.m_sName      = m_pName->text().toStdString();
+
+            // add parent objects
+            t_NewProto.m_uilParentList.clear();
+            for (int t_I = 0; t_I < m_pParentList->count(); ++t_I)
+            {
+                QListWidgetItem *t_pItem = m_pParentList->item(t_I);
+                if (!t_pItem)
+                    continue;
+
+                QString t_sID = t_pItem->text();
+                t_sID.truncate(t_sID.indexOf(":"));
+                t_NewProto.m_uilParentList.insert(t_sID.toUInt());
+            }
 
             // texture ID
             t_NewProto.m_uiTextureID= GetCurrentTextureID();
@@ -224,7 +230,6 @@ void ObjectDatabaseWindow::ChangeItem(uint32 p_uiID, bool p_Delete)
             default:
                 break;
             }
-
             t_pDBOut->ChangeObjectPrototype(t_NewProto);
         }
     }
@@ -288,4 +293,116 @@ void ObjectDatabaseWindow::TextureIndexChanged(int p_Index)
 {
     ChangeTextureView(ObjectPrototype::GetRightTextureType((OBJECT_TYPE)m_pType->currentIndex()));
     ChangeItem(GetCurrentItemID());
+}
+
+void ObjectDatabaseWindow::ParentObjectAdded()
+{
+    if (!m_pObjectList || !m_pParentList)
+        return;
+
+    QListWidgetItem *t_pItem = m_pObjectList->currentItem();
+    if (!t_pItem)
+        return;
+
+    QString t_sID = t_pItem->text();
+    t_sID.truncate(t_sID.indexOf(":"));
+
+    // if inheritor is a parent of the new parent, it results in a loop
+    if (IsParentOf(t_sID.toUInt(), GetCurrentItemID()))
+    {
+        QMessageBox::critical(window(), "RECURSIVE HEREDITY", "This heredity results in a recursive heredity (inheritor is the parent of the new parent)!");
+        return;
+    }
+
+    m_pParentList->addItem(t_pItem->text());
+    delete t_pItem;
+
+    ChangeItem(GetCurrentItemID());
+    SelectItem(GetCurrentItemID());
+}
+
+void ObjectDatabaseWindow::ParentObjectRemoved()
+{
+    if (!m_pObjectList || !m_pParentList)
+        return;
+
+    QListWidgetItem *t_pItem = m_pParentList->currentItem();
+    if (!t_pItem)
+        return;
+
+    m_pObjectList->addItem(t_pItem->text());
+    delete t_pItem;
+
+    ChangeItem(GetCurrentItemID());
+    SelectItem(GetCurrentItemID());
+}
+
+bool ObjectDatabaseWindow::IsParentOf(uint32 p_uiInheritorID, uint32 p_uiParentID)
+{
+    if (!p_uiInheritorID || !p_uiParentID)
+        return false;
+
+    if (const ObjectPrototype *t_pProto = DatabaseOutput::GetLatestObjectPrototype(p_uiInheritorID))
+    {
+        if (t_pProto->IsChildrenOf(p_uiParentID))
+            return true;
+
+        for (IDList::const_iterator t_Itr = t_pProto->GetParentList()->begin(); t_Itr != t_pProto->GetParentList()->end(); ++t_Itr)
+        {
+            if (IsParentOf(*t_Itr, p_uiParentID))
+                return true;
+        }
+    }
+
+    return false;
+}
+
+void ObjectDatabaseWindow::FillObjectAndParentBox()
+{
+    if (!m_pObjectList || !m_pParentList)
+        return;
+
+    m_pObjectList->clear();
+    m_pParentList->clear();
+
+    std::map<uint32, std::string> t_sObjectNames;
+    if (Database *t_pDB = Database::Get())
+        t_pDB->GetObjectNames(t_sObjectNames);
+
+    uint32 t_uiCurID = GetCurrentItemID();
+    if (DatabaseOutput *t_pDBOut = DatabaseOutput::Get())
+    {
+        t_pDBOut->GetObjectNames(t_sObjectNames);
+        const ObjectPrototype *t_pProto = DatabaseOutput::GetLatestObjectPrototype(t_uiCurID);
+        if (!t_pProto)
+            return;
+
+        // add items in m_pObjectList
+        for (std::map<uint32, std::string>::iterator t_Itr = t_sObjectNames.begin(); t_Itr != t_sObjectNames.end(); ++t_Itr)
+        {
+            if (t_Itr->first == t_uiCurID)
+                continue;
+            else if (t_pProto->IsChildrenOf(t_Itr->first))
+                continue;
+            else if (t_pDBOut->IsObjectPrototypeDeleted(t_Itr->first))
+                continue;
+
+            m_pObjectList->addItem(QString((ToString(t_Itr->first) + ":" + t_Itr->second).c_str()));
+        }
+
+        // add items in m_pParentList
+        for (IDList::const_iterator t_Itr = t_pProto->GetParentList()->begin(); t_Itr != t_pProto->GetParentList()->end(); ++t_Itr)
+        {
+            if (*t_Itr == t_uiCurID)
+                continue;
+            else if (t_pDBOut->IsObjectPrototypeDeleted(*t_Itr))
+                continue;
+
+            std::map<uint32, std::string>::iterator t_ObjItr = t_sObjectNames.find(*t_Itr);
+            if (t_ObjItr == t_sObjectNames.end())
+                continue;
+
+            m_pParentList->addItem(QString((ToString(t_ObjItr->first) + ":" + t_ObjItr->second).c_str()));
+        }
+    }
 }

@@ -11,5 +11,6 @@ const std::string LOGFILE_ENGINE_LOG_NAME = "ENGINE::";
 #define DAY             = 24;
 
 typedef unsigned int uint32;
+const uint32 MAX_UINT = (uint32)0-1;
 
 #endif

@@ -7,15 +7,6 @@
 
 namespace DATABASE
 {
-    enum CUSTOM_VARIABLE_TYPE
-    {
-        VARIABLE_NONE,
-        VARIABLE_BOOL,
-        VARIABLE_INT,
-        VARIABLE_FLOAT,
-        VARIABLE_STRING,
-    };
-
     class DatabaseOutput : public TSingleton<DatabaseOutput>
     {
     public:
@@ -32,14 +23,16 @@ namespace DATABASE
         /*#####
         # Objects
         #####*/
+        static IDList GetAllParents(const Prototype *p_pProto);
+        static const ObjectPrototype* GetLatestObjectPrototype(uint32 p_uiID);
         ObjectPrototype* GetObjectPrototype(uint32 p_uiID);
         void ChangeObjectPrototype(ObjectPrototype &p_ChangedProto);
         void DeleteObjectPrototype(ObjectPrototype &p_DelProto);
         bool IsObjectPrototypeDeleted(uint32 p_uiID);
         void GetObjectNames(std::map<uint32, std::string> &p_lObjectNames);
         // Objects - Custom Variables
-        uint32 AddNewCustomObjectVariable(uint32 p_uiObjectID, CUSTOM_VARIABLE_TYPE p_Type);
-        bool DeleteCustomObjectVariable(uint32 p_uiObjectID, CUSTOM_VARIABLE_TYPE p_Type, uint32 p_uiVariableID);
+        uint32 AddNewCustomObjectVariable(uint32 p_uiObjectID, VariableType p_Type);
+        bool DeleteCustomObjectVariable(uint32 p_uiObjectID, VariableType p_Type, uint32 p_uiVariableID);
 
         XML::XML_STATE GetDBState();
 

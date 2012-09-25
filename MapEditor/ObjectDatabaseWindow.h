@@ -11,7 +11,7 @@ public:
     ObjectDatabaseWindow(QWidget *p_pParent = NULL);
     ~ObjectDatabaseWindow(void);
 
-    static const DATABASE::ObjectPrototype* GetLatestPrototype(uint32 p_uiID);
+    static bool IsParentOf(uint32 p_uiInheritorID, uint32 p_uiParentID);
 
 protected:
     void ConnectWidgets();
@@ -27,6 +27,9 @@ private:
     void ChangeTextureView(std::string p_sType);
     void SetSelectableTextures(std::string p_sType);
 
+    void SetParentBoxIndexToID(uint32 p_uiID);
+    void FillObjectAndParentBox();
+
 protected slots:
     void ClickButtonNew();
 
@@ -34,6 +37,8 @@ private slots:
     void NPCAttributeChanged(int p_Index) { ChangeItem(GetCurrentItemID()); }
     void TypeChanged(int p_Index);
     void TextureIndexChanged(int p_Index);
+    void ParentObjectAdded();
+    void ParentObjectRemoved();
 
     void ClickOpenEventEditor();
 };

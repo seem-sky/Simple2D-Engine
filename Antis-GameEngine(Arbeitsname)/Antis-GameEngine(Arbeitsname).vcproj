@@ -62,7 +62,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="d3d9.lib d3dx9.lib msxml2.lib dinput8.lib dxguid.lib EngineSupportd.lib"
+				AdditionalDependencies="d3d9.lib d3dx9.lib msxml2.lib dinput8.lib dxguid.lib Cored.lib"
 				LinkIncremental="0"
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -137,7 +137,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="d3d9.lib d3dx9.lib msxml2.lib dinput8.lib dxguid.lib EngineSupport.lib"
+				AdditionalDependencies="d3d9.lib d3dx9.lib msxml2.lib dinput8.lib dxguid.lib Core.lib"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				SubSystem="2"

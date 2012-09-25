@@ -1,5 +1,6 @@
 #include "DatabaseOutput.h"
 #include <XML_Writer.h>
+#include "GlobalVariableOutput.h"
 
 using namespace XML;
 
@@ -19,6 +20,9 @@ namespace DATABASE
     {
         m_ChangedSprites.clear();
         m_ChangedObjects.clear();
+
+        if (GlobalVariableOutput *t_pGVOut = GlobalVariableOutput::Get())
+            t_pGVOut->ClearVariables();
     }
 
     void DatabaseOutput::ChangeSpritePrototype(std::string p_sType, SpritePrototype &p_ChangedProto)
@@ -157,6 +161,10 @@ namespace DATABASE
                 t_DBChanges->AddChild("Database", t_NewChildren);
         }
 
+        // get global variable changes
+        if (GlobalVariableOutput *t_pGVOut = GlobalVariableOutput::Get())
+            t_DBChanges->AddChild("GlobalVariables", t_pGVOut->GetXMLData());
+
         m_pWriter = new XML_Writer(p_sFileName, t_DBChanges);
         ClearOutput();
     }
@@ -177,6 +185,36 @@ namespace DATABASE
 
         // Texture ID
         p_pElement->AddAttribute("TextureID", p_pProto->m_uiTextureID);
+
+        // Parent ID
+        if (p_pProto->GetParentList())
+        {
+            XML_WriteData t_Parents(XML_WRITE_CHANGE);
+            for (IDList::const_iterator t_Itr = p_pProto->GetParentList()->begin(); t_Itr != p_pProto->GetParentList()->end(); ++t_Itr)
+            {
+                XML_WriteData t_NewParent;
+                t_NewParent.AddAttribute("ID", *t_Itr);
+                t_Parents.AddChild("Parent", t_NewParent);
+            }
+
+            // delete old parents
+            if (Database *t_pDB = Database::Get())
+            {
+                if (const ObjectPrototype *t_pOldProto = t_pDB->GetObjectPrototype(p_pProto->m_uiID))
+                {
+                    for (IDList::const_iterator t_Itr = t_pOldProto->GetParentList()->begin(); t_Itr != t_pOldProto->GetParentList()->end(); ++t_Itr)
+                    {
+                        if (p_pProto->IsChildrenOf(*t_Itr))
+                            continue;
+
+                        XML_WriteData t_DeleteParent(XML_WRITE_DELETE);
+                        t_DeleteParent.AddAttribute("ID", *t_Itr);
+                        t_Parents.AddChild("Parent", t_DeleteParent);
+                    }
+                }
+            }
+            p_pElement->AddChild("Parents", t_Parents);
+        }
 
         switch(p_pProto->m_uiType)
         {
@@ -206,81 +244,17 @@ namespace DATABASE
 
             if (XML_WriteData* t_pVariables = (XML_WriteData*)p_pElement->GetChild("Variables"))
             {
-                for (ObjectBoolList::const_iterator t_Itr = p_pProto->m_ObjectBoolList.begin(); t_Itr != p_pProto->m_ObjectBoolList.end(); ++t_Itr)
-                {
-                    XML_WriteData t_NewVariable(XML::XML_WRITE_CHANGE);
-                    // 0 == delete mode
-                    if (t_Itr->second.m_uiID != 0)
-                    {
-                        t_NewVariable.AddAttribute("name", (LPCOLESTR)_bstr_t(t_Itr->second.m_sName.c_str()));
-                        t_NewVariable.AddAttribute("ID", t_Itr->second.m_uiID);
-                        t_NewVariable.AddAttribute("value", t_Itr->second.m_Value);
-                    }
-                    else
-                    {
-                        t_NewVariable.SetWriteState(XML_WRITE_DELETE);
-                        t_NewVariable.AddAttribute("ID", t_Itr->first);
-                    }
+                for (VariableBoolList::const_iterator t_Itr = p_pProto->m_ObjectBoolList.begin(); t_Itr != p_pProto->m_ObjectBoolList.end(); ++t_Itr)
+                    t_pVariables->AddChild("bool", GlobalVariableOutput::ParseVariable(t_Itr->first, t_Itr->second));
 
-                    t_pVariables->AddChild("bool", t_NewVariable);
-                }
+                for (VariableIntegerList::const_iterator t_Itr = p_pProto->m_ObjectIntegerList.begin(); t_Itr != p_pProto->m_ObjectIntegerList.end(); ++t_Itr)
+                    t_pVariables->AddChild("integer", GlobalVariableOutput::ParseVariable(t_Itr->first, t_Itr->second));
 
-                for (ObjectIntegerList::const_iterator t_Itr = p_pProto->m_ObjectIntegerList.begin(); t_Itr != p_pProto->m_ObjectIntegerList.end(); ++t_Itr)
-                {
-                    XML_WriteData t_NewVariable(XML::XML_WRITE_CHANGE);
-                    // 0 == delete mode
-                    if (t_Itr->second.m_uiID != 0)
-                    {
-                        t_NewVariable.AddAttribute("name", (LPCOLESTR)_bstr_t(t_Itr->second.m_sName.c_str()));
-                        t_NewVariable.AddAttribute("ID", t_Itr->second.m_uiID);
-                        t_NewVariable.AddAttribute("value", t_Itr->second.m_Value);
-                    }
-                    else
-                    {
-                        t_NewVariable.SetWriteState(XML_WRITE_DELETE);
-                        t_NewVariable.AddAttribute("ID", t_Itr->first);
-                    }
+                for (VariableFloatList::const_iterator t_Itr = p_pProto->m_ObjectFloatList.begin(); t_Itr != p_pProto->m_ObjectFloatList.end(); ++t_Itr)
+                    t_pVariables->AddChild("float", GlobalVariableOutput::ParseVariable(t_Itr->first, t_Itr->second));
 
-                    t_pVariables->AddChild("integer", t_NewVariable);
-                }
-
-                for (ObjectFloatList::const_iterator t_Itr = p_pProto->m_ObjectFloatList.begin(); t_Itr != p_pProto->m_ObjectFloatList.end(); ++t_Itr)
-                {
-                    XML_WriteData t_NewVariable(XML::XML_WRITE_CHANGE);
-                    // 0 == delete mode
-                    if (t_Itr->second.m_uiID != 0)
-                    {
-                        t_NewVariable.AddAttribute("name", (LPCOLESTR)_bstr_t(t_Itr->second.m_sName.c_str()));
-                        t_NewVariable.AddAttribute("ID", t_Itr->second.m_uiID);
-                        t_NewVariable.AddAttribute("value", t_Itr->second.m_Value);
-                    }
-                    else
-                    {
-                        t_NewVariable.SetWriteState(XML_WRITE_DELETE);
-                        t_NewVariable.AddAttribute("ID", t_Itr->first);
-                    }
-
-                    t_pVariables->AddChild("float", t_NewVariable);
-                }
-
-                for (ObjectStringList::const_iterator t_Itr = p_pProto->m_ObjectStringList.begin(); t_Itr != p_pProto->m_ObjectStringList.end(); ++t_Itr)
-                {
-                    XML_WriteData t_NewVariable(XML::XML_WRITE_CHANGE);
-                    // 0 == delete mode
-                    if (t_Itr->second.m_uiID != 0)
-                    {
-                        t_NewVariable.AddAttribute("name", (LPCOLESTR)_bstr_t(t_Itr->second.m_sName.c_str()));
-                        t_NewVariable.AddAttribute("ID", t_Itr->second.m_uiID);
-                        t_NewVariable.AddAttribute("value", (LPCOLESTR)_bstr_t(t_Itr->second.m_Value.c_str()));
-                    }
-                    else
-                    {
-                        t_NewVariable.SetWriteState(XML_WRITE_DELETE);
-                        t_NewVariable.AddAttribute("ID", t_Itr->first);
-                    }
-
-                    t_pVariables->AddChild("string", t_NewVariable);
-                }
+                for (VariableStringList::const_iterator t_Itr = p_pProto->m_ObjectStringList.begin(); t_Itr != p_pProto->m_ObjectStringList.end(); ++t_Itr)
+                    t_pVariables->AddChild("string", GlobalVariableOutput::ParseVariable(t_Itr->first, t_Itr->second));
             }
         }
 
@@ -434,7 +408,7 @@ namespace DATABASE
         }
     }
 
-    uint32 DatabaseOutput::AddNewCustomObjectVariable(uint32 p_uiObjectID, CUSTOM_VARIABLE_TYPE p_Type)
+    uint32 DatabaseOutput::AddNewCustomObjectVariable(uint32 p_uiObjectID, VariableType p_Type)
     {
         ObjectPrototype t_Proto;
         if (GetObjectPrototype(p_uiObjectID))
@@ -451,17 +425,17 @@ namespace DATABASE
         switch(p_Type)
         {
         case VARIABLE_BOOL:
-            for (ObjectBoolList::iterator t_Itr = t_Proto.m_ObjectBoolList.begin(); t_Itr != t_Proto.m_ObjectBoolList.end(); ++t_Itr)
+            for (VariableBoolList::iterator t_Itr = t_Proto.m_ObjectBoolList.begin(); t_Itr != t_Proto.m_ObjectBoolList.end(); ++t_Itr)
             {
-                // 0 == delete mode
                 if (t_uiIDCheck < t_Itr->first)
                 {
-                    TObjectVariable<bool> t_Variable;
+                    TVariable<bool> t_Variable;
                     t_Variable.m_uiID = t_uiIDCheck;
                     t_Proto.m_ObjectBoolList.insert(std::make_pair(t_uiIDCheck, t_Variable));
                     t_bSuccess = true;
                     break;
                 }
+                // 0 == delete mode
                 else if (t_Itr->second.m_uiID == 0)
                 {
                     t_Itr->second.m_uiID = t_uiIDCheck;
@@ -473,7 +447,7 @@ namespace DATABASE
 
             if (!t_bSuccess)
             {
-                TObjectVariable<bool> t_Variable;
+                TVariable<bool> t_Variable;
                 t_Variable.m_uiID = t_uiIDCheck;
                 t_Proto.m_ObjectBoolList.insert(std::make_pair(t_uiIDCheck, t_Variable));
                 t_bSuccess = true;
@@ -481,17 +455,17 @@ namespace DATABASE
 
             break;
         case VARIABLE_INT:
-            for (ObjectIntegerList::iterator t_Itr = t_Proto.m_ObjectIntegerList.begin(); t_Itr != t_Proto.m_ObjectIntegerList.end(); ++t_Itr)
+            for (VariableIntegerList::iterator t_Itr = t_Proto.m_ObjectIntegerList.begin(); t_Itr != t_Proto.m_ObjectIntegerList.end(); ++t_Itr)
             {
-                // 0 == delete mode
                 if (t_uiIDCheck < t_Itr->first)
                 {
-                    TObjectVariable<int> t_Variable;
+                    TVariable<int> t_Variable;
                     t_Variable.m_uiID = t_uiIDCheck;
                     t_Proto.m_ObjectIntegerList.insert(std::make_pair(t_uiIDCheck, t_Variable));
                     t_bSuccess = true;
                     break;
                 }
+                // 0 == delete mode
                 else if (t_Itr->second.m_uiID == 0)
                 {
                     t_Itr->second.m_uiID = t_uiIDCheck;
@@ -504,24 +478,24 @@ namespace DATABASE
 
             if (!t_bSuccess)
             {
-                TObjectVariable<int> t_Variable;
+                TVariable<int> t_Variable;
                 t_Variable.m_uiID = t_uiIDCheck;
                 t_Proto.m_ObjectIntegerList.insert(std::make_pair(t_uiIDCheck, t_Variable));
                 t_bSuccess = true;
             }
             break;
         case VARIABLE_FLOAT:
-            for (ObjectFloatList::iterator t_Itr = t_Proto.m_ObjectFloatList.begin(); t_Itr != t_Proto.m_ObjectFloatList.end(); ++t_Itr)
+            for (VariableFloatList::iterator t_Itr = t_Proto.m_ObjectFloatList.begin(); t_Itr != t_Proto.m_ObjectFloatList.end(); ++t_Itr)
             {
-                // 0 == delete mode
                 if (t_uiIDCheck < t_Itr->first)
                 {
-                    TObjectVariable<float> t_Variable;
+                    TVariable<float> t_Variable;
                     t_Variable.m_uiID = t_uiIDCheck;
                     t_Proto.m_ObjectFloatList.insert(std::make_pair(t_uiIDCheck, t_Variable));
                     t_bSuccess = true;
                     break;
                 }
+                // 0 == delete mode
                 else if (t_Itr->second.m_uiID == 0)
                 {
                     t_Itr->second.m_uiID = t_uiIDCheck;
@@ -534,24 +508,24 @@ namespace DATABASE
 
             if (!t_bSuccess)
             {
-                TObjectVariable<float> t_Variable;
+                TVariable<float> t_Variable;
                 t_Variable.m_uiID = t_uiIDCheck;
                 t_Proto.m_ObjectFloatList.insert(std::make_pair(t_uiIDCheck, t_Variable));
                 t_bSuccess = true;
             }
             break;
         case VARIABLE_STRING:
-            for (ObjectStringList::iterator t_Itr = t_Proto.m_ObjectStringList.begin(); t_Itr != t_Proto.m_ObjectStringList.end(); ++t_Itr)
+            for (VariableStringList::iterator t_Itr = t_Proto.m_ObjectStringList.begin(); t_Itr != t_Proto.m_ObjectStringList.end(); ++t_Itr)
             {
-                // 0 == delete mode
                 if (t_uiIDCheck < t_Itr->first)
                 {
-                    TObjectVariable<std::string> t_Variable;
+                    TVariable<std::string> t_Variable;
                     t_Variable.m_uiID = t_uiIDCheck;
                     t_Proto.m_ObjectStringList.insert(std::make_pair(t_uiIDCheck, t_Variable));
                     t_bSuccess = true;
                     break;
                 }
+                // 0 == delete mode
                 else if (t_Itr->second.m_uiID == 0)
                 {
                     t_Itr->second.m_uiID = t_uiIDCheck;
@@ -564,7 +538,7 @@ namespace DATABASE
 
             if (!t_bSuccess)
             {
-                TObjectVariable<std::string> t_Variable;
+                TVariable<std::string> t_Variable;
                 t_Variable.m_uiID = t_uiIDCheck;
                 t_Proto.m_ObjectStringList.insert(std::make_pair(t_uiIDCheck, t_Variable));
                 t_bSuccess = true;
@@ -583,7 +557,7 @@ namespace DATABASE
         return 0;
     }
 
-    bool DatabaseOutput::DeleteCustomObjectVariable(uint32 p_uiObjectID, CUSTOM_VARIABLE_TYPE p_Type, uint32 p_uiVariableID)
+    bool DatabaseOutput::DeleteCustomObjectVariable(uint32 p_uiObjectID, VariableType p_Type, uint32 p_uiVariableID)
     {
         ObjectPrototype t_Proto;
         if (GetObjectPrototype(p_uiObjectID))
@@ -600,7 +574,7 @@ namespace DATABASE
         {
         case VARIABLE_BOOL:
             {
-                ObjectBoolList::iterator t_Itr = t_Proto.m_ObjectBoolList.find(p_uiVariableID);
+                VariableBoolList::iterator t_Itr = t_Proto.m_ObjectBoolList.find(p_uiVariableID);
                 if (t_Itr != t_Proto.m_ObjectBoolList.end())
                 {
                     t_Itr->second.m_uiID = 0;
@@ -611,7 +585,7 @@ namespace DATABASE
             }
         case VARIABLE_INT:
             {
-                ObjectIntegerList::iterator t_Itr = t_Proto.m_ObjectIntegerList.find(p_uiVariableID);
+                VariableIntegerList::iterator t_Itr = t_Proto.m_ObjectIntegerList.find(p_uiVariableID);
                 if (t_Itr != t_Proto.m_ObjectIntegerList.end())
                 {
                     t_Itr->second.m_uiID = 0;
@@ -623,7 +597,7 @@ namespace DATABASE
             break;
         case VARIABLE_FLOAT:
             {
-                ObjectFloatList::iterator t_Itr = t_Proto.m_ObjectFloatList.find(p_uiVariableID);
+                VariableFloatList::iterator t_Itr = t_Proto.m_ObjectFloatList.find(p_uiVariableID);
                 if (t_Itr != t_Proto.m_ObjectFloatList.end())
                 {
                     t_Itr->second.m_uiID = 0;
@@ -635,7 +609,7 @@ namespace DATABASE
             break;
         case VARIABLE_STRING:
             {
-                ObjectStringList::iterator t_Itr = t_Proto.m_ObjectStringList.find(p_uiVariableID);
+                VariableStringList::iterator t_Itr = t_Proto.m_ObjectStringList.find(p_uiVariableID);
                 if (t_Itr != t_Proto.m_ObjectStringList.end())
                 {
                     t_Itr->second.m_uiID = 0;
@@ -653,5 +627,43 @@ namespace DATABASE
             ChangeObjectPrototype(t_Proto);
 
         return t_bSuccess;
+    }
+
+    const ObjectPrototype* DatabaseOutput::GetLatestObjectPrototype(uint32 p_uiID)
+    {
+        if (Database *t_pDB = Database::Get())
+        {
+            if (DatabaseOutput *t_pDBOut = DatabaseOutput::Get())
+            {
+                const ObjectPrototype *t_pProto = t_pDBOut->GetObjectPrototype(p_uiID);
+                if (t_pProto)
+                    return t_pProto;
+
+                t_pProto = t_pDB->GetObjectPrototype(p_uiID);
+                if (t_pProto)
+                    return t_pProto;
+            }
+        }
+
+        return NULL;
+    }
+
+    IDList DatabaseOutput::GetAllParents(const Prototype *p_pProto)
+    {
+        IDList t_uiParentIDList;
+        if (!p_pProto || !p_pProto->GetParentList())
+            return t_uiParentIDList;
+
+        t_uiParentIDList = *p_pProto->GetParentList();
+        for (IDList::const_iterator t_Itr = p_pProto->GetParentList()->begin(); t_Itr != p_pProto->GetParentList()->end(); ++t_Itr)
+        {
+            if (const ObjectPrototype *t_pParent = GetLatestObjectPrototype(*t_Itr))
+            {
+                IDList t_uiTempIDList = GetAllParents(t_pParent);
+                t_uiParentIDList.insert(t_uiTempIDList.begin(), t_uiTempIDList.end());
+            }
+        }
+
+        return t_uiParentIDList;
     }
 }

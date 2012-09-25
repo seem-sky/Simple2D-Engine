@@ -15,6 +15,13 @@ CustomVariablePageTemplateWidget::~CustomVariablePageTemplateWidget(void)
 
 void CustomVariablePageTemplateWidget::ClickDelete()
 {
+    QString t_sText = m_pStoreBox->currentText();
+    QString t_sID = t_sText;
+    t_sID.truncate(t_sID.indexOf(":"));
+    // if == P, its a parent variable
+    if (t_sID == "P")
+        return;
+
     ChangeItem(GetCurrentItemID(), true);
     m_pStoreBox->removeItem(m_pStoreBox->currentIndex());
 }
@@ -25,9 +32,22 @@ void CustomVariablePageTemplateWidget::IndexChanged(int p_Index)
     if (p_Index == -1)
         return;
 
-    QString t_sID = m_pStoreBox->currentText();
+    QString t_sText = m_pStoreBox->currentText();
+    QString t_sID = t_sText;
     t_sID.truncate(t_sID.indexOf(":"));
-    SelectItem(t_sID.toUInt());
+    // if == P, its a parent variable
+    if (t_sID == "P")
+    {
+        t_sText = t_sText.right(t_sText.size()-2);
+        QString t_sPID = t_sText;
+        t_sPID.truncate(t_sPID.indexOf(":"));
+        t_sText = t_sText.right(t_sText.size()-t_sText.indexOf(":")-1);
+        QString t_sPVID = t_sText;
+        t_sPVID.truncate(t_sPVID.indexOf(":"));
+        SelectItem(t_sPVID.toUInt(), t_sPID.toUInt());
+    }
+    else
+        SelectItem(t_sID.toUInt());
 }
 
 void CustomVariablePageTemplateWidget::ConnectWidgets()
@@ -60,6 +80,9 @@ int CustomVariablePageTemplateWidget::InsertItem(uint32 p_uiID, QString p_sData)
     {
         t_sText = m_pStoreBox->itemText(t_uiI);
         t_sText.truncate(t_sText.indexOf(":"));
+        if (t_sText == "P")
+            continue;
+
         t_uiID = t_sText.toUInt();
         if (p_uiID < t_uiID)
         {
@@ -68,5 +91,21 @@ int CustomVariablePageTemplateWidget::InsertItem(uint32 p_uiID, QString p_sData)
         }
     }
 
-    return -1;
+    m_pStoreBox->addItem(p_sData);
+    return m_pStoreBox->count()-1;
+}
+
+void CustomVariablePageTemplateWidget::SetWidgets(uint32 p_uiID, QString p_sName, bool p_bEnabled)
+{
+    m_pName->setText(p_sName);
+    if (p_bEnabled)
+        m_pName->setEnabled(true);
+    else
+        m_pName->setEnabled(false);
+
+    m_pID->setValue(p_uiID);
+    if (p_bEnabled)
+        m_pID->setEnabled(true);
+    else
+        m_pID->setEnabled(false);
 }

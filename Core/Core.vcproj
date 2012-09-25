@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="EngineSupport"
+	Name="Core"
 	ProjectGUID="{EF50DD0D-6C98-4570-8036-AB5D9874C997}"
 	RootNamespace="EngineSupport"
 	TargetFrameworkVersion="196613"
@@ -17,7 +17,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			OutputDirectory="..\..\Antis-GameEngine(Arbeitsname)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
 			CharacterSet="2"
@@ -156,11 +156,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Logfile.cpp"
+				RelativePath=".\GlobalVariables.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\ScriptDatabase.cpp"
+				RelativePath=".\Logfile.cpp"
 				>
 			</File>
 			<File
@@ -190,15 +190,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\GlobalVariables.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Logfile.h"
 				>
 			</File>
 			<File
 				RelativePath=".\Point.h"
-				>
-			</File>
-			<File
-				RelativePath=".\ScriptDatabase.h"
 				>
 			</File>
 			<File
@@ -227,10 +227,24 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Ressourcendateien"
-			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
-			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
+			Name="EventScriptStuff"
 			>
+			<File
+				RelativePath=".\EventScriptCommand.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\EventScriptCommand.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ScriptDatabase.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ScriptDatabase.h"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>

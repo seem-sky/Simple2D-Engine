@@ -30,7 +30,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>2</number>
     </property>
     <widget class="TextureDatabaseWindow" name="widget">
      <attribute name="title">
@@ -40,6 +40,11 @@
     <widget class="ObjectDatabaseWindow" name="Objects">
      <attribute name="title">
       <string>Objects</string>
+     </attribute>
+    </widget>
+    <widget class="GlobalVariableDatabaseWindow" name="m_pGlobalVariables">
+     <attribute name="title">
+      <string>Global Variables</string>
      </attribute>
     </widget>
    </widget>
@@ -95,6 +100,12 @@
    <class>ObjectDatabaseWindow</class>
    <extends>QWidget</extends>
    <header>objectdatabasewindow.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>GlobalVariableDatabaseWindow</class>
+   <extends>QWidget</extends>
+   <header>globalvariabledatabasewindow.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -14,7 +14,7 @@
    <string>EventEditor</string>
   </property>
   <widget class="QWidget" name="mainwidget">
-   <widget class="EventEditorWidget" name="EventEditor" native="true">
+   <widget class="EventEditorWidget" name="m_pEventEditor" native="true">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -24,7 +24,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QPushButton" name="ButtonApply">
+   <widget class="QPushButton" name="m_pButtonApply">
     <property name="geometry">
      <rect>
       <x>670</x>
@@ -37,7 +37,7 @@
      <string>Apply</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="ButtonCancel">
+   <widget class="QPushButton" name="m_pButtonCancel">
     <property name="geometry">
      <rect>
       <x>550</x>
@@ -50,7 +50,7 @@
      <string>Cancel</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="ButtonOK">
+   <widget class="QPushButton" name="m_pButtonOK">
     <property name="geometry">
      <rect>
       <x>430</x>
