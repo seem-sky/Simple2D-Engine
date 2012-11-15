@@ -1,29 +1,13 @@
 #include "CustomVariablePageTemplateWidget.h"
 #include "moc_CustomVariablePageTemplateWidget.h"
+#include "VariableCountDialog.h"
 
-CustomVariablePageTemplateWidget::CustomVariablePageTemplateWidget(QWidget *p_pParent) : QWidget(p_pParent), Ui_CustomVariablePageTemplate(), m_uiOwnerID(0)
+CustomVariablePageTemplateWidget::CustomVariablePageTemplateWidget(QWidget *p_pParent) : QWidget(p_pParent), Ui_CustomVariablePageTemplate(),
+m_uiOwnerID(0), m_pVariableHolder(NULL), m_pPrototype(NULL)
 {
     setupUi(this);
     connect(m_pStoreBox, SIGNAL(currentIndexChanged(int)), this, SLOT(IndexChanged(int)));
-    connect(m_pNew, SIGNAL(clicked()), this, SLOT(ClickNew()));
-    connect(m_pDelete, SIGNAL(clicked()), this, SLOT(ClickDelete()));
-}
-
-CustomVariablePageTemplateWidget::~CustomVariablePageTemplateWidget(void)
-{
-}
-
-void CustomVariablePageTemplateWidget::ClickDelete()
-{
-    QString t_sText = m_pStoreBox->currentText();
-    QString t_sID = t_sText;
-    t_sID.truncate(t_sID.indexOf(":"));
-    // if == P, its a parent variable
-    if (t_sID == "P")
-        return;
-
-    ChangeItem(GetCurrentItemID(), true);
-    m_pStoreBox->removeItem(m_pStoreBox->currentIndex());
+    connect(m_pResizeButton, SIGNAL(clicked()), this, SLOT(ResizeVariablesClicked()));
 }
 
 void CustomVariablePageTemplateWidget::IndexChanged(int p_Index)
@@ -38,13 +22,16 @@ void CustomVariablePageTemplateWidget::IndexChanged(int p_Index)
     // if == P, its a parent variable
     if (t_sID == "P")
     {
-        t_sText = t_sText.right(t_sText.size()-2);
-        QString t_sPID = t_sText;
-        t_sPID.truncate(t_sPID.indexOf(":"));
-        t_sText = t_sText.right(t_sText.size()-t_sText.indexOf(":")-1);
-        QString t_sPVID = t_sText;
-        t_sPVID.truncate(t_sPVID.indexOf(":"));
-        SelectItem(t_sPVID.toUInt(), t_sPID.toUInt());
+        if (m_pPrototype)
+        {
+            t_sText = t_sText.right(t_sText.size()-2);
+            QString t_sPID = t_sText;
+            t_sPID.truncate(t_sPID.indexOf(":"));
+            t_sText = t_sText.right(t_sText.size()-t_sText.indexOf(":")-1);
+            QString t_sPVID = t_sText;
+            t_sPVID.truncate(t_sPVID.indexOf(":"));
+            SelectItem(t_sPVID.toUInt(), t_sPID.toUInt());
+        }
     }
     else
         SelectItem(t_sID.toUInt());
@@ -98,14 +85,18 @@ int CustomVariablePageTemplateWidget::InsertItem(uint32 p_uiID, QString p_sData)
 void CustomVariablePageTemplateWidget::SetWidgets(uint32 p_uiID, QString p_sName, bool p_bEnabled)
 {
     m_pName->setText(p_sName);
-    if (p_bEnabled)
-        m_pName->setEnabled(true);
-    else
-        m_pName->setEnabled(false);
-
+    m_pName->setEnabled(p_bEnabled ? true : false);
     m_pID->setValue(p_uiID);
-    if (p_bEnabled)
-        m_pID->setEnabled(true);
-    else
-        m_pID->setEnabled(false);
+    m_pID->setEnabled(p_bEnabled ? true : false);
+}
+
+void CustomVariablePageTemplateWidget::ResizeVariablesClicked()
+{
+    if (!m_pVariableHolder)
+        return;
+
+    uint32 t_uiCounter = GetVariableCount();
+    VariableCountDialog t_Dialog(this, &t_uiCounter);
+    if (t_Dialog.exec())
+        ResizeVariableCount(t_uiCounter);
 }

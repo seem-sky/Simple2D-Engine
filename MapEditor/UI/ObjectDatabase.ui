@@ -282,24 +282,24 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>2</number>
    </property>
-   <widget class="CustomObjectVariableBoolPageWidget" name="m_pBools">
+   <widget class="CustomVariableBoolPageWidget" name="m_pBools">
     <attribute name="title">
      <string>bool</string>
     </attribute>
    </widget>
-   <widget class="CustomObjectVariableIntPageWidget" name="m_pInteger">
+   <widget class="CustomVariableIntPageWidget" name="m_pInteger">
     <attribute name="title">
      <string>integer</string>
     </attribute>
    </widget>
-   <widget class="CustomObjectVariableFloatPageWidget" name="m_pFloats">
+   <widget class="CustomVariableFloatPageWidget" name="m_pFloats">
     <attribute name="title">
      <string>float</string>
     </attribute>
    </widget>
-   <widget class="CustomObjectVariableStringPageWidget" name="m_pStrings">
+   <widget class="CustomVariableStringPageWidget" name="m_pStrings">
     <attribute name="title">
      <string>string</string>
     </attribute>
@@ -409,27 +409,27 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>CustomObjectVariableIntPageWidget</class>
+   <class>CustomVariableBoolPageWidget</class>
+   <extends>QWidget</extends>
+   <header>customvariableboolpagewidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CustomVariableIntPageWidget</class>
    <extends>QWidget</extends>
    <header>customvariableintpagewidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>CustomObjectVariableFloatPageWidget</class>
-   <extends>QWidget</extends>
-   <header>customvariablefloatpagewidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>CustomObjectVariableStringPageWidget</class>
+   <class>CustomVariableStringPageWidget</class>
    <extends>QWidget</extends>
    <header>customvariablestringpagewidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>CustomObjectVariableBoolPageWidget</class>
+   <class>CustomVariableFloatPageWidget</class>
    <extends>QWidget</extends>
-   <header>customvariableboolpagewidget.h</header>
+   <header>customvariablefloatpagewidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

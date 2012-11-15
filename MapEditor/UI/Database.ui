@@ -5,6 +5,9 @@
   <property name="windowModality">
    <enum>Qt::NonModal</enum>
   </property>
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -30,7 +33,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>0</number>
     </property>
     <widget class="TextureDatabaseWindow" name="widget">
      <attribute name="title">
@@ -49,6 +52,9 @@
     </widget>
    </widget>
    <widget class="QPushButton" name="ButtonApply">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>670</x>

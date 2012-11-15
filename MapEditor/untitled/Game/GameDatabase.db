@@ -1,19 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <Database>
-	<GlobalVariables>
-		<GlobalBools>
-			<Variable ID="1" name="test" value="0"/>
-		</GlobalBools>
-		<GlobalInts>
-			<Variable ID="1" name="test" value="78768"/>
-		</GlobalInts>
-		<GlobalFloats>
-			<Variable ID="1" name="test" value="45665,543"/>
-		</GlobalFloats>
-		<GlobalStrings>
-			<Variable ID="1" name="test" value="Ich bin eine Testvariabel!"/>
-		</GlobalStrings>
-	</GlobalVariables>
 	<SpriteDatabase>
 		<SpritePath ID="0" Path="MapSprites/"/>
 		<SpritePath ID="1" Path="Charset/"/>
@@ -23,7 +9,7 @@
 			<Sprite ID="1" FileName="gras.png" Type="0" auto_tile="0" passability="15" terraintype="0" transparent_color=""/>
 			<Sprite ID="2" FileName="stone.png" Type="0" auto_tile="0" passability="0" terraintype="0"/>
 			<Sprite ID="3" FileName="road2.png" Type="0" auto_tile="1" passability="15" terraintype="0" transparent_color="R0G255B0"/>
-			<Sprite FileName="road.png" ID="4" Type="0" passability="15" terraintype="0" auto_tile="1" transparent_color=""/><Sprite FileName="" ID="5" Type="0" auto_tile="0" passability="0" terraintype="0" transparent_color=""/><Sprite FileName="" ID="6" Type="0" auto_tile="0" passability="0" terraintype="0" transparent_color=""/><Sprite FileName="" ID="7" Type="0" auto_tile="0" passability="0" terraintype="0" transparent_color=""/><Sprite FileName="" ID="8" Type="0" auto_tile="0" passability="0" terraintype="0" transparent_color=""/><Sprite FileName="" ID="9" Type="0" auto_tile="0" passability="0" terraintype="0" transparent_color=""/></Tiles>
+			<Sprite FileName="road.png" ID="4" Type="0" passability="15" terraintype="0" auto_tile="1" transparent_color=""/></Tiles>
 		<Objects>
 			<Sprite ID="1" FileName="tree1.png" Type="1" boundingXBegin="12" boundingYBegin="64" boundingXRange="40" boundingYRange="19" transparent_color="R0G128B128"/>
 		</Objects>
@@ -36,15 +22,12 @@
 	</SpriteDatabase>
 	<ObjectDatabase>
 		<Object ID="1" ObjectName="Held" Type="1" TextureID="1" AnimationFrequency="3" MovementSpeed="3" HP_max="0" HP_min="0">
-			<Variables>
-				<bool ID="1" name="test" value="-1"/>
-				<bool ID="2" name="test2" value="0"/><string ID="1" name="font" value="dgdfgsdy"/></Variables>
-			<Parents/></Object>
-		<Object ID="2" ObjectName="Tree1" Type="0" TextureID="1"><Variables><bool ID="1" name="alive" value="-1"/></Variables></Object>
+			<Parents><Parent ID="2"/></Parents><Variables><bool name="" value="0"/><bool name="" value="0"/></Variables></Object>
+		<Object ID="2" ObjectName="Tree1" Type="0" TextureID="1"><Parents/><Variables><bool name="alive" value="-1"/><integer name="" value="0"/><integer name="" value="0"/></Variables></Object>
 	</ObjectDatabase>
 	<MapDatabase>
 		<Map ID="1" File="Map2.map"/>
 		<Map ID="2" File="Map1.map"/>
 	</MapDatabase>
 	<StartConditions MapID="1" HeroeID="1" StartPosX="55" StartPosY="90"/>
-</Database>
+	<GlobalVariables><bool name="" value="0"/><bool name="" value="0"/><bool name="" value="0"/><bool name="" value="0"/><bool name="" value="0"/><float name="test" value="4566554"/><integer name="" value="0"/><integer name="" value="0"/><integer name="" value="0"/><string name="test" value="Ich bin eine Testvariabel!"/></GlobalVariables></Database>

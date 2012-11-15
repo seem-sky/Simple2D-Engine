@@ -1,6 +1,7 @@
 #include "CustomVariableStringPageWidget.h"
 #include "moc_CustomVariableStringPageWidget.h"
 #include "DatabaseOutput.h"
+#include <QtGui/QMessageBox>
 
 using namespace DATABASE;
 
@@ -9,20 +10,16 @@ CustomVariableStringPageWidget::CustomVariableStringPageWidget(QWidget *p_pParen
     Ui_CustomVariableStringPage::setupUi(this);
 }
 
-CustomVariableStringPageWidget::~CustomVariableStringPageWidget(void)
-{
-}
-
 void CustomVariableStringPageWidget::ConnectWidgets()
 {
     CustomVariablePageTemplateWidget::ConnectWidgets();
-    connect(m_pDefault, SIGNAL(currentIndexChanged(int)), this, SLOT(DefaultValueChanged(int)));
+    connect(m_pDefault, SIGNAL(editingFinished()), this, SLOT(DefaultValueChanged()));
 }
 
 void CustomVariableStringPageWidget::DisconnectWidgets()
 {
     CustomVariablePageTemplateWidget::DisconnectWidgets();
-    disconnect(m_pDefault, SIGNAL(currentIndexChanged(int)), this, SLOT(DefaultValueChanged(int)));
+    disconnect(m_pDefault, SIGNAL(editingFinished()), this, SLOT(DefaultValueChanged()));
 }
 
 void CustomVariableStringPageWidget::ClearWidgets()
@@ -37,158 +34,103 @@ TVariable<std::string> CustomVariableStringPageWidget::GetVariableFromData()
 {
     TVariable<std::string> t_Var;
     t_Var.m_sName  = m_pName->text().toStdString();
-    t_Var.m_uiID   = m_pID->value();
     t_Var.m_Value  = m_pDefault->text().toStdString();
     return t_Var;
 }
 
-void CustomObjectVariableStringPageWidget::ClickNew()
+void CustomVariableStringPageWidget::ChangeItem(uint32 p_uiID, bool p_bDelete /* = false */)
 {
-    if (DatabaseOutput *t_pDB = DatabaseOutput::Get())
-    {
-        uint32 t_uiID = t_pDB->AddNewCustomObjectVariable(m_uiOwnerID, VARIABLE_STRING);
-        if (t_uiID)
-        {
-            int t_Index = InsertItem(t_uiID, QString((ToString(t_uiID)+":").c_str()));
-            if (t_Index != -1)
-                m_pStoreBox->setCurrentIndex(t_Index);
-        }
-    }
-}
-
-void CustomObjectVariableStringPageWidget::LoadItems()
-{
-    m_pStoreBox->clear();
-    const ObjectPrototype *t_pProto = DatabaseOutput::GetLatestObjectPrototype(m_uiOwnerID);
-    if (!t_pProto)
+    if (!m_pVariableHolder)
         return;
 
-    IDList t_uiParentIDList = DatabaseOutput::GetAllParents(t_pProto);
-    for (IDList::iterator t_Itr = t_uiParentIDList.begin(); t_Itr != t_uiParentIDList.end(); ++t_Itr)
-    {
-        if (const ObjectPrototype *t_pParentProto = DatabaseOutput::GetLatestObjectPrototype(*t_Itr))
-        {
-            for (VariableStringList::const_iterator t_VarItr = t_pParentProto->m_ObjectStringList.begin(); t_VarItr != t_pParentProto->m_ObjectStringList.end(); ++t_VarItr)
-            {
-                std::string t_sText = "P:" + ToString(t_pParentProto->m_uiID) + ":" + ToString(t_VarItr->first)+":" + t_VarItr->second.m_sName;
-                m_pStoreBox->addItem(QString(t_sText.c_str()));
-            }
-        }
-    }
-
-    for (VariableStringList::const_iterator t_Itr = t_pProto->m_ObjectStringList.begin(); t_Itr != t_pProto->m_ObjectStringList.end(); ++t_Itr)
-    {
-        std::string t_sText = ToString(t_Itr->first)+":"+t_Itr->second.m_sName;
-        m_pStoreBox->addItem(QString(t_sText.c_str()));
-    }
+    m_pVariableHolder->SetString(p_uiID, GetVariableFromData());
 }
 
-void CustomObjectVariableStringPageWidget::SelectItem(uint32 p_uiID, uint32 p_uiParentID)
+void CustomVariableStringPageWidget::SelectItem(uint32 p_uiID, uint32 p_uiParentID /* = 0 */)
 {
     ClearWidgets();
     DisconnectWidgets();
     uint32 t_uiID = 0;
+    const VariableHolder *t_pVarHolder = NULL;
     if (p_uiParentID)
-        t_uiID = p_uiParentID;
-    else
-        t_uiID = m_uiOwnerID;
+    {
+        if (!m_pPrototype)
+            return;
 
-    const ObjectPrototype *t_pProto = DatabaseOutput::GetLatestObjectPrototype(t_uiID);
-    if (!t_pProto)
+        if (DatabaseOutput *t_pDBOut = DatabaseOutput::Get())
+            t_pVarHolder = t_pDBOut->GetVariableHolderFromParent(m_pPrototype->m_PrototypeType, p_uiParentID);
+    }
+    else
+        t_pVarHolder = m_pVariableHolder;
+
+    if (!t_pVarHolder)
         return;
 
-    VariableStringList::const_iterator t_Itr = t_pProto->m_ObjectStringList.find(p_uiID);
-    if (t_Itr == t_pProto->m_ObjectStringList.end())
+    const TVariable<std::string> *t_pVar = t_pVarHolder->GetString(p_uiID);
+    if (!t_pVar)
         return;
 
-    SetWidgets(t_Itr->second.m_uiID, QString(t_Itr->second.m_sName.c_str()), p_uiParentID ? 0 : 1);
+    SetWidgets(p_uiID, QString::fromStdString(t_pVar->m_sName), p_uiParentID ? false : true);
 
-    m_pDefault->setText(QString(t_Itr->second.m_Value.c_str()));
-    if (p_uiParentID)
-        m_pDefault->setEnabled(false);
-    else
-        m_pDefault->setEnabled(true);
+    m_pDefault->setText(QString::fromStdString(t_pVar->m_Value));
+    m_pDefault->setEnabled(p_uiParentID ? false : true);
     ConnectWidgets();
 }
 
-void CustomObjectVariableStringPageWidget::ChangeItem(uint32 p_uiID, bool p_bDelete)
+void CustomVariableStringPageWidget::LoadItems()
 {
-    ObjectPrototype t_Proto;
-    if (const ObjectPrototype *t_pProto = DatabaseOutput::GetLatestObjectPrototype(m_uiOwnerID))
-        t_Proto = *t_pProto;
-    else
+    m_pDefault->setEnabled(false);
+    m_pName->setEnabled(false);
+    m_pID->setEnabled(false);
+    m_pStoreBox->clear();
+    if (!m_pVariableHolder)
         return;
 
-    TVariable<std::string> t_Variable = GetVariableFromData();
-
-    VariableStringList::iterator t_Itr = t_Proto.m_ObjectStringList.find(t_Variable.m_uiID);
-    if (t_Itr != t_Proto.m_ObjectStringList.end())
-        t_Itr->second = t_Variable;
-    else
-        t_Proto.m_ObjectStringList.insert(std::make_pair(t_Variable.m_uiID, t_Variable));
-
-    if (DatabaseOutput *t_pDB = DatabaseOutput::Get())
-        t_pDB->ChangeObjectPrototype(t_Proto);
-}
-
-void CustomGlobalVariableStringPageWidget::SelectItem(uint32 p_uiID, uint32 p_uiParentID)
-{
-    QString t_sText = m_pStoreBox->currentText();
-    QString t_sID = t_sText;
-    t_sID.truncate(t_sID.indexOf(":"));
-    GlobalVariableOutput *t_pGlobalVariables = GlobalVariableOutput::Get();
-    if (!t_pGlobalVariables)
-        return;
-
-    const TVariable<std::string> *t_Var = t_pGlobalVariables->GetLatestString(t_sID.toUInt());
-    if (!t_Var)
-        return;
-
-    m_pID->setValue(t_Var->m_uiID);
-    m_pName->setText(QString(t_Var->m_sName.c_str()));
-    m_pDefault->setText(QString(t_Var->m_Value.c_str()));
-}
-
-void CustomGlobalVariableStringPageWidget::ChangeItem(uint32 p_uiID, bool p_bDelete)
-{
-    TVariable<std::string> t_Var = GetVariableFromData();
-    if (GlobalVariableOutput *t_pGVOut = GlobalVariableOutput::Get())
-        t_pGVOut->SetVariable(t_Var, p_bDelete);
-}
-
-void CustomGlobalVariableStringPageWidget::LoadItems()
-{
-    GlobalVariables *t_pGlobalVariables = GlobalVariables::Get();
-    if (!t_pGlobalVariables)
-        return;
-
-    std::map<uint32, std::string> t_VarNames;
-    t_pGlobalVariables->GetStringNames(t_VarNames);
-
-    for (std::map<uint32, std::string>::iterator t_Itr = t_VarNames.begin(); t_Itr != t_VarNames.end(); ++t_Itr)
+    if (m_pPrototype)
     {
-        std::string t_sText = ToString(t_Itr->first)+":"+t_Itr->second;
-        m_pStoreBox->addItem(QString(t_sText.c_str()));
+        if (DatabaseOutput *t_pDBOut = DatabaseOutput::Get())
+        {
+            IDList t_uiParentIDList = t_pDBOut->GetAllParents(m_pPrototype);
+            for (IDList::iterator t_Itr = t_uiParentIDList.begin(); t_Itr != t_uiParentIDList.end(); ++t_Itr)
+            {
+                if (const VariableHolder *t_pVarHolder = t_pDBOut->GetVariableHolderFromParent(m_pPrototype->m_PrototypeType, *t_Itr))
+                {
+                    std::vector<std::string> t_VarNames;
+                    t_pVarHolder->GetStringNames(t_VarNames);
+                    for (uint32 i = 0; i < t_VarNames.size(); ++i)
+                        m_pStoreBox->addItem("P:" + QString::number(*t_Itr) + ":" + QString::number(i)+":" + QString::fromStdString(t_VarNames.at(i)));
+                }
+            }
+        }
     }
+
+    std::vector<std::string> t_VarNames;
+    m_pVariableHolder->GetStringNames(t_VarNames);
+    for (uint32 i = 0; i < t_VarNames.size(); ++i)
+        m_pStoreBox->addItem(QString::number(i)+":" + QString::fromStdString(t_VarNames.at(i)));
 }
 
-void CustomGlobalVariableStringPageWidget::ClickNew()
+void CustomVariableStringPageWidget::ResizeVariableCount(uint32 p_uiCount)
 {
-    GlobalVariableOutput *t_pGVOut = GlobalVariableOutput::Get();
-    if (!t_pGVOut)
+    if (!m_pVariableHolder)
         return;
 
-    uint32 t_uiNewID = t_pGVOut->GetFreeStringID();
+    uint32 t_uiCurCount = m_pVariableHolder->GetStringCount();
+    if (t_uiCurCount < p_uiCount)
+        m_pVariableHolder->SetStringCount(p_uiCount);
+    else if (t_uiCurCount > p_uiCount)
+    {
+        if (QMessageBox::Yes == QMessageBox::question(this, "Are you sure?", "The new count is smaller than the old one. Some variables are going to be deleted.", QMessageBox::Yes | QMessageBox::No, QMessageBox::No))
+            m_pVariableHolder->SetStringCount(p_uiCount);
+    }
 
-    if (!t_uiNewID)
-        return;
+    LoadItems();
+}
 
-    TVariable<std::string> t_NewVar;
-    t_NewVar.m_uiID = t_uiNewID;
-    t_pGVOut->SetVariable(t_NewVar);
-    int t_Index = InsertItem(t_uiNewID, QString((ToString(t_uiNewID) + ":").c_str()));
-    if (t_Index == -1)
-        return;
+uint32 CustomVariableStringPageWidget::GetVariableCount()
+{
+    if (!m_pVariableHolder)
+        return 0;
 
-    m_pStoreBox->setCurrentIndex(t_Index);
+    return m_pVariableHolder->GetStringCount();
 }

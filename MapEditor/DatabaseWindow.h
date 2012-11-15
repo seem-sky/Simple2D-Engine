@@ -18,12 +18,17 @@ public:
 private slots:
     void ClickButtonOK();
     void ClickButtonApply();
+    void DBSaved();
+
+signals:
+    void ReloadPage();
 
 protected:
     void closeEvent(QCloseEvent *p_pEvent);
     void resizeEvent(QResizeEvent *p_pEvent) { m_ResizeObj.ResizeEvent(this); }
 
 private:
+    void SaveDatabase();
     void ClearWidgets();
     std::string m_sLogLocationName;
     ResizeWidget m_ResizeObj;

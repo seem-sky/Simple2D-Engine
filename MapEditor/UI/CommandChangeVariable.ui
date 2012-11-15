@@ -46,7 +46,7 @@
     <rect>
      <x>10</x>
      <y>160</y>
-     <width>71</width>
+     <width>181</width>
      <height>21</height>
     </rect>
    </property>
@@ -147,7 +147,7 @@
       <rect>
        <x>10</x>
        <y>10</y>
-       <width>211</width>
+       <width>311</width>
        <height>22</height>
       </rect>
      </property>
@@ -157,6 +157,16 @@
     <attribute name="title">
      <string>Local Variable</string>
     </attribute>
+    <widget class="QComboBox" name="m_pLocalVarBox">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>311</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
    </widget>
    <widget class="QWidget" name="m_pDestObjectVariable">
     <attribute name="title">
@@ -367,9 +377,9 @@
     <widget class="QDoubleSpinBox" name="m_pValueFloat">
      <property name="geometry">
       <rect>
-       <x>140</x>
+       <x>130</x>
        <y>70</y>
-       <width>171</width>
+       <width>191</width>
        <height>22</height>
       </rect>
      </property>
@@ -386,9 +396,9 @@
     <widget class="QSpinBox" name="m_pValueInteger">
      <property name="geometry">
       <rect>
-       <x>140</x>
+       <x>130</x>
        <y>40</y>
-       <width>171</width>
+       <width>191</width>
        <height>22</height>
       </rect>
      </property>
@@ -402,9 +412,9 @@
     <widget class="QLineEdit" name="m_pValueString">
      <property name="geometry">
       <rect>
-       <x>140</x>
+       <x>130</x>
        <y>100</y>
-       <width>171</width>
+       <width>191</width>
        <height>20</height>
       </rect>
      </property>
@@ -412,9 +422,9 @@
     <widget class="QComboBox" name="m_pValueBool">
      <property name="geometry">
       <rect>
-       <x>140</x>
+       <x>130</x>
        <y>10</y>
-       <width>171</width>
+       <width>191</width>
        <height>21</height>
       </rect>
      </property>
@@ -440,11 +450,251 @@
     <attribute name="title">
      <string>Global Variable</string>
     </attribute>
+    <widget class="QLabel" name="label_28">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>100</y>
+       <width>121</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>string value:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_29">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>40</y>
+       <width>121</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>integer value:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_30">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>101</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>bool value:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_31">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>70</y>
+       <width>121</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>float value:</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="m_pSrcGlobalBoolBox">
+     <property name="geometry">
+      <rect>
+       <x>130</x>
+       <y>10</y>
+       <width>191</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="m_pSrcGlobalIntegerBox">
+     <property name="geometry">
+      <rect>
+       <x>130</x>
+       <y>40</y>
+       <width>191</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="m_pSrcGlobalFloatBox">
+     <property name="geometry">
+      <rect>
+       <x>130</x>
+       <y>70</y>
+       <width>191</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="m_pSrcGlobalStringBox">
+     <property name="geometry">
+      <rect>
+       <x>130</x>
+       <y>100</y>
+       <width>191</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
    </widget>
    <widget class="QWidget" name="m_pSrcLocalVariable">
     <attribute name="title">
      <string>Local Variable</string>
     </attribute>
+    <widget class="QLabel" name="label_32">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>40</y>
+       <width>121</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>integer value:</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="m_pSrcLocalBoolBox">
+     <property name="geometry">
+      <rect>
+       <x>130</x>
+       <y>10</y>
+       <width>191</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="m_pSrcLocalFloatBox">
+     <property name="geometry">
+      <rect>
+       <x>130</x>
+       <y>70</y>
+       <width>191</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_33">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>101</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>bool value:</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="m_pSrcLocalIntegerBox">
+     <property name="geometry">
+      <rect>
+       <x>130</x>
+       <y>40</y>
+       <width>191</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_34">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>100</y>
+       <width>121</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>string value:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_35">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>70</y>
+       <width>121</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>float value:</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="m_pSrcLocalStringBox">
+     <property name="geometry">
+      <rect>
+       <x>130</x>
+       <y>100</y>
+       <width>191</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
    </widget>
    <widget class="QWidget" name="m_pSrcObjectVariable">
     <attribute name="title">

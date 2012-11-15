@@ -28,7 +28,8 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
-				CommandLine="qmake -project&#x0D;&#x0A;qmake&#x0D;&#x0A;&#x0D;&#x0A;"
+				Description="qmake project"
+				CommandLine="qmake -project&#x0D;&#x0A;"
 				AdditionalDependencies=""
 				Outputs="QT_BUILD"
 			/>
@@ -100,6 +101,9 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
+				Description="qmake project"
+				CommandLine="qmake -project&#x0D;&#x0A;"
+				Outputs="QT_BUILD"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -405,30 +409,6 @@
 						Name="Transparency"
 						>
 						<File
-							RelativePath=".\UI\ChoseTransparency.ui"
-							>
-							<FileConfiguration
-								Name="Debug|Win32"
-								>
-								<Tool
-									Name="VCCustomBuildTool"
-									Description="compile TransparencyWindow"
-									CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)&#x0D;&#x0A;"
-									Outputs="ChoseTransparency"
-								/>
-							</FileConfiguration>
-							<FileConfiguration
-								Name="Release|Win32"
-								>
-								<Tool
-									Name="VCCustomBuildTool"
-									Description="compile TransparencyWindow"
-									CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)&#x0D;&#x0A;"
-									Outputs="TransparencyWindow"
-								/>
-							</FileConfiguration>
-						</File>
-						<File
 							RelativePath=".\TransparencyWindow.cpp"
 							>
 						</File>
@@ -580,14 +560,6 @@
 						</FileConfiguration>
 					</File>
 					<File
-						RelativePath=".\GlobalVariableOutput.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\GlobalVariableOutput.h"
-						>
-					</File>
-					<File
 						RelativePath=".\UI\UI_GlobalVariableDatabase.h"
 						>
 					</File>
@@ -651,6 +623,58 @@
 				<File
 					RelativePath=".\UI\UI_CustomVariableTemplate.h"
 					>
+				</File>
+				<File
+					RelativePath=".\VariableCountDialog.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\VariableCountDialog.h"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="create moc_VariableCountDialog.h"
+							CommandLine="moc -o moc_$(InputFileName) $(InputFileName)&#x0D;&#x0A;"
+							Outputs="moc_VariableCountDialog.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="create moc_VariableCountDialog.h"
+							CommandLine="moc -o moc_$(InputFileName) $(InputFileName)&#x0D;&#x0A;"
+							Outputs="moc_VariableCountDialog.h"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\UI\VariableCountDialog.ui"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="compile VariableCountDialog.ui"
+							CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)&#x0D;&#x0A;"
+							Outputs="VariableCountDialog.ui"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="compile VariableCountDialog.ui"
+							CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)&#x0D;&#x0A;"
+							Outputs="VariableCountDialog.ui"
+						/>
+					</FileConfiguration>
 				</File>
 				<Filter
 					Name="Bool"
@@ -989,6 +1013,54 @@
 				Name="EventCommands"
 				>
 				<File
+					RelativePath=".\UI\CommandChangeVariable.ui"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="compile CommandChangeVariable.ui"
+							CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)&#x0D;&#x0A;"
+							Outputs="CommandChangeVariable.ui"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="compile CommandChangeVariable.ui"
+							CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)&#x0D;&#x0A;"
+							Outputs="CommandChangeVariable.ui"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\UI\CommandComment.ui"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="compile CommandComment.ui"
+							CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)&#x0D;&#x0A;"
+							Outputs="CommandComment.ui"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="compile CommandComment.ui"
+							CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)&#x0D;&#x0A;"
+							Outputs="CommandComment.ui"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
 					RelativePath=".\UI\CommandDialog.ui"
 					>
 					<FileConfiguration
@@ -1009,6 +1081,30 @@
 							Description="compile CommandDialog.ui"
 							CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)&#x0D;&#x0A;"
 							Outputs="CommandDialog.ui"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\UI\CommandIfCondition.ui"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="compile CommandIfCondition.ui"
+							CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)"
+							Outputs="CommandIfCondition.ui"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="compile CommandIfCondition.ui"
+							CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)"
+							Outputs="CommandIfCondition.ui"
 						/>
 					</FileConfiguration>
 				</File>
@@ -1041,74 +1137,118 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath=".\EventScriptCommandDialog.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\EventScriptCommandDialog.h"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="create moc_EventScriptCommandDialog.h"
+							CommandLine="moc -o moc_$(InputFileName) $(InputFileName)&#x0D;&#x0A;"
+							Outputs="moc_EventScriptCommandDialog.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="create moc_EventScriptCommandDialog.h"
+							CommandLine="moc -o moc_$(InputFileName) $(InputFileName)&#x0D;&#x0A;"
+							Outputs="moc_EventScriptCommandDialog.h"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\UI\UI_CommandChangeVariable.h"
+					>
+				</File>
+				<File
+					RelativePath=".\UI\UI_CommandComment.h"
+					>
+				</File>
+				<File
 					RelativePath=".\UI\UI_CommandDialog.h"
 					>
 				</File>
-				<Filter
-					Name="ChangeVariable"
+			</Filter>
+			<Filter
+				Name="LocalVariableDialog"
+				>
+				<File
+					RelativePath=".\LocalVariableDialog.cpp"
 					>
-					<File
-						RelativePath=".\ChangeVariableWindow.cpp"
+				</File>
+				<File
+					RelativePath=".\LocalVariableDialog.h"
+					>
+				</File>
+				<File
+					RelativePath=".\UI\LocalVariableDialog.ui"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
 						>
-					</File>
-					<File
-						RelativePath=".\ChangeVariableWindow.h"
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="compile LocalVariableDialog.ui"
+							CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)&#x0D;&#x0A;"
+							Outputs="LocalVariableDialog.ui"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
 						>
-						<FileConfiguration
-							Name="Debug|Win32"
-							>
-							<Tool
-								Name="VCCustomBuildTool"
-								Description="create moc_ChangeVariableWindow.h"
-								CommandLine="moc -o moc_$(InputFileName) $(InputFileName)&#x0D;&#x0A;"
-								Outputs="moc_ChangeVariableWindow.h"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Release|Win32"
-							>
-							<Tool
-								Name="VCCustomBuildTool"
-								Description="create moc_ChangeVariableWindow.h"
-								CommandLine="moc -o moc_$(InputFileName) $(InputFileName)&#x0D;&#x0A;"
-								Outputs="moc_ChangeVariableWindow.h"
-							/>
-						</FileConfiguration>
-					</File>
-					<File
-						RelativePath=".\UI\CommandChangeVariable.ui"
-						>
-						<FileConfiguration
-							Name="Debug|Win32"
-							>
-							<Tool
-								Name="VCCustomBuildTool"
-								Description="compile CommandChangeVariable.ui"
-								CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)&#x0D;&#x0A;"
-								Outputs="CommandChangeVariable.ui"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Release|Win32"
-							>
-							<Tool
-								Name="VCCustomBuildTool"
-								Description="compile CommandChangeVariable.ui"
-								CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)&#x0D;&#x0A;"
-								Outputs="CommandChangeVariable.ui"
-							/>
-						</FileConfiguration>
-					</File>
-					<File
-						RelativePath=".\UI\UI_CommandChangeVariable.h"
-						>
-					</File>
-				</Filter>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="compile LocalVariableDialog.ui"
+							CommandLine="uic -o UI/UI_$(InputName).h UI/$(InputFileName)&#x0D;&#x0A;"
+							Outputs="LocalVariableDialog.ui"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\UI\UI_LocalVariableDialog.h"
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<Filter
 			Name="EditorCore"
 			>
+			<File
+				RelativePath=".\ContextMenu.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ContextMenu.h"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="create moc_ContextMenu.h"
+						CommandLine="moc -o moc_$(InputFileName) $(InputFileName)&#x0D;&#x0A;"
+						Outputs="moc_ContextMenu.h"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="create moc_ContextMenu.h"
+						CommandLine="moc -o moc_$(InputFileName) $(InputFileName)&#x0D;&#x0A;"
+						Outputs="moc_ContextMenu.h"
+					/>
+				</FileConfiguration>
+			</File>
 			<File
 				RelativePath=".\EditorConfig.cpp"
 				>

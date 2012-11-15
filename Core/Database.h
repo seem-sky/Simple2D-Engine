@@ -6,7 +6,7 @@
 #include <list>
 #include "Point.h"
 #include "Logfile.h"
-#include "GlobalVariables.h"
+#include "VariableHolder.h"
 #include <set>
 
 typedef std::set<uint32> IDList;
@@ -29,15 +29,22 @@ namespace DATABASE
     /*#####
     # Prototype Superclass
     #####*/
+    enum PrototypeType
+    {
+        PROTOTYPE_TYPE_NONE,
+        PROTOTYPE_TYPE_OBJECT,
+    };
+
     struct Prototype
     {
-        Prototype() : m_uiID(0) {}
+        Prototype() : m_uiID(0), m_PrototypeType(PROTOTYPE_TYPE_NONE) {}
         bool IsChildrenOf(uint32 p_uiID) const;
         inline const IDList* GetParentList() const { return &m_uilParentList; }
 
         uint32 m_uiID;
         std::string m_sName;
         IDList m_uilParentList;
+        PrototypeType m_PrototypeType;
     };
 
     /*####
@@ -122,22 +129,20 @@ namespace DATABASE
         ObjectPrototype() : m_uiType(0), m_uiTextureID(0)
         {
             memset(&ObjectType, 0, sizeof(ObjectType));
+            m_PrototypeType = PROTOTYPE_TYPE_OBJECT;
         }
 
-        std::string GetRightTextureType() const
+        std::string GetCorrectTextureType() const
         {
-            return GetRightTextureType((OBJECT_TYPE)m_uiType);
+            return GetCorrectTextureType((OBJECT_TYPE)m_uiType);
         }
 
-        static std::string GetRightTextureType(OBJECT_TYPE p_Type);
+        static std::string GetCorrectTextureType(OBJECT_TYPE p_Type);
+        const VariableHolder* GetVariableHolderFromParent(uint32 p_uiID) const;
 
         uint32 m_uiType;
         uint32 m_uiTextureID;
-
-        VariableBoolList m_ObjectBoolList;
-        VariableIntegerList m_ObjectIntegerList;
-        VariableFloatList m_ObjectFloatList;
-        VariableStringList m_ObjectStringList;
+        VariableHolder m_Variables;
 
         union
         {
@@ -180,6 +185,8 @@ namespace DATABASE
         const std::string GetSpritePath(uint32 p_uiID);
 
         void LoadGlobalVariables();
+        const VariableHolder* GetGlobalVariables() const { return &m_GlobalVariables; }
+
         void LoadDB(std::string p_sFileName);
         XML::XML_STATE GetDBState();
         bool IsDBEmpty() { return m_Database.empty(); }
@@ -192,17 +199,13 @@ namespace DATABASE
         std::map<uint32, std::string> m_SpritePaths;
         // spriteDB
         SpriteList m_SpriteDB;
+        // global variables
+        VariableHolder m_GlobalVariables;
 
         void ClearDB();
 
         bool ChangeDBdir(std::list<std::string> p_DirList, XML::XML_ReadData &p_Dir);
         void StoreSpritePaths();
-
-        // load variables
-        void LoadBools();
-        void LoadIntegers();
-        void LoadFloats();
-        void LoadStrings();
 
         // load DB
         XML::XML_Reader *m_pXMLReader;

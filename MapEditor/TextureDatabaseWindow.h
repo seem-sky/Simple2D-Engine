@@ -9,7 +9,6 @@ class TextureDatabaseWindow : public DatabasePageTemplate, Ui_TextureDatabase
     Q_OBJECT
 public:
     TextureDatabaseWindow(QWidget *p_pParent = NULL);
-    ~TextureDatabaseWindow(void);
 
     inline std::string GetCurrentType() const {return m_pTab->tabText(m_pTab->currentIndex()).toStdString(); }
     static const DATABASE::SpritePrototype* GetLatestPrototype(std::string p_sType, uint32 p_uiID);
@@ -18,7 +17,7 @@ private:
     void SetTexturePixmap(QPixmap &p_Pixmap);
     void ChangeBounding();
 
-    PassabilityFlag m_DirPressed;
+    uint32 m_DirPressed;
 
 protected:
     void ConnectWidgets();
@@ -32,6 +31,7 @@ protected slots:
     void ClickButtonNew();
 
 private slots:
+    void LoadPage();
     void TransparencyColorChanged() { ChangeItem(GetCurrentItemID()); }
     void CurrentTabChanged(int p_Index);
     void TransparencyColorChanged(QString p_Color) { m_pTransparencyColor->setText(p_Color); }

@@ -1,27 +1,27 @@
 #ifndef TRANSPARENCY_WINDOW_H
 #define TRANSPARENCY_WINDOW_H
 
-#include "UI/UI_ChoseTransparency.h"
 #include <QtGui/QCloseEvent>
+#include <QtGui/QDialog>
+#include <QtGui/QLabel>
 
-class TransparencyWindow : public QMainWindow, Ui_TransparencyWindow
+class TransparencyWindow : public QDialog
 {
     Q_OBJECT
 public:
-    TransparencyWindow(QMainWindow *parent, QPixmap &p_Pixmap);
-    ~TransparencyWindow(void);
+    TransparencyWindow(QWidget *parent, QPixmap &p_Pixmap);
 
     void ShowTexture(QPixmap &p_Pixmap);
 
 protected:
     void resizeEvent(QResizeEvent *p_Event);
-    void closeEvent(QCloseEvent *p_Event);
     bool eventFilter(QObject *p_pObj, QEvent *p_pEvent);
 
 signals:
     void ColorChosen(QString p_Result);
 
 private:
+    QLabel *m_pPic;
     QPixmap m_Pixmap;
     QString m_RGBresult;
 };

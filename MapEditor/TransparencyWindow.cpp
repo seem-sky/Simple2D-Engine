@@ -2,28 +2,17 @@
 #include "moc_TransparencyWindow.h"
 #include <Logfile.h>
 
-TransparencyWindow::TransparencyWindow(QMainWindow *parent, QPixmap &p_Pixmap) : QMainWindow(parent), Ui_TransparencyWindow()
+TransparencyWindow::TransparencyWindow(QWidget *parent, QPixmap &p_Pixmap) : QDialog(parent), m_pPic(NULL)
 {
-    setupUi(this);
+    m_pPic = new QLabel(this);
+    m_pPic->setGeometry(0, 0, 10, 10);
     ShowTexture(p_Pixmap);
-    TextureView->installEventFilter(this);
-}
-
-TransparencyWindow::~TransparencyWindow(void)
-{
-    if (QWidget *t_pParent = (QWidget*)parent())
-        t_pParent->setEnabled(true);
-}
-
-void TransparencyWindow::closeEvent(QCloseEvent *p_Event)
-{
-    p_Event->accept();
-    delete this;
+    m_pPic->installEventFilter(this);
 }
 
 void TransparencyWindow::resizeEvent(QResizeEvent *p_Event)
 {
-    TextureView->setFixedSize(p_Event->size());
+    m_pPic->setFixedSize(p_Event->size());
 }
 
 void TransparencyWindow::ShowTexture(QPixmap &p_Pixmap)
@@ -31,12 +20,12 @@ void TransparencyWindow::ShowTexture(QPixmap &p_Pixmap)
     m_Pixmap = p_Pixmap;
     QSize t_Size = m_Pixmap.size();
     setFixedSize(t_Size);
-    TextureView->setPixmap(p_Pixmap);
+    m_pPic->setPixmap(p_Pixmap);
 }
 
 bool TransparencyWindow::eventFilter(QObject *p_pObj, QEvent *p_pEvent)
 {
-    if (p_pObj == TextureView && p_pEvent->type() == QEvent::MouseButtonPress)
+    if (p_pObj == m_pPic && p_pEvent->type() == QEvent::MouseButtonPress)
     {
         if (QMouseEvent* t_pEvent = (QMouseEvent*)p_pEvent)
         {
@@ -48,14 +37,14 @@ bool TransparencyWindow::eventFilter(QObject *p_pObj, QEvent *p_pEvent)
                 int t_Red   = t_Color.red();
                 int t_Green = t_Color.green();
                 int t_Blue  = t_Color.blue();
-                emit ColorChosen(QString(("R" + ToString(t_Red) + "G" + ToString(t_Green) + "B" + ToString(t_Blue)).c_str()));
+                emit ColorChosen("R" + QString::number(t_Red) + "G" + QString::number(t_Green) + "B" + QString::number(t_Blue));
                 close();
                 return true;
             }
         }
     }
     else // pass the event on to the parent class
-        return QMainWindow::eventFilter(p_pObj, p_pEvent);
+        return QDialog::eventFilter(p_pObj, p_pEvent);
 
     return false;
 }

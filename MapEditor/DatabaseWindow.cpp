@@ -24,6 +24,8 @@ DatabaseWindow::DatabaseWindow(QMainWindow *p_pParent) : QMainWindow(p_pParent),
 
     connect(ButtonOK, SIGNAL(clicked()), this, SLOT(ClickButtonOK()));
     connect(ButtonApply, SIGNAL(clicked()), this, SLOT(ClickButtonApply()));
+    for (int i = 0; i < m_pSections->count(); ++i)
+        connect(this, SIGNAL(ReloadPage()), m_pSections->widget(i), SLOT(LoadPage()));
     m_pSections->setCurrentIndex(0);
 }
 
@@ -43,11 +45,11 @@ void DatabaseWindow::closeEvent(QCloseEvent *event)
     delete this;
 }
 
-void DatabaseWindow::ClickButtonApply()
+void DatabaseWindow::SaveDatabase()
 {
     QString t_sDBDir;
     if (EditorConfig *t_pConfig = EditorConfig::Get())
-        t_sDBDir = QString(t_pConfig->GetProjectDirectory().c_str());
+        t_sDBDir = QString::fromStdString(t_pConfig->GetProjectDirectory());
 
     t_sDBDir += "\\Game\\GameDatabase.db";
 
@@ -66,9 +68,21 @@ void DatabaseWindow::ClickButtonApply()
     }
 }
 
+void DatabaseWindow::DBSaved()
+{
+    emit ReloadPage();
+}
+
+void DatabaseWindow::ClickButtonApply()
+{
+    SaveDatabase();
+    if (MainWindow *p_pParent = (MainWindow*)parent())
+        connect(p_pParent, SIGNAL(WindowActionDone()), this, SLOT(DBSaved()));
+}
+
 void DatabaseWindow::ClickButtonOK()
 {
-    ClickButtonApply();
+    SaveDatabase();
     if (MainWindow *p_pParent = (MainWindow*)parent())
         connect(p_pParent, SIGNAL(WindowActionDone()), this, SLOT(close()));
 }

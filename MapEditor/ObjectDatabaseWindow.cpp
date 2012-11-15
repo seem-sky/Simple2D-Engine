@@ -17,15 +17,10 @@ ObjectDatabaseWindow::ObjectDatabaseWindow(QWidget *p_pParent) : DatabasePageTem
     connect(m_pEventEditorButton, SIGNAL(clicked()), this, SLOT(ClickOpenEventEditor()));
     connect(m_pParentAddButton, SIGNAL(clicked()), this, SLOT(ParentObjectAdded()));
     connect(m_pParentRemoveButton, SIGNAL(clicked()), this, SLOT(ParentObjectRemoved()));
-
-    LoadObjects();
+    LoadPage();
 }
 
-ObjectDatabaseWindow::~ObjectDatabaseWindow(void)
-{
-}
-
-void ObjectDatabaseWindow::LoadObjects()
+void ObjectDatabaseWindow::LoadPage()
 {
     m_pStoreBox->clear();
     m_uilIDCache.clear();
@@ -43,7 +38,7 @@ void ObjectDatabaseWindow::LoadObjects()
             if (t_pDBOut->IsObjectPrototypeDeleted(t_itr->first))
                 continue;
 
-            InsertItem(t_itr->first, QString((ToString(t_itr->first) + ":" + t_itr->second).c_str()));
+            InsertItem(t_itr->first, QString::number(t_itr->first) + ":" + QString::fromStdString(t_itr->second));
         }
     }
 }
@@ -74,8 +69,8 @@ void ObjectDatabaseWindow::ClickButtonNew()
 
     ClearWidgets();
     ChangeItem(t_uiID);
-    InsertItem(t_uiID, QString((ToString(t_uiID) + ":").c_str()));
-    m_pStoreBox->setCurrentIndex(m_pStoreBox->findText(QString((ToString(t_uiID) + ":").c_str())));
+    InsertItem(t_uiID, QString::number(t_uiID) + ":");
+    m_pStoreBox->setCurrentIndex(m_pStoreBox->findText(QString::number(t_uiID) + ":"));
 }
 
 void ObjectDatabaseWindow::ClearWidgets()
@@ -95,14 +90,27 @@ bool ObjectDatabaseWindow::SelectItem(uint32 p_uiID)
 {
     ClearWidgets();
     DisconnectWidgets();
+    for (int i = 0; i < m_pCustomVariables->count(); ++i)
+    {
+        CustomVariablePageTemplateWidget *t_pPage = (CustomVariablePageTemplateWidget *)m_pCustomVariables->widget(i);
+        if (!t_pPage)
+            continue;
+
+        t_pPage->SetVariableHolder(NULL, NULL);
+    }
+
     bool t_bSuccess = false;
-    if (const ObjectPrototype *t_pProto = DatabaseOutput::GetLatestObjectPrototype(p_uiID))
+    DatabaseOutput *t_pDBOut = DatabaseOutput::Get();
+    if (!t_pDBOut)
+        return false;
+
+    if (ObjectPrototype *t_pProto = t_pDBOut->GetLatestObjectPrototype(p_uiID))
     {
         // ID
         m_pID->setValue(p_uiID);
 
         // Object Name
-        m_pName->setText(QString(t_pProto->m_sName.c_str()));
+        m_pName->setText(QString::fromStdString(t_pProto->m_sName));
 
         // type
         m_pType->setCurrentIndex(t_pProto->m_uiType);
@@ -111,12 +119,12 @@ bool ObjectDatabaseWindow::SelectItem(uint32 p_uiID)
         FillObjectAndParentBox();
 
         // textures
-        std::string t_sTextureType = t_pProto->GetRightTextureType();
+        std::string t_sTextureType = t_pProto->GetCorrectTextureType();
         SetSelectableTextures(t_sTextureType);
         bool t_bTextureSuccess = false;
         if (const SpritePrototype *t_pTextureProto = TextureDatabaseWindow::GetLatestPrototype(t_sTextureType, t_pProto->m_uiTextureID))
         {
-            int t_Index = m_pTextureBox->findText(QString((ToString(t_pTextureProto->m_uiID) + ":" + t_pTextureProto->m_sFileName).c_str()));
+            int t_Index = m_pTextureBox->findText(QString::number(t_pTextureProto->m_uiID) + ":" + QString::fromStdString(t_pTextureProto->m_sFileName));
             if (t_Index != -1)
             {
                 m_pTextureBox->setCurrentIndex(t_Index);
@@ -149,7 +157,7 @@ bool ObjectDatabaseWindow::SelectItem(uint32 p_uiID)
             if (!t_pPage)
                 continue;
 
-            t_pPage->SetNewData(p_uiID);
+            t_pPage->SetVariableHolder(&t_pProto->m_Variables, t_pProto);
         }
         m_pCustomVariables->setCurrentIndex(0);
     }
@@ -179,14 +187,15 @@ void ObjectDatabaseWindow::DisconnectWidgets()
 void ObjectDatabaseWindow::ChangeItem(uint32 p_uiID, bool p_Delete)
 {
     ObjectPrototype t_NewProto;
-    if (const ObjectPrototype *t_pProto = DatabaseOutput::GetLatestObjectPrototype(p_uiID))
-        t_NewProto = *t_pProto;
-
-    // ID
-    t_NewProto.m_uiID = p_uiID;
-
     if (DatabaseOutput *t_pDBOut = DatabaseOutput::Get())
     {
+        if (const ObjectPrototype *t_pProto = t_pDBOut->GetLatestObjectPrototype(p_uiID))
+            t_NewProto = *t_pProto;
+        else
+            return;
+
+        // ID
+        t_NewProto.m_uiID = p_uiID;
         if (p_Delete)
         {
             t_pDBOut->DeleteObjectPrototype(t_NewProto);
@@ -250,7 +259,8 @@ void ObjectDatabaseWindow::ChangeTextureView(std::string p_sType)
         if (EditorConfig *t_pConf = EditorConfig::Get())
         {
             if (Database* t_pDB = Database::Get())
-                m_pTextureView->setPixmap(QString((t_pConf->GetProjectDirectory()+"/" + t_pDB->GetSpritePath(t_pProto->m_uiSpriteType)+t_pProto->m_sFileName).c_str()));
+                m_pTextureView->setPixmap(QString::fromStdString(t_pConf->GetProjectDirectory()+"/" + t_pDB->GetSpritePath(t_pProto->m_uiSpriteType) +
+                t_pProto->m_sFileName));
         }
     }
 }
@@ -277,21 +287,20 @@ void ObjectDatabaseWindow::SetSelectableTextures(std::string p_sType)
             if (t_pDBOut->IsSpritePrototypeDeleted(p_sType, t_itr->first))
                 continue;
 
-            t_sName = (ToString(t_itr->first) + ":" + t_itr->second).c_str();
-            m_pTextureBox->addItem(t_sName);
+            m_pTextureBox->addItem(QString::number(t_itr->first) + ":" + QString::fromStdString(t_itr->second));
         }
     }
 }
 
 void ObjectDatabaseWindow::TypeChanged(int p_Index)
 {
-    SetSelectableTextures(ObjectPrototype::GetRightTextureType((OBJECT_TYPE)p_Index));
+    SetSelectableTextures(ObjectPrototype::GetCorrectTextureType((OBJECT_TYPE)p_Index));
     ChangeItem(GetCurrentItemID());
 }
 
 void ObjectDatabaseWindow::TextureIndexChanged(int p_Index)
 {
-    ChangeTextureView(ObjectPrototype::GetRightTextureType((OBJECT_TYPE)m_pType->currentIndex()));
+    ChangeTextureView(ObjectPrototype::GetCorrectTextureType((OBJECT_TYPE)m_pType->currentIndex()));
     ChangeItem(GetCurrentItemID());
 }
 
@@ -342,15 +351,18 @@ bool ObjectDatabaseWindow::IsParentOf(uint32 p_uiInheritorID, uint32 p_uiParentI
     if (!p_uiInheritorID || !p_uiParentID)
         return false;
 
-    if (const ObjectPrototype *t_pProto = DatabaseOutput::GetLatestObjectPrototype(p_uiInheritorID))
+    if (DatabaseOutput *t_pDBOut = DatabaseOutput::Get())
     {
-        if (t_pProto->IsChildrenOf(p_uiParentID))
-            return true;
-
-        for (IDList::const_iterator t_Itr = t_pProto->GetParentList()->begin(); t_Itr != t_pProto->GetParentList()->end(); ++t_Itr)
+        if (const ObjectPrototype *t_pProto = t_pDBOut->GetLatestObjectPrototype(p_uiInheritorID))
         {
-            if (IsParentOf(*t_Itr, p_uiParentID))
+            if (t_pProto->IsChildrenOf(p_uiParentID))
                 return true;
+
+            for (IDList::const_iterator t_Itr = t_pProto->GetParentList()->begin(); t_Itr != t_pProto->GetParentList()->end(); ++t_Itr)
+            {
+                if (IsParentOf(*t_Itr, p_uiParentID))
+                    return true;
+            }
         }
     }
 
@@ -373,7 +385,7 @@ void ObjectDatabaseWindow::FillObjectAndParentBox()
     if (DatabaseOutput *t_pDBOut = DatabaseOutput::Get())
     {
         t_pDBOut->GetObjectNames(t_sObjectNames);
-        const ObjectPrototype *t_pProto = DatabaseOutput::GetLatestObjectPrototype(t_uiCurID);
+        const ObjectPrototype *t_pProto = t_pDBOut->GetLatestObjectPrototype(t_uiCurID);
         if (!t_pProto)
             return;
 
@@ -387,7 +399,7 @@ void ObjectDatabaseWindow::FillObjectAndParentBox()
             else if (t_pDBOut->IsObjectPrototypeDeleted(t_Itr->first))
                 continue;
 
-            m_pObjectList->addItem(QString((ToString(t_Itr->first) + ":" + t_Itr->second).c_str()));
+            m_pObjectList->addItem(QString::number(t_Itr->first) + ":" + QString::fromStdString(t_Itr->second));
         }
 
         // add items in m_pParentList
@@ -402,7 +414,7 @@ void ObjectDatabaseWindow::FillObjectAndParentBox()
             if (t_ObjItr == t_sObjectNames.end())
                 continue;
 
-            m_pParentList->addItem(QString((ToString(t_ObjItr->first) + ":" + t_ObjItr->second).c_str()));
+            m_pParentList->addItem(QString::number(t_ObjItr->first) + ":" + QString::fromStdString(t_ObjItr->second));
         }
     }
 }

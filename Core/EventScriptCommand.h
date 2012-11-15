@@ -1,7 +1,7 @@
 #ifndef EVENT_SCRIPT_COMMAND_H
 #define EVENT_SCRIPT_COMMAND_H
 
-#include <map>
+#include <vector>
 #include "Global.h"
 #include "Database.h"
 #include <atlcomcli.h>
@@ -9,46 +9,73 @@
 
 namespace EVENT_SCRIPT
 {
-    /*#####
-    # EventCommand superclass
-    #####*/
     enum ScriptCommandType
     {
         COMMAND_NONE,
+        COMMAND_COMMENT,
         COMMAND_CHANGE_VARIABLE,
-        COMMAND_IF_CONDITION,
-        COMMAND_LOOP,
+
+        // add cotainer below COMMAND_CONTAINER
+        COMMAND_CONTAINER,
+        COMMAND_CONTAINER_IF_CONDITION,
+        COMMAND_CONTAINER_LOOP,
+
+        COMMAND_MAX,
     };
 
+    /*#####
+    # EventCommand superclass
+    #####*/
     class EventScriptCommand
     {
     public:
-        EventScriptCommand();
-        ~EventScriptCommand(void);
+        EventScriptCommand() { m_CommandType = COMMAND_NONE; }
 
         inline ScriptCommandType GetCommandType() const { return m_CommandType; }
-        virtual std::string GetCommandName() const = NULL;
-        virtual std::string GetCommandText() const = NULL;
+        virtual std::string GetCommandName() const { return ""; }
+        virtual std::string GetCommandText() const { return ""; }
         virtual XML::XML_WriteData GetCommandXML() const;
 
     protected:
         ScriptCommandType m_CommandType;
     };
 
-    typedef std::map<uint32, EventScriptCommand> CommandList;
+    typedef std::vector<EventScriptCommand*> CommandList;
+
+    /*#####
+    # Comment
+    #####*/
+    class EventScriptComment : public EventScriptCommand
+    {
+    public:
+        EventScriptComment() : EventScriptCommand()
+        {
+            m_CommandType = COMMAND_COMMENT;
+        }
+
+        void SetCommentText(std::string p_sText) { m_sCommentText = p_sText; }
+        inline std::string GetCommentText() const { return m_sCommentText; }
+
+        std::string GetCommandName() const { return "Comment"; }
+        std::string GetCommandText() const { return "<> " + GetCommandName() + ": " + GetCommentText(); }
+        XML::XML_WriteData GetCommandXML() const;
+
+    private:
+        std::string m_sCommentText;
+    };
 
     /*#####
     # Change Variable
     #####*/
     enum VariableOperator
     {
-        OPERATOR_SET,
-        OPERATOR_ADD,
-        OPERATOR_SUBTRACT,
-        OPERATOR_MULTIPLICATE,
-        OPERATOR_DIVIDE,
-        OPERATOR_MODULO,
-        OPERATOR_TRIGGER,
+        VARIABLE_OPERATOR_SET,
+        VARIABLE_OPERATOR_ADD,
+        VARIABLE_OPERATOR_SUBTRACT,
+        VARIABLE_OPERATOR_MULTIPLICATE,
+        VARIABLE_OPERATOR_DIVIDE,
+        VARIABLE_OPERATOR_MODULO,
+        VARIABLE_OPERATOR_TRIGGER,
     };
 
     enum VariableLocalisation
@@ -60,18 +87,22 @@ namespace EVENT_SCRIPT
         LOCALISATION_OBJECT,
     };
 
-    struct ChangeConditions
+    struct VariableSettings
     {
-        ChangeConditions() : m_VarLocalisation(LOCALISATION_NONE)
+        VariableSettings() : m_VarLocalisation(LOCALISATION_NONE)
         {
-            memset(&Type, 0, sizeof(Type));
+            memset(&m_Type, 0, sizeof(m_Type));
         }
 
-        VariableLocalisation m_VarLocalisation;
+        std::string GetVariableSettingText() const;
+        std::string GetVariableTypeText() const;
 
-        union VariableChangeType
+        VariableLocalisation m_VarLocalisation;
+        VariableType m_VariableType;
+
+        union VariableSettingType
         {
-            struct Value                    // type 0
+            struct Value                    // type 1
             {
                 union VariableType
                 {
@@ -82,17 +113,22 @@ namespace EVENT_SCRIPT
                 } m_VariableType;
             } m_Value;
 
-            struct GlobalVariable           // type 1
+            struct GlobalVariable           // type 2
             {
                 uint32 m_uiVariableID;
             } m_GlobalVariable;
-        } Type;
+
+            struct LocalVariable           // type 3
+            {
+                uint32 m_uiVariableID;
+            } m_LocalVariable;
+        } m_Type;
     };
 
-    class CommandChangeVariable : public EventScriptCommand
+    class EventScriptChangeVariable : public EventScriptCommand
     {
     public:
-        CommandChangeVariable() : m_Operator(OPERATOR_SET), EventScriptCommand()
+        EventScriptChangeVariable() : m_Operator(VARIABLE_OPERATOR_SET), EventScriptCommand()
         {
             m_CommandType = COMMAND_CHANGE_VARIABLE;
         }
@@ -103,20 +139,92 @@ namespace EVENT_SCRIPT
 
         VariableOperator GetOperator() const { return m_Operator; }
         void SetOperator(VariableOperator p_Operator) { m_Operator = p_Operator; }
-        void SetVariableType(VariableType p_Type) { m_VariableType = p_Type; }
-        VariableType GetVariableType() { return m_VariableType; }
 
-        inline ChangeConditions GetDestVariable() const { return m_DestVariable; }
-        inline void SetDestVariable(ChangeConditions m_Var) { m_DestVariable = m_Var; }
-        inline ChangeConditions GetSrcVariable() const { return m_SrcVariable; }
-        void SetSrcVariable(ChangeConditions m_Var) { m_SrcVariable = m_Var; }
+        void SetVariableType(VariableType p_Type);
+        inline VariableType GetVariableType() { return m_VariableType; }
+
+        inline VariableSettings GetDestVariable() const { return m_DestVariable; }
+        inline void SetDestVariable(VariableSettings m_Var) { m_DestVariable = m_Var; }
+        inline VariableSettings GetSrcVariable() const { return m_SrcVariable; }
+        void SetSrcVariable(VariableSettings m_Var) { m_SrcVariable = m_Var; }
 
     private:
         VariableOperator m_Operator;
         VariableType m_VariableType;
 
-        ChangeConditions m_SrcVariable;
-        ChangeConditions m_DestVariable;
+        VariableSettings m_SrcVariable;
+        VariableSettings m_DestVariable;
+    };
+
+    /*#####
+    # EventScriptCommandContainer superclass
+    #####*/
+    class EventScriptCommandContainer : public EventScriptCommand
+    {
+    public:
+        EventScriptCommandContainer() : EventScriptCommand()
+        {
+            m_CommandType = COMMAND_CONTAINER;
+        }
+
+        virtual ~EventScriptCommandContainer();
+        void InsertChildCommand(int p_uiRow, EventScriptCommand *p_pCommand);
+
+    private:
+        CommandList m_pChildCommands;
+    };
+
+    /*#####
+    # EventScriptIfCondition
+    #####*/
+    enum ConditionType
+    {
+        CONDITION_TYPE_NONE,
+        CONDITION_TYPE_VARIABLE,
+    };
+
+    enum ConditionOperator
+    {
+        CONDITION_OPERATOR_EQUAL,
+        CONDITION_OPERATOR_NOT_EQUAL,
+        CONDITION_OPERATOR_GREATER_EQUAL,
+        CONDITION_OPERATOR_LESS_EQUAL,
+        CONDITION_OPERATOR_GREATER,
+        CONDITION_OPERATOR_LESS,
+    };
+
+    class EventScriptIfCondition : public EventScriptCommandContainer
+    {
+    public:
+        EventScriptIfCondition();
+        virtual ~EventScriptIfCondition();
+
+        std::string GetCommandName() const { return "If Condition: "; }
+        std::string GetCommandText() const;
+
+        void SetConditionType(ConditionType p_Type);
+        inline ConditionType GetConditionType() const { return m_ConditionType; }
+
+        void SetOperator(ConditionOperator p_Operator) { m_Operator = p_Operator; }
+        ConditionOperator GetOperator() const { return m_Operator; }
+
+        const VariableSettings* GetDestinationVariable() const;
+        void SetDestinationVariable(VariableSettings &p_Variable);
+        const VariableSettings* GetSourceVariable() const;
+        void SetSourceVariable(VariableSettings &p_Variable);
+
+    private:
+        union Type
+        {
+            struct ConditionVariable
+            {
+                VariableSettings *m_pDestVar;
+                VariableSettings *m_pSrcVar;
+            } m_ConditionVariable;
+        } m_Type;
+
+        ConditionType m_ConditionType;
+        ConditionOperator m_Operator;
     };
 }
 #endif

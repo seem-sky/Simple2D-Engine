@@ -29,7 +29,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>10</y>
+     <y>40</y>
      <width>240</width>
      <height>23</height>
     </rect>
@@ -38,7 +38,37 @@
     <string>Change Variable</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="m_pButtonComment">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>240</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Comment</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="m_pButtonIfCondition">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>70</y>
+     <width>240</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>If Condition</string>
+   </property>
+  </widget>
  </widget>
+ <tabstops>
+  <tabstop>m_pButtonComment</tabstop>
+  <tabstop>m_pButtonChangeVariable</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

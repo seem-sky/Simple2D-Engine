@@ -2,7 +2,9 @@
 #include "moc_TextureDatabaseWindow.h"
 #include "EditorConfig.h"
 #include <QTGui/QFileDialog>
+#include <QTGui/QMainWindow>
 #include "TransparencyWindow.h"
+#include "DatabaseWindow.h"
 
 using namespace DATABASE;
 const QString PASSABLE_RIGHT_ICON   = "icons/arrow-right.png";
@@ -26,12 +28,13 @@ TextureDatabaseWindow::TextureDatabaseWindow(QWidget *p_pParent) : DatabasePageT
     m_pPassabilityLeft->installEventFilter(this);
 
     connect(m_pTab, SIGNAL(currentChanged(int)), this, SLOT(CurrentTabChanged(int)));
-    m_pTab->setCurrentIndex(-1);
-    m_pTab->setCurrentIndex(0);
+    LoadPage();
 }
 
-TextureDatabaseWindow::~TextureDatabaseWindow(void)
+void TextureDatabaseWindow::LoadPage()
 {
+    m_pTab->setCurrentIndex(-1);
+    m_pTab->setCurrentIndex(0);
 }
 
 void TextureDatabaseWindow::ClickButtonNew()
@@ -50,13 +53,13 @@ void TextureDatabaseWindow::ClickButtonNew()
 
     ClearWidgets();
     ChangeItem(t_uiID);
-    InsertItem(t_uiID, QString((ToString(t_uiID) + ":").c_str()));
-    m_pStoreBox->setCurrentIndex(m_pStoreBox->findText(QString((ToString(t_uiID) + ":").c_str())));
+    InsertItem(t_uiID, QString::number(t_uiID) + ":");
+    m_pStoreBox->setCurrentIndex(m_pStoreBox->findText(QString::number(t_uiID) + ":"));
 }
 
 void TextureDatabaseWindow::ChangeItem(uint32 p_uiID, bool p_bDelete)
 {
-    QString t_sCurTextureType(GetCurrentType().c_str());
+    QString t_sCurTextureType(QString::fromStdString(GetCurrentType()));
     SpritePrototype t_NewProto;
     t_NewProto.m_uiID = p_uiID;
 
@@ -78,18 +81,7 @@ void TextureDatabaseWindow::ChangeItem(uint32 p_uiID, bool p_bDelete)
             if (t_sCurTextureType == "Tiles")
             {
                 // set passability
-                switch(m_DirPressed)
-                {
-                case PASSABLE_DOWN:
-                case PASSABLE_LEFT:
-                case PASSABLE_RIGHT:
-                case PASSABLE_UP:
-                    if (const SpritePrototype* t_pOldProto = GetLatestPrototype(t_sCurTextureType.toStdString(), t_NewProto.m_uiID))
-                        t_NewProto.Type.Tile.m_uiPassable = t_pOldProto->Type.Tile.m_uiPassable ^ m_DirPressed;
-                default:
-                    m_DirPressed = PASSABLE_NONE;
-                    break;
-                }
+                t_NewProto.Type.Tile.m_uiPassable = m_DirPressed;
 
                 // set is autotile?
                 t_NewProto.Type.Tile.m_bAutotile = m_pIsAutotile->isChecked();
@@ -135,24 +127,37 @@ bool TextureDatabaseWindow::SelectItem(uint32 p_uiID)
             // different texture types
             if (t_sCurTextureType == "Tiles")
             {
+                m_DirPressed = PASSABLE_NONE;
                 // passability
                 if ((t_pProto->Type.Tile.m_uiPassable & PASSABLE_RIGHT) != 0)
+                {
                     m_pPassabilityRight->setPixmap(QPixmap(PASSABLE_RIGHT_ICON));
+                    m_DirPressed |= PASSABLE_RIGHT;
+                }
                 else
                     m_pPassabilityRight->setPixmap(QPixmap(PASSABLE_NONE_ICON));
 
                 if ((t_pProto->Type.Tile.m_uiPassable & PASSABLE_LEFT) != 0)
+                {
                     m_pPassabilityLeft->setPixmap(QPixmap(PASSABLE_LEFT_ICON));
+                    m_DirPressed |= PASSABLE_LEFT;
+                }
                 else
                     m_pPassabilityLeft->setPixmap(QPixmap(PASSABLE_NONE_ICON));
 
                 if ((t_pProto->Type.Tile.m_uiPassable & PASSABLE_UP) != 0)
+                {
                     m_pPassabilityUp->setPixmap(QPixmap(PASSABLE_UP_ICON));
+                    m_DirPressed |= PASSABLE_UP;
+                }
                 else
                     m_pPassabilityUp->setPixmap(QPixmap(PASSABLE_NONE_ICON));
 
                 if ((t_pProto->Type.Tile.m_uiPassable & PASSABLE_DOWN) != 0)
+                {
                     m_pPassabilityDown->setPixmap(QPixmap(PASSABLE_DOWN_ICON));
+                    m_DirPressed |= PASSABLE_DOWN;
+                }
                 else
                     m_pPassabilityDown->setPixmap(QPixmap(PASSABLE_NONE_ICON));
 
@@ -184,10 +189,10 @@ bool TextureDatabaseWindow::SelectItem(uint32 p_uiID)
 
             QString t_sProjectDir;
             if (EditorConfig *t_pConf = EditorConfig::Get())
-                SetTexturePixmap(QPixmap(QString((t_pConf->GetProjectDirectory()+"/" + t_pDB->GetSpritePath(t_pProto->m_uiSpriteType) + t_pProto->m_sFileName).c_str())));
-            m_pName->setText(QString(t_pProto->m_sFileName.c_str()));
+                SetTexturePixmap(QPixmap(QString::fromStdString(t_pConf->GetProjectDirectory()+"/" + t_pDB->GetSpritePath(t_pProto->m_uiSpriteType) + t_pProto->m_sFileName)));
+            m_pName->setText(QString::fromStdString(t_pProto->m_sFileName));
             m_pID->setValue(p_uiID);
-            m_pTransparencyColor->setText(QString(t_pProto->m_sTransparencyColor.c_str()));
+            m_pTransparencyColor->setText(QString::fromStdString(t_pProto->m_sTransparencyColor));
 
             t_bSuccess = true;
         }
@@ -200,7 +205,7 @@ bool TextureDatabaseWindow::SelectItem(uint32 p_uiID)
 void TextureDatabaseWindow::ConnectWidgets()
 {
     DatabasePageTemplate::ConnectWidgets();
-    connect(m_pTransparencyColor, SIGNAL(editingFinished()), this, SLOT(TileAutotileStateChanged(int)));
+    connect(m_pTransparencyColor, SIGNAL(editingFinished()), this, SLOT(TransparencyColorChanged()));
 
     /*#####
     # Tiles
@@ -229,7 +234,7 @@ void TextureDatabaseWindow::ConnectWidgets()
 void TextureDatabaseWindow::DisconnectWidgets()
 {
     DatabasePageTemplate::DisconnectWidgets();
-    disconnect(m_pTransparencyColor, SIGNAL(editingFinished()), this, SLOT(TileAutotileStateChanged(int)));
+    disconnect(m_pTransparencyColor, SIGNAL(editingFinished()), this, SLOT(TransparencyColorChanged()));
     /*#####
     # Tiles
     #####*/
@@ -332,7 +337,7 @@ void TextureDatabaseWindow::CurrentTabChanged(int p_Index)
             if (t_pDBOut->IsSpritePrototypeDeleted(GetCurrentType(), t_itr->first))
                 continue;
 
-            InsertItem(t_itr->first, QString((ToString(t_itr->first) + ":" + t_itr->second).c_str()));
+            InsertItem(t_itr->first, QString::number(t_itr->first) + ":" + QString::fromStdString(t_itr->second));
         }
     }
 }
@@ -340,7 +345,7 @@ void TextureDatabaseWindow::CurrentTabChanged(int p_Index)
 void TextureDatabaseWindow::SetTexturePixmap(QPixmap &p_Pixmap)
 {
     m_pView->setPixmap(p_Pixmap);
-    QString t_sCurType(GetCurrentType().c_str());
+    QString t_sCurType(QString::fromStdString(GetCurrentType()));
     if (t_sCurType == "Tiles")
         m_pPassability->setPixmap(p_Pixmap);
     else if (t_sCurType == "Objects")
@@ -415,17 +420,21 @@ bool TextureDatabaseWindow::eventFilter(QObject *p_pObj, QEvent *p_pEvent)
         {
             QString t_sProjectDir;
             if (EditorConfig *t_pConf = EditorConfig::Get())
-                t_sProjectDir = QString(t_pConf->GetProjectDirectory().c_str());
+                t_sProjectDir = QString::fromStdString(t_pConf->GetProjectDirectory());
+
             QString t_sFileName = QFileDialog::getOpenFileName(this, tr("Open Texture"), t_sProjectDir+"/MapSprites", tr("Images (*.png)"));
-            SetTexturePixmap(QPixmap(t_sFileName));
-            t_sFileName.remove(0, t_sFileName.lastIndexOf("/")+1);
-            // change TextureName
-            m_pName->setText(t_sFileName);
-            // change TextureBox
-            QString t_sID = m_pID->text();
-            QString t_sItemText = t_sID+":"+t_sFileName;
-            m_pStoreBox->setItemText(m_pStoreBox->currentIndex(), t_sItemText);
-            ChangeItem(t_sID.toUInt());
+            if (!t_sFileName.isEmpty())
+            {
+                SetTexturePixmap(QPixmap(t_sFileName));
+                t_sFileName.remove(0, t_sFileName.lastIndexOf("/")+1);
+                // change TextureName
+                m_pName->setText(t_sFileName);
+                // change TextureBox
+                QString t_sID = m_pID->text();
+                QString t_sItemText = t_sID+":"+t_sFileName;
+                m_pStoreBox->setItemText(m_pStoreBox->currentIndex(), t_sItemText);
+                ChangeItem(t_sID.toUInt());
+            }
             return true;
         }
     }
@@ -434,7 +443,7 @@ bool TextureDatabaseWindow::eventFilter(QObject *p_pObj, QEvent *p_pEvent)
     {
         if (p_pEvent->type() == QEvent::MouseButtonDblClick)
         {
-            if (const SpritePrototype* t_pProto = GetLatestPrototype(GetCurrentType(), m_pID->text().toUInt()))
+            if (const SpritePrototype* t_pProto = GetLatestPrototype(GetCurrentType(), m_pID->value()))
             {
                 if (EditorConfig *t_pConf = EditorConfig::Get())
                 {
@@ -442,12 +451,11 @@ bool TextureDatabaseWindow::eventFilter(QObject *p_pObj, QEvent *p_pEvent)
                     {
                         if (QMainWindow *t_pDBWindow = (QMainWindow*)window())
                         {
-                            TransparencyWindow *t_pTWindow = new TransparencyWindow(t_pDBWindow, QPixmap( QString((t_pConf->GetProjectDirectory()+"/" +
-                                t_pDB->GetSpritePath(t_pProto->m_uiSpriteType) + t_pProto->m_sFileName).c_str())));
-                            connect(t_pTWindow, SIGNAL(ColorChosen(QString)), this, SLOT(TransparencyColorChanged(QString)));
-                            t_pTWindow->show();
-                            t_pDBWindow->setEnabled(false);
-                            t_pTWindow->setEnabled(true);
+                            TransparencyWindow t_TWindow(t_pDBWindow, QPixmap(QString::fromStdString(t_pConf->GetProjectDirectory()+"/" +
+                                t_pDB->GetSpritePath(t_pProto->m_uiSpriteType) + t_pProto->m_sFileName)));
+                            connect(&t_TWindow, SIGNAL(ColorChosen(QString)), this, SLOT(TransparencyColorChanged(QString)));
+                            t_TWindow.exec();
+                            disconnect(&t_TWindow, SIGNAL(ColorChosen(QString)), this, SLOT(TransparencyColorChanged(QString)));
                             return true;
                         }
                     }
@@ -458,20 +466,19 @@ bool TextureDatabaseWindow::eventFilter(QObject *p_pObj, QEvent *p_pEvent)
     // change tile passability
     else if (p_pObj == m_pPassabilityDown || p_pObj == m_pPassabilityUp || p_pObj == m_pPassabilityRight || p_pObj == m_pPassabilityLeft)
     {
-        PassabilityFlag t_Dir = PASSABLE_NONE;
-        if (p_pObj == m_pPassabilityRight)
-            t_Dir = PASSABLE_RIGHT;
-        else if (p_pObj == m_pPassabilityLeft)
-            t_Dir = PASSABLE_LEFT;
-        else if (p_pObj == m_pPassabilityDown)
-            t_Dir = PASSABLE_DOWN;
-        else if (p_pObj == m_pPassabilityUp)
-            t_Dir = PASSABLE_UP;
-
         if (p_pEvent->type() == QEvent::MouseButtonPress)
         {
-            if (const SpritePrototype* t_pProto = GetLatestPrototype(GetCurrentType(), m_pName->text().toUInt()))
+            if (const SpritePrototype* t_pProto = GetLatestPrototype(GetCurrentType(), m_pID->value()))
             {
+                PassabilityFlag t_Dir = PASSABLE_NONE;
+                if (p_pObj == m_pPassabilityRight)
+                    t_Dir = PASSABLE_RIGHT;
+                else if (p_pObj == m_pPassabilityLeft)
+                    t_Dir = PASSABLE_LEFT;
+                else if (p_pObj == m_pPassabilityDown)
+                    t_Dir = PASSABLE_DOWN;
+                else if (p_pObj == m_pPassabilityUp)
+                    t_Dir = PASSABLE_UP;
                 // if is passable
                 QString t_sIconName;
                 if ((t_pProto->Type.Tile.m_uiPassable & t_Dir) != 0)
@@ -501,7 +508,7 @@ bool TextureDatabaseWindow::eventFilter(QObject *p_pObj, QEvent *p_pEvent)
                 if (t_sIconName.size())
                     ((QLabel*)p_pObj)->setPixmap(QPixmap(t_sIconName));
 
-                m_DirPressed = t_Dir;
+                m_DirPressed ^= t_Dir;
 
                 ChangeItem(m_pID->text().toUInt());
                 return true;

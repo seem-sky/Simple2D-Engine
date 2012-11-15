@@ -8,6 +8,8 @@ class GlobalVariableDatabaseWindow : public QWidget, public Ui_GlobalVariableDat
     Q_OBJECT
 public:
     GlobalVariableDatabaseWindow(QWidget *p_pParent = NULL);
-    ~GlobalVariableDatabaseWindow(void);
+
+private slots:
+    void LoadPage();
 };
 #endif

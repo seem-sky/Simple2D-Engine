@@ -100,13 +100,13 @@ namespace XML
         return NULL;
     }
 
-    void XML_Writer::AddChildNode(MSXML2::IXMLDOMDocument2Ptr p_pDOM, MSXML2::IXMLDOMElementPtr p_pParent, std::string p_sNodeName, const AttributeList *p_plAttributes)
+    IXMLDOMNodePtr XML_Writer::AddChildNode(MSXML2::IXMLDOMDocument2Ptr p_pDOM, MSXML2::IXMLDOMElementPtr p_pParent, std::string p_sNodeName, const AttributeList *p_plAttributes)
     {
         if (!p_pDOM)
-            return;
+            return NULL;
 
         if (!p_pParent)
-            return;
+            return NULL;
 
         MSXML2::IXMLDOMElementPtr t_Node(p_pDOM->createNode(NODE_ELEMENT, p_sNodeName.c_str(), ""));
 
@@ -122,7 +122,7 @@ namespace XML
             }
         }
 
-        p_pParent->appendChild(t_Node);
+        return p_pParent->appendChild(t_Node);
     }
 
     void XML_Writer::AddChildNodes(MSXML2::IXMLDOMDocument2Ptr p_pDOM, IXMLDOMNodePtr p_pParent, const WriteChildList *p_plChildren)
@@ -133,17 +133,20 @@ namespace XML
         for (WriteChildList::const_iterator t_Itr = p_plChildren->begin(); t_Itr != p_plChildren->end(); ++t_Itr)
         {
             IXMLDOMNodePtr t_pNewNode = NULL;
-            // if node has no attribute named "ID" its a single node
-            CComVariant t_Value;
-            if (t_Itr->second.GetAttributeValue("ID", t_Value))
+            if (t_Itr->second.GetWriteState() != XML_WRITE_APPEND)
             {
-                 if (FAILED(t_Value.ChangeType(VT_UINT)))
-                    continue;
+                // if node has no attribute named "ID" its a single node
+                CComVariant t_Value;
+                if (t_Itr->second.GetAttributeValue("ID", t_Value))
+                {
+                    if (FAILED(t_Value.ChangeType(VT_UINT)))
+                        continue;
 
-                 t_pNewNode = GetChildNodeByAttribute(p_pParent, t_Itr->first, "ID", t_Value);
+                    t_pNewNode = GetChildNodeByAttribute(p_pParent, t_Itr->first, "ID", t_Value);
+                }
+                else
+                    p_pParent->selectSingleNode(_bstr_t(t_Itr->first.c_str()), &t_pNewNode);
             }
-            else
-                p_pParent->selectSingleNode(_bstr_t(t_Itr->first.c_str()), &t_pNewNode);
 
             switch (t_Itr->second.GetWriteState())
             {
@@ -157,16 +160,23 @@ namespace XML
                 // deleted nodes can not have child nodes, so do continue with next node
             	continue;
 
+                // delete all child nodes first
+            case XML_WRITE_OVERWRITE:
+                if (t_pNewNode)
+                {
+                    IXMLDOMNodePtr t_pRemovedChild = NULL;
+                    p_pParent->removeChild(t_pNewNode, &t_pRemovedChild);
+                    t_pNewNode = NULL;
+                }
+
+            case XML_WRITE_APPEND:
             case XML_WRITE_CHANGE:
             case XML_WRITE_ADD:
                 if (t_pNewNode)
                     ChangeNode(t_pNewNode, t_Itr->second.GetAttributeList());
 
                 else
-                {
-                    AddChildNode(p_pDOM, p_pParent, t_Itr->first, t_Itr->second.GetAttributeList());
-                    p_pParent->selectSingleNode(_bstr_t(t_Itr->first.c_str()), &t_pNewNode);
-                }
+                    t_pNewNode = AddChildNode(p_pDOM, p_pParent, t_Itr->first, t_Itr->second.GetAttributeList());
                 break;
 
             case XML_WRITE_NONE:

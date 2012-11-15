@@ -4,6 +4,7 @@
 #include "Singleton.h"
 #include <Database.h>
 #include <XML_Writer.h>
+#include <VariableHolder.h>
 
 namespace DATABASE
 {
@@ -20,19 +21,22 @@ namespace DATABASE
         bool IsSpritePrototypeDeleted(std::string p_sType, uint32 p_uiID);
         void GetTextureNames(std::string p_sType, std::map<uint32, std::string> &p_lTextureNames);
 
+        inline VariableHolder* GetGlobalVariables(){ return &m_Variables; }
+        inline const VariableHolder* GetGlobalVariables() const { return &m_Variables; }
+        inline void SetGlobalVariables(const VariableHolder &p_VariableHolder) { m_Variables = p_VariableHolder; }
+
+        const VariableHolder* GetVariableHolderFromParent(const DATABASE::PrototypeType p_ProtoType, const uint32 p_uiParentID);
+
         /*#####
         # Objects
         #####*/
-        static IDList GetAllParents(const Prototype *p_pProto);
-        static const ObjectPrototype* GetLatestObjectPrototype(uint32 p_uiID);
+        IDList GetAllParents(const Prototype *p_pProto);
+        ObjectPrototype* GetLatestObjectPrototype(uint32 p_uiID);
         ObjectPrototype* GetObjectPrototype(uint32 p_uiID);
         void ChangeObjectPrototype(ObjectPrototype &p_ChangedProto);
         void DeleteObjectPrototype(ObjectPrototype &p_DelProto);
         bool IsObjectPrototypeDeleted(uint32 p_uiID);
         void GetObjectNames(std::map<uint32, std::string> &p_lObjectNames);
-        // Objects - Custom Variables
-        uint32 AddNewCustomObjectVariable(uint32 p_uiObjectID, VariableType p_Type);
-        bool DeleteCustomObjectVariable(uint32 p_uiObjectID, VariableType p_Type, uint32 p_uiVariableID);
 
         XML::XML_STATE GetDBState();
 
@@ -44,6 +48,7 @@ namespace DATABASE
 
         SpriteList m_ChangedSprites;
         ObjectList m_ChangedObjects;
+        VariableHolder m_Variables;
         XML::XML_Writer *m_pWriter;
         inline void KillXMLThread()
         {

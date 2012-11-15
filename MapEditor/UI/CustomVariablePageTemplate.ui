@@ -42,34 +42,11 @@
      <height>20</height>
     </rect>
    </property>
+   <property name="maxLength">
+    <number>25</number>
+   </property>
    <property name="readOnly">
     <bool>false</bool>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="m_pDelete">
-   <property name="geometry">
-    <rect>
-     <x>230</x>
-     <y>10</y>
-     <width>71</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Delete</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="m_pNew">
-   <property name="geometry">
-    <rect>
-     <x>150</x>
-     <y>10</y>
-     <width>71</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>New</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_44">
@@ -97,7 +74,7 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>131</width>
+     <width>181</width>
      <height>21</height>
     </rect>
    </property>
@@ -130,11 +107,22 @@
     <number>999999999</number>
    </property>
   </widget>
+  <widget class="QPushButton" name="m_pResizeButton">
+   <property name="geometry">
+    <rect>
+     <x>200</x>
+     <y>10</y>
+     <width>101</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Resize Variables</string>
+   </property>
+  </widget>
  </widget>
  <tabstops>
   <tabstop>m_pStoreBox</tabstop>
-  <tabstop>m_pNew</tabstop>
-  <tabstop>m_pDelete</tabstop>
   <tabstop>m_pName</tabstop>
  </tabstops>
  <resources/>

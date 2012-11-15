@@ -9,7 +9,6 @@ class ObjectDatabaseWindow : public DatabasePageTemplate, public Ui_ObjectDataba
     Q_OBJECT
 public:
     ObjectDatabaseWindow(QWidget *p_pParent = NULL);
-    ~ObjectDatabaseWindow(void);
 
     static bool IsParentOf(uint32 p_uiInheritorID, uint32 p_uiParentID);
 
@@ -22,7 +21,6 @@ protected:
     void ClearWidgets();
 
 private:
-    void LoadObjects();
     uint32 GetCurrentTextureID();
     void ChangeTextureView(std::string p_sType);
     void SetSelectableTextures(std::string p_sType);
@@ -34,6 +32,7 @@ protected slots:
     void ClickButtonNew();
 
 private slots:
+    void LoadPage();
     void NPCAttributeChanged(int p_Index) { ChangeItem(GetCurrentItemID()); }
     void TypeChanged(int p_Index);
     void TextureIndexChanged(int p_Index);

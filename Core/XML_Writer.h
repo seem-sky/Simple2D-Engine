@@ -14,6 +14,8 @@ namespace XML
         XML_WRITE_ADD,
         XML_WRITE_DELETE,
         XML_WRITE_CHANGE,
+        XML_WRITE_APPEND,
+        XML_WRITE_OVERWRITE,
     };
 
     class XML_WriteData;
@@ -52,7 +54,7 @@ namespace XML
         XML_STATE GetWriterState() const { return m_XMLState; }
         IXMLDOMNodePtr GetChildNodeByAttribute(IXMLDOMNodePtr p_pNode, std::string p_sNodeName, std::string p_sAttributeName, CComVariant p_value);
 
-        void AddChildNode(MSXML2::IXMLDOMDocument2Ptr p_pDOM, MSXML2::IXMLDOMElementPtr p_pParent, std::string p_sNodeName, const AttributeList *p_plAttributes);
+        IXMLDOMNodePtr AddChildNode(MSXML2::IXMLDOMDocument2Ptr p_pDOM, MSXML2::IXMLDOMElementPtr p_pParent, std::string p_sNodeName, const AttributeList *p_plAttributes);
         void AddChildNodes(MSXML2::IXMLDOMDocument2Ptr p_pDOM, IXMLDOMNodePtr p_pParent, const WriteChildList *p_plChildren);
         void ChangeNode(IXMLDOMNodePtr p_pElement, const AttributeList *p_plAttributes);
 

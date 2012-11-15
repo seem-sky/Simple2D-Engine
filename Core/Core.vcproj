@@ -156,7 +156,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\GlobalVariables.cpp"
+				RelativePath=".\EventScriptHolder.cpp"
 				>
 			</File>
 			<File
@@ -165,6 +165,10 @@
 			</File>
 			<File
 				RelativePath=".\Thread.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\VariableHolder.cpp"
 				>
 			</File>
 			<File
@@ -186,11 +190,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Global.h"
+				RelativePath=".\EventScriptHolder.h"
 				>
 			</File>
 			<File
-				RelativePath=".\GlobalVariables.h"
+				RelativePath=".\Global.h"
 				>
 			</File>
 			<File
@@ -211,6 +215,10 @@
 			</File>
 			<File
 				RelativePath=".\Thread.h"
+				>
+			</File>
+			<File
+				RelativePath=".\VariableHolder.h"
 				>
 			</File>
 			<File
