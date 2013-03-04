@@ -22,7 +22,7 @@ public:
 
     inline WALKMODE GetWalkmode() { return m_Walkmode; }
 
-    void MovePosition(int XMove, int YMove, DIRECTION dir, uint32 time = 0);
+    void MovePosition(int XMove, int32 YMove, DIRECTION dir, uint32 time = 0);
     inline bool IsMoving()
     {
         if (m_pMovement)

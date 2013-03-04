@@ -14,7 +14,7 @@ struct MapInfo
 {
     std::string m_sMapName;
     std::string m_sMapAnnounceName;
-    std::string m_sAIName;
+    std::string m_sScriptName;
 
     uint32 m_uiX;
     uint32 m_uiY;
@@ -30,7 +30,7 @@ struct MapInfo
         m_uiID = 0;
         m_sMapName.clear();
         m_sMapAnnounceName.clear();
-        m_sAIName.clear();
+        m_sScriptName.clear();
     }
 };
 
@@ -82,8 +82,8 @@ public:
     /*#####
     ## position funktions
     #####*/
-    inline int GetPositionX() { return m_Position.x; }
-    inline int GetPositionY() { return m_Position.y; }
+    inline int32 GetPositionX() { return m_Position.x; }
+    inline int32 GetPositionY() { return m_Position.y; }
     inline Point<int> GetPosition() { return m_Position; }
     inline void SetPosition(Point<int> pos) {m_Position = pos; }
     inline void ChangePosition(Point<int> pos) { m_Position += pos; }
@@ -92,7 +92,7 @@ public:
     ## objects
     #####*/
     // add new world object to map
-    WorldObject* AddNewWorldObject(uint32 uiObjectID, int XPos, int YPos, uint32 uiLayerNr);
+    WorldObject* AddNewWorldObject(uint32 uiObjectID, int32 XPos, int32 YPos, uint32 uiLayerNr);
     WorldObject* GetObject(uint32 t_uiObjectGUID);
 
     /*#####
@@ -143,8 +143,8 @@ struct ObjectReadOut
 {
     uint32 m_ObjectID;
     uint32 m_GUID;
-    int m_XPos;
-    int m_YPos;
+    int32 m_XPos;
+    int32 m_YPos;
     uint32 m_uiDirection;
     uint32 m_uiWalkmode;
 
@@ -152,7 +152,7 @@ struct ObjectReadOut
 };
 
 // map load object create new thread
-class MapLoadThread : public ActiveObject
+class MapLoadThread : public ActiveObject<int>
 {
 public:
     MapLoadThread(std::string sMapName, MapInfo &MapInfo, std::vector<MapTiles> &MapTiles, LayerList &LayerList, std::map<uint32, WorldObject*> &objectList, ScriptPointLIST &scriptPoints);

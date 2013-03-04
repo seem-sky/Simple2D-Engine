@@ -65,7 +65,7 @@ public:
     void AddKeyAction(uint32 uiKey, uint32 actionID, bool press = true);
 
     // move player object
-    void MovePlayer(int XMove, int YMove, uint32 uiMoveMSec);
+    void MovePlayer(int XMove, int32 YMove, uint32 uiMoveMSec);
 
     void UseCollissionObject();
 

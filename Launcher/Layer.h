@@ -13,7 +13,7 @@ enum LAYER_TYPE
 
 class Layer;
 typedef std::vector<Layer*> LayerList;
-typedef std::vector<WorldObject*> ObjectList;
+typedef std::vector<WorldObject*> ObjectPrototypeMap;
 
 class Layer
 {
@@ -32,7 +32,7 @@ protected:
     LAYER_TYPE m_LayerType;
     std::string m_sLogLocationName;  
 
-    ObjectList m_lObjects;
+    ObjectPrototypeMap m_lObjects;
 
 private:
 };

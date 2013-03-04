@@ -79,8 +79,8 @@ bool ObjectLayer::IsObjectVisible(WorldObject *pObject)
         return false;
 
     // get object resolution
-    int XPos = pObject->GetScreenPosX();
-    int YPos = pObject->GetScreenPosY();
+    int32 XPos = pObject->GetScreenPosX();
+    int32 YPos = pObject->GetScreenPosY();
     uint32 XSize = 0, YSize = 0;
     pObject->GetObjectSize(XSize, YSize);
 

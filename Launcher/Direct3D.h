@@ -2,7 +2,7 @@
 #define DIRECT3D_H
 
 #include <d3dx9.h>
-#include "Logfile.h"
+#include <Logfile.h>
 #include <vector>
 
 class CDirect3D : public TSingleton<CDirect3D>

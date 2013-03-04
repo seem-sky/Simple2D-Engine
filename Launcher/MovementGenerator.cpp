@@ -11,7 +11,7 @@ MovementGenerator::~MovementGenerator(void)
 {
 }
 
-void MovementGenerator::Move2D(int x, int y, uint32 uiMSECTime, DIRECTION dir, bool Collision)
+void MovementGenerator::Move2D(int x, int32 y, uint32 uiMSECTime, DIRECTION dir, bool Collision)
 {
     sMoveCommand *pMove         = new sMoveCommand();
     pMove->m_bWithCollission    = Collision;

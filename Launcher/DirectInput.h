@@ -22,7 +22,7 @@ public:
 
 private:
     void CleanUp();
-    HRESULT InitMouseBuffer( int BufferSize );
+    HRESULT InitMouseBuffer( int32 BufferSize );
     //Direct Input Object
     LPDIRECTINPUT8 m_DirectInput;
 

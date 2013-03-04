@@ -231,7 +231,7 @@ void Player::DoActionForKey(PlayerKeyAction *action, const ULONGLONG CurTime)
     }
 }
 
-void Player::MovePlayer(int XMove, int YMove, uint32 uiMoveMsec)
+void Player::MovePlayer(int XMove, int32 YMove, uint32 uiMoveMsec)
 {
     if (m_pControledUnit && !m_pControledUnit->IsMoving())
     {

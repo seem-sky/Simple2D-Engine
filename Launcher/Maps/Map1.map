@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
 <Map>
-  <MapInfo MapName="blubb" MapAnnounceName="underground lair" MapSizeX="18" MapSizeY="16"/>
   <MapData>
     <Layer>
       <MapTiles Tiles="2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2"/>

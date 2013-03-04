@@ -31,7 +31,7 @@ LPDIRECT3DTEXTURE9 ResourceMgr::AddTexture(std::string p_sLocation, const DATABA
     if (!p_pProto)
         return NULL;
 
-    HRESULT hr;
+    HRESULT hr = 0;
 
     CDirect3D *pDirect3D = CDirect3D::Get();
 
@@ -43,12 +43,12 @@ LPDIRECT3DTEXTURE9 ResourceMgr::AddTexture(std::string p_sLocation, const DATABA
     LPDIRECT3DTEXTURE9 pTexture = NULL;
 
     // parse transparency color
-    std::string t_sColorString = p_pProto->m_sTransparencyColor;
-    uint32 t_uiColorRed = atoi(t_sColorString.substr((t_sColorString.find("R"))).c_str());
-    uint32 t_uiColorBlue = atoi(t_sColorString.substr((t_sColorString.find("B"))).c_str());
-    uint32 t_uiColorGreen = atoi(t_sColorString.substr((t_sColorString.find("G"))).c_str());
-    hr = D3DXCreateTextureFromFileEx(pDirect3D->GetDevice(), (p_sLocation+p_pProto->m_sFileName).c_str(), ImageInfo.Width, ImageInfo.Height, 1, 0,
-        D3DFMT_UNKNOWN, D3DPOOL_MANAGED, D3DX_FILTER_NONE, D3DX_FILTER_NONE, D3DCOLOR_XRGB(t_uiColorRed, t_uiColorGreen, t_uiColorBlue), NULL, NULL, &pTexture);
+    //std::string t_sColorString = p_pProto->m_sTransparencyColor;
+    //uint32 t_uiColorRed = atoi(t_sColorString.substr((t_sColorString.find("R"))).c_str());
+    //uint32 t_uiColorBlue = atoi(t_sColorString.substr((t_sColorString.find("B"))).c_str());
+    //uint32 t_uiColorGreen = atoi(t_sColorString.substr((t_sColorString.find("G"))).c_str());
+    //hr = D3DXCreateTextureFromFileEx(pDirect3D->GetDevice(), (p_sLocation+p_pProto->m_sFileName).c_str(), ImageInfo.Width, ImageInfo.Height, 1, 0,
+    //    D3DFMT_UNKNOWN, D3DPOOL_MANAGED, D3DX_FILTER_NONE, D3DX_FILTER_NONE, D3DCOLOR_XRGB(t_uiColorRed, t_uiColorGreen, t_uiColorBlue), NULL, NULL, &pTexture);
 
     // return NULL if unable to load texture from file
     if (FAILED(hr))

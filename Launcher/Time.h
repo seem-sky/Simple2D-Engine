@@ -1,7 +1,7 @@
 #ifndef TIME_H
 #define TIME_H
 
-#include "Logfile.h"
+#include <Logfile.h>
 #include "Global.h"
 #include <windows.h>
 
@@ -35,9 +35,9 @@ private:
     //Gibt die Zeit von m_CurCount vor der letzten Zeit Aktualisierung an
     LONGLONG m_TimeDif;
     //Momentane Frames
-    int m_Frames;
+    int32 m_Frames;
     //Berechnete Frames der letzten Sekunde
-    int m_FrameRate;
+    int32 m_FrameRate;
 
     //Zeiger auf Logfile
     Logfile *m_pLogfile;

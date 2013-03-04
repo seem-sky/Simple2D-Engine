@@ -9,12 +9,12 @@ Logfile *m_pLogfile     = NULL;
 CTime *m_pTime          = NULL;
 CGame *m_pGame          = NULL;
 
-HRESULT InitWindow ( HINSTANCE hInstance, int nCmdShow, GameInfo *GameInfo );
+HRESULT InitWindow ( HINSTANCE hInstance, int32 nCmdShow, GameInfo *GameInfo );
 LRESULT CALLBACK WndProc( HWND, uint32, WPARAM, LPARAM );
 void ReleaseObjects();
 
 // the entry point for any Windows program
-int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow )
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int32 nCmdShow )
 {
     UNREFERENCED_PARAMETER( hPrevInstance );
     UNREFERENCED_PARAMETER( lpCmdLine );
@@ -150,7 +150,7 @@ LRESULT CALLBACK WndProc( HWND hWnd, uint32 message, WPARAM wParam, LPARAM lPara
 }
 
 //Erstellt das Main Window
-HRESULT InitWindow( HINSTANCE hInstance, int nCmdShow, GameInfo *GameInfo )
+HRESULT InitWindow( HINSTANCE hInstance, int32 nCmdShow, GameInfo *GameInfo )
 {
     // Register class
     WNDCLASSEX wcex;

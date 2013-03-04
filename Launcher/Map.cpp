@@ -96,7 +96,7 @@ MapLoadResult Map::LoadNewMap(uint32 p_uiID)
     return result;
 }
 
-WorldObject* Map::AddNewWorldObject(uint32 uiObjectID, int XPos, int YPos, uint32 uiLayerNr)
+WorldObject* Map::AddNewWorldObject(uint32 uiObjectID, int32 XPos, int32 YPos, uint32 uiLayerNr)
 {
     WorldObject *pNewObject = NULL;
     DATABASE::Database *t_pDB = DATABASE::Database::Get();
@@ -268,7 +268,7 @@ void Map::DrawMap()
                         if (pTexture->m_pTexture)
                         {
                             // set source rect
-                            int iAutoTile = (int)((fMapTile +0.00005) * 10000)%10000;
+                            int32 iAutoTile = (int)((fMapTile +0.00005) * 10000)%10000;
                             RECT rSrcRect;
                             // if autotile is one tile
                             if (iAutoTile % 1000 == 0)
@@ -532,7 +532,7 @@ Point<uint32> Map::CalcPixToTile(Point<uint32> uiPos)
 ## MapLoadThread
 #####*/
 MapLoadThread::MapLoadThread(std::string sMapName, MapInfo &MapInfo, std::vector<MapTiles> &MapTiles, LayerList &LayerList, std::map<uint32, WorldObject*> &objectList, ScriptPointLIST &scriptPoints)
-    : m_MapInfo(MapInfo), m_v2MapTiles(MapTiles), m_lLayers(LayerList), m_ScriptPoints(scriptPoints), m_WorldObjectLIST(objectList), ActiveObject()
+    : m_MapInfo(MapInfo), m_v2MapTiles(MapTiles), m_lLayers(LayerList), m_ScriptPoints(scriptPoints), m_WorldObjectLIST(objectList), ActiveObject(NULL)
 {
     m_MapLoadState      = MAP_STATE_NONE;
     m_sMapName          = sMapName;

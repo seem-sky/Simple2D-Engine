@@ -96,9 +96,9 @@ private:
     uint32 m_uiShownLetterTime;
 
     // scrolling
-    int m_MsgYPos;
-    int m_NewMsgYPos;
-    int m_StartMsgYPos;
+    int32 m_MsgYPos;
+    int32 m_NewMsgYPos;
+    int32 m_StartMsgYPos;
     uint32 m_uiCurRow;
     uint32 m_uiCurRowShown;
     uint32 m_uiScrollTime;

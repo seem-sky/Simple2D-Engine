@@ -9,7 +9,7 @@
 
 struct sMoveCommand
 {
-    int m_MoveX, m_MoveY;
+    int32 m_MoveX, m_MoveY;
     uint32 m_MoveTime;
     bool m_bWithCollission;
     DIRECTION m_Dir;
@@ -35,7 +35,7 @@ public:
     MovementGenerator(Unit *pObj);
     ~MovementGenerator(void);
 
-    void Move2D(int x, int y, uint32 uiMSECTime, DIRECTION dir, bool Collission = true);
+    void Move2D(int x, int32 y, uint32 uiMSECTime, DIRECTION dir, bool Collission = true);
     void Move2DRandom(uint32 uiRange, bool Collission = true);
     void MovePointByPathfinder(Point<uint32> uiPoint);
 

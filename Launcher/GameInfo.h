@@ -1,9 +1,9 @@
 #ifndef GAME_INFO_H
 #define GAME_INFO_H
 
-#include "Point.h"
+#include <Point.h>
 #include "IniParser.h"
-#include "Logfile.h"
+#include <Logfile.h>
 
 class GameInfo
 {

@@ -470,7 +470,7 @@ void TextBox::ConvertMsg(std::string sText)
 
 void TextBox::MoveTextToLine(uint32 uiLine, uint32 uiTimePerLine)
 {
-    int LineDiff = uiLine-m_uiCurRowShown;
+    int32 LineDiff = uiLine-m_uiCurRowShown;
     m_uiCurRowShown = uiLine;
     // set scroll time
     m_uiScrollTime = LineDiff > 0 ? uiTimePerLine*LineDiff : (-1)*uiTimePerLine*LineDiff;

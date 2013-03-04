@@ -42,19 +42,19 @@ public:
     void GetBoundingRect(RECT &bound);
 
     // position
-    inline void ChangePosition(int XPos, int YPos) { m_Position += Point<int>(XPos, YPos); }
+    inline void ChangePosition(int XPos, int32 YPos) { m_Position += Point<int>(XPos, YPos); }
     inline Point<int> GetPosition() { return m_Position; }
     inline Point<int>* GetPositionPtr() { return &m_Position; }
-    inline int GetPositionX() { return m_Position.x; }
-    inline int GetPositionY() { return m_Position.y; }
-    inline int GetBottomPosY()
+    inline int32 GetPositionX() { return m_Position.x; }
+    inline int32 GetPositionY() { return m_Position.y; }
+    inline int32 GetBottomPosY()
     {
         uint32 x = 0, y = 0;
         GetObjectSize(x, y);
         return GetPositionY() + y;
     }
-    int GetScreenPosX();
-    int GetScreenPosY();
+    int32 GetScreenPosX();
+    int32 GetScreenPosY();
 
     void GetObjectSize(uint32 &Xsize, uint32 &Ysize);
     Map* GetMap();

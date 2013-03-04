@@ -77,23 +77,23 @@ GAMEINIT_STATE CGame::Initialize(HINSTANCE hInstance, HWND hWnd)
     // check DB state
     switch(m_pGameDB->GetDBState())
     {
-    case XML_DONE:
+    case THREAD_DONE:
         BASIC_LOG(m_sLogLocationName + "Successfully load Game-Database.");
         return GAMEINIT_STATE_OK;
         break;
 
-    case XML_IN_PROGRESS:
+    case THREAD_IN_PROGRESS:
         return GAMEINIT_STATE_IN_PROGRESS;
 
-    case XML_NO_FILE:
-        ERROR_LOG(m_sLogLocationName + "Unable to load Game-Database." + GetGameInfo()->GetDatabaseLocation() + " no such file or directory.");
-        return GAMEINIT_STATE_FAILED;
+    //case THREAD_NO_FILE:
+    //    ERROR_LOG(m_sLogLocationName + "Unable to load Game-Database." + GetGameInfo()->GetDatabaseLocation() + " no such file or directory.");
+    //    return GAMEINIT_STATE_FAILED;
 
-    case XML_CORRUPT_FILE:
-        ERROR_LOG(m_sLogLocationName + "Unable to load Game-Database." + GetGameInfo()->GetDatabaseLocation() + " is a corrupt file.");
-        return GAMEINIT_STATE_FAILED;
+    //case THREAD_CORRUPT_FILE:
+    //    ERROR_LOG(m_sLogLocationName + "Unable to load Game-Database." + GetGameInfo()->GetDatabaseLocation() + " is a corrupt file.");
+    //    return GAMEINIT_STATE_FAILED;
 
-    case XML_FAILED:
+    case THREAD_FAILED:
     default:
         ERROR_LOG(m_sLogLocationName + "Unable to load Game-Database. Undefined error!");
         return GAMEINIT_STATE_FAILED;

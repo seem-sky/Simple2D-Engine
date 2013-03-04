@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="Antis-GameEngine(Arbeitsname)"
+	Name="Launcher"
 	ProjectGUID="{D8A9B640-5A61-4087-9133-8DC208D7FDFD}"
 	RootNamespace="AntisGameEngineArbeitsname"
 	Keyword="Win32Proj"
@@ -46,7 +46,7 @@
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_DEBUG, D3D_DEBUG_INFO"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="3"
+				RuntimeLibrary="1"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="4"
@@ -118,9 +118,11 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
+				InlineFunctionExpansion="2"
 				EnableIntrinsicFunctions="true"
+				FavorSizeOrSpeed="1"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
-				RuntimeLibrary="2"
+				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
@@ -369,14 +371,6 @@
 			</File>
 			<File
 				RelativePath=".\GameInfo.h"
-				>
-			</File>
-			<File
-				RelativePath=".\IniParser.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\IniParser.h"
 				>
 			</File>
 		</Filter>

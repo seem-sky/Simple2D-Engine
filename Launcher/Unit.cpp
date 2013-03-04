@@ -91,7 +91,7 @@ void Unit::SetToStartSector()
     }
 }
 
-void Unit::MovePosition(int XMove, int YMove, DIRECTION dir, uint32 time)
+void Unit::MovePosition(int XMove, int32 YMove, DIRECTION dir, uint32 time)
 {
     if (m_pMovement)
         m_pMovement->Move2D(XMove, YMove, time, dir);

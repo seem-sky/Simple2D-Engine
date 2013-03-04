@@ -36,10 +36,10 @@ bool Collision::CheckTileCollision(Unit* pWho, Point<int> oldPos, Point<int> new
     // check if terrain is passable
     if (Map *pMap = pLayer->GetOwnerMap())
     {
-        int XMapPos = 0;
-        int XMapPosEnd = 0;
-        int YMapPos = 0;
-        int YMapPosEnd = 0;
+        int32 XMapPos = 0;
+        int32 XMapPosEnd = 0;
+        int32 YMapPos = 0;
+        int32 YMapPosEnd = 0;
         if (moveFlag & PASSABLE_LEFT || moveFlag & PASSABLE_RIGHT)
         {
             // calc start pos
