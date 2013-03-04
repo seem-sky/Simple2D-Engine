@@ -31,7 +31,7 @@ protected:
     virtual void DisconnectWidgets();
     virtual void ClearWidgets();
     virtual void LoadItems() = 0;
-    int InsertItem(uint32 p_uiID, QString p_sData);
+    int32 InsertItem(uint32 p_uiID, QString p_sData);
     void SetWidgets(uint32 p_uiID, QString p_sName, bool p_bEnabled = true);
 
     uint32 m_uiOwnerID;

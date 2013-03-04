@@ -1,11 +1,12 @@
 #ifndef TRANSPARENCY_WINDOW_H
 #define TRANSPARENCY_WINDOW_H
 
-#include <QtGui/QCloseEvent>
+#include <QtGui/QResizeEvent>
 #include <QtGui/QDialog>
-#include <QtGui/QLabel>
+#include "Ui/UI_TransparentColorDialog.h"
+#include <Color.h>
 
-class TransparencyWindow : public QDialog
+class TransparencyWindow : public QDialog, Ui_TransparentColorDialog
 {
     Q_OBJECT
 public:
@@ -18,10 +19,9 @@ protected:
     bool eventFilter(QObject *p_pObj, QEvent *p_pEvent);
 
 signals:
-    void ColorChosen(QString p_Result);
+    void ColorChosen(const Color &p_Result);
 
 private:
-    QLabel *m_pPic;
     QPixmap m_Pixmap;
     QString m_RGBresult;
 };

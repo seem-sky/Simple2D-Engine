@@ -45,7 +45,7 @@
 				Optimization="0"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="3"
+				RuntimeLibrary="1"
 				WarningLevel="3"
 				DebugInformationFormat="4"
 			/>
@@ -107,8 +107,10 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
+				InlineFunctionExpansion="2"
 				EnableIntrinsicFunctions="true"
-				RuntimeLibrary="2"
+				FavorSizeOrSpeed="1"
+				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
 				WarningLevel="3"
 				DebugInformationFormat="3"
@@ -152,7 +154,23 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\Color.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ConditionHolder.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Database.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\DatabaseLoad.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\EventScriptCommand.cpp"
 				>
 			</File>
 			<File
@@ -160,7 +178,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\IniParser.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Logfile.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\MapDatabase.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\MapIO.cpp"
 				>
 			</File>
 			<File
@@ -186,7 +216,23 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\Color.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ConditionHolder.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Database.h"
+				>
+			</File>
+			<File
+				RelativePath=".\DatabaseLoad.h"
+				>
+			</File>
+			<File
+				RelativePath=".\EventScriptCommand.h"
 				>
 			</File>
 			<File
@@ -198,7 +244,23 @@
 				>
 			</File>
 			<File
+				RelativePath=".\IniParser.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Logfile.h"
+				>
+			</File>
+			<File
+				RelativePath=".\MapDatabase.h"
+				>
+			</File>
+			<File
+				RelativePath=".\MapIO.h"
+				>
+			</File>
+			<File
+				RelativePath=".\math_extensions.h"
 				>
 			</File>
 			<File
@@ -231,26 +293,6 @@
 			</File>
 			<File
 				RelativePath=".\XML_Writer.h"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="EventScriptStuff"
-			>
-			<File
-				RelativePath=".\EventScriptCommand.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\EventScriptCommand.h"
-				>
-			</File>
-			<File
-				RelativePath=".\ScriptDatabase.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\ScriptDatabase.h"
 				>
 			</File>
 		</Filter>

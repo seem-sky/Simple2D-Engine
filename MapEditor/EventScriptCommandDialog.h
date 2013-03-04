@@ -1,8 +1,8 @@
 #ifndef EVENT_SCRIPT_COMMAND_DIALOG_H
 #define EVENT_SCRIPT_COMMAND_DIALOG_H
 
-#include "EventScriptCommand.h"
-#include "ResizeWidget.h"
+#include <EventScriptCommand.h>
+#include "ModifyObject.h"
 #include <QtGui/QDialog>
 
 /*#####
@@ -36,13 +36,13 @@ public:
     void LoadValuesFromEventScriptCommand();
 
 protected:
-    void resizeEvent(QResizeEvent *p_pEvent) { m_ResizeObj.ResizeEvent(this); }
+    void resizeEvent(QResizeEvent *p_pEvent) { m_ResizeObj.resizeEvent(this); }
 
 private slots:
     void Accept();
 
 private:
-    ResizeWidget m_ResizeObj;
+    ModifyObject m_ResizeObj;
 };
 
 /*#####
@@ -75,9 +75,13 @@ public:
     EventScriptIfConditionDialog(EVENT_SCRIPT::EventScriptIfCondition *p_pCommand, QWidget *p_pParent = NULL);
     void LoadValuesFromEventScriptCommand();
 
+private:
+    void RemoveCondition(int32 p_Index);
+    void AddCondition();
+
 private slots:
     void Accept();
-    void ConditionTypeChanged(int p_Index);
-    void VariableTypeChanged(bool p_bChecked);
+    void ConditionAdded();
+    void ConditionDeleted();
 };
 #endif

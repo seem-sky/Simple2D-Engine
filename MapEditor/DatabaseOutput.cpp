@@ -10,11 +10,6 @@ namespace DATABASE
         m_sLogLocationName = LOGFILE_ENGINE_LOG_NAME + "DatabaseOutput : ";
     }
 
-    DatabaseOutput::~DatabaseOutput(void)
-    {
-        KillXMLThread();
-    }
-
     void DatabaseOutput::ClearOutput()
     {
         m_ChangedSprites.clear();
@@ -25,7 +20,7 @@ namespace DATABASE
     void DatabaseOutput::ChangeSpritePrototype(std::string p_sType, SpritePrototype &p_ChangedProto)
     {
         // find type or create it
-        SpriteList::iterator t_TypeItr = m_ChangedSprites.find(p_sType);
+        SpriteTypeList::iterator t_TypeItr = m_ChangedSprites.find(p_sType);
         if (t_TypeItr == m_ChangedSprites.end())
         {
             std::map<uint32, SpritePrototype> t_NewMap;
@@ -44,7 +39,7 @@ namespace DATABASE
     SpritePrototype* DatabaseOutput::GetSpritePrototype(std::string p_sType, uint32 p_uiID)
     {
         // find type
-        SpriteList::iterator t_TypeItr = m_ChangedSprites.find(p_sType);
+        SpriteTypeList::iterator t_TypeItr = m_ChangedSprites.find(p_sType);
         if (t_TypeItr == m_ChangedSprites.end())
             return NULL;
 
@@ -54,6 +49,16 @@ namespace DATABASE
             return NULL;
 
         return &t_SpriteItr->second;
+    }
+
+    const SpritePrototype* DatabaseOutput::GetLatestSpritePrototype(std::string p_sType, uint32 p_uiID)
+    {
+        const SpritePrototype *pProto = NULL;
+        if (pProto = GetSpritePrototype(p_sType, p_uiID))
+            return pProto;
+        if (Database *pDB = Database::Get())
+            return pDB->GetSpritePrototype(p_sType, p_uiID);
+        return pProto;
     }
 
     void DatabaseOutput::DeleteSpritePrototype(std::string p_sType, SpritePrototype &p_DelProto)
@@ -77,7 +82,7 @@ namespace DATABASE
         if (m_pWriter)
             return;
 
-        XML_WriteData *t_DBChanges = new XML_WriteData();
+        XML_WriteData t_DBChanges;
         XML_WriteData t_DB;
 
         // parse sprite changes
@@ -85,7 +90,7 @@ namespace DATABASE
         {
             XML_WriteData t_SpriteDB;
             // iterate through type
-            for (SpriteList::iterator t_TypeItr = m_ChangedSprites.begin(); t_TypeItr != m_ChangedSprites.end(); ++t_TypeItr)
+            for (SpriteTypeList::iterator t_TypeItr = m_ChangedSprites.begin(); t_TypeItr != m_ChangedSprites.end(); ++t_TypeItr)
             {
                 XML_WriteData *p_pSpriteType = t_SpriteDB.GetChild(t_TypeItr->first);
                 if (!p_pSpriteType)
@@ -142,13 +147,14 @@ namespace DATABASE
         }
 
         // get global variable changes
-        XML_WriteData t_VariableDB;
-        m_Variables.ParseVariables(t_VariableDB);
+        XML_WriteData t_VariableDB(XML_WRITE_OVERWRITE);
+        m_Variables.GetXMLData(t_VariableDB);
         if (t_VariableDB.HasChilds())
             t_DB.AddChild("GlobalVariables", t_VariableDB);
 
-        t_DBChanges->AddChild("Database", t_DB);
-        m_pWriter = new XML_Writer(p_sFileName, t_DBChanges);
+        t_DBChanges.AddChild("Database", t_DB);
+        m_pWriter = new XML_Writer();
+        m_pWriter->startWriting(p_sFileName, t_DBChanges);
         ClearOutput();
     }
 
@@ -158,7 +164,7 @@ namespace DATABASE
             return false;
 
         // filename
-        p_pElement->AddAttribute("ObjectName", (LPCOLESTR)_bstr_t(p_pProto->m_sName.c_str()));
+        p_pElement->AddAttribute("ObjectName", (LPCSTR)p_pProto->m_sName.c_str());
 
         // ID
         p_pElement->AddAttribute("ID", p_pProto->m_uiID);
@@ -204,10 +210,17 @@ namespace DATABASE
 
         // parse custom variables
         if (!p_pElement->HasChild("Variables"))
-            p_pElement->AddChild("Variables", XML_WriteData(XML_WRITE_CHANGE));
+            p_pElement->AddChild("Variables", XML_WriteData(XML_WRITE_OVERWRITE));
 
         if (XML_WriteData* t_pVariables = (XML_WriteData*)p_pElement->GetChild("Variables"))
-            p_pProto->m_Variables.ParseVariables(*t_pVariables);
+            p_pProto->m_Variables.GetXMLData(*t_pVariables);
+
+        // parse object scripts
+        if (!p_pElement->HasChild("Scripts"))
+            p_pElement->AddChild("Scripts", XML_WriteData(XML_WRITE_OVERWRITE));
+
+        if (XML_WriteData* t_pScripts = (XML_WriteData*)p_pElement->GetChild("Scripts"))
+            p_pProto->m_Scripts.GetXMLData(*t_pScripts);
 
         // set change flag
         p_pElement->SetWriteState(XML_WRITE_CHANGE);
@@ -221,7 +234,10 @@ namespace DATABASE
             return false;
 
         // filename
-        p_pElement->AddAttribute("FileName", (LPCOLESTR)_bstr_t(p_pProto->m_sFileName.c_str()));
+        p_pElement->AddAttribute("FileName", (LPCSTR)p_pProto->m_sFileName.c_str());
+
+        // path
+        p_pElement->AddAttribute("Path", (LPCSTR)p_pProto->m_sPath.c_str());
 
         // ID
         p_pElement->AddAttribute("ID", p_pProto->m_uiID);
@@ -230,7 +246,9 @@ namespace DATABASE
         p_pElement->AddAttribute("Type", p_pProto->m_uiSpriteType);
 
         // transparent_color
-        p_pElement->AddAttribute("transparent_color", (LPCOLESTR)_bstr_t(p_pProto->m_sTransparencyColor.c_str()));
+        std::string t_sColorString;
+        p_pProto->m_TransparencyColor.getColorString(t_sColorString);
+        p_pElement->AddAttribute("transparent_color", (LPCSTR)t_sColorString.c_str());
 
         // type specific stuff
         switch (p_pProto->m_uiSpriteType)
@@ -273,7 +291,7 @@ namespace DATABASE
     void DatabaseOutput::GetTextureNames(std::string p_sType, std::map<uint32, std::string> &p_lTextureNames)
     {
         // find type
-        SpriteList::iterator t_TypeItr = m_ChangedSprites.find(p_sType);
+        SpriteTypeList::iterator t_TypeItr = m_ChangedSprites.find(p_sType);
         if (t_TypeItr == m_ChangedSprites.end())
             return;
 
@@ -289,21 +307,18 @@ namespace DATABASE
         }
     }
 
-    XML_STATE DatabaseOutput::GetDBState()
+    ThreadState DatabaseOutput::GetDBState()
     {
         // progress XML writer
-        XML_STATE t_State = XML_NONE;
+        ThreadState t_State = THREAD_NONE;
         if (m_pWriter)
         {
-            t_State = m_pWriter->GetWriterState();
             switch(t_State)
             {
-            case XML_IN_PROGRESS:
+            case THREAD_IN_PROGRESS:
                 break;
-            case XML_DONE:
+            case THREAD_DONE:
                 BASIC_LOG(m_sLogLocationName + "Database save complete.");
-            default:
-                KillXMLThread();
                 break;
             }
         }
@@ -312,7 +327,7 @@ namespace DATABASE
 
     ObjectPrototype* DatabaseOutput::GetObjectPrototype(uint32 p_uiID)
     {
-        ObjectList::iterator t_ObjItr = m_ChangedObjects.find(p_uiID);
+        ObjectPrototypeMap::iterator t_ObjItr = m_ChangedObjects.find(p_uiID);
         if (t_ObjItr != m_ChangedObjects.end())
             return &t_ObjItr->second;
 
@@ -322,7 +337,7 @@ namespace DATABASE
     void DatabaseOutput::ChangeObjectPrototype(ObjectPrototype &p_ChangedProto)
     {
         // find prototype and overwrite it, or create it
-        ObjectList::iterator t_ObjItr = m_ChangedObjects.find(p_ChangedProto.m_uiID);
+        ObjectPrototypeMap::iterator t_ObjItr = m_ChangedObjects.find(p_ChangedProto.m_uiID);
         if (t_ObjItr == m_ChangedObjects.end())
             m_ChangedObjects.insert(std::make_pair(p_ChangedProto.m_uiID, p_ChangedProto));
         else
@@ -348,7 +363,7 @@ namespace DATABASE
     void DatabaseOutput::GetObjectNames(std::map<uint32, std::string> &p_lObjectNames)
     {
         std::map<uint32, std::string>::iterator t_NameItr;
-        for (ObjectList::iterator t_ObjectItr = m_ChangedObjects.begin(); t_ObjectItr != m_ChangedObjects.end(); ++t_ObjectItr)
+        for (ObjectPrototypeMap::iterator t_ObjectItr = m_ChangedObjects.begin(); t_ObjectItr != m_ChangedObjects.end(); ++t_ObjectItr)
         {
             t_NameItr = p_lObjectNames.find(t_ObjectItr->first);
             if (t_NameItr == p_lObjectNames.end())

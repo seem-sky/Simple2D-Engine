@@ -25,7 +25,7 @@ public:
         if (!m_pSingleton)
             m_pSingleton = new T;
 
-        return (m_pSingleton);
+        return m_pSingleton;
     }
 
     void Del()

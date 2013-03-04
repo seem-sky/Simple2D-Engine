@@ -1,0 +1,26 @@
+<Database>
+	<SpriteDatabase>
+		<Tiles>
+			<Sprite ID="5" FileName="halfgras.png" Type="0" auto_tile="0" passability="15" terraintype="0" transparent_color="R255G255B255"/>
+			<Sprite ID="1" FileName="gras.png" Type="0" auto_tile="0" passability="15" terraintype="0" transparent_color=""/>
+			<Sprite ID="2" FileName="stone.png" Type="0" auto_tile="0" passability="0" terraintype="0"/>
+			<Sprite ID="3" FileName="road2.png" Type="0" auto_tile="1" passability="15" terraintype="0" transparent_color="R0G255B0"/>
+			<Sprite FileName="road.png" ID="4" Type="0" passability="15" terraintype="0" auto_tile="1" transparent_color=""/></Tiles>
+		<Objects>
+			<Sprite ID="1" FileName="tree1.png" Type="1" boundingXBegin="12" boundingYBegin="64" boundingXRange="40" boundingYRange="19" transparent_color="R0G128B128"/>
+		</Objects>
+		<NPCs>
+			<Sprite ID="1" FileName="Char1.png" Type="2" spritesX="3" spritesY="4" boundingXBegin="4" boundingYBegin="20" boundingXRange="16" boundingYRange="12" transparent_color=""/>
+		</NPCs>
+		<TextBoxes>
+			<Sprite ID="1" FileName="Textbox1.png" Type="4" BorderSize="5"/>
+		</TextBoxes>
+	</SpriteDatabase>
+	<ObjectDatabase>
+		<Object ID="1" ObjectName="Held" Type="1" TextureID="1" AnimationFrequency="3" MovementSpeed="3" HP_max="0" HP_min="0">
+			<Parents><Parent ID="2"/></Parents><Scripts><ScriptPage Name="Page1"><Command Comparison="1" Type="4"><Condition ConditionType="1" Operator="1"><DestVar ID="0" Localisation="2" VariableType="1"/><SrcVar Localisation="1" Value="0" VariableType="1"/></Condition><Condition ConditionType="1" Operator="1"><DestVar ID="0" Localisation="2" VariableType="1"/><SrcVar Localisation="1" Value="0" VariableType="1"/></Condition><Condition ConditionType="1" Operator="1"><DestVar ID="0" Localisation="2" VariableType="1"/><SrcVar Localisation="1" Value="0" VariableType="1"/></Condition><Condition ConditionType="1" Operator="1"><DestVar ID="0" Localisation="2" VariableType="1"/><SrcVar Localisation="1" Value="0" VariableType="1"/></Condition></Command><LocalVariables/></ScriptPage></Scripts><Variables><bool name="" value="0"/><bool name="" value="0"/></Variables></Object>
+		<Object ID="2" ObjectName="Tree1" Type="0" TextureID="1">
+			<Parents/><Scripts/><Variables><bool name="alive" value="-1"/></Variables></Object>
+	</ObjectDatabase>
+	<StartConditions MapID="1" HeroeID="1" StartPosX="55" StartPosY="90"/>
+	<GlobalVariables><bool name="" value="0"/><bool name="" value="0"/><bool name="" value="0"/><bool name="" value="0"/><bool name="" value="0"/><bool name="" value="0"/><bool name="" value="0"/><bool name="" value="0"/><bool name="" value="0"/><bool name="" value="0"/><bool name="" value="0"/><bool name="" value="0"/><bool name="" value="0"/><bool name="" value="0"/><bool name="" value="0"/><bool name="" value="0"/><bool name="" value="0"/><bool name="" value="0"/><bool name="" value="0"/><bool name="" value="0"/><bool name="" value="0"/><bool name="" value="0"/><bool name="" value="0"/><bool name="" value="0"/><bool name="" value="0"/><float name="" value="0"/><float name="" value="0"/><float name="" value="0"/><float name="" value="0"/><float name="" value="0"/><float name="" value="0"/><float name="" value="0"/><float name="" value="0"/><float name="" value="0"/><float name="" value="0"/><float name="" value="0"/><float name="" value="0"/><float name="" value="0"/><float name="" value="0"/><float name="" value="0"/></GlobalVariables></Database>

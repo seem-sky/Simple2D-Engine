@@ -3,6 +3,7 @@
 
 #include "UI/UI_TextureDatabase.h"
 #include "DatabasePageTemplate.h"
+#include <Color.h>
 
 class TextureDatabaseWindow : public DatabasePageTemplate, Ui_TextureDatabase
 {
@@ -34,9 +35,12 @@ private slots:
     void LoadPage();
     void TransparencyColorChanged() { ChangeItem(GetCurrentItemID()); }
     void CurrentTabChanged(int p_Index);
-    void TransparencyColorChanged(QString p_Color) { m_pTransparencyColor->setText(p_Color); }
+    void TransparencyColorChanged(const Color &p_Color);
     void TileAutotileStateChanged(int p_State) { ChangeItem(GetCurrentItemID()); }
     void BoundingChanged(int p_Value);
     void NPCSpriteCountChanged(int p_Value) { ChangeItem(GetCurrentItemID()); }
+
+private:
+    QString m_sCurrentTexturePath;
 };
 #endif

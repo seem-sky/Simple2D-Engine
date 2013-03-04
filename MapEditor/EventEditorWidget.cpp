@@ -8,7 +8,7 @@
 using namespace EVENT_SCRIPT;
 using namespace CONTEXT_MENU;
 
-EventEditorWidget::EventEditorWidget(QWidget *p_pParent) : QWidget(p_pParent), Ui_EventEditor()
+EventEditorWidget::EventEditorWidget(QWidget *p_pParent) : m_pEventScriptHolder(NULL), QWidget(p_pParent), Ui_EventEditor()
 {
     setupUi(this);
     connect(m_pButtonNewPage, SIGNAL(clicked()), this, SLOT(ButtonEventPageAdded()));
@@ -16,11 +16,71 @@ EventEditorWidget::EventEditorWidget(QWidget *p_pParent) : QWidget(p_pParent), U
     connect(m_pName, SIGNAL(editingFinished()), this, SLOT(PageNameChanged()));
     connect(m_pButtonEditLocalVariables, SIGNAL(clicked()), this, SLOT(LocalVariableDialogClicked()));
     connect(m_pEventEditorPages, SIGNAL(currentChanged(int)), this, SLOT(ScriptPageSelected(int)));
-    m_ResizeObj.AddResizeWidget(m_pEventEditorPages);
-    m_ResizeObj.AddResizeWidget(m_pPageConditions, QPoint(10+m_pButtonDeleteCondition->width(),0), MODIFY_RESIZE_WIDTH);
-    m_ResizeObj.AddMoveWidget(m_pButtonDeleteCondition, QPoint(0, 0), MODIFY_MOVE_WIDTH);
-    m_ResizeObj.AddMoveWidget(m_pButtonEditCondition, QPoint(0, 0), MODIFY_MOVE_WIDTH);
-    m_ResizeObj.AddMoveWidget(m_pButtonNewCondition, QPoint(0, 0), MODIFY_MOVE_WIDTH);
+    m_ResizeObj.setWidget(m_pEventEditorPages, MODIFY_RESIZE);
+    m_ResizeObj.setWidget(m_pPageConditions, MODIFY_RESIZE, QPoint(10+m_pButtonDeleteCondition->width(),0), MODIFY_DIRECTION_WIDTH);
+    m_ResizeObj.setWidget(m_pButtonDeleteCondition, MODIFY_MOVE, QPoint(0, 0), MODIFY_DIRECTION_WIDTH);
+    m_ResizeObj.setWidget(m_pButtonEditCondition, MODIFY_MOVE, QPoint(0, 0), MODIFY_DIRECTION_WIDTH);
+    m_ResizeObj.setWidget(m_pButtonNewCondition, MODIFY_MOVE, QPoint(0, 0), MODIFY_DIRECTION_WIDTH);
+}
+
+void EventEditorWidget::LoadScriptsFromEventScriptHolder()
+{
+    if (!m_pEventScriptHolder)
+        return;
+
+    for (uint32 i = 0; i < m_pEventScriptHolder->GetEventScriptCount(); ++i)
+    {
+        if (EventScript *t_pScript = m_pEventScriptHolder->GetEventScript(i))
+        {
+            ScriptPage *t_pPage = new ScriptPage(t_pScript, m_pEventEditorPages);
+            t_pPage->installEventFilter(this);
+            m_pEventEditorPages->addTab(t_pPage, QString::fromStdString(t_pScript->GetName()));
+            LoadCommandsFromEventScript(t_pScript, t_pPage);
+        }
+    }
+}
+
+void EventEditorWidget::LoadCommandsFromEventScript(const EventScript *p_pScript, ScriptPage *p_pPage)
+{
+    if (!p_pScript || !p_pPage)
+        return;
+
+    for (uint32 i = 0; i < p_pScript->GetCommandCount(); ++i)
+    {
+        EventScriptCommandPtr t_pCommand;
+        if (p_pScript->GetCommand(i, t_pCommand) && p_pPage->AddNewCommandLine(t_pCommand, -1, false))
+        {
+            // only container could have children
+            if (ScriptLineContainer *t_pScriptLine = (ScriptLineContainer*)p_pPage->topLevelItem(p_pPage->topLevelItemCount()-2))
+            {
+                if (t_pScriptLine->IsContainer())
+                    LoadChildCommandsFromCommand(t_pScriptLine);
+            }
+        }
+    }
+}
+
+void EventEditorWidget::LoadChildCommandsFromCommand(ScriptLineContainer *p_pScriptLine)
+{
+    if (!p_pScriptLine || !p_pScriptLine->GetCommand().get())
+        return;
+
+    if (EventScriptCommandContainer *t_pCommandContainer = (EventScriptCommandContainer*)p_pScriptLine->GetCommand().get())
+    {
+        for (uint32 i = 0; i < t_pCommandContainer->GetChildCommandCount(); ++i)
+        {
+            EventScriptCommandPtr t_pResult;
+            if (t_pCommandContainer->GetChildCommand(i, t_pResult) && p_pScriptLine->AddNewCommandLine(t_pResult, -1, false))
+            {
+                // only container could have children
+                if (ScriptLineContainer *t_pScriptLine = (ScriptLineContainer*)p_pScriptLine->child(p_pScriptLine->childCount()-2))
+                {
+                    if (t_pScriptLine->IsContainer())
+                        LoadChildCommandsFromCommand(t_pScriptLine);
+                }
+            }
+        }
+    }
 }
 
 void EventEditorWidget::ScriptPageSelected(int p_Index)
@@ -29,6 +89,14 @@ void EventEditorWidget::ScriptPageSelected(int p_Index)
         return;
 
     m_pName->setText(m_pEventEditorPages->tabText(p_Index));
+    if (m_pEventScriptHolder)
+    {
+        if (EventScript *t_pScript = m_pEventScriptHolder->GetEventScript((uint32)p_Index))
+        {
+            if (VariableHolder *t_pVarHolder = t_pScript->GetLocalVariableHolder())
+                UpdateLocalVariableCount(t_pVarHolder);
+        }
+    }
 }
 
 void EventEditorWidget::LocalVariableDialogClicked()
@@ -58,13 +126,17 @@ void EventEditorWidget::UpdateLocalVariableCount(const VariableHolder *p_pHolder
 
 void EventEditorWidget::ButtonEventPageAdded()
 {
-    ScriptPage *t_pNewPage = new ScriptPage(m_pEventEditorPages);
+    if (!m_pEventScriptHolder)
+        return;
+
+    ScriptPage *t_pNewPage = new ScriptPage(m_pEventScriptHolder->InsertEventScript(), m_pEventEditorPages);
     t_pNewPage->installEventFilter(this);
     m_pEventEditorPages->addTab(t_pNewPage, "");
     m_pEventEditorPages->setCurrentWidget(t_pNewPage);
     QString t_sName("Page"+QString::number(m_pEventEditorPages->currentIndex()+1));
     m_pEventEditorPages->setTabText(m_pEventEditorPages->currentIndex(), t_sName);
     m_pName->setText(t_sName);
+    PageNameChanged();
 }
 
 void EventEditorWidget::ButtonEventPageDeleted()
@@ -72,6 +144,7 @@ void EventEditorWidget::ButtonEventPageDeleted()
     if (QWidget *t_pWidget = m_pEventEditorPages->currentWidget())
     {
         ClearWidgets();
+        m_pEventScriptHolder->DeleteEventScript(m_pEventEditorPages->currentIndex());
         m_pEventEditorPages->removeTab(m_pEventEditorPages->currentIndex());
         delete t_pWidget;
     }
@@ -82,7 +155,13 @@ void EventEditorWidget::PageNameChanged()
     if (m_pEventEditorPages->currentIndex() == -1)
         return;
 
-    m_pEventEditorPages->setTabText(m_pEventEditorPages->currentIndex(), m_pName->text());
+    int32 t_Index = m_pEventEditorPages->currentIndex();
+    if (t_Index < 0)
+        return;
+
+    m_pEventEditorPages->setTabText(t_Index, m_pName->text());
+    if (m_pEventScriptHolder)
+        m_pEventScriptHolder->SetScriptName(m_pName->text().toStdString(), (uint32)t_Index);
 }
 
 void EventEditorWidget::ClearWidgets()
@@ -98,12 +177,9 @@ void EventEditorWidget::ClearWidgets()
 /*#####
 # ScriptContainer
 #####*/
-ScriptLine* ScriptContainer::GetNewScriptLine(EventScriptCommand *p_pCommand)
+ScriptLine* ScriptContainer::GetNewScriptLine(const EventScriptCommandPtr &p_pCommand)
 {
-    if (!p_pCommand)
-        return NULL;
-
-    if (p_pCommand->GetCommandType() < COMMAND_CONTAINER)
+    if (p_pCommand.get()->GetCommandType() < COMMAND_CONTAINER)
         return new ScriptLine(p_pCommand);
     else
         return new ScriptLineContainer(p_pCommand);
@@ -112,12 +188,12 @@ ScriptLine* ScriptContainer::GetNewScriptLine(EventScriptCommand *p_pCommand)
 /*#####
 # ScriptPage
 #####*/
-ScriptPage::ScriptPage(QWidget *p_pParent /* = NULL */) : QTreeWidget(p_pParent)
+ScriptPage::ScriptPage(EventScript *p_pScript, QWidget *p_pParent /* = NULL */) : m_pScript(p_pScript), QTreeWidget(p_pParent), ScriptContainer()
 {
-    AddNewCommandLine(new EventScriptCommand());
+    AddNewCommandLine(EventScriptCommandPtr(new EventScriptCommand()), -1, false);
     viewport()->installEventFilter(this);
     setHeaderHidden(true);
-    setIndentation(0);
+    setIndentation(10);
 }
 
 bool ScriptPage::eventFilter(QObject *p_pObj, QEvent *p_pEvent)
@@ -128,12 +204,20 @@ bool ScriptPage::eventFilter(QObject *p_pObj, QEvent *p_pEvent)
     // open event command dialog
     if (p_pEvent->type() == QEvent::MouseButtonDblClick && ((QMouseEvent*)p_pEvent)->button() == Qt::LeftButton)
     {
-        QTreeWidgetItem *t_pItem = itemAt(((QMouseEvent*)p_pEvent)->pos());
+        ScriptLine *t_pItem = (ScriptLine*)itemAt(((QMouseEvent*)p_pEvent)->pos());
         if (!t_pItem)
-            setCurrentItem (t_pItem, QItemSelectionModel::Clear);
+            return false;
 
-        CommandWindow t_Dialog(this);
-        t_Dialog.exec();
+        ScriptContainer *t_pContainer = NULL;
+        if (t_pItem->parent())
+            t_pContainer = (ScriptLineContainer*)t_pItem->parent();
+        else
+            t_pContainer = (ScriptPage*)t_pItem->treeWidget();
+        if (t_pContainer)
+        {
+            CommandWindow t_Dialog(t_pContainer, this);
+            t_Dialog.exec();
+        }
     }
     // show menu
     else if (p_pEvent->type() == QEvent::MouseButtonRelease && ((QMouseEvent*)p_pEvent)->button() == Qt::RightButton)
@@ -153,9 +237,9 @@ bool ScriptPage::eventFilter(QObject *p_pObj, QEvent *p_pEvent)
     return false;
 }
 
-bool ScriptPage::AddNewCommandLine(EVENT_SCRIPT::EventScriptCommand *p_pCommand, int p_Row /*= -1*/)
+bool ScriptPage::AddNewCommandLine(const EventScriptCommandPtr &p_pCommand, int32 p_Row /*= -1*/, bool p_bInsertInHolder /*= true*/)
 {
-    if (!p_pCommand)
+    if (!p_pCommand.get() || !m_pScript)
         return false;
 
     ScriptLine *t_pNewCommandLine = GetNewScriptLine(p_pCommand);
@@ -163,11 +247,12 @@ bool ScriptPage::AddNewCommandLine(EVENT_SCRIPT::EventScriptCommand *p_pCommand,
         return false;
 
     if (p_Row < 0)
-        insertTopLevelItem(topLevelItemCount() > 0 ? topLevelItemCount()-1 : 0, t_pNewCommandLine);
-    else
-        insertTopLevelItem(p_Row, t_pNewCommandLine);
-    
+        p_Row = topLevelItemCount() > 0 ? topLevelItemCount()-1 : 0;
+
+    insertTopLevelItem(p_Row, t_pNewCommandLine);
     t_pNewCommandLine->setExpanded(true);
+    if (p_bInsertInHolder)
+        m_pScript->InsertCommand((uint32)p_Row, p_pCommand);
     return true;
 }
 
@@ -176,6 +261,8 @@ void ScriptPage::RemoveCommandLine(ScriptLine *p_pCommand)
     if (!p_pCommand || !p_pCommand->GetCommand() || p_pCommand->GetCommand()->GetCommandType() == COMMAND_NONE)
         return;
 
+    if (m_pScript)
+        m_pScript->DeleteCommand(p_pCommand->GetCommand());
     if (QTreeWidgetItem *t_pItem = takeTopLevelItem(indexOfTopLevelItem(p_pCommand)))
         delete t_pItem;
 }
@@ -183,25 +270,13 @@ void ScriptPage::RemoveCommandLine(ScriptLine *p_pCommand)
 /*#####
 # ScriptLine
 #####*/
-ScriptLine::ScriptLine(EventScriptCommand *p_pCommand) : m_pCommand(p_pCommand), QTreeWidgetItem()
+ScriptLine::ScriptLine(const EventScriptCommandPtr &p_pCommand) : m_pCommand(p_pCommand), QTreeWidgetItem()
 {
-    if (!m_pCommand)
-        return;
-
     // show comments with green color
     if (m_pCommand->GetCommandType() == COMMAND_COMMENT)
         setForeground(0, QBrush(QColor(70, 138, 30)));
 
     UpdateItemText();
-}
-
-ScriptLine::~ScriptLine()
-{
-    if (m_pCommand)
-    {
-        delete m_pCommand;
-        m_pCommand = NULL;
-    }
 }
 
 void ScriptLine::UpdateItemText()
@@ -215,22 +290,40 @@ void ScriptLine::UpdateItemText()
 /*#####
 # ScriptLineContainer
 #####*/
-bool ScriptLineContainer::AddNewCommandLine(EventScriptCommand *p_pCommand, int p_Row /*= -1*/)
+QTreeWidgetItem* ScriptLineContainer::GetCurrentChild() const
 {
-    if (!p_pCommand)
-        return false;
+    for (int i = 0; i < childCount(); ++i)
+    {
+        if (QTreeWidgetItem *t_pItem = child(i))
+        {
+            if (t_pItem->isSelected())
+                return t_pItem;
+        }
+    }
 
+    return NULL;
+}
+
+int ScriptLineContainer::GetCurrentIndex() const
+{
+    if (QTreeWidgetItem *t_pItem = GetCurrentChild())
+        return indexOfChild(t_pItem);
+
+    return -1;
+}
+
+bool ScriptLineContainer::AddNewCommandLine(const EventScriptCommandPtr &p_pCommand, int32 p_Row /*= -1*/, bool p_bInsertInHolder /*= true*/)
+{
     ScriptLine *t_pNewCommandLine = GetNewScriptLine(p_pCommand);
     if (!t_pNewCommandLine)
         return false;
 
     if (p_Row < 0)
-        insertChild(childCount() > 0 ? childCount()-1 : 0, t_pNewCommandLine);
-    else
-        insertChild(p_Row, t_pNewCommandLine);
+        p_Row = childCount() > 0 ? childCount()-1 : 0;
 
-    if (GetCommand())
-        ((EventScriptCommandContainer*)GetCommand())->InsertChildCommand(p_Row, p_pCommand);
+    insertChild(p_Row, t_pNewCommandLine);
+    if (p_bInsertInHolder && GetCommand())
+        ((EventScriptCommandContainer*)GetCommand().get())->InsertChildCommand(p_Row, p_pCommand);
     t_pNewCommandLine->setExpanded(true);
     return true;
 }
@@ -240,6 +333,8 @@ void ScriptLineContainer::RemoveCommandLine(ScriptLine *p_pCommand)
     if (!p_pCommand || !p_pCommand->GetCommand() || p_pCommand->GetCommand()->GetCommandType() == COMMAND_NONE)
         return;
 
+    if (GetCommand() && GetCommand()->GetCommandType() >= COMMAND_CONTAINER)
+        ((EventScriptCommandContainer*)GetCommand().get())->DeleteChildCommand(p_pCommand->GetCommand());
     removeChild(p_pCommand);
     delete p_pCommand;
 }

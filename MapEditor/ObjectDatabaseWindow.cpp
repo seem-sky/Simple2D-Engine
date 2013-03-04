@@ -1,9 +1,8 @@
 #include "ObjectDatabaseWindow.h"
 #include "moc_ObjectDatabaseWindow.h"
 #include "TextureDatabaseWindow.h"
-#include "EditorConfig.h"
-#include "EventEditorWindow.h"
-#include "CustomVariableBoolPageWidget.h"
+#include "Config.h"
+#include "EventEditorDialog.h"
 #include <QtGui/QMessageBox>
 
 using namespace DATABASE;
@@ -12,7 +11,7 @@ ObjectDatabaseWindow::ObjectDatabaseWindow(QWidget *p_pParent) : DatabasePageTem
 {
     Ui_ObjectDatabase::setupUi(this);
     m_sLogLocationName = LOGFILE_ENGINE_LOG_NAME + "ObjectDatabaseWindow : ";
-    m_ResizeObj.AddResizeWidget(m_pType);
+    m_ResizeObj.setWidget(m_pType, MODIFY_RESIZE);
 
     connect(m_pEventEditorButton, SIGNAL(clicked()), this, SLOT(ClickOpenEventEditor()));
     connect(m_pParentAddButton, SIGNAL(clicked()), this, SLOT(ParentObjectAdded()));
@@ -45,13 +44,16 @@ void ObjectDatabaseWindow::LoadPage()
 
 void ObjectDatabaseWindow::ClickOpenEventEditor()
 {
-    if (QWidget *t_pWindow = window())
+    if (DatabaseOutput *t_pDBOut = DatabaseOutput::Get())
     {
-        if (EventEditorWindow *t_pEE = new EventEditorWindow(t_pWindow))
+        if (ObjectPrototype *t_pProto = t_pDBOut->GetLatestObjectPrototype(GetCurrentItemID()))
         {
-            t_pEE->show();
-            t_pWindow->setEnabled(false);
-            t_pEE->setEnabled(true);
+            if (QWidget *t_pWindow = window())
+            {
+                EventEditorDialog t_Dialog(t_pWindow);
+                t_Dialog.SetEventScriptHolder(&t_pProto->m_Scripts);
+                t_Dialog.exec();
+            }
         }
     }
 }
@@ -124,7 +126,7 @@ bool ObjectDatabaseWindow::SelectItem(uint32 p_uiID)
         bool t_bTextureSuccess = false;
         if (const SpritePrototype *t_pTextureProto = TextureDatabaseWindow::GetLatestPrototype(t_sTextureType, t_pProto->m_uiTextureID))
         {
-            int t_Index = m_pTextureBox->findText(QString::number(t_pTextureProto->m_uiID) + ":" + QString::fromStdString(t_pTextureProto->m_sFileName));
+            int32 t_Index = m_pTextureBox->findText(QString::number(t_pTextureProto->m_uiID) + ":" + QString::fromStdString(t_pTextureProto->m_sFileName));
             if (t_Index != -1)
             {
                 m_pTextureBox->setCurrentIndex(t_Index);
@@ -256,11 +258,10 @@ void ObjectDatabaseWindow::ChangeTextureView(std::string p_sType)
     m_pTextureView->clear();
     if (const SpritePrototype *t_pProto = TextureDatabaseWindow::GetLatestPrototype(p_sType, GetCurrentTextureID()))
     {
-        if (EditorConfig *t_pConf = EditorConfig::Get())
+        if (Config *t_pConf = Config::Get())
         {
             if (Database* t_pDB = Database::Get())
-                m_pTextureView->setPixmap(QString::fromStdString(t_pConf->GetProjectDirectory()+"/" + t_pDB->GetSpritePath(t_pProto->m_uiSpriteType) +
-                t_pProto->m_sFileName));
+                m_pTextureView->setPixmap(QString::fromStdString(t_pConf->getProjectDirectory()+ "/Textures/" + t_pProto->m_sPath + t_pProto->m_sFileName));
         }
     }
 }

@@ -3,7 +3,7 @@
 
 #include "UI/UI_DatabasePageTemplate.h"
 #include "DatabaseOutput.h"
-#include "ResizeWidget.h"
+#include "ModifyObject.h"
 #include <set>
 
 class DatabasePageTemplate : public QWidget, public Ui_DatabasePageTemplate
@@ -25,8 +25,8 @@ protected slots:
 protected:
     virtual void ConnectWidgets();
     virtual void DisconnectWidgets();
-    void resizeEvent(QResizeEvent *p_pEvent) { m_ResizeObj.ResizeEvent(this); }
-    int InsertItem(uint32 p_uiID, QString p_sData);
+    void resizeEvent(QResizeEvent *p_pEvent) { m_ResizeObj.resizeEvent(this); }
+    int32 InsertItem(uint32 p_uiID, QString p_sData);
     virtual void ChangeItem(uint32 p_uiID, bool p_Delete = false) = 0;
     virtual bool SelectItem(uint32 p_uiID) = 0;
 
@@ -34,6 +34,6 @@ protected:
 
     std::set<uint32> m_uilIDCache;
     std::string m_sLogLocationName;
-    ResizeWidget m_ResizeObj;
+    ModifyObject m_ResizeObj;
 };
 #endif

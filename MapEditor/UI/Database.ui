@@ -1,98 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>Database</class>
- <widget class="QMainWindow" name="Database">
-  <property name="windowModality">
-   <enum>Qt::NonModal</enum>
-  </property>
-  <property name="enabled">
-   <bool>true</bool>
-  </property>
+ <widget class="QDialog" name="Database">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>826</width>
-    <height>582</height>
+    <width>800</width>
+    <height>585</height>
    </rect>
   </property>
-  <property name="contextMenuPolicy">
-   <enum>Qt::DefaultContextMenu</enum>
-  </property>
   <property name="windowTitle">
-   <string>Database</string>
+   <string>Dialog</string>
   </property>
-  <widget class="QWidget" name="centralwidget">
-   <widget class="QTabWidget" name="m_pSections">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>780</width>
-      <height>540</height>
-     </rect>
-    </property>
-    <property name="currentIndex">
-     <number>0</number>
-    </property>
-    <widget class="TextureDatabaseWindow" name="widget">
-     <attribute name="title">
-      <string>Textures</string>
-     </attribute>
-    </widget>
-    <widget class="ObjectDatabaseWindow" name="Objects">
-     <attribute name="title">
-      <string>Objects</string>
-     </attribute>
-    </widget>
-    <widget class="GlobalVariableDatabaseWindow" name="m_pGlobalVariables">
-     <attribute name="title">
-      <string>Global Variables</string>
-     </attribute>
-    </widget>
+  <widget class="QPushButton" name="ButtonCancel">
+   <property name="geometry">
+    <rect>
+     <x>550</x>
+     <y>550</y>
+     <width>121</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Cancel</string>
+   </property>
+  </widget>
+  <widget class="QTabWidget" name="m_pSections">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>780</width>
+     <height>540</height>
+    </rect>
+   </property>
+   <property name="currentIndex">
+    <number>0</number>
+   </property>
+   <widget class="TextureDatabaseWindow" name="widget">
+    <attribute name="title">
+     <string>Textures</string>
+    </attribute>
    </widget>
-   <widget class="QPushButton" name="ButtonApply">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>670</x>
-      <y>550</y>
-      <width>121</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Apply</string>
-    </property>
+   <widget class="ObjectDatabaseWindow" name="Objects">
+    <attribute name="title">
+     <string>Objects</string>
+    </attribute>
    </widget>
-   <widget class="QPushButton" name="ButtonCancel">
-    <property name="geometry">
-     <rect>
-      <x>550</x>
-      <y>550</y>
-      <width>121</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Cancel</string>
-    </property>
+   <widget class="GlobalVariableDatabaseWindow" name="m_pGlobalVariables">
+    <attribute name="title">
+     <string>Global Variables</string>
+    </attribute>
    </widget>
-   <widget class="QPushButton" name="ButtonOK">
-    <property name="geometry">
-     <rect>
-      <x>430</x>
-      <y>550</y>
-      <width>121</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>OK</string>
-    </property>
-   </widget>
+  </widget>
+  <widget class="QPushButton" name="ButtonOK">
+   <property name="geometry">
+    <rect>
+     <x>430</x>
+     <y>550</y>
+     <width>121</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>OK</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="ButtonApply">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>670</x>
+     <y>550</y>
+     <width>121</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Apply</string>
+   </property>
   </widget>
  </widget>
  <customwidgets>
@@ -115,31 +104,6 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <tabstops>
-  <tabstop>m_pSections</tabstop>
-  <tabstop>ButtonOK</tabstop>
-  <tabstop>ButtonCancel</tabstop>
-  <tabstop>ButtonApply</tabstop>
- </tabstops>
- <resources>
-  <include location="../resource.qrc"/>
- </resources>
- <connections>
-  <connection>
-   <sender>ButtonCancel</sender>
-   <signal>clicked()</signal>
-   <receiver>Database</receiver>
-   <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>610</x>
-     <y>565</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>399</x>
-     <y>299</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <resources/>
+ <connections/>
 </ui>

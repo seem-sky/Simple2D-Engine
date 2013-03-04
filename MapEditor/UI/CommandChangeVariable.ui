@@ -183,7 +183,7 @@
      <height>21</height>
     </rect>
    </property>
-   <widget class="QRadioButton" name="m_pTrigger">
+   <widget class="QRadioButton" name="m_pToggle">
     <property name="geometry">
      <rect>
       <x>280</x>
@@ -193,7 +193,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Trigger</string>
+     <string>Toggle</string>
     </property>
    </widget>
    <widget class="QRadioButton" name="m_pSet">
@@ -723,6 +723,36 @@
    </property>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>m_pBool</tabstop>
+  <tabstop>m_pInteger</tabstop>
+  <tabstop>m_pFloat</tabstop>
+  <tabstop>m_pString</tabstop>
+  <tabstop>m_pDestTab</tabstop>
+  <tabstop>m_pGlobalVarBox</tabstop>
+  <tabstop>m_pLocalVarBox</tabstop>
+  <tabstop>m_pSet</tabstop>
+  <tabstop>m_pAdd</tabstop>
+  <tabstop>m_pSubtract</tabstop>
+  <tabstop>m_pMultiplicate</tabstop>
+  <tabstop>m_pDivide</tabstop>
+  <tabstop>m_pModulo</tabstop>
+  <tabstop>m_pToggle</tabstop>
+  <tabstop>m_pSrcTab</tabstop>
+  <tabstop>m_pValueBool</tabstop>
+  <tabstop>m_pValueInteger</tabstop>
+  <tabstop>m_pValueFloat</tabstop>
+  <tabstop>m_pValueString</tabstop>
+  <tabstop>m_pSrcGlobalBoolBox</tabstop>
+  <tabstop>m_pSrcGlobalIntegerBox</tabstop>
+  <tabstop>m_pSrcGlobalFloatBox</tabstop>
+  <tabstop>m_pSrcGlobalStringBox</tabstop>
+  <tabstop>m_pSrcLocalBoolBox</tabstop>
+  <tabstop>m_pSrcLocalIntegerBox</tabstop>
+  <tabstop>m_pSrcLocalFloatBox</tabstop>
+  <tabstop>m_pSrcLocalStringBox</tabstop>
+  <tabstop>m_pButtonBox</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

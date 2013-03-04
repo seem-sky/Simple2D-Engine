@@ -12,19 +12,12 @@
 
 namespace XML
 {
+    /*####
+    # XML_Data
+    ####*/
     class XML_ReadData;
     typedef std::multimap<std::string, XML_ReadData> ReadChildList;
-    typedef std::map<std::string, CComVariant> AttributeList;
-
-    enum XML_STATE
-    {
-        XML_NONE,
-        XML_FAILED,
-        XML_NO_FILE,
-        XML_CORRUPT_FILE,
-        XML_IN_PROGRESS,
-        XML_DONE,
-    };
+    typedef std::map<std::string, CComVariant> AttributeMap;
 
     class XML_Data
     {
@@ -35,14 +28,17 @@ namespace XML
         inline bool HasAttributes() const { return !m_AttributeList.empty(); }
         bool HasAttribute(std::string p_sName) const;
         bool GetAttributeValue(std::string p_sName, CComVariant &p_Value) const;
-        inline void SetAttributeList(AttributeList &p_AttrList) { m_AttributeList = p_AttrList; }
+        inline void SetAttributeList(AttributeMap &p_AttrList) { m_AttributeList = p_AttrList; }
         //inline AttributeList* GetAttributeList() { return &m_AttributeList; }
-        const inline AttributeList* GetAttributeList() const { return &m_AttributeList; }
+        const inline AttributeMap* GetAttributeList() const { return &m_AttributeList; }
 
     protected:
-        AttributeList m_AttributeList;
+        AttributeMap m_AttributeList;
     };
 
+    /*####
+    # XML_ReadData
+    ####*/
     class XML_ReadData : public XML_Data
     {
     public:
@@ -57,24 +53,44 @@ namespace XML
         ReadChildList m_ChildList;
     };
 
-    class XML_Reader : public ActiveObject
+    /*####
+    # CoObject
+    ####*/
+    class CoObject
     {
     public:
-        XML_Reader(std::string sData);
-        virtual ~XML_Reader(void);
+        ~CoObject();
 
-        void Run();
-        inline XML_STATE GetReaderState() { return m_XMLState; }
-        inline const ReadChildList* GetXMLData() { return &m_ChildList; }
+        bool InitCo(LPVOID p_pReserved = NULL);
+    };
+
+    /*####
+    # XML_Reader
+    ####*/
+    enum XMLState
+    {
+        XML_NONE,
+        XML_DONE,
+        XML_FAILED,
+        XML_IN_PROGRESS,
+    };
+
+    class XML_Reader
+    {
+    public:
+        XML_Reader(std::string p_sFileName);
+
+        bool ReadFile();
+        inline ReadChildList& GetXMLData() { return m_ChildList; }
         inline void ClearChildList() { m_ChildList.clear(); }
 
     protected:
         HRESULT CheckoutChildren(IXMLDOMNodePtr p_pNode, ReadChildList &p_DestList);
-        HRESULT CheckoutAttributes(IXMLDOMNodePtr p_pNode, AttributeList &p_DestList);
+        HRESULT CheckoutAttributes(IXMLDOMNodePtr p_pNode, AttributeMap &p_DestList);
 
     private:
-        XML_STATE m_XMLState;
-        std::string m_sData;
+        XMLState m_XMLState;
+        std::string m_sFileName;
         std::string m_sLogLocationName;
 
         ReadChildList m_ChildList;

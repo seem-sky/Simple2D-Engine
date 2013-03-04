@@ -39,6 +39,9 @@
    </property>
   </widget>
   <widget class="QLabel" name="label_16">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="geometry">
     <rect>
      <x>150</x>
@@ -260,6 +263,9 @@
    </widget>
   </widget>
   <widget class="QPushButton" name="m_pEventEditorButton">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="geometry">
     <rect>
      <x>180</x>
@@ -273,6 +279,9 @@
    </property>
   </widget>
   <widget class="QTabWidget" name="m_pCustomVariables">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="geometry">
     <rect>
      <x>150</x>
@@ -306,6 +315,9 @@
    </widget>
   </widget>
   <widget class="QLabel" name="label_20">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="geometry">
     <rect>
      <x>150</x>
@@ -326,6 +338,9 @@
    </property>
   </widget>
   <widget class="QLabel" name="label_21">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="geometry">
     <rect>
      <x>150</x>
@@ -346,6 +361,9 @@
    </property>
   </widget>
   <widget class="QPushButton" name="m_pParentRemoveButton">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="geometry">
     <rect>
      <x>330</x>
@@ -366,6 +384,9 @@
    </property>
   </widget>
   <widget class="QPushButton" name="m_pParentAddButton">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="geometry">
     <rect>
      <x>220</x>
@@ -387,6 +408,9 @@
    </property>
   </widget>
   <widget class="QListWidget" name="m_pObjectList">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="geometry">
     <rect>
      <x>150</x>
@@ -397,6 +421,9 @@
    </property>
   </widget>
   <widget class="QListWidget" name="m_pParentList">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="geometry">
     <rect>
      <x>150</x>

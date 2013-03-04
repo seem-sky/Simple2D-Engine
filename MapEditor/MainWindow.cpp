@@ -1,79 +1,133 @@
 #include "MainWindow.h"
 #include "moc_MainWindow.h"
 #include "DatabaseWindow.h"
-#include <QTGui/QFileDialog>
+#include <QtGui/QFileDialog>
 #include <QtCore/QDir>
 #include <QtCore/QFile>
 #include <QtCore/QTextstream>
 #include <QtCore/QTimer>
 #include <QtGui/QErrorMessage>
 #include "DatabaseOutput.h"
-#include "EditorConfig.h"
+#include <QtGui/QBitmap>
 
 using namespace DATABASE;
 using namespace XML;
 
-MainWindow::MainWindow(QMainWindow *p_pParent) : QMainWindow(p_pParent), m_WindowAction(WINDOW_DO), m_pTimer(NULL)
+MainWindow::MainWindow(QMainWindow *pParent) : QMainWindow(pParent), m_WindowAction(WINDOW_DO), m_pTimer(NULL)
 {
     setupUi(this);
 
     Database::Get();
-    
-    connect(menuDatabase, SIGNAL(aboutToShow()), this, SLOT(OpenDatabase()));
-    connect(actionNew, SIGNAL(activated()), this, SLOT(NewProject()));
-    connect(actionLoad, SIGNAL(activated()), this, SLOT(LoadProject()));
+
+    m_ModifyObj.setWidget(m_pMapEditor, MODIFY_RESIZE, QPoint(0, 20));
+
+    connect(this, SIGNAL(projectSave()), m_pMapEditor, SLOT(_saveMaps()));
+    connect(this, SIGNAL(projectLoadDone()), m_pMapEditor, SLOT(_updateTiles()));
+    connect(menuDatabase, SIGNAL(aboutToShow()), this, SLOT(_openDatabase()));
+    connect(actionNew, SIGNAL(triggered()), this, SLOT(_newProject()));
+    connect(actionLoad, SIGNAL(triggered()), this, SLOT(_loadProject()));
+    connect(actionSave, SIGNAL(triggered()), this, SLOT(_saveProject()));
+    connect(actionClose, SIGNAL(triggered()), this, SLOT(_closeProject()));
+    actionSave->setShortcut(QKeySequence(tr("Ctrl+S", "File|Save")));
+    actionLoad->setShortcut(QKeySequence(tr("Ctrl+O", "File|Open")));
+    actionNew->setShortcut(QKeySequence(tr("Ctrl+N", "File|New")));
+
+    Config::Get()->loadConfig();
+    move(Config::Get()->getMainWindowPos().x, Config::Get()->getMainWindowPos().y);
+    QSize newSize = QSize(Config::Get()->getMainWindowSize().x, Config::Get()->getMainWindowSize().y);
+    if (newSize.width() >= minimumWidth() && newSize.height() >= minimumHeight())
+        resize(newSize);
+    if (!Config::Get()->getProjectDirectory().empty())
+        _loadProject(Config::Get()->getProjectDirectory());
+}
+
+void MainWindow::resizeEvent(QResizeEvent *pEvent)
+{
+    m_ModifyObj.resizeEvent(this);
+    Config::Get()->setMainWindowSize(Point<uint32>(pEvent->size().width(), pEvent->size().height()));
 }
 
 MainWindow::~MainWindow(void)
 {
-    if (Database *t_pDB = Database::Get())
-        t_pDB->Del();
+    if (Database *pDB = Database::Get())
+        pDB->Del();
 
-    if (DatabaseOutput *t_pDB = DatabaseOutput::Get())
-        t_pDB->Del();
+    if (DatabaseOutput *pDBOut = DatabaseOutput::Get())
+        pDBOut->Del();
 
-    if (Logfile *t_Log = Logfile::Get())
-        t_Log->Del();
+    if (Logfile *pLog = Logfile::Get())
+        pLog->Del();
 }
 
-void MainWindow::OpenDatabase()
+void MainWindow::_openDatabase()
 {
-    DatabaseWindow *t_pDB = new DatabaseWindow(this);
-    t_pDB->show();
-    setEnabled(false);
-    t_pDB->setEnabled(true);
+    DatabaseWindow *pDB = new DatabaseWindow(this);
+    pDB->exec();
 }
 
-void MainWindow::NewProject()
+void MainWindow::_saveProject()
 {
-    QString t_sFileName = QFileDialog::getSaveFileName(this, tr("New Project"), "projects/untitled", tr("Project File"));
-    QDir t_dir(t_sFileName);
-    if (!t_dir.exists())
+    Config *pConf = Config::Get();
+    if (!pConf)
+        return;
+
+    bool mapDBResult = false;
+    if (MAP::MapDatabase *pMapDB = MAP::MapDatabase::Get())
+        pMapDB->saveMapDatabase(mapDBResult, pConf->getProjectDirectory());
+
+    emit projectSave();
+}
+
+void MainWindow::_newProject()
+{
+    QString sFileName = QFileDialog::getSaveFileName(this, tr("New Project"), "projects/untitled", tr("Project File"));
+    QDir fileDir(sFileName);
+    if (!fileDir.exists())
     {
-        t_dir.mkpath(t_sFileName);
-        t_dir.mkpath(t_sFileName + "/Game");
-        QFile t_newFile(t_sFileName + "/Game/GameDatabase.db");
-        if (t_newFile.open(QIODevice::WriteOnly))
+        fileDir.mkpath(sFileName);
+        fileDir.mkpath(sFileName + "/Game");
+        fileDir.mkpath(sFileName + "/Maps");
+        fileDir.mkpath(sFileName + "/Textures");
+        // create game database
+        QFile newFile(sFileName + "/Game/GameDatabase.xml");
+        if (newFile.open(QIODevice::WriteOnly))
         {
-            QTextStream t_stream(&t_newFile);
-            t_stream << "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" << endl;
-            t_stream << "<Database>" << endl;
-            t_stream << "</Database>" << endl;
-            t_newFile.close();
+            QTextStream stream(&newFile);
+            stream << "<Database></Database>";
+            newFile.close();
         }
+        // create map database
+        newFile.setFileName(sFileName + "/Game/MapDatabase.xml");
+        if (newFile.open(QIODevice::WriteOnly))
+        {
+            QTextStream stream(&newFile);
+            stream << "<MapDatabase></MapDatabase>";
+            newFile.close();
+        }
+        BASIC_LOG("Successfully create project at " + sFileName.toStdString());
+        _loadProject(sFileName.toStdString());
     }
+    else
+        ERROR_LOG("Unable to create project at " + sFileName.toStdString() + ". It already exists!");
 }
 
-bool MainWindow::LoadDB()
+bool MainWindow::_loadDB()
 {
-    if (Database *t_pDB = Database::Get())
+    if (Database *pDB = Database::Get())
     {
-        if (EditorConfig *t_pConf = EditorConfig::Get())
-            t_pDB->LoadDB(t_pConf->GetProjectDirectory()+"/Game/GameDatabase.db");
+        bool mapDBResult = false;
+        if (Config *pConf = Config::Get())
+        {
+            pDB->LoadDB(pConf->getProjectDirectory()+"/Game/GameDatabase.xml");
+            MAP::MapDatabase::Get()->loadMapDatabase(mapDBResult, pConf->getProjectDirectory());
+        }
+
+        if (!mapDBResult)
+            return false;
 
         if (!m_pTimer)
             m_pTimer = new QTimer(this);
-        connect(m_pTimer,SIGNAL(timeout()),SLOT(CustomUpdate()));
+        connect(m_pTimer,SIGNAL(timeout()),SLOT(_customUpdate()));
         m_pTimer->start(100);
         m_WindowAction = WINDOW_LOAD_DB;
         setEnabled(false);
@@ -83,79 +137,101 @@ bool MainWindow::LoadDB()
     return false;
 }
 
-void MainWindow::LoadProject()
+bool MainWindow::_loadProject(const std::string &sDir)
 {
-    QDir t_sAppDir = QDir::current();
-    QString t_sFileName = QFileDialog::getExistingDirectory(this, tr("Open Project"), t_sAppDir.path()+"/projects", QFileDialog::ShowDirsOnly);
-    if (t_sFileName.isEmpty())
-        return;
+    QDir t_dir(QString::fromStdString(sDir + "/Game"));
 
-    QDir t_dir(t_sFileName + "/Game");
-    if (EditorConfig *t_pConfig = EditorConfig::Get())
-        t_pConfig->SetProjectDirectory(t_sFileName.toStdString());
-
-    bool t_bSuccess = false;
-    if (t_dir.exists())
+    if (t_dir.exists() && _loadDB())
     {
-        if (LoadDB())
-            t_bSuccess = true;
+        Config::Get()->setProjectDirectory(sDir);
+        emit projectLoadDone();
+        Config::Get()->saveConfig();
+        BASIC_LOG("Successfully load " + sDir + ".");
+        return true;
+    }
+    else
+    {
+        QErrorMessage *pMsg = new QErrorMessage(this);
+        pMsg->showMessage(QString::fromStdString(sDir + " is no valid project directory."));
+        BASIC_LOG("Unable to load " + sDir + ". Corrupt project or no such directory.");
+        Config::Get()->clear();
     }
 
-    if (!t_bSuccess)
+    return false;
+}
+
+void MainWindow::_loadProject()
+{
+    QDir sAppDir = QDir::current();
+    QString sFileName = QFileDialog::getExistingDirectory(this, tr("Open Project"), sAppDir.path()+"/projects", QFileDialog::ShowDirsOnly);
+    if (sFileName.isEmpty())
+        return;
+
+    _closeProject();
+    _loadProject(sFileName.toStdString());
+}
+
+void MainWindow::_closeProject()
+{
+    if (Config::Get()->getProjectDirectory() != "")
     {
-        QErrorMessage *t_Msg = new QErrorMessage(this);
-        t_Msg->showMessage(t_sFileName + " is no valid project directory.");
+        BASIC_LOG("Close project " + Config::Get()->getProjectDirectory());
+        m_pMapEditor->clearWidgets();
+        MAP::MapDatabase::Get()->unloadMapDatabase();
+        DatabaseOutput::Get()->ClearOutput();
+        // Database::Get()->ClearDB();
+        Config::Get()->clear();
     }
 }
 
-void MainWindow::CustomUpdate()
+void MainWindow::_customUpdate()
 {
     switch(m_WindowAction)
     {
     case WINDOW_SAVE_DB:
-        if (DatabaseOutput *t_pDB = DatabaseOutput::Get())
+        if (DatabaseOutput *pDB = DatabaseOutput::Get())
         {
-            switch(t_pDB->GetDBState())
+            switch(pDB->GetDBState())
             {
-            case XML_IN_PROGRESS:
+            case THREAD_IN_PROGRESS:
                 if (m_pTimer)
                     m_pTimer->start(100);
                 return;
-            case XML_CORRUPT_FILE:
-            case XML_FAILED:
-            case XML_NO_FILE:
+            //case XML_CORRUPT_FILE:
+            case THREAD_FAILED:
+            //case XML_NO_FILE:
                 {
-                    QErrorMessage *t_Msg = new QErrorMessage(this);
-                    t_Msg->showMessage("Unable to read GameDatabase.");
+                    QErrorMessage *pMsg = new QErrorMessage(this);
+                    pMsg->showMessage("Unable to read GameDatabase.");
                 }
-            case XML_DONE:
+            case THREAD_DONE:
             default:
-                if (DatabaseOutput *t_pDBOut = DatabaseOutput::Get())
-                    t_pDBOut->ClearOutput();
+                if (DatabaseOutput *pDBOut = DatabaseOutput::Get())
+                    pDBOut->ClearOutput();
 
                 // reload db, so new files are stored
-                LoadDB();
+                _loadDB();
                 break;
             }
         }
         break;
     case WINDOW_LOAD_DB:
-        if (Database *t_pDB = Database::Get())
+        if (Database *pDB = Database::Get())
         {
-            switch(t_pDB->GetDBState())
+            switch(pDB->GetDBState())
             {
-            case XML_IN_PROGRESS:
+            case THREAD_IN_PROGRESS:
                 if (m_pTimer)
                     m_pTimer->start(100);
                 return;
-            case XML_CORRUPT_FILE:
-            case XML_FAILED:
-            case XML_NO_FILE:
+            //case XML_CORRUPT_FILE:
+            case THREAD_FAILED:
+            //case XML_NO_FILE:
             {
-                QErrorMessage *t_Msg = new QErrorMessage(this);
-                t_Msg->showMessage("Unable to read GameDatabase.");
+                QErrorMessage *pMsg = new QErrorMessage(this);
+                pMsg->showMessage("Unable to read GameDatabase.");
             }
-            case XML_DONE:
+            case THREAD_DONE:
             default:
                 m_WindowAction = WINDOW_DO;
                 break;
@@ -170,11 +246,11 @@ void MainWindow::CustomUpdate()
     {
         if (m_pTimer)
         {
-            if (QWidget *t_pParent = (QWidget*)m_pTimer->parent())
-                t_pParent->setEnabled(true);
+            if (QWidget *pParent = (QWidget*)m_pTimer->parent())
+                pParent->setEnabled(true);
             else
                 setEnabled(true);
-            disconnect(m_pTimer, SIGNAL(timeout()), this, SLOT(CustomUpdate()));
+            disconnect(m_pTimer, SIGNAL(timeout()), this, SLOT(_customUpdate()));
             delete m_pTimer;
             m_pTimer = NULL;
 

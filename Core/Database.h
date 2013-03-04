@@ -7,7 +7,11 @@
 #include "Point.h"
 #include "Logfile.h"
 #include "VariableHolder.h"
+#include "EventScriptHolder.h"
 #include <set>
+#include "Color.h"
+
+class DatabaseLoad;
 
 typedef std::set<uint32> IDList;
 
@@ -67,26 +71,29 @@ namespace DATABASE
 
         uint32 m_uiSpriteType;
         uint32 m_uiID;
-        std::string m_sTransparencyColor;
+        Color m_TransparencyColor;
         std::string m_sFileName;        // stores texture name (WITHOUT path).
+        std::string m_sPath;            // path from ~/textures
+
+        std::string GetFilePath() const { return m_sPath + m_sFileName; }
 
         union                           // different sprite types have different attributes
         {
             // SpriteTile = 0
             struct SpriteTile
             {
-                uint32 m_uiPassable;      // 0 passability
-                uint32 m_uiTerrainType;   // 1 terrain type
-                bool m_bAutotile;       // 2 is autotile?
+                uint32 m_uiPassable;        // 0 passability
+                uint32 m_uiTerrainType;     // 1 terrain type
+                bool m_bAutotile;           // 2 is autotile?
             } Tile;
 
             // SpriteObject = 1
             struct SpriteObject
             {
-                int m_uiBoundingXBegin;
-                int m_uiBoundingYBegin;
-                int m_uiBoundingXRange;
-                int m_uiBoundingYRange;
+                int32 m_uiBoundingXBegin;
+                int32 m_uiBoundingYBegin;
+                int32 m_uiBoundingXRange;
+                int32 m_uiBoundingYRange;
             } Object;
 
             // SpriteAnimatedObject = 2
@@ -143,6 +150,7 @@ namespace DATABASE
         uint32 m_uiType;
         uint32 m_uiTextureID;
         VariableHolder m_Variables;
+        EVENT_SCRIPT::EventScriptHolder m_Scripts;
 
         union
         {
@@ -164,14 +172,15 @@ namespace DATABASE
         }ObjectType;
     };
 
-    typedef std::map<uint32, ObjectPrototype> ObjectList;
-    typedef std::map<std::string, std::map<uint32, SpritePrototype>> SpriteList;
+    typedef std::map<uint32, ObjectPrototype> ObjectPrototypeMap;
+    typedef std::map<uint32, SpritePrototype> SpritePrototypeMap;
+    typedef std::map<std::string, SpritePrototypeMap> SpriteTypeList;
 
     class Database : public TSingleton<Database>
     {
+        friend class DatabaseLoad;
     public:
         Database(void);
-        ~Database(void);
 
         const std::string GetMapName(uint32 p_uiID);
         bool GetStartConditions(StartConditionsPrototype &p_proto);
@@ -179,44 +188,32 @@ namespace DATABASE
         void GetObjectNames(std::map<uint32, std::string> &p_lObjectNames);
         const ObjectPrototype* GetObjectPrototype(uint32 p_uiID);
 
-        void GetTextureNames(std::string p_sType, std::map<uint32, std::string> &p_lTextureNames);
+        const SpritePrototypeMap* GetTexturePrototypes(std::string p_sType) const;
+        void GetTextureNames(std::string p_sType, std::map<uint32, std::string> &p_lTextureNames) const;
         const SpritePrototype* GetSpritePrototype(std::string p_sType, uint32 p_uiID);
         bool HasSprite(std::string p_sType, uint32 p_uiID);
-        const std::string GetSpritePath(uint32 p_uiID);
 
         void LoadGlobalVariables();
         const VariableHolder* GetGlobalVariables() const { return &m_GlobalVariables; }
 
         void LoadDB(std::string p_sFileName);
-        XML::XML_STATE GetDBState();
+        ThreadState GetDBState();
         bool IsDBEmpty() { return m_Database.empty(); }
 
     private:
         XML::ReadChildList m_Database;
         // objectDB
-        ObjectList m_ObjectDB;
-        // sprite paths
-        std::map<uint32, std::string> m_SpritePaths;
+        ObjectPrototypeMap m_ObjectDB;
         // spriteDB
-        SpriteList m_SpriteDB;
+        SpriteTypeList m_SpriteDB;
         // global variables
         VariableHolder m_GlobalVariables;
 
-        void ClearDB();
+        void _clearDB();
+        void _storeTextures(bool &result);
+        bool _loadTextureFromXML(const XML::XML_ReadData &p_Data, SpritePrototype &p_Result);
 
-        bool ChangeDBdir(std::list<std::string> p_DirList, XML::XML_ReadData &p_Dir);
-        void StoreSpritePaths();
-
-        // load DB
-        XML::XML_Reader *m_pXMLReader;
-        inline void KillXMLThread()
-        {
-            if (m_pXMLReader)
-            {
-                m_pXMLReader->Kill();
-                m_pXMLReader = NULL;
-            }
-        }
+        bool _changeDBdir(std::list<std::string> p_DirList, XML::XML_ReadData &p_Dir) const;
     };
 };
 #endif

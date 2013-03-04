@@ -14,6 +14,69 @@ enum VariableType
     VARIABLE_FLOAT,
     VARIABLE_STRING,
 };
+const uint32 VARIABLE_TYPE_MAX = 4;
+
+enum VariableOperator
+{
+    VARIABLE_OPERATOR_SET,
+    VARIABLE_OPERATOR_ADD,
+    VARIABLE_OPERATOR_SUBTRACT,
+    VARIABLE_OPERATOR_MULTIPLICATE,
+    VARIABLE_OPERATOR_DIVIDE,
+    VARIABLE_OPERATOR_MODULO,
+    VARIABLE_OPERATOR_TOGGLE
+};
+const uint32 VARIABLE_OPERATOR_MAX = 6;
+
+enum VariableLocalisation
+{
+    LOCALISATION_NONE,
+    LOCALISATION_VALUE,
+    LOCALISATION_GLOBAL,
+    LOCALISATION_LOCAL,
+    LOCALISATION_OBJECT,
+};
+const uint32 VARIABLE_LOCALISATION_MAX = 4;
+
+struct VariableSettings
+{
+    VariableSettings() : m_VarLocalisation(LOCALISATION_NONE)
+    {
+        memset(&m_Type, 0, sizeof(m_Type));
+    }
+
+    std::string GetVariableSettingText() const;
+    std::string GetVariableTypeText() const;
+    bool GetVariableXMLData(XML::XML_WriteData &p_Data) const;
+    bool LoadDataFromXML(const XML::XML_ReadData &p_Data);
+
+    VariableLocalisation m_VarLocalisation;
+    VariableType m_VariableType;
+
+    union VariableSettingType
+    {
+        struct Value                    // type 1
+        {
+            union VariableType
+            {
+                bool m_BoolValue;
+                int32 m_IntValue;
+                float m_FloatValue;
+                BSTR m_StringValue;
+            } m_VariableType;
+        } m_Value;
+
+        struct GlobalVariable           // type 2
+        {
+            uint32 m_uiVariableID;
+        } m_GlobalVariable;
+
+        struct LocalVariable            // type 3
+        {
+            uint32 m_uiVariableID;
+        } m_LocalVariable;
+    } m_Type;
+};
 
 template <class T>
 struct TVariable
@@ -89,7 +152,7 @@ public:
     inline void SetString(uint32 p_uiID, TVariable<std::string> &p_Variable) { m_Strings.SetVariable(p_uiID, p_Variable); }
 
     inline void SetBoolValue(uint32 p_uiID, bool &p_Value) { m_Bools.SetVariableValue(p_uiID, p_Value); }
-    inline void SetIntegerValue(uint32 p_uiID, int &p_Value) { m_Integers.SetVariableValue(p_uiID, p_Value); }
+    inline void SetIntegerValue(uint32 p_uiID, int32 &p_Value) { m_Integers.SetVariableValue(p_uiID, p_Value); }
     inline void SetFloatValue(uint32 p_uiID, float &p_Value) { m_Floats.SetVariableValue(p_uiID, p_Value); }
     inline void SetStringValue(uint32 p_uiID, std::string &p_Value) { m_Strings.SetVariableValue(p_uiID, p_Value); }
 
@@ -108,21 +171,18 @@ public:
     inline void SetFloatCount(uint32 p_uiNewSize) { m_Floats.Resize(p_uiNewSize); }
     inline void SetStringCount(uint32 p_uiNewSize) { m_Strings.Resize(p_uiNewSize); }
 
-    int AddBoolFromXML(const XML::XML_ReadData &p_Data);
-    int AddIntegerFromXML(const XML::XML_ReadData &p_Data);
-    int AddFloatFromXML(const XML::XML_ReadData &p_Data);
-    int AddStringFromXML(const XML::XML_ReadData &p_Data);
+    int32 AddBoolFromXML(const XML::XML_ReadData &p_Data);
+    int32 AddIntegerFromXML(const XML::XML_ReadData &p_Data);
+    int32 AddFloatFromXML(const XML::XML_ReadData &p_Data);
+    int32 AddStringFromXML(const XML::XML_ReadData &p_Data);
+    void LoadDataFromXML(const XML::XML_ReadData &p_Data);
 
     inline void GetBoolNames(std::vector<std::string> &p_lNames) const { m_Bools.GetVariableNames(p_lNames); }
     inline void GetIntegerNames(std::vector<std::string> &p_lNames) const { m_Integers.GetVariableNames(p_lNames); }
     inline void GetFloatNames(std::vector<std::string> &p_lNames) const { m_Floats.GetVariableNames(p_lNames); }
     inline void GetStringNames(std::vector<std::string> &p_lNames) const { m_Strings.GetVariableNames(p_lNames); }
 
-    void ParseVariables(XML::XML_WriteData &p_XMLData) const;
-    void ParseBoolsToXML(XML::XML_WriteData &p_XMLData) const;
-    void ParseIntegersToXML(XML::XML_WriteData &p_XMLData) const;
-    void ParseFloatsToXML(XML::XML_WriteData &p_XMLData) const;
-    void ParseStringsToXML(XML::XML_WriteData &p_XMLData) const;
+    void GetXMLData(XML::XML_WriteData &p_XMLData) const;
 
     void Clear();
 
@@ -131,5 +191,10 @@ private:
     TVariableVector<int> m_Integers;
     TVariableVector<float> m_Floats;
     TVariableVector<std::string> m_Strings;
+
+    void ParseBoolsToXML(XML::XML_WriteData &p_XMLData) const;
+    void ParseIntegersToXML(XML::XML_WriteData &p_XMLData) const;
+    void ParseFloatsToXML(XML::XML_WriteData &p_XMLData) const;
+    void ParseStringsToXML(XML::XML_WriteData &p_XMLData) const;
 };
 #endif

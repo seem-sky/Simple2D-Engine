@@ -1,30 +1,24 @@
 #include "Database.h"
+#include <boost/thread.hpp>
 #include <fstream>
 #include <atlcomcli.h>
 #include "VariableHolder.h"
+#include "DatabaseLoad.h"
 
 namespace DATABASE
 {
     using namespace XML;
-    Database::Database(void) : m_pXMLReader(NULL), TSingleton()
+    Database::Database(void) : TSingleton()
     {
         m_sLogLocationName = LOGFILE_ENGINE_LOG_NAME + "Database : ";
     }
 
-    Database::~Database(void)
-    {
-        KillXMLThread();
-    }
-
-    void Database::ClearDB()
+    void Database::_clearDB()
     {
         m_Database.clear();
 
         m_ObjectDB.clear();
         m_SpriteDB.clear();
-        
-        m_SpritePaths.clear();
-
         m_GlobalVariables.Clear();
     }
 
@@ -33,7 +27,7 @@ namespace DATABASE
         std::string t_sDir[] = {"MapDatabase"};
         std::list<std::string> t_DirList(t_sDir, t_sDir + sizeof(t_sDir) / sizeof(std::string));
         XML_ReadData t_DBData;
-        if (!ChangeDBdir(t_DirList, t_DBData))
+        if (!_changeDBdir(t_DirList, t_DBData))
             return "";
 
         const ReadChildList* t_pChildList = t_DBData.GetChildList();
@@ -66,16 +60,16 @@ namespace DATABASE
         return "";
     }
 
-    bool Database::ChangeDBdir(std::list<std::string> p_DirList, XML_ReadData &p_Dir)
+    bool Database::_changeDBdir(std::list<std::string> p_DirList, XML_ReadData &p_Dir) const
     {
-        ReadChildList::iterator t_DBitr = m_Database.find("Database");
+        ReadChildList::const_iterator t_DBitr = m_Database.find("Database");
         if (t_DBitr == m_Database.end())
             return false;
 
         if (*p_DirList.begin() == "Database")
             p_DirList.pop_front();
 
-        XML_ReadData *t_DBData = &t_DBitr->second;
+        const XML_ReadData *t_DBData = &t_DBitr->second;
         for (std::list<std::string>::iterator t_itr = p_DirList.begin(); t_itr != p_DirList.end(); ++t_itr)
         {
             if (!t_DBData || !(t_DBData = t_DBData->GetChild(*t_itr)))
@@ -92,54 +86,57 @@ namespace DATABASE
 
     void Database::LoadDB(std::string p_sFileName)
     {
-        ClearDB();
-        // start XML Reader
-        std::string t_sFileData;
-        // this open and store the XML file:
-        std::fstream Data(p_sFileName.c_str());
-        if(Data.is_open())
+        _clearDB();
+        XML_Reader reader(p_sFileName);
+        if (reader.ReadFile())
         {
-            std::string DataLine;
-            while(std::getline(Data,DataLine))
-                t_sFileData += DataLine;
+            m_Database = reader.GetXMLData();
+            bool spriteResult = false;
+            boost::thread storeTextures(boost::bind(&Database::_storeTextures, this, spriteResult));
+            LoadGlobalVariables();
+            storeTextures.join();
+            if (!spriteResult)
+                return;
 
-            m_pXMLReader = new XML_Reader(t_sFileData);
-            Data.close();
+            BASIC_LOG(m_sLogLocationName + "Database load complete.");
         }
     }
 
-    XML_STATE Database::GetDBState()
+    ThreadState Database::GetDBState()
     {
-        // progress XML Reader
-        if (m_pXMLReader)
-        {
-            XML_STATE t_State = m_pXMLReader->GetReaderState();
-            switch(t_State)
-            {
-            case XML_IN_PROGRESS:
-                return XML_IN_PROGRESS;
-            case XML_DONE:
-                if (m_pXMLReader->GetXMLData())
-                {
-                    m_Database = *m_pXMLReader->GetXMLData();
-                    StoreSpritePaths();
-                    LoadGlobalVariables();
-                    BASIC_LOG(m_sLogLocationName + "Database load complete.");
-                }
-                else
-                    ERROR_LOG(m_sLogLocationName + "Database load complete, but got no Data from file.");
-                break;
-            default:
-                break;
-            }
+        //// progress XML Reader
+        //if (m_pXMLReader)
+        //{
+        //    ThreadState t_State = m_pXMLReader->GetThreadState();
+        //    switch(t_State)
+        //    {
+        //    case THREAD_IN_PROGRESS:
+        //        return THREAD_IN_PROGRESS;
+        //    case THREAD_DONE:
+        //        if (m_pXMLReader->GetXMLData())
+        //        {
+        //            m_Database = *m_pXMLReader->GetXMLData();
+        //            StoreSpritePaths();
+        //            StoreTextures();
+        //            LoadGlobalVariables();
+        //            BASIC_LOG(m_sLogLocationName + "Database load complete.");
+        //        }
+        //        else
+        //            ERROR_LOG(m_sLogLocationName + "Database load complete, but got no Data from file.");
+        //        break;
+        //    default:
+        //        break;
+        //    }
 
-            KillXMLThread();
-            return t_State;
-        }
-        else if (!m_Database.empty())
-            return XML_DONE;
-        else
-            return XML_NONE;
+        //    KillXMLThread();
+        //    return t_State;
+        //}
+        //else if (!m_Database.empty())
+        //    return THREAD_DONE;
+        //else
+        //    return THREAD_NONE;
+
+        return THREAD_DONE;
     }
 
     bool Database::GetStartConditions(StartConditionsPrototype &p_proto)
@@ -147,15 +144,15 @@ namespace DATABASE
         std::string t_sDir[] = {"StartConditions"};
         std::list<std::string> t_DirList(t_sDir, t_sDir + sizeof(t_sDir) / sizeof(std::string));
         XML_ReadData t_DBData;
-        if (!ChangeDBdir(t_DirList, t_DBData))
+        if (!_changeDBdir(t_DirList, t_DBData))
             return false;
 
         CComVariant t_Value;
-        const AttributeList *t_AttrList = t_DBData.GetAttributeList();
+        const AttributeMap *t_AttrList = t_DBData.GetAttributeList();
         if (!t_AttrList)
             return false;
 
-        for (AttributeList::const_iterator t_AttrItr = t_AttrList->begin(); t_AttrItr != t_AttrList->end(); ++t_AttrItr)
+        for (AttributeMap::const_iterator t_AttrItr = t_AttrList->begin(); t_AttrItr != t_AttrList->end(); ++t_AttrItr)
         {
             if (FAILED(t_Value.ChangeType(VT_UINT, &t_AttrItr->second)))
                 continue;
@@ -181,14 +178,14 @@ namespace DATABASE
 
     const ObjectPrototype* Database::GetObjectPrototype(uint32 p_uiID)
     {
-        ObjectList::const_iterator t_ObjItr = m_ObjectDB.find(p_uiID);
+        ObjectPrototypeMap::const_iterator t_ObjItr = m_ObjectDB.find(p_uiID);
         if (t_ObjItr != m_ObjectDB.end())
             return &t_ObjItr->second;
 
         std::string t_sDir[] = {"ObjectDatabase"};
         std::list<std::string> t_DirList(t_sDir, t_sDir + sizeof(t_sDir) / sizeof(std::string));
         XML_ReadData t_DBData;
-        if (!ChangeDBdir(t_DirList, t_DBData))
+        if (!_changeDBdir(t_DirList, t_DBData))
             return NULL;
 
         const ReadChildList *t_pChildList = t_DBData.GetChildList();
@@ -213,10 +210,10 @@ namespace DATABASE
 
                     t_Proto.m_uiType = t_Value.uintVal;
 
-                    const AttributeList *t_pAttrList = t_ObjItr->second.GetAttributeList();
+                    const AttributeMap *t_pAttrList = t_ObjItr->second.GetAttributeList();
                     if (!t_pAttrList)
                         continue;
-                    for (AttributeList::const_iterator t_AttrItr = t_pAttrList->begin(); t_AttrItr != t_pAttrList->end(); ++t_AttrItr)
+                    for (AttributeMap::const_iterator t_AttrItr = t_pAttrList->begin(); t_AttrItr != t_pAttrList->end(); ++t_AttrItr)
                     {
                         if (t_AttrItr->first == "ObjectName")
                             t_Proto.m_sName = bstr_t(t_AttrItr->second);
@@ -323,27 +320,10 @@ namespace DATABASE
                         }
                         // check variables
                         else if (t_ChildItr->first == "Variables")
-                        {
-                            const ReadChildList *t_pVariableList = t_ChildItr->second.GetChildList();
-                            if (!t_pVariableList)
-                                continue;
-
-                            for (ReadChildList::const_iterator t_VTypeItr = t_pVariableList->begin(); t_VTypeItr != t_pVariableList->end(); ++t_VTypeItr)
-                            {
-                                // bool value
-                                if (t_VTypeItr->first == "bool")
-                                    t_Proto.m_Variables.AddBoolFromXML(t_VTypeItr->second);
-                                // int value
-                                else if (t_VTypeItr->first == "integer")
-                                    t_Proto.m_Variables.AddIntegerFromXML(t_VTypeItr->second);
-                                // float value
-                                else if (t_VTypeItr->first == "float")
-                                    t_Proto.m_Variables.AddFloatFromXML(t_VTypeItr->second);
-                                // string value
-                                else if (t_VTypeItr->first == "string")
-                                    t_Proto.m_Variables.AddStringFromXML(t_VTypeItr->second);
-                            }
-                        }
+                            t_Proto.m_Variables.LoadDataFromXML(t_ChildItr->second);
+                        // get scripts
+                        else if (t_ChildItr->first == "Scripts")
+                            t_Proto.m_Scripts.LoadDataFromXML(t_ChildItr->second);
                     }
 
                     m_ObjectDB.insert(std::make_pair(t_Proto.m_uiID, t_Proto));
@@ -354,9 +334,222 @@ namespace DATABASE
         return NULL;
     }
 
+    const SpritePrototypeMap* Database::GetTexturePrototypes(std::string p_sType) const
+    {
+        SpriteTypeList::const_iterator t_CacheItr = m_SpriteDB.find(p_sType);
+        if (t_CacheItr != m_SpriteDB.end())
+            return &t_CacheItr->second;
+
+        return NULL;
+    }
+
+    bool Database::_loadTextureFromXML(const XML::XML_ReadData &p_Data, SpritePrototype &p_Result)
+    {
+        const AttributeMap *t_pAttrList = p_Data.GetAttributeList();
+        if (!t_pAttrList)
+            return false;
+
+        // check ID
+        CComVariant t_Value;
+        if (!p_Data.GetAttributeValue("ID", t_Value) || FAILED(t_Value.ChangeType(VT_UINT)))
+            return false;
+
+        p_Result.m_uiID = t_Value.uintVal;
+        for (AttributeMap::const_iterator t_AttrItr = t_pAttrList->begin(); t_AttrItr != t_pAttrList->end(); ++t_AttrItr)
+        {
+            // check first for different variable types than uint32
+            if (t_AttrItr->first == "FileName")
+            {
+                p_Result.m_sFileName = bstr_t(t_AttrItr->second);
+                continue;
+            }
+            else if (t_AttrItr->first == "Path")
+            {
+                p_Result.m_sPath = bstr_t(t_AttrItr->second);
+                continue;
+            }
+            else if (t_AttrItr->first == "transparent_color")
+            {
+                std::string t_sColorString = bstr_t(t_AttrItr->second);
+                p_Result.m_TransparencyColor.setColor(t_sColorString);
+                continue;
+            }
+
+            // check the uint32 variables
+            if (FAILED(t_Value.ChangeType(VT_UINT, &t_AttrItr->second)))
+                continue;
+
+            if (t_AttrItr->first == "ID")
+                continue;
+            else if (t_AttrItr->first == "Type")
+            {
+                p_Result.m_uiSpriteType = t_Value.uintVal;
+                continue;
+            }
+            else if (t_AttrItr->first == "spritesX")
+            {
+                switch(p_Result.m_uiSpriteType)
+                {
+                    // count of spritesX
+                case SPRITE_TYPE_ANIMATED_OBJECT:
+                    p_Result.Type.AnimatedObject.m_uiSpritesX = t_Value.uintVal;
+                    break;
+                default:
+                    break;
+                }
+            }
+            else if (t_AttrItr->first == "spritesY")
+            {
+                switch(p_Result.m_uiSpriteType)
+                {
+                    // count of spritesX
+                case SPRITE_TYPE_ANIMATED_OBJECT:
+                    p_Result.Type.AnimatedObject.m_uiSpritesY = t_Value.uintVal;
+                    break;
+                default:
+                    break;
+                }
+            }
+            else if (t_AttrItr->first == "boundingXBegin")
+            {
+                if (FAILED(t_Value.ChangeType(VT_INT, &t_AttrItr->second)))
+                    continue;
+                switch(p_Result.m_uiSpriteType)
+                {
+                case SPRITE_TYPE_OBJECT:
+                case SPRITE_TYPE_ANIMATED_OBJECT:
+                    p_Result.Type.Object.m_uiBoundingXBegin = t_Value.intVal;
+                    break;
+                default:
+                    break;
+                }
+            }
+            else if (t_AttrItr->first == "boundingYBegin")
+            {
+                if (FAILED(t_Value.ChangeType(VT_INT, &t_AttrItr->second)))
+                    continue;
+                switch(p_Result.m_uiSpriteType)
+                {
+                case SPRITE_TYPE_OBJECT:
+                case SPRITE_TYPE_ANIMATED_OBJECT:
+                    p_Result.Type.Object.m_uiBoundingYBegin = t_Value.intVal;
+                    break;
+                default:
+                    break;
+                }
+            }
+            else if (t_AttrItr->first == "boundingXRange")
+            {
+                if (FAILED(t_Value.ChangeType(VT_INT, &t_AttrItr->second)))
+                    continue;
+                switch(p_Result.m_uiSpriteType)
+                {
+                case SPRITE_TYPE_OBJECT:
+                case SPRITE_TYPE_ANIMATED_OBJECT:
+                    p_Result.Type.Object.m_uiBoundingXRange = t_Value.intVal;
+                    break;
+                default:
+                    break;
+                }
+            }
+            else if (t_AttrItr->first == "boundingYRange")
+            {
+                if (FAILED(t_Value.ChangeType(VT_INT, &t_AttrItr->second)))
+                    continue;
+                switch(p_Result.m_uiSpriteType)
+                {
+                case SPRITE_TYPE_OBJECT:
+                case SPRITE_TYPE_ANIMATED_OBJECT:
+                    p_Result.Type.Object.m_uiBoundingYRange = t_Value.intVal;
+                    break;
+                default:
+                    break;
+                }
+            }
+            else if (t_AttrItr->first == "passability")
+            {
+                switch(p_Result.m_uiSpriteType)
+                {
+                    // passability
+                case SPRITE_TYPE_TILE:
+                    p_Result.Type.Tile.m_uiPassable = t_Value.uintVal;
+                    break;
+                default:
+                    break;
+                }
+            }
+            else if (t_AttrItr->first == "terraintype")
+            {
+                switch(p_Result.m_uiSpriteType)
+                {
+                    // terrain type
+                case SPRITE_TYPE_TILE:
+                    p_Result.Type.Tile.m_uiTerrainType = t_Value.uintVal;
+                    break;
+                }
+            }
+            else if (t_AttrItr->first == "auto_tile")
+            {
+                switch(p_Result.m_uiSpriteType)
+                {
+                    // auto_tile
+                case SPRITE_TYPE_TILE:
+                    p_Result.Type.Tile.m_bAutotile = t_Value.uintVal != 0 ? true : false;
+                    break;
+                }
+            }
+            else if (t_AttrItr->first == "BorderSize")
+            {
+                switch(p_Result.m_uiSpriteType)
+                {
+                    // border size
+                case SPRITE_TYPE_TEXTBOX:
+                    p_Result.Type.Textbox.m_uiBorderSize = t_Value.uintVal;
+                    break;
+                }
+            }
+        }
+        return true;
+    }
+
+    void Database::_storeTextures(bool &result)
+    {
+        result = false;
+        std::string t_sDir[] = {"SpriteDatabase"};
+        std::list<std::string> t_DirList(t_sDir, t_sDir + sizeof(t_sDir) / sizeof(std::string));
+        XML_ReadData t_DBData;
+        if (!_changeDBdir(t_DirList, t_DBData))
+            return;
+        const ReadChildList *t_pTypeList = t_DBData.GetChildList();
+        if (!t_pTypeList)
+            return;
+
+        for (ReadChildList::const_iterator t_TypeItr = t_pTypeList->begin(); t_TypeItr != t_pTypeList->end(); ++t_TypeItr)
+        {
+            const ReadChildList *t_pSpriteList = t_TypeItr->second.GetChildList();
+            if (!t_pSpriteList)
+                return;
+
+            SpritePrototypeMap t_SpriteStoreList;
+            for (ReadChildList::const_iterator t_SpriteItr = t_pSpriteList->begin(); t_SpriteItr != t_pSpriteList->end(); ++t_SpriteItr)
+            {
+                if (t_SpriteItr->first != "Sprite")
+                    continue;
+
+                SpritePrototype t_Proto;
+                if (_loadTextureFromXML(t_SpriteItr->second, t_Proto))
+                    t_SpriteStoreList.insert(std::make_pair(t_Proto.m_uiID, t_Proto));
+            }
+
+            m_SpriteDB.insert(std::make_pair(t_TypeItr->first, t_SpriteStoreList));
+        }
+
+        result = true;
+    }
+
     const SpritePrototype* Database::GetSpritePrototype(std::string p_sType, uint32 p_uiID)
     {
-        SpriteList::iterator t_CacheItr = m_SpriteDB.find(p_sType);
+        SpriteTypeList::iterator t_CacheItr = m_SpriteDB.find(p_sType);
         if (t_CacheItr != m_SpriteDB.end())
         {
             std::map<uint32, SpritePrototype>::iterator t_SpriteItr = t_CacheItr->second.find(p_uiID);
@@ -364,250 +557,15 @@ namespace DATABASE
                 return &t_SpriteItr->second;
         }
 
-        std::string t_sDir[] = {"SpriteDatabase", p_sType};
-        std::list<std::string> t_DirList(t_sDir, t_sDir + sizeof(t_sDir) / sizeof(std::string));
-        XML_ReadData t_DBData;
-        if (!ChangeDBdir(t_DirList, t_DBData))
-            return NULL;
-
-        const ReadChildList *t_pChildList = t_DBData.GetChildList();
-        if (!t_pChildList)
-            return NULL;
-
-        for (ReadChildList::const_iterator t_DBitr2 = t_pChildList->find("Sprite"); t_DBitr2 != t_pChildList->end() && t_DBitr2->first == "Sprite"; ++t_DBitr2)
-        {
-            if (t_DBitr2->second.HasAttributes())
-            {
-                // check ID
-                CComVariant t_Value;
-                if (!t_DBitr2->second.GetAttributeValue("ID", t_Value) || FAILED(t_Value.ChangeType(VT_UINT)))
-                    continue;
-
-                if (t_Value.uintVal == p_uiID)
-                {
-                    SpritePrototype t_proto;
-                    t_proto.m_uiID = t_Value.uintVal;
-                    // store type before other attributes
-                    if (!t_DBitr2->second.GetAttributeValue("Type", t_Value) || FAILED(t_Value.ChangeType(VT_UINT)))
-                        continue;
-                    t_proto.m_uiSpriteType = t_Value.uintVal;
-
-                    const AttributeList *t_pAttrList = t_DBitr2->second.GetAttributeList();
-                    if (!t_pAttrList)
-                        continue;
-                    for (AttributeList::const_iterator t_AttrItr = t_pAttrList->begin(); t_AttrItr != t_pAttrList->end(); ++t_AttrItr)
-                    {
-                        // check first for different variable types than uint32
-                        if (t_AttrItr->first == "FileName")
-                        {
-                            t_proto.m_sFileName = bstr_t(t_AttrItr->second);
-                            continue;
-                        }
-                        else if (t_AttrItr->first == "transparent_color")
-                        {
-                            t_proto.m_sTransparencyColor = bstr_t(t_AttrItr->second);
-                            continue;
-                        }
-
-                        // check the uint32 variables
-                        if (FAILED(t_Value.ChangeType(VT_UINT, &t_AttrItr->second)))
-                            continue;
-
-                        if (t_AttrItr->first == "ID")
-                            continue;
-
-                        else if (t_AttrItr->first == "Type")
-                            continue;
-
-                        else if (t_AttrItr->first == "spritesX")
-                        {
-                            switch(t_proto.m_uiSpriteType)
-                            {
-                                // count of spritesX
-                            case SPRITE_TYPE_ANIMATED_OBJECT:
-                                t_proto.Type.AnimatedObject.m_uiSpritesX = t_Value.uintVal;
-                                break;
-                            default:
-                                break;
-                            }
-                        }
-                        else if (t_AttrItr->first == "spritesY")
-                        {
-                            switch(t_proto.m_uiSpriteType)
-                            {
-                                // count of spritesX
-                            case SPRITE_TYPE_ANIMATED_OBJECT:
-                                t_proto.Type.AnimatedObject.m_uiSpritesY = t_Value.uintVal;
-                                break;
-                            default:
-                                break;
-                            }
-                        }
-                        else if (t_AttrItr->first == "boundingXBegin")
-                        {
-                            if (FAILED(t_Value.ChangeType(VT_INT, &t_AttrItr->second)))
-                                continue;
-                            switch(t_proto.m_uiSpriteType)
-                            {
-                            case SPRITE_TYPE_OBJECT:
-                            case SPRITE_TYPE_ANIMATED_OBJECT:
-                                t_proto.Type.Object.m_uiBoundingXBegin = t_Value.intVal;
-                                break;
-                            default:
-                                break;
-                            }
-                        }
-                        else if (t_AttrItr->first == "boundingYBegin")
-                        {
-                            if (FAILED(t_Value.ChangeType(VT_INT, &t_AttrItr->second)))
-                                continue;
-                            switch(t_proto.m_uiSpriteType)
-                            {
-                            case SPRITE_TYPE_OBJECT:
-                            case SPRITE_TYPE_ANIMATED_OBJECT:
-                                t_proto.Type.Object.m_uiBoundingYBegin = t_Value.intVal;
-                                break;
-                            default:
-                                break;
-                            }
-                        }
-                        else if (t_AttrItr->first == "boundingXRange")
-                        {
-                            if (FAILED(t_Value.ChangeType(VT_INT, &t_AttrItr->second)))
-                                continue;
-                            switch(t_proto.m_uiSpriteType)
-                            {
-                            case SPRITE_TYPE_OBJECT:
-                            case SPRITE_TYPE_ANIMATED_OBJECT:
-                                t_proto.Type.Object.m_uiBoundingXRange = t_Value.intVal;
-                                break;
-                            default:
-                                break;
-                            }
-                        }
-                        else if (t_AttrItr->first == "boundingYRange")
-                        {
-                            if (FAILED(t_Value.ChangeType(VT_INT, &t_AttrItr->second)))
-                                continue;
-                            switch(t_proto.m_uiSpriteType)
-                            {
-                            case SPRITE_TYPE_OBJECT:
-                            case SPRITE_TYPE_ANIMATED_OBJECT:
-                                t_proto.Type.Object.m_uiBoundingYRange = t_Value.intVal;
-                                break;
-                            default:
-                                break;
-                            }
-                        }
-                        else if (t_AttrItr->first == "passability")
-                        {
-                            switch(t_proto.m_uiSpriteType)
-                            {
-                                // passability
-                            case SPRITE_TYPE_TILE:
-                                t_proto.Type.Tile.m_uiPassable = t_Value.uintVal;
-                                break;
-                            default:
-                                break;
-                            }
-                        }
-                        else if (t_AttrItr->first == "terraintype")
-                        {
-                            switch(t_proto.m_uiSpriteType)
-                            {
-                                // terrain type
-                            case SPRITE_TYPE_TILE:
-                                t_proto.Type.Tile.m_uiTerrainType = t_Value.uintVal;
-                                break;
-                            }
-                        }
-                        else if (t_AttrItr->first == "auto_tile")
-                        {
-                            switch(t_proto.m_uiSpriteType)
-                            {
-                                // auto_tile
-                            case SPRITE_TYPE_TILE:
-                                t_proto.Type.Tile.m_bAutotile = t_Value.uintVal != 0 ? true : false;
-                                break;
-                            }
-                        }
-                        else if (t_AttrItr->first == "BorderSize")
-                        {
-                            switch(t_proto.m_uiSpriteType)
-                            {
-                                // border size
-                            case SPRITE_TYPE_TEXTBOX:
-                                t_proto.Type.Textbox.m_uiBorderSize = t_Value.uintVal;
-                                break;
-                            }
-                        }
-                    }
-
-                    if (m_SpriteDB.find(p_sType) == m_SpriteDB.end())
-                    {
-                        std::map<uint32, SpritePrototype> t_Map;
-                        m_SpriteDB.insert(std::make_pair(p_sType, t_Map));
-                    }
-
-                    m_SpriteDB.find(p_sType)->second.insert(std::make_pair(t_proto.m_uiID, t_proto));
-                    return &(m_SpriteDB.find(p_sType)->second.find(p_uiID)->second);
-                }
-            }
-        }
         return NULL;
     }
 
-    void Database::StoreSpritePaths()
-    {
-        m_SpritePaths.clear();
-        std::string t_sDir[] = {"SpriteDatabase"};
-        std::list<std::string> t_DirList(t_sDir, t_sDir + sizeof(t_sDir) / sizeof(std::string));
-        XML_ReadData t_DBData;
-        if (!ChangeDBdir(t_DirList, t_DBData))
-            return;
-
-        const ReadChildList *t_pChildList = t_DBData.GetChildList();
-        for (ReadChildList::const_iterator t_DBitr2 = t_pChildList->find("SpritePath"); t_DBitr2 != t_pChildList->end() && t_DBitr2->first == "SpritePath"; ++t_DBitr2)
-        {
-            const AttributeList *t_pAttrList = t_DBitr2->second.GetAttributeList();
-            if (!t_pAttrList)
-                continue;
-
-            uint32 t_uiID = 0;
-            std::string t_sPath;
-            for (AttributeList::const_iterator t_AttrItr = t_pAttrList->begin(); t_AttrItr != t_pAttrList->end(); ++t_AttrItr)
-            {
-                CComVariant t_Value;
-                if (t_AttrItr->first == "ID")
-                {
-                    if (FAILED(t_Value.ChangeType(VT_UINT, &t_AttrItr->second)))
-                        continue;
-
-                    t_uiID = t_Value.uintVal;
-                }
-                else if (t_AttrItr->first == "Path")
-                    t_sPath = bstr_t(t_AttrItr->second);
-            }
-
-            m_SpritePaths.insert(std::make_pair(t_uiID, t_sPath));
-        }
-    }
-
-    const std::string Database::GetSpritePath(uint32 p_uiID)
-    {
-        std::map<uint32, std::string>::iterator t_itr = m_SpritePaths.find(p_uiID);
-        if (t_itr == m_SpritePaths.end())
-            return "";
-
-        return t_itr->second;
-    }
-
-    void Database::GetTextureNames(std::string p_sType, std::map<uint32, std::string> &p_lTextureNames)
+    void Database::GetTextureNames(std::string p_sType, std::map<uint32, std::string> &p_lTextureNames) const
     {
         std::string t_sDir[] = {"SpriteDatabase", p_sType};
         std::list<std::string> t_DirList(t_sDir, t_sDir + sizeof(t_sDir) / sizeof(std::string));
         XML_ReadData t_DBData;
-        if (!ChangeDBdir(t_DirList, t_DBData))
+        if (!_changeDBdir(t_DirList, t_DBData))
             return;
 
         const ReadChildList *t_pChildList = t_DBData.GetChildList();
@@ -633,7 +591,7 @@ namespace DATABASE
 
     bool Database::HasSprite(std::string p_sType, uint32 p_uiID)
     {
-        SpriteList::iterator t_CacheItr = m_SpriteDB.find(p_sType);
+        SpriteTypeList::iterator t_CacheItr = m_SpriteDB.find(p_sType);
         if (t_CacheItr != m_SpriteDB.end())
         {
             std::map<uint32, SpritePrototype>::iterator t_SpriteItr = t_CacheItr->second.find(p_uiID);
@@ -644,7 +602,7 @@ namespace DATABASE
         std::string t_sDir[] = {"SpriteDatabase", p_sType};
         std::list<std::string> t_DirList(t_sDir, t_sDir + sizeof(t_sDir) / sizeof(std::string));
         XML_ReadData t_DBData;
-        if (!ChangeDBdir(t_DirList, t_DBData))
+        if (!_changeDBdir(t_DirList, t_DBData))
             return false;
 
         CComVariant t_Value;
@@ -668,7 +626,7 @@ namespace DATABASE
         std::string t_sDir[] = {"ObjectDatabase"};
         std::list<std::string> t_DirList(t_sDir, t_sDir + sizeof(t_sDir) / sizeof(std::string));
         XML_ReadData t_DBData;
-        if (!ChangeDBdir(t_DirList, t_DBData))
+        if (!_changeDBdir(t_DirList, t_DBData))
             return;
 
         const ReadChildList *t_pChildList = t_DBData.GetChildList();
@@ -696,7 +654,7 @@ namespace DATABASE
         std::string t_sDir[] = {"GlobalVariables"};
         std::list<std::string> t_DirList(t_sDir, t_sDir + sizeof(t_sDir) / sizeof(std::string));
         XML_ReadData t_DBData;
-        if (!ChangeDBdir(t_DirList, t_DBData))
+        if (!_changeDBdir(t_DirList, t_DBData))
             return;
 
         const ReadChildList *t_pChildList = t_DBData.GetChildList();

@@ -1,83 +1,51 @@
 #include "EventScriptCommand.h"
+#include "StringAdditions.h"
+#include "EventScriptHolder.h"
 
 namespace EVENT_SCRIPT
 {
     /*#####
-    # VariableSettings
-    #####*/
-    std::string VariableSettings::GetVariableTypeText() const
-    {
-        switch(m_VariableType)
-        {
-        case VARIABLE_BOOL:
-            return "Bool";
-        case VARIABLE_INT:
-            return "Integer";
-        case VARIABLE_FLOAT:
-            return "Float";
-        case VARIABLE_STRING:
-            return "String";
-        }
-
-        return "";
-    }
-
-    std::string VariableSettings::GetVariableSettingText() const
-    {
-        // variable localisation
-        switch (m_VarLocalisation)
-        {
-        case LOCALISATION_LOCAL:
-            return "Local " + GetVariableTypeText() + " ID " + ToString(m_Type.m_LocalVariable.m_uiVariableID) + " ";
-        case LOCALISATION_GLOBAL:
-            return "Global " + GetVariableTypeText() + " ID " + ToString(m_Type.m_GlobalVariable.m_uiVariableID) + " ";
-        case LOCALISATION_VALUE:
-            {
-                std::string t_sText = "Value " + GetVariableTypeText() + " ";
-                // variable type
-                switch (m_VariableType)
-                {
-                case VARIABLE_BOOL:
-                    t_sText += m_Type.m_Value.m_VariableType.m_BoolValue ? "true " : "false ";
-                    break;
-                case VARIABLE_INT:
-                    t_sText += ToString(m_Type.m_Value.m_VariableType.m_IntValue) + " ";
-                    break;
-                case VARIABLE_FLOAT:
-                    t_sText += ToString(m_Type.m_Value.m_VariableType.m_FloatValue) + " ";
-                    break;
-                case VARIABLE_STRING:
-                    t_sText += "\"";
-                    t_sText += bstr_t(m_Type.m_Value.m_VariableType.m_StringValue);
-                    t_sText += "\" ";
-                    break;
-                }
-                return t_sText;
-            }
-        }
-
-        return "";
-    }
-
-    /*#####
     # EventScriptCommand - Superclass
     #####*/
-    XML::XML_WriteData EventScriptCommand::GetCommandXML() const
+    bool EventScriptCommand::GetCommandXML(XML::XML_WriteData &p_Data) const
     {
-        XML::XML_WriteData t_Element(XML::XML_WRITE_APPEND);
-        t_Element.AddAttribute("Type", (uint32)m_CommandType);
-        return t_Element;
+        p_Data.AddAttribute("Type", (uint32)m_CommandType);
+        return true;
+    }
+
+    bool EventScriptCommand::LoadDataFromXML(const XML::XML_ReadData &p_Data)
+    {
+        ATL::CComVariant t_Value;
+        if (!p_Data.GetAttributeValue("Type", t_Value) || FAILED(t_Value.ChangeType(VT_UINT, &t_Value)) || t_Value.uintVal > EVENT_COMMAND_MAX)
+            return false;
+
+        m_CommandType = (ScriptCommandType)t_Value.uintVal;
+        return true;
     }
 
     /*#####
     # EventScriptComment
     #####*/
-    XML::XML_WriteData EventScriptComment::GetCommandXML() const
+    bool EventScriptComment::GetCommandXML(XML::XML_WriteData &p_Data) const
     {
-        XML::XML_WriteData t_Element;
-        t_Element.AddAttribute("Type", (uint32)m_CommandType);
-        t_Element.AddAttribute("Comment", ((LPCOLESTR)_bstr_t(m_sCommentText.c_str())));
-        return t_Element;
+        if (!EventScriptCommand::GetCommandXML(p_Data))
+            return false;
+
+        p_Data.AddAttribute("Comment", (LPCSTR)m_sCommentText.c_str());
+        return true;
+    }
+
+    bool EventScriptComment::LoadDataFromXML(const XML::XML_ReadData &p_Data)
+    {
+        if (!EventScriptCommand::LoadDataFromXML(p_Data))
+            return false;
+
+        CComVariant t_Value;
+        if (!p_Data.GetAttributeValue("Comment", t_Value))
+            return false;
+
+        m_sCommentText = bstr_t(t_Value);
+        return true;
     }
 
     /*#####
@@ -112,205 +80,237 @@ namespace EVENT_SCRIPT
             t_sText += t_DestVar+ "= " + t_SrcVar;
             break;
         case VARIABLE_OPERATOR_ADD:
-            t_sText += t_DestVar + "+ " + t_SrcVar;
+            t_sText += t_DestVar + "+= " + t_SrcVar;
             break;
         case VARIABLE_OPERATOR_SUBTRACT:
-            t_sText += t_DestVar + "- " + t_SrcVar;
+            t_sText += t_DestVar + "-= " + t_SrcVar;
             break;
         case VARIABLE_OPERATOR_MULTIPLICATE:
-            t_sText += t_DestVar + "x " + t_SrcVar;
+            t_sText += t_DestVar + "x= " + t_SrcVar;
             break;
         case VARIABLE_OPERATOR_DIVIDE:
-            t_sText += t_DestVar + "/ " + t_SrcVar;
+            t_sText += t_DestVar + "/= " + t_SrcVar;
             break;
         case VARIABLE_OPERATOR_MODULO:
-            t_sText += t_DestVar + "% " + t_SrcVar;
+            t_sText += t_DestVar + "%= " + t_SrcVar;
             break;
-        case VARIABLE_OPERATOR_TRIGGER:
-            t_sText += "Trigger " + t_DestVar;
+        case VARIABLE_OPERATOR_TOGGLE:
+            t_sText += "Toggle " + t_DestVar;
             break;
         }
 
         return t_sText;
     }
 
-    XML::XML_WriteData EventScriptChangeVariable::GetCommandXML() const
+    bool EventScriptChangeVariable::GetCommandXML(XML::XML_WriteData &p_Data) const
     {
-        XML::XML_WriteData t_Element = EventScriptCommand::GetCommandXML();
-        t_Element.AddAttribute("Operator", (uint32)m_Operator);
-        t_Element.AddAttribute("VariableType", (uint32)m_VariableType);
+        if (!EventScriptCommand::GetCommandXML(p_Data))
+            return false;
 
-        for (uint32 t_I = 0; t_I < 2; ++t_I)
-        {
-            const VariableSettings *t_pVar = NULL;
-            t_pVar = t_I == 0 ? &m_DestVariable : &m_SrcVariable;
-            if (!t_pVar)
-                continue;
+        p_Data.AddAttribute("Operator", (uint32)m_Operator);
+        p_Data.AddAttribute("VariableType", (uint32)m_VariableType);
 
-            XML::XML_WriteData t_Var(XML::XML_WRITE_CHANGE);
-            t_Var.AddAttribute("Localisation", (uint32)t_pVar->m_VarLocalisation);
-            switch (t_pVar->m_VarLocalisation)
-            {
-            case LOCALISATION_VALUE:
-                switch (m_VariableType)
-                {
-                case VARIABLE_BOOL:
-                    t_Var.AddAttribute("Value", t_pVar->m_Type.m_Value.m_VariableType.m_BoolValue);
-                    break;
-                case VARIABLE_INT:
-                    t_Var.AddAttribute("Value", t_pVar->m_Type.m_Value.m_VariableType.m_IntValue);
-                    break;
-                case VARIABLE_FLOAT:
-                    t_Var.AddAttribute("Value", t_pVar->m_Type.m_Value.m_VariableType.m_FloatValue);
-                    break;
-                case VARIABLE_STRING:
-                    t_Var.AddAttribute("Value", t_pVar->m_Type.m_Value.m_VariableType.m_StringValue);
-                    break;
-                }
-                break;
-            case LOCALISATION_GLOBAL:
-                t_Var.AddAttribute("ID", t_pVar->m_Type.m_GlobalVariable.m_uiVariableID);
-                break;
-            case LOCALISATION_LOCAL:
-                t_Var.AddAttribute("ID", t_pVar->m_Type.m_LocalVariable.m_uiVariableID);
-                break;
-            }
+        // get variables
+        XML::XML_WriteData t_DestVar(XML::XML_WRITE_CHANGE);
+        if (m_DestVariable.GetVariableXMLData(t_DestVar))
+            p_Data.AddChild("DestVar", t_DestVar);
 
-            if (t_I == 0)
-                t_Element.AddChild("DestVar", t_Var);
-            else
-                t_Element.AddChild("SrcVar", t_Var);
-        }
+        XML::XML_WriteData t_SrcVar(XML::XML_WRITE_CHANGE);
+        if (m_DestVariable.GetVariableXMLData(t_SrcVar))
+            p_Data.AddChild("SrcVar", t_SrcVar);
 
-        return t_Element;
+        return true;
+    }
+
+    bool EventScriptChangeVariable::LoadDataFromXML(const XML::XML_ReadData &p_Data)
+    {
+        if (!EventScriptCommand::LoadDataFromXML(p_Data))
+            return false;
+
+        ATL::CComVariant t_Value;
+        // operator
+        if (!p_Data.GetAttributeValue("Operator", t_Value) || FAILED(t_Value.ChangeType(VT_UINT, &t_Value)) ||
+            t_Value.uintVal > VARIABLE_OPERATOR_MAX)
+            return false;
+        m_Operator = (VariableOperator)t_Value.uintVal;
+
+        // variable type
+        if (!p_Data.GetAttributeValue("VariableType", t_Value) || FAILED(t_Value.ChangeType(VT_UINT, &t_Value)) ||
+            t_Value.uintVal > VARIABLE_TYPE_MAX)
+            return false;
+        m_VariableType = (VariableType)t_Value.uintVal;
+
+        // dest var
+        const XML::XML_ReadData *t_DestData = p_Data.GetChild("DestVar");
+        if (!t_DestData || !m_DestVariable.LoadDataFromXML(*t_DestData))
+            return false;
+
+        // src var
+        const XML::XML_ReadData *t_SrcData = p_Data.GetChild("SrcVar");
+        if (!t_SrcData || !m_SrcVariable.LoadDataFromXML(*t_SrcData))
+            return false;
+
+        return true;
     }
 
     /*#####
     # EventScriptCommandContainer superclass
     #####*/
-    EventScriptCommandContainer::~EventScriptCommandContainer()
+    void EventScriptCommandContainer::InsertChildCommand(int p_Row, const EventScriptCommandPtr &p_pCommand)
+    {
+        EventScriptCommandPtrList::iterator t_Itr = m_pChildCommands.begin();
+        if (p_Row > 0)
+            t_Itr+p_Row;
+        m_pChildCommands.insert(t_Itr, p_pCommand);
+    }
+
+    void EventScriptCommandContainer::DeleteChildCommand(const EventScriptCommandPtr &p_pCommand)
     {
         for (uint32 i = 0; i < m_pChildCommands.size(); ++i)
         {
-            if (m_pChildCommands.at(i))
+            if (m_pChildCommands.at(i).get() == p_pCommand.get())
             {
-                delete m_pChildCommands.at(i);
-                m_pChildCommands.at(i) = NULL;
+                DeleteChildCommand(i);
+                return;
             }
         }
     }
 
-    void EventScriptCommandContainer::InsertChildCommand(int p_uiRow, EventScriptCommand *p_pCommand)
+    void EventScriptCommandContainer::DeleteChildCommand(uint32 p_uiRow)
     {
-        if (!p_pCommand)
+        if (p_uiRow >= m_pChildCommands.size())
             return;
 
-        CommandList::iterator t_Itr = m_pChildCommands.begin();
-        if (p_uiRow > 0)
-            t_Itr+p_uiRow;
-        m_pChildCommands.insert(t_Itr, p_pCommand);
+        EventScriptCommandPtrList::iterator t_Itr = m_pChildCommands.begin();
+        t_Itr+p_uiRow;
+        m_pChildCommands.erase(t_Itr);
+    }
+
+    bool EventScriptCommandContainer::GetChildCommand(uint32 p_uiIndex, EventScriptCommandPtr &p_pResult)
+    {
+        if (p_uiIndex >= m_pChildCommands.size())
+            return false;
+
+        p_pResult = m_pChildCommands.at(p_uiIndex);
+        return true;
+    }
+
+    void EventScriptCommandContainer::DeleteChildCommandsOfType(EVENT_SCRIPT::ScriptCommandType p_Type)
+    {
+        // iterate from back
+        for (uint32 i = m_pChildCommands.size()-1; (i+1) > 0 ; --i)
+        {
+            if (!m_pChildCommands.at(i).get())
+                continue;
+
+            if (m_pChildCommands.at(i).get()->GetCommandType() == p_Type)
+            {
+                EventScriptCommandPtrList::iterator t_Itr = m_pChildCommands.begin();
+                t_Itr += i;
+                m_pChildCommands.erase(t_Itr);
+            }
+            else if (m_pChildCommands.at(i).get()->GetCommandType() >= COMMAND_CONTAINER)
+                ((EventScriptCommandContainer*)m_pChildCommands.at(i).get())->DeleteChildCommandsOfType(p_Type);
+        }
+    }
+
+    void EventScriptCommandContainer::GetChildCommandXMLData(XML::XML_WriteData &p_Data) const
+    {
+        for (uint32 i = 0; i < m_pChildCommands.size(); ++i)
+        {
+            XML::XML_WriteData t_Data(XML::XML_WRITE_APPEND);
+            if (m_pChildCommands.at(i)->GetCommandXML(t_Data))
+                p_Data.AddChild("ChildCommand", t_Data);
+        }
+    }
+
+    void EventScriptCommandContainer::LoadChildCommandsFromXML(const XML::XML_ReadData &p_Data)
+    {
+        const XML::ReadChildList *t_ChildList = p_Data.GetChildList();
+        if (!t_ChildList)
+            return;
+
+        CComVariant t_Value;
+        for (XML::ReadChildList::const_iterator t_Itr = t_ChildList->begin(); t_Itr != t_ChildList->end(); ++t_Itr)
+        {
+            // get commands
+            if (t_Itr->first == "ChildCommand")
+            {
+                if (!t_Itr->second.GetAttributeValue("Type", t_Value) || FAILED(t_Value.ChangeType(VT_UINT, &t_Value)) ||
+                    t_Value.uintVal > EVENT_COMMAND_MAX)
+                    continue;
+
+                EventScriptCommandPtr t_pCommand;
+                if (!EventScriptHolder::GetNewCommand((ScriptCommandType)t_Value.uintVal, t_pCommand))
+                    continue;
+
+                if (!t_pCommand->LoadDataFromXML(t_Itr->second))
+                    continue;
+
+                m_pChildCommands.push_back(t_pCommand);
+            }
+        }
     }
 
     /*#####
     # EventScriptIfCondition
     #####*/
-    EventScriptIfCondition::EventScriptIfCondition() : m_ConditionType(CONDITION_TYPE_NONE), m_Operator(CONDITION_OPERATOR_EQUAL),
-        EventScriptCommandContainer()
+    EventScriptIfCondition::EventScriptIfCondition() : EventScriptCommandContainer()
     {
         m_CommandType = COMMAND_CONTAINER_IF_CONDITION;
-        memset(&m_Type, NULL, sizeof(m_Type));
-    }
-
-    EventScriptIfCondition::~EventScriptIfCondition()
-    {
-        SetConditionType(CONDITION_TYPE_NONE);
-        EventScriptCommandContainer::~EventScriptCommandContainer();
     }
 
     std::string EventScriptIfCondition::GetCommandText() const
     {
-        std::string t_sText = "<> " + GetCommandName() + "If ";
-        std::string t_sType;
-        std::string t_sOperator;
-        switch(m_Operator)
-        {
-        case CONDITION_OPERATOR_EQUAL: t_sOperator = "== "; break;
-        case CONDITION_OPERATOR_NOT_EQUAL: t_sOperator = "!= "; break;
-        case CONDITION_OPERATOR_GREATER_EQUAL: t_sOperator = ">= "; break;
-        case CONDITION_OPERATOR_LESS_EQUAL: t_sOperator = "<= "; break;
-        case CONDITION_OPERATOR_GREATER: t_sOperator = "> "; break;
-        case CONDITION_OPERATOR_LESS: t_sOperator = "< "; break;
-        }
-
-        switch (m_ConditionType)
-        {
-        case CONDITION_TYPE_VARIABLE:
-            t_sType = "Variable ";
-            std::string t_sDestText;
-            std::string t_sSrcText;
-            if (m_Type.m_ConditionVariable.m_pDestVar)
-                t_sDestText = m_Type.m_ConditionVariable.m_pDestVar->GetVariableSettingText();
-            if (m_Type.m_ConditionVariable.m_pSrcVar)
-                t_sSrcText = m_Type.m_ConditionVariable.m_pSrcVar->GetVariableSettingText();
-            break;
-        }
+        std::string t_sText = "<> " + GetCommandName() + " ";
+        std::string t_sConditionText;
+        if (m_ConditionHolder.GetConditionText(t_sConditionText))
+            t_sText.append(t_sConditionText);
 
         return t_sText;
     }
 
-    void EventScriptIfCondition::SetConditionType(ConditionType p_Type)
+    bool EventScriptIfCondition::GetCommandXML(XML::XML_WriteData &p_Data) const
     {
-        if (m_ConditionType != p_Type)
+        if (!EventScriptCommand::GetCommandXML(p_Data))
+            return false;
+
+        p_Data.AddAttribute("Comparison", (uint32)m_ConditionHolder.GetComparison());
+        for (std::size_t i = 0; i < m_ConditionHolder.GetConditionCount(); ++i)
         {
-            m_ConditionType = p_Type;
-            switch(m_ConditionType)
-            {
-            case CONDITION_TYPE_VARIABLE:
-                if (m_Type.m_ConditionVariable.m_pDestVar)
-                    delete m_Type.m_ConditionVariable.m_pDestVar;
-                if (m_Type.m_ConditionVariable.m_pSrcVar)
-                    delete m_Type.m_ConditionVariable.m_pSrcVar;
-                break;
-            }
-            memset(&m_Type, NULL, sizeof(m_Type));
+            XML::XML_WriteData t_Data(XML::XML_WRITE_APPEND);
+            if (m_ConditionHolder[i]->GetXMLData(t_Data))
+                p_Data.AddChild("Condition", t_Data);
         }
+        GetChildCommandXMLData(p_Data);
+        return true;
     }
 
-    const VariableSettings* EventScriptIfCondition::GetDestinationVariable() const
+    bool EventScriptIfCondition::LoadDataFromXML(const XML::XML_ReadData &p_Data)
     {
-        if (m_ConditionType != CONDITION_TYPE_VARIABLE)
-            return NULL;
+        if (!EventScriptCommand::LoadDataFromXML(p_Data))
+            return false;
 
-        return m_Type.m_ConditionVariable.m_pDestVar;
-    }
+        CComVariant t_Value;
+        if (!p_Data.GetAttributeValue("Comparison", t_Value) || FAILED(t_Value.ChangeType(VT_UINT, &t_Value)) || t_Value.uintVal > ConditionHolder::COMPARISON_MAX)
+            return false;
+        m_ConditionHolder.SetComparison((ConditionHolder::Comparison)t_Value.uintVal);
 
-    const VariableSettings* EventScriptIfCondition::GetSourceVariable() const
-    {
-        if (m_ConditionType != CONDITION_TYPE_VARIABLE)
-            return NULL;
+        const XML::ReadChildList *t_pChildList = p_Data.GetChildList();
+        if (!t_pChildList)
+            return false;
 
-        return m_Type.m_ConditionVariable.m_pSrcVar;
-    }
+        for (XML::ReadChildList::const_iterator t_Itr = t_pChildList->begin(); t_Itr != t_pChildList->end(); ++t_Itr)
+        {
+            if (t_Itr->first == "Condition")
+            {
+                ConditionSettingsPtr t_Condition(new ConditionSettings());
+                if (t_Condition->LoadDataFromXML(t_Itr->second))
+                    m_ConditionHolder.AddCondition(t_Condition);
+            }
+        }
 
-    void EventScriptIfCondition::SetDestinationVariable(VariableSettings &p_Variable)
-    {
-        if (m_ConditionType != CONDITION_TYPE_VARIABLE)
-            return;
-
-        if (m_Type.m_ConditionVariable.m_pDestVar)
-            *m_Type.m_ConditionVariable.m_pDestVar = p_Variable;
-        else
-            m_Type.m_ConditionVariable.m_pDestVar = new VariableSettings(p_Variable);
-    }
-
-    void EventScriptIfCondition::SetSourceVariable(VariableSettings &p_Variable)
-    {
-        if (m_ConditionType != CONDITION_TYPE_VARIABLE)
-            return;
-
-        if (m_Type.m_ConditionVariable.m_pSrcVar)
-            *m_Type.m_ConditionVariable.m_pSrcVar = p_Variable;
-        else
-            m_Type.m_ConditionVariable.m_pSrcVar = new VariableSettings(p_Variable);
+        LoadChildCommandsFromXML(p_Data);
+        return true;
     }
 }

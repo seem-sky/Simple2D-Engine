@@ -1,0 +1,3 @@
+<MapDatabase>
+	<Map File="map20.xml" ID="20" MapAnnounceName="blubb" MapScript="" MapSizeX="1000" MapSizeY="1000" Layer="1" ParentID="4"/>
+	<Map File="map4.xml" ID="4" Layer="3" MapAnnounceName="test2" MapScript="" MapSizeX="18" MapSizeY="18" ParentID="0"/><Map File="map21.xml" ID="21" Layer="1" MapAnnounceName="test" MapScript="" MapSizeX="5" MapSizeY="5" ParentID="0"/></MapDatabase>

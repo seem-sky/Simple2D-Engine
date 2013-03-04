@@ -2,16 +2,15 @@
 #define DATABASE_WINDOW_H
 
 #include "UI/UI_Database.h"
-#include "ResizeWidget.h"
+#include "ModifyObject.h"
 #include <QtGui/QCloseEvent>
 #include "DatabaseOutput.h"
 
-class DatabaseWindow : public QMainWindow, Ui_Database
+class DatabaseWindow : public QDialog, Ui_Database
 {
     Q_OBJECT
 public:
-    DatabaseWindow(QMainWindow *parent);
-    ~DatabaseWindow(void);
+    DatabaseWindow(QWidget *parent);
 
     std::string GetCurrentDatabaseSection();
 
@@ -25,12 +24,12 @@ signals:
 
 protected:
     void closeEvent(QCloseEvent *p_pEvent);
-    void resizeEvent(QResizeEvent *p_pEvent) { m_ResizeObj.ResizeEvent(this); }
+    void resizeEvent(QResizeEvent *p_pEvent) { m_ModifyObj.resizeEvent(this); }
 
 private:
     void SaveDatabase();
     void ClearWidgets();
     std::string m_sLogLocationName;
-    ResizeWidget m_ResizeObj;
+    ModifyObject m_ModifyObj;
 };
 #endif

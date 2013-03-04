@@ -12,9 +12,9 @@ namespace DATABASE
     {
     public:
         DatabaseOutput(void);
-        ~DatabaseOutput(void);
 
         void ClearOutput();
+        const SpritePrototype* GetLatestSpritePrototype(std::string p_sType, uint32 p_uiID);
         SpritePrototype* GetSpritePrototype(std::string p_sType, uint32 p_uiID);
         void ChangeSpritePrototype(std::string p_sType, SpritePrototype &p_ChangedProto);
         void DeleteSpritePrototype(std::string p_sType, SpritePrototype &p_DelProto);
@@ -38,7 +38,7 @@ namespace DATABASE
         bool IsObjectPrototypeDeleted(uint32 p_uiID);
         void GetObjectNames(std::map<uint32, std::string> &p_lObjectNames);
 
-        XML::XML_STATE GetDBState();
+        ThreadState GetDBState();
 
         void SaveChangesTo(std::string p_sFileName);
 
@@ -46,18 +46,10 @@ namespace DATABASE
         bool ParseSpriteChange(XML::XML_WriteData *p_pElement, const SpritePrototype *p_pProto);
         bool ParseObjectChange(XML::XML_WriteData *p_pElement, const ObjectPrototype *p_pProto);
 
-        SpriteList m_ChangedSprites;
-        ObjectList m_ChangedObjects;
+        SpriteTypeList m_ChangedSprites;
+        ObjectPrototypeMap m_ChangedObjects;
         VariableHolder m_Variables;
         XML::XML_Writer *m_pWriter;
-        inline void KillXMLThread()
-        {
-            if (m_pWriter)
-            {
-                m_pWriter->Kill();
-                m_pWriter = NULL;
-            }
-        }
     };
 }
 #endif

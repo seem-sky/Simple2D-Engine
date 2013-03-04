@@ -3,9 +3,9 @@
 
 #include <vector>
 #include "Global.h"
-#include "Database.h"
 #include <atlcomcli.h>
 #include "XML_Writer.h"
+#include "ConditionHolder.h"
 
 namespace EVENT_SCRIPT
 {
@@ -15,13 +15,13 @@ namespace EVENT_SCRIPT
         COMMAND_COMMENT,
         COMMAND_CHANGE_VARIABLE,
 
-        // add cotainer below COMMAND_CONTAINER
+        // add container commands below COMMAND_CONTAINER
         COMMAND_CONTAINER,
         COMMAND_CONTAINER_IF_CONDITION,
         COMMAND_CONTAINER_LOOP,
-
-        COMMAND_MAX,
     };
+
+    const uint32 EVENT_COMMAND_MAX = 5;
 
     /*#####
     # EventCommand superclass
@@ -33,14 +33,16 @@ namespace EVENT_SCRIPT
 
         inline ScriptCommandType GetCommandType() const { return m_CommandType; }
         virtual std::string GetCommandName() const { return ""; }
-        virtual std::string GetCommandText() const { return ""; }
-        virtual XML::XML_WriteData GetCommandXML() const;
+        virtual std::string GetCommandText() const { return "<>"; }
+        virtual bool GetCommandXML(XML::XML_WriteData &p_Data) const;
+        virtual bool LoadDataFromXML(const XML::XML_ReadData &p_Data);
 
     protected:
         ScriptCommandType m_CommandType;
     };
 
-    typedef std::vector<EventScriptCommand*> CommandList;
+    typedef boost::shared_ptr<EventScriptCommand> EventScriptCommandPtr;
+    typedef std::vector<EventScriptCommandPtr> EventScriptCommandPtrList;
 
     /*#####
     # Comment
@@ -58,7 +60,8 @@ namespace EVENT_SCRIPT
 
         std::string GetCommandName() const { return "Comment"; }
         std::string GetCommandText() const { return "<> " + GetCommandName() + ": " + GetCommentText(); }
-        XML::XML_WriteData GetCommandXML() const;
+        bool GetCommandXML(XML::XML_WriteData &p_Data) const;
+        bool LoadDataFromXML(const XML::XML_ReadData &p_Data);
 
     private:
         std::string m_sCommentText;
@@ -67,64 +70,6 @@ namespace EVENT_SCRIPT
     /*#####
     # Change Variable
     #####*/
-    enum VariableOperator
-    {
-        VARIABLE_OPERATOR_SET,
-        VARIABLE_OPERATOR_ADD,
-        VARIABLE_OPERATOR_SUBTRACT,
-        VARIABLE_OPERATOR_MULTIPLICATE,
-        VARIABLE_OPERATOR_DIVIDE,
-        VARIABLE_OPERATOR_MODULO,
-        VARIABLE_OPERATOR_TRIGGER,
-    };
-
-    enum VariableLocalisation
-    {
-        LOCALISATION_NONE,
-        LOCALISATION_VALUE,
-        LOCALISATION_GLOBAL,
-        LOCALISATION_LOCAL,
-        LOCALISATION_OBJECT,
-    };
-
-    struct VariableSettings
-    {
-        VariableSettings() : m_VarLocalisation(LOCALISATION_NONE)
-        {
-            memset(&m_Type, 0, sizeof(m_Type));
-        }
-
-        std::string GetVariableSettingText() const;
-        std::string GetVariableTypeText() const;
-
-        VariableLocalisation m_VarLocalisation;
-        VariableType m_VariableType;
-
-        union VariableSettingType
-        {
-            struct Value                    // type 1
-            {
-                union VariableType
-                {
-                    bool m_BoolValue;
-                    int m_IntValue;
-                    float m_FloatValue;
-                    BSTR m_StringValue;
-                } m_VariableType;
-            } m_Value;
-
-            struct GlobalVariable           // type 2
-            {
-                uint32 m_uiVariableID;
-            } m_GlobalVariable;
-
-            struct LocalVariable           // type 3
-            {
-                uint32 m_uiVariableID;
-            } m_LocalVariable;
-        } m_Type;
-    };
-
     class EventScriptChangeVariable : public EventScriptCommand
     {
     public:
@@ -133,9 +78,10 @@ namespace EVENT_SCRIPT
             m_CommandType = COMMAND_CHANGE_VARIABLE;
         }
 
-        virtual std::string GetCommandText() const;
-        virtual std::string GetCommandName() const { return "Change Variable"; }
-        virtual XML::XML_WriteData GetCommandXML() const;
+        std::string GetCommandText() const;
+        std::string GetCommandName() const { return "Change Variable"; }
+        bool GetCommandXML(XML::XML_WriteData &p_Data) const;
+        bool LoadDataFromXML(const XML::XML_ReadData &p_Data);
 
         VariableOperator GetOperator() const { return m_Operator; }
         void SetOperator(VariableOperator p_Operator) { m_Operator = p_Operator; }
@@ -167,64 +113,38 @@ namespace EVENT_SCRIPT
             m_CommandType = COMMAND_CONTAINER;
         }
 
-        virtual ~EventScriptCommandContainer();
-        void InsertChildCommand(int p_uiRow, EventScriptCommand *p_pCommand);
+        void InsertChildCommand(int p_Row, const EventScriptCommandPtr &p_pCommand);
+        void DeleteChildCommand(const EventScriptCommandPtr &p_pCommand);
+        void DeleteChildCommand(uint32 p_uiRow);
+        void DeleteChildCommandsOfType(ScriptCommandType p_Type);
+        uint32 GetChildCommandCount() const { return m_pChildCommands.size(); }
+        bool GetChildCommand(uint32 p_uiIndex, EventScriptCommandPtr &p_pResult);
+
+    protected:
+        void GetChildCommandXMLData(XML::XML_WriteData &p_Data) const;
+        void LoadChildCommandsFromXML(const XML::XML_ReadData &p_Data);
 
     private:
-        CommandList m_pChildCommands;
+        EventScriptCommandPtrList m_pChildCommands;
     };
 
     /*#####
     # EventScriptIfCondition
     #####*/
-    enum ConditionType
-    {
-        CONDITION_TYPE_NONE,
-        CONDITION_TYPE_VARIABLE,
-    };
-
-    enum ConditionOperator
-    {
-        CONDITION_OPERATOR_EQUAL,
-        CONDITION_OPERATOR_NOT_EQUAL,
-        CONDITION_OPERATOR_GREATER_EQUAL,
-        CONDITION_OPERATOR_LESS_EQUAL,
-        CONDITION_OPERATOR_GREATER,
-        CONDITION_OPERATOR_LESS,
-    };
-
     class EventScriptIfCondition : public EventScriptCommandContainer
     {
     public:
         EventScriptIfCondition();
-        virtual ~EventScriptIfCondition();
 
         std::string GetCommandName() const { return "If Condition: "; }
+
+        inline const ConditionHolder* GetConditionHolder() const { return &m_ConditionHolder; }
+        inline ConditionHolder* GetConditionHolder() { return &m_ConditionHolder; }
         std::string GetCommandText() const;
-
-        void SetConditionType(ConditionType p_Type);
-        inline ConditionType GetConditionType() const { return m_ConditionType; }
-
-        void SetOperator(ConditionOperator p_Operator) { m_Operator = p_Operator; }
-        ConditionOperator GetOperator() const { return m_Operator; }
-
-        const VariableSettings* GetDestinationVariable() const;
-        void SetDestinationVariable(VariableSettings &p_Variable);
-        const VariableSettings* GetSourceVariable() const;
-        void SetSourceVariable(VariableSettings &p_Variable);
-
+        bool GetCommandXML(XML::XML_WriteData &p_Data) const;
+        bool LoadDataFromXML(const XML::XML_ReadData &p_Data);
     private:
-        union Type
-        {
-            struct ConditionVariable
-            {
-                VariableSettings *m_pDestVar;
-                VariableSettings *m_pSrcVar;
-            } m_ConditionVariable;
-        } m_Type;
-
-        ConditionType m_ConditionType;
-        ConditionOperator m_Operator;
+        ConditionHolder m_ConditionHolder;
     };
 }
 #endif

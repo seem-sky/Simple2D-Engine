@@ -8,7 +8,7 @@
 
 namespace XML
 {
-    enum XML_WRITE_STATE
+    enum XMLWriteState
     {
         XML_WRITE_NONE,
         XML_WRITE_ADD,
@@ -19,50 +19,44 @@ namespace XML
     };
 
     class XML_WriteData;
-    typedef std::multimap<std::string, XML_WriteData> WriteChildList;
+    typedef std::multimap<std::string, XML_WriteData> XMLWriteChildMultimap;
 
     class XML_WriteData : public XML_Data
     {
     public:
-        XML_WriteData(XML_WRITE_STATE p_WriterState = XML_WRITE_NONE) : m_WriteState(p_WriterState), XML_Data() {}
+        XML_WriteData(XMLWriteState writeState = XML_WRITE_NONE) : m_WriteState(writeState), XML_Data() {}
 
-        inline XML_WRITE_STATE GetWriteState() const { return m_WriteState; }
-        inline void SetWriteState(XML_WRITE_STATE p_State) { m_WriteState = p_State; }
+        inline XMLWriteState GetWriteState() const { return m_WriteState; }
+        inline void SetWriteState(XMLWriteState state) { m_WriteState = state; }
 
-        void AddChild(std::string p_sName, XML_WriteData p_NewChild);
+        void AddChild(const std::string &sName, const XML_WriteData &newChild);
         bool HasChilds() const { return !m_ChildList.empty(); }
-        bool HasChild(std::string p_sName) const;
-        XML_WriteData* GetChild(std::string p_sName);
-        const XML_WriteData* GetChild(std::string p_sName) const;
-        const inline WriteChildList* GetChildList() const { return &m_ChildList; }
-        inline void SetChildList(WriteChildList &p_ChildList) { m_ChildList = p_ChildList; }
+        bool HasChild(std::string sName) const;
+        XML_WriteData* GetChild(std::string sName);
+        const XML_WriteData* GetChild(std::string sName) const;
+        const inline XMLWriteChildMultimap* GetChildList() const { return &m_ChildList; }
+        inline void SetChildList(XMLWriteChildMultimap &childList) { m_ChildList = childList; }
 
-        void AddAttribute(std::string p_sName, CComVariant p_NewAttribute);
+        void AddAttribute(const std::string &sName, const CComVariant &newAttribute);
 
     private:
-        XML_WRITE_STATE m_WriteState;
-        WriteChildList m_ChildList;
+        XMLWriteState m_WriteState;
+        XMLWriteChildMultimap m_ChildList;
     };
 
-    class XML_Writer : public ActiveObject
+    class XML_Writer
     {
+    private:
+        IXMLDOMNodePtr _getChildNodeByAttribute(IXMLDOMNodePtr pNode, std::string sNodeName, std::string sAttributeName, CComVariant value);
+        IXMLDOMNodePtr _addChildNode(MSXML2::IXMLDOMDocument2Ptr pDOM, MSXML2::IXMLDOMElementPtr pParent, std::string sNodeName, const AttributeMap *plAttributes);
+        void _addChildNodes(MSXML2::IXMLDOMDocument2Ptr pDOM, IXMLDOMNodePtr pParent, const XMLWriteChildMultimap *plChildren);
+        void _changeNode(IXMLDOMNodePtr pElement, const AttributeMap *plAttributes);
+
     public:
-        XML_Writer(std::string p_sData, XML_WriteData *p_tData);
-        ~XML_Writer(void);
-
-        void Run();
-        XML_STATE GetWriterState() const { return m_XMLState; }
-        IXMLDOMNodePtr GetChildNodeByAttribute(IXMLDOMNodePtr p_pNode, std::string p_sNodeName, std::string p_sAttributeName, CComVariant p_value);
-
-        IXMLDOMNodePtr AddChildNode(MSXML2::IXMLDOMDocument2Ptr p_pDOM, MSXML2::IXMLDOMElementPtr p_pParent, std::string p_sNodeName, const AttributeList *p_plAttributes);
-        void AddChildNodes(MSXML2::IXMLDOMDocument2Ptr p_pDOM, IXMLDOMNodePtr p_pParent, const WriteChildList *p_plChildren);
-        void ChangeNode(IXMLDOMNodePtr p_pElement, const AttributeList *p_plAttributes);
+        XML_Writer();
+        bool startWriting(const std::string &sFileName, XML_WriteData &data);
 
     private:
-        XML_STATE m_XMLState;
-        std::string m_sFileName;
-        XML_WriteData *m_pData;
-
         std::string m_sLogLocationName;
     };
 }

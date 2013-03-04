@@ -2,9 +2,35 @@
 #include "moc_ContextMenu.h"
 #include "EventEditorWidget.h"
 #include "CommandWindow.h"
+#include "MapTree.h"
 
 namespace CONTEXT_MENU
 {
+    /*#####
+    # Map
+    #####*/
+    MapTreeContextMenu::MapTreeContextMenu(QWidget *pParent) : QMenu(pParent)
+    {
+        QAction *pAction = new QAction("new map", this);
+        addAction(pAction);
+        connect(pAction, SIGNAL(triggered()), parent(), SLOT(_newMap()));
+    }
+
+    MapItemContextMenu::MapItemContextMenu(QWidget *pParent) : MapTreeContextMenu(pParent)
+    {
+        QAction *pAction = new QAction("open map", this);
+        addAction(pAction);
+        connect(pAction, SIGNAL(triggered()), parent(), SLOT(_openMap()));
+
+        pAction = new QAction("settings", this);
+        addAction(pAction);
+        connect(pAction, SIGNAL(triggered()), parent(), SLOT(_openMapSettingsDialog()));
+
+        pAction = new QAction("delete map", this);
+        addAction(pAction);
+        connect(pAction, SIGNAL(triggered()), parent(), SLOT(_deleteMap()));
+    }
+
     /*#####
     # ScriptLineContextMenu
     #####*/
@@ -33,7 +59,7 @@ namespace CONTEXT_MENU
         if (!t_pLine)
             return;
 
-        EVENT_SCRIPT::EventScriptCommand *t_pCommand = ((ScriptLine*)t_pLine)->GetCommand();
+        EVENT_SCRIPT::EventScriptCommandPtr t_pCommand = ((ScriptLine*)t_pLine)->GetCommand();
         if (!t_pCommand)
             return;
 

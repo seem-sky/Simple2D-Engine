@@ -1,6 +1,6 @@
 #include "TextureDatabaseWindow.h"
 #include "moc_TextureDatabaseWindow.h"
-#include "EditorConfig.h"
+#include "Config.h"
 #include <QTGui/QFileDialog>
 #include <QTGui/QMainWindow>
 #include "TransparencyWindow.h"
@@ -18,7 +18,7 @@ TextureDatabaseWindow::TextureDatabaseWindow(QWidget *p_pParent) : DatabasePageT
     Ui_TextureDatabase::setupUi(this);
     m_pName->setReadOnly(true);
     m_sLogLocationName = LOGFILE_ENGINE_LOG_NAME + "TextureDatabaseWindow : ";
-    m_ResizeObj.AddResizeWidget(m_pTab);
+    m_ResizeObj.setWidget(m_pTab, MODIFY_RESIZE);
 
     m_pView->installEventFilter(this);
     m_pName->installEventFilter(this);
@@ -76,7 +76,8 @@ void TextureDatabaseWindow::ChangeItem(uint32 p_uiID, bool p_bDelete)
         {
             t_NewProto.m_uiSpriteType       = m_pTab->currentIndex();
             t_NewProto.m_sFileName          = m_pName->text().toStdString();
-            t_NewProto.m_sTransparencyColor = m_pTransparencyColor->text().toStdString();
+            t_NewProto.m_sPath              = m_sCurrentTexturePath.toStdString();
+            t_NewProto.m_TransparencyColor.setColor(m_pTransparencyColor->text().toStdString());
 
             if (t_sCurTextureType == "Tiles")
             {
@@ -117,6 +118,7 @@ void TextureDatabaseWindow::ChangeItem(uint32 p_uiID, bool p_bDelete)
 bool TextureDatabaseWindow::SelectItem(uint32 p_uiID)
 {
     ClearWidgets();
+    m_sCurrentTexturePath.clear();
     DisconnectWidgets();
     bool t_bSuccess = false;
     std::string t_sCurTextureType = GetCurrentType();
@@ -188,11 +190,14 @@ bool TextureDatabaseWindow::SelectItem(uint32 p_uiID)
             }
 
             QString t_sProjectDir;
-            if (EditorConfig *t_pConf = EditorConfig::Get())
-                SetTexturePixmap(QPixmap(QString::fromStdString(t_pConf->GetProjectDirectory()+"/" + t_pDB->GetSpritePath(t_pProto->m_uiSpriteType) + t_pProto->m_sFileName)));
+            if (Config *t_pConf = Config::Get())
+                SetTexturePixmap(QPixmap(QString::fromStdString(t_pConf->getProjectDirectory()+"/Textures/" + t_pProto->GetFilePath())));
+            m_sCurrentTexturePath = QString::fromStdString(t_pProto->m_sPath);
             m_pName->setText(QString::fromStdString(t_pProto->m_sFileName));
             m_pID->setValue(p_uiID);
-            m_pTransparencyColor->setText(QString::fromStdString(t_pProto->m_sTransparencyColor));
+            std::string t_sColorString;
+            t_pProto->m_TransparencyColor.getColorString(t_sColorString);
+            m_pTransparencyColor->setText(QString::fromStdString(t_sColorString));
 
             t_bSuccess = true;
         }
@@ -314,6 +319,13 @@ void TextureDatabaseWindow::ClearWidgets()
     ConnectWidgets();
 }
 
+void TextureDatabaseWindow::TransparencyColorChanged(const Color &p_Color)
+{
+    std::string t_sColor;
+    p_Color.getColorString(t_sColor);
+    m_pTransparencyColor->setText(QString::fromStdString(t_sColor));
+}
+
 void TextureDatabaseWindow::CurrentTabChanged(int p_Index)
 {
     m_uilIDCache.clear();
@@ -419,19 +431,22 @@ bool TextureDatabaseWindow::eventFilter(QObject *p_pObj, QEvent *p_pEvent)
         if (p_pEvent->type() == QEvent::MouseButtonDblClick)
         {
             QString t_sProjectDir;
-            if (EditorConfig *t_pConf = EditorConfig::Get())
-                t_sProjectDir = QString::fromStdString(t_pConf->GetProjectDirectory());
+            if (Config *t_pConf = Config::Get())
+                t_sProjectDir = QString::fromStdString(t_pConf->getProjectDirectory());
 
-            QString t_sFileName = QFileDialog::getOpenFileName(this, tr("Open Texture"), t_sProjectDir+"/MapSprites", tr("Images (*.png)"));
-            if (!t_sFileName.isEmpty())
+            QString t_sFileName = QFileDialog::getOpenFileName(this, tr("Chose Texture"), t_sProjectDir+"/Textures", tr("Images (*.png)"));
+            QFileInfo t_FileInfo(t_sFileName);
+            if (t_FileInfo.isFile())
             {
+                QString t_sPath(t_FileInfo.absolutePath());
+                t_sPath.remove(t_sProjectDir+"/Textures/");
+                m_sCurrentTexturePath = t_sPath;
                 SetTexturePixmap(QPixmap(t_sFileName));
-                t_sFileName.remove(0, t_sFileName.lastIndexOf("/")+1);
                 // change TextureName
-                m_pName->setText(t_sFileName);
+                m_pName->setText(t_FileInfo.fileName());
                 // change TextureBox
                 QString t_sID = m_pID->text();
-                QString t_sItemText = t_sID+":"+t_sFileName;
+                QString t_sItemText = t_sID+":"+t_FileInfo.fileName();
                 m_pStoreBox->setItemText(m_pStoreBox->currentIndex(), t_sItemText);
                 ChangeItem(t_sID.toUInt());
             }
@@ -445,17 +460,20 @@ bool TextureDatabaseWindow::eventFilter(QObject *p_pObj, QEvent *p_pEvent)
         {
             if (const SpritePrototype* t_pProto = GetLatestPrototype(GetCurrentType(), m_pID->value()))
             {
-                if (EditorConfig *t_pConf = EditorConfig::Get())
+                if (Config *t_pConf = Config::Get())
                 {
                     if (Database *t_pDB = Database::Get())
                     {
                         if (QMainWindow *t_pDBWindow = (QMainWindow*)window())
                         {
-                            TransparencyWindow t_TWindow(t_pDBWindow, QPixmap(QString::fromStdString(t_pConf->GetProjectDirectory()+"/" +
-                                t_pDB->GetSpritePath(t_pProto->m_uiSpriteType) + t_pProto->m_sFileName)));
-                            connect(&t_TWindow, SIGNAL(ColorChosen(QString)), this, SLOT(TransparencyColorChanged(QString)));
-                            t_TWindow.exec();
-                            disconnect(&t_TWindow, SIGNAL(ColorChosen(QString)), this, SLOT(TransparencyColorChanged(QString)));
+                            QFileInfo t_Info(QString::fromStdString(t_pConf->getProjectDirectory()+"/Textures/" + t_pProto->GetFilePath()));
+                            if (t_Info.isFile())
+                            {
+                                TransparencyWindow t_TWindow(t_pDBWindow, QPixmap(t_Info.absoluteFilePath()));
+                                connect(&t_TWindow, SIGNAL(ColorChosen(const Color&)), this, SLOT(TransparencyColorChanged(const Color&)));
+                                t_TWindow.exec();
+                                disconnect(&t_TWindow, SIGNAL(ColorChosen(const Color&)), this, SLOT(TransparencyColorChanged(const Color&)));
+                            }
                             return true;
                         }
                     }
