@@ -10,8 +10,8 @@ struct Point
     T x;
     T y;
 
-    Point(const Point3D<T> &p);
-    Point(T X = 0, T Y = 0) : x(X), y(Y) { }
+    inline Point(const Point3D<T> &p);
+    inline Point(T X = 0, T Y = 0) : x(X), y(Y) { }
     inline Point<T>& operator =(Point3D<T> const& p);
     inline Point<T>& operator +=(Point<T> const& p)
     {
@@ -35,12 +35,12 @@ struct Point3D
     T y;
     T z;
 
-    Point3D(const Point<T> &p, T z = 0) : z(z) { *this = p; }
-    Point3D(T X = 0, T Y = 0, T Z = 0) : x(X), y(Y), z(Z) { }
+    inline Point3D(const Point<T> &p, T z = 0) : z(z) { *this = p; }
+    inline Point3D(T X = 0, T Y = 0, T Z = 0) : x(X), y(Y), z(Z) { }
 
     inline Point3D<T>& operator =(Point<T> const& p)
     {
-        *this = Point3D<T>(p.x, p.y, 0);
+        *this = Point3D<T>(p.x, p.y, this->z);
         return *this;
     }
 
@@ -65,14 +65,14 @@ struct Point3D
 # Point
 #####*/
 template <typename T>
-Point<T>& Point<T>::operator =(Point3D<T> const& p)
+inline Point<T>& Point<T>::operator =(Point3D<T> const& p)
 {
     *this = Point<T>(p.x, p.y);
     return *this;
 }
 
 template <typename T>
-Point<T>::Point(const Point3D<T> &p)
+inline Point<T>::Point(const Point3D<T> &p)
 {
     x = p.x;
     y = p.y;

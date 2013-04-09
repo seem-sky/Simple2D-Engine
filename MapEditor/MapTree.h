@@ -2,8 +2,7 @@
 #define MAP_TREE_H
 
 #include <QtGui/QTreeWidget>
-#include "Database.h"
-#include "MapDatabase.h"
+#include "DatabaseMgr.h"
 
 class MapTreeItem : public QTreeWidgetItem
 {
@@ -33,6 +32,7 @@ protected:
 
 public:
     MapTreeWidget(QWidget *pParent = NULL);
+    inline void setMapDB(DATABASE::MapDatabasePtr pMapDB) { m_pMapDB = pMapDB; }
 
 private slots:
     void _showMapTree();
@@ -45,6 +45,9 @@ signals:
     void mapOpened(const MAP::MapPrototypePtr &map);
     void mapUpdated(const MAP::MapPrototypePtr &map);
     void mapDeleted(const MAP::MapPrototypePtr &map);
+
+private:
+    DATABASE::MapDatabasePtr m_pMapDB;
 };
 
 #endif

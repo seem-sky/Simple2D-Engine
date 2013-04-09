@@ -8,21 +8,18 @@
 
 class TransparencyWindow : public QDialog, Ui_TransparentColorDialog
 {
-    Q_OBJECT
 public:
-    TransparencyWindow(QWidget *parent, QPixmap &p_Pixmap);
+    TransparencyWindow(QWidget *parent, QPixmap &pixmap);
 
-    void ShowTexture(QPixmap &p_Pixmap);
+    void showTexture(QPixmap &p_Pixmap);
+    Color getColor() const { return m_RGBresult; }
 
 protected:
-    void resizeEvent(QResizeEvent *p_Event);
-    bool eventFilter(QObject *p_pObj, QEvent *p_pEvent);
-
-signals:
-    void ColorChosen(const Color &p_Result);
+    void resizeEvent(QResizeEvent *pEvent);
+    bool eventFilter(QObject *pObj, QEvent *pEvent);
 
 private:
     QPixmap m_Pixmap;
-    QString m_RGBresult;
+    Color m_RGBresult;
 };
 #endif

@@ -29,26 +29,28 @@ namespace MAP
     class TileMapAction : public MapAction
     {
     public:
-        TileMapAction(const Point3D<uint32> &pos, const uint32 &uiTileID, const MapPrototypePtr &map);
+        TileMapAction(const Point3D<uint32> &pos, const MapTile &uiTileID, const MapPrototypePtr &map);
 
         void revertMapAction();
 
     private:
         Point3D<uint32> m_Pos;
-        uint32 m_uiTileID;
+        MapTile m_MapTile;
     };
 
     class MultiTileMapAction : public MapAction
     {
     public:
-        MultiTileMapAction(const uint32 &uiTileID, const MapPrototypePtr &map);
+        MultiTileMapAction(const MapTile &mapTile, const MapPrototypePtr &map, const uint32 &uiLayer);
 
         void revertMapAction();
-        void addPosition(const Point3D<uint32> &pos);
+        void addPosition(const Point<uint32> &pos);
 
     private:
-        UInt32Point3DVector m_Positions;
-        uint32 m_uiTileID;
+        UInt32PointVector m_Positions;
+        uint32 m_uiLayer;
+        MapTile m_MapTile;
     };
+    typedef boost::shared_ptr<MultiTileMapAction> MultiTileMapActionPtr;
 }
 #endif

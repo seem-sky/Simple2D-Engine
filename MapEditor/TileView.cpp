@@ -4,26 +4,51 @@
 #include <QtGui/QMouseEvent>
 #include "moc_TileView.h"
 
-TileView::TileView(QWidget* pParent) : QGraphicsView(pParent)
+/*#####
+# TileViewScene
+#####*/
+void TileViewScene::drawForeground(QPainter *painter, const QRectF &rect)
 {
-    setAlignment(Qt::AlignLeft | Qt::AlignTop);
-}
-
-void TileView::mousePressEvent(QMouseEvent *pEvent)
-{
-    if (!pEvent || (pEvent->button() != Qt::LeftButton && pEvent->button() != Qt::RightButton))
+    if (!parent())
         return;
 
-    QPoint tileCoord(pEvent->x() / m_TileSize.width(), pEvent->y() / m_TileSize.height());
-    int tileID = getTile(tileCoord);
-    if (tileID != -1)
+    Point<uint32> tileCount = ((TileView*)parent())->getTileCount();
+    const Point<uint32> startTile(rect.x() <= 0 ? 0 : (uint32)rect.x() / TILE_SIZE * TILE_SIZE, rect.y() <= 0 ? 0 : (uint32)rect.y() / TILE_SIZE * TILE_SIZE);
+    const Point<uint32> endTile(qMin<uint32>(ceil(rect.width() / TILE_SIZE) + startTile.x + 1, tileCount.y) * TILE_SIZE,
+        qMin<uint32>(ceil(rect.height() / TILE_SIZE) + startTile.y + 1, tileCount.x) * TILE_SIZE);
+    QVector<QPoint> pointPairs;
+    for (uint32 x = startTile.x; x < endTile.x; x += TILE_SIZE)
     {
-        emit changeTile((uint32)tileID, (uint32)pEvent->button());
-        emit changeTile(tileCoord, m_TileSize, (uint32)pEvent->button());
+        pointPairs.push_back(QPoint(x, startTile.y));
+        pointPairs.push_back(QPoint(x, endTile.y));
     }
+    for (uint32 y = startTile.y; y < endTile.y; y += TILE_SIZE)
+    {
+        pointPairs.push_back(QPoint(startTile.x, y));
+        pointPairs.push_back(QPoint(endTile.x, y));
+    }
+    painter->drawLines(pointPairs);
 }
 
-int TileView::getTile(QPoint at) const
+/*#####
+# TileTabView
+#####*/
+TileTabView::TileTabView(QWidget* pParent) : QGraphicsView(pParent)
+{
+    setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setScene(new TileViewScene(this));
+}
+
+Point<uint32> TileTabView::getTileCount() const
+{
+    if (m_uiIDVector.empty())
+        return Point<uint32>();
+
+    return Point<uint32>(m_uiIDVector.at(0).size(), m_uiIDVector.size());
+}
+
+int TileTabView::getTile(QPoint at) const
 {
     if (at.x() < (int32)m_uiIDVector.size() && at.y() < (int32)m_uiIDVector.at(at.x()).size())
     {
@@ -34,7 +59,7 @@ int TileView::getTile(QPoint at) const
     return -1;
 }
 
-void TileView::updateTiles(const QPixmapPtrMap &pixmaps, const QSize &tileSize, const QSize &parentSize)
+void TileTabView::updateTiles(const QPixmapPtrMap &pixmaps, const QSize &tileSize, const QSize &parentSize)
 {
     if (!parent())
         return;
@@ -46,8 +71,8 @@ void TileView::updateTiles(const QPixmapPtrMap &pixmaps, const QSize &tileSize, 
     pixmap.fill();
     QPainter painter(&pixmap);
     QPoint tilePoint(0,0);
-    uint32 uiTilesPerRow = pixmapSize.width() / tileSize.width();
     m_uiIDVector.clear();
+    uint32 uiTilesPerRow = pixmapSize.width() / tileSize.width();
     m_uiIDVector.resize(uiTilesPerRow, UInt32Vector(ceil((float)pixmaps.size() / uiTilesPerRow), MAX_UINT32));
     for (QPixmapPtrMap::const_iterator itr = pixmaps.begin(); itr != pixmaps.end(); ++itr, tilePoint.setX(tilePoint.x() + tileSize.width()))
     {
@@ -65,7 +90,25 @@ void TileView::updateTiles(const QPixmapPtrMap &pixmaps, const QSize &tileSize, 
     }
 
     painter.end();
-    QGraphicsScene *pScene = new QGraphicsScene();
+    QGraphicsScene *pScene = new TileViewScene(this);
     pScene->addPixmap(pixmap);
     setScene(pScene);
+}
+
+/*#####
+# TileView
+#####*/
+void TileView::mousePressEvent(QMouseEvent *pEvent)
+{
+    if (!pEvent || (pEvent->button() != Qt::LeftButton && pEvent->button() != Qt::RightButton))
+        return;
+
+    QPoint scenePos = mapToScene(pEvent->pos()).toPoint();
+    QPoint tileCoord(scenePos.x() / getTileSize().width(), scenePos.y() / getTileSize().height());
+    int tileID = getTile(tileCoord);
+    if (tileID != -1)
+    {
+        emit changeTile((uint32)tileID, (uint32)pEvent->button(), isAutoTileView());
+        emit changeTile(tileCoord, getTileSize(), (uint32)pEvent->button());
+    }
 }

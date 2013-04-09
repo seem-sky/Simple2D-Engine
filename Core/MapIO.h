@@ -15,6 +15,7 @@ namespace MAP
     class MapReader
     {
     private:
+        void _parseTileString(const Point<uint32> &pos, std::string sTileString);
         void _loadTiles(bool &result, const std::string &sFileName = "", bool threaded = false);
         void _loadObjects(bool &result, const std::string &sFileName = "", bool threaded = false);
 

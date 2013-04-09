@@ -19,10 +19,9 @@ void Color::setColor(const std::string &p_sColorText)
     m_Blue = atoi(t_sColorBuffer.c_str());
 }
 
-void Color::getColorString(std::string &sResult) const
+std::string Color::getColorString() const
 {
     if (hasValidColor())
-        sResult = "R"+ ToString(m_Red) + "G" + ToString(m_Green) + "B" + ToString(m_Blue);
-    else
-        sResult = "";
+        return "R"+ ToString(m_Red) + "G" + ToString(m_Green) + "B" + ToString(m_Blue);
+    return "";
 }

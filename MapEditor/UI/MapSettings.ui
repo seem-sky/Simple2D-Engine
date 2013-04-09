@@ -61,7 +61,7 @@
     <string>file name:</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="m_pName">
+  <widget class="QLineEdit" name="m_pFileName">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -86,7 +86,7 @@
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QLineEdit" name="m_pAnnounceName">
+  <widget class="QLineEdit" name="m_pName">
    <property name="geometry">
     <rect>
      <x>170</x>
@@ -125,7 +125,7 @@
     </font>
    </property>
    <property name="text">
-    <string>announce name:</string>
+    <string>name:</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="m_pScriptName">
@@ -376,8 +376,8 @@
  <tabstops>
   <tabstop>m_pID</tabstop>
   <tabstop>m_pScriptName</tabstop>
+  <tabstop>m_pFileName</tabstop>
   <tabstop>m_pName</tabstop>
-  <tabstop>m_pAnnounceName</tabstop>
   <tabstop>m_pSizeX</tabstop>
   <tabstop>m_pSizeY</tabstop>
   <tabstop>m_pLayer</tabstop>

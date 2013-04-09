@@ -6,8 +6,10 @@
 #include <boost/unordered_set.hpp>
 #include <vector>
 #include <map>
-#include "Point.h"
+#include <list>
+#include "Rect.h"
 #include "math_extensions.h"
+#include <boost/dynamic_bitset.hpp>
 
 #pragma warning(disable : 4996)
 
@@ -17,6 +19,8 @@ typedef unsigned int uint32;
 typedef int int32;
 typedef unsigned short uint16;
 typedef short int16;
+typedef unsigned char uint8;
+typedef char int8;
 const uint32 MAX_UINT32 = -1;
 const uint16 MAX_UINT16 = -1;
 
@@ -51,5 +55,15 @@ typedef std::vector<Point3D<uint32>> UInt32Point3DVector;
 
 typedef std::vector<std::string> StdStringVector;
 typedef std::vector<StdStringVector> StdString2DVector;
+
+// special typedefs
+typedef std::vector<std::pair<uint32, std::string>> UIntStdStringPairVector;
+typedef std::map<uint32, std::string> UInt32StdStringMap;
+
+// rect typedefs
+typedef Rect<uint32> UInt32Rect;
+
+// bitset typedefs
+typedef std::vector<boost::dynamic_bitset<>> BitsetVector;
 
 #endif

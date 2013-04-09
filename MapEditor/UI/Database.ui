@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>585</height>
+    <width>798</width>
+    <height>587</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>798</width>
+    <height>587</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
@@ -31,27 +37,79 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>780</width>
-     <height>540</height>
+     <width>781</width>
+     <height>531</height>
     </rect>
    </property>
-   <property name="currentIndex">
-    <number>0</number>
+   <property name="minimumSize">
+    <size>
+     <width>0</width>
+     <height>0</height>
+    </size>
    </property>
-   <widget class="TextureDatabaseWindow" name="widget">
+   <property name="currentIndex">
+    <number>2</number>
+   </property>
+   <widget class="QWidget" name="widget">
     <attribute name="title">
      <string>Textures</string>
     </attribute>
+    <widget class="QTabWidget" name="m_pTextureTabs">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>761</width>
+       <height>491</height>
+      </rect>
+     </property>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="TileDatabaseWidget" name="m_pTiles">
+      <attribute name="title">
+       <string>Tiles</string>
+      </attribute>
+     </widget>
+     <widget class="AutoTileDatabaseWidget" name="m_pAutoTiles">
+      <attribute name="title">
+       <string>AutoTiles</string>
+      </attribute>
+     </widget>
+     <widget class="SpriteDatabaseWidget" name="m_pSprites">
+      <attribute name="title">
+       <string>Sprites</string>
+      </attribute>
+     </widget>
+    </widget>
    </widget>
-   <widget class="ObjectDatabaseWindow" name="Objects">
+   <widget class="QWidget" name="Objects">
     <attribute name="title">
      <string>Objects</string>
     </attribute>
    </widget>
-   <widget class="GlobalVariableDatabaseWindow" name="m_pGlobalVariables">
+   <widget class="QWidget" name="Text">
     <attribute name="title">
-     <string>Global Variables</string>
+     <string>Text</string>
     </attribute>
+    <widget class="QTabWidget" name="m_pTextTabs">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>761</width>
+       <height>491</height>
+      </rect>
+     </property>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="TextDatabaseWidget" name="m_pTexts">
+      <attribute name="title">
+       <string>Texts</string>
+      </attribute>
+     </widget>
+    </widget>
    </widget>
   </widget>
   <widget class="QPushButton" name="ButtonOK">
@@ -86,21 +144,27 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>TextureDatabaseWindow</class>
+   <class>TileDatabaseWidget</class>
    <extends>QWidget</extends>
-   <header>texturedatabasewindow.h</header>
+   <header>tiledatabasewidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>ObjectDatabaseWindow</class>
+   <class>SpriteDatabaseWidget</class>
    <extends>QWidget</extends>
-   <header>objectdatabasewindow.h</header>
+   <header>spritedatabasewidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>GlobalVariableDatabaseWindow</class>
+   <class>AutoTileDatabaseWidget</class>
    <extends>QWidget</extends>
-   <header>globalvariabledatabasewindow.h</header>
+   <header>autotiledatabasewidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>TextDatabaseWidget</class>
+   <extends>QWidget</extends>
+   <header>textdatabasewidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

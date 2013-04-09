@@ -14,7 +14,7 @@ public:
     void setColor(const std::string &sColorText);
 
     inline void getColor(int32 &red, int32 &green, int32 &blue) const { red = m_Red; green = m_Green; blue = m_Blue; }
-    void getColorString(std::string &sResult) const;
+    std::string getColorString() const;
     inline int32 getRed() const { return m_Red; }
     inline int32 getGreen() const { return m_Green; }
     inline int32 getBlue() const { return m_Blue; }

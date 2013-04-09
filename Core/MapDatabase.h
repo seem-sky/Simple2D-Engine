@@ -3,12 +3,14 @@
 
 #include "Global.h"
 #include "Point.h"
-#include "Singleton.h"
-#include "XML_Reader.h"
-#include "XML_Writer.h"
 #include <map>
-#include <boost/smart_ptr.hpp>
 #include <boost/multi_array.hpp>
+#include "DatabasePrototypes.h"
+
+namespace DATABASE
+{
+    class MapDatabaseXMLReader;
+}
 
 namespace MAP
 {
@@ -24,81 +26,104 @@ namespace MAP
     typedef std::vector<MapObjectPtr> MapObjectPtrVector;
     typedef std::vector<MapObjectPtrVector> MapObjectPtr2DVector;
 
+    struct MapTile
+    {
+        MapTile(uint32 uiTileID = 0, uint32 uiAutoTileSetID = 0) : m_uiAutoTileSetID(uiAutoTileSetID), m_uiTileID(uiTileID) {}
+        uint32 m_uiTileID;
+        uint32 m_uiAutoTileSetID;
+    };
+    typedef std::vector<MapTile> MapTileVector;
+
     // map infos
     typedef boost::multi_array<uint32, 3> UInt32Multiarray3D;
-    class MapPrototype
+    typedef boost::multi_array<MapTile, 3> TileDataMultiarray3D;
+    class MapPrototype : public DATABASE::Prototype
     {
-        friend class MapWriter;
         friend class MapReader;
+        friend class MapWriter;
         friend class MapDatabase;
+        friend class DATABASE::MapDatabaseXMLReader;
+    private:
+        inline void setFileName(const std::string &sFileName) { m_sFileName = sFileName; }
+        void _resizeMap(const Point3D<uint32> &size);
+        void _clear();
+
     public:
-        MapPrototype(uint32 uiID = 0, const std::string &sFileName = "") : m_uiID(uiID), m_sFileName(sFileName), m_uiParentID(0), m_DataLoaded(false) {}
+        MapPrototype(uint32 uiID = 0, const std::string &sFileName = "") : DATABASE::Prototype(uiID), m_sFileName(sFileName), m_uiParentID(0), m_DataLoaded(false)
+        {}
 
         inline bool hasMapDataStored() const { return m_DataLoaded; }
 
         inline std::string getFileName() const { return m_sFileName; }
-        inline std::string getAnnounceName() const { return m_sAnnounceName; }
+        inline void setScriptName(const std::string &sScriptName) { m_sScriptName = sScriptName; }
         inline std::string getScriptName() const { return m_sScriptName; }
-        inline uint32 getID() const { return m_uiID; }
+        void setSize(const Point3D<uint32> &size);
         inline Point3D<uint32> getSize() const { return m_Size; }
 
         inline uint32 getParentID() const { return m_uiParentID; }
         inline void setParentID(uint32 uiParentID) { m_uiParentID = uiParentID; }
 
-        uint32 getTile(Point3D<uint32> at) const;
-        void setTile(Point3D<uint32> at, uint32 uiID);
+        uint32 getTile(const Point3D<uint32> &at) const;
+        void setTile(const Point3D<uint32> &at, uint32 uiID);
+
+        uint32 getAutoTile(const Point3D<uint32> &at) const;
+        void setAutoTile(const Point3D<uint32> &at, uint32 uiID);
+
+        void setMapTile(const Point3D<uint32> &at, const MapTile &mapTile);
+        MapTile getMapTile(const Point3D<uint32> &at) const;
+
+        enum RESULT_FLAG
+        {
+            FLAG_NOTHING    = 0x0,
+            FLAG_SAME       = 0x1,
+            FLAG_OTHER      = 0x2,
+            FLAG_ALL        = FLAG_SAME | FLAG_OTHER
+        };
+        uint32 getPositionsAroundWithID(const uint32 &uiID, const Point3D<uint32> &pos, UInt32PointSet &result, uint32 resultFlag = FLAG_ALL);
 
     private:
         bool m_DataLoaded;
 
-        uint32 m_uiID;
         uint32 m_uiParentID;
         Point3D<uint32> m_Size;
         std::string m_sFileName;
-        std::string m_sAnnounceName;
         std::string m_sScriptName;
 
-        UInt32Multiarray3D m_MapData;
+        TileDataMultiarray3D m_MapData;
         MapObjectPtr2DVector m_Objects;
     };
     typedef boost::shared_ptr<MapPrototype> MapPrototypePtr;
+    typedef boost::shared_ptr<const MapPrototype> ConstMapPrototypePtr;
+    typedef std::vector<MapPrototypePtr> MapPrototypePtrVector;
     typedef std::map<uint32, MapPrototypePtr> MapPrototypePtrMap;
 
-    class MapDatabase : public TSingleton<MapDatabase>
+    class MapDatabase : public DATABASE::Database<MapPrototype>
     {
     private:
         void _deleteRemovedMap(const MapPrototypePtr &map, const std::string &path);
         void _createNewMap(const MapPrototypePtr &map, const std::string &path);
-        void _resizeMap(const MapPrototypePtr &map, Point3D<uint32> newSize) const;
 
     public:
         MapDatabase(void);
 
         bool removeMap(uint32 uiID);
+        void deleteRemovedMaps(const std::string &path);
 
-        void loadMapDatabase(bool &result, const std::string &path = "");
         void saveMapDatabase(bool &result, const std::string &path = "");
         void saveMapInfo(const MapPrototypePtr &map, const std::string &path = "");
-        void unloadMapDatabase();
+        void clear();
 
         bool hasMapDataStored(uint32 uiIndex) const;
         bool loadMapFile(uint32 uiMapID, const std::string &sPath = "");
         void unloadMapFile(uint32 uiMapID);
 
-        const MapPrototypePtrMap& getStoredMaps() const { return m_pMaps; }
-        bool getMap(uint32 uiID, MapPrototypePtr &result) const;
-        uint32 getFreeID() const;
+        MapPrototypePtr getNewMap();
 
-        void setMapInfo(uint32 uiID, const std::string &sMapName, const std::string &sAnnounceName, const std::string &sScriptName, const Point3D<uint32> &size);
-
-        static void getMapInfoFromXMLData(const XML::XML_ReadData &data, MapPrototypePtr &result);
-        static bool getXMLDataFromMapInfo(const MapPrototypePtr &map, XML::XML_WriteData &result);
         static bool getFilePath(const MapPrototypePtr &map, std::string &result, const std::string path = "");
         static std::string getDefaultDBPath(const std::string &path = "");
 
     private:
-        MapPrototypePtrMap m_pMaps;
-        MapPrototypePtrMap m_pRemovedMaps;
+        MapPrototypePtrVector m_RemovedMaps;
     };
 };
 #endif

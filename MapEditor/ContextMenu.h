@@ -22,33 +22,33 @@ namespace CONTEXT_MENU
         void openMapSettings();
     };
 
-    /*#####
-    # ScriptLineContextMenu
-    #####*/
-    class ScriptLineContextMenu : public QMenu
-    {
-    public:
-        ScriptLineContextMenu(QWidget *p_pParent = NULL);
-    };
+    ///*#####
+    //# ScriptLineContextMenu
+    //#####*/
+    //class ScriptLineContextMenu : public QMenu
+    //{
+    //public:
+    //    ScriptLineContextMenu(QWidget *p_pParent = NULL);
+    //};
 
-    class ScriptLineActionEdit : public QAction
-    {
-        Q_OBJECT
-    public:
-        ScriptLineActionEdit(ScriptLineContextMenu *p_pParent = NULL);
+    //class ScriptLineActionEdit : public QAction
+    //{
+    //    Q_OBJECT
+    //public:
+    //    ScriptLineActionEdit(ScriptLineContextMenu *p_pParent = NULL);
 
-    private slots:
-        void Activated();
-    };
+    //private slots:
+    //    void Activated();
+    //};
 
-    class ScriptLineActionDelete : public QAction
-    {
-        Q_OBJECT
-    public:
-        ScriptLineActionDelete(ScriptLineContextMenu *p_pParent = NULL);
+    //class ScriptLineActionDelete : public QAction
+    //{
+    //    Q_OBJECT
+    //public:
+    //    ScriptLineActionDelete(ScriptLineContextMenu *p_pParent = NULL);
 
-    private slots:
-        void Activated();
-    };
+    //private slots:
+    //    void Activated();
+    //};
 }
 #endif

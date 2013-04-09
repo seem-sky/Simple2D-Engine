@@ -5,8 +5,9 @@
 #include "Singleton.h"
 #include "StringAdditions.h"
 
-#define BASIC_LOG if(Logfile *pLog = Logfile::Get()) pLog->WriteMessage
-#define ERROR_LOG if(Logfile *pLog = Logfile::Get()) pLog->WriteErrorMessage
+// ToDo: add this in makro __FILE__ and __LINE__
+#define BASIC_LOG Logfile::Get()->WriteMessage
+#define ERROR_LOG Logfile::Get()->WriteErrorMessage
 
 class Logfile : public TSingleton<Logfile>
 {

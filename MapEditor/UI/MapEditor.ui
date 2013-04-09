@@ -197,47 +197,6 @@
     <string>map tree:</string>
    </property>
   </widget>
-  <widget class="TileTab" name="m_pTileTab">
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>130</y>
-     <width>231</width>
-     <height>201</height>
-    </rect>
-   </property>
-   <property name="currentIndex">
-    <number>0</number>
-   </property>
-   <widget class="TileView" name="m_pTiles">
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
-    </property>
-    <attribute name="title">
-     <string>Tiles</string>
-    </attribute>
-   </widget>
-   <widget class="TileView" name="m_pAutoTiles">
-    <property name="enabled">
-     <bool>false</bool>
-    </property>
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
-    </property>
-    <attribute name="title">
-     <string>AutoTiles</string>
-    </attribute>
-   </widget>
-  </widget>
   <widget class="QLabel" name="m_pRightCurrentTile">
    <property name="geometry">
     <rect>
@@ -319,6 +278,70 @@
     <property name="checked">
      <bool>false</bool>
     </property>
+   </widget>
+  </widget>
+  <widget class="QTabWidget" name="m_pMappingModeTab">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>130</y>
+     <width>231</width>
+     <height>211</height>
+    </rect>
+   </property>
+   <property name="currentIndex">
+    <number>1</number>
+   </property>
+   <widget class="QWidget" name="m_pTileMapping">
+    <attribute name="title">
+     <string>Tiles</string>
+    </attribute>
+    <widget class="TileTab" name="m_pTileTab">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>221</width>
+       <height>181</height>
+      </rect>
+     </property>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="TileView" name="m_pTiles">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <attribute name="title">
+       <string>Tiles</string>
+      </attribute>
+     </widget>
+     <widget class="TileView" name="m_pAutoTiles">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <attribute name="title">
+       <string>AutoTiles</string>
+      </attribute>
+     </widget>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="m_pObjectMapping">
+    <attribute name="title">
+     <string>Objects</string>
+    </attribute>
    </widget>
   </widget>
  </widget>

@@ -1,7 +1,6 @@
 #include "MapView.h"
 #include <QtGui/QPixmap>
 #include <QtGui/QBitmap>
-#include "DatabaseOutput.h"
 #include "moc_MapView.h"
 #include <QtGui/QPainterPath>
 #include <QtGui/QMessageBox>
@@ -24,46 +23,85 @@ void MapViewScene::drawBackground(QPainter *painter, const QRectF &rect)
     if (!parent() || !((MapViewWidget*)parent())->getMap())
         return;
 
+    MapEditor *pEditor = ((MainWindow*)((MapViewWidget*)parent())->window())->getMapEditorWidget();
+    if (!pEditor)
+        return;
     MapPrototypePtr map = ((MapViewWidget*)parent())->getMap();
     const Point<uint32> startTile(rect.x() <= 0 ? 0 : (uint32)rect.x() / TILE_SIZE, rect.y() <= 0 ? 0 : (uint32)rect.y() / TILE_SIZE);
     const Point<uint32> endTile(qMin<uint32>(ceil(rect.width() / TILE_SIZE) + startTile.x + 1, map->getSize().x),
         qMin<uint32>(ceil(rect.height() / TILE_SIZE) + startTile.y + 1, map->getSize().y));
     uint32 uiActiveLayer = ((MapViewWidget*)parent())->getActiveLayer()-1;
+    QRectF tileRect(0, 0, TILE_SIZE, TILE_SIZE);
     for (uint32 layer = 0; layer < map->getSize().z; ++layer)
     {
         // draw black rect over lower layer
         if (layer == uiActiveLayer)
             painter->fillRect(rect, QColor(0, 0, 0, 125));
-
-        UInt32Set usedIDs;
-        std::vector<std::vector<QPainter::PixmapFragment>> fragmentVector;
+        qreal opacity = layer > uiActiveLayer ? 0.5 : 1;
+        UInt32Set usedTileIDs, usedAutoTileIDs;
+        std::vector<std::vector<QPainter::PixmapFragment>> tileFragmentVector;
+        std::vector<std::map<QPixmapPtr, std::vector<QPainter::PixmapFragment>>> autoTileFragmentVector;
         for (uint32 x = startTile.x; x < endTile.x; ++x)
         {
             for (uint32 y = startTile.y; y < endTile.y; ++y)
             {
-                uint32 uiTileID = map->getTile(Point3D<uint32>(x, y, layer));
-                if (!uiTileID)      // ignore tile ID 0; transparency tile
+                MapTile tileObj = map->getMapTile(Point3D<uint32>(x, y, layer));
+                if (tileObj.m_uiTileID == 0 && tileObj.m_uiAutoTileSetID == 0)      // ignore tile ID 0; transparency tile
                     continue;
-                if (uiTileID >= fragmentVector.size())
-                    fragmentVector.resize(uiTileID+1);
-                fragmentVector.at(uiTileID).push_back(QPainter::PixmapFragment::create(QPointF(x*TILE_SIZE+(TILE_SIZE>>1), y*TILE_SIZE+(TILE_SIZE>>1)), QRectF(0, 0, TILE_SIZE, TILE_SIZE), 1, 1, 0, 
-                    layer > uiActiveLayer ? 0.5 : 1));
-                usedIDs.insert(uiTileID);
+                // is no auto tile
+                if (tileObj.m_uiAutoTileSetID == 0)
+                {
+                    if (tileObj.m_uiTileID >= tileFragmentVector.size())
+                        tileFragmentVector.resize(tileObj.m_uiTileID+1);
+                    tileFragmentVector.at(tileObj.m_uiTileID).push_back(QPainter::PixmapFragment::create(QPointF(x*TILE_SIZE+(TILE_SIZE>>1),
+                        y*TILE_SIZE+(TILE_SIZE>>1)), tileRect, 1, 1, 0, opacity));
+                    usedTileIDs.insert(tileObj.m_uiTileID);
+                }
+                // autotiles
+                else
+                {
+                    QPixmapPtr pixmapPtr;
+                    AutoTilePixmapsPtr pAutoTile;
+                    if (tileObj.m_uiAutoTileSetID >= autoTileFragmentVector.size())
+                        autoTileFragmentVector.resize(tileObj.m_uiAutoTileSetID+1);
+
+                    if ((pEditor->getAutoTilePixmaps(tileObj.m_uiAutoTileSetID, pAutoTile) || pEditor->createAutoTilePixmaps(tileObj.m_uiAutoTileSetID, pAutoTile)) &&
+                        pAutoTile->getPixmap(static_cast<DATABASE::AutoTilePrototype::AUTO_TILE_INDEX>(tileObj.m_uiTileID), pixmapPtr))
+                    {
+                        std::map<QPixmapPtr, std::vector<QPainter::PixmapFragment>>::iterator itr =
+                            autoTileFragmentVector.at(tileObj.m_uiAutoTileSetID).find(pixmapPtr);
+                        if (itr == autoTileFragmentVector.at(tileObj.m_uiAutoTileSetID).end())
+                        {
+                            autoTileFragmentVector.at(tileObj.m_uiAutoTileSetID).insert(std::make_pair(pixmapPtr, std::vector<QPainter::PixmapFragment>()));
+                            itr = autoTileFragmentVector.at(tileObj.m_uiAutoTileSetID).find(pixmapPtr);
+                        }
+                        itr->second.push_back(QPainter::PixmapFragment::create(QPointF(x*TILE_SIZE+(TILE_SIZE>>1), y*TILE_SIZE+(TILE_SIZE>>1)), tileRect, 1, 1, 0, opacity));
+                        usedAutoTileIDs.insert(tileObj.m_uiAutoTileSetID);
+                    }
+                }
             }
         }
 
         QPixmapPtr pixmapPtr;
-        for (UInt32Set::const_iterator itr = usedIDs.begin(); itr != usedIDs.end(); ++itr)
+        // draw tiles
+        for (UInt32Set::const_iterator itr = usedTileIDs.begin(); itr != usedTileIDs.end(); ++itr)
         {
-            if (((MainWindow*)((MapViewWidget*)parent())->window())->getMapEditorWidget()->getTilePixmap(*itr, pixmapPtr) && pixmapPtr)
-                painter->drawPixmapFragments(&fragmentVector.at(*itr).at(0), fragmentVector.at(*itr).size(), *pixmapPtr.get());
+            if (pEditor->getTilePixmap(*itr, pixmapPtr) && pixmapPtr)
+                painter->drawPixmapFragments(&tileFragmentVector.at(*itr).at(0), tileFragmentVector.at(*itr).size(), *pixmapPtr.get());
+        }
+        // draw autoTiles
+        for (UInt32Set::const_iterator IDitr = usedAutoTileIDs.begin(); IDitr != usedAutoTileIDs.end(); ++IDitr)
+        {
+            for (std::map<QPixmapPtr, std::vector<QPainter::PixmapFragment>>::const_iterator itr = autoTileFragmentVector.at(*IDitr).begin();
+                itr != autoTileFragmentVector.at(*IDitr).end(); ++itr)
+                painter->drawPixmapFragments(&itr->second.at(0), itr->second.size(), *(itr->first.get()));
         }
     }
 }
 
 void MapViewScene::drawForeground(QPainter *painter, const QRectF &rect)
 {
-    if (!parent() || !((MapViewWidget*)parent())->getMap())
+    if (!parent() || !((MapViewWidget*)parent())->showGrid() || !((MapViewWidget*)parent())->getMap())
         return;
 
     MapPrototypePtr map = ((MapViewWidget*)parent())->getMap();
@@ -93,6 +131,7 @@ m_hasChanges(false)
     setupUi(this);
     connect(m_pZoom, SIGNAL(valueChanged(int)), this, SLOT(_changeZoom(int)));
     connect(m_pCurLayer, SIGNAL(valueChanged(int)), this, SLOT(_changeCurLayer(int)));
+    connect(m_pShowGrid, SIGNAL(stateChanged(int)), this, SLOT(_showGridChanged(int)));
     connect(m_pRevert, SIGNAL(clicked (bool)), this, SLOT(_revertAction(bool)));
     m_ModObj.setWidget(m_pView, MODIFY_RESIZE);
     m_pView->viewport()->installEventFilter(this);
@@ -131,6 +170,11 @@ bool MapViewWidget::eventFilter(QObject *pObj, QEvent *pEvent)
 }
 
 void MapViewWidget::_changeCurLayer(int layer)
+{
+    _updateMap();
+}
+
+void MapViewWidget::_showGridChanged(int state)
 {
     _updateMap();
 }
@@ -195,7 +239,7 @@ void MapViewWidget::updateText()
     if (!m_pMap)
         return;
 
-    QString sTabName(QString::fromStdString(m_pMap->getAnnounceName()));
+    QString sTabName(QString::fromStdString(m_pMap->getName()));
     if (hasChanged())
         sTabName.append('*');
 
@@ -225,14 +269,15 @@ void MapTabWidget::_addMapTab(const MapPrototypePtr &map)
     MapViewWidget *pWidget = getTabWithMap(map);
     if (!pWidget)
     {
-        MapDatabase::Get()->loadMapFile(map->getID(), Config::Get()->getProjectDirectory());
+        if (m_pMapDB)
+            m_pMapDB->loadMapFile(map->getID(), Config::Get()->getProjectDirectory());
         pWidget = new MapViewWidget(map, this);
         addTab(pWidget, "");
         connect(this, SIGNAL(changedZoom(uint32)), pWidget, SLOT(_changeZoom(uint32)));
         connect(pWidget, SIGNAL(brushPressed(MapViewWidget*, Point3D<uint32>, uint32)), parent(), SLOT(_pressBrush(MapViewWidget*, Point3D<uint32>, uint32)));
         connect(pWidget, SIGNAL(brushReleased(MapViewWidget*, Point3D<uint32>, uint32)), parent(), SLOT(_releaseBrush(MapViewWidget*, Point3D<uint32>, uint32)));
         connect(pWidget, SIGNAL(brushMoved(MapViewWidget*, Point3D<uint32>)), parent(), SLOT(_moveBrush(MapViewWidget*, Point3D<uint32>)));
-        connect(pWidget, SIGNAL(textUpdated(MapViewWidget*, QString)), this, SLOT(_updateTabText(MapViewWidget*, QString)));
+        connect(pWidget, SIGNAL(textUpdated(MapViewWidget*, const QString&)), this, SLOT(_updateTabText(MapViewWidget*, const QString&)));
         pWidget->updateText();
         Config::Get()->addOpenMap(map->getID());
     }
@@ -273,15 +318,16 @@ void MapTabWidget::_closeTab(int index)
             {
             case QMessageBox::Yes:
                 pTab->saveCurrentMap();
-                MapDatabase::Get()->saveMapInfo(pTab->getMap(), Config::Get()->getProjectDirectory());
+                if (m_pMapDB)
+                    m_pMapDB->saveMapInfo(pTab->getMap(), Config::Get()->getProjectDirectory());
                 break;
             case QMessageBox::Cancel: return;
             }
         }
 
         // unload map from memory
-        if (MAP::MapDatabase *pMapDB = MAP::MapDatabase::Get())
-            pMapDB->unloadMapFile(pTab->getMap()->getID());
+        if (m_pMapDB)
+            m_pMapDB->unloadMapFile(pTab->getMap()->getID());
         Config::Get()->removeOpenMap(pTab->getMap()->getID());
         removeTab(index);
     }

@@ -15,8 +15,8 @@ void MapSettings::updateWidgets()
         return;
 
     m_pID->setValue(m_pMap->getID());
-    m_pName->setText(QString::fromStdString(m_pMap->getFileName()));
-    m_pAnnounceName->setText(QString::fromStdString(m_pMap->getAnnounceName()));
+    m_pFileName->setText(QString::fromStdString(m_pMap->getFileName()));
+    m_pName->setText(QString::fromStdString(m_pMap->getName()));
     m_pScriptName->setText(QString::fromStdString(m_pMap->getScriptName()));
     m_pSizeX->setValue(m_pMap->getSize().x);
     m_pSizeY->setValue(m_pMap->getSize().y);
@@ -27,8 +27,7 @@ void MapSettings::_accepted()
 {
     if (!m_pMap)
         return;
-
-    if (MAP::MapDatabase *pMapDB = MAP::MapDatabase::Get())
-        pMapDB->setMapInfo(m_pMap->getID(), m_pName->text().toStdString(), m_pAnnounceName->text().toStdString(), m_pScriptName->text().toStdString(),
-        Point3D<uint32>(m_pSizeX->value(), m_pSizeY->value(), m_pLayer->value()));
+    m_pMap->setName(m_pName->text().toStdString());
+    m_pMap->setScriptName(m_pScriptName->text().toStdString());
+    m_pMap->setSize(Point3D<uint32>(m_pSizeX->value(), m_pSizeY->value(), m_pLayer->value()));
 }

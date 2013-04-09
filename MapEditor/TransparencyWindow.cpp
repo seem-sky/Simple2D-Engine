@@ -1,47 +1,44 @@
 #include "TransparencyWindow.h"
-#include "moc_TransparencyWindow.h"
-#include <Logfile.h>
 
-TransparencyWindow::TransparencyWindow(QWidget *parent, QPixmap &p_Pixmap) : QDialog(parent), Ui_TransparentColorDialog()
+TransparencyWindow::TransparencyWindow(QWidget *parent, QPixmap &pixmap) : QDialog(parent), Ui_TransparentColorDialog()
 {
     setupUi(this);
-    ShowTexture(p_Pixmap);
+    showTexture(pixmap);
     m_pPic->installEventFilter(this);
 }
 
-void TransparencyWindow::resizeEvent(QResizeEvent *p_Event)
+void TransparencyWindow::resizeEvent(QResizeEvent *pEvent)
 {
     m_pPic->resize(m_Pixmap.size());
 }
 
-void TransparencyWindow::ShowTexture(QPixmap &p_Pixmap)
+void TransparencyWindow::showTexture(QPixmap &pixmap)
 {
-    m_Pixmap = p_Pixmap;
-    QSize t_Size = m_Pixmap.size();
-    setFixedSize(t_Size);
-    m_pPic->setPixmap(p_Pixmap);
+    m_Pixmap = pixmap;
+    QSize size = m_Pixmap.size();
+    setFixedSize(size);
+    m_pPic->setPixmap(pixmap);
 }
 
-bool TransparencyWindow::eventFilter(QObject *p_pObj, QEvent *p_pEvent)
+bool TransparencyWindow::eventFilter(QObject *pObj, QEvent *pEvent)
 {
-    if (p_pObj == m_pPic && p_pEvent->type() == QEvent::MouseButtonPress)
+    if (pObj && pEvent && pObj == m_pPic && pEvent->type() == QEvent::MouseButtonPress)
     {
-        if (QMouseEvent* t_pEvent = (QMouseEvent*)p_pEvent)
+        if (QMouseEvent* pMouseEvent = (QMouseEvent*)pEvent)
         {
-            if (t_pEvent->button() == Qt::LeftButton)
+            if (pMouseEvent->button() == Qt::LeftButton)
             {
-                QPoint t_MouseCoord = t_pEvent->pos();
-                QImage t_Image = m_Pixmap.toImage();
-                QColor t_Color(t_Image.pixel(t_MouseCoord));
-                Color t_TmpColor(t_Color.red(), t_Color.green(), t_Color.blue());
-                emit ColorChosen(t_TmpColor);
-                close();
+                QPoint mouseCoord = pMouseEvent->pos();
+                QImage image = m_Pixmap.toImage();
+                QColor color(image.pixel(mouseCoord));
+                m_RGBresult = Color(color.red(), color.green(), color.blue());
+                accept();
                 return true;
             }
         }
     }
     else // pass the event on to the parent class
-        return QDialog::eventFilter(p_pObj, p_pEvent);
+        return QDialog::eventFilter(pObj, pEvent);
 
     return false;
 }

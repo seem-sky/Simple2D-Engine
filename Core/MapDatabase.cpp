@@ -4,117 +4,203 @@
 #include "MapIO.h"
 
 using namespace MAP;
+using namespace DATABASE;
 
-uint32 MapPrototype::getTile(Point3D<uint32> at) const
+uint32 MapPrototype::getPositionsAroundWithID(const uint32 &uiID, const Point3D<uint32> &pos, UInt32PointSet &result, uint32 resultFlag)
+{
+    uint32 uiBorderCheck = 0;
+    MapTile centerTile = getMapTile(pos);
+    for (uint32 i = 0; i < 8; ++i)
+    {
+        DATABASE::AutoTilePrototype::TILE_CHECK curTileCheck = DATABASE::AutoTilePrototype::SAME_AROUND;
+        // set position check
+        Point3D<uint32> checkPos = pos;
+        switch (i)
+        {
+        case 0: // top-left
+            if (!checkPos.x || !checkPos.y)
+                continue;
+            --checkPos.x;
+            --checkPos.y;
+            curTileCheck = DATABASE::AutoTilePrototype::OTHER_TOP_LEFT;
+            break;
+
+        case 1: // top
+            if (!checkPos.y)
+                continue;
+            --checkPos.y;
+            curTileCheck = DATABASE::AutoTilePrototype::OTHER_TOP;
+            break;
+
+        case 2: // top-right
+            if (!checkPos.y || checkPos.x+1 >= getSize().x)
+                continue;
+            ++checkPos.x;
+            --checkPos.y;
+            curTileCheck = DATABASE::AutoTilePrototype::OTHER_TOP_RIGHT;
+            break;
+
+        case 3: // left
+            if (!checkPos.x)
+                continue;
+            --checkPos.x;
+            curTileCheck = DATABASE::AutoTilePrototype::OTHER_LEFT;
+            break;
+
+        case 4: // right
+            if (checkPos.x+1 >= getSize().x)
+                continue;
+            ++checkPos.x;
+            curTileCheck = DATABASE::AutoTilePrototype::OTHER_RIGHT;
+            break;
+
+        case 5: // bottom-left
+            if (!checkPos.x || checkPos.y+1 >= getSize().y)
+                continue;
+            --checkPos.x;
+            ++checkPos.y;
+            curTileCheck = DATABASE::AutoTilePrototype::OTHER_BOTTOM_LEFT;
+            break;
+
+        case 6: // bottom
+            if (checkPos.y+1 >= getSize().y)
+                continue;
+            ++checkPos.y;
+            curTileCheck = DATABASE::AutoTilePrototype::OTHER_BOTTOM;
+            break;
+
+        case 7: // bottom-right
+            if (checkPos.x+1 >= getSize().x || checkPos.y+1 >= getSize().y)
+                continue;
+            ++checkPos.x;
+            ++checkPos.y;
+            curTileCheck = DATABASE::AutoTilePrototype::OTHER_BOTTOM_RIGHT;
+            break;
+        }
+        MapTile mapTile = getMapTile(checkPos);
+        // if bad object, continue
+        if (mapTile.m_uiAutoTileSetID == MAX_UINT32 || mapTile.m_uiTileID == MAX_UINT32)
+            continue;
+
+        // if not same
+        if (mapTile.m_uiAutoTileSetID != uiID)
+        {
+            uiBorderCheck += curTileCheck;
+            if (resultFlag & FLAG_OTHER)
+                result.insert(checkPos);
+        }
+        // if same
+        else if (resultFlag & FLAG_SAME)
+            result.insert(checkPos);
+    }
+    return uiBorderCheck;
+}
+
+void MapPrototype::_resizeMap(const Point3D<uint32> &size)
+{
+    m_MapData.resize(boost::extents[size.x][size.y][size.z]);
+}
+
+void MapPrototype::_clear()
+{
+    m_MapData.resize(boost::extents[0][0][0]);
+}
+
+void MapPrototype::setSize(const Point3D<uint32> &size)
+{
+    if (size != getSize())
+    {
+        if (hasMapDataStored())
+            _resizeMap(size);
+        m_Size = size;
+    }
+}
+
+uint32 MapPrototype::getTile(const Point3D<uint32> &at) const
 {
     if (!hasMapDataStored() || at.x >= m_Size.x || at.y >= m_Size.y || at.z >= m_Size.z)
         return MAX_UINT32;
 
-    return m_MapData[at.x][at.y][at.z];
+    return m_MapData[at.x][at.y][at.z].m_uiTileID;
 }
 
-void MapPrototype::setTile(Point3D<uint32> at, uint32 uiID)
+void MapPrototype::setTile(const Point3D<uint32> &at, uint32 uiID)
 {
     if (!hasMapDataStored() || at.x >= m_Size.x || at.y >= m_Size.y || at.z >= m_Size.z)
         return;
-    m_MapData[at.x][at.y][at.z] = uiID;
+    m_MapData[at.x][at.y][at.z].m_uiTileID = uiID;
 }
 
-MapDatabase::MapDatabase(void) : TSingleton()
+uint32 MapPrototype::getAutoTile(const Point3D<uint32> &at) const
+{
+    if (!hasMapDataStored() || at.x >= m_Size.x || at.y >= m_Size.y || at.z >= m_Size.z)
+        return MAX_UINT32;
+
+    return m_MapData[at.x][at.y][at.z].m_uiAutoTileSetID;
+}
+
+void MapPrototype::setAutoTile(const Point3D<uint32> &at, uint32 uiID)
+{
+    if (!hasMapDataStored() || at.x >= m_Size.x || at.y >= m_Size.y || at.z >= m_Size.z)
+        return;
+    m_MapData[at.x][at.y][at.z].m_uiAutoTileSetID = uiID;
+}
+
+void MapPrototype::setMapTile(const Point3D<uint32> &at, const MapTile &mapTile)
+{
+    if (!hasMapDataStored() || at.x >= m_Size.x || at.y >= m_Size.y || at.z >= m_Size.z)
+        return;
+    m_MapData[at.x][at.y][at.z] = mapTile;
+}
+
+MapTile MapPrototype::getMapTile(const Point3D<uint32> &at) const
+{
+    if (!hasMapDataStored() || at.x >= m_Size.x || at.y >= m_Size.y || at.z >= m_Size.z)
+        return MapTile(MAX_UINT32, MAX_UINT32);
+    return m_MapData[at.x][at.y][at.z];
+}
+
+MapDatabase::MapDatabase(void) : Database()
 {
 }
 
-void MapDatabase::unloadMapDatabase()
+void MapDatabase::clear()
 {
-    m_pMaps.clear();
-    m_pRemovedMaps.clear();
+    Database::clear();
+    m_RemovedMaps.clear();
 }
 
 bool MapDatabase::hasMapDataStored(uint32 uiIndex) const
 {
-    MapPrototypePtrMap::const_iterator itr = m_pMaps.find(uiIndex);
-    if (itr != m_pMaps.end() && itr->second)
-        return itr->second->hasMapDataStored();
+    ConstMapPrototypePtr pMap;
+    if (getPrototype(uiIndex, pMap) && pMap && pMap->hasMapDataStored())
+        return true;
     return false;
-}
-
-void MapDatabase::loadMapDatabase(bool &result, const std::string &sPath)
-{
-    result = false;
-    m_pMaps.clear();
-    XML::XML_Reader reader(getDefaultDBPath(sPath).c_str());
-    if (!reader.ReadFile())
-        return;
-
-    XML::ReadChildList childList = reader.GetXMLData();
-    XML::ReadChildList::iterator mapDBitr = childList.find("MapDatabase");
-    if (mapDBitr == childList.end())
-        return;
-
-    MapPrototypePtr newMap;
-    for (XML::ReadChildList::const_iterator itr = mapDBitr->second.GetChildList()->find("Map"); itr != mapDBitr->second.GetChildList()->end() &&
-        itr->first == "Map"; ++itr)
-    {
-        newMap = MapPrototypePtr(new MapPrototype());
-        // get map attributes
-        getMapInfoFromXMLData(itr->second, newMap);
-        m_pMaps.insert(std::make_pair(newMap->m_uiID, newMap));
-    }
-
-    result = true;
 }
 
 void MapDatabase::saveMapInfo(const MapPrototypePtr &map, const std::string &path)
 {
-    XML::XML_WriteData xmlMapDB(XML::XML_WRITE_ADD);
-    // get map
-    XML::XML_WriteData newMap(XML::XML_WRITE_OVERWRITE);
-    MapPrototypePtrMap::const_iterator itr = m_pMaps.find(map->getID());
-    if (itr == m_pMaps.end() || !getXMLDataFromMapInfo(itr->second, newMap))
-        return;
+    //XML::XML_WriteData xmlMapDB(XML::XML_WRITE_ADD);
+    //// get map
+    //XML::XML_WriteData newMap(XML::XML_WRITE_OVERWRITE);
+    //if (!getXMLDataFromMapInfo(map, newMap))
+    //    return;
 
-    xmlMapDB.AddChild("Map", newMap);
-    XML::XML_WriteData xmlFile(XML::XML_WRITE_OVERWRITE);
-    xmlFile.AddChild("MapDatabase", xmlMapDB);
+    //xmlMapDB.AddChild("Map", newMap);
+    //XML::XML_WriteData xmlFile(XML::XML_WRITE_OVERWRITE);
+    //xmlFile.AddChild("MapDatabase", xmlMapDB);
 
-    XML::XML_Writer writer;
-    std::string sFilePath;
-    getFilePath(map, sFilePath, path);
-    writer.startWriting(sFilePath, xmlFile);
+    //XML::XML_Writer writer;
+    //std::string sFilePath;
+    //getFilePath(map, sFilePath, path);
+    //writer.startWriting(sFilePath, xmlFile);
 }
 
-void MapDatabase::saveMapDatabase(bool &result, const std::string &path)
+void MapDatabase::deleteRemovedMaps(const std::string &path)
 {
-    result = false;
-    XML::XML_WriteData xmlMapDB(XML::XML_WRITE_ADD);
-    // get maps
-    for (MapPrototypePtrMap::const_iterator itr = m_pMaps.begin(); itr != m_pMaps.end(); ++itr)
-    {
-        XML::XML_WriteData newMap(XML::XML_WRITE_ADD);
-        if (!getXMLDataFromMapInfo(itr->second, newMap))
-            continue;
-
-        xmlMapDB.AddChild("Map", newMap);
-    }
-
-    // get removed maps
-    for (MapPrototypePtrMap::const_iterator itr = m_pRemovedMaps.begin(); itr != m_pRemovedMaps.end(); ++itr)
-    {
-        XML::XML_WriteData removedMap(XML::XML_WRITE_DELETE);
-        if (!getXMLDataFromMapInfo(itr->second, removedMap))
-            continue;
-
-        _deleteRemovedMap(itr->second, path);
-        xmlMapDB.AddChild("Map", removedMap);
-    }
-    m_pRemovedMaps.clear();
-
-    XML::XML_WriteData xmlFile(XML::XML_WRITE_OVERWRITE);
-    xmlFile.AddChild("MapDatabase", xmlMapDB);
-
-    XML::XML_Writer writer;
-    if (writer.startWriting(getDefaultDBPath(path), xmlFile))
-        result = true;
+    for (uint32 i = 0; i < m_RemovedMaps.size(); ++i)
+        _deleteRemovedMap(m_RemovedMaps.at(i), path);
+    m_RemovedMaps.clear();
 }
 
 void MapDatabase::_deleteRemovedMap(const MapPrototypePtr &map, const std::string &path)
@@ -123,132 +209,35 @@ void MapDatabase::_deleteRemovedMap(const MapPrototypePtr &map, const std::strin
         boost::filesystem::remove_all(path + "/Maps/" + map->getFileName());
 }
 
-bool MapDatabase::getXMLDataFromMapInfo(const MapPrototypePtr &map, XML::XML_WriteData &result)
+bool MapDatabase::removeMap(uint32 uiID)
 {
-    if (!map)
+    MapPrototypePtr pMap;
+    if (!getPrototype(uiID, pMap))
         return false;
-
-    result.AddAttribute("File", map->getFileName().c_str());
-    result.AddAttribute("MapAnnounceName", map->getAnnounceName().c_str());
-    result.AddAttribute("MapScript", map->getScriptName().c_str());
-    result.AddAttribute("ID", map->getID());
-    result.AddAttribute("ParentID", map->getParentID());
-    result.AddAttribute("MapSizeX", map->getSize().x);
-    result.AddAttribute("MapSizeY", map->getSize().y);
-    result.AddAttribute("Layer", map->getSize().z);
+    m_RemovedMaps.push_back(pMap);
+    setPrototype(uiID, MapPrototypePtr());
     return true;
 }
 
-void MapDatabase::getMapInfoFromXMLData(const XML::XML_ReadData &data, MapPrototypePtr &result)
+MapPrototypePtr MapDatabase::getNewMap()
 {
-    for (XML::AttributeMap::const_iterator attrItr = data.GetAttributeList()->begin(); attrItr != data.GetAttributeList()->end(); ++attrItr)
+    MapPrototypePtr pMap;
+    uint32 i = 0;
+    for (; i < getDBSize(); ++i)
     {
-        if ("File" == attrItr->first)
-        {
-            result->m_sFileName = _bstr_t(attrItr->second.bstrVal);
-            continue;
-        }
-        else if ("MapAnnounceName" == attrItr->first)
-        {
-            result->m_sAnnounceName = _bstr_t(attrItr->second.bstrVal);
-            continue;
-        }
-        else if ("MapScript" == attrItr->first)
-        {
-            result->m_sScriptName = _bstr_t(attrItr->second.bstrVal);
-            continue;
-        }
-
-        CComVariant value = attrItr->second;
-        if (FAILED(value.ChangeType(VT_UINT)))
-            continue;
-        if ("ID" == attrItr->first)
-            result->m_uiID = value.uintVal;
-        if ("ParentID" == attrItr->first)
-            result->m_uiParentID = value.uintVal;
-        if ("MapSizeX" == attrItr->first)
-            result->m_Size.x = value.uintVal;
-        if ("MapSizeY" == attrItr->first)
-            result->m_Size.y = value.uintVal;
-        if ("Layer" == attrItr->first)
-            result->m_Size.z = value.uintVal;
+        if (!getPrototype(i+1, pMap) || !pMap)
+            break;
     }
-
-    if (result->m_uiID == result->m_uiParentID)
-        result->m_uiParentID = 0;
-}
-
-bool MapDatabase::removeMap(uint32 uiID)
-{
-    MapPrototypePtrMap::iterator itr = m_pMaps.find(uiID);
-    if (itr != m_pMaps.end())
-    {
-        m_pRemovedMaps.insert(std::make_pair(itr->first, itr->second));
-        m_pMaps.erase(itr);
-        return true;
-    }
-
-    return false;
-}
-
-void MapDatabase::_resizeMap(const MapPrototypePtr &map, Point3D<uint32> newSize) const
-{
-    if (!map)
-        return;
-    if (map->m_DataLoaded)
-        map->m_MapData.resize(boost::extents[newSize.x][newSize.y][newSize.z]);
-    map->m_Size = newSize;
-}
-
-void MapDatabase::setMapInfo(uint32 uiID, const std::string &sMapName, const std::string &sAnnounceName, const std::string &sScriptName, const Point3D<uint32> &size)
-{
-    if (!uiID)
-        return;
-
-    MapPrototypePtrMap::iterator itr = m_pMaps.find(uiID);
-    if (itr != m_pMaps.end())
-    {
-        itr->second->m_sFileName = sMapName;
-        itr->second->m_sAnnounceName = sAnnounceName;
-        itr->second->m_sScriptName = sScriptName;
-        if (itr->second->m_Size != size)
-            _resizeMap(itr->second, size);
-    }
-    else
-    {
-        MapPrototypePtr newMap(new MapPrototype(uiID, sMapName));
-        newMap->m_sAnnounceName = sAnnounceName;
-        newMap->m_sScriptName = sScriptName;
-        newMap->m_Size = size;
-        m_pMaps.insert(std::make_pair(uiID, newMap));
-    }
-}
-
-uint32 MapDatabase::getFreeID() const
-{
-    if (m_pMaps.empty())
-        return 1;
-
-    MapPrototypePtrMap::const_iterator itr = --(m_pMaps.end());
-    return itr->first+1;
-}
-
-bool MapDatabase::getMap(uint32 uiID, MapPrototypePtr &result) const
-{
-    MapPrototypePtrMap::const_iterator itr = m_pMaps.find(uiID);
-    if (itr != m_pMaps.end())
-    {
-        result = itr->second;
-        return true;
-    }
-
-    return false;
+    // add new map
+    pMap = MapPrototypePtr(new MapPrototype(i+1, "map" + ToString(i+1) + ".xml"));
+    setPrototype(i+1, pMap);
+    return pMap;
 }
 
 bool MapDatabase::loadMapFile(uint32 uiMapID, const std::string &sPath)
 {
     MapPrototypePtr map;
-    if (!getMap(uiMapID, map))
+    if (!getPrototype(uiMapID, map))
         return false;
 
     if (map->m_DataLoaded)
@@ -266,18 +255,18 @@ bool MapDatabase::loadMapFile(uint32 uiMapID, const std::string &sPath)
     }
 
     map->m_DataLoaded = true;
-    _resizeMap(map, map->getSize());
+    map->_resizeMap(map->getSize());
     return true;
 }
 
 void MapDatabase::unloadMapFile(uint32 uiMapID)
 {
     MapPrototypePtr map;
-    if (!getMap(uiMapID, map))
+    if (!getPrototype(uiMapID, map))
         return;
 
     map->m_DataLoaded = false;
-    map->m_MapData.resize(boost::extents[0][0][0]);
+    map->_resizeMap(Point3D<uint32>());
     map->m_Objects.clear();
 }
 

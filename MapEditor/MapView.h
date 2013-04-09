@@ -10,6 +10,7 @@
 #include <QtGui/QGraphicsPathItem>
 #include <boost/multi_array.hpp>
 #include "MapAction.h"
+#include "DatabaseMgr.h"
 
 class MapViewWidget;
 
@@ -57,10 +58,13 @@ public:
 
     void addAction(MAP::MapActionPtr pAction);
 
+    inline bool showGrid() const { return m_pShowGrid->isChecked(); }
+
 private slots:
     void _changeZoom(int zoom);
     void _changeCurLayer(int layer);
     void _revertAction(bool);
+    void _showGridChanged(int state);
 
 signals:
     void brushPressed(MapViewWidget *pWidget, Point3D<uint32> point, uint32 uiButton);
@@ -90,16 +94,18 @@ public:
 
     bool isMapOpened(const MAP::MapPrototypePtr &map) const;
     MapViewWidget* getTabWithMap(const MAP::MapPrototypePtr &map) const;
+    inline void setMapDatabase(DATABASE::MapDatabasePtr pMapDB) { m_pMapDB = pMapDB; }
 
 public slots:
     void _addMapTab(const MAP::MapPrototypePtr &map);
+    void _closeTab(int index);
 
 private slots:
     void _updateMap(const MAP::MapPrototypePtr &map);
     void _closeMap(const MAP::MapPrototypePtr &map);
-    void _updateTabText(MapViewWidget *pWidget, QString sTabName);
-
-public slots:
-    void _closeTab(int index);
+    void _updateTabText(MapViewWidget *pWidget, const QString &sTabName);
+    
+private:
+    DATABASE::MapDatabasePtr m_pMapDB;
 };
 #endif

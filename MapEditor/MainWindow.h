@@ -6,6 +6,7 @@
 #include "Point.h"
 #include "MapDatabase.h"
 #include "Config.h"
+#include "DatabaseIO.h"
 
 enum WindowAction
 {
@@ -23,7 +24,6 @@ private slots:
     void _loadProject();
     void _saveProject();
     void _closeProject();
-    void _customUpdate();
 
 signals:
     void WindowActionDone();
@@ -31,8 +31,9 @@ signals:
     void projectSave();
 
 private:
-    bool _loadDB();
+    bool _loadDB(const std::string &projectPath);
     bool _loadProject(const std::string &sDir);
+    void _setDBs();
 
 protected:
     void resizeEvent(QResizeEvent *pEvent);
@@ -42,18 +43,12 @@ public:
     MainWindow(QMainWindow *parent = 0);
     ~MainWindow(void);
 
-    inline void setNewTimer(QTimer *pTimer)
-    {
-        if (pTimer)
-            m_pTimer = pTimer;
-    }
-
     inline void setWindowAction(WindowAction action) { m_WindowAction = action; }
     inline MapEditor* getMapEditorWidget() const { return m_pMapEditor; }
 
 private:
     ModifyObject m_ModifyObj;
     WindowAction m_WindowAction;
-    QTimer *m_pTimer;
+    DATABASE::DatabaseMgrPtr m_pDBMgr;
 };
 #endif

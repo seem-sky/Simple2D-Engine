@@ -6,8 +6,11 @@
 #include "MapSettings.h"
 #include "Config.h"
 #include <QtGui/QMessageBox>
+#include "StringAdditions.h"
+#include "MainWindow.h"
 
 using namespace MAP;
+using namespace DATABASE;
 
 /*#####
 # MapTreeItem
@@ -23,7 +26,7 @@ void MapTreeItem::updateMapText()
         return;
 
     setText(0, QString::number(m_pMap->getID()));
-    setText(1, QString::fromStdString(m_pMap->getAnnounceName()));
+    setText(1, QString::fromStdString(m_pMap->getName()));
 }
 
 bool MapTreeItem::operator <(const QTreeWidgetItem &other) const  
@@ -50,31 +53,35 @@ void MapTreeWidget::_openMapSettingsDialog()
     if (MapTreeItem *pItem = (MapTreeItem*)currentItem())
     {
         Point3D<uint32> oldSize = pItem->getMap()->getSize();
-        MapSettings dialog(pItem->getMap(), this);
-        if (dialog.exec())
+        if (MainWindow *pMainWindow = static_cast<MainWindow*>(window()))
         {
-            pItem->updateMapText();
-            emit mapUpdated(pItem->getMap());
+            if (MapEditor *pMapEditor = pMainWindow->getMapEditorWidget())
+            {
+                if (DatabaseMgrPtr pDBMgr = pMapEditor->getDBMgr())
+                {
+                    MapSettings dialog(pItem->getMap(), this);
+                    if (dialog.exec())
+                    {
+                        pItem->updateMapText();
+                        emit mapUpdated(pItem->getMap());
+                    }
+                }
+            }
         }
     }    
 }
 
 void MapTreeWidget::_newMap()
 {
-    MapDatabase *pMapDB = MapDatabase::Get();
-    if (!pMapDB)
+    if (!m_pMapDB)
         return;
 
-    uint32 uiID = pMapDB->getFreeID();
-    MapPrototypePtr newMap(new MapPrototype(uiID, "map" + ToString(uiID) + ".xml"));
+    MapPrototypePtr newMap = m_pMapDB->getNewMap();
     MapSettings dialog(newMap, this);
     if (dialog.exec())
     {
-        MapPrototypePtr ptr;
-        if (!pMapDB->getMap(newMap->getID(), ptr))
-            return;
-
-        addTopLevelItem(new MapTreeItem(ptr));
+        m_pMapDB->setPrototype(newMap->getID(), newMap);
+        addTopLevelItem(new MapTreeItem(newMap));
     }
 }
 
@@ -94,10 +101,7 @@ void MapTreeWidget::_deleteMap()
 void MapTreeWidget::_openMap()
 {
     if (MapTreeItem *pItem = (MapTreeItem*)currentItem())
-    {
-        if (MapDatabase *pMapDB = MapDatabase::Get())
-            emit mapOpened(pItem->getMap());
-    }
+        emit mapOpened(pItem->getMap());
 }
 
 void MapTreeWidget::_removeItem(MapTreeItem *pItem)
@@ -108,8 +112,8 @@ void MapTreeWidget::_removeItem(MapTreeItem *pItem)
     while (pItem->childCount())
         _removeItem((MapTreeItem*)pItem->child(0));
 
-    if (MapDatabase *pMapDB = MapDatabase::Get())
-        pMapDB->removeMap(pItem->getMap()->getID());
+    if (m_pMapDB)
+        m_pMapDB->removeMap(pItem->getMap()->getID());
 
     if (pItem->parent())
         pItem->parent()->removeChild(pItem);
@@ -134,21 +138,23 @@ void MapTreeWidget::_openWidgetContextMenu(const QPoint &pos)
 void MapTreeWidget::_showMapTree()
 {
     clear();
-    MapDatabase *pMapDB = MapDatabase::Get();
-    if (!pMapDB)
+    if (!m_pMapDB)
         return;
 
     typedef std::map<uint32/*ID*/, MapTreeItem*> MapItemMap;
     typedef std::vector<MapTreeItem*> MapItemVector;
     MapItemMap mapItems;
     MapItemVector notSortedMaps;
-    for (MapPrototypePtrMap::const_iterator itr = pMapDB->getStoredMaps().begin(); itr != pMapDB->getStoredMaps().end(); ++itr)
+    MapPrototypePtr pMap;
+    for (uint32 i = 1; i < m_pMapDB->getDBSize()+1; ++i)
     {
-        MapTreeItem *newItem = new MapTreeItem(itr->second);
-        mapItems.insert(std::make_pair(itr->second->getID(), newItem));
-        if (itr->second->getParentID() != 0)
+        if (!m_pMapDB->getPrototype(i, pMap) || !pMap)
+            continue;
+        MapTreeItem *newItem = new MapTreeItem(pMap);
+        mapItems.insert(std::make_pair(pMap->getID(), newItem));
+        if (pMap->getParentID() != 0)
         {
-            MapItemMap::iterator mapItr = mapItems.find(itr->second->getParentID());
+            MapItemMap::iterator mapItr = mapItems.find(pMap->getParentID());
             if (mapItr != mapItems.end())
                 mapItr->second->addChild(newItem);
             else

@@ -1,5 +1,4 @@
 #include "TileTab.h"
-#include "Database.h"
 #include "Config.h"
 #include "moc_TileTab.h"
 #include <QTGui/QBitmap>
@@ -17,13 +16,11 @@ void TileTab::clearTiles()
 
 void TileTab::fillTiles(QPixmapPtrVector &pixmapCache)
 {
-    pixmapCache.clear();
-    const SpritePrototypeMap* pTileMap = Database::Get()->GetTexturePrototypes("Tiles");
     // get tile widget
     TileView *pTileView = static_cast<TileView*>(widget(0));
     // get autotile widget
     TileView *pAutoTileView = static_cast<TileView*>(widget(1));
-    if (!pTileMap || !pTileView || !pAutoTileView)
+    if (!m_pTileDB || !pTileView || !pAutoTileView)
         return;
 
     QPixmapPtrMap tileMap, autoTileMap;
@@ -31,31 +28,44 @@ void TileTab::fillTiles(QPixmapPtrVector &pixmapCache)
     pixmapCache.resize(1, QPixmapPtr(new QPixmap(QSize(TILE_SIZE, TILE_SIZE))));
     pixmapCache.at(0)->fill();
     tileMap.insert(std::make_pair(0, pixmapCache.at(0)));
-    for (SpritePrototypeMap::const_iterator itr = pTileMap->begin(); itr != pTileMap->end(); ++itr)
+    for (uint32 i = 0; i < m_pTileDB->getDBSize(); ++i)
     {
-        QPixmapPtr pixmapPtr(new QPixmap(QString::fromStdString(Config::Get()->getProjectDirectory()+"/Textures/"+itr->second.GetFilePath())));
+        ConstTilePrototypePtr proto;
+        if (!m_pTileDB->getPrototype(i+1, proto))
+            continue;
+
+        QPixmapPtr pixmapPtr(new QPixmap(QString::fromStdString(Config::Get()->getProjectDirectory()+"/Textures/"+proto->getPathName())));
         if (!pixmapPtr)
             continue;
 
         // set transparency color
-        if (itr->second.m_TransparencyColor.hasValidColor())
+        if (proto->getTransparencyColor().hasValidColor())
         {
             int red, green, blue;
-            itr->second.m_TransparencyColor.getColor(red, green, blue);
+            proto->getTransparencyColor().getColor(red, green, blue);
             pixmapPtr->setMask(pixmapPtr->createMaskFromColor(QColor(red, green, blue)));
         }
 
-        if (pixmapCache.size() <= itr->first)
-            pixmapCache.resize(itr->first+1);
+        if (pixmapCache.size() <= proto->getID())
+            pixmapCache.resize(proto->getID()+1);
 
-        pixmapCache.at(itr->first) = pixmapPtr;
-        if (itr->second.Type.Tile.m_bAutotile)
-            autoTileMap.insert(std::make_pair(itr->first, pixmapPtr));
-        else
-            tileMap.insert(std::make_pair(itr->first, pixmapPtr));
+        pixmapCache.at(proto->getID()) = pixmapPtr;
+        tileMap.insert(std::make_pair(proto->getID(), pixmapPtr));
     }
+
+    // show autoTiles
+    for (uint32 i = 0; i < m_pAutoTileDB->getDBSize(); ++i)
+    {
+        ConstAutoTilePrototypePtr proto;
+        if (!m_pAutoTileDB->getPrototype(i+1, proto))
+            continue;
+
+        if (pixmapCache.size() > proto->getTileID(AutoTilePrototype::INDEX_INNER_CENTER))
+            autoTileMap.insert(std::make_pair(proto->getID(), pixmapCache.at(proto->getTileID(AutoTilePrototype::INDEX_INNER_CENTER))));
+    }
+
     pTileView->updateTiles(tileMap, QSize(TILE_SIZE, TILE_SIZE), size());
-    pAutoTileView->updateTiles(autoTileMap, QSize(TILE_SIZE*3, TILE_SIZE*3), size());
+    pAutoTileView->updateTiles(autoTileMap, QSize(TILE_SIZE, TILE_SIZE), size());
 }
 
 void TileTab::tabInserted(int index)
@@ -96,5 +106,6 @@ void TileTab::_changeCurrentTile(const QPoint &pos, const QSize &tileSize, uint3
             pen.setWidth(4);
             pScene->addRect(pos.x()*tileSize.width(), pos.y()*tileSize.height(), tileSize.width(), tileSize.height(), pen);
         }
+        pView->viewport()->update();
     }
 }

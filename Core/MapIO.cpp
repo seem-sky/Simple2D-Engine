@@ -37,8 +37,8 @@ void MapReader::_loadTiles(bool &result, const std::string &sFileName, bool thre
         return;
 
     // resize map data
-    m_pMap->m_MapData.resize(boost::extents[0][0][0]);
-    m_pMap->m_MapData.resize(boost::extents[m_pMap->m_Size.x][m_pMap->m_Size.y][m_pMap->m_Size.z]);
+    m_pMap->_clear();
+    m_pMap->_resizeMap(m_pMap->getSize());
 
     XML::CoObject CoObj;
     if (threaded)
@@ -70,7 +70,7 @@ void MapReader::_loadTiles(bool &result, const std::string &sFileName, bool thre
         return;
 
     IXMLDOMNodePtr pLayer = NULL;
-    for (LONG j = 0; j < iLayerLength; j++)
+    for (LONG j = 0; j < iLayerLength && j < (LONG)m_pMap->getSize().z; ++j)
     {
         if (FAILED(pLayerNodes->get_item(j, &pLayer)))
             continue;
@@ -84,62 +84,50 @@ void MapReader::_loadTiles(bool &result, const std::string &sFileName, bool thre
         if (FAILED(pMapNodes->get_length(&iNodeLength)))
             continue;
         IXMLDOMNamedNodeMapPtr pmAttributes;
-
         CComBSTR attributeText;
-
         // iterate through tiles
         IXMLDOMNodePtr pNodeTemp = NULL;
-        StdStringVector tempList;
-        for (int i = 0; i < iNodeLength; i++)
+        for (int i = 0; i < iNodeLength && i < (LONG)m_pMap->getSize().y; ++i)
         {
             // continue if there are no "Tiles" set
-            if (FAILED(pMapNodes->get_item(i, &pNodeTemp)))
+            if (FAILED(pMapNodes->get_item(i, &pNodeTemp)) || FAILED(pNodeTemp->get_attributes(&pmAttributes)) ||
+                FAILED(pmAttributes->get_item(0, &pNodeTemp)) || FAILED(pNodeTemp->get_text(&attributeText)))
                 continue;
 
-            if (FAILED(pNodeTemp->get_attributes(&pmAttributes)))
-                continue;
-
-            if (FAILED(pmAttributes->get_item(0, &pNodeTemp)))
-                continue;
-
-            if (FAILED(pNodeTemp->get_text(&attributeText)))
-                continue;
-
-            std::string temp = _bstr_t(attributeText);
-            tempList.push_back(temp);
-        }
-        TileByRowFromFileList.push_back(tempList);
-    }
-
-    // read out layers
-    uint32 uiLayerCount = TileByRowFromFileList.size();
-    for (uint32 layer = 0; layer < uiLayerCount && layer < m_pMap->getSize().z; layer++)
-    {
-        uint32 uiYCount = TileByRowFromFileList.at(layer).size();
-        for (uint32 y = 0; y < uiYCount && y < m_pMap->getSize().y; ++y)
-        {
-            // if tiles are in string, read it out and store as readable vector.
-            UInt32Vector tempVector;
-            for (uint32 x = 0; x < m_pMap->getSize().x && !TileByRowFromFileList.at(layer).at(y).empty(); ++x)
-            {
-                bool tileStored = false;
-                while (!tileStored && !TileByRowFromFileList.at(layer).at(y).empty())
-                {
-                    // if first sign is a number
-                    if (TileByRowFromFileList.at(layer).at(y).at(0) <= 57 && TileByRowFromFileList.at(layer).at(y).at(0) >= 48)
-                    {
-                        m_pMap->m_MapData[x][y][layer] = (uint32)atoi(TileByRowFromFileList.at(layer).at(y).c_str());
-                        TileByRowFromFileList.at(layer).at(y).erase(0, TileByRowFromFileList.at(layer).at(y).find(','));
-                        tileStored = true;
-                    }
-                    // if first sign is a not a number, delete it
-                    else
-                        TileByRowFromFileList.at(layer).at(y).erase(0, 1);
-                }
-            }
+            _parseTileString(Point<uint32>(i, j), std::string(_bstr_t(attributeText)));
         }
     }
     result = true;
+}
+
+void MapReader::_parseTileString(const Point<uint32> &pos, std::string sTileString)
+{
+    for (uint32 x = 0; x < m_pMap->getSize().x && !sTileString.empty(); ++x)
+    {
+        MapTile tileObject;
+        bool tileStored = false;
+        while (!tileStored && !sTileString.empty())
+        {
+            // if first sign is a number
+            if (sTileString.at(0) <= 57 && sTileString.at(0) >= 48)
+            {
+                tileObject.m_uiTileID = (uint32)atoi(sTileString.c_str());
+                uint32 uiColonIndex = sTileString.find(','), uiDblPointIndex = sTileString.find(':');
+                if (uiDblPointIndex < uiColonIndex)
+                {
+                    sTileString.erase(0, uiDblPointIndex != std::string::npos ? uiDblPointIndex+1 : uiDblPointIndex);
+                    tileObject.m_uiAutoTileSetID = (uint32)atoi(sTileString.c_str());
+                    uiColonIndex = sTileString.find(',');
+                }
+                sTileString.erase(0, uiColonIndex != std::string::npos ? uiColonIndex+1 : uiColonIndex);
+                m_pMap->m_MapData[x][pos.x][pos.y] = tileObject;
+                tileStored = true;
+            }
+            // if first sign is a not a number, delete it
+            else
+                sTileString.erase(0, 1);
+        }
+    }
 }
 
 void MapReader::_loadObjects(bool &result, const std::string &sFileName, bool threaded)
@@ -261,7 +249,7 @@ void MapWriter::_storeTiles(XML::XML_WriteData &xmlResult)
             XML::XML_WriteData xml_Line(XML::XML_WRITE_APPEND);
             std::string sLine;
             for (uint32 x = 0; x < m_pMap->getSize().x; ++x)
-                sLine.append(ToString(m_pMap->m_MapData[x][y][layer]) + ',');
+                sLine.append(ToString(m_pMap->m_MapData[x][y][layer].m_uiTileID) + ':' + ToString(m_pMap->m_MapData[x][y][layer].m_uiAutoTileSetID) + ',');
             xml_Line.AddAttribute("Tiles", sLine.c_str());
             xml_Layer.AddChild("MapTiles", xml_Line);
         }

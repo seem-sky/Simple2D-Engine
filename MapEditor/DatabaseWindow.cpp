@@ -7,75 +7,91 @@
 #include <QtGui/QGraphicsPixmapItem>
 #include "Config.h"
 #include "MainWindow.h"
+#include "DatabaseIO.h"
 
 using namespace DATABASE;
 
-DatabaseWindow::DatabaseWindow(QWidget *p_pParent) : QDialog(p_pParent), Ui_Database()
+DatabaseWindow::DatabaseWindow(DatabaseMgrPtr pDBMgr, QWidget *p_pParent) : QDialog(p_pParent), Ui_Database(),
+m_pDBMgr(pDBMgr)
 {
     setupUi(this);
 
-    m_ModifyObj.setWidget(m_pSections, MODIFY_RESIZE, QPoint(10, ButtonCancel->height()+10));
+    // setup db for specific widgets
+    m_pTiles->setDB(m_pDBMgr->getTileDatabase());
+    // 2 dbs for AutoTile widget
+    m_pAutoTiles->setTileDB(m_pTiles->getDBChanger());
+    m_pAutoTiles->setDB(m_pDBMgr->getAutoTileDatabase());
+    m_pSprites->setDB(m_pDBMgr->getSpriteDatabase());
+    m_pTexts->setDB(m_pDBMgr->getTextDatabase());
+
+    // setup move and resize widgets
+    m_ModifyObj.setWidget(m_pSections, MODIFY_RESIZE, QPoint(10, ButtonCancel->height()+15));
+    m_ModifyObj.setWidget(m_pTextureTabs, MODIFY_RESIZE, QPoint(50, ButtonCancel->height()+60));
+    m_ModifyObj.setWidget(m_pTextTabs, MODIFY_RESIZE, QPoint(50, ButtonCancel->height()+60));
     m_ModifyObj.setWidget(ButtonApply, MODIFY_MOVE, QPoint(10, 10));
     m_ModifyObj.setWidget(ButtonCancel, MODIFY_MOVE, QPoint(ButtonApply->width()+10, 10));
     m_ModifyObj.setWidget(ButtonOK, MODIFY_MOVE, QPoint(ButtonApply->width()+ButtonOK->width()+10, 10));
 
     m_sLogLocationName = LOGFILE_ENGINE_LOG_NAME + "DatabaseWindow : ";
 
-    connect(ButtonOK, SIGNAL(clicked()), this, SLOT(ClickButtonOK()));
-    connect(ButtonApply, SIGNAL(clicked()), this, SLOT(ClickButtonApply()));
-    for (int i = 0; i < m_pSections->count(); ++i)
-        connect(this, SIGNAL(ReloadPage()), m_pSections->widget(i), SLOT(LoadPage()));
+    connect(ButtonOK, SIGNAL(clicked()), this, SLOT(clickButtonOK()));
+    connect(ButtonApply, SIGNAL(clicked()), this, SLOT(clickButtonApply()));
+
+    // focus connections
+    connect(m_pTextureTabs, SIGNAL(currentChanged (int)), this, SLOT(_textureWidgetChanged(int)));
     m_pSections->setCurrentIndex(0);
 }
 
-void DatabaseWindow::closeEvent(QCloseEvent *event)
+void DatabaseWindow::_textureWidgetChanged(int index)
 {
-    event->accept();
-
-    if (DatabaseOutput *t_pDBOut = DatabaseOutput::Get())
-        t_pDBOut->ClearOutput();
-
-    delete this;
+    DatabaseWidgetObject *pTab = dynamic_cast<DatabaseWidgetObject*>(m_pTextureTabs->widget(index));
+    if (pTab)
+        pTab->setFocus();
 }
 
-void DatabaseWindow::SaveDatabase()
+void DatabaseWindow::saveDatabase()
 {
-    QString t_sDBDir;
-    if (Config *t_pConfig = Config::Get())
-        t_sDBDir = QString::fromStdString(t_pConfig->getProjectDirectory());
-
-    t_sDBDir += "\\Game\\GameDatabase.xml";
-
-    if (DatabaseOutput *t_pDBOut = DatabaseOutput::Get())
+    // TileDB
+    if (m_pTiles->hasChanged())
     {
-        t_pDBOut->SaveChangesTo(t_sDBDir.toStdString());
-        if (MainWindow *t_pParent = (MainWindow*)parent())
-        {
-            QTimer *t_pTimer = new QTimer(this);
-            t_pParent->setNewTimer(t_pTimer);
-            t_pParent->setWindowAction(WINDOW_SAVE_DB);
-            connect(t_pTimer,SIGNAL(timeout()), t_pParent, SLOT(CustomUpdate()));
-            t_pTimer->start(100);
-            setEnabled(false);
-        }
+        m_pTiles->storeDBChanges();
+        TileDatabaseXMLWriter writer(m_pDBMgr->getTileDatabase());
+        writer.writeFile(Config::Get()->getProjectDirectory() + TILE_DATABASE_PATH);
     }
+
+    // AutoTileDB
+    if (m_pAutoTiles->hasChanged())
+    {
+        m_pAutoTiles->storeDBChanges();
+        AutoTileDatabaseXMLWriter writer(m_pDBMgr->getAutoTileDatabase());
+        writer.writeFile(Config::Get()->getProjectDirectory() + AUTO_TILE_DATABASE_PATH);
+    }
+
+    // SpriteDB
+    if (m_pSprites->hasChanged())
+    {
+        m_pSprites->storeDBChanges();
+        SpriteDatabaseXMLWriter writer(m_pDBMgr->getSpriteDatabase());
+        writer.writeFile(Config::Get()->getProjectDirectory() + SPRITE_DATABASE_PATH);
+    }
+
+    // TextDB
+    if (m_pTexts->hasChanged())
+    {
+        m_pTexts->storeDBChanges();
+        TextDatabaseXMLWriter writer(m_pDBMgr->getTextDatabase());
+        writer.writeFile(Config::Get()->getProjectDirectory() + TEXT_DATABASE_PATH);
+    }
+    // ToDo: save changes
 }
 
-void DatabaseWindow::DBSaved()
+void DatabaseWindow::clickButtonApply()
 {
-    emit ReloadPage();
+    saveDatabase();
 }
 
-void DatabaseWindow::ClickButtonApply()
+void DatabaseWindow::clickButtonOK()
 {
-    SaveDatabase();
-    if (MainWindow *p_pParent = (MainWindow*)parent())
-        connect(p_pParent, SIGNAL(WindowActionDone()), this, SLOT(DBSaved()));
-}
-
-void DatabaseWindow::ClickButtonOK()
-{
-    SaveDatabase();
-    if (MainWindow *p_pParent = (MainWindow*)parent())
-        connect(p_pParent, SIGNAL(WindowActionDone()), this, SLOT(close()));
+    clickButtonApply();
+    close();
 }

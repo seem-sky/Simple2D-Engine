@@ -45,7 +45,8 @@
 				Optimization="0"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="1"
+				RuntimeLibrary="3"
+				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="4"
 			/>
@@ -110,7 +111,7 @@
 				InlineFunctionExpansion="2"
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
-				RuntimeLibrary="0"
+				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				WarningLevel="3"
 				DebugInformationFormat="3"
@@ -158,39 +159,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ConditionHolder.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Database.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\DatabaseLoad.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\EventScriptCommand.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\EventScriptHolder.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\IniParser.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\Logfile.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\MapDatabase.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\MapIO.cpp"
 				>
 			</File>
 			<File
@@ -199,14 +168,6 @@
 			</File>
 			<File
 				RelativePath=".\VariableHolder.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\XML_Reader.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\XML_Writer.cpp"
 				>
 			</File>
 		</Filter>
@@ -220,43 +181,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ConditionHolder.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Database.h"
-				>
-			</File>
-			<File
-				RelativePath=".\DatabaseLoad.h"
-				>
-			</File>
-			<File
-				RelativePath=".\EventScriptCommand.h"
-				>
-			</File>
-			<File
-				RelativePath=".\EventScriptHolder.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Global.h"
 				>
 			</File>
 			<File
-				RelativePath=".\IniParser.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Logfile.h"
-				>
-			</File>
-			<File
-				RelativePath=".\MapDatabase.h"
-				>
-			</File>
-			<File
-				RelativePath=".\MapIO.h"
 				>
 			</File>
 			<File
@@ -265,6 +194,10 @@
 			</File>
 			<File
 				RelativePath=".\Point.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Rect.h"
 				>
 			</File>
 			<File
@@ -287,12 +220,92 @@
 				RelativePath=".\WrapperFunctions.h"
 				>
 			</File>
+		</Filter>
+		<Filter
+			Name="Database"
+			>
+			<File
+				RelativePath=".\DatabaseChanger.h"
+				>
+			</File>
+			<File
+				RelativePath=".\DatabaseMgr.h"
+				>
+			</File>
+			<File
+				RelativePath=".\DatabasePrototypes.h"
+				>
+			</File>
+			<Filter
+				Name="IO"
+				>
+				<File
+					RelativePath=".\DatabaseIO.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\DatabaseIO.h"
+					>
+				</File>
+				<File
+					RelativePath=".\DatabaseIOTemplates.h"
+					>
+				</File>
+			</Filter>
+		</Filter>
+		<Filter
+			Name="FileIO"
+			>
+			<File
+				RelativePath=".\IniParser.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\IniParser.h"
+				>
+			</File>
+			<File
+				RelativePath=".\XML_IO.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\XML_IO.h"
+				>
+			</File>
+			<File
+				RelativePath=".\XML_Reader.cpp"
+				>
+			</File>
 			<File
 				RelativePath=".\XML_Reader.h"
 				>
 			</File>
 			<File
+				RelativePath=".\XML_Writer.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\XML_Writer.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Map"
+			>
+			<File
+				RelativePath=".\MapDatabase.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\MapDatabase.h"
+				>
+			</File>
+			<File
+				RelativePath=".\MapIO.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\MapIO.h"
 				>
 			</File>
 		</Filter>

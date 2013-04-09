@@ -4,32 +4,32 @@
 #include "UI/UI_Database.h"
 #include "ModifyObject.h"
 #include <QtGui/QCloseEvent>
-#include "DatabaseOutput.h"
+#include "DatabaseMgr.h"
 
 class DatabaseWindow : public QDialog, Ui_Database
 {
     Q_OBJECT
-public:
-    DatabaseWindow(QWidget *parent);
-
-    std::string GetCurrentDatabaseSection();
-
-private slots:
-    void ClickButtonOK();
-    void ClickButtonApply();
-    void DBSaved();
-
-signals:
-    void ReloadPage();
-
 protected:
-    void closeEvent(QCloseEvent *p_pEvent);
     void resizeEvent(QResizeEvent *p_pEvent) { m_ModifyObj.resizeEvent(this); }
 
 private:
-    void SaveDatabase();
-    void ClearWidgets();
+    void saveDatabase();
+    void clearWidgets();
+
+public:
+    DatabaseWindow(DATABASE::DatabaseMgrPtr pDBMgr, QWidget *parent);
+
+    std::string getCurrentDatabaseSection();
+    inline DATABASE::DatabaseMgrPtr getDBMgr() const { return m_pDBMgr; }
+
+private slots:
+    void clickButtonOK();
+    void clickButtonApply();
+    void _textureWidgetChanged(int index);
+
+private:
     std::string m_sLogLocationName;
     ModifyObject m_ModifyObj;
+    DATABASE::DatabaseMgrPtr m_pDBMgr;
 };
 #endif
