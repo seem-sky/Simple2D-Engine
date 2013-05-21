@@ -10,6 +10,7 @@
 #include "Rect.h"
 #include "math_extensions.h"
 #include <boost/dynamic_bitset.hpp>
+#include <QtCore/QString>
 
 #pragma warning(disable : 4996)
 

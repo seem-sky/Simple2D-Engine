@@ -6,6 +6,28 @@
 using namespace MAP;
 using namespace DATABASE;
 
+MapObjectPtr MapPrototype::addMapObject(DATABASE::ObjectType type, uint32 uiID, Point3D<uint32> pos)
+{
+    MapObjectPtr newObject(new MapObject());
+    newObject->m_ObjectID = uiID;
+    newObject->m_Type = type;
+    newObject->m_Position = pos;
+    m_Objects.push_back(newObject);
+    newObject->m_GUID = m_Objects.size();
+    //m_Grid.addObject(newObject);
+    return newObject;
+}
+
+void MapPrototype::moveMapObject(uint32 uiGUID, const Point3D<uint32> &newPos)
+{
+    if (uiGUID < m_Objects.size() && m_Objects.at(uiGUID))
+    {
+        //m_Grid.removeObject(m_Objects.at(uiGUID), MapGrid::getGridFromMapPos(m_Objects.at(uiGUID)->m_Position));
+        m_Objects.at(uiGUID)->m_Position = newPos;
+        //m_Grid.addObject(m_Objects.at(uiGUID));
+    }
+}
+
 uint32 MapPrototype::getPositionsAroundWithID(const uint32 &uiID, const Point3D<uint32> &pos, UInt32PointSet &result, uint32 resultFlag)
 {
     uint32 uiBorderCheck = 0;
@@ -243,17 +265,12 @@ bool MapDatabase::loadMapFile(uint32 uiMapID, const std::string &sPath)
     if (map->m_DataLoaded)
         return true;
 
-    std::string sFilePath;
-    if (getFilePath(map, sFilePath, sPath) && boost::filesystem::exists(sFilePath))
-    {
-        bool loadResult = false;
-        MapReader mapLoader(map);
-        mapLoader.loadMapThreaded(sFilePath, loadResult);
-        map->m_DataLoaded = true;
-        if (loadResult)
-            return true;
-    }
+    // if success, return
+    MapReader mapLoader(map);
+    if (mapLoader.readFile(QString::fromStdString(sPath + "/Maps/" + map->getFileName()), "Map"))
+        return true;
 
+    // if no success, init with stored size
     map->m_DataLoaded = true;
     map->_resizeMap(map->getSize());
     return true;

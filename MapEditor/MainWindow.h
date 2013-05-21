@@ -46,6 +46,8 @@ public:
     inline void setWindowAction(WindowAction action) { m_WindowAction = action; }
     inline MapEditor* getMapEditorWidget() const { return m_pMapEditor; }
 
+    inline DATABASE::ConstDatabaseMgrPtr getDatabaseMgr() const { return m_pDBMgr; }
+
 private:
     ModifyObject m_ModifyObj;
     WindowAction m_WindowAction;

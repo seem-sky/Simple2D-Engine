@@ -17,7 +17,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Game Database</string>
   </property>
   <widget class="QPushButton" name="ButtonCancel">
    <property name="geometry">
@@ -48,7 +48,7 @@
     </size>
    </property>
    <property name="currentIndex">
-    <number>2</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="widget">
     <attribute name="title">
@@ -81,12 +81,40 @@
        <string>Sprites</string>
       </attribute>
      </widget>
+     <widget class="AnimationDatabaseWidget" name="m_pAnimations">
+      <attribute name="title">
+       <string>Animations</string>
+      </attribute>
+     </widget>
     </widget>
    </widget>
    <widget class="QWidget" name="Objects">
     <attribute name="title">
      <string>Objects</string>
     </attribute>
+    <widget class="QTabWidget" name="m_pObjectTabs">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>761</width>
+       <height>491</height>
+      </rect>
+     </property>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="WorldObjectDatabaseWidget" name="m_pWorldObjects">
+      <attribute name="title">
+       <string>WorldObjects</string>
+      </attribute>
+     </widget>
+     <widget class="ObjectAnimationTypeDatabaseWidget" name="m_pObjectAnimationTypes">
+      <attribute name="title">
+       <string>ObjectAnimationTypes</string>
+      </attribute>
+     </widget>
+    </widget>
    </widget>
    <widget class="QWidget" name="Text">
     <attribute name="title">
@@ -167,7 +195,33 @@
    <header>textdatabasewidget.h</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>AnimationDatabaseWidget</class>
+   <extends>QWidget</extends>
+   <header>animationdatabasewidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WorldObjectDatabaseWidget</class>
+   <extends>QWidget</extends>
+   <header>worldobjectdatabasewidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ObjectAnimationTypeDatabaseWidget</class>
+   <extends>QWidget</extends>
+   <header>objectanimationtypedatabasewidget.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>m_pSections</tabstop>
+  <tabstop>m_pTextureTabs</tabstop>
+  <tabstop>ButtonOK</tabstop>
+  <tabstop>ButtonCancel</tabstop>
+  <tabstop>ButtonApply</tabstop>
+  <tabstop>m_pTextTabs</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

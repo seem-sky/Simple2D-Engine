@@ -25,7 +25,7 @@ public:
 private slots:
     void clickButtonOK();
     void clickButtonApply();
-    void _textureWidgetChanged(int index);
+    void _focusChanged(int index);
 
 private:
     std::string m_sLogLocationName;

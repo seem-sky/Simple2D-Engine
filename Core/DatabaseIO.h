@@ -11,28 +11,20 @@ namespace DATABASE
     ####*/
     class TileDatabaseXMLReader : public TextureDatabaseReader<TilePrototype>
     {
-    private:
-        void _getPrototypeFromXML(const IXMLDOMNodePtr &pParentNode);
-
     protected:
-        bool getAttributeFromXML(TilePrototypePtr proto, const std::string sAttributeName, CComVariant value);
+        bool getAttributeFromXML(TilePrototypePtr proto, const QString &attributeName, const QString &attributeValue);
 
     public:
         TileDatabaseXMLReader(const TileDatabasePtr &pDB) : TextureDatabaseReader(pDB) {}
-        bool readFile(const std::string &sFileName, const bool threaded = false);
     };
 
     class TileDatabaseXMLWriter : public TextureDatabaseWriter<TilePrototype>
     {
-    private:
-        std::string _getNodeName() const { return "Tile"; }
-
     protected:
-        virtual void getXMLFromAttributes(TilePrototypePtr proto, MSXML2::IXMLDOMNodePtr &pNewNode);
+        virtual void getXMLFromAttributes(TilePrototypePtr proto, QXmlStreamWriter &writer);
 
     public:
         TileDatabaseXMLWriter(const TileDatabasePtr &pDB) : TextureDatabaseWriter(pDB) {}
-        bool writeFile(const std::string &sFileName, const bool threaded = false);
     };
 
     /*####
@@ -40,57 +32,51 @@ namespace DATABASE
     ####*/
     class AutoTileDatabaseXMLReader : public DatabaseReader<AutoTilePrototype>
     {
-    private:
-        void _getPrototypeFromXML(const IXMLDOMNodePtr &pParentNode);
-
     protected:
-        bool getAttributeFromXML(AutoTilePrototypePtr proto, const std::string sAttributeName, CComVariant value);
+        bool getAttributeFromXML(AutoTilePrototypePtr proto, const QString &attributeName, const QString &attributeValue);
 
     public:
         AutoTileDatabaseXMLReader(const AutoTileDatabasePtr &pDB) : DatabaseReader(pDB) {}
-        bool readFile(const std::string &sFileName, const bool threaded = false);
     };
 
     class AutoTileDatabaseXMLWriter : public DatabaseWriter<AutoTilePrototype>
     {
-    private:
-        std::string _getNodeName() const { return "AutoTile"; }
-
     protected:
-        virtual void getXMLFromAttributes(AutoTilePrototypePtr proto, MSXML2::IXMLDOMNodePtr &pNewNode);
+        virtual void getXMLFromAttributes(AutoTilePrototypePtr proto, QXmlStreamWriter &writer);
 
     public:
         AutoTileDatabaseXMLWriter(const AutoTileDatabasePtr &pDB) : DatabaseWriter(pDB) {}
-        bool writeFile(const std::string &sFileName, const bool threaded = false);
     };
 
     /*####
     # SpriteDatabase
     ####*/
-    class SpriteDatabaseXMLReader : public TextureDatabaseReader<SpritePrototype>
+    typedef TextureDatabaseReader<SpritePrototype> SpriteDatabaseXMLReader;
+    typedef TextureDatabaseWriter<SpritePrototype> SpriteDatabaseXMLWriter;
+
+    /*####
+    # AnimationDatabase
+    ####*/
+    class AnimationDatabaseXMLReader : public DatabaseReader<AnimationPrototype>
     {
     private:
-        void _getPrototypeFromXML(const IXMLDOMNodePtr &pParentNode);
+        bool _getFrameAttribute(DATABASE::AnimationPrototype::Frame &frame, const QString &nodeName, const QString &nodeValue);
+        bool _getSpriteAttribute(DATABASE::AnimationPrototype::Sprite &sprite, const QString &nodeName, const QString &nodeValue);
 
     protected:
-        bool getAttributeFromXML(SpritePrototypePtr proto, const std::string sAttributeName, CComVariant value);
+        bool getChildrenFromXML(const QDomNode &node, AnimationPrototypePtr proto, const QString &childName);
 
     public:
-        SpriteDatabaseXMLReader(const SpriteDatabasePtr &pDB) : TextureDatabaseReader(pDB) {}
-        bool readFile(const std::string &sFileName, const bool threaded = false);
+        AnimationDatabaseXMLReader(const AnimationDatabasePtr &pDB) : DatabaseReader(pDB) {}
     };
 
-    class SpriteDatabaseXMLWriter : public TextureDatabaseWriter<SpritePrototype>
+    class AnimationDatabaseXMLWriter : public DatabaseWriter<AnimationPrototype>
     {
-    private:
-        std::string _getNodeName() const { return "Sprite"; }
-
     protected:
-        virtual void getXMLFromAttributes(SpritePrototypePtr proto, MSXML2::IXMLDOMNodePtr &pNewNode);
+        virtual void getXMLFromAttributes(AnimationPrototypePtr proto, QXmlStreamWriter &writer);
 
     public:
-        SpriteDatabaseXMLWriter(const SpriteDatabasePtr &pDB) : TextureDatabaseWriter(pDB) {}
-        bool writeFile(const std::string &sFileName, const bool threaded = false);
+        AnimationDatabaseXMLWriter(const AnimationDatabasePtr &pDB) : DatabaseWriter(pDB) {}
     };
 
     /*####
@@ -98,28 +84,20 @@ namespace DATABASE
     ####*/
     class MapDatabaseXMLReader : public DatabaseReader<MAP::MapPrototype>
     {
-    private:
-        void _getPrototypeFromXML(const IXMLDOMNodePtr &pParentNode);
-
     protected:
-        bool getAttributeFromXML(MAP::MapPrototypePtr proto, const std::string sAttributeName, CComVariant value);
+        bool getAttributeFromXML(MAP::MapPrototypePtr proto, const QString &attributeName, const QString &attributeValue);
 
     public:
         MapDatabaseXMLReader(const MapDatabasePtr &pDB) : DatabaseReader(pDB) {}
-        bool readFile(const std::string &sFileName, const bool threaded = false);
     };
 
     class MapDatabaseXMLWriter : public DatabaseWriter<MAP::MapPrototype>
     {
-    private:
-        std::string _getNodeName() const { return "Map"; }
-
     protected:
-        virtual void getXMLFromAttributes(MAP::MapPrototypePtr proto, MSXML2::IXMLDOMNodePtr &pNewNode);
+        virtual void getXMLFromAttributes(MAP::MapPrototypePtr proto, QXmlStreamWriter &writer);
 
     public:
         MapDatabaseXMLWriter(const MapDatabasePtr &pDB) : DatabaseWriter(pDB) {}
-        bool writeFile(const std::string &sFileName, const bool threaded = false);
     };
 
     /*####
@@ -127,28 +105,48 @@ namespace DATABASE
     ####*/
     class TextDatabaseXMLReader : public DatabaseReader<TextPrototype>
     {
-    private:
-        void _getPrototypeFromXML(const IXMLDOMNodePtr &pParentNode);
-
     protected:
-        bool getAttributeFromXML(TextPrototypePtr proto, const std::string sAttributeName, CComVariant value);
+        bool getAttributeFromXML(TextPrototypePtr proto, const QString &attributeName, const QString &attributeValue);
 
     public:
         TextDatabaseXMLReader(const TextDatabasePtr &pDB) : DatabaseReader(pDB) {}
-        bool readFile(const std::string &sFileName, const bool threaded = false);
     };
 
     class TextDatabaseXMLWriter : public DatabaseWriter<TextPrototype>
     {
-    private:
-        std::string _getNodeName() const { return "Text"; }
-
     protected:
-        virtual void getXMLFromAttributes(TextPrototypePtr proto, MSXML2::IXMLDOMNodePtr &pNewNode);
+        virtual void getXMLFromAttributes(TextPrototypePtr proto, QXmlStreamWriter &writer);
 
     public:
         TextDatabaseXMLWriter(const TextDatabasePtr &pDB) : DatabaseWriter(pDB) {}
-        bool writeFile(const std::string &sFileName, const bool threaded = false);
     };
+
+    /*####
+    # WorldObjectDatabase
+    ####*/
+    class WorldObjectDatabaseXMLReader : public DatabaseReader<WorldObjectPrototype>
+    {
+    protected:
+        bool getChildrenFromXML(const QDomNode &node, WorldObjectPrototypePtr proto, const QString &childName);
+        bool getAttributeFromXML(WorldObjectPrototypePtr proto, const QString &attributeName, const QString &attributeValue);
+
+    public:
+        WorldObjectDatabaseXMLReader(const WorldObjectDatabasePtr &pDB) : DatabaseReader(pDB) {}
+    };
+
+    class WorldObjectDatabaseXMLWriter : public DatabaseWriter<WorldObjectPrototype>
+    {
+    protected:
+        virtual void getXMLFromAttributes(WorldObjectPrototypePtr proto, QXmlStreamWriter &writer);
+
+    public:
+        WorldObjectDatabaseXMLWriter(const WorldObjectDatabasePtr &pDB) : DatabaseWriter(pDB) {}
+    };
+
+    /*####
+    # ObjectAnimationTypeDatabase
+    ####*/
+    typedef DatabaseReader<ObjectAnimationTypePrototype> ObjectAnimationTypeDatabaseXMLReader;
+    typedef DatabaseWriter<ObjectAnimationTypePrototype> ObjectAnimationTypeDatabaseXMLWriter;
 }
 #endif

@@ -17,9 +17,9 @@
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>360</y>
+     <y>330</y>
      <width>231</width>
-     <height>201</height>
+     <height>231</height>
     </rect>
    </property>
    <property name="dragEnabled">
@@ -94,94 +94,11 @@
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QFrame" name="m_pLeftBrush">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>90</y>
-     <width>111</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="frameShape">
-    <enum>QFrame::StyledPanel</enum>
-   </property>
-   <property name="frameShadow">
-    <enum>QFrame::Raised</enum>
-   </property>
-   <widget class="QRadioButton" name="m_pLeftBrushPen">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>37</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Pen</string>
-    </property>
-    <property name="checked">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="m_pLeftBrushRect">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>0</y>
-      <width>41</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Rect</string>
-    </property>
-    <property name="checked">
-     <bool>false</bool>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="m_pLeftBrushFill">
-    <property name="geometry">
-     <rect>
-      <x>80</x>
-      <y>0</y>
-      <width>31</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Fill</string>
-    </property>
-    <property name="checked">
-     <bool>false</bool>
-    </property>
-   </widget>
-  </widget>
-  <widget class="QLabel" name="m_pLeftCurrentTile">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>0</y>
-     <width>96</width>
-     <height>96</height>
-    </rect>
-   </property>
-   <property name="frameShape">
-    <enum>QFrame::Box</enum>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignCenter</set>
-   </property>
-  </widget>
   <widget class="QLabel" name="m_pMapTreeLabel">
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>340</y>
+     <y>310</y>
      <width>81</width>
      <height>21</height>
     </rect>
@@ -197,96 +114,13 @@
     <string>map tree:</string>
    </property>
   </widget>
-  <widget class="QLabel" name="m_pRightCurrentTile">
-   <property name="geometry">
-    <rect>
-     <x>130</x>
-     <y>0</y>
-     <width>96</width>
-     <height>96</height>
-    </rect>
-   </property>
-   <property name="frameShape">
-    <enum>QFrame::Box</enum>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignCenter</set>
-   </property>
-  </widget>
-  <widget class="QFrame" name="m_pRightBrush">
-   <property name="geometry">
-    <rect>
-     <x>120</x>
-     <y>90</y>
-     <width>111</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="frameShape">
-    <enum>QFrame::StyledPanel</enum>
-   </property>
-   <property name="frameShadow">
-    <enum>QFrame::Raised</enum>
-   </property>
-   <widget class="QRadioButton" name="m_pRightBrushPen">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>38</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Pen</string>
-    </property>
-    <property name="checked">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="m_pRightBrushRect">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>0</y>
-      <width>41</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Rect</string>
-    </property>
-    <property name="checked">
-     <bool>false</bool>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="m_pRightBrushFill">
-    <property name="geometry">
-     <rect>
-      <x>80</x>
-      <y>0</y>
-      <width>31</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Fill</string>
-    </property>
-    <property name="checked">
-     <bool>false</bool>
-    </property>
-   </widget>
-  </widget>
   <widget class="QTabWidget" name="m_pMappingModeTab">
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>130</y>
+     <y>10</y>
      <width>231</width>
-     <height>211</height>
+     <height>291</height>
     </rect>
    </property>
    <property name="currentIndex">
@@ -303,9 +137,9 @@
      <property name="geometry">
       <rect>
        <x>0</x>
-       <y>0</y>
+       <y>90</y>
        <width>221</width>
-       <height>181</height>
+       <height>171</height>
       </rect>
      </property>
      <property name="currentIndex">
@@ -337,11 +171,130 @@
       </attribute>
      </widget>
     </widget>
+    <widget class="QLabel" name="m_pLeftCurrentTile">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>10</y>
+       <width>32</width>
+       <height>32</height>
+      </rect>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::Box</enum>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="m_pRHDrawMode">
+     <property name="geometry">
+      <rect>
+       <x>120</x>
+       <y>50</y>
+       <width>91</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <item>
+      <property name="text">
+       <string>Pen</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Fill</string>
+      </property>
+     </item>
+    </widget>
+    <widget class="QComboBox" name="m_pLHDrawMode">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>50</y>
+       <width>91</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <item>
+      <property name="text">
+       <string>Pen</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Fill</string>
+      </property>
+     </item>
+    </widget>
+    <widget class="QLabel" name="m_pRightCurrentTile">
+     <property name="geometry">
+      <rect>
+       <x>150</x>
+       <y>10</y>
+       <width>32</width>
+       <height>32</height>
+      </rect>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::Box</enum>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
    </widget>
    <widget class="QWidget" name="m_pObjectMapping">
     <attribute name="title">
      <string>Objects</string>
     </attribute>
+    <widget class="QTabWidget" name="m_pObjectTabs">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>221</width>
+       <height>261</height>
+      </rect>
+     </property>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="WorldObjectPrototypeDragTreeWidget" name="m_pWorldObjects">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <attribute name="title">
+       <string>WorldObjects</string>
+      </attribute>
+     </widget>
+     <widget class="QWidget" name="m_pDynamicObjects">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <attribute name="title">
+       <string>DynamicObjects</string>
+      </attribute>
+     </widget>
+    </widget>
    </widget>
   </widget>
  </widget>
@@ -367,6 +320,12 @@
    <class>MapTabWidget</class>
    <extends>QTabWidget</extends>
    <header>mapview.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WorldObjectPrototypeDragTreeWidget</class>
+   <extends>QWidget</extends>
+   <header>dragtreewidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

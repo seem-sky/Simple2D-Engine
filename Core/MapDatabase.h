@@ -1,11 +1,11 @@
 #ifndef MAP_DATABASE_H
 #define MAP_DATABASE_H
 
-#include "Global.h"
 #include "Point.h"
 #include <map>
-#include <boost/multi_array.hpp>
+#include "Global.h"
 #include "DatabasePrototypes.h"
+#include <boost/multi_array.hpp>
 
 namespace DATABASE
 {
@@ -14,17 +14,27 @@ namespace DATABASE
 
 namespace MAP
 {
+    enum MAP_DIRECTION
+    {
+        DIRECTION_UP,
+        DIRECTION_RIGHT,
+        DIRECTION_DOWN,
+        DIRECTION_LEFT
+    };
+
     // map objects
     struct MapObject
     {
+        MapObject() : m_Type(DATABASE::TYPE_WORLDOBJECT), m_ObjectID(0), m_GUID(0), m_Direction(DIRECTION_DOWN) {}
+        DATABASE::ObjectType m_Type;
         uint32 m_ObjectID;
         uint32 m_GUID;
-        Point<uint32> m_Position;
-        uint32 m_uiDirection;
+        Point3D<uint32> m_Position;
+        MAP_DIRECTION m_Direction;
     };
     typedef boost::shared_ptr<MapObject> MapObjectPtr;
     typedef std::vector<MapObjectPtr> MapObjectPtrVector;
-    typedef std::vector<MapObjectPtrVector> MapObjectPtr2DVector;
+    typedef boost::multi_array<MapObjectPtrVector, 3> MapObjectPtrVectorMultiarray3D;
 
     struct MapTile
     {
@@ -72,6 +82,9 @@ namespace MAP
         void setMapTile(const Point3D<uint32> &at, const MapTile &mapTile);
         MapTile getMapTile(const Point3D<uint32> &at) const;
 
+        MapObjectPtr addMapObject(DATABASE::ObjectType type, uint32 uiID, Point3D<uint32> pos);
+        void moveMapObject(uint32 uiGUID, const Point3D<uint32> &newPos);
+
         enum RESULT_FLAG
         {
             FLAG_NOTHING    = 0x0,
@@ -89,8 +102,8 @@ namespace MAP
         std::string m_sFileName;
         std::string m_sScriptName;
 
+        MapObjectPtrVector m_Objects;
         TileDataMultiarray3D m_MapData;
-        MapObjectPtr2DVector m_Objects;
     };
     typedef boost::shared_ptr<MapPrototype> MapPrototypePtr;
     typedef boost::shared_ptr<const MapPrototype> ConstMapPrototypePtr;

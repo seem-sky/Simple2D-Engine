@@ -17,7 +17,12 @@ namespace DATABASE
         }
 
     public:
-        inline void setDB(boost::shared_ptr<DATABASE::Database<T>> pDB)
+        DatabaseChanger(boost::shared_ptr<Database<T>> pDB)
+        {
+            setDB(pDB);
+        }
+        DatabaseChanger() {}
+        inline void setDB(boost::shared_ptr<Database<T>> pDB)
         {
             m_pTargetDB = pDB;
             setNewDBSize();
@@ -30,7 +35,10 @@ namespace DATABASE
             if (m_NewDB.getPrototype(uiID, result))
                 return true;
             if (m_pTargetDB->getPrototype(uiID, result))
+            {
+                result = boost::shared_ptr<const T>(new T(*result));
                 return true;
+            }
             return false;
         }
 
@@ -90,6 +98,12 @@ namespace DATABASE
         Database<T> m_NewDB;
     };
 
-    typedef boost::shared_ptr<const DatabaseChanger<TilePrototype>> ConstTilePrototypDatabaseChangerPtr;
+    typedef boost::shared_ptr<const DatabaseChanger<TexturePrototype>> ConstTextureDatabaseChangerPtr;
+    typedef boost::shared_ptr<const DatabaseChanger<TilePrototype>> ConstTileDatabaseChangerPtr;
+    typedef boost::shared_ptr<const DatabaseChanger<SpritePrototype>> ConstSpriteDatabaseChangerPtr;
+    typedef boost::shared_ptr<DatabaseChanger<WorldObjectPrototype>> WorldObjectDatabaseChangerPtr;
+    typedef boost::shared_ptr<DatabaseChanger<AnimationPrototype>> AnimationDatabaseChangerPtr;
+    typedef boost::shared_ptr<const DatabaseChanger<AnimationPrototype>> ConstAnimationDatabaseChangerPtr;
+    typedef boost::shared_ptr<const DatabaseChanger<ObjectAnimationTypePrototype>> ConstObjectAnimationTypeDatabaseChangerPtr;
 }
 #endif

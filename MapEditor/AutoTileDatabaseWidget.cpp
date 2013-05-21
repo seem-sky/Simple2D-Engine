@@ -12,23 +12,23 @@ AutoTileDatabaseWidget::AutoTileDatabaseWidget(QWidget *pParent) : DatabaseWidge
 {
     memset(&m_uiAutoTileSet, NULL, sizeof(m_uiAutoTileSet));
     Ui_AutoTileDatabaseWidget::setupUi(this);
+    m_ModObj.setWidget(m_pTileList, MODIFY_RESIZE, QPoint(0, 5), MODIFY_DIRECTION_HEIGHT);
     connectWidgets();
     m_pTileList->sortByColumn(0, Qt::AscendingOrder);
 
     connect(m_pTileList, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(_tileDoubleClicked(QTreeWidgetItem*, int)));
-    connect(m_pTileList, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)), this, SLOT(_changeSelectedTile(QTreeWidgetItem*, QTreeWidgetItem*)));
-    // install event filter for auto tile labels
+    // connect auto tile labels
     for (uint32 i = 0; i < AUTO_TILE_SET_COUNT; ++i)
     {
-        if (QLabel *pLabel = _getLabelForIndex(static_cast<AutoTilePrototype::AUTO_TILE_INDEX>(i)))
+        if (TileDropLabel *pLabel = _getLabelForIndex(static_cast<AutoTilePrototype::AUTO_TILE_INDEX>(i)))
         {
-            pLabel->installEventFilter(this);
+            connect(pLabel, SIGNAL(onDrop(uint32, const Point<int32>&)), this, SLOT(_onTileDrop(uint32, const Point<int32>&)));
             pLabel->resize(TILE_SIZE, TILE_SIZE);
         }
     }
 }
 
-QLabel* AutoTileDatabaseWidget::_getLabelForIndex(AutoTilePrototype::AUTO_TILE_INDEX index)
+TileDropLabel* AutoTileDatabaseWidget::_getLabelForIndex(AutoTilePrototype::AUTO_TILE_INDEX index)
 {
     switch (index)
     {
@@ -46,7 +46,7 @@ QLabel* AutoTileDatabaseWidget::_getLabelForIndex(AutoTilePrototype::AUTO_TILE_I
     return NULL;
 }
 
-AutoTilePrototype::AUTO_TILE_INDEX AutoTileDatabaseWidget::_getIndexForLabel(QLabel *pLabel)
+AutoTilePrototype::AUTO_TILE_INDEX AutoTileDatabaseWidget::_getIndexForLabel(TileDropLabel *pLabel)
 {
     if (pLabel)
     {
@@ -59,122 +59,36 @@ AutoTilePrototype::AUTO_TILE_INDEX AutoTileDatabaseWidget::_getIndexForLabel(QLa
     return AutoTilePrototype::INDEX_NONE;
 }
 
-bool AutoTileDatabaseWidget::eventFilter(QObject *pObj, QEvent *pEvent)
-{
-    if (!pObj || !pEvent)
-        return false;
-
-    if (pEvent->type() == QEvent::MouseButtonPress)
-    {
-        if (QMouseEvent *pMouseEvent = dynamic_cast<QMouseEvent*>(pEvent))
-        {
-            if (pMouseEvent->button() == Qt::LeftButton)
-            {
-                for (uint32 i = 0; i < AUTO_TILE_SET_COUNT; ++i)
-                {
-                    if (pObj == _getLabelForIndex(static_cast<AutoTilePrototype::AUTO_TILE_INDEX>(i)))
-                        _setCurrentLabel(_getLabelForIndex(static_cast<AutoTilePrototype::AUTO_TILE_INDEX>(i)));
-                }
-            }
-        }
-    }
-
-    return QWidget::eventFilter(pObj, pEvent);
-}
-
-void AutoTileDatabaseWidget::_setCurrentLabel(QLabel *pLabel)
-{
-    if (!pLabel || m_pCurrentLabel == pLabel)
-        return;
-
-    if (m_pCurrentLabel)
-        m_pCurrentLabel->setLineWidth(1);
-    m_pCurrentLabel = pLabel;
-    m_pCurrentLabel->setLineWidth(3);
-}
-
-void AutoTileDatabaseWidget::_tileDoubleClicked(QTreeWidgetItem *pItem, int column)
-{
-    AutoTilePrototype::AUTO_TILE_INDEX index = _getIndexForLabel(m_pCurrentLabel);
-    if (!pItem || index == AUTO_TILE_SET_COUNT)
-        return;
-
-    uint32 uiTileID = pItem->text(0).toUInt();
-    ConstTilePrototypePtr pTileProto;
-    AutoTilePrototypePtr autoTileProto;
-    if (!m_pTileDB->getPrototype(uiTileID, pTileProto))
-        return;
-
-    m_uiAutoTileSet[index] = pTileProto->getID();
-    m_pCurrentLabel->setPixmap(_createTilePixmap(pTileProto));
-    change();
-}
-
-void AutoTileDatabaseWidget::_changeSelectedTile(QTreeWidgetItem *pCurrent, QTreeWidgetItem *pPrevious)
-{
-    ConstTilePrototypePtr proto;
-    if (pCurrent && m_pTileDB && m_pTileDB->getPrototype(pCurrent->text(0).toUInt(), proto))
-        _showTilePixmap(proto);
-}
-
-void AutoTileDatabaseWidget::_fillTileList()
-{
-    m_pTileList->clear();
-    if (!m_pTileDB)
-        return;
-
-    UInt32StdStringMap tileList;
-    m_pTileDB->getPrototypeShortInfos(tileList);
-    for (UInt32StdStringMap::const_iterator itr = tileList.begin(); itr != tileList.end(); ++itr)
-    {
-        QStringList stringList;
-        stringList.push_back(QString::number(itr->first));
-        stringList.push_back(QString::fromStdString(itr->second));
-        m_pTileList->addTopLevelItem(new PrototypeTreeWidgetItem(stringList));
-    }
-
-    // select topLevelItem
-    if (QTreeWidgetItem *pItem = m_pTileList->topLevelItem(0))
-        m_pTileList->setCurrentItem(pItem);
-}
-
-void AutoTileDatabaseWidget::_showTilePixmap(const ConstTilePrototypePtr &proto)
-{
-    QGraphicsScene *pScene = new QGraphicsScene();
-    pScene->addPixmap(_createTilePixmap(proto));
-    m_pTileView->setScene(pScene);    
-}
-
-QPixmap AutoTileDatabaseWidget::_createTilePixmap(const DATABASE::ConstTilePrototypePtr &proto)
-{
-    QPixmap pixmap;
-    if (!proto)
-        return pixmap;
-    pixmap = QPixmap(QString::fromStdString(Config::Get()->getProjectDirectory() + "/Textures/" + proto->getPathName()));
-    if (!pixmap.isNull())
-    {
-        // set transparency color
-        Color color(proto->getTransparencyColor());
-        if (color.hasValidColor())
-            pixmap.setMask(pixmap.createMaskFromColor(QColor(color.getRed(), color.getGreen(), color.getBlue())));
-    }
-    return pixmap;
-}
-
 void AutoTileDatabaseWidget::clearWidgets()
 {
     DatabaseWidget::clearWidgets();
     // clear labels
     for (uint32 i = 0; i < AUTO_TILE_SET_COUNT; ++i)
     {
-        if (QLabel *pLabel = _getLabelForIndex(static_cast<AutoTilePrototype::AUTO_TILE_INDEX>(i)))
+        if (TileDropLabel *pLabel = _getLabelForIndex(static_cast<AutoTilePrototype::AUTO_TILE_INDEX>(i)))
             pLabel->clear();
+    }
+}
+
+void AutoTileDatabaseWidget::setTileDB(const ConstTileDatabaseChangerPtr &pDB)
+{
+    m_pTileDB = pDB;
+    m_pTileList->setDB(m_pTileDB);
+    for (uint32 i = 0; i < AUTO_TILE_SET_COUNT; ++i)
+    {
+        if (TileDropLabel *pLabel = _getLabelForIndex(static_cast<AutoTilePrototype::AUTO_TILE_INDEX>(i)))
+            pLabel->setTileDB(pDB);
     }
 }
 
 void AutoTileDatabaseWidget::setFocus()
 {
-    _fillTileList();
+    m_pTileList->fillWithPrototypes();
+    for (uint32 i = 0; i < AUTO_TILE_SET_COUNT; ++i)
+    {
+        if (TileDropLabel *pLabel = _getLabelForIndex(static_cast<AutoTilePrototype::AUTO_TILE_INDEX>(i)))
+            pLabel->drawCurrentTile();
+    }
 }
 
 bool AutoTileDatabaseWidget::setWidgetsFromPrototype(const AutoTilePrototypePtr &proto)
@@ -184,13 +98,8 @@ bool AutoTileDatabaseWidget::setWidgetsFromPrototype(const AutoTilePrototypePtr 
 
     for (uint32 i = 0; i < AUTO_TILE_SET_COUNT; ++i)
     {
-        m_uiAutoTileSet[i] = proto->getTileID(static_cast<AutoTilePrototype::AUTO_TILE_INDEX>(i));
-        ConstTilePrototypePtr tileProto;
-        if (m_pTileDB->getPrototype(m_uiAutoTileSet[i], tileProto))
-        {
-            if (QLabel *pLabel = _getLabelForIndex(static_cast<AutoTilePrototype::AUTO_TILE_INDEX>(i)))
-                pLabel->setPixmap(_createTilePixmap(tileProto));
-        }
+        if (TileDropLabel *pLabel = _getLabelForIndex(static_cast<AutoTilePrototype::AUTO_TILE_INDEX>(i)))
+            pLabel->setCurrentTileID(proto->getTileID(static_cast<AutoTilePrototype::AUTO_TILE_INDEX>(i)));
     }
     return true;
 }
@@ -201,7 +110,14 @@ bool AutoTileDatabaseWidget::getPrototypeFromWidgets(AutoTilePrototypePtr &proto
         return false;
 
     for (uint32 i = 0; i < AUTO_TILE_SET_COUNT; ++i)
-        proto->setTileID(static_cast<AutoTilePrototype::AUTO_TILE_INDEX>(i), m_uiAutoTileSet[i]);
-
+    {
+        if (TileDropLabel *pLabel = _getLabelForIndex(static_cast<AutoTilePrototype::AUTO_TILE_INDEX>(i)))
+            proto->setTileID(static_cast<AutoTilePrototype::AUTO_TILE_INDEX>(i), pLabel->getCurrentTileID());
+    }
     return true;
+}
+
+void AutoTileDatabaseWidget::_onTileDrop(uint32 uiID, const Point<int32> &pos)
+{
+    updateItem();
 }

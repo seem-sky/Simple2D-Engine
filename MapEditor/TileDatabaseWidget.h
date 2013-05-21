@@ -17,7 +17,7 @@ protected:
 
 public:
     TileDatabaseWidget(QWidget *pParent = NULL);
-    QPixmap showPixmap(const QString &sFilePath);
+    QPixmap showPixmap(const DATABASE::TilePrototypePtr &proto);
 
 private slots:
     void _passabilityButtonClicked(bool clicked);
@@ -25,7 +25,7 @@ private slots:
     void _choseTransparentColorButtonClicked() { choseTransparencyColor(); }
     void _choseFileButtonClicked() { choseFile(); }
     void _changeTransparencyColor() { transparencyColorChanged(); }
-    void _resizeButtonClicked() { _resizeDatabase(getListCountValue()); }
+    void _resizeButtonClicked() { resizeDatabase(getListCountValue()); }
     void _currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous) { currentItemChanged(current); }
     void _changeName() { changeName(); }
 };

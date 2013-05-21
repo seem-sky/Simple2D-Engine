@@ -50,7 +50,7 @@ void MultiTileMapAction::revertMapAction()
 
     // ugly solution, but i did not find a better way
     // first update all autotiles
-    // after that, in a new loop, get all border tiles and update the tile if its an autotile set;
+    // after that, in a new loop, get all border tiles and update the tile
     // last update all border tiles
     UInt32PointSet positions;
     for (UInt32PointVector::const_iterator itr = m_Positions.begin(); itr != m_Positions.end(); ++itr)

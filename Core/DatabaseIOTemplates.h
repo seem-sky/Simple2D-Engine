@@ -13,66 +13,63 @@ namespace DATABASE
     class DatabaseReader : public XML_IO::XMLReader
     {
     private:
-        void _getPrototypeFromXML(const IXMLDOMNodePtr &pParentNode)
+        void _getPrototypeFromXML(const QDomNode &node)
         {
-            IXMLDOMNamedNodeMapPtr pAttributes;
-            LONG attributeCount = 0;
-            if (FAILED(pParentNode->get_attributes(&pAttributes)) || FAILED(pAttributes->get_length(&attributeCount)))
+            if (node.isNull())
                 return;
-
-            CComBSTR attributeText;
-            CComVariant value;
+            QDomNamedNodeMap attributeMap = node.attributes();
             boost::shared_ptr<T> proto(new T());
-            for (LONG i = 0; i < attributeCount; ++i)
+            // get attributes
+            for (uint32 i = 0; i < attributeMap.length(); ++i)
             {
-                IXMLDOMNodePtr pNodeTemp = NULL;
-                if (FAILED(pAttributes->get_item(i, &pNodeTemp)) || FAILED(pNodeTemp->get_nodeName(&attributeText)) ||
-                    FAILED(pNodeTemp->get_nodeValue(&value)))
-                    continue;
-
-                std::string sAttributeText = _bstr_t(attributeText);
-                getAttributeFromXML(proto, sAttributeText, value);
+                QDomNode attributeNode = attributeMap.item(i);
+                if (!attributeNode.isNull())
+                    getAttributeFromXML(proto, attributeNode.nodeName(), attributeNode.nodeValue());
             }
+            // get children
+            checkoutChildren(node, proto);
             m_pDB->setPrototype(proto->getID(), proto);
         }
 
     protected:
-        bool checkoutChildren(const IXMLDOMNodePtr &pParentNode)
+        virtual bool getChildrenFromXML(const QDomNode &node, boost::shared_ptr<T> proto, const QString &childName) { return false; }
+        bool checkoutChildren(const QDomNode &node, boost::shared_ptr<T> proto)
         {
-            IXMLDOMNodeListPtr pChildNodes;
-            if (FAILED(pParentNode->get_childNodes(&pChildNodes)))
+            if (node.isNull())
                 return false;
-
-            LONG nodeLength = 0;
-            if (FAILED(pChildNodes->get_length(&nodeLength)))
-                return false;
-
-            IXMLDOMNodePtr pNodeTemp = NULL;
-            for (LONG i = 0; i < nodeLength; ++i)
+            QDomNodeList childNodeList = node.childNodes();
+            for (uint32 i = 0; i < childNodeList.length(); ++i)
             {
-                if (SUCCEEDED(pChildNodes->get_item(i, &pNodeTemp)))
-                    _getPrototypeFromXML(pNodeTemp);
+                if (!childNodeList.at(i).isNull())
+                    getChildrenFromXML(childNodeList.at(i), proto, childNodeList.at(i).nodeName());
             }
             return true;
         }
 
-        virtual bool getAttributeFromXML(boost::shared_ptr<T> proto, const std::string sAttributeName, CComVariant value)
+        bool checkoutChildren(const QDomNode &parentNode)
         {
-            if (!proto)
+            if (parentNode.isNull())
+                return false;
+            QDomNodeList childNodeList = parentNode.childNodes();
+            for (uint32 i = 0; i < childNodeList.length(); ++i)
+                _getPrototypeFromXML(childNodeList.at(i));
+            return true;
+        }
+
+        virtual bool getAttributeFromXML(boost::shared_ptr<T> proto, const QString &attributeName, const QString &attributeValue)
+        {
+            if (!proto || attributeName.isEmpty() || attributeValue.isEmpty())
                 return false;
 
-            if (sAttributeName == "Name")
+            if (attributeName == "Name")
             {
-                proto->setName(std::string(_bstr_t(value)));
+                proto->setName(attributeValue.toStdString());
                 return true;
             }
-            else if (sAttributeName == "ID")
+            else if (attributeName == "ID")
             {
-                if (SUCCEEDED(value.ChangeType(VT_UINT)))
-                {
-                    proto->setID(value.uintVal);
-                    return true;
-                }
+                proto->setID(attributeValue.toUInt());
+                return true;
             }
             return false;
         }
@@ -85,42 +82,38 @@ namespace DATABASE
     };
 
     template <class T>
-    class DatabaseWriter : public XML_IO::XMLWriter
+    class DatabaseWriter : public XML_IO::XMLStreamWriter
     {
     private:
-        virtual std::string _getNodeName() const = 0;
-
-        bool _getXMLFromPrototype(uint32 uiID, MSXML2::IXMLDOMNodePtr &pNewNode)
+        bool _writePrototype(uint32 uiID, QXmlStreamWriter &writer)
         {
             boost::shared_ptr<T> proto;
-            if (!pNewNode || !m_pDB->getPrototype(uiID, proto))
+            if (!m_pDB->getPrototype(uiID, proto))
                 return false;
-            getXMLFromAttributes(proto, pNewNode);
+            writer.writeStartElement("prototype");
+            getXMLFromAttributes(proto, writer);
+            writer.writeEndElement();
             return true;
         }
 
-        bool writeChildren(MSXML2::IXMLDOMNodePtr &parentNode)
+        bool _writeChildren(QXmlStreamWriter &writer)
         {
             for (uint32 i = 1; i <= m_pDB->getDBSize()+1; ++i)
-            {
-                MSXML2::IXMLDOMNodePtr newNode = createNode(_getNodeName());
-                if (_getXMLFromPrototype(i, newNode))
-                    addChildren(newNode, parentNode);
-            }
+                _writePrototype(i, writer);
             return true;
         }
 
     protected:
-        virtual void getXMLFromAttributes(boost::shared_ptr<T> proto, MSXML2::IXMLDOMNodePtr &pNewNode)
+        virtual void getXMLFromAttributes(boost::shared_ptr<T> proto, QXmlStreamWriter &writer)
         {
             if (!proto)
                 return;
-            changeAttribute(pNewNode, proto->getID(), "ID");
-            changeAttribute(pNewNode, proto->getName().c_str(), "Name");
+            writer.writeAttribute("ID", QString::number(proto->getID()));
+            writer.writeAttribute("Name", QString::fromStdString(proto->getName()));
         }
 
     public:
-        DatabaseWriter(const boost::shared_ptr<Database<T>> &pDB) : XMLWriter(), m_pDB(pDB) {}
+        DatabaseWriter(const boost::shared_ptr<Database<T>> &pDB) : XMLStreamWriter(), m_pDB(pDB) {}
 
     protected:
         boost::shared_ptr<Database<T>> m_pDB;
@@ -133,26 +126,26 @@ namespace DATABASE
     class TextureDatabaseReader : public DatabaseReader<T>
     {
     protected:
-        virtual bool getAttributeFromXML(boost::shared_ptr<T> proto, const std::string sAttributeName, CComVariant value)
+        virtual bool getAttributeFromXML(boost::shared_ptr<T> proto, const QString &attributeName, const QString &attributeValue)
         {
-            if (!proto)
+            if (!proto || attributeName.isEmpty() || attributeValue.isEmpty())
                 return false;
-            if (DatabaseReader::getAttributeFromXML(proto, sAttributeName, value))
+            if (DatabaseReader::getAttributeFromXML(proto, attributeName, attributeValue))
                 return true;
 
-            if (sAttributeName == "FileName")
+            if (attributeName == "FileName")
             {
-                proto->setFileName(std::string(_bstr_t(value)));
+                proto->setFileName(attributeValue.toStdString());
                 return true;
             }
-            else if (sAttributeName == "Path")
+            else if (attributeName == "Path")
             {
-                proto->setPath(std::string(_bstr_t(value)));
+                proto->setPath(attributeValue.toStdString());
                 return true;
             }
-            else if (sAttributeName == "transparent_color")
+            else if (attributeName == "transparent_color")
             {
-                proto->setTransparencyColor(Color(std::string(_bstr_t(value))));
+                proto->setTransparencyColor(Color(attributeValue.toStdString()));
                 return true;
             }
             return false;
@@ -166,14 +159,14 @@ namespace DATABASE
     class TextureDatabaseWriter : public DatabaseWriter<T>
     {
     protected:
-        virtual void getXMLFromAttributes(boost::shared_ptr<T> proto, MSXML2::IXMLDOMNodePtr &pNewNode)
+        virtual void getXMLFromAttributes(boost::shared_ptr<T> proto, QXmlStreamWriter &writer)
         {
             if (!proto)
                 return;
-            DatabaseWriter::getXMLFromAttributes(proto, pNewNode);
-            changeAttribute(pNewNode, proto->getFileName().c_str(), "FileName");
-            changeAttribute(pNewNode, proto->getPath().c_str(), "Path");
-            changeAttribute(pNewNode, proto->getTransparencyColor().getColorString().c_str(), "transparent_color");
+            DatabaseWriter::getXMLFromAttributes(proto, writer);
+            writer.writeAttribute("FileName", QString::fromStdString(proto->getFileName()));
+            writer.writeAttribute("Path", QString::fromStdString(proto->getPath()));
+            writer.writeAttribute("transparent_color", QString::fromStdString(proto->getTransparencyColor().getColorString()));
         }
 
     public:

@@ -6,7 +6,10 @@
 
 namespace MAP
 {
-    class MapBrush
+    /*#####
+    # TileBrushes
+    #####*/
+    class TileBrush
     {
     public:
         enum BrushType
@@ -27,7 +30,7 @@ namespace MAP
         void setupBitset(const MAP::MapPrototypePtr &map, BitsetVector &mapBitset);
 
     public:
-        MapBrush();
+        TileBrush();
         inline void setBrushType(BrushType type) { m_Type = type; }
         inline BrushType getBrushType() const { return m_Type; }
         inline void setTile(uint32 uiID) { m_uiTileID = uiID; }
@@ -45,9 +48,9 @@ namespace MAP
         BrushType m_Type;
         uint32 m_uiTileID;
     };
-    typedef boost::shared_ptr<MapBrush> MapBrushPtr;
+    typedef boost::shared_ptr<TileBrush> MapBrushPtr;
 
-    class MapTileBrush : public MapBrush
+    class MapTileBrush : public TileBrush
     {
     private:
         void _drawPen(MapViewWidget *pWidget, const Point3D<uint32> &center);
@@ -56,7 +59,7 @@ namespace MAP
             std::vector<boost::dynamic_bitset<>> &mapBitset, UInt32PointVector &openPoints);
     };
 
-    class MapAutoTileBrush : public MapBrush
+    class MapAutoTileBrush : public TileBrush
     {
     private:
         void _drawPen(MapViewWidget *pWidget, const Point3D<uint32> &center);
@@ -69,12 +72,39 @@ namespace MAP
         void _doAutoTileCheckForPosList(const MAP::MapPrototypePtr &map, const uint32 &uiLayer, const UInt32PointSet &posVector);
 
     public:
-        MapAutoTileBrush(DATABASE::ConstAutoTileDatabasePtr pDB) : MapBrush(), m_pAutoTileDB(pDB) {}
+        MapAutoTileBrush(DATABASE::ConstAutoTileDatabasePtr pDB) : TileBrush(), m_pAutoTileDB(pDB) {}
         inline void setAutoTileDB(DATABASE::ConstAutoTileDatabasePtr pAutoTileDB) { m_pAutoTileDB = pAutoTileDB; }
 
     private:
         DATABASE::ConstAutoTileDatabasePtr m_pAutoTileDB;
         UInt32PointSet m_BorderPosResult;
+    };
+
+    /*#####
+    # MapObjectBrush
+    #####*/
+    class MapObjectBrush
+    {
+    public:
+        inline void setObjectType(DATABASE::ObjectType type) { m_ObjectType = type; }
+        inline DATABASE::ObjectType getObjectType() const { return m_ObjectType; }
+
+        inline void setObjectID(uint32 uiID) { m_uiObjectID = uiID; }
+        inline uint32 getObjectID() const { return m_uiObjectID; }
+
+        // return true if draw was successful
+        bool drawObject(MapViewWidget *pWidget, Point3D<uint32> pos);
+
+        void setAdditionalDBs(DATABASE::ConstWorldObjectDatabasePtr pWorldObjectDB, DATABASE::ConstAnimationDatabasePtr pAnimationDB,
+            DATABASE::ConstSpriteDatabasePtr pSpriteDB);
+
+    private:
+        uint32 m_uiObjectID;
+        DATABASE::ObjectType m_ObjectType;
+
+        DATABASE::ConstWorldObjectDatabasePtr m_pWorldObjectDB;
+        DATABASE::ConstAnimationDatabasePtr m_pAnimationDB;
+        DATABASE::ConstSpriteDatabasePtr m_pSpriteDB;
     };
 }
 #endif

@@ -6,310 +6,366 @@ using namespace DATABASE;
 /*####
 # TileDatabase
 ####*/
-bool TileDatabaseXMLReader::readFile(const std::string &sFileName, const bool threaded)
+bool TileDatabaseXMLReader::getAttributeFromXML(TilePrototypePtr proto, const QString &attributeName, const QString &attributeValue)
 {
-    if (!m_pDB)
+    if (!proto || attributeName.isEmpty() || attributeValue.isEmpty())
         return false;
-    StdStringVector sNodeNames;
-    sNodeNames.push_back("Database");
-    sNodeNames.push_back("TileDatabase");
-    return XMLReader::readFile(sFileName, sNodeNames, threaded);
-}
-
-bool TileDatabaseXMLReader::getAttributeFromXML(TilePrototypePtr proto, const std::string sAttributeName, CComVariant value)
-{
-    if (!proto)
-        return false;
-    if (TextureDatabaseReader::getAttributeFromXML(proto, sAttributeName, value))
+    if (TextureDatabaseReader::getAttributeFromXML(proto, attributeName, attributeValue))
         return true;
 
-    if (sAttributeName == "passability")
+    if (attributeName == "passability")
     {
-        if (SUCCEEDED(value.ChangeType(VT_UI1)))
-            proto->addPassabilityFlag(value.bVal);
+        proto->addPassabilityFlag(attributeValue.toUShort());
         return true;
     }
-    else if (sAttributeName == "terraintype")
+    else if (attributeName == "terraintype")
     {
-        if (SUCCEEDED(value.ChangeType(VT_UINT)))
-            proto->setTerrainType(value.uintVal);
+        proto->setTerrainType(attributeValue.toUInt());
         return true;
     }
     return false;
 }
 
-bool TileDatabaseXMLWriter::writeFile(const std::string &sFileName, const bool threaded)
-{
-    if (!m_pDB)
-        return false;
-    StdStringVector sNodeNames;
-    sNodeNames.push_back("Database");
-    sNodeNames.push_back("TileDatabase");
-    return XMLWriter::writeFile(sFileName, sNodeNames, threaded);
-}
-
-void TileDatabaseXMLWriter::getXMLFromAttributes(TilePrototypePtr proto, MSXML2::IXMLDOMNodePtr &pNewNode)
+void TileDatabaseXMLWriter::getXMLFromAttributes(TilePrototypePtr proto, QXmlStreamWriter &writer)
 {
     if (!proto)
         return;
-    TextureDatabaseWriter::getXMLFromAttributes(proto, pNewNode);
-    changeAttribute(pNewNode, proto->getTerrainType(), "terraintype");
-    changeAttribute(pNewNode, proto->getPassability(), "passability");
+    TextureDatabaseWriter::getXMLFromAttributes(proto, writer);
+    writer.writeAttribute("terraintype", QString::number(proto->getTerrainType()));
+    writer.writeAttribute("passability", QString::number(proto->getPassability()));
 }
 
 /*####
 # AutoTileDatabase
 ####*/
-bool AutoTileDatabaseXMLReader::readFile(const std::string &sFileName, const bool threaded)
+bool AutoTileDatabaseXMLReader::getAttributeFromXML(AutoTilePrototypePtr proto, const QString &attributeName, const QString &attributeValue)
 {
-    if (!m_pDB)
+    if (!proto || attributeName.isEmpty() || attributeValue.isEmpty())
         return false;
-    StdStringVector sNodeNames;
-    sNodeNames.push_back("Database");
-    sNodeNames.push_back("AutoTileDatabase");
-    return XMLReader::readFile(sFileName, sNodeNames, threaded);
-}
-
-bool AutoTileDatabaseXMLReader::getAttributeFromXML(AutoTilePrototypePtr proto, const std::string sAttributeName, CComVariant value)
-{
-    if (!proto)
-        return false;
-    if (DatabaseReader::getAttributeFromXML(proto, sAttributeName, value))
+    if (DatabaseReader::getAttributeFromXML(proto, attributeName, attributeValue))
         return true;
 
-    std::string sSubstr = "Index";
-    uint32 uiIndex = atoi(sAttributeName.substr(sAttributeName.find(sSubstr) + sSubstr.size()).c_str());
-    if (SUCCEEDED(value.ChangeType(VT_UINT)) && uiIndex < AUTO_TILE_SET_COUNT)
+    QString tempName = attributeName;
+    uint32 uiIndex = tempName.remove("Index").toUInt();
+    if (uiIndex < AUTO_TILE_SET_COUNT)
     {
-        proto->setTileID(static_cast<AutoTilePrototype::AUTO_TILE_INDEX>(uiIndex), value.uintVal);
+        proto->setTileID(static_cast<AutoTilePrototype::AUTO_TILE_INDEX>(uiIndex), attributeValue.toUInt());
         return true;
     }
 
     return false;
 }
 
-bool AutoTileDatabaseXMLWriter::writeFile(const std::string &sFileName, const bool threaded)
-{
-    if (!m_pDB)
-        return false;
-    StdStringVector sNodeNames;
-    sNodeNames.push_back("Database");
-    sNodeNames.push_back("AutoTileDatabase");
-    return XMLWriter::writeFile(sFileName, sNodeNames, threaded);
-}
-
-void AutoTileDatabaseXMLWriter::getXMLFromAttributes(AutoTilePrototypePtr proto, MSXML2::IXMLDOMNodePtr &pNewNode)
+void AutoTileDatabaseXMLWriter::getXMLFromAttributes(AutoTilePrototypePtr proto, QXmlStreamWriter &writer)
 {
     if (!proto)
         return;
-    DatabaseWriter::getXMLFromAttributes(proto, pNewNode);
+    DatabaseWriter::getXMLFromAttributes(proto, writer);
     for (uint32 i = 0; i < AUTO_TILE_SET_COUNT; ++i)
-        changeAttribute(pNewNode, proto->getTileID(static_cast<AutoTilePrototype::AUTO_TILE_INDEX>(i)), ("Index" + ToString(i)).c_str());
+        writer.writeAttribute("Index" + QString::number(i), QString::number(proto->getTileID(static_cast<AutoTilePrototype::AUTO_TILE_INDEX>(i))));
 }
 
 /*####
-# SpriteDatabase
+# AnimationDatabase
 ####*/
-bool SpriteDatabaseXMLReader::readFile(const std::string &sFileName, const bool threaded)
+bool AnimationDatabaseXMLReader::_getFrameAttribute(AnimationPrototype::Frame &frame, const QString &nodeName, const QString &nodeValue)
 {
-    if (!m_pDB)
-        return false;
-    StdStringVector sNodeNames;
-    sNodeNames.push_back("Database");
-    sNodeNames.push_back("SpriteDatabase");
-    return XMLReader::readFile(sFileName, sNodeNames, threaded);
-}
-
-bool SpriteDatabaseXMLReader::getAttributeFromXML(SpritePrototypePtr proto, const std::string sAttributeName, CComVariant value)
-{
-    if (!proto)
-        return false;
-    if (TextureDatabaseReader::getAttributeFromXML(proto, sAttributeName, value))
-        return true;
-
-    if (sAttributeName == "boundingX")
+    if (nodeName == "time_msec")
     {
-        if (SUCCEEDED(value.ChangeType(VT_UINT)))
-            proto->setBoundingX(value.uintVal);
-        return true;
-    }
-    else if (sAttributeName == "boundingY")
-    {
-        if (SUCCEEDED(value.ChangeType(VT_UINT)))
-            proto->setBoundingY(value.uintVal);
-        return true;
-    }
-    else if (sAttributeName == "boundingWidth")
-    {
-        if (SUCCEEDED(value.ChangeType(VT_UINT)))
-            proto->setBoundingWidth(value.uintVal);
-        return true;
-    }
-    else if (sAttributeName == "boundingHeight")
-    {
-        if (SUCCEEDED(value.ChangeType(VT_UINT)))
-            proto->setBoundingHeight(value.uintVal);
-        return true;
-    }
-    else if (sAttributeName == "columns")
-    {
-        if (SUCCEEDED(value.ChangeType(VT_UINT)))
-            proto->setColumns(value.uintVal);
-        return true;
-    }
-    else if (sAttributeName == "rows")
-    {
-        if (SUCCEEDED(value.ChangeType(VT_UINT)))
-            proto->setRows(value.uintVal);
+        frame.m_uiMsecTime = nodeValue.toUInt();
         return true;
     }
     return false;
 }
 
-bool SpriteDatabaseXMLWriter::writeFile(const std::string &sFileName, const bool threaded)
+bool AnimationDatabaseXMLReader::_getSpriteAttribute(AnimationPrototype::Sprite &sprite, const QString &nodeName, const QString &nodeValue)
 {
-    if (!m_pDB)
-        return false;
-    StdStringVector sNodeNames;
-    sNodeNames.push_back("Database");
-    sNodeNames.push_back("SpriteDatabase");
-    return XMLWriter::writeFile(sFileName, sNodeNames, threaded);
+    if (nodeName == "spriteID")
+    {
+        sprite.m_uiSpriteID = nodeValue.toUInt();
+        return true;
+    }
+    else if (nodeName == "posX")
+    {
+        sprite.m_Pos.x = nodeValue.toInt();
+        return true;
+    }
+    else if (nodeName == "posY")
+    {
+        sprite.m_Pos.y = nodeValue.toInt();
+        return true;
+    }
+    else if (nodeName == "scale")
+    {
+        sprite.m_uiScale = nodeValue.toUInt();
+        return true;
+    }
+    else if (nodeName == "rotation")
+    {
+        sprite.m_uiRotation = nodeValue.toUInt();
+        return true;
+    }
+    else if (nodeName == "opacity")
+    {
+        sprite.m_uiOpacity = nodeValue.toUShort();
+        return true;
+    }
+    return false;
 }
 
-void SpriteDatabaseXMLWriter::getXMLFromAttributes(SpritePrototypePtr proto, MSXML2::IXMLDOMNodePtr &pNewNode)
+bool AnimationDatabaseXMLReader::getChildrenFromXML(const QDomNode &node, AnimationPrototypePtr proto, const QString &childName)
+{
+    if (node.isNull() || !proto || childName.isEmpty())
+        return false;
+
+    // checkout frame and sprites
+    if (childName == "Frame" || childName == "Sprite")
+    {
+        AnimationPrototype::Frame newFrame;
+        AnimationPrototype::Sprite newSprite;
+        // get attributes
+        QDomNamedNodeMap attributeNodes = node.attributes();
+        for (uint32 i = 0; i < attributeNodes.length(); ++i)
+        {
+            QDomNode attributeNode = attributeNodes.item(i);
+            if (attributeNode.isNull())
+                continue;
+            if (childName == "Frame")
+                _getFrameAttribute(newFrame, attributeNode.nodeName(), attributeNode.nodeValue());
+            else
+                _getSpriteAttribute(newSprite, attributeNode.nodeName(), attributeNode.nodeValue());
+        }
+        if (childName == "Frame")
+        {
+            // get sprites
+            proto->setFrame(proto->getFrameCount(), newFrame);
+            checkoutChildren(node, proto);
+            return true;
+        }
+        else
+        {
+            // add sprite to last frame
+            if (proto->getFrame(proto->getFrameCount()-1, newFrame))
+            {
+                newFrame.m_Sprites.push_back(newSprite);
+                proto->setFrame(proto->getFrameCount()-1, newFrame);
+            }
+        }
+    }
+    return false;
+}
+
+void AnimationDatabaseXMLWriter::getXMLFromAttributes(AnimationPrototypePtr proto, QXmlStreamWriter &writer)
 {
     if (!proto)
         return;
-    TextureDatabaseWriter::getXMLFromAttributes(proto, pNewNode);
-    changeAttribute(pNewNode, proto->getBoundingX(), "boundingX");
-    changeAttribute(pNewNode, proto->getBoundingY(), "boundingY");
-    changeAttribute(pNewNode, proto->getBoundingWidth(), "boundingWidth");
-    changeAttribute(pNewNode, proto->getBoundingHeight(), "boundingHeight");
-    changeAttribute(pNewNode, proto->getColumns(), "columns");
-    changeAttribute(pNewNode, proto->getRows(), "rows");
+    DatabaseWriter::getXMLFromAttributes(proto, writer);
+    // remove all empty frames from the end
+    while (proto->getFrameCount() > 0)
+    {
+        AnimationPrototype::Frame frame;
+        uint32 uiIndex = proto->getFrameCount()-1;
+        if (!proto->getFrame(uiIndex, frame) || !frame.m_Sprites.empty())
+            break;
+        proto->removeFrame(uiIndex);
+    }
+
+    // store frames
+    for (uint32 i = 0; i < proto->getFrameCount(); ++i)
+    {
+        AnimationPrototype::Frame frame;
+        if (!proto->getFrame(i, frame))
+            continue;
+        writer.writeStartElement("Frame");
+        writer.writeAttribute("time_msec", QString::number(frame.m_uiMsecTime));
+        // store sprites
+        for (uint32 j = 0; j < frame.m_Sprites.size(); ++j)
+        {
+            writer.writeEmptyElement("Sprite");
+            writer.writeAttribute("spriteID", QString::number(frame.m_Sprites.at(j).m_uiSpriteID));
+            writer.writeAttribute("posX", QString::number(frame.m_Sprites.at(j).m_Pos.x));
+            writer.writeAttribute("posY", QString::number(frame.m_Sprites.at(j).m_Pos.y));
+            writer.writeAttribute("scale", QString::number(frame.m_Sprites.at(j).m_uiScale));
+            writer.writeAttribute("rotation", QString::number(frame.m_Sprites.at(j).m_uiRotation));
+            writer.writeAttribute("opacity", QString::number(frame.m_Sprites.at(j).m_uiOpacity));
+        }
+        writer.writeEndElement();
+    }
 }
 
 /*####
 # MapDatabase
 ####*/
-bool MapDatabaseXMLReader::readFile(const std::string &sFileName, const bool threaded)
+bool MapDatabaseXMLReader::getAttributeFromXML(MAP::MapPrototypePtr proto, const QString &attributeName, const QString &attributeValue)
 {
-    if (!m_pDB)
+    if (!proto || attributeName.isEmpty() || attributeValue.isEmpty())
         return false;
-    StdStringVector sNodeNames;
-    sNodeNames.push_back("MapDatabase");
-    return XMLReader::readFile(sFileName, sNodeNames, threaded);
-}
-
-bool MapDatabaseXMLReader::getAttributeFromXML(MAP::MapPrototypePtr proto, const std::string sAttributeName, CComVariant value)
-{
-    if (!proto)
-        return false;
-    if (DatabaseReader::getAttributeFromXML(proto, sAttributeName, value))
+    if (DatabaseReader::getAttributeFromXML(proto, attributeName, attributeValue))
         return true;
 
-    if (sAttributeName == "MapSizeX")
+    if (attributeName == "MapSizeX")
     {
-        if (SUCCEEDED(value.ChangeType(VT_UINT)))
-            proto->m_Size.x = value.uintVal;
+        proto->m_Size.x = attributeValue.toUInt();
         return true;
     }
-    else if (sAttributeName == "MapSizeY")
+    else if (attributeName == "MapSizeY")
     {
-        if (SUCCEEDED(value.ChangeType(VT_UINT)))
-            proto->m_Size.y = value.uintVal;
+        proto->m_Size.y = attributeValue.toUInt();
         return true;
     }
-    else if (sAttributeName == "Layer")
+    else if (attributeName == "Layer")
     {
-        if (SUCCEEDED(value.ChangeType(VT_UINT)))
-            proto->m_Size.z = value.uintVal;
+        proto->m_Size.z = attributeValue.toUInt();
         return true;
     }
-    else if (sAttributeName == "ParentID")
+    else if (attributeName == "ParentID")
     {
-        if (SUCCEEDED(value.ChangeType(VT_UINT)))
-            proto->setParentID(value.uintVal);
+        proto->setParentID(attributeValue.toUInt());
         return true;
     }
-    else if (sAttributeName == "MapScript")
+    else if (attributeName == "MapScript")
     {
-        proto->setScriptName(std::string(_bstr_t(value)));
+        proto->setScriptName(attributeValue.toStdString());
         return true;
     }
-    else if (sAttributeName == "File")
+    else if (attributeName == "File")
     {
-        proto->setFileName(std::string(_bstr_t(value)));
+        proto->setFileName(attributeValue.toStdString());
         return true;
     }
     return false;
 }
 
-bool MapDatabaseXMLWriter::writeFile(const std::string &sFileName, const bool threaded)
-{
-    if (!m_pDB)
-        return false;
-    StdStringVector sNodeNames;
-    sNodeNames.push_back("MapDatabase");
-    return XMLWriter::writeFile(sFileName, sNodeNames, threaded);
-}
-
-void MapDatabaseXMLWriter::getXMLFromAttributes(MAP::MapPrototypePtr proto, MSXML2::IXMLDOMNodePtr &pNewNode)
+void MapDatabaseXMLWriter::getXMLFromAttributes(MAP::MapPrototypePtr proto, QXmlStreamWriter &writer)
 {
     if (!proto)
         return;
-    DatabaseWriter::getXMLFromAttributes(proto, pNewNode);
-    changeAttribute(pNewNode, proto->getSize().x, "MapSizeX");
-    changeAttribute(pNewNode, proto->getSize().y, "MapSizeY");
-    changeAttribute(pNewNode, proto->getSize().z, "Layer");
-    changeAttribute(pNewNode, proto->getParentID(), "ParentID");
-    changeAttribute(pNewNode, proto->getScriptName().c_str(), "MapScript");
-    changeAttribute(pNewNode, proto->getFileName().c_str(), "File");
+    DatabaseWriter::getXMLFromAttributes(proto, writer);
+    writer.writeAttribute("MapSizeX", QString::number(proto->getSize().x));
+    writer.writeAttribute("MapSizeY", QString::number(proto->getSize().y));
+    writer.writeAttribute("Layer", QString::number(proto->getSize().z));
+    writer.writeAttribute("ParentID", QString::number(proto->getParentID()));
+    writer.writeAttribute("MapScript", QString::fromStdString(proto->getScriptName()));
+    writer.writeAttribute("File", QString::fromStdString(proto->getFileName()));
 }
 
 /*####
 # TextDatabase
 ####*/
-bool TextDatabaseXMLReader::readFile(const std::string &sFileName, const bool threaded)
+bool TextDatabaseXMLReader::getAttributeFromXML(TextPrototypePtr proto, const QString &attributeName, const QString &attributeValue)
 {
-    if (!m_pDB)
+    if (!proto || attributeName.isEmpty() || attributeValue.isEmpty())
         return false;
-    StdStringVector sNodeNames;
-    sNodeNames.push_back("Database");
-    sNodeNames.push_back("TextDatabase");
-    return XMLReader::readFile(sFileName, sNodeNames, threaded);
-}
-
-bool TextDatabaseXMLReader::getAttributeFromXML(TextPrototypePtr proto, const std::string sAttributeName, CComVariant value)
-{
-    if (!proto)
-        return false;
-    if (DatabaseReader::getAttributeFromXML(proto, sAttributeName, value))
+    if (DatabaseReader::getAttributeFromXML(proto, attributeName, attributeValue))
         return true;
 
-    std::string sSubstr = "Local";
-    uint32 uiIndex = atoi(sAttributeName.substr(sAttributeName.find(sSubstr) + sSubstr.size()).c_str());
+    QString tempName = attributeName;
+    uint32 uiIndex = tempName.remove("Local").toUInt();
     if (uiIndex >= proto->getLocalCount())
         proto->setLocalCount(uiIndex+1);
-    proto->setLocal(uiIndex, std::string(_bstr_t(value)));
+    proto->setLocal(uiIndex, attributeValue.toStdString());
     return true;
 }
 
-bool TextDatabaseXMLWriter::writeFile(const std::string &sFileName, const bool threaded)
-{
-    if (!m_pDB)
-        return false;
-    StdStringVector sNodeNames;
-    sNodeNames.push_back("Database");
-    sNodeNames.push_back("TextDatabase");
-    return XMLWriter::writeFile(sFileName, sNodeNames, threaded);
-}
-
-void TextDatabaseXMLWriter::getXMLFromAttributes(TextPrototypePtr proto, MSXML2::IXMLDOMNodePtr &pNewNode)
+void TextDatabaseXMLWriter::getXMLFromAttributes(TextPrototypePtr proto, QXmlStreamWriter &writer)
 {
     if (!proto)
         return;
-    DatabaseWriter::getXMLFromAttributes(proto, pNewNode);
+    DatabaseWriter::getXMLFromAttributes(proto, writer);
     for (uint32 i = 0; i < proto->getLocalCount(); ++i)
-        changeAttribute(pNewNode, proto->getLocal(i).c_str(), ("Local" + ToString(i)).c_str());
+        writer.writeAttribute("Local" + QString::number(i), QString::fromStdString(proto->getLocal(i)));
+}
+
+/*####
+# WorldObjectDatabase
+####*/
+bool WorldObjectDatabaseXMLReader::getAttributeFromXML(WorldObjectPrototypePtr proto, const QString &attributeName, const QString &attributeValue)
+{
+    if (!proto || attributeName.isEmpty() || attributeValue.isEmpty())
+        return false;
+    if (DatabaseReader::getAttributeFromXML(proto, attributeName, attributeValue))
+        return true;
+
+    if (attributeName == "boundingX")
+    {
+        proto->setBoundingX(attributeValue.toUInt());
+        return true;
+    }
+    else if (attributeName == "boundingY")
+    {
+        proto->setBoundingY(attributeValue.toUInt());
+        return true;
+    }
+    else if (attributeName == "boundingWidth")
+    {
+        proto->setBoundingWidth(attributeValue.toUInt());
+        return true;
+    }
+    else if (attributeName == "boundingHeight")
+    {
+        proto->setBoundingHeight(attributeValue.toUInt());
+        return true;
+    }
+    else if (attributeName == "animationSpeed")
+    {
+        proto->setAnimationSpeed(attributeValue.toUShort());
+        return true;
+    }
+    else if (attributeName == "scriptName")
+    {
+        proto->setScriptName(attributeValue.toStdString());
+        return true;
+    }
+    return false;
+}
+
+bool WorldObjectDatabaseXMLReader::getChildrenFromXML(const QDomNode &node, WorldObjectPrototypePtr proto, const QString &childName)
+{
+    if (node.isNull() || !proto || childName.isEmpty())
+        return false;
+
+    // checkout animation info
+    if (childName == "AnimationInfo")
+    {
+        WorldObjectPrototype::AnimationInfo newAnimationInfo;
+        QDomNamedNodeMap attributeList = node.attributes();
+        // get attributes
+        for (uint32 i = 0; i < attributeList.length(); ++i)
+        {
+            QDomNode tempNode = attributeList.item(i);
+            if (tempNode.nodeName() == "animationID")
+                newAnimationInfo.m_uiAnimationID = tempNode.nodeValue().toUInt();
+            else if (tempNode.nodeName() == "animationTypeID")
+                newAnimationInfo.m_uiObjectAnimationTypeID = tempNode.nodeValue().toUInt();
+        }
+        if (newAnimationInfo.m_uiObjectAnimationTypeID <= MIN_WORLD_OBJECT_POSE)
+            proto->setAnimationInfo(newAnimationInfo.m_uiObjectAnimationTypeID-1, newAnimationInfo);
+        else
+            proto->setAnimationInfo(proto->getAnimationCount(), newAnimationInfo);
+    }
+    return false;
+}
+
+void WorldObjectDatabaseXMLWriter::getXMLFromAttributes(WorldObjectPrototypePtr proto, QXmlStreamWriter &writer)
+{
+    if (!proto)
+        return;
+    DatabaseWriter::getXMLFromAttributes(proto, writer);
+    writer.writeAttribute("boundingX", QString::number(proto->getBoundingX()));
+    writer.writeAttribute("boundingY", QString::number(proto->getBoundingY()));
+    writer.writeAttribute("boundingWidth", QString::number(proto->getBoundingWidth()));
+    writer.writeAttribute("boundingHeight", QString::number(proto->getBoundingHeight()));
+    writer.writeAttribute("animationSpeed", QString::number(proto->getAnimationSpeed()));
+    writer.writeAttribute("scriptName", QString::fromStdString(proto->getScriptName()));
+
+    // store animation infos
+    for (uint32 i = 0; i < proto->getAnimationCount(); ++i)
+    {
+        WorldObjectPrototype::AnimationInfo animationInfo = proto->getAnimationInfo(i);
+        if (animationInfo.m_uiAnimationID == 0 && animationInfo.m_uiObjectAnimationTypeID == 0)
+            continue;
+        writer.writeEmptyElement("AnimationInfo");
+        writer.writeAttribute("animationID", QString::number(animationInfo.m_uiAnimationID));
+        writer.writeAttribute("animationTypeID", QString::number(animationInfo.m_uiObjectAnimationTypeID));
+    }
 }

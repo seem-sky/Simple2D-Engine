@@ -12,21 +12,6 @@
 #include "MapAction.h"
 #include "DatabaseMgr.h"
 
-class MapViewWidget;
-
-/*#####
-# MapViewScene
-#####*/
-class MapViewScene : public QGraphicsScene
-{
-protected:
-    void drawBackground(QPainter *painter, const QRectF &rect);
-    void drawForeground(QPainter *painter, const QRectF &rect);
-
-public:
-    MapViewScene(MapViewWidget *pParent);
-};
-
 /*#####
 # MapViewWidget
 #####*/
@@ -38,13 +23,14 @@ private:
 
 protected:
     void resizeEvent(QResizeEvent *pEvent) { m_ModObj.resizeEvent(this); }
-    bool eventFilter(QObject *pObj, QEvent *pEvent);
 
 public:
     MapViewWidget(const MAP::MapPrototypePtr &map, QWidget *pParent = NULL);
 
     const MAP::MapPrototypePtr& getMap() const { return m_pMap; }
-    inline MapViewScene* getScene() { return (MapViewScene*)m_pView->scene(); }
+    inline MapViewScene* getScene() { return dynamic_cast<MapViewScene*>(m_pView->scene()); }
+    inline MapViewer* getMapViewer() { return m_pView; }
+    inline uint32 getCurrentLayer() const { return m_pCurLayer->value(); }
 
     void changedMap();
     inline bool hasChanged() const { return m_hasChanges; }
@@ -60,6 +46,8 @@ public:
 
     inline bool showGrid() const { return m_pShowGrid->isChecked(); }
 
+    void setObjectsEditable(bool editable = true);
+
 private slots:
     void _changeZoom(int zoom);
     void _changeCurLayer(int layer);
@@ -67,9 +55,6 @@ private slots:
     void _showGridChanged(int state);
 
 signals:
-    void brushPressed(MapViewWidget *pWidget, Point3D<uint32> point, uint32 uiButton);
-    void brushReleased(MapViewWidget *pWidget, Point3D<uint32> point, uint32 uiButton);
-    void brushMoved(MapViewWidget *pWidget, Point3D<uint32> point);
     void textUpdated(MapViewWidget *pWidget, const QString &sTabName);
 
 private:
@@ -99,6 +84,7 @@ public:
 public slots:
     void _addMapTab(const MAP::MapPrototypePtr &map);
     void _closeTab(int index);
+    void setCurrentCursor(const QCursor &cursor);
 
 private slots:
     void _updateMap(const MAP::MapPrototypePtr &map);
@@ -107,5 +93,7 @@ private slots:
     
 private:
     DATABASE::MapDatabasePtr m_pMapDB;
+
+    QCursor m_cursor;
 };
 #endif

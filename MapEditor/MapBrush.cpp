@@ -2,6 +2,7 @@
 #include <QtGui/QPainter>
 #include <QtGui/QBitmap>
 #include "Config.h"
+#include "AnimationViewWidget.h"
 
 using namespace MAP;
 using namespace DATABASE;
@@ -9,18 +10,17 @@ using namespace DATABASE;
 /*#####
 # MapBrush
 #####*/
-
-MapBrush::MapBrush() : m_buttonHold(false), m_pLastEmitter(NULL), m_Type(BRUSH_PEN), m_uiTileID(0)
+TileBrush::TileBrush() : m_buttonHold(false), m_pLastEmitter(NULL), m_Type(BRUSH_PEN), m_uiTileID(0)
 {}
 
-void MapBrush::brushPress(MapViewWidget *pWidget, Point3D<uint32> center)
+void TileBrush::brushPress(MapViewWidget *pWidget, Point3D<uint32> center)
 {
     m_pLastEmitter = pWidget;
     m_buttonHold = true;
     drawOnMap(pWidget, center);
 }
 
-void MapBrush::brushRelease(MapViewWidget *pWidget, Point3D<uint32> center)
+void TileBrush::brushRelease(MapViewWidget *pWidget, Point3D<uint32> center)
 {
     if (m_pLastEmitter != pWidget || !m_buttonHold)
         return;
@@ -33,7 +33,7 @@ void MapBrush::brushRelease(MapViewWidget *pWidget, Point3D<uint32> center)
     }
 }
 
-void MapBrush::brushMove(MapViewWidget *pWidget, Point3D<uint32> center)
+void TileBrush::brushMove(MapViewWidget *pWidget, Point3D<uint32> center)
 {
     if (m_pLastEmitter != pWidget || !m_buttonHold)
         return;
@@ -43,7 +43,7 @@ void MapBrush::brushMove(MapViewWidget *pWidget, Point3D<uint32> center)
     }
 }
 
-void MapBrush::drawOnMap(MapViewWidget *pWidget, Point3D<uint32> center)
+void TileBrush::drawOnMap(MapViewWidget *pWidget, Point3D<uint32> center)
 {
     if (!pWidget || !pWidget->getMap())
         return;
@@ -59,13 +59,13 @@ void MapBrush::drawOnMap(MapViewWidget *pWidget, Point3D<uint32> center)
     pWidget->changedMap();
 }
 
-void MapBrush::setupBitset(const MAP::MapPrototypePtr &map, BitsetVector &mapBitset)
+void TileBrush::setupBitset(const MAP::MapPrototypePtr &map, BitsetVector &mapBitset)
 {
     if (map)
         mapBitset = BitsetVector(map->getSize().x, boost::dynamic_bitset<>(map->getSize().y));
 }
 
-void MapBrush::calculateFillArea(MapViewWidget *pWidget, const Point3D<uint32> &center, BitsetVector &mapBitset)
+void TileBrush::calculateFillArea(MapViewWidget *pWidget, const Point3D<uint32> &center, BitsetVector &mapBitset)
 {
     mapBitset.clear();
     MapPrototypePtr map = pWidget->getMap();
@@ -253,4 +253,55 @@ void MapAutoTileBrush::_doAutoTileCheckForPosList(const MAP::MapPrototypePtr &ma
         map->setTile(pos, AutoTilePrototype::getAutoTileIndexForTileCheck(map->getPositionsAroundWithID(map->getAutoTile(pos), pos, UInt32PointSet(),
             MapPrototype::FLAG_NOTHING)));
     }
+}
+
+/*#####
+# MapObjectBrush
+#####*/
+void MapObjectBrush::setAdditionalDBs(DATABASE::ConstWorldObjectDatabasePtr pWorldObjectDB, DATABASE::ConstAnimationDatabasePtr pAnimationDB,
+                                      DATABASE::ConstSpriteDatabasePtr pSpriteDB)
+{
+    m_pWorldObjectDB    = pWorldObjectDB;
+    m_pAnimationDB      = pAnimationDB;
+    m_pSpriteDB         = pSpriteDB;
+}
+
+bool MapObjectBrush::drawObject(MapViewWidget *pWidget, Point3D<uint32> pos)
+{
+    if (!pWidget || !pWidget->getMap() || !pWidget->getScene() || !m_uiObjectID || !m_pWorldObjectDB || !m_pAnimationDB || !m_pSpriteDB)
+        return false;
+
+    MapObjectPtr newMapObject = pWidget->getMap()->addMapObject(m_ObjectType, m_uiObjectID, pos);
+    MapViewScene *pScene = dynamic_cast<MapViewScene*>(pWidget->getScene());
+    // get worldobject
+    ConstWorldObjectPrototypePtr objectProto;
+    if (!m_pWorldObjectDB->getPrototype(m_uiObjectID, objectProto))
+        return false;
+    // create frame
+    WorldObjectPrototype::AnimationInfo animationInfo = objectProto->getAnimationInfo(DIRECTION_DOWN);
+    AnimationViewDB aniViewer;
+    aniViewer.setAttribute(Qt::WA_TranslucentBackground);
+    aniViewer.setWindowFlags(Qt::FramelessWindowHint);
+    aniViewer.setStyleSheet("background:transparent");
+    aniViewer.setFrameShape(QFrame::NoFrame);
+    aniViewer.setAnimationDB(m_pAnimationDB);
+    aniViewer.setSpriteDB(m_pSpriteDB);
+    aniViewer.setGridDraw(false);
+    aniViewer.setPreviousFrameDraw(false);
+    aniViewer.setCurrentAnimation(animationInfo.m_uiAnimationID);
+    // resize viewer
+    AnimationViewScene *pAniScene = dynamic_cast<AnimationViewScene*>(aniViewer.scene());
+    if (!pAniScene)
+        return false;
+    QRect boundingRect = pAniScene->itemsBoundingRect().toRect();
+    aniViewer.resize(boundingRect.width(), boundingRect.height());
+    aniViewer.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    aniViewer.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    aniViewer.setSceneRect(boundingRect);
+    // get pixmap from viewer
+    MapObjectItem *pItem = new MapObjectItem(newMapObject);
+    pItem->setPixmap(QPixmap::grabWidget(&aniViewer));
+    pScene->addItem(pItem);
+    pItem->move(boundingRect.x() + pos.x, boundingRect.y() + pos.y);
+    return true;
 }

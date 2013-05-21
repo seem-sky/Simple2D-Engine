@@ -21,7 +21,7 @@ public:
 private slots:
     void _localChanged();
 
-    void _resizeButtonClicked() { _resizeDatabase(getListCountValue()); }
+    void _resizeButtonClicked() { resizeDatabase(getListCountValue()); }
     void _currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous) { currentItemChanged(current); }
     void _changeName() { changeName(); }
 };

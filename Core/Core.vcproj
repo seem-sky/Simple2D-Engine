@@ -163,6 +163,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\MapGrid.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Thread.cpp"
 				>
 			</File>
@@ -186,6 +190,10 @@
 			</File>
 			<File
 				RelativePath=".\Logfile.h"
+				>
+			</File>
+			<File
+				RelativePath=".\MapGrid.h"
 				>
 			</File>
 			<File
@@ -272,22 +280,6 @@
 				RelativePath=".\XML_IO.h"
 				>
 			</File>
-			<File
-				RelativePath=".\XML_Reader.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\XML_Reader.h"
-				>
-			</File>
-			<File
-				RelativePath=".\XML_Writer.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\XML_Writer.h"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Map"
@@ -306,6 +298,18 @@
 			</File>
 			<File
 				RelativePath=".\MapIO.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Object"
+			>
+			<File
+				RelativePath=".\WorldObject.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\WorldObject.h"
 				>
 			</File>
 		</Filter>

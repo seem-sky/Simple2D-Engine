@@ -92,9 +92,9 @@ bool TileDatabaseWidget::setWidgetsFromPrototype(const TilePrototypePtr &proto)
     return true;
 }
 
-QPixmap TileDatabaseWidget::showPixmap(const QString &sFilePath)
+QPixmap TileDatabaseWidget::showPixmap(const TilePrototypePtr &proto)
 {
-    QPixmap pixmap = TextureDatabaseWidget::showPixmap(sFilePath);
+    QPixmap pixmap = TextureDatabaseWidget::showPixmap(proto);
     if (!pixmap.isNull())
     {
         QGraphicsScene *pScene = new QGraphicsScene();

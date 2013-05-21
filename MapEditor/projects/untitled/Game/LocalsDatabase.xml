@@ -1,0 +1,4 @@
+<LocalsDatabase>
+    <Text ID="1" Name="test String" Local0="Wo ist mein Text hin???&#xA;&#xA;&#xA;&#xA;!!!!!!!!!1;" Local1="Was geht ab?"/>
+    <Text ID="2" Name="test" Local0="bitte, bitte!" Local1=""/>
+  </LocalsDatabase>

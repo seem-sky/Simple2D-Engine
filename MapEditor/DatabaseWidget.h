@@ -5,18 +5,13 @@
 #include "Global.h"
 #include "DatabaseChanger.h"
 #include <QtGui/QMessageBox>
+#include "QtGlobal.h"
+#include "ModifyObject.h"
 
 // slots for child class, paste them after "private slots:"
 //void _resizeButtonClicked() { _resizeDatabase(getListCountValue()); }
 //void _currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous) { currentItemChanged(current); }
 //void _changeName() { changeName(); }
-
-class PrototypeTreeWidgetItem : public QTreeWidgetItem
-{
-public:
-    PrototypeTreeWidgetItem(const QStringList & strings);
-    bool operator <(const QTreeWidgetItem &other) const;
-};
 
 class DatabaseWidgetObject : public QWidget
 {
@@ -37,6 +32,7 @@ private:
     }
 
 protected:
+    void resizeEvent(QResizeEvent *pEvent) { m_ModObj.resizeEvent(this); }
     virtual void connectWidgets()
     {
         connect(m_pResizeList, SIGNAL(clicked()), this, SLOT(_resizeButtonClicked()));
@@ -55,7 +51,7 @@ protected:
         changeName();
     }
 
-    void _resizeDatabase(uint32 uiSize)
+    virtual void resizeDatabase(uint32 uiSize)
     {
         if (uiSize == m_pDBChanger->getDBSize())
             return;
@@ -123,7 +119,7 @@ protected:
         change();
     }
 
-    void fillListWidget(const UInt32StdStringMap &sStrings)
+    virtual void fillListWidget(const UInt32StdStringMap &sStrings)
     {
         m_pListCount->setValue(0);
         m_pList->clear();
@@ -149,6 +145,9 @@ public:
     {
         setupUi(this);
         m_pList->sortByColumn(0, Qt::AscendingOrder);
+        m_ModObj.setWidget(m_pList, MODIFY_RESIZE, QPoint(0, m_pListCount->height()+10), MODIFY_DIRECTION_HEIGHT);
+        m_ModObj.setWidget(m_pListCount, MODIFY_MOVE, QPoint(0, 5), MODIFY_DIRECTION_HEIGHT);
+        m_ModObj.setWidget(m_pResizeList, MODIFY_MOVE, QPoint(0, 5), MODIFY_DIRECTION_HEIGHT);
     }
 
     void storeDBChanges()
@@ -158,7 +157,7 @@ public:
 
     inline uint32 getCurrentID() const { return m_pID->value(); }
     inline bool hasChanged() const { return m_Changes; }
-    inline void setDB(const boost::shared_ptr<DATABASE::Database<T>> &pDB) { m_pDBChanger->setDB(pDB); _updateWidget(); }
+    virtual void setDB(const boost::shared_ptr<DATABASE::Database<T>> &pDB) { m_pDBChanger->setDB(pDB); _updateWidget(); }
     inline uint32 getListCountValue() const { return m_pListCount->value(); }
     void updateName(QTreeWidgetItem *pItem, const QString &sName)
     {
@@ -174,6 +173,7 @@ public:
 
 protected:
     boost::shared_ptr<DATABASE::DatabaseChanger<T>> m_pDBChanger;
+    ModifyObject m_ModObj;
 
 private:
     bool m_Changes;

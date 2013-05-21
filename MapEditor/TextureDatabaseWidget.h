@@ -10,6 +10,7 @@
 #include <QtGui/QFileDialog>
 #include <QtGui/QBitmap>
 #include "TransparencyWindow.h"
+#include "QtGlobal.h"
 
 // slots for child class, paste them after "private slots:"
 //void _choseTransparentColorButtonClicked() { choseTransparencyColor(); }
@@ -56,20 +57,15 @@ protected:
         m_pPath->setText(QString::fromStdString(proto->getPath()));
         // set transparency first, so that pixmap is displayed correctly.
         m_pTransparencyColor->setText(QString::fromStdString(proto->getTransparencyColor().getColorString()));
-        showPixmap(QString::fromStdString(Config::Get()->getProjectDirectory() + "/Textures/" + proto->getPathName()));
+        showPixmap(proto);
         return true;
     }
 
-    virtual QPixmap showPixmap(const QString &sFilePath)
+    virtual QPixmap showPixmap(const boost::shared_ptr<T> &proto)
     {
-        QPixmap pixmap(sFilePath);
-        if (!pixmap.isNull())
+        QPixmap pixmap;
+        if (createPixmapFromTexturePrototype(proto, pixmap))
         {
-            // set transparency color
-            Color color(m_pTransparencyColor->text().toStdString());
-            if (color.hasValidColor())
-                pixmap.setMask(pixmap.createMaskFromColor(QColor(color.getRed(), color.getGreen(), color.getBlue())));
-
             QGraphicsScene *pScene = new QGraphicsScene();
             pScene->addPixmap(pixmap);
             m_pView->setScene(pScene);
@@ -97,17 +93,27 @@ protected:
 
     void transparencyColorChanged()
     {
-        showPixmap(QString::fromStdString(Config::Get()->getProjectDirectory() + "/Textures/") + m_pPath->text() + m_pFileName->text());
+        if (!m_pDBChanger)
+            return;
         updateItem();
+        boost::shared_ptr<T> proto;
+        if (m_pDBChanger->getPrototype(getCurrentID(), proto))
+            showPixmap(proto);
     }
 
     void choseFile()
     {
+
         QString sProjectDir = QString::fromStdString(Config::Get()->getProjectDirectory());
         QString sFileName = QFileDialog::getOpenFileName(this, tr("Chose Texture"), sProjectDir+"/Textures", tr("Images (*.png)"));
         QFileInfo fileInfo(sFileName);
         if (fileInfo.isFile())
         {
+            // clear previous data
+            m_pPath->clear();
+            if (m_pView->scene())
+                m_pView->scene()->clear();
+
             QString sPath(fileInfo.absolutePath());
             sPath = sPath.remove(0, sPath.lastIndexOf("/Textures")+10);
             if (!sPath.isEmpty())
@@ -115,11 +121,13 @@ protected:
                 sPath += "/";
                 m_pPath->setText(sPath);
             }
-            showPixmap(sFileName);
             m_pFileName->setText(fileInfo.fileName());
             if (m_pName->text().isEmpty())
                 setName(fileInfo.fileName().left(fileInfo.fileName().indexOf(".")));
             updateItem();
+            boost::shared_ptr<T> proto;
+            if (m_pDBChanger->getPrototype(getCurrentID(), proto))
+                showPixmap(proto);
         }
     }
 

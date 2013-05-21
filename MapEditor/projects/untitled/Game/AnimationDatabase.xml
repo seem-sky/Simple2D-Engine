@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AnimationDatabase>
+    <prototype ID="1" Name="explosion">
+        <Frame time_msec="50">
+            <Sprite spriteID="3" posX="0" posY="0" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="50">
+            <Sprite spriteID="4" posX="0" posY="0" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="50">
+            <Sprite spriteID="5" posX="0" posY="0" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="50">
+            <Sprite spriteID="6" posX="0" posY="0" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="50">
+            <Sprite spriteID="7" posX="0" posY="0" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="50">
+            <Sprite spriteID="8" posX="0" posY="0" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="50">
+            <Sprite spriteID="9" posX="0" posY="0" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="50">
+            <Sprite spriteID="10" posX="0" posY="0" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="50">
+            <Sprite spriteID="11" posX="0" posY="0" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="50">
+            <Sprite spriteID="12" posX="0" posY="0" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="50">
+            <Sprite spriteID="13" posX="0" posY="0" scale="100" rotation="0" opacity="100"/>
+            <Sprite spriteID="3" posX="-96" posY="-96" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="50">
+            <Sprite spriteID="14" posX="0" posY="0" scale="100" rotation="0" opacity="100"/>
+            <Sprite spriteID="4" posX="-96" posY="-96" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="50">
+            <Sprite spriteID="15" posX="0" posY="0" scale="100" rotation="0" opacity="100"/>
+            <Sprite spriteID="5" posX="-96" posY="-96" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="50">
+            <Sprite spriteID="16" posX="0" posY="0" scale="100" rotation="0" opacity="100"/>
+            <Sprite spriteID="6" posX="-96" posY="-96" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="50">
+            <Sprite spriteID="17" posX="0" posY="0" scale="100" rotation="0" opacity="100"/>
+            <Sprite spriteID="7" posX="-96" posY="-96" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="50">
+            <Sprite spriteID="18" posX="0" posY="0" scale="100" rotation="0" opacity="100"/>
+            <Sprite spriteID="8" posX="-96" posY="-96" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="50">
+            <Sprite spriteID="19" posX="0" posY="0" scale="100" rotation="0" opacity="100"/>
+            <Sprite spriteID="9" posX="-96" posY="-96" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="50">
+            <Sprite spriteID="20" posX="0" posY="0" scale="100" rotation="0" opacity="100"/>
+            <Sprite spriteID="10" posX="-96" posY="-96" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="51">
+            <Sprite spriteID="21" posX="0" posY="0" scale="100" rotation="0" opacity="100"/>
+            <Sprite spriteID="11" posX="-96" posY="-96" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="50">
+            <Sprite spriteID="22" posX="0" posY="0" scale="100" rotation="0" opacity="100"/>
+            <Sprite spriteID="12" posX="-96" posY="-96" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="50">
+            <Sprite spriteID="23" posX="0" posY="0" scale="100" rotation="0" opacity="100"/>
+            <Sprite spriteID="13" posX="-96" posY="-96" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="50">
+            <Sprite spriteID="24" posX="0" posY="0" scale="100" rotation="0" opacity="100"/>
+            <Sprite spriteID="14" posX="-96" posY="-96" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="50">
+            <Sprite spriteID="25" posX="0" posY="0" scale="100" rotation="0" opacity="100"/>
+            <Sprite spriteID="15" posX="-96" posY="-96" scale="100" rotation="0" opacity="100"/>
+            <Sprite spriteID="3" posX="-2" posY="-94" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="50">
+            <Sprite spriteID="26" posX="0" posY="0" scale="100" rotation="0" opacity="100"/>
+            <Sprite spriteID="16" posX="-96" posY="-96" scale="100" rotation="0" opacity="100"/>
+            <Sprite spriteID="4" posX="-4" posY="-92" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="50">
+            <Sprite spriteID="27" posX="0" posY="0" scale="100" rotation="0" opacity="100"/>
+            <Sprite spriteID="17" posX="-96" posY="-96" scale="100" rotation="0" opacity="100"/>
+            <Sprite spriteID="5" posX="-6" posY="-90" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="50">
+            <Sprite spriteID="18" posX="-96" posY="-96" scale="100" rotation="0" opacity="100"/>
+            <Sprite spriteID="6" posX="-8" posY="-88" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="50">
+            <Sprite spriteID="19" posX="-96" posY="-96" scale="100" rotation="0" opacity="100"/>
+            <Sprite spriteID="7" posX="-11" posY="-86" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="50">
+            <Sprite spriteID="20" posX="-96" posY="-96" scale="100" rotation="0" opacity="100"/>
+            <Sprite spriteID="8" posX="-14" posY="-84" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="50">
+            <Sprite spriteID="21" posX="-96" posY="-96" scale="100" rotation="0" opacity="100"/>
+            <Sprite spriteID="9" posX="-15" posY="-82" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="50">
+            <Sprite spriteID="22" posX="-96" posY="-96" scale="100" rotation="0" opacity="100"/>
+            <Sprite spriteID="10" posX="-16" posY="-80" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="50">
+            <Sprite spriteID="23" posX="-96" posY="-96" scale="100" rotation="0" opacity="100"/>
+            <Sprite spriteID="11" posX="-18" posY="-78" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="50">
+            <Sprite spriteID="24" posX="-96" posY="-96" scale="100" rotation="0" opacity="100"/>
+            <Sprite spriteID="12" posX="-20" posY="-76" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="50">
+            <Sprite spriteID="25" posX="-96" posY="-96" scale="100" rotation="0" opacity="100"/>
+            <Sprite spriteID="13" posX="-22" posY="-72" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="50">
+            <Sprite spriteID="26" posX="-96" posY="-96" scale="100" rotation="0" opacity="100"/>
+            <Sprite spriteID="14" posX="-24" posY="-72" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="50">
+            <Sprite spriteID="27" posX="-96" posY="-96" scale="100" rotation="0" opacity="100"/>
+            <Sprite spriteID="15" posX="-26" posY="-70" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="50">
+            <Sprite spriteID="16" posX="-28" posY="-68" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="50">
+            <Sprite spriteID="17" posX="-31" posY="-66" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="50">
+            <Sprite spriteID="18" posX="-36" posY="-62" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="50">
+            <Sprite spriteID="19" posX="-40" posY="-56" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="50">
+            <Sprite spriteID="20" posX="-38" posY="-61" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="50">
+            <Sprite spriteID="21" posX="-38" posY="-58" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="50">
+            <Sprite spriteID="22" posX="-42" posY="-55" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="50">
+            <Sprite spriteID="23" posX="-45" posY="-53" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="50">
+            <Sprite spriteID="24" posX="-48" posY="-51" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="50">
+            <Sprite spriteID="25" posX="-51" posY="-50" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="50">
+            <Sprite spriteID="26" posX="-56" posY="-53" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="0">
+            <Sprite spriteID="27" posX="-59" posY="-50" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+    </prototype>
+    <prototype ID="2" Name="char1-right">
+        <Frame time_msec="250">
+            <Sprite spriteID="28" posX="12" posY="16" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="250">
+            <Sprite spriteID="29" posX="12" posY="16" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="250">
+            <Sprite spriteID="30" posX="12" posY="16" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+        <Frame time_msec="250">
+            <Sprite spriteID="29" posX="12" posY="16" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+    </prototype>
+    <prototype ID="3" Name="Tree">
+        <Frame time_msec="0">
+            <Sprite spriteID="1" posX="32" posY="40" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+    </prototype>

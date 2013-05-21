@@ -41,7 +41,7 @@ namespace DATABASE
         void clear() { m_Prototypes.clear(); }
 
     public:
-        void setPrototype(uint32 uiID, boost::shared_ptr<T> &prototype)
+        virtual void setPrototype(uint32 uiID, boost::shared_ptr<T> &prototype)
         {
             if (uiID)
             {
@@ -119,6 +119,7 @@ namespace DATABASE
         std::string m_sFileName;    // filename
     };
     typedef boost::shared_ptr<TexturePrototype> TexturePrototypePtr;
+    typedef boost::shared_ptr<const TexturePrototype> ConstTexturePrototypePtr;
 
     /*#####
     # TilePrototype
@@ -469,11 +470,97 @@ namespace DATABASE
     {
     public:
         SpritePrototype(uint32 uiID = 0) : TexturePrototype(uiID) {}
+    };
+    typedef boost::shared_ptr<SpritePrototype> SpritePrototypePtr;
+    typedef boost::shared_ptr<const SpritePrototype> ConstSpritePrototypePtr;
+    typedef std::vector<ConstSpritePrototypePtr> ConstSpritePrototypePtrVector;
 
-        inline uint8 getColumns() const { return m_Frames.x; }
-        inline void setColumns(uint8 columns) { m_Frames.x = columns; }
-        inline uint8 getRows() const { return m_Frames.y; }
-        inline void setRows(uint8 rows) { m_Frames.y = rows; }
+    /*#####
+    # AnimationPrototype
+    #####*/
+    class AnimationPrototype : public Prototype
+    {
+    public:
+        class Sprite
+        {
+        public:
+            Sprite() : m_uiSpriteID(0), m_uiRotation(0), m_uiScale(100), m_uiOpacity(100) {}
+            Point<int32> m_Pos;
+            uint32 m_uiSpriteID;
+            uint16 m_uiRotation;
+            uint32 m_uiScale;
+            uint8 m_uiOpacity;
+        };
+        typedef std::vector<Sprite> SpriteVector;
+
+        class Frame
+        {
+        public:
+            Frame() : m_uiMsecTime(0) {}
+            uint32 m_uiMsecTime;
+            SpriteVector m_Sprites;
+        };
+        typedef std::vector<Frame> FrameVector;
+
+    public:
+        AnimationPrototype(uint32 uiID = 0) : Prototype(uiID) {}
+
+        inline bool getFrame(uint32 uiIndex, Frame &frame) const
+        {
+            if (uiIndex < m_Frames.size())
+            {
+                frame = m_Frames.at(uiIndex);
+                return true;
+            }
+            return false;
+        }
+
+        inline void setFrame(uint32 uiIndex, const Frame &frame)
+        {
+            if (uiIndex >= m_Frames.size())
+                m_Frames.resize(uiIndex+1);
+            m_Frames.at(uiIndex) = frame;
+        }
+
+        inline void removeFrame(uint32 uiIndex)
+        {
+            if (uiIndex >= m_Frames.size())
+                return;
+            if (uiIndex == m_Frames.size()-1)
+                m_Frames.resize(uiIndex);
+            else
+                m_Frames.at(uiIndex) = Frame();
+        }
+
+        inline uint32 getFrameCount() const { return m_Frames.size(); }
+
+    private:
+        FrameVector m_Frames;
+    };
+    typedef boost::shared_ptr<AnimationPrototype> AnimationPrototypePtr;
+    typedef boost::shared_ptr<const AnimationPrototype> ConstAnimationPrototypePtr;
+    typedef std::vector<ConstAnimationPrototypePtr> ConstAnimationPrototypePtrVector;
+
+    /*#####
+    # WorldObjectPrototype
+    #####*/
+    enum ObjectType
+    {
+        TYPE_WORLDOBJECT,
+        TYPE_DYNAMIC_OBJECT
+    };
+
+    const uint32 MIN_WORLD_OBJECT_POSE = 4;
+    class WorldObjectPrototype : public Prototype
+    {
+    public:
+        WorldObjectPrototype(uint32 uiID = 0) : Prototype(uiID), m_uiAnimationSpeed(100)
+        {
+            // set minimum poses, so we have stand pose for all directions
+            m_AnimationInfos.resize(MIN_WORLD_OBJECT_POSE, 0);
+            for (uint32 i = 1; i <= MIN_WORLD_OBJECT_POSE; ++i)
+                m_AnimationInfos.at(i-1).m_uiObjectAnimationTypeID = i;
+        }
 
         inline uint32 getBoundingX() const { return m_BoundingRect.getPositionX(); }
         inline void setBoundingX(uint32 x) { m_BoundingRect.setPositionX(x); }
@@ -486,30 +573,62 @@ namespace DATABASE
         inline Rect<uint32> getBoundingRect() const { return m_BoundingRect; }
         inline void setBoundingRect(const Rect<uint32> rect) { m_BoundingRect = rect; }
 
+        inline void setAnimationSpeed(uint16 uiSpeed) { m_uiAnimationSpeed = uiSpeed; }
+        inline uint16 getAnimationSpeed() const { return m_uiAnimationSpeed; }
+
+        inline void setScriptName(const std::string &sScriptName) { m_ScriptName = sScriptName; }
+        inline std::string getScriptName() const { return m_ScriptName; }
+
+        static QString getTypeString(ObjectType type)
+        {
+            switch (type)
+            {
+            case TYPE_WORLDOBJECT: return "WorldObject";
+            case TYPE_DYNAMIC_OBJECT: return "DynamicObject";
+            }
+            return "";
+        }
+
+        // animation stuff
+        struct AnimationInfo
+        {
+            AnimationInfo(uint32 uiAnimationID = 0, uint32 uiAnimationTypeID = 0) : m_uiAnimationID(uiAnimationID), m_uiObjectAnimationTypeID(uiAnimationTypeID)
+            {}
+
+            uint32 m_uiAnimationID;
+            uint32 m_uiObjectAnimationTypeID;
+        };
+        typedef std::vector<AnimationInfo> AnimationInfoVector;
+
+        inline AnimationInfo getAnimationInfo(uint32 uiIndex) const
+        {
+            if (uiIndex < m_AnimationInfos.size())
+                return m_AnimationInfos.at(uiIndex);
+            return 0;
+        }
+        inline void setAnimationInfo(uint32 uiIndex, AnimationInfo animationInfo)
+        {
+            if (uiIndex >= m_AnimationInfos.size())
+                m_AnimationInfos.resize(uiIndex+1);
+            // do not change animation type id if its an standard entry
+            if (uiIndex < MIN_WORLD_OBJECT_POSE)
+                m_AnimationInfos.at(uiIndex).m_uiAnimationID = animationInfo.m_uiAnimationID;
+            else
+                m_AnimationInfos.at(uiIndex) = animationInfo;
+        }
+        inline uint32 getAnimationCount() const { return m_AnimationInfos.size(); }
+        virtual void setAnimationCount(uint32 uiCount)
+        {
+            if (uiCount < MIN_WORLD_OBJECT_POSE || m_AnimationInfos.size() == uiCount)
+                return;
+            m_AnimationInfos.resize(uiCount);
+        }
+
     private:
-        Point<uint8> m_Frames;
         Rect<uint32> m_BoundingRect;
-    };
-    typedef boost::shared_ptr<SpritePrototype> SpritePrototypePtr;
-    typedef boost::shared_ptr<const SpritePrototype> ConstSpritePrototypePtr;
-    typedef std::vector<ConstSpritePrototypePtr> ConstSpritePrototypePtrVector;
-
-    /*#####
-    # WorldObjectPrototype
-    #####*/
-    class WorldObjectPrototype : public Prototype
-    {
-    public:
-        WorldObjectPrototype(uint32 uiID = 0) : Prototype(uiID), m_uiTextureID(0), m_uiFrames(0) {}
-        inline void setTextureID(uint32 uiTextureID) { m_uiTextureID = uiTextureID; }
-        inline uint32 getTextureID() const { return m_uiTextureID; }
-
-        inline void setFramesPerSecond(uint16 uiFrames) { m_uiFrames = uiFrames; }
-        inline uint16 getFramesPerSecond() const { return m_uiFrames; }
-
-    private:
-        uint32 m_uiTextureID;
-        uint16 m_uiFrames;
+        AnimationInfoVector m_AnimationInfos;
+        uint16 m_uiAnimationSpeed;
+        std::string m_ScriptName;
     };
     typedef boost::shared_ptr<WorldObjectPrototype> WorldObjectPrototypePtr;
     typedef boost::shared_ptr<const WorldObjectPrototype> ConstWorldObjectPrototypePtr;
@@ -518,6 +637,7 @@ namespace DATABASE
     /*#####
     # DynamicObjectPrototype
     #####*/
+    const uint32 MIN_DYNAMIC_OBJECT_POSE = 8;
     class DynamicObjectPrototype : public WorldObjectPrototype
     {
     public:
@@ -525,12 +645,33 @@ namespace DATABASE
         inline void setSpeed(uint16 uiSpeed) { m_uiSpeed = uiSpeed; }
         inline uint16 getSpeed() const { return m_uiSpeed; }
 
+        void setAnimationCount(uint32 uiCount)
+        {
+            if (uiCount >= MIN_WORLD_OBJECT_POSE)
+                WorldObjectPrototype::setAnimationCount(uiCount);
+        }
+
     private:
         uint16 m_uiSpeed;
     };
     typedef boost::shared_ptr<DynamicObjectPrototype> DynamicObjectPrototypePtr;
     typedef boost::shared_ptr<const DynamicObjectPrototype> ConstDynamicObjectPrototypePtr;
     typedef std::vector<ConstDynamicObjectPrototypePtr> ConstDynamicObjectPrototypePtrVector;
+
+    /*#####
+    # ObjectAnimationPrototype
+    #####*/
+    class ObjectAnimationTypePrototype : public Prototype
+    {
+    public:
+        ObjectAnimationTypePrototype(uint32 uiID = 0, std::string sName = "") : Prototype(uiID)
+        {
+            setName(sName);
+        }
+    };
+    typedef boost::shared_ptr<ObjectAnimationTypePrototype> ObjectAnimationTypePrototypePtr;
+    typedef boost::shared_ptr<const ObjectAnimationTypePrototype> ConstObjectAnimationTypePrototypePtr;
+    typedef std::vector<ConstObjectAnimationTypePrototypePtr> ConstObjectAnimationPrototypePtrVector;
 
     /*#####
     # TextPrototype

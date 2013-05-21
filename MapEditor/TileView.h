@@ -6,10 +6,7 @@
 #include "Global.h"
 #include <boost/smart_ptr.hpp>
 #include "DatabaseMgr.h"
-
-typedef boost::shared_ptr<QPixmap> QPixmapPtr;
-typedef std::vector<QPixmapPtr> QPixmapPtrVector;
-typedef std::map<uint32, QPixmapPtr> QPixmapPtrMap;
+#include "QtTypedefs.h"
 
 class TileTabView : public QGraphicsView
 {

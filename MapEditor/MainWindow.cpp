@@ -32,10 +32,10 @@ MainWindow::MainWindow(QMainWindow *pParent) : QMainWindow(pParent), m_WindowAct
 
     // load old config data and open last project
     Config::Get()->loadConfig();
-    move(Config::Get()->getMainWindowPos().x, Config::Get()->getMainWindowPos().y);
-    QSize newSize = QSize(Config::Get()->getMainWindowSize().x, Config::Get()->getMainWindowSize().y);
-    if (newSize.width() >= minimumWidth() && newSize.height() >= minimumHeight())
-        resize(newSize);
+    //move(Config::Get()->getMainWindowPos().x, Config::Get()->getMainWindowPos().y);
+    //QSize newSize = QSize(Config::Get()->getMainWindowSize().x, Config::Get()->getMainWindowSize().y);
+    //if (newSize.width() >= minimumWidth() && newSize.height() >= minimumHeight())
+    //    resize(newSize);
     if (!Config::Get()->getProjectDirectory().empty())
         _loadProject(Config::Get()->getProjectDirectory());
 }
@@ -63,7 +63,7 @@ void MainWindow::_openDatabase()
 {
     DatabaseWindow pDB(m_pDBMgr, this);
     pDB.exec();
-    m_pMapEditor->updateTiles();
+    m_pMapEditor->updateMapEditor();
 }
 
 void MainWindow::_saveProject()
@@ -77,7 +77,7 @@ void MainWindow::_saveProject()
     {
         pMapDB->deleteRemovedMaps(Config::Get()->getProjectDirectory());
         MapDatabaseXMLWriter writer(pMapDB);
-        writer.writeFile(Config::Get()->getProjectDirectory() + MAP_DATABASE_PATH);
+        writer.writeFile(QString::fromStdString(Config::Get()->getProjectDirectory() + MAP_DATABASE_PATH), "MapDatabase");
     }
 
     emit projectSave();
@@ -123,32 +123,50 @@ bool MainWindow::_loadDB(const std::string &projectPath)
     // tile database
     TileDatabasePtr tileDB(new TileDatabase());
     TileDatabaseXMLReader tileReader(tileDB);
-    tileReader.readFile(projectPath + TILE_DATABASE_PATH);
+    tileReader.readFile(QString::fromStdString(projectPath + TILE_DATABASE_PATH), "TileDatabase");
     m_pDBMgr->setTileDatabase(tileDB);
 
     // autotile database
     AutoTileDatabasePtr autoTileDB(new AutoTileDatabase());
     AutoTileDatabaseXMLReader autoTileReader(autoTileDB);
-    autoTileReader.readFile(projectPath + AUTO_TILE_DATABASE_PATH);
+    autoTileReader.readFile(QString::fromStdString(projectPath + AUTO_TILE_DATABASE_PATH), "AutoTileDatabase");
     m_pDBMgr->setAutoTileDatabase(autoTileDB);
 
     // sprite database
     SpriteDatabasePtr spriteDB(new SpriteDatabase());
     SpriteDatabaseXMLReader spriteReader(spriteDB);
-    spriteReader.readFile(projectPath + SPRITE_DATABASE_PATH);
+    spriteReader.readFile(QString::fromStdString(projectPath + SPRITE_DATABASE_PATH), "SpriteDatabase");
     m_pDBMgr->setSpriteDatabase(spriteDB);
+
+    // animation database
+    AnimationDatabasePtr animationDB(new AnimationDatabase());
+    AnimationDatabaseXMLReader animationReader(animationDB);
+    animationReader.readFile(QString::fromStdString(projectPath + ANIMATION_DATABASE_PATH), "AnimationDatabase");
+    m_pDBMgr->setAnimationDatabase(animationDB);
 
     // load map database
     MapDatabasePtr mapDB(new MAP::MapDatabase());
     MapDatabaseXMLReader mapReader(mapDB);
-    mapReader.readFile(projectPath + MAP_DATABASE_PATH);
+    mapReader.readFile(QString::fromStdString(projectPath + MAP_DATABASE_PATH), "MapDatabase");
     m_pDBMgr->setMapDatabase(mapDB);
 
     // load text database
     TextDatabasePtr textDB(new TextDatabase());
     TextDatabaseXMLReader textReader(textDB);
-    textReader.readFile(projectPath + TEXT_DATABASE_PATH);
+    textReader.readFile(QString::fromStdString(projectPath + LOCALS_DATABASE_PATH), "LocalsDatabase");
     m_pDBMgr->setTextDatabase(textDB);
+
+    // load worldobject database
+    WorldObjectDatabasePtr worldObjectDB(new WorldObjectDatabase());
+    WorldObjectDatabaseXMLReader worldObjectReader(worldObjectDB);
+    worldObjectReader.readFile(QString::fromStdString(projectPath + WORLD_OBJECT_DATABASE_PATH), "WorldObjectDatabase");
+    m_pDBMgr->setWorldObjectDatabase(worldObjectDB);
+
+    // load object animation type database
+    ObjectAnimationTypeDatabasePtr objectAnimationTypeDB(new ObjectAnimationTypeDatabase());
+    ObjectAnimationTypeDatabaseXMLReader objectAnimationTypeReader(objectAnimationTypeDB);
+    objectAnimationTypeReader.readFile(QString::fromStdString(projectPath + OBJECT_ANIMATION_TYPE_DATABASE_PATH), "ObjectAnimationTypeDatabase");
+    m_pDBMgr->setObjectAnimationTypeDatabase(objectAnimationTypeDB);
 
     // ToDo: load complete databases
     return true;

@@ -3,57 +3,33 @@
 
 #include "Global.h"
 #include "Logfile.h"
-#include <atlcomcli.h>
-#include <atlbase.h>
-
-#include <msxml.h>
-#import <msxml6.dll>
+#include <QtXml/QtXml>
+#include <QtCore/QStringList>
+#include <QtCore/QXmlStreamWriter>
 
 namespace XML_IO
 {
-    /*####
-    # CoObject
-    ####*/
-    class CoObject
-    {
-    public:
-        CoObject() : init(false) {}
-        ~CoObject();
-
-        bool InitCo(LPVOID p_pReserved = NULL);
-
-    private:
-        bool init;
-    };
-
     class XMLReader
     {
     private:
-        IXMLDOMNodePtr changeRootNode(const IXMLDOMNodePtr pParentNode, const StdStringVector &sNodeName);
-        virtual bool checkoutChildren(const IXMLDOMNodePtr &parentNode) = 0;
+        // if invalid nodelist, NULL node returns
+        QDomNode changeRootNode(const QDomNode &parentNode, const QStringList &nodeNameList);
+        virtual bool checkoutChildren(const QDomNode &parentNode) = 0;
 
     protected:
-        bool readFile(const std::string &sFileName, const StdStringVector &sRootNode, const bool threaded = false);
-    };
-
-    class XMLWriter
-    {
-    private:
-        void removeChildren(MSXML2::IXMLDOMNodePtr pNode);
-        IXMLDOMNodePtr changeRootNode(const IXMLDOMNodePtr pParentNode, const StdStringVector &sNodeName);
-        virtual bool writeChildren(MSXML2::IXMLDOMNodePtr &parentNode) = 0;
-
-    protected:
-        MSXML2::IXMLDOMElementPtr createNode(const std::string &sNode);
-        MSXML2::IXMLDOMNodePtr addChildren(MSXML2::IXMLDOMNodePtr pNode, MSXML2::IXMLDOMNodePtr pParent);
-        void changeAttribute(MSXML2::IXMLDOMElementPtr pNode, CComVariant value, CComBSTR attributeName);
-        bool writeFile(const std::string &sFileName, const StdStringVector &sRootNode, const bool threaded = false);
+        QDomNode getSingleNode(const QDomNode &parentNode, const QString &nodeName);
 
     public:
-        XMLWriter() : m_pXMLDom(NULL) {}
+        bool readFile(const QString &fileName, const QString &nodeName);
+    };
 
+    class XMLStreamWriter
+    {
     private:
-        MSXML2::IXMLDOMDocument2Ptr m_pXMLDom;
+        virtual bool _writeChildren(QXmlStreamWriter &writer) = 0;
+
+    public:
+        bool writeFile(const QString &fileName, const QString &rootNode);
     };
 }
 #endif

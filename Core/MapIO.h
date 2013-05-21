@@ -5,24 +5,25 @@
 #include "Point.h"
 #include <boost/smart_ptr.hpp>
 #include "MapDatabase.h"
-#include "XML_Writer.h"
+#include "XML_IO.h"
 
 namespace MAP
 {
     /*#####
     # MapReader
     #####*/
-    class MapReader
+    class MapReader : public XML_IO::XMLReader
     {
     private:
-        void _parseTileString(const Point<uint32> &pos, std::string sTileString);
-        void _loadTiles(bool &result, const std::string &sFileName = "", bool threaded = false);
-        void _loadObjects(bool &result, const std::string &sFileName = "", bool threaded = false);
+        void _parseTileString(const Point<uint32> &pos, QString sTileString);
+        void _loadTiles(const QDomNode &parentNode, bool &result);
+        void _loadObjects(const QDomNode &parentNode, bool &result);
+        bool checkoutChildren(const QDomNode &parentNode);
 
     public:
-        MapReader(MapPrototypePtr &map) : m_pMap(map), m_State(STATE_NONE) {}
+        MapReader(MapPrototypePtr &map) : m_pMap(map), m_State(STATE_NONE), XMLReader() {}
 
-        void loadMapThreaded(const std::string &sFileName, bool &result);
+        //void loadMapThreaded(const QString &sFileName, bool &result);
 
     private:
         enum MapLoadState
@@ -43,15 +44,15 @@ namespace MAP
     class MapWriter
     {
     private:
-        void _storeTiles(XML::XML_WriteData &xmlResult);
-        void _storeObjects(XML::XML_WriteData &xmlResult);
+        //void _storeTiles(XML::XML_WriteData &xmlResult);
+        //void _storeObjects(XML::XML_WriteData &xmlResult);
 
     public:
         MapWriter(MapPrototypePtr &map) : m_pMap(map){}
 
         void storeMapThreaded(const std::string &sFileName, bool &result);
 
-        static void getXMLDataFromObject(const MapObjectPtr &obj, XML::XML_WriteData &xmlResult);
+        //static void getXMLDataFromObject(const MapObjectPtr &obj, XML::XML_WriteData &xmlResult);
 
     private:
         MapPrototypePtr &m_pMap;

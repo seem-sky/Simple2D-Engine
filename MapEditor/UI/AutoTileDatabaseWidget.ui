@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>739</width>
-    <height>551</height>
+    <width>636</width>
+    <height>476</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -33,23 +33,7 @@
     <string>tiles:</string>
    </property>
   </widget>
-  <widget class="QGraphicsView" name="m_pTileView">
-   <property name="geometry">
-    <rect>
-     <x>390</x>
-     <y>300</y>
-     <width>161</width>
-     <height>161</height>
-    </rect>
-   </property>
-   <property name="verticalScrollBarPolicy">
-    <enum>Qt::ScrollBarAsNeeded</enum>
-   </property>
-   <property name="dragMode">
-    <enum>QGraphicsView::ScrollHandDrag</enum>
-   </property>
-  </widget>
-  <widget class="QTreeWidget" name="m_pTileList">
+  <widget class="TilePrototypeDragTreeWidget" name="m_pTileList">
    <property name="geometry">
     <rect>
      <x>390</x>
@@ -57,6 +41,9 @@
      <width>231</width>
      <height>261</height>
     </rect>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::StyledPanel</enum>
    </property>
    <property name="editTriggers">
     <set>QAbstractItemView::NoEditTriggers</set>
@@ -125,7 +112,7 @@
     <string>AutoTile set:</string>
    </property>
   </widget>
-  <widget class="QLabel" name="m_pTopLeft">
+  <widget class="TileDropLabel" name="m_pTopLeft">
    <property name="geometry">
     <rect>
      <x>210</x>
@@ -147,7 +134,7 @@
     <string/>
    </property>
   </widget>
-  <widget class="QLabel" name="m_pTopCenter">
+  <widget class="TileDropLabel" name="m_pTopCenter">
    <property name="geometry">
     <rect>
      <x>250</x>
@@ -166,7 +153,7 @@
     <string/>
    </property>
   </widget>
-  <widget class="QLabel" name="m_pTopRight">
+  <widget class="TileDropLabel" name="m_pTopRight">
    <property name="geometry">
     <rect>
      <x>290</x>
@@ -205,7 +192,7 @@
     <string>basic set:</string>
    </property>
   </widget>
-  <widget class="QLabel" name="m_pCenterLeft">
+  <widget class="TileDropLabel" name="m_pCenterLeft">
    <property name="geometry">
     <rect>
      <x>210</x>
@@ -224,7 +211,7 @@
     <string/>
    </property>
   </widget>
-  <widget class="QLabel" name="m_pCenter">
+  <widget class="TileDropLabel" name="m_pCenter">
    <property name="geometry">
     <rect>
      <x>250</x>
@@ -243,7 +230,7 @@
     <string/>
    </property>
   </widget>
-  <widget class="QLabel" name="m_pCenterRight">
+  <widget class="TileDropLabel" name="m_pCenterRight">
    <property name="geometry">
     <rect>
      <x>290</x>
@@ -262,7 +249,7 @@
     <string/>
    </property>
   </widget>
-  <widget class="QLabel" name="m_pBottomLeft">
+  <widget class="TileDropLabel" name="m_pBottomLeft">
    <property name="geometry">
     <rect>
      <x>210</x>
@@ -281,7 +268,7 @@
     <string/>
    </property>
   </widget>
-  <widget class="QLabel" name="m_pBottomCenter">
+  <widget class="TileDropLabel" name="m_pBottomCenter">
    <property name="geometry">
     <rect>
      <x>250</x>
@@ -300,7 +287,7 @@
     <string/>
    </property>
   </widget>
-  <widget class="QLabel" name="m_pBottomRight">
+  <widget class="TileDropLabel" name="m_pBottomRight">
    <property name="geometry">
     <rect>
      <x>290</x>
@@ -339,7 +326,7 @@
     <string>inner edges:</string>
    </property>
   </widget>
-  <widget class="QLabel" name="m_pInnerEdges">
+  <widget class="TileDropLabel" name="m_pInnerEdges">
    <property name="geometry">
     <rect>
      <x>210</x>
@@ -359,9 +346,20 @@
    </property>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>TilePrototypeDragTreeWidget</class>
+   <extends>QTreeWidget</extends>
+   <header>dragtreewidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>TileDropLabel</class>
+   <extends>QLabel</extends>
+   <header>dragtreewidget.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>m_pTileList</tabstop>
-  <tabstop>m_pTileView</tabstop>
  </tabstops>
  <resources/>
  <connections/>
