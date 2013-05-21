@@ -1,5 +1,5 @@
 //#include "VariableHolder.h"
-//#include "StringAdditions.h"
+//
 //#include <XML_Reader.h>
 //
 ///*#####
@@ -87,7 +87,7 @@
 //    return true;
 //}
 //
-//std::string VariableSettings::GetVariableTypeText() const
+//QString VariableSettings::GetVariableTypeText() const
 //{
 //    switch(m_VariableType)
 //    {
@@ -104,7 +104,7 @@
 //    return "";
 //}
 //
-//std::string VariableSettings::GetVariableSettingText() const
+//QString VariableSettings::GetVariableSettingText() const
 //{
 //    // variable localisation
 //    switch (m_VarLocalisation)
@@ -115,7 +115,7 @@
 //        return "Global " + GetVariableTypeText() + "[" + ToString(m_Type.m_GlobalVariable.m_uiVariableID) + "] ";
 //    case LOCALISATION_VALUE:
 //        {
-//            std::string t_sText = "Value " + GetVariableTypeText() + " ";
+//            QString t_sText = "Value " + GetVariableTypeText() + " ";
 //            // variable type
 //            switch (m_VariableType)
 //            {
@@ -239,7 +239,7 @@
 //{
 //    if (p_Data.HasAttributes())
 //    {
-//        TVariable<std::string> t_Var;
+//        TVariable<QString> t_Var;
 //        CComVariant t_Value;
 //        if (!p_Data.GetAttributeValue("name", t_Value))
 //            return -1;
@@ -301,7 +301,7 @@
 //{
 //    for (uint32 i = 0; i < m_Strings.Size(); ++i)
 //    {
-//        if (const TVariable<std::string> *t_pVar = m_Strings.GetVariable(i))
+//        if (const TVariable<QString> *t_pVar = m_Strings.GetVariable(i))
 //        {
 //            XML::XML_WriteData t_Data(XML::XML_WRITE_APPEND);
 //            t_Data.AddAttribute("name", (LPCSTR)t_pVar->m_sName.c_str());

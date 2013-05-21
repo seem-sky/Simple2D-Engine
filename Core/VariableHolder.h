@@ -43,8 +43,8 @@
 //        memset(&m_Type, 0, sizeof(m_Type));
 //    }
 //
-//    std::string GetVariableSettingText() const;
-//    std::string GetVariableTypeText() const;
+//    QString GetVariableSettingText() const;
+//    QString GetVariableTypeText() const;
 //    bool GetVariableXMLData(XML::XML_WriteData &p_Data) const;
 //    bool LoadDataFromXML(const XML::XML_ReadData &p_Data);
 //
@@ -81,7 +81,7 @@
 //{
 //    TVariable() : m_Value() {}
 //
-//    std::string m_sName;
+//    QString m_sName;
 //    T m_Value;
 //};
 //
@@ -117,7 +117,7 @@
 //    inline void Resize(uint32 p_uiNewSize) { m_Variables.resize(p_uiNewSize); }
 //    inline uint32 Size() const { return m_Variables.size(); }
 //    inline void Clear() { m_Variables.clear(); }
-//    inline void GetVariableNames(std::vector<std::string> &p_lNames) const
+//    inline void GetVariableNames(std::vector<QString> &p_lNames) const
 //    {
 //        for (uint32 i = 0; i < m_Variables.size(); ++i)
 //            p_lNames.push_back(m_Variables.at(i).m_sName);
@@ -130,7 +130,7 @@
 //typedef std::vector<TVariable<bool>> VariableBoolList;
 //typedef std::vector<TVariable<int>> VariableIntegerList;
 //typedef std::vector<TVariable<float>> VariableFloatList;
-//typedef std::vector<TVariable<std::string>> VariableStringList;
+//typedef std::vector<TVariable<QString>> VariableStringList;
 //
 //class VariableHolder
 //{
@@ -138,26 +138,26 @@
 //    inline TVariable<bool>* GetBool(uint32 p_uiID) { return m_Bools.GetVariable(p_uiID); }
 //    inline TVariable<int>* GetInteger(uint32 p_uiID) { return m_Integers.GetVariable(p_uiID); }
 //    inline TVariable<float>* GetFloat(uint32 p_uiID) { return m_Floats.GetVariable(p_uiID); }
-//    inline TVariable<std::string>* GetString(uint32 p_uiID) { return m_Strings.GetVariable(p_uiID); }
+//    inline TVariable<QString>* GetString(uint32 p_uiID) { return m_Strings.GetVariable(p_uiID); }
 //    inline const TVariable<bool>* GetBool(uint32 p_uiID) const { return m_Bools.GetVariable(p_uiID); }
 //    inline const TVariable<int>* GetInteger(uint32 p_uiID) const { return m_Integers.GetVariable(p_uiID); }
 //    inline const TVariable<float>* GetFloat(uint32 p_uiID) const { return m_Floats.GetVariable(p_uiID); }
-//    inline const TVariable<std::string>* GetString(uint32 p_uiID) const { return m_Strings.GetVariable(p_uiID); }
+//    inline const TVariable<QString>* GetString(uint32 p_uiID) const { return m_Strings.GetVariable(p_uiID); }
 //
 //    inline void SetBool(uint32 p_uiID, TVariable<bool> &p_Variable) { m_Bools.SetVariable(p_uiID, p_Variable); }
 //    inline void SetInteger(uint32 p_uiID, TVariable<int> &p_Variable) { m_Integers.SetVariable(p_uiID, p_Variable); }
 //    inline void SetFloat(uint32 p_uiID, TVariable<float> &p_Variable) { m_Floats.SetVariable(p_uiID, p_Variable); }
-//    inline void SetString(uint32 p_uiID, TVariable<std::string> &p_Variable) { m_Strings.SetVariable(p_uiID, p_Variable); }
+//    inline void SetString(uint32 p_uiID, TVariable<QString> &p_Variable) { m_Strings.SetVariable(p_uiID, p_Variable); }
 //
 //    inline void SetBoolValue(uint32 p_uiID, bool &p_Value) { m_Bools.SetVariableValue(p_uiID, p_Value); }
 //    inline void SetIntegerValue(uint32 p_uiID, int32 &p_Value) { m_Integers.SetVariableValue(p_uiID, p_Value); }
 //    inline void SetFloatValue(uint32 p_uiID, float &p_Value) { m_Floats.SetVariableValue(p_uiID, p_Value); }
-//    inline void SetStringValue(uint32 p_uiID, std::string &p_Value) { m_Strings.SetVariableValue(p_uiID, p_Value); }
+//    inline void SetStringValue(uint32 p_uiID, QString &p_Value) { m_Strings.SetVariableValue(p_uiID, p_Value); }
 //
 //    inline uint32 AddBool(TVariable<bool> &p_Variable) { return m_Bools.AddVariable(p_Variable); }
 //    inline uint32 AddInteger(TVariable<int> &p_Variable) { return m_Integers.AddVariable(p_Variable); }
 //    inline uint32 AddFloat(TVariable<float> &p_Variable) { return m_Floats.AddVariable(p_Variable); }
-//    inline uint32 AddString(TVariable<std::string> &p_Variable) { return m_Strings.AddVariable(p_Variable); }
+//    inline uint32 AddString(TVariable<QString> &p_Variable) { return m_Strings.AddVariable(p_Variable); }
 //
 //    inline uint32 GetBoolCount() const { return m_Bools.Size(); }
 //    inline uint32 GetIntegerCount() const { return m_Integers.Size(); }
@@ -175,10 +175,10 @@
 //    int32 AddStringFromXML(const XML::XML_ReadData &p_Data);
 //    void LoadDataFromXML(const XML::XML_ReadData &p_Data);
 //
-//    inline void GetBoolNames(std::vector<std::string> &p_lNames) const { m_Bools.GetVariableNames(p_lNames); }
-//    inline void GetIntegerNames(std::vector<std::string> &p_lNames) const { m_Integers.GetVariableNames(p_lNames); }
-//    inline void GetFloatNames(std::vector<std::string> &p_lNames) const { m_Floats.GetVariableNames(p_lNames); }
-//    inline void GetStringNames(std::vector<std::string> &p_lNames) const { m_Strings.GetVariableNames(p_lNames); }
+//    inline void GetBoolNames(std::vector<QString> &p_lNames) const { m_Bools.GetVariableNames(p_lNames); }
+//    inline void GetIntegerNames(std::vector<QString> &p_lNames) const { m_Integers.GetVariableNames(p_lNames); }
+//    inline void GetFloatNames(std::vector<QString> &p_lNames) const { m_Floats.GetVariableNames(p_lNames); }
+//    inline void GetStringNames(std::vector<QString> &p_lNames) const { m_Strings.GetVariableNames(p_lNames); }
 //
 //    void GetXMLData(XML::XML_WriteData &p_XMLData) const;
 //
@@ -188,7 +188,7 @@
 //    TVariableVector<bool> m_Bools;
 //    TVariableVector<int> m_Integers;
 //    TVariableVector<float> m_Floats;
-//    TVariableVector<std::string> m_Strings;
+//    TVariableVector<QString> m_Strings;
 //
 //    void ParseBoolsToXML(XML::XML_WriteData &p_XMLData) const;
 //    void ParseIntegersToXML(XML::XML_WriteData &p_XMLData) const;

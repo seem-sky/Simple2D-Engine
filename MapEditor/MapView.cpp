@@ -87,7 +87,7 @@ void MapViewWidget::saveCurrentMap()
 
     MapWriter writer(m_pMap);
     bool result = false;
-    std::string sFilePath;
+    QString sFilePath;
     if (MapDatabase::getFilePath(m_pMap, sFilePath, Config::Get()->getProjectDirectory()))
         writer.storeMapThreaded(sFilePath, result);
 
@@ -101,7 +101,7 @@ void MapViewWidget::updateText()
     if (!m_pMap)
         return;
 
-    QString sTabName(QString::fromStdString(m_pMap->getName()));
+    QString sTabName(m_pMap->getName());
     if (hasChanged())
         sTabName.append('*');
 
@@ -193,8 +193,8 @@ void MapTabWidget::_closeTab(int index)
         // ask for saving map, if changed
         if (pTab->hasChanged())
         {
-            switch (QMessageBox::question(this, "close " + QString::fromStdString(pTab->getMap()->getFileName()), QString::fromStdString(pTab->getMap()->getFileName() +
-                " has been changed. Do you want to save changes?"), QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel))
+            switch (QMessageBox::question(this, "close " + pTab->getMap()->getFileName(), pTab->getMap()->getFileName() +
+                " has been changed. Do you want to save changes?", QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel))
             {
             case QMessageBox::Yes:
                 pTab->saveCurrentMap();

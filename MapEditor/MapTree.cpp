@@ -6,7 +6,6 @@
 #include "MapSettings.h"
 #include "Config.h"
 #include <QtGui/QMessageBox>
-#include "StringAdditions.h"
 #include "MainWindow.h"
 
 using namespace MAP;
@@ -26,7 +25,7 @@ void MapTreeItem::updateMapText()
         return;
 
     setText(0, QString::number(m_pMap->getID()));
-    setText(1, QString::fromStdString(m_pMap->getName()));
+    setText(1, m_pMap->getName());
 }
 
 bool MapTreeItem::operator <(const QTreeWidgetItem &other) const  
@@ -89,8 +88,8 @@ void MapTreeWidget::_deleteMap()
 {
     if (MapTreeItem *pItem = (MapTreeItem*)currentItem())
     {
-        if (QMessageBox::Ok == QMessageBox::question(0, "delete " + QString::fromStdString(pItem->getMap()->getFileName()),
-            QString::fromStdString("Do you really want to delete " + pItem->getMap()->getFileName() + " and all of its children?"), QMessageBox::Ok | QMessageBox::Cancel))
+        if (QMessageBox::Ok == QMessageBox::question(0, "delete " + pItem->getMap()->getFileName(),
+            "Do you really want to delete " + pItem->getMap()->getFileName() + " and all of its children?", QMessageBox::Ok | QMessageBox::Cancel))
         {
             emit mapDeleted(pItem->getMap());
             _removeItem(pItem);

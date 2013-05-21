@@ -35,7 +35,7 @@ bool TextDatabaseWidget::getPrototypeFromWidgets(TextPrototypePtr &proto)
     {
         // set locals
         if (QTextEdit *pItem = (QTextEdit*)m_pLocalTable->cellWidget(i, 0))
-            proto->setLocal(i, pItem->toPlainText().toStdString());
+            proto->setLocal(i, pItem->toPlainText());
     }
     return true;
 }
@@ -55,7 +55,7 @@ bool TextDatabaseWidget::setWidgetsFromPrototype(const TextPrototypePtr &proto)
             if (QTableWidgetItem *pItem = m_pLocalTable->verticalHeaderItem(i))
                 pItem->setText("local " + QString::number(i));
         }
-        _addCellTextEdit(QPoint(0, i), QString::fromStdString(proto->getLocal(i)));
+        _addCellTextEdit(QPoint(0, i), proto->getLocal(i));
     }
     return true;
 }

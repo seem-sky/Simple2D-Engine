@@ -36,7 +36,7 @@ MainWindow::MainWindow(QMainWindow *pParent) : QMainWindow(pParent), m_WindowAct
     //QSize newSize = QSize(Config::Get()->getMainWindowSize().x, Config::Get()->getMainWindowSize().y);
     //if (newSize.width() >= minimumWidth() && newSize.height() >= minimumHeight())
     //    resize(newSize);
-    if (!Config::Get()->getProjectDirectory().empty())
+    if (!Config::Get()->getProjectDirectory().isEmpty())
         _loadProject(Config::Get()->getProjectDirectory());
 }
 
@@ -77,9 +77,8 @@ void MainWindow::_saveProject()
     {
         pMapDB->deleteRemovedMaps(Config::Get()->getProjectDirectory());
         MapDatabaseXMLWriter writer(pMapDB);
-        writer.writeFile(QString::fromStdString(Config::Get()->getProjectDirectory() + MAP_DATABASE_PATH), "MapDatabase");
+        writer.writeFile(Config::Get()->getProjectDirectory() + MAP_DATABASE_PATH, "MapDatabase");
     }
-
     emit projectSave();
 }
 
@@ -102,98 +101,98 @@ void MainWindow::_newProject()
             newFile.close();
         }
         // create map database
-        newFile.setFileName(sFileName + QString::fromStdString(MAP_DATABASE_PATH.c_str()));
+        newFile.setFileName(sFileName + (MAP_DATABASE_PATH));
         if (newFile.open(QIODevice::WriteOnly))
         {
             QTextStream stream(&newFile);
             stream << "<MapDatabase></MapDatabase>";
             newFile.close();
         }
-        BASIC_LOG("Successfully create project at " + sFileName.toStdString());
-        _loadProject(sFileName.toStdString());
+        BASIC_LOG("Successfully create project at " + sFileName);
+        _loadProject(sFileName);
     }
     else
-        ERROR_LOG("Unable to create project at " + sFileName.toStdString() + ". It already exists!");
+        ERROR_LOG("Unable to create project at " + sFileName + ". It already exists!");
 }
 
-bool MainWindow::_loadDB(const std::string &projectPath)
+bool MainWindow::_loadDB(const QString &projectPath)
 {
     if (!m_pDBMgr)
         return false;
     // tile database
     TileDatabasePtr tileDB(new TileDatabase());
     TileDatabaseXMLReader tileReader(tileDB);
-    tileReader.readFile(QString::fromStdString(projectPath + TILE_DATABASE_PATH), "TileDatabase");
+    tileReader.readFile(projectPath + TILE_DATABASE_PATH, "TileDatabase");
     m_pDBMgr->setTileDatabase(tileDB);
 
     // autotile database
     AutoTileDatabasePtr autoTileDB(new AutoTileDatabase());
     AutoTileDatabaseXMLReader autoTileReader(autoTileDB);
-    autoTileReader.readFile(QString::fromStdString(projectPath + AUTO_TILE_DATABASE_PATH), "AutoTileDatabase");
+    autoTileReader.readFile(projectPath + AUTO_TILE_DATABASE_PATH, "AutoTileDatabase");
     m_pDBMgr->setAutoTileDatabase(autoTileDB);
 
     // sprite database
     SpriteDatabasePtr spriteDB(new SpriteDatabase());
     SpriteDatabaseXMLReader spriteReader(spriteDB);
-    spriteReader.readFile(QString::fromStdString(projectPath + SPRITE_DATABASE_PATH), "SpriteDatabase");
+    spriteReader.readFile(projectPath + SPRITE_DATABASE_PATH, "SpriteDatabase");
     m_pDBMgr->setSpriteDatabase(spriteDB);
 
     // animation database
     AnimationDatabasePtr animationDB(new AnimationDatabase());
     AnimationDatabaseXMLReader animationReader(animationDB);
-    animationReader.readFile(QString::fromStdString(projectPath + ANIMATION_DATABASE_PATH), "AnimationDatabase");
+    animationReader.readFile(projectPath + ANIMATION_DATABASE_PATH, "AnimationDatabase");
     m_pDBMgr->setAnimationDatabase(animationDB);
 
     // load map database
     MapDatabasePtr mapDB(new MAP::MapDatabase());
     MapDatabaseXMLReader mapReader(mapDB);
-    mapReader.readFile(QString::fromStdString(projectPath + MAP_DATABASE_PATH), "MapDatabase");
+    mapReader.readFile(projectPath + MAP_DATABASE_PATH, "MapDatabase");
     m_pDBMgr->setMapDatabase(mapDB);
 
     // load text database
     TextDatabasePtr textDB(new TextDatabase());
     TextDatabaseXMLReader textReader(textDB);
-    textReader.readFile(QString::fromStdString(projectPath + LOCALS_DATABASE_PATH), "LocalsDatabase");
+    textReader.readFile(projectPath + LOCALS_DATABASE_PATH, "LocalsDatabase");
     m_pDBMgr->setTextDatabase(textDB);
 
     // load worldobject database
     WorldObjectDatabasePtr worldObjectDB(new WorldObjectDatabase());
     WorldObjectDatabaseXMLReader worldObjectReader(worldObjectDB);
-    worldObjectReader.readFile(QString::fromStdString(projectPath + WORLD_OBJECT_DATABASE_PATH), "WorldObjectDatabase");
+    worldObjectReader.readFile(projectPath + WORLD_OBJECT_DATABASE_PATH, "WorldObjectDatabase");
     m_pDBMgr->setWorldObjectDatabase(worldObjectDB);
 
     // load object animation type database
     ObjectAnimationTypeDatabasePtr objectAnimationTypeDB(new ObjectAnimationTypeDatabase());
     ObjectAnimationTypeDatabaseXMLReader objectAnimationTypeReader(objectAnimationTypeDB);
-    objectAnimationTypeReader.readFile(QString::fromStdString(projectPath + OBJECT_ANIMATION_TYPE_DATABASE_PATH), "ObjectAnimationTypeDatabase");
+    objectAnimationTypeReader.readFile(projectPath + OBJECT_ANIMATION_TYPE_DATABASE_PATH, "ObjectAnimationTypeDatabase");
     m_pDBMgr->setObjectAnimationTypeDatabase(objectAnimationTypeDB);
 
     // ToDo: load complete databases
     return true;
 }
 
-bool MainWindow::_loadProject(const std::string &sDir)
+bool MainWindow::_loadProject(const QString &dir)
 {
-    if (_loadDB(sDir))
+    if (_loadDB(dir))
     {
         _setDBs();
-        Config::Get()->setProjectDirectory(sDir);
-        BASIC_LOG("Successfully load " + sDir + ".");
+        Config::Get()->setProjectDirectory(dir);
+        BASIC_LOG("Successfully load " + dir + ".");
         emit projectLoadDone();
         return true;
     }
     QErrorMessage *pMsg = new QErrorMessage(this);
-    pMsg->showMessage(QString::fromStdString(sDir + " is no valid project directory."));
-    BASIC_LOG("Unable to load " + sDir + ". Corrupt project or no such directory.");
+    pMsg->showMessage(dir + " is no valid project directory.");
+    BASIC_LOG("Unable to load " + dir + ". Corrupt project or no such directory.");
     Config::Get()->clear();
     return false;
 }
 
 void MainWindow::_loadProject()
 {
-    QString sPath = QFileDialog::getExistingDirectory(this, tr("Open Project"), QDir::current().path()+"/projects", QFileDialog::ShowDirsOnly);
+    QString path = QFileDialog::getExistingDirectory(this, tr("Open Project"), QDir::current().path()+"/projects", QFileDialog::ShowDirsOnly);
     _closeProject();
-    _loadProject(sPath.toStdString());
+    _loadProject(path);
 }
 
 void MainWindow::_closeProject()

@@ -54,19 +54,19 @@ namespace MAP
         friend class MapDatabase;
         friend class DATABASE::MapDatabaseXMLReader;
     private:
-        inline void setFileName(const std::string &sFileName) { m_sFileName = sFileName; }
+        inline void setFileName(const QString &sFileName) { m_sFileName = sFileName; }
         void _resizeMap(const Point3D<uint32> &size);
         void _clear();
 
     public:
-        MapPrototype(uint32 uiID = 0, const std::string &sFileName = "") : DATABASE::Prototype(uiID), m_sFileName(sFileName), m_uiParentID(0), m_DataLoaded(false)
+        MapPrototype(uint32 uiID = 0, const QString &sFileName = "") : DATABASE::Prototype(uiID), m_sFileName(sFileName), m_uiParentID(0), m_DataLoaded(false)
         {}
 
         inline bool hasMapDataStored() const { return m_DataLoaded; }
 
-        inline std::string getFileName() const { return m_sFileName; }
-        inline void setScriptName(const std::string &sScriptName) { m_sScriptName = sScriptName; }
-        inline std::string getScriptName() const { return m_sScriptName; }
+        inline QString getFileName() const { return m_sFileName; }
+        inline void setScriptName(const QString &sScriptName) { m_sScriptName = sScriptName; }
+        inline QString getScriptName() const { return m_sScriptName; }
         void setSize(const Point3D<uint32> &size);
         inline Point3D<uint32> getSize() const { return m_Size; }
 
@@ -99,8 +99,8 @@ namespace MAP
 
         uint32 m_uiParentID;
         Point3D<uint32> m_Size;
-        std::string m_sFileName;
-        std::string m_sScriptName;
+        QString m_sFileName;
+        QString m_sScriptName;
 
         MapObjectPtrVector m_Objects;
         TileDataMultiarray3D m_MapData;
@@ -113,27 +113,27 @@ namespace MAP
     class MapDatabase : public DATABASE::Database<MapPrototype>
     {
     private:
-        void _deleteRemovedMap(const MapPrototypePtr &map, const std::string &path);
-        void _createNewMap(const MapPrototypePtr &map, const std::string &path);
+        void _deleteRemovedMap(const MapPrototypePtr &map, const QString &path);
+        void _createNewMap(const MapPrototypePtr &map, const QString &path);
 
     public:
         MapDatabase(void);
 
         bool removeMap(uint32 uiID);
-        void deleteRemovedMaps(const std::string &path);
+        void deleteRemovedMaps(const QString &path);
 
-        void saveMapDatabase(bool &result, const std::string &path = "");
-        void saveMapInfo(const MapPrototypePtr &map, const std::string &path = "");
+        void saveMapDatabase(bool &result, const QString &path = "");
+        void saveMapInfo(const MapPrototypePtr &map, const QString &path = "");
         void clear();
 
         bool hasMapDataStored(uint32 uiIndex) const;
-        bool loadMapFile(uint32 uiMapID, const std::string &sPath = "");
+        bool loadMapFile(uint32 uiMapID, const QString &sPath = "");
         void unloadMapFile(uint32 uiMapID);
 
         MapPrototypePtr getNewMap();
 
-        static bool getFilePath(const MapPrototypePtr &map, std::string &result, const std::string path = "");
-        static std::string getDefaultDBPath(const std::string &path = "");
+        static bool getFilePath(const MapPrototypePtr &map, QString &result, const QString path = "");
+        static QString getDefaultDBPath(const QString &path = "");
 
     private:
         MapPrototypePtrVector m_RemovedMaps;

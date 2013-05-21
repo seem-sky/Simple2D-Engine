@@ -1,5 +1,4 @@
 #include "ContextMenu.h"
-#include "moc_ContextMenu.h"
 #include "MapTree.h"
 
 namespace CONTEXT_MENU

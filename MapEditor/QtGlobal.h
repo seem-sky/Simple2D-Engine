@@ -28,7 +28,7 @@ static bool createPixmapFromTexturePrototype(DATABASE::ConstTexturePrototypePtr 
     if (!proto)
         return false;
 
-    QPixmap pixmap(QString::fromStdString(Config::Get()->getProjectDirectory() + "/Textures/" + proto->getPathName()));
+    QPixmap pixmap(Config::Get()->getProjectDirectory() + "/Textures/" + proto->getPathName());
     if (!pixmap.isNull())
     {
         // set transparency color

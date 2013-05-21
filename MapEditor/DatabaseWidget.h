@@ -89,7 +89,7 @@ protected:
             return false;
 
         proto->setID(m_pID->value());
-        proto->setName(m_pName->text().toStdString());
+        proto->setName(m_pName->text());
         return true;
     }
 
@@ -99,7 +99,7 @@ protected:
             return false;
 
         m_pID->setValue(proto->getID());
-        m_pName->setText(QString::fromStdString(proto->getName()));
+        m_pName->setText(proto->getName());
         return true;
     }
 
@@ -128,7 +128,7 @@ protected:
         {
             QStringList stringList;
             stringList.push_back(QString::number(itr->first));
-            stringList.push_back(QString::fromStdString(itr->second));
+            stringList.push_back(itr->second);
             m_pList->addTopLevelItem(new PrototypeTreeWidgetItem(stringList));
         }
 

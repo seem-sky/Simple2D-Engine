@@ -12,8 +12,8 @@ public:
     void loadConfig();
     void saveConfig();
 
-    inline std::string getProjectDirectory() const { return m_sProjectDirectory; }
-    inline void setProjectDirectory(const std::string &p_sProjectDir) { m_sProjectDirectory = p_sProjectDir; saveConfig(); }
+    inline QString getProjectDirectory() const { return m_projectDirectory; }
+    inline void setProjectDirectory(const QString &p_sProjectDir) { m_projectDirectory = p_sProjectDir; saveConfig(); }
 
     void clear();
 
@@ -26,10 +26,10 @@ public:
     inline Point<uint32> getMainWindowPos() const { return m_MainWindowPos; }
     inline void setMainWindowPos(Point<uint32> pos) { m_MainWindowPos = pos; saveConfig(); }
 
-    inline static std::string getConfigDefaultPath() { return "Config.ini"; }
+    inline static QString getConfigDefaultPath() { return "Config.ini"; }
 
 private:
-    std::string m_sProjectDirectory;
+    QString m_projectDirectory;
     UInt32UnorderedSet m_openMaps;
     Point<uint32> m_MainWindowSize;
     Point<uint32> m_MainWindowPos;

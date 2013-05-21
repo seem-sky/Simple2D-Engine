@@ -2,26 +2,29 @@
 Color::Color(int32 red, int32 green, int32 blue) : m_Red(red), m_Green(green), m_Blue(blue)
 {}
 
-Color::Color(const std::string &p_sColorText) : m_Red(-1), m_Green(-1), m_Blue(-1)
+Color::Color(const QString &p_sColorText) : m_Red(-1), m_Green(-1), m_Blue(-1)
 {
     setColor(p_sColorText);
 }
 
-void Color::setColor(const std::string &p_sColorText)
+void Color::setColor(const QString &colorText)
 {
-    if (p_sColorText.empty())
+    if (colorText.isEmpty())
         return;
-    std::string t_sColorBuffer = p_sColorText.substr(p_sColorText.find("R")+1);
-    m_Red = atoi(t_sColorBuffer.c_str());
-    t_sColorBuffer = t_sColorBuffer.substr(t_sColorBuffer.find("G")+1);
-    m_Green = atoi(t_sColorBuffer.c_str());
-    t_sColorBuffer = t_sColorBuffer.substr(t_sColorBuffer.find("B")+1);
-    m_Blue = atoi(t_sColorBuffer.c_str());
+    QString tempColorText = colorText.left(colorText.indexOf("R")+1);
+    // setup red
+    m_Red = tempColorText.left(tempColorText.indexOf("G")).toUInt();
+    tempColorText = tempColorText.left(tempColorText.indexOf("G")+1);
+    // setup green
+    m_Green = tempColorText.left(tempColorText.indexOf("B")).toUInt();
+    tempColorText = tempColorText.left(tempColorText.indexOf("B")+1);
+    // setup blue
+    m_Blue = tempColorText.toUInt();
 }
 
-std::string Color::getColorString() const
+QString Color::getColorString() const
 {
     if (hasValidColor())
-        return "R"+ ToString(m_Red) + "G" + ToString(m_Green) + "B" + ToString(m_Blue);
+        return "R" + QString::number(m_Red) + "G" + QString::number(m_Green) + "B" + QString::number(m_Blue);
     return "";
 }

@@ -213,10 +213,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\StringAdditions.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Thread.h"
 				>
 			</File>

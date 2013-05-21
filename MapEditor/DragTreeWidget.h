@@ -83,7 +83,7 @@ public:
         {
             QStringList stringList;
             stringList.push_back(QString::number(itr->first));
-            stringList.push_back(QString::fromStdString(itr->second));
+            stringList.push_back(itr->second);
             addTopLevelItem(new PrototypeTreeWidgetItem(stringList));
         }
 

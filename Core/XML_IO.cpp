@@ -10,7 +10,7 @@ bool XMLReader::readFile(const QString &fileName, const QString &nodeName)
     QFile xmlFile(fileName);
     if (!xmlFile.open(QIODevice::ReadOnly))
     {
-        ERROR_LOG("Unable to load XML file " + fileName.toStdString() + " .");
+        ERROR_LOG("Unable to load XML file " + fileName + " .");
         return false;
     }
 
@@ -18,7 +18,7 @@ bool XMLReader::readFile(const QString &fileName, const QString &nodeName)
     xmlDoc.setContent(&xmlFile);
     if (xmlDoc.isNull())
     {
-        ERROR_LOG("Unable to parse XML file " + fileName.toStdString() + " .");
+        ERROR_LOG("Unable to parse XML file " + fileName + " .");
         return false;
     }
 
@@ -65,7 +65,7 @@ bool XMLStreamWriter::writeFile(const QString &fileName, const QString &rootNode
     QFile xmlFile(fileName);
     if (!xmlFile.open(QIODevice::WriteOnly))
     {
-        ERROR_LOG("Unable to load XML file " + fileName.toStdString() + " .");
+        ERROR_LOG("Unable to load XML file " + fileName + " .");
         return false;
     }
 

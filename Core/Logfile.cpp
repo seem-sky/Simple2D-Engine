@@ -1,31 +1,32 @@
 #include "Logfile.h"
 
-const std::string LOGFILE_FILENAME               = "Logfile.log";
-const std::string LOGFILE_OPENING_MESSAGE        = "Logfile open and ready to write in";
-const std::string LOGFILE_CLOSING_MESSAGE        = "Logfile shutting down...";
+const QString LOGFILE_FILENAME               = "Logfile.log";
+const QString LOGFILE_OPENING_MESSAGE        = "Logfile open and ready to write in";
+const QString LOGFILE_CLOSING_MESSAGE        = "Logfile shutting down...";
 
 Logfile::Logfile() : TSingleton()
 {
-    m_sLogLocationName = LOGFILE_ENGINE_LOG_NAME + "Logfile : ";
-    WriteMessage(m_sLogLocationName + LOGFILE_OPENING_MESSAGE, std::ios::out);
+    m_logLocationName = LOGFILE_ENGINE_LOG_NAME + "Logfile : ";
+    WriteMessage(m_logLocationName + LOGFILE_OPENING_MESSAGE, std::ios::out);
 }
 
 Logfile::~Logfile()
 {
-    WriteMessage(m_sLogLocationName + LOGFILE_CLOSING_MESSAGE);
+    WriteMessage(m_logLocationName + LOGFILE_CLOSING_MESSAGE);
 }
 
-void Logfile::WriteMessage(std::string ps_msg, std::ios_base::openmode p_mode)
+void Logfile::WriteMessage(QString msg, std::ios_base::openmode mode)
 {
-    ps_msg += "\n";
+    // ToDo: rewrite logfile output
+    /*ps_msg += "\n";
     std::fstream t_file;
     t_file.open(LOGFILE_FILENAME.c_str(), p_mode);
     t_file << ps_msg.c_str();
-    t_file.close();
+    t_file.close();*/
 }
 
-void Logfile::WriteErrorMessage(std::string ps_msg, std::ios_base::openmode p_mode)
+void Logfile::WriteErrorMessage(QString msg, std::ios_base::openmode mode)
 {
-    ps_msg = "ERROR! " + ps_msg;
-    WriteMessage(ps_msg, p_mode);
+    msg = "ERROR! " + msg;
+    WriteMessage(msg, mode);
 }

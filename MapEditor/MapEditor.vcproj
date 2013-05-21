@@ -699,20 +699,6 @@
 			<File
 				RelativePath=".\AutoTilePixmaps.h"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\MapBrush.cpp"
@@ -721,20 +707,6 @@
 			<File
 				RelativePath=".\MapBrush.h"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\MapEditor.cpp"
@@ -769,20 +741,6 @@
 				<File
 					RelativePath=".\MapAction.h"
 					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCustomBuildTool"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCustomBuildTool"
-						/>
-					</FileConfiguration>
 				</File>
 				<File
 					RelativePath=".\MapView.cpp"
@@ -841,22 +799,14 @@
 						Name="Debug|Win32"
 						>
 						<Tool
-							Name="VCCustomBuildTool"
-							Description="compile moc_MapSettings.h"
-							CommandLine="moc -o moc_$(InputFileName) $(InputFileName)&#x0D;&#x0A;"
-							AdditionalDependencies="moc.exe;%(AdditionalInputs)"
-							Outputs="moc_%(Filename).h;%(Outputs)"
+							Name="moc header"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32"
 						>
 						<Tool
-							Name="VCCustomBuildTool"
-							Description="compile moc_MapSettings.h"
-							CommandLine="moc -o moc_$(InputFileName) $(InputFileName)&#x0D;&#x0A;"
-							AdditionalDependencies="moc.exe;%(AdditionalInputs)"
-							Outputs="moc_%(Filename).h;%(Outputs)"
+							Name="moc header"
 						/>
 					</FileConfiguration>
 				</File>
@@ -875,22 +825,14 @@
 						Name="Debug|Win32"
 						>
 						<Tool
-							Name="VCCustomBuildTool"
-							Description="create moc_MapTree.h"
-							CommandLine="moc -o moc_$(InputFileName) $(InputFileName)&#x0D;&#x0A;"
-							AdditionalDependencies="moc.exe;%(AdditionalInputs)"
-							Outputs="moc_%(Filename).h;%(Outputs)"
+							Name="moc header"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32"
 						>
 						<Tool
-							Name="VCCustomBuildTool"
-							Description="create moc_MapTree.h"
-							CommandLine="moc -o moc_$(InputFileName) $(InputFileName)&#x0D;&#x0A;"
-							AdditionalDependencies="moc.exe;%(AdditionalInputs)"
-							Outputs="moc_%(Filename).h;%(Outputs)"
+							Name="moc header"
 						/>
 					</FileConfiguration>
 				</File>
@@ -946,13 +888,6 @@
 			<File
 				RelativePath=".\Config.h"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\ContextMenu.cpp"
@@ -993,20 +928,6 @@
 			<File
 				RelativePath=".\ModifyObject.h"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\ModifyView.cpp"
@@ -1026,17 +947,6 @@
 						Name="VCCustomBuildTool"
 					/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\QtTypedefs.h"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32"
 					>
@@ -1044,6 +954,10 @@
 						Name="VCCustomBuildTool"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\QtTypedefs.h"
+				>
 			</File>
 			<Filter
 				Name="IndexDialog"
@@ -1055,20 +969,6 @@
 				<File
 					RelativePath=".\IndexDialog.h"
 					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCustomBuildTool"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCustomBuildTool"
-						/>
-					</FileConfiguration>
 				</File>
 				<File
 					RelativePath=".\UI\IndexDialog.ui"

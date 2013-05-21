@@ -34,7 +34,7 @@ void ObjectAnimationTypeDatabaseWidget::fillListWidget(const UInt32StdStringMap 
     {
         QStringList stringList;
         stringList.push_back(QString::number(itr->first));
-        stringList.push_back(QString::fromStdString(itr->second));
+        stringList.push_back(itr->second);
         PrototypeTreeWidgetItem *pItem = new PrototypeTreeWidgetItem(stringList);
         // if standard entry, set blue color
         if (itr->first <= MIN_DYNAMIC_OBJECT_POSE)

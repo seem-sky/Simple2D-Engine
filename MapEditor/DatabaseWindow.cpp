@@ -1,7 +1,6 @@
 #include "DatabaseWindow.h"
 #include "moc_DatabaseWindow.h"
 #include <QTGui/QFileDialog>
-#include <StringAdditions.h>
 #include <QtCore/QTimer>
 #include <QtGui/QPainter>
 #include <QtGui/QGraphicsPixmapItem>
@@ -81,7 +80,7 @@ void DatabaseWindow::saveDatabase()
     {
         m_pTiles->storeDBChanges();
         TileDatabaseXMLWriter writer(m_pDBMgr->getTileDatabase());
-        writer.writeFile(QString::fromStdString(Config::Get()->getProjectDirectory() + TILE_DATABASE_PATH), "TileDatabase");
+        writer.writeFile(Config::Get()->getProjectDirectory() + TILE_DATABASE_PATH, "TileDatabase");
     }
 
     // AutoTileDB
@@ -89,7 +88,7 @@ void DatabaseWindow::saveDatabase()
     {
         m_pAutoTiles->storeDBChanges();
         AutoTileDatabaseXMLWriter writer(m_pDBMgr->getAutoTileDatabase());
-        writer.writeFile(QString::fromStdString(Config::Get()->getProjectDirectory() + AUTO_TILE_DATABASE_PATH), "AutoTileDatabase");
+        writer.writeFile(Config::Get()->getProjectDirectory() + AUTO_TILE_DATABASE_PATH, "AutoTileDatabase");
     }
 
     // SpriteDB
@@ -97,7 +96,7 @@ void DatabaseWindow::saveDatabase()
     {
         m_pSprites->storeDBChanges();
         SpriteDatabaseXMLWriter writer(m_pDBMgr->getSpriteDatabase());
-        writer.writeFile(QString::fromStdString(Config::Get()->getProjectDirectory() + SPRITE_DATABASE_PATH), "SpriteDatabase");
+        writer.writeFile(Config::Get()->getProjectDirectory() + SPRITE_DATABASE_PATH, "SpriteDatabase");
     }
 
     // AnimationDB
@@ -105,7 +104,7 @@ void DatabaseWindow::saveDatabase()
     {
         m_pAnimations->storeDBChanges();
         AnimationDatabaseXMLWriter writer(m_pDBMgr->getAnimationDatabase());
-        writer.writeFile(QString::fromStdString(Config::Get()->getProjectDirectory() + ANIMATION_DATABASE_PATH), "AnimationDatabase");
+        writer.writeFile(Config::Get()->getProjectDirectory() + ANIMATION_DATABASE_PATH, "AnimationDatabase");
     }
 
     // TextDB
@@ -113,7 +112,7 @@ void DatabaseWindow::saveDatabase()
     {
         m_pTexts->storeDBChanges();
         TextDatabaseXMLWriter writer(m_pDBMgr->getTextDatabase());
-        writer.writeFile(QString::fromStdString(Config::Get()->getProjectDirectory() + LOCALS_DATABASE_PATH), "LocalsDatabase");
+        writer.writeFile(Config::Get()->getProjectDirectory() + LOCALS_DATABASE_PATH, "LocalsDatabase");
     }
 
     // WorldObjectDB
@@ -121,7 +120,7 @@ void DatabaseWindow::saveDatabase()
     {
         m_pWorldObjects->storeDBChanges();
         WorldObjectDatabaseXMLWriter writer(m_pDBMgr->getWorldObjectDatabase());
-        writer.writeFile(QString::fromStdString(Config::Get()->getProjectDirectory() + WORLD_OBJECT_DATABASE_PATH), "WorldObjectDatabase");
+        writer.writeFile(Config::Get()->getProjectDirectory() + WORLD_OBJECT_DATABASE_PATH, "WorldObjectDatabase");
     }
 
     // ObjectAnimationDB
@@ -129,7 +128,7 @@ void DatabaseWindow::saveDatabase()
     {
         m_pObjectAnimationTypes->storeDBChanges();
         ObjectAnimationTypeDatabaseXMLWriter writer(m_pDBMgr->getObjectAnimationTypeDatabase());
-        writer.writeFile(QString::fromStdString(Config::Get()->getProjectDirectory() + OBJECT_ANIMATION_TYPE_DATABASE_PATH), "ObjectAnimationTypeDatabase");
+        writer.writeFile(Config::Get()->getProjectDirectory() + OBJECT_ANIMATION_TYPE_DATABASE_PATH, "ObjectAnimationTypeDatabase");
     }
     // ToDo: save changes
 }

@@ -4,8 +4,8 @@
 #include <fstream>
 #include "Global.h"
 
-typedef std::multimap<std::string, std::string> DataMultimap;
-typedef std::map<std::string, DataMultimap> SectorData;
+typedef std::multimap<QString, QString> DataMultimap;
+typedef std::map<QString, DataMultimap> SectorData;
 
 class IniParser
 {
@@ -17,21 +17,21 @@ public:
     ## ini reader
     #####*/
     // open and read file
-    bool readFile(const std::string &sFileName);
+    bool readFile(const QString &fileName);
 
-    std::string getString(const std::string &sKey, const std::string &sSector, const std::string sDefault = "");
-    void getAllStrings(const std::string &sKey, const std::string &sSector, StdStringVector &data);
+    QString getString(const QString &key, const QString &sector, const QString defaultString = "");
+    void getAllStrings(const QString &key, const QString &sector, StdStringVector &data);
 
-    int32 getInt(const std::string &sKey, const std::string &sSector, const int32 defaultValue = 0);
-    uint32 getUInt(const std::string &sKey, const std::string &sSector, const uint32 defaultValue = 0);
-    bool getBool(const std::string &sKey, const std::string &sSector, const bool defaultValue = false);
+    int32 getInt(const QString &key, const QString &sector, const int32 defaultValue = 0);
+    uint32 getUInt(const QString &key, const QString &sector, const uint32 defaultValue = 0);
+    bool getBool(const QString &key, const QString &sector, const bool defaultValue = false);
 
     /*#####
     ## ini writer
     #####*/
     template <typename T>
-    void addData(const std::string &sKey, const std::string &sSector, const T &data) { addData(sKey, sSector, ToString(data)); };
-    void addData(const std::string &sKey, const std::string &sSector, const std::string &sData);
-    void saveDataToFile(std::string sFileName);
+    void addData(const QString &key, const QString &sector, const T &data) { addData(key, sector, QString::number(data)); };
+    void addData(const QString &key, const QString &sector, const QString &sData);
+    void saveDataToFile(QString sFileName);
 };
 #endif

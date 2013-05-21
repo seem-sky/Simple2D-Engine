@@ -15,7 +15,7 @@ namespace MAP
     class MapReader : public XML_IO::XMLReader
     {
     private:
-        void _parseTileString(const Point<uint32> &pos, QString sTileString);
+        void _parseTileString(const Point<uint32> &pos, QString &tileString);
         void _loadTiles(const QDomNode &parentNode, bool &result);
         void _loadObjects(const QDomNode &parentNode, bool &result);
         bool checkoutChildren(const QDomNode &parentNode);
@@ -50,7 +50,7 @@ namespace MAP
     public:
         MapWriter(MapPrototypePtr &map) : m_pMap(map){}
 
-        void storeMapThreaded(const std::string &sFileName, bool &result);
+        void storeMapThreaded(const QString &sFileName, bool &result);
 
         //static void getXMLDataFromObject(const MapObjectPtr &obj, XML::XML_WriteData &xmlResult);
 

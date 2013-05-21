@@ -31,8 +31,8 @@ signals:
     void projectSave();
 
 private:
-    bool _loadDB(const std::string &projectPath);
-    bool _loadProject(const std::string &sDir);
+    bool _loadDB(const QString &projectPath);
+    bool _loadProject(const QString &sDir);
     void _setDBs();
 
 protected:

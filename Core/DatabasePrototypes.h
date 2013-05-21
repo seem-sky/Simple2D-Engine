@@ -15,14 +15,14 @@ namespace DATABASE
     public:
         Prototype(uint32 uiID) : m_uiID(uiID) {}
 
-        inline void setName(const std::string &sName) { m_sName = sName; }
-        inline std::string getName() const { return m_sName; }
+        inline void setName(const QString &sName) { m_sName = sName; }
+        inline QString getName() const { return m_sName; }
         inline uint32 getID() const { return m_uiID; }
         inline void setID(uint32 uiID) { m_uiID = uiID; }
 
     private:
         uint32 m_uiID;
-        std::string m_sName;
+        QString m_sName;
     };
     typedef boost::shared_ptr<Prototype> PrototypePtr;
     typedef std::vector<PrototypePtr> PrototypePtrVector;
@@ -104,19 +104,19 @@ namespace DATABASE
     {
     public:
         TexturePrototype(uint32 uiID = 0) : Prototype(uiID) {}
-        inline void setFileName(const std::string &sFileName) { m_sFileName = sFileName; }
-        inline std::string getFileName() const { return m_sFileName; }
-        inline void setPath(const std::string &sPath) { m_sPath = sPath; }
-        inline std::string getPath() const { return m_sPath; }
-        inline std::string getPathName() const { return getPath() + getFileName(); }
+        inline void setFileName(const QString &sFileName) { m_sFileName = sFileName; }
+        inline QString getFileName() const { return m_sFileName; }
+        inline void setPath(const QString &sPath) { m_sPath = sPath; }
+        inline QString getPath() const { return m_sPath; }
+        inline QString getPathName() const { return getPath() + getFileName(); }
 
         inline Color getTransparencyColor() const { return m_TransparencyColor; }
         inline void setTransparencyColor(const Color &color) { m_TransparencyColor = color; }
 
     private:
         Color m_TransparencyColor;
-        std::string m_sPath;        // path from ~/textures
-        std::string m_sFileName;    // filename
+        QString m_sPath;        // path from ~/textures
+        QString m_sFileName;    // filename
     };
     typedef boost::shared_ptr<TexturePrototype> TexturePrototypePtr;
     typedef boost::shared_ptr<const TexturePrototype> ConstTexturePrototypePtr;
@@ -576,8 +576,8 @@ namespace DATABASE
         inline void setAnimationSpeed(uint16 uiSpeed) { m_uiAnimationSpeed = uiSpeed; }
         inline uint16 getAnimationSpeed() const { return m_uiAnimationSpeed; }
 
-        inline void setScriptName(const std::string &sScriptName) { m_ScriptName = sScriptName; }
-        inline std::string getScriptName() const { return m_ScriptName; }
+        inline void setScriptName(const QString &sScriptName) { m_ScriptName = sScriptName; }
+        inline QString getScriptName() const { return m_ScriptName; }
 
         static QString getTypeString(ObjectType type)
         {
@@ -628,7 +628,7 @@ namespace DATABASE
         Rect<uint32> m_BoundingRect;
         AnimationInfoVector m_AnimationInfos;
         uint16 m_uiAnimationSpeed;
-        std::string m_ScriptName;
+        QString m_ScriptName;
     };
     typedef boost::shared_ptr<WorldObjectPrototype> WorldObjectPrototypePtr;
     typedef boost::shared_ptr<const WorldObjectPrototype> ConstWorldObjectPrototypePtr;
@@ -664,7 +664,7 @@ namespace DATABASE
     class ObjectAnimationTypePrototype : public Prototype
     {
     public:
-        ObjectAnimationTypePrototype(uint32 uiID = 0, std::string sName = "") : Prototype(uiID)
+        ObjectAnimationTypePrototype(uint32 uiID = 0, QString sName = "") : Prototype(uiID)
         {
             setName(sName);
         }
@@ -686,8 +686,8 @@ namespace DATABASE
 
         inline void setLocalCount(uint32 uiCount) { m_Locals.resize(uiCount); }
         inline uint32 getLocalCount() const { return m_Locals.size(); }
-        inline void setLocal(uint32 uiIndex, const std::string &sLocal) { if (uiIndex < getLocalCount()) m_Locals.at(uiIndex) = sLocal; }
-        inline std::string getLocal(uint32 uiIndex)
+        inline void setLocal(uint32 uiIndex, const QString &sLocal) { if (uiIndex < getLocalCount()) m_Locals.at(uiIndex) = sLocal; }
+        inline QString getLocal(uint32 uiIndex)
         {
             if (uiIndex < getLocalCount())
                 return m_Locals.at(uiIndex);

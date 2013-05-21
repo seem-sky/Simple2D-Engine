@@ -63,7 +63,7 @@ namespace DATABASE
 
             if (attributeName == "Name")
             {
-                proto->setName(attributeValue.toStdString());
+                proto->setName(attributeValue);
                 return true;
             }
             else if (attributeName == "ID")
@@ -109,7 +109,7 @@ namespace DATABASE
             if (!proto)
                 return;
             writer.writeAttribute("ID", QString::number(proto->getID()));
-            writer.writeAttribute("Name", QString::fromStdString(proto->getName()));
+            writer.writeAttribute("Name", proto->getName());
         }
 
     public:
@@ -135,17 +135,17 @@ namespace DATABASE
 
             if (attributeName == "FileName")
             {
-                proto->setFileName(attributeValue.toStdString());
+                proto->setFileName(attributeValue);
                 return true;
             }
             else if (attributeName == "Path")
             {
-                proto->setPath(attributeValue.toStdString());
+                proto->setPath(attributeValue);
                 return true;
             }
             else if (attributeName == "transparent_color")
             {
-                proto->setTransparencyColor(Color(attributeValue.toStdString()));
+                proto->setTransparencyColor(Color(attributeValue));
                 return true;
             }
             return false;
@@ -164,9 +164,9 @@ namespace DATABASE
             if (!proto)
                 return;
             DatabaseWriter::getXMLFromAttributes(proto, writer);
-            writer.writeAttribute("FileName", QString::fromStdString(proto->getFileName()));
-            writer.writeAttribute("Path", QString::fromStdString(proto->getPath()));
-            writer.writeAttribute("transparent_color", QString::fromStdString(proto->getTransparencyColor().getColorString()));
+            writer.writeAttribute("FileName", proto->getFileName());
+            writer.writeAttribute("Path", proto->getPath());
+            writer.writeAttribute("transparent_color", proto->getTransparencyColor().getColorString());
         }
 
     public:

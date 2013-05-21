@@ -1,20 +1,19 @@
 #ifndef COLOR_H
 #define COLOR_H
 
-#include "StringAdditions.h"
 #include "Global.h"
 
 class Color
 {
 public:
-    Color(const std::string &sColorText);
+    Color(const QString &sColorText);
     Color(int32 red = -1, int32 green = -1, int32 blue = -1);
 
     inline void setColor(int32 red, int32 green, int32 blue) { m_Red = red; m_Green = green; m_Blue = blue; }
-    void setColor(const std::string &sColorText);
+    void setColor(const QString &sColorText);
 
     inline void getColor(int32 &red, int32 &green, int32 &blue) const { red = m_Red; green = m_Green; blue = m_Blue; }
-    std::string getColorString() const;
+    QString getColorString() const;
     inline int32 getRed() const { return m_Red; }
     inline int32 getGreen() const { return m_Green; }
     inline int32 getBlue() const { return m_Blue; }

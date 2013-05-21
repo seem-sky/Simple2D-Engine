@@ -34,7 +34,7 @@ void TileTab::fillTiles(QPixmapPtrVector &pixmapCache)
         if (!m_pTileDB->getPrototype(i+1, proto))
             continue;
 
-        QPixmapPtr pixmapPtr(new QPixmap(QString::fromStdString(Config::Get()->getProjectDirectory()+"/Textures/"+proto->getPathName())));
+        QPixmapPtr pixmapPtr(new QPixmap(Config::Get()->getProjectDirectory()+"/Textures/"+proto->getPathName()));
         if (!pixmapPtr)
             continue;
 

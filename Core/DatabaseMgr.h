@@ -7,15 +7,15 @@
 namespace DATABASE
 {
     // database store path
-    const std::string TILE_DATABASE_PATH = "/Game/TileDatabase.xml";
-    const std::string AUTO_TILE_DATABASE_PATH = "/Game/AutoTileDatabase.xml";
-    const std::string SPRITE_DATABASE_PATH = "/Game/SpriteDatabase.xml";
-    const std::string ANIMATION_DATABASE_PATH = "/Game/AnimationDatabase.xml";
-    const std::string WORLD_OBJECT_DATABASE_PATH = "/Game/WorldObjectDatabase.xml";
-    const std::string DYNAMIC_OBJECT_DATABASE_PATH = "/Game/DynamicObjectDatabase.xml";
-    const std::string OBJECT_ANIMATION_TYPE_DATABASE_PATH = "/Game/ObjectAnimationTypeDatabase.xml";
-    const std::string MAP_DATABASE_PATH = "/Game/MapDatabase.xml";
-    const std::string LOCALS_DATABASE_PATH = "/Game/LocalsDatabase.xml";
+    const QString TILE_DATABASE_PATH = "/Game/TileDatabase.xml";
+    const QString AUTO_TILE_DATABASE_PATH = "/Game/AutoTileDatabase.xml";
+    const QString SPRITE_DATABASE_PATH = "/Game/SpriteDatabase.xml";
+    const QString ANIMATION_DATABASE_PATH = "/Game/AnimationDatabase.xml";
+    const QString WORLD_OBJECT_DATABASE_PATH = "/Game/WorldObjectDatabase.xml";
+    const QString DYNAMIC_OBJECT_DATABASE_PATH = "/Game/DynamicObjectDatabase.xml";
+    const QString OBJECT_ANIMATION_TYPE_DATABASE_PATH = "/Game/ObjectAnimationTypeDatabase.xml";
+    const QString MAP_DATABASE_PATH = "/Game/MapDatabase.xml";
+    const QString LOCALS_DATABASE_PATH = "/Game/LocalsDatabase.xml";
 
     class ObjectAnimationTypeDatabase : public Database<ObjectAnimationTypePrototype>
     {

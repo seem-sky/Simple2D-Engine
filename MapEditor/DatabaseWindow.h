@@ -19,7 +19,7 @@ private:
 public:
     DatabaseWindow(DATABASE::DatabaseMgrPtr pDBMgr, QWidget *parent);
 
-    std::string getCurrentDatabaseSection();
+    QString getCurrentDatabaseSection();
     inline DATABASE::DatabaseMgrPtr getDBMgr() const { return m_pDBMgr; }
 
 private slots:
@@ -28,7 +28,7 @@ private slots:
     void _focusChanged(int index);
 
 private:
-    std::string m_sLogLocationName;
+    QString m_sLogLocationName;
     ModifyObject m_ModifyObj;
     DATABASE::DatabaseMgrPtr m_pDBMgr;
 };

@@ -42,9 +42,9 @@ protected:
         if (!proto || !DatabaseWidget::getPrototypeFromWidgets(proto))
             return false;
 
-        proto->setFileName(m_pFileName->text().toStdString());
-        proto->setPath(m_pPath->text().toStdString());
-        proto->setTransparencyColor(Color(m_pTransparencyColor->text().toStdString()));
+        proto->setFileName(m_pFileName->text());
+        proto->setPath(m_pPath->text());
+        proto->setTransparencyColor(Color(m_pTransparencyColor->text()));
         return true;
     }
 
@@ -53,10 +53,10 @@ protected:
         if (!proto || !DatabaseWidget::setWidgetsFromPrototype(proto))
             return false;
 
-        m_pFileName->setText(QString::fromStdString(proto->getFileName()));
-        m_pPath->setText(QString::fromStdString(proto->getPath()));
+        m_pFileName->setText(proto->getFileName());
+        m_pPath->setText(proto->getPath());
         // set transparency first, so that pixmap is displayed correctly.
-        m_pTransparencyColor->setText(QString::fromStdString(proto->getTransparencyColor().getColorString()));
+        m_pTransparencyColor->setText(proto->getTransparencyColor().getColorString());
         showPixmap(proto);
         return true;
     }
@@ -75,7 +75,7 @@ protected:
 
     void choseTransparencyColor()
     {
-        QFileInfo info(QString::fromStdString(Config::Get()->getProjectDirectory()+"/Textures/") + m_pPath->text() + m_pFileName->text());
+        QFileInfo info(Config::Get()->getProjectDirectory()+"/Textures/" + m_pPath->text() + m_pFileName->text());
         if (info.isFile())
         {
             TransparencyWindow transparencyWindow(this, QPixmap(info.absoluteFilePath()));
@@ -84,7 +84,7 @@ protected:
                 Color color = transparencyWindow.getColor();
                 if (color.hasValidColor())
                 {
-                    m_pTransparencyColor->setText(QString::fromStdString(color.getColorString()));
+                    m_pTransparencyColor->setText(color.getColorString());
                     transparencyColorChanged();
                 }
             }
@@ -104,7 +104,7 @@ protected:
     void choseFile()
     {
 
-        QString sProjectDir = QString::fromStdString(Config::Get()->getProjectDirectory());
+        QString sProjectDir = Config::Get()->getProjectDirectory();
         QString sFileName = QFileDialog::getOpenFileName(this, tr("Chose Texture"), sProjectDir+"/Textures", tr("Images (*.png)"));
         QFileInfo fileInfo(sFileName);
         if (fileInfo.isFile())

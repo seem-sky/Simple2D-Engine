@@ -14,7 +14,7 @@
 
 #pragma warning(disable : 4996)
 
-const std::string LOGFILE_ENGINE_LOG_NAME = "ENGINE::";
+const QString LOGFILE_ENGINE_LOG_NAME = "ENGINE::";
 
 typedef unsigned int uint32;
 typedef int int32;
@@ -54,12 +54,12 @@ typedef std::vector<Point<uint16>> UInt16PointVector;
 typedef std::vector<Point<uint32>> UInt32PointVector;
 typedef std::vector<Point3D<uint32>> UInt32Point3DVector;
 
-typedef std::vector<std::string> StdStringVector;
+typedef std::vector<QString> StdStringVector;
 typedef std::vector<StdStringVector> StdString2DVector;
 
 // special typedefs
-typedef std::vector<std::pair<uint32, std::string>> UIntStdStringPairVector;
-typedef std::map<uint32, std::string> UInt32StdStringMap;
+typedef std::vector<std::pair<uint32, QString>> UIntStdStringPairVector;
+typedef std::map<uint32, QString> UInt32StdStringMap;
 
 // rect typedefs
 typedef Rect<uint32> UInt32Rect;

@@ -3,7 +3,6 @@
 
 #include <fstream>
 #include "Singleton.h"
-#include "StringAdditions.h"
 
 // ToDo: add this in makro __FILE__ and __LINE__
 #define BASIC_LOG Logfile::Get()->WriteMessage
@@ -14,7 +13,7 @@ class Logfile : public TSingleton<Logfile>
 public:
     Logfile();
     ~Logfile();
-    void WriteMessage(std::string ps_msg, std::ios_base::openmode p_mode = std::ios::out | std::ios::app);
-    void WriteErrorMessage(std::string ps_msg, std::ios_base::openmode p_mode = std::ios::app);
+    void WriteMessage(QString msg, std::ios_base::openmode mode = std::ios::out | std::ios::app);
+    void WriteErrorMessage(QString msg, std::ios_base::openmode mode = std::ios::app);
 };
 #endif

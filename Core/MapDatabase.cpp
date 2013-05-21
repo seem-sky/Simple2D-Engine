@@ -200,7 +200,7 @@ bool MapDatabase::hasMapDataStored(uint32 uiIndex) const
     return false;
 }
 
-void MapDatabase::saveMapInfo(const MapPrototypePtr &map, const std::string &path)
+void MapDatabase::saveMapInfo(const MapPrototypePtr &map, const QString &path)
 {
     //XML::XML_WriteData xmlMapDB(XML::XML_WRITE_ADD);
     //// get map
@@ -213,22 +213,22 @@ void MapDatabase::saveMapInfo(const MapPrototypePtr &map, const std::string &pat
     //xmlFile.AddChild("MapDatabase", xmlMapDB);
 
     //XML::XML_Writer writer;
-    //std::string sFilePath;
+    //QString sFilePath;
     //getFilePath(map, sFilePath, path);
     //writer.startWriting(sFilePath, xmlFile);
 }
 
-void MapDatabase::deleteRemovedMaps(const std::string &path)
+void MapDatabase::deleteRemovedMaps(const QString &path)
 {
     for (uint32 i = 0; i < m_RemovedMaps.size(); ++i)
         _deleteRemovedMap(m_RemovedMaps.at(i), path);
     m_RemovedMaps.clear();
 }
 
-void MapDatabase::_deleteRemovedMap(const MapPrototypePtr &map, const std::string &path)
+void MapDatabase::_deleteRemovedMap(const MapPrototypePtr &map, const QString &path)
 {
-    if (boost::filesystem::exists(path+ "/Maps/" + map->getFileName()))
-        boost::filesystem::remove_all(path + "/Maps/" + map->getFileName());
+    if (boost::filesystem::exists((path+ "/Maps/" + map->getFileName()).toStdString()))
+        boost::filesystem::remove_all((path + "/Maps/" + map->getFileName()).toStdString());
 }
 
 bool MapDatabase::removeMap(uint32 uiID)
@@ -251,12 +251,12 @@ MapPrototypePtr MapDatabase::getNewMap()
             break;
     }
     // add new map
-    pMap = MapPrototypePtr(new MapPrototype(i+1, "map" + ToString(i+1) + ".xml"));
+    pMap = MapPrototypePtr(new MapPrototype(i+1, "map" + QString::number(i+1) + ".xml"));
     setPrototype(i+1, pMap);
     return pMap;
 }
 
-bool MapDatabase::loadMapFile(uint32 uiMapID, const std::string &sPath)
+bool MapDatabase::loadMapFile(uint32 uiMapID, const QString &path)
 {
     MapPrototypePtr map;
     if (!getPrototype(uiMapID, map))
@@ -267,7 +267,7 @@ bool MapDatabase::loadMapFile(uint32 uiMapID, const std::string &sPath)
 
     // if success, return
     MapReader mapLoader(map);
-    if (mapLoader.readFile(QString::fromStdString(sPath + "/Maps/" + map->getFileName()), "Map"))
+    if (mapLoader.readFile(path + "/Maps/" + map->getFileName(), "Map"))
         return true;
 
     // if no success, init with stored size
@@ -287,7 +287,7 @@ void MapDatabase::unloadMapFile(uint32 uiMapID)
     map->m_Objects.clear();
 }
 
-bool MapDatabase::getFilePath(const MapPrototypePtr &map, std::string &result, const std::string path)
+bool MapDatabase::getFilePath(const MapPrototypePtr &map, QString &result, const QString path)
 {
     result = "";
     if (!map)
@@ -297,7 +297,7 @@ bool MapDatabase::getFilePath(const MapPrototypePtr &map, std::string &result, c
     return true;
 }
 
-std::string MapDatabase::getDefaultDBPath(const std::string &path)
+QString MapDatabase::getDefaultDBPath(const QString &path)
 {
     return path + "/Game/MapDatabase.xml";
 }

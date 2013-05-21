@@ -225,12 +225,12 @@ bool MapDatabaseXMLReader::getAttributeFromXML(MAP::MapPrototypePtr proto, const
     }
     else if (attributeName == "MapScript")
     {
-        proto->setScriptName(attributeValue.toStdString());
+        proto->setScriptName(attributeValue);
         return true;
     }
     else if (attributeName == "File")
     {
-        proto->setFileName(attributeValue.toStdString());
+        proto->setFileName(attributeValue);
         return true;
     }
     return false;
@@ -245,8 +245,8 @@ void MapDatabaseXMLWriter::getXMLFromAttributes(MAP::MapPrototypePtr proto, QXml
     writer.writeAttribute("MapSizeY", QString::number(proto->getSize().y));
     writer.writeAttribute("Layer", QString::number(proto->getSize().z));
     writer.writeAttribute("ParentID", QString::number(proto->getParentID()));
-    writer.writeAttribute("MapScript", QString::fromStdString(proto->getScriptName()));
-    writer.writeAttribute("File", QString::fromStdString(proto->getFileName()));
+    writer.writeAttribute("MapScript", proto->getScriptName());
+    writer.writeAttribute("File", proto->getFileName());
 }
 
 /*####
@@ -263,7 +263,7 @@ bool TextDatabaseXMLReader::getAttributeFromXML(TextPrototypePtr proto, const QS
     uint32 uiIndex = tempName.remove("Local").toUInt();
     if (uiIndex >= proto->getLocalCount())
         proto->setLocalCount(uiIndex+1);
-    proto->setLocal(uiIndex, attributeValue.toStdString());
+    proto->setLocal(uiIndex, attributeValue);
     return true;
 }
 
@@ -273,7 +273,7 @@ void TextDatabaseXMLWriter::getXMLFromAttributes(TextPrototypePtr proto, QXmlStr
         return;
     DatabaseWriter::getXMLFromAttributes(proto, writer);
     for (uint32 i = 0; i < proto->getLocalCount(); ++i)
-        writer.writeAttribute("Local" + QString::number(i), QString::fromStdString(proto->getLocal(i)));
+        writer.writeAttribute("Local" + QString::number(i), proto->getLocal(i));
 }
 
 /*####
@@ -313,7 +313,7 @@ bool WorldObjectDatabaseXMLReader::getAttributeFromXML(WorldObjectPrototypePtr p
     }
     else if (attributeName == "scriptName")
     {
-        proto->setScriptName(attributeValue.toStdString());
+        proto->setScriptName(attributeValue);
         return true;
     }
     return false;
@@ -356,7 +356,7 @@ void WorldObjectDatabaseXMLWriter::getXMLFromAttributes(WorldObjectPrototypePtr 
     writer.writeAttribute("boundingWidth", QString::number(proto->getBoundingWidth()));
     writer.writeAttribute("boundingHeight", QString::number(proto->getBoundingHeight()));
     writer.writeAttribute("animationSpeed", QString::number(proto->getAnimationSpeed()));
-    writer.writeAttribute("scriptName", QString::fromStdString(proto->getScriptName()));
+    writer.writeAttribute("scriptName", proto->getScriptName());
 
     // store animation infos
     for (uint32 i = 0; i < proto->getAnimationCount(); ++i)

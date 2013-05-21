@@ -4,7 +4,7 @@
 #include <boost/thread.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/bind.hpp>
-#include "StringAdditions.h"
+
 
 #import <msxml6.dll>
 
@@ -75,32 +75,32 @@ void MapReader::_loadTiles(const QDomNode &parentNode, bool &result)
     result = true;
 }
 
-void MapReader::_parseTileString(const Point<uint32> &pos, QString sTileString)
+void MapReader::_parseTileString(const Point<uint32> &pos, QString &tileString)
 {
-    for (uint32 x = 0; x < m_pMap->getSize().x && !sTileString.isEmpty(); ++x)
+    for (uint32 x = 0; x < m_pMap->getSize().x && !tileString.isEmpty(); ++x)
     {
         bool tileStored = false;
-        while (!tileStored && !sTileString.isEmpty())
+        while (!tileStored && !tileString.isEmpty())
         {
             // if first sign is a number
-            if (sTileString.at(0) <= 57 && sTileString.at(0) >= 48)
+            if (tileString.at(0) <= 57 && tileString.at(0) >= 48)
             {
                 MapTile tileObject;
-                uint32 uiColonIndex = sTileString.indexOf(','), uiDblPointIndex = sTileString.indexOf(':');
-                tileObject.m_uiTileID = sTileString.left(uiColonIndex < uiDblPointIndex ? uiColonIndex : uiDblPointIndex).toUInt();
+                uint32 uiColonIndex = tileString.indexOf(','), uiDblPointIndex = tileString.indexOf(':');
+                tileObject.m_uiTileID = tileString.left(uiColonIndex < uiDblPointIndex ? uiColonIndex : uiDblPointIndex).toUInt();
                 if (uiDblPointIndex < uiColonIndex)
                 {
-                    sTileString.remove(0, uiDblPointIndex != std::string::npos ? uiDblPointIndex+1 : uiDblPointIndex);
-                    uiColonIndex = sTileString.indexOf(',');
-                    tileObject.m_uiAutoTileSetID = sTileString.left(uiColonIndex).toUInt();
+                    tileString.remove(0, uiDblPointIndex != -1 ? uiDblPointIndex+1 : uiDblPointIndex);
+                    uiColonIndex = tileString.indexOf(',');
+                    tileObject.m_uiAutoTileSetID = tileString.left(uiColonIndex).toUInt();
                 }
-                sTileString.remove(0, uiColonIndex != std::string::npos ? uiColonIndex+1 : uiColonIndex);
+                tileString.remove(0, uiColonIndex != -1 ? uiColonIndex+1 : uiColonIndex);
                 m_pMap->m_MapData[x][pos.x][pos.y] = tileObject;
                 tileStored = true;
             }
             // if first sign is a not a number, delete it
             else
-                sTileString.remove(0, 1);
+                tileString.remove(0, 1);
         }
     }
 }
@@ -168,7 +168,7 @@ void MapReader::_loadObjects(const QDomNode &parentNode, bool &result)
 //        for (uint32 y = 0; y < m_pMap->getSize().y; ++y)
 //        {
 //            XML::XML_WriteData xml_Line(XML::XML_WRITE_APPEND);
-//            std::string sLine;
+//            QString sLine;
 //            for (uint32 x = 0; x < m_pMap->getSize().x; ++x)
 //                sLine.append(ToString(m_pMap->m_MapData[x][y][layer].m_uiTileID) + ':' + ToString(m_pMap->m_MapData[x][y][layer].m_uiAutoTileSetID) + ',');
 //            xml_Line.AddAttribute("Tiles", sLine.c_str());
@@ -202,7 +202,7 @@ void MapReader::_loadObjects(const QDomNode &parentNode, bool &result)
 //    xmlResult.AddAttribute("Direction", obj->m_uiDirection);
 //}
 
-void MapWriter::storeMapThreaded(const std::string &sFileName, bool &result)
+void MapWriter::storeMapThreaded(const QString &sFileName, bool &result)
 {
     result = false;
     //if (!m_pMap || !m_pMap->hasMapDataStored())
