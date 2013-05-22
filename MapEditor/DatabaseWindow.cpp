@@ -33,7 +33,7 @@ m_pDBMgr(pDBMgr)
     m_pWorldObjects->setDB(m_pDBMgr->getWorldObjectDatabase());
 
     // text section
-    m_pTexts->setDB(m_pDBMgr->getTextDatabase());
+    m_pTexts->setDB(m_pDBMgr->getLocalsDatabase());
 
     // setup move and resize widgets
     m_ModifyObj.setWidget(m_pSections, MODIFY_RESIZE, QPoint(10, ButtonCancel->height()+15));
@@ -77,60 +77,31 @@ void DatabaseWindow::saveDatabase()
 {
     // TileDB
     if (m_pTiles->hasChanged())
-    {
         m_pTiles->storeDBChanges();
-        TileDatabaseXMLWriter writer(m_pDBMgr->getTileDatabase());
-        writer.writeFile(Config::Get()->getProjectDirectory() + TILE_DATABASE_PATH, "TileDatabase");
-    }
 
     // AutoTileDB
     if (m_pAutoTiles->hasChanged())
-    {
         m_pAutoTiles->storeDBChanges();
-        AutoTileDatabaseXMLWriter writer(m_pDBMgr->getAutoTileDatabase());
-        writer.writeFile(Config::Get()->getProjectDirectory() + AUTO_TILE_DATABASE_PATH, "AutoTileDatabase");
-    }
 
     // SpriteDB
     if (m_pSprites->hasChanged())
-    {
         m_pSprites->storeDBChanges();
-        SpriteDatabaseXMLWriter writer(m_pDBMgr->getSpriteDatabase());
-        writer.writeFile(Config::Get()->getProjectDirectory() + SPRITE_DATABASE_PATH, "SpriteDatabase");
-    }
 
     // AnimationDB
     if (m_pAnimations->hasChanged())
-    {
         m_pAnimations->storeDBChanges();
-        AnimationDatabaseXMLWriter writer(m_pDBMgr->getAnimationDatabase());
-        writer.writeFile(Config::Get()->getProjectDirectory() + ANIMATION_DATABASE_PATH, "AnimationDatabase");
-    }
 
     // TextDB
     if (m_pTexts->hasChanged())
-    {
         m_pTexts->storeDBChanges();
-        TextDatabaseXMLWriter writer(m_pDBMgr->getTextDatabase());
-        writer.writeFile(Config::Get()->getProjectDirectory() + LOCALS_DATABASE_PATH, "LocalsDatabase");
-    }
 
     // WorldObjectDB
     if (m_pWorldObjects->hasChanged())
-    {
         m_pWorldObjects->storeDBChanges();
-        WorldObjectDatabaseXMLWriter writer(m_pDBMgr->getWorldObjectDatabase());
-        writer.writeFile(Config::Get()->getProjectDirectory() + WORLD_OBJECT_DATABASE_PATH, "WorldObjectDatabase");
-    }
 
     // ObjectAnimationDB
     if (m_pObjectAnimationTypes->hasChanged())
-    {
         m_pObjectAnimationTypes->storeDBChanges();
-        ObjectAnimationTypeDatabaseXMLWriter writer(m_pDBMgr->getObjectAnimationTypeDatabase());
-        writer.writeFile(Config::Get()->getProjectDirectory() + OBJECT_ANIMATION_TYPE_DATABASE_PATH, "ObjectAnimationTypeDatabase");
-    }
-    // ToDo: save changes
 }
 
 void DatabaseWindow::clickButtonApply()

@@ -14,7 +14,7 @@ bool IniParser::readFile(const QString &fileName)
     DataMultimap newData;
     while (!stream.atEnd())
     {
-        stream >> dataLine;
+        dataLine = stream.readLine();
         // delete comments
         int32 sign = dataLine.indexOf(';');
         if (sign != -1)
@@ -29,7 +29,7 @@ bool IniParser::readFile(const QString &fileName)
         if (pos != -1)
         {
             QString indexBuffer = dataLine.mid(0, pos);
-            dataLine = dataLine.left(pos+1);
+            dataLine = dataLine.mid(pos+1);
             sectorBuffer.trimmed();
             newData.insert(std::make_pair(indexBuffer, dataLine));
         }
@@ -47,7 +47,7 @@ bool IniParser::readFile(const QString &fileName)
                 }
 
                 // read out new sector
-                sectorBuffer = dataLine.left(pos+1);
+                sectorBuffer = dataLine.mid(pos+1);
                 sectorBuffer = sectorBuffer.mid(0, sectorBuffer.indexOf(']'));
                 sectorBuffer.trimmed();
             }

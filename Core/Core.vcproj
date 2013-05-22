@@ -167,10 +167,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Thread.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\VariableHolder.cpp"
 				>
 			</File>
@@ -213,10 +209,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Thread.h"
-				>
-			</File>
-			<File
 				RelativePath=".\VariableHolder.h"
 				>
 			</File>
@@ -230,6 +222,10 @@
 			>
 			<File
 				RelativePath=".\DatabaseChanger.h"
+				>
+			</File>
+			<File
+				RelativePath=".\DatabaseMgr.cpp"
 				>
 			</File>
 			<File

@@ -1,7 +1,7 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
-#include <string>
+#include <stdexcept>
 #include <set>
 #include <boost/unordered_set.hpp>
 #include <vector>

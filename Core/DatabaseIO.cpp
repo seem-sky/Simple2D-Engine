@@ -252,7 +252,7 @@ void MapDatabaseXMLWriter::getXMLFromAttributes(MAP::MapPrototypePtr proto, QXml
 /*####
 # TextDatabase
 ####*/
-bool TextDatabaseXMLReader::getAttributeFromXML(TextPrototypePtr proto, const QString &attributeName, const QString &attributeValue)
+bool LocalsDatabaseXMLReader::getAttributeFromXML(TextPrototypePtr proto, const QString &attributeName, const QString &attributeValue)
 {
     if (!proto || attributeName.isEmpty() || attributeValue.isEmpty())
         return false;
@@ -267,7 +267,7 @@ bool TextDatabaseXMLReader::getAttributeFromXML(TextPrototypePtr proto, const QS
     return true;
 }
 
-void TextDatabaseXMLWriter::getXMLFromAttributes(TextPrototypePtr proto, QXmlStreamWriter &writer)
+void LocalsDatabaseXMLWriter::getXMLFromAttributes(TextPrototypePtr proto, QXmlStreamWriter &writer)
 {
     if (!proto)
         return;

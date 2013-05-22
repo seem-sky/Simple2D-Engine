@@ -3,16 +3,13 @@
 #include "DatabaseWindow.h"
 #include <QtGui/QFileDialog>
 #include <QtCore/QDir>
-#include <QtCore/QFile>
-#include <QtCore/QTextstream>
 #include <QtCore/QTimer>
 #include <QtGui/QErrorMessage>
-#include <QtGui/QBitmap>
 #include "Logfile.h"
 
 using namespace DATABASE;
 
-MainWindow::MainWindow(QMainWindow *pParent) : QMainWindow(pParent), m_WindowAction(WINDOW_DO), m_pDBMgr(new DatabaseMgr())
+MainWindow::MainWindow(QMainWindow *pParent) : QMainWindow(pParent)
 {
     setupUi(this);
 
@@ -49,7 +46,7 @@ void MainWindow::resizeEvent(QResizeEvent *pEvent)
 void MainWindow::_setDBs()
 {
     // share DBMgr pointer
-    m_pMapEditor->setDBMgr(m_pDBMgr);
+    m_pMapEditor->setDBMgr(m_project.getDatabaseMgr());
 }
 
 MainWindow::~MainWindow(void)
@@ -61,119 +58,34 @@ MainWindow::~MainWindow(void)
 
 void MainWindow::_openDatabase()
 {
-    DatabaseWindow pDB(m_pDBMgr, this);
+    DatabaseWindow pDB(m_project.getDatabaseMgr(), this);
     pDB.exec();
     m_pMapEditor->updateMapEditor();
 }
 
 void MainWindow::_saveProject()
 {
-    Config *pConf = Config::Get();
-    if (!pConf)
-        return;
-
-    // save map database
-    if (DATABASE::MapDatabasePtr pMapDB = m_pDBMgr->getMapDatabase())
-    {
-        pMapDB->deleteRemovedMaps(Config::Get()->getProjectDirectory());
-        MapDatabaseXMLWriter writer(pMapDB);
-        writer.writeFile(Config::Get()->getProjectDirectory() + MAP_DATABASE_PATH, "MapDatabase");
-    }
-    emit projectSave();
+    m_project.saveCurrentProject();
 }
 
 void MainWindow::_newProject()
 {
-    QString sFileName = QFileDialog::getSaveFileName(this, tr("New Project"), "projects/untitled", tr("Project File"));
-    QDir fileDir(sFileName);
+    QString dir = QFileDialog::getSaveFileName(this, tr("New Project"), "projects/untitled", tr("Project File"));
+    QDir fileDir(dir);
     if (!fileDir.exists())
     {
-        fileDir.mkpath(sFileName);
-        fileDir.mkpath(sFileName + "/Game");
-        fileDir.mkpath(sFileName + "/Maps");
-        fileDir.mkpath(sFileName + "/Textures");
-        // create game database
-        QFile newFile(sFileName + "/Game/GameDatabase.xml");
-        if (newFile.open(QIODevice::WriteOnly))
-        {
-            QTextStream stream(&newFile);
-            stream << "<Database></Database>";
-            newFile.close();
-        }
-        // create map database
-        newFile.setFileName(sFileName + (MAP_DATABASE_PATH));
-        if (newFile.open(QIODevice::WriteOnly))
-        {
-            QTextStream stream(&newFile);
-            stream << "<MapDatabase></MapDatabase>";
-            newFile.close();
-        }
-        BASIC_LOG("Successfully create project at " + sFileName);
-        _loadProject(sFileName);
+        if (m_project.createNewProject(dir))
+            BASIC_LOG("Successfully create project at " + dir);
+        else
+            ERROR_LOG("Unable to create project at " + dir);
     }
     else
-        ERROR_LOG("Unable to create project at " + sFileName + ". It already exists!");
-}
-
-bool MainWindow::_loadDB(const QString &projectPath)
-{
-    if (!m_pDBMgr)
-        return false;
-    // tile database
-    TileDatabasePtr tileDB(new TileDatabase());
-    TileDatabaseXMLReader tileReader(tileDB);
-    tileReader.readFile(projectPath + TILE_DATABASE_PATH, "TileDatabase");
-    m_pDBMgr->setTileDatabase(tileDB);
-
-    // autotile database
-    AutoTileDatabasePtr autoTileDB(new AutoTileDatabase());
-    AutoTileDatabaseXMLReader autoTileReader(autoTileDB);
-    autoTileReader.readFile(projectPath + AUTO_TILE_DATABASE_PATH, "AutoTileDatabase");
-    m_pDBMgr->setAutoTileDatabase(autoTileDB);
-
-    // sprite database
-    SpriteDatabasePtr spriteDB(new SpriteDatabase());
-    SpriteDatabaseXMLReader spriteReader(spriteDB);
-    spriteReader.readFile(projectPath + SPRITE_DATABASE_PATH, "SpriteDatabase");
-    m_pDBMgr->setSpriteDatabase(spriteDB);
-
-    // animation database
-    AnimationDatabasePtr animationDB(new AnimationDatabase());
-    AnimationDatabaseXMLReader animationReader(animationDB);
-    animationReader.readFile(projectPath + ANIMATION_DATABASE_PATH, "AnimationDatabase");
-    m_pDBMgr->setAnimationDatabase(animationDB);
-
-    // load map database
-    MapDatabasePtr mapDB(new MAP::MapDatabase());
-    MapDatabaseXMLReader mapReader(mapDB);
-    mapReader.readFile(projectPath + MAP_DATABASE_PATH, "MapDatabase");
-    m_pDBMgr->setMapDatabase(mapDB);
-
-    // load text database
-    TextDatabasePtr textDB(new TextDatabase());
-    TextDatabaseXMLReader textReader(textDB);
-    textReader.readFile(projectPath + LOCALS_DATABASE_PATH, "LocalsDatabase");
-    m_pDBMgr->setTextDatabase(textDB);
-
-    // load worldobject database
-    WorldObjectDatabasePtr worldObjectDB(new WorldObjectDatabase());
-    WorldObjectDatabaseXMLReader worldObjectReader(worldObjectDB);
-    worldObjectReader.readFile(projectPath + WORLD_OBJECT_DATABASE_PATH, "WorldObjectDatabase");
-    m_pDBMgr->setWorldObjectDatabase(worldObjectDB);
-
-    // load object animation type database
-    ObjectAnimationTypeDatabasePtr objectAnimationTypeDB(new ObjectAnimationTypeDatabase());
-    ObjectAnimationTypeDatabaseXMLReader objectAnimationTypeReader(objectAnimationTypeDB);
-    objectAnimationTypeReader.readFile(projectPath + OBJECT_ANIMATION_TYPE_DATABASE_PATH, "ObjectAnimationTypeDatabase");
-    m_pDBMgr->setObjectAnimationTypeDatabase(objectAnimationTypeDB);
-
-    // ToDo: load complete databases
-    return true;
+        ERROR_LOG("Unable to create project at " + dir + ". It already exists!");
 }
 
 bool MainWindow::_loadProject(const QString &dir)
 {
-    if (_loadDB(dir))
+    if (m_project.loadProject(dir))
     {
         _setDBs();
         Config::Get()->setProjectDirectory(dir);
@@ -201,8 +113,7 @@ void MainWindow::_closeProject()
     {
         BASIC_LOG("Close project " + Config::Get()->getProjectDirectory());
         m_pMapEditor->clearWidgets();
-        if (m_pDBMgr)
-            m_pDBMgr->clear();
+        m_project.closeCurrentProject();
         Config::Get()->clear();
     }
 }

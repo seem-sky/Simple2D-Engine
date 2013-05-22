@@ -6,14 +6,7 @@
 #include "Point.h"
 #include "MapDatabase.h"
 #include "Config.h"
-#include "DatabaseIO.h"
-
-enum WindowAction
-{
-    WINDOW_DO,
-    WINDOW_LOAD_DB,
-    WINDOW_SAVE_DB,
-};
+#include "Project.h"
 
 class MainWindow : public QMainWindow, public Ui_MainWindow
 {
@@ -26,9 +19,7 @@ private slots:
     void _closeProject();
 
 signals:
-    void WindowActionDone();
     void projectLoadDone();
-    void projectSave();
 
 private:
     bool _loadDB(const QString &projectPath);
@@ -43,14 +34,12 @@ public:
     MainWindow(QMainWindow *parent = 0);
     ~MainWindow(void);
 
-    inline void setWindowAction(WindowAction action) { m_WindowAction = action; }
     inline MapEditor* getMapEditorWidget() const { return m_pMapEditor; }
 
-    inline DATABASE::ConstDatabaseMgrPtr getDatabaseMgr() const { return m_pDBMgr; }
+    inline DATABASE::ConstDatabaseMgrPtr getDatabaseMgr() const { return m_project.getDatabaseMgr(); }
 
 private:
     ModifyObject m_ModifyObj;
-    WindowAction m_WindowAction;
-    DATABASE::DatabaseMgrPtr m_pDBMgr;
+    Project m_project;
 };
 #endif

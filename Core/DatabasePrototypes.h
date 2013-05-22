@@ -38,7 +38,7 @@ namespace DATABASE
         friend class DatabaseMgr;
         friend class DatabaseChanger<T>;
     protected:
-        void clear() { m_Prototypes.clear(); }
+        virtual void clear() { m_Prototypes.clear(); }
 
     public:
         virtual void setPrototype(uint32 uiID, boost::shared_ptr<T> &prototype)

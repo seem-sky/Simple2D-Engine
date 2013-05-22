@@ -22,6 +22,12 @@ namespace DATABASE
     public:
         ObjectAnimationTypeDatabase() : Database()
         {
+            clear();
+        }
+
+        void clear()
+        {
+            Database::clear();
             Database::setPrototype(1, ObjectAnimationTypePrototypePtr(new ObjectAnimationTypePrototype(1, "STAND_LEFT")));
             Database::setPrototype(2, ObjectAnimationTypePrototypePtr(new ObjectAnimationTypePrototype(2, "STAND_RIGHT")));
             Database::setPrototype(3, ObjectAnimationTypePrototypePtr(new ObjectAnimationTypePrototype(3, "STAND_UP")));
@@ -70,15 +76,17 @@ namespace DATABASE
     typedef boost::shared_ptr<DynamicObjectDatabase> DynamicObjectDatabasePtr;
     typedef boost::shared_ptr<const DynamicObjectDatabase> ConstDynamicObjectDatabasePtr;
     // text database typedefs
-    typedef Database<TextPrototype> TextDatabase;
-    typedef boost::shared_ptr<TextDatabase> TextDatabasePtr;
-    typedef boost::shared_ptr<const TextDatabase> ConstTextDatabasePtr;
+    typedef Database<TextPrototype> LocalsDatabase;
+    typedef boost::shared_ptr<LocalsDatabase> LocalsDatabasePtr;
+    typedef boost::shared_ptr<const LocalsDatabase> ConstTextDatabasePtr;
     // map database typedefs
     typedef boost::shared_ptr<MAP::MapDatabase> MapDatabasePtr;
     typedef boost::shared_ptr<const MAP::MapDatabase> ConstMapDatabasePtr;
     class DatabaseMgr
     {
     public:
+        DatabaseMgr();
+
         inline ConstTileDatabasePtr getTileDatabase() const { return m_pTileDatabase; }
         inline TileDatabasePtr getTileDatabase() { return m_pTileDatabase; }
         inline void setTileDatabase(const TileDatabasePtr &db) { *m_pTileDatabase.get() = *db; }
@@ -111,35 +119,15 @@ namespace DATABASE
         inline ConstMapDatabasePtr getMapDatabase() const { return m_pMapDatabase; }
         inline void setMapDatabase(const MapDatabasePtr &db) { *m_pMapDatabase = *db; }
 
-        inline TextDatabasePtr getTextDatabase() { return m_pTextDatabase; }
-        inline ConstTextDatabasePtr getTextDatabase() const { return m_pTextDatabase; }
-        inline void setTextDatabase(const TextDatabasePtr &db) { *m_pTextDatabase = *db; }
+        inline LocalsDatabasePtr getLocalsDatabase() { return m_pTextDatabase; }
+        inline ConstTextDatabasePtr getLocalsDatabase() const { return m_pTextDatabase; }
+        inline void setTextDatabase(const LocalsDatabasePtr &db) { *m_pTextDatabase = *db; }
 
-        virtual void clear()
-        {
-            if (m_pTileDatabase) m_pTileDatabase->clear();
-            if (m_pAutoTileDatabase) m_pAutoTileDatabase->clear();
-            if (m_pSpriteDatabase) m_pSpriteDatabase->clear();
-            if (m_pAnimationDatabase) m_pAnimationDatabase->clear();
-            if (m_pWorldObjectDatabase) m_pWorldObjectDatabase->clear();
-            if (m_pDynamicObjectDatabase) m_pDynamicObjectDatabase->clear();
-            if (m_pObjectAnimationTypeDatabase) m_pObjectAnimationTypeDatabase->clear();
-            if (m_pMapDatabase) m_pMapDatabase->clear();
-            if (m_pTextDatabase) m_pTextDatabase->clear();
-        }
+        virtual void clear();
 
-        DatabaseMgr()
-        {
-            m_pTileDatabase = TileDatabasePtr(new TileDatabase());
-            m_pAutoTileDatabase = AutoTileDatabasePtr(new AutoTileDatabase());
-            m_pSpriteDatabase = SpriteDatabasePtr(new SpriteDatabase());
-            m_pAnimationDatabase = AnimationDatabasePtr(new AnimationDatabase());
-            m_pWorldObjectDatabase = WorldObjectDatabasePtr(new WorldObjectDatabase());
-            m_pDynamicObjectDatabase = DynamicObjectDatabasePtr(new DynamicObjectDatabase());
-            m_pObjectAnimationTypeDatabase = ObjectAnimationTypeDatabasePtr(new ObjectAnimationTypeDatabase());
-            m_pMapDatabase = MapDatabasePtr(new MAP::MapDatabase());
-            m_pTextDatabase = TextDatabasePtr(new TextDatabase());
-        }
+        // in/output
+        virtual bool loadDatabase(const QString &projectPath);
+        virtual bool saveDatabase(const QString &projectPath);
 
     private:
         TileDatabasePtr m_pTileDatabase;
@@ -150,7 +138,7 @@ namespace DATABASE
         DynamicObjectDatabasePtr m_pDynamicObjectDatabase;
         ObjectAnimationTypeDatabasePtr m_pObjectAnimationTypeDatabase;
         MapDatabasePtr m_pMapDatabase;
-        TextDatabasePtr m_pTextDatabase;
+        LocalsDatabasePtr m_pTextDatabase;
     };
     typedef boost::shared_ptr<DatabaseMgr> DatabaseMgrPtr;
     typedef boost::shared_ptr<const DatabaseMgr> ConstDatabaseMgrPtr;

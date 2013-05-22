@@ -11,13 +11,13 @@ void Color::setColor(const QString &colorText)
 {
     if (colorText.isEmpty())
         return;
-    QString tempColorText = colorText.left(colorText.indexOf("R")+1);
+    QString tempColorText = colorText.mid(colorText.indexOf("R")+1);
     // setup red
     m_Red = tempColorText.left(tempColorText.indexOf("G")).toUInt();
-    tempColorText = tempColorText.left(tempColorText.indexOf("G")+1);
+    tempColorText = tempColorText.mid(tempColorText.indexOf("G")+1);
     // setup green
     m_Green = tempColorText.left(tempColorText.indexOf("B")).toUInt();
-    tempColorText = tempColorText.left(tempColorText.indexOf("B")+1);
+    tempColorText = tempColorText.mid(tempColorText.indexOf("B")+1);
     // setup blue
     m_Blue = tempColorText.toUInt();
 }

@@ -3,15 +3,39 @@
 using namespace XML_IO;
 
 /*####
+# XML
+####*/
+bool XML::waitForSuccess() const
+{
+    if (!m_pThread)
+        return false;
+    m_pThread->join();
+    return m_result == DONE;
+}
+
+void XML::execThreaded(const QString &fileName, const QString &nodeName)
+{
+    if (m_result == NONE)
+        m_pThread = ThreadPtr(new boost::thread(boost::bind(&XML::_execThreaded, this, fileName, nodeName, m_result)));
+}
+
+/*####
 # XMLReader
 ####*/
-bool XMLReader::readFile(const QString &fileName, const QString &nodeName)
+void XMLReader::_execThreaded(const QString &fileName, const QString &nodeName, XML_Result &result)
 {
+    result = readFile(fileName, nodeName);
+}
+
+XML_Result XMLReader::readFile(const QString &fileName, const QString &nodeName)
+{
+    m_result = IN_PROGRESS;
     QFile xmlFile(fileName);
     if (!xmlFile.open(QIODevice::ReadOnly))
     {
         ERROR_LOG("Unable to load XML file " + fileName + " .");
-        return false;
+        m_result = FAILED;
+        return m_result;
     }
 
     QDomDocument xmlDoc;
@@ -19,13 +43,18 @@ bool XMLReader::readFile(const QString &fileName, const QString &nodeName)
     if (xmlDoc.isNull())
     {
         ERROR_LOG("Unable to parse XML file " + fileName + " .");
-        return false;
+        m_result = FAILED;
+        return m_result;
     }
 
     QDomNode rootNode = getSingleNode(xmlDoc, nodeName);
-    if (!rootNode.isNull())
-        return checkoutChildren(rootNode);
-    return false;
+    if (rootNode.isNull() || !checkoutChildren(rootNode))
+    {
+        m_result = FAILED;
+        return m_result;
+    }
+    m_result = DONE;
+    return m_result;
 }
 
 QDomNode XMLReader::getSingleNode(const QDomNode &parentNode, const QString &nodeName)
@@ -60,13 +89,20 @@ QDomNode XMLReader::changeRootNode(const QDomNode &parentNode, const QStringList
 /*####
 # XMLStreamWriter
 ####*/
-bool XMLStreamWriter::writeFile(const QString &fileName, const QString &rootNode)
+void XMLStreamWriter::_execThreaded(const QString &fileName, const QString &nodeName, XML_Result &result)
 {
+    result = writeFile(fileName, nodeName);
+}
+
+XML_Result XMLStreamWriter::writeFile(const QString &fileName, const QString &rootNode)
+{
+    m_result = IN_PROGRESS;
     QFile xmlFile(fileName);
     if (!xmlFile.open(QIODevice::WriteOnly))
     {
         ERROR_LOG("Unable to load XML file " + fileName + " .");
-        return false;
+        m_result = FAILED;
+        return m_result;
     }
 
     QXmlStreamWriter xmlWriter(&xmlFile);
@@ -74,5 +110,6 @@ bool XMLStreamWriter::writeFile(const QString &fileName, const QString &rootNode
     xmlWriter.writeStartDocument();
     xmlWriter.writeStartElement(rootNode);
     _writeChildren(xmlWriter);
-    return true;
+    m_result = DONE;
+    return m_result;
 }

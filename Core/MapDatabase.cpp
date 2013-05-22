@@ -267,7 +267,8 @@ bool MapDatabase::loadMapFile(uint32 uiMapID, const QString &path)
 
     // if success, return
     MapReader mapLoader(map);
-    if (mapLoader.readFile(path + "/Maps/" + map->getFileName(), "Map"))
+    mapLoader.readFile(path + "/Maps/" + map->getFileName(), "Map");
+    if (mapLoader.waitForSuccess())
         return true;
 
     // if no success, init with stored size

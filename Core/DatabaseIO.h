@@ -103,22 +103,22 @@ namespace DATABASE
     /*####
     # TextDatabase
     ####*/
-    class TextDatabaseXMLReader : public DatabaseReader<TextPrototype>
+    class LocalsDatabaseXMLReader : public DatabaseReader<TextPrototype>
     {
     protected:
         bool getAttributeFromXML(TextPrototypePtr proto, const QString &attributeName, const QString &attributeValue);
 
     public:
-        TextDatabaseXMLReader(const TextDatabasePtr &pDB) : DatabaseReader(pDB) {}
+        LocalsDatabaseXMLReader(const LocalsDatabasePtr &pDB) : DatabaseReader(pDB) {}
     };
 
-    class TextDatabaseXMLWriter : public DatabaseWriter<TextPrototype>
+    class LocalsDatabaseXMLWriter : public DatabaseWriter<TextPrototype>
     {
     protected:
         virtual void getXMLFromAttributes(TextPrototypePtr proto, QXmlStreamWriter &writer);
 
     public:
-        TextDatabaseXMLWriter(const TextDatabasePtr &pDB) : DatabaseWriter(pDB) {}
+        LocalsDatabaseXMLWriter(const LocalsDatabasePtr &pDB) : DatabaseWriter(pDB) {}
     };
 
     /*####
