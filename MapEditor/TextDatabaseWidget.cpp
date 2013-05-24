@@ -25,29 +25,28 @@ void TextDatabaseWidget::clearWidgets()
     _addCellTextEdit(QPoint(0,0));
 }
 
-bool TextDatabaseWidget::getPrototypeFromWidgets(TextPrototypePtr &proto)
+bool TextDatabaseWidget::getPrototypeFromWidgets(LocalisationPrototypePtr &proto)
 {
     if (!DatabaseWidget::getPrototypeFromWidgets(proto))
         return false;
 
-    proto->setLocalCount((uint32)m_pLocalTable->rowCount());
     for (int i = 0; i < m_pLocalTable->rowCount(); ++i)
     {
         // set locals
         if (QTextEdit *pItem = (QTextEdit*)m_pLocalTable->cellWidget(i, 0))
-            proto->setLocal(i, pItem->toPlainText());
+            proto->setLocalisation(i, pItem->toPlainText());
     }
     return true;
 }
 
-bool TextDatabaseWidget::setWidgetsFromPrototype(const TextPrototypePtr &proto)
+bool TextDatabaseWidget::setWidgetsFromPrototype(const LocalisationPrototypePtr &proto)
 {
     if (!DatabaseWidget::setWidgetsFromPrototype(proto))
         return false;
 
-    m_pLocalTable->setRowCount(proto->getLocalCount() == 0 ? 1 : proto->getLocalCount());
-    m_pLocalTable->resize(m_pLocalTable->width(), proto->getLocalCount()*LOCAL_TABLE_CELL_HEIGHT+2);
-    for (uint32 i = 0; i < proto->getLocalCount(); ++i)
+    m_pLocalTable->setRowCount(proto->getLocalsCount() == 0 ? 1 : proto->getLocalsCount());
+    m_pLocalTable->resize(m_pLocalTable->width(), proto->getLocalsCount()*LOCAL_TABLE_CELL_HEIGHT+2);
+    for (uint32 i = 0; i < proto->getLocalsCount(); ++i)
     {
         // if not the first header
         if (i)
@@ -55,7 +54,7 @@ bool TextDatabaseWidget::setWidgetsFromPrototype(const TextPrototypePtr &proto)
             if (QTableWidgetItem *pItem = m_pLocalTable->verticalHeaderItem(i))
                 pItem->setText("local " + QString::number(i));
         }
-        _addCellTextEdit(QPoint(0, i), proto->getLocal(i));
+        _addCellTextEdit(QPoint(0, i), proto->getLocalisation(i));
     }
     return true;
 }

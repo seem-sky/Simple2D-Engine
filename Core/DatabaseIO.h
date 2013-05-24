@@ -101,21 +101,21 @@ namespace DATABASE
     };
 
     /*####
-    # TextDatabase
+    # LocalsDatabase
     ####*/
-    class LocalsDatabaseXMLReader : public DatabaseReader<TextPrototype>
+    class LocalsDatabaseXMLReader : public DatabaseReader<LocalisationPrototype>
     {
     protected:
-        bool getAttributeFromXML(TextPrototypePtr proto, const QString &attributeName, const QString &attributeValue);
+        bool getAttributeFromXML(LocalisationPrototypePtr proto, const QString &attributeName, const QString &attributeValue);
 
     public:
         LocalsDatabaseXMLReader(const LocalsDatabasePtr &pDB) : DatabaseReader(pDB) {}
     };
 
-    class LocalsDatabaseXMLWriter : public DatabaseWriter<TextPrototype>
+    class LocalsDatabaseXMLWriter : public DatabaseWriter<LocalisationPrototype>
     {
     protected:
-        virtual void getXMLFromAttributes(TextPrototypePtr proto, QXmlStreamWriter &writer);
+        virtual void getXMLFromAttributes(LocalisationPrototypePtr proto, QXmlStreamWriter &writer);
 
     public:
         LocalsDatabaseXMLWriter(const LocalsDatabasePtr &pDB) : DatabaseWriter(pDB) {}

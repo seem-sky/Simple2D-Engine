@@ -76,7 +76,7 @@ namespace DATABASE
     typedef boost::shared_ptr<DynamicObjectDatabase> DynamicObjectDatabasePtr;
     typedef boost::shared_ptr<const DynamicObjectDatabase> ConstDynamicObjectDatabasePtr;
     // text database typedefs
-    typedef Database<TextPrototype> LocalsDatabase;
+    typedef Database<LocalisationPrototype> LocalsDatabase;
     typedef boost::shared_ptr<LocalsDatabase> LocalsDatabasePtr;
     typedef boost::shared_ptr<const LocalsDatabase> ConstTextDatabasePtr;
     // map database typedefs

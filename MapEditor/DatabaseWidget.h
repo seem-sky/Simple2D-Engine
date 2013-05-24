@@ -26,7 +26,7 @@ class DatabaseWidget : public DatabaseWidgetObject, protected Ui_DatabaseWidget
 private:
     void _updateWidget()
     {
-        UInt32StdStringMap protoInfo;
+        UInt32StringMap protoInfo;
         m_pDBChanger->getPrototypeShortInfos(protoInfo);
         fillListWidget(protoInfo);
     }
@@ -119,12 +119,12 @@ protected:
         change();
     }
 
-    virtual void fillListWidget(const UInt32StdStringMap &sStrings)
+    virtual void fillListWidget(const UInt32StringMap &sStrings)
     {
         m_pListCount->setValue(0);
         m_pList->clear();
         m_pListCount->setValue(sStrings.size());
-        for (UInt32StdStringMap::const_iterator itr = sStrings.begin(); itr != sStrings.end(); ++itr)
+        for (UInt32StringMap::const_iterator itr = sStrings.begin(); itr != sStrings.end(); ++itr)
         {
             QStringList stringList;
             stringList.push_back(QString::number(itr->first));

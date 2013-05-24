@@ -181,6 +181,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Exception.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Global.h"
 				>
 			</File>

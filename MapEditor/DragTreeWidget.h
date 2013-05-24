@@ -77,9 +77,9 @@ public:
         if (!m_pDB)
             return;
 
-        UInt32StdStringMap spriteList;
+        UInt32StringMap spriteList;
         m_pDB->getPrototypeShortInfos(spriteList);
-        for (UInt32StdStringMap::const_iterator itr = spriteList.begin(); itr != spriteList.end(); ++itr)
+        for (UInt32StringMap::const_iterator itr = spriteList.begin(); itr != spriteList.end(); ++itr)
         {
             QStringList stringList;
             stringList.push_back(QString::number(itr->first));

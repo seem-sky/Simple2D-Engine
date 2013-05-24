@@ -83,6 +83,13 @@ void MainWindow::_newProject()
         ERROR_LOG("Unable to create project at " + dir + ". It already exists!");
 }
 
+void MainWindow::_loadProject()
+{
+    QString path = QFileDialog::getExistingDirectory(this, tr("Open Project"), QDir::current().path()+"/projects", QFileDialog::ShowDirsOnly);
+    _closeProject();
+    _loadProject(path);
+}
+
 bool MainWindow::_loadProject(const QString &dir)
 {
     if (m_project.loadProject(dir))
@@ -98,13 +105,6 @@ bool MainWindow::_loadProject(const QString &dir)
     BASIC_LOG("Unable to load " + dir + ". Corrupt project or no such directory.");
     Config::Get()->clear();
     return false;
-}
-
-void MainWindow::_loadProject()
-{
-    QString path = QFileDialog::getExistingDirectory(this, tr("Open Project"), QDir::current().path()+"/projects", QFileDialog::ShowDirsOnly);
-    _closeProject();
-    _loadProject(path);
 }
 
 void MainWindow::_closeProject()

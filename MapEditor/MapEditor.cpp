@@ -168,7 +168,7 @@ void MapEditor::_currentTileChanged(uint32 uiSpriteIndex, uint32 uiButton, bool 
         if (ConstAutoTileDatabasePtr pDB = m_pDBMgr->getAutoTileDatabase())
         {
             ConstAutoTilePrototypePtr proto; 
-            if (pDB->getPrototype(uiRealTile, proto) && proto)
+            if (pDB->getPrototype(uiRealTile, proto))
                 uiRealTile = proto->getTileID(AutoTilePrototype::INDEX_CENTER);
         }
     }

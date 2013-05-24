@@ -9,7 +9,7 @@ class ObjectAnimationTypeDatabaseWidget : public DatabaseWidget<DATABASE::Object
 protected:
     bool setWidgetsFromPrototype(const DATABASE::ObjectAnimationTypePrototypePtr &proto);
     void resizeDatabase(uint32 uiSize);
-    void fillListWidget(const UInt32StdStringMap &sStrings);
+    void fillListWidget(const UInt32StringMap &sStrings);
 
 public:
     ObjectAnimationTypeDatabaseWidget(QWidget *pParent = NULL);

@@ -32,7 +32,7 @@ void Config::loadConfig()
     m_MainWindowSize.y = parser.getUInt("MainWindowSizeY", "EditorSettings");
     m_MainWindowPos.x = parser.getUInt("MainWindowPosX", "EditorSettings");
     m_MainWindowPos.y = parser.getUInt("MainWindowPosY", "EditorSettings");
-    StdStringVector openMaps;
+    StringVector openMaps;
     parser.getAllStrings("Map", "OpenMaps", openMaps);
     for (uint32 i = 0; i < openMaps.size(); ++i)
         m_openMaps.insert(openMaps.at(i).toUInt());

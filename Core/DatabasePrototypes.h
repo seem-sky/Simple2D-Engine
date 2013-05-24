@@ -72,7 +72,7 @@ namespace DATABASE
             return false;
         }
 
-        void getPrototypeShortInfos(UInt32StdStringMap &result) const
+        void getPrototypeShortInfos(UInt32StringMap &result) const
         {
             for (uint32 i = 0; i < getDBSize(); ++i)
             {
@@ -674,31 +674,37 @@ namespace DATABASE
     typedef std::vector<ConstObjectAnimationTypePrototypePtr> ConstObjectAnimationPrototypePtrVector;
 
     /*#####
-    # TextPrototype
+    # LocalisationPrototype
     #####*/
-    class TextPrototype : public Prototype
+    class LocalisationPrototype : public Prototype
     {
     public:
-        TextPrototype(uint32 uiID = 0, uint32 uiLocalCount = 1) : Prototype(uiID)
+        LocalisationPrototype(uint32 uiID = 0, uint32 uiLocalCount = 1) : Prototype(uiID)
         {
-            setLocalCount(uiLocalCount);
+            setLocalsCount(uiLocalCount);
         }
 
-        inline void setLocalCount(uint32 uiCount) { m_Locals.resize(uiCount); }
-        inline uint32 getLocalCount() const { return m_Locals.size(); }
-        inline void setLocal(uint32 uiIndex, const QString &sLocal) { if (uiIndex < getLocalCount()) m_Locals.at(uiIndex) = sLocal; }
-        inline QString getLocal(uint32 uiIndex)
+        inline void setLocalsCount(uint32 uiCount) { m_Locals.resize(uiCount); }
+        inline uint32 getLocalsCount() const { return m_Locals.size(); }
+        inline void setLocalisation(uint32 uiIndex, const QString &sLocal)
         {
-            if (uiIndex < getLocalCount())
+            if (uiIndex >= getLocalsCount())
+                setLocalsCount(uiIndex+1);
+            m_Locals.at(uiIndex) = sLocal;
+        }
+
+        inline QString getLocalisation(uint32 uiIndex)
+        {
+            if (uiIndex < getLocalsCount())
                 return m_Locals.at(uiIndex);
             return "";
         }
 
     private:
-        StdStringVector m_Locals;
+        StringVector m_Locals;
     };
-    typedef boost::shared_ptr<TextPrototype> TextPrototypePtr;
-    typedef boost::shared_ptr<const TextPrototype> ConstTextPrototypePtr;
-    typedef std::vector<ConstTextPrototypePtr> ConstTextPrototypePtrVector;
+    typedef boost::shared_ptr<LocalisationPrototype> LocalisationPrototypePtr;
+    typedef boost::shared_ptr<const LocalisationPrototype> ConstLocalisationPrototypePtr;
+    typedef std::vector<ConstLocalisationPrototypePtr> ConstLocalisationPrototypePtrVector;
 }
 #endif

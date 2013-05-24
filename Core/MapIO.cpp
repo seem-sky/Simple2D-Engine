@@ -52,7 +52,7 @@ void MapReader::_loadTiles(const QDomNode &parentNode, bool &result)
     m_pMap->_clear();
     m_pMap->_resizeMap(m_pMap->getSize());
 
-    StdString2DVector TileByRowFromFileList;
+    String2DVector TileByRowFromFileList;
     QDomNode node = getSingleNode(parentNode, "MapData");
     if (node.isNull())
         return;

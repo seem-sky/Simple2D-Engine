@@ -25,12 +25,12 @@ void ObjectAnimationTypeDatabaseWidget::resizeDatabase(uint32 uiSize)
     DatabaseWidget::resizeDatabase(uiSize);
 }
 
-void ObjectAnimationTypeDatabaseWidget::fillListWidget(const UInt32StdStringMap &sStrings)
+void ObjectAnimationTypeDatabaseWidget::fillListWidget(const UInt32StringMap &sStrings)
 {
     m_pListCount->setValue(0);
     m_pList->clear();
     m_pListCount->setValue(sStrings.size());
-    for (UInt32StdStringMap::const_iterator itr = sStrings.begin(); itr != sStrings.end(); ++itr)
+    for (UInt32StringMap::const_iterator itr = sStrings.begin(); itr != sStrings.end(); ++itr)
     {
         QStringList stringList;
         stringList.push_back(QString::number(itr->first));

@@ -1,7 +1,6 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
-#include <stdexcept>
 #include <set>
 #include <boost/unordered_set.hpp>
 #include <vector>
@@ -11,6 +10,7 @@
 #include "math_extensions.h"
 #include <boost/dynamic_bitset.hpp>
 #include <QtCore/QString>
+#include "Exception.h"
 
 #pragma warning(disable : 4996)
 
@@ -54,12 +54,11 @@ typedef std::vector<Point<uint16>> UInt16PointVector;
 typedef std::vector<Point<uint32>> UInt32PointVector;
 typedef std::vector<Point3D<uint32>> UInt32Point3DVector;
 
-typedef std::vector<QString> StdStringVector;
-typedef std::vector<StdStringVector> StdString2DVector;
+typedef std::vector<QString> StringVector;
+typedef std::vector<StringVector> String2DVector;
 
 // special typedefs
-typedef std::vector<std::pair<uint32, QString>> UIntStdStringPairVector;
-typedef std::map<uint32, QString> UInt32StdStringMap;
+typedef std::map<uint32, QString> UInt32StringMap;
 
 // rect typedefs
 typedef Rect<uint32> UInt32Rect;

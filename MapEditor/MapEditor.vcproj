@@ -30,6 +30,7 @@
 				Name="VCPreBuildEventTool"
 				Description="QT_MAKE"
 				CommandLine="qmake -project"
+				ExcludedFromBuild="true"
 			/>
 			<Tool
 				Name="compile QT-Files"

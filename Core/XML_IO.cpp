@@ -8,9 +8,9 @@ using namespace XML_IO;
 bool XML::waitForSuccess() const
 {
     if (!m_pThread)
-        return false;
+        false;
     m_pThread->join();
-    return m_result == DONE;
+    return m_result != DONE;
 }
 
 void XML::execThreaded(const QString &fileName, const QString &nodeName)

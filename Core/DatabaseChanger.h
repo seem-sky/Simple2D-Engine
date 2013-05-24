@@ -53,13 +53,13 @@ namespace DATABASE
             return false;
         }
 
-        inline void getPrototypeShortInfos(UInt32StdStringMap &result) const
+        inline void getPrototypeShortInfos(UInt32StringMap &result) const
         {
             if (!m_pTargetDB)
                 return;
             m_NewDB.getPrototypeShortInfos(result);
             m_pTargetDB->getPrototypeShortInfos(result);
-            UInt32StdStringMap::iterator itr = result.begin();
+            UInt32StringMap::iterator itr = result.begin();
             std::advance(itr, m_NewDB.getDBSize());
             result.erase(itr, result.end());
         }

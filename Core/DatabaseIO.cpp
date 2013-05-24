@@ -250,9 +250,9 @@ void MapDatabaseXMLWriter::getXMLFromAttributes(MAP::MapPrototypePtr proto, QXml
 }
 
 /*####
-# TextDatabase
+# LocalsDatabase
 ####*/
-bool LocalsDatabaseXMLReader::getAttributeFromXML(TextPrototypePtr proto, const QString &attributeName, const QString &attributeValue)
+bool LocalsDatabaseXMLReader::getAttributeFromXML(LocalisationPrototypePtr proto, const QString &attributeName, const QString &attributeValue)
 {
     if (!proto || attributeName.isEmpty() || attributeValue.isEmpty())
         return false;
@@ -261,19 +261,17 @@ bool LocalsDatabaseXMLReader::getAttributeFromXML(TextPrototypePtr proto, const 
 
     QString tempName = attributeName;
     uint32 uiIndex = tempName.remove("Local").toUInt();
-    if (uiIndex >= proto->getLocalCount())
-        proto->setLocalCount(uiIndex+1);
-    proto->setLocal(uiIndex, attributeValue);
+    proto->setLocalisation(uiIndex, attributeValue);
     return true;
 }
 
-void LocalsDatabaseXMLWriter::getXMLFromAttributes(TextPrototypePtr proto, QXmlStreamWriter &writer)
+void LocalsDatabaseXMLWriter::getXMLFromAttributes(LocalisationPrototypePtr proto, QXmlStreamWriter &writer)
 {
     if (!proto)
         return;
     DatabaseWriter::getXMLFromAttributes(proto, writer);
-    for (uint32 i = 0; i < proto->getLocalCount(); ++i)
-        writer.writeAttribute("Local" + QString::number(i), proto->getLocal(i));
+    for (uint32 i = 0; i < proto->getLocalsCount(); ++i)
+        writer.writeAttribute("Local" + QString::number(i), proto->getLocalisation(i));
 }
 
 /*####

@@ -4,7 +4,7 @@
 #include "DatabaseWidget.h"
 #include "ui/UI_TextDatabaseWidget.h"
 
-class TextDatabaseWidget : public DatabaseWidget<DATABASE::TextPrototype>, Ui_TextDatabaseWidget
+class TextDatabaseWidget : public DatabaseWidget<DATABASE::LocalisationPrototype>, Ui_TextDatabaseWidget
 {
     Q_OBJECT
 private:
@@ -12,8 +12,8 @@ private:
 
 protected:
     void clearWidgets();
-    bool getPrototypeFromWidgets(DATABASE::TextPrototypePtr &proto);
-    bool setWidgetsFromPrototype(const DATABASE::TextPrototypePtr &proto);
+    bool getPrototypeFromWidgets(DATABASE::LocalisationPrototypePtr &proto);
+    bool setWidgetsFromPrototype(const DATABASE::LocalisationPrototypePtr &proto);
 
 public:
     TextDatabaseWidget(QWidget *pParent = NULL);
