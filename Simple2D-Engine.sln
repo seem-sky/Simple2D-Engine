@@ -1,11 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameEditor", "MapEditor\MapEditor.vcproj", "{88755B49-72E2-42CE-8332-213BD4CBE137}"
-	ProjectSection(ProjectDependencies) = postProject
-		{EF50DD0D-6C98-4570-8036-AB5D9874C997} = {EF50DD0D-6C98-4570-8036-AB5D9874C997}
-	EndProjectSection
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Core", "Core\Core.vcproj", "{EF50DD0D-6C98-4570-8036-AB5D9874C997}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameLauncher", "GameLauncher\GameLauncher.vcproj", "{052F0CF2-EF76-4237-B6C7-6376736E64F6}"
@@ -13,16 +8,14 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameLauncher", "GameLaunche
 		{EF50DD0D-6C98-4570-8036-AB5D9874C997} = {EF50DD0D-6C98-4570-8036-AB5D9874C997}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameEditor", "GameEditor\GameEditor.vcproj", "{88755B49-72E2-42CE-8332-213BD4CBE137}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{88755B49-72E2-42CE-8332-213BD4CBE137}.Debug|Win32.ActiveCfg = Debug|Win32
-		{88755B49-72E2-42CE-8332-213BD4CBE137}.Debug|Win32.Build.0 = Debug|Win32
-		{88755B49-72E2-42CE-8332-213BD4CBE137}.Release|Win32.ActiveCfg = Release|Win32
-		{88755B49-72E2-42CE-8332-213BD4CBE137}.Release|Win32.Build.0 = Release|Win32
 		{EF50DD0D-6C98-4570-8036-AB5D9874C997}.Debug|Win32.ActiveCfg = Debug|Win32
 		{EF50DD0D-6C98-4570-8036-AB5D9874C997}.Debug|Win32.Build.0 = Debug|Win32
 		{EF50DD0D-6C98-4570-8036-AB5D9874C997}.Release|Win32.ActiveCfg = Release|Win32
@@ -31,6 +24,10 @@ Global
 		{052F0CF2-EF76-4237-B6C7-6376736E64F6}.Debug|Win32.Build.0 = Debug|Win32
 		{052F0CF2-EF76-4237-B6C7-6376736E64F6}.Release|Win32.ActiveCfg = Release|Win32
 		{052F0CF2-EF76-4237-B6C7-6376736E64F6}.Release|Win32.Build.0 = Release|Win32
+		{88755B49-72E2-42CE-8332-213BD4CBE137}.Debug|Win32.ActiveCfg = Debug|Win32
+		{88755B49-72E2-42CE-8332-213BD4CBE137}.Debug|Win32.Build.0 = Debug|Win32
+		{88755B49-72E2-42CE-8332-213BD4CBE137}.Release|Win32.ActiveCfg = Release|Win32
+		{88755B49-72E2-42CE-8332-213BD4CBE137}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

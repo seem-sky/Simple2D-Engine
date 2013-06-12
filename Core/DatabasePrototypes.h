@@ -1,8 +1,7 @@
 #ifndef DATABASE_PROTOTYPES_H
 #define DATABASE_PROTOTYPES_H
 
-#include "Global.h"
-#include <boost/smart_ptr.hpp>
+#include "Container.h"
 #include "Color.h"
 
 namespace DATABASE
@@ -33,68 +32,31 @@ namespace DATABASE
     template <class T>
     class DatabaseChanger;
     template <class T>
-    class Database
+    class Database : public Container<T>
     {
         friend class DatabaseMgr;
         friend class DatabaseChanger<T>;
-    protected:
-        virtual void clear() { m_Prototypes.clear(); }
 
     public:
-        virtual void setPrototype(uint32 uiID, boost::shared_ptr<T> &prototype)
+        void getItemShortInfos(UInt32StringMap &result) const
         {
-            if (uiID)
+            for (uint32 i = 0; i < getSize(); ++i)
             {
-                if (--uiID >= m_Prototypes.size())
-                    m_Prototypes.resize(uiID+1);
-                m_Prototypes.at(uiID) = prototype;
+                if (m_Items.at(i) && m_Items.at(i)->getID() != 0)
+                    result.insert(std::make_pair(m_Items.at(i)->getID(), m_Items.at(i)->getName()));
             }
         }
 
-        bool getPrototype(uint32 uiID, boost::shared_ptr<const T> &result) const
+        void resize(uint32 uiSize, bool fillNew = true)
         {
-            if (uiID && --uiID < m_Prototypes.size() && m_Prototypes.at(uiID))
-            {
-                result = m_Prototypes.at(uiID);
-                return true;
-            }
-            return false;
-        }
-
-        bool getPrototype(uint32 uiID, boost::shared_ptr<T> &result)
-        {
-            boost::shared_ptr<const T> temp;
-            if (const_cast<const Database<T>&>(*this).getPrototype(uiID, temp))
-            {
-                result = boost::const_pointer_cast<T>(temp);
-                return true;
-            }
-            return false;
-        }
-
-        void getPrototypeShortInfos(UInt32StringMap &result) const
-        {
-            for (uint32 i = 0; i < getDBSize(); ++i)
-            {
-                if (m_Prototypes.at(i) && m_Prototypes.at(i)->getID() != 0)
-                    result.insert(std::make_pair(m_Prototypes.at(i)->getID(), m_Prototypes.at(i)->getName()));
-            }
-        }
-
-        inline uint32 getDBSize() const { return m_Prototypes.size(); }
-        inline void resizeDB(uint32 uiSize, bool fillNew = true)
-        {
-            uint32 uiOldSize = getDBSize();
-            m_Prototypes.resize(uiSize);
+            uint32 uiOldSize = getSize();
+            m_Items.resize(uiSize);
             if (fillNew && uiSize > uiOldSize)
             {
                 for (uint32 i = uiOldSize; i < uiSize; ++i)                 // first ID == 1, so use i+1 for ID at position i
-                    m_Prototypes.at(i) = boost::shared_ptr<T>(new T(i+1));
+                    m_Items.at(i) = boost::shared_ptr<T>(new T(i+1));
             }
         }
-
-    private:
-        std::vector<boost::shared_ptr<T>> m_Prototypes;
     };
 
     /*#####
@@ -230,8 +192,8 @@ namespace DATABASE
             INDEX_INNER_EDGE_TOP_RIGHT_BOTTOM_RIGHT,
             INDEX_INNER_EDGE_BOTTOM_LEFT_BOTTOM_RIGHT,// 33
 
-            // inner edge center
-            INDEX_INNER_EDGE_CENTER,                // 34
+            // circle
+            INDEX_CIRCLE,                           // 34
 
             // Y tiles
             INDEX_Y_TOP_BOTTOM_LEFT,
@@ -336,7 +298,7 @@ namespace DATABASE
         {
             // lonely tile
             if (hasTileCheck(uiTileCheck, CIRCLE))
-                return INDEX_INNER_EDGE_CENTER;
+                return INDEX_CIRCLE;
 
             // end sides
             if (hasTileCheck(uiTileCheck, LEFT_END))

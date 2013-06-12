@@ -110,6 +110,7 @@ XML_Result XMLStreamWriter::writeFile(const QString &fileName, const QString &ro
     xmlWriter.writeStartDocument();
     xmlWriter.writeStartElement(rootNode);
     _writeChildren(xmlWriter);
+    xmlWriter.writeEndElement();
     m_result = DONE;
     return m_result;
 }

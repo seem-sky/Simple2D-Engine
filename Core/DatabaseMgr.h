@@ -28,20 +28,20 @@ namespace DATABASE
         void clear()
         {
             Database::clear();
-            Database::setPrototype(1, ObjectAnimationTypePrototypePtr(new ObjectAnimationTypePrototype(1, "STAND_LEFT")));
-            Database::setPrototype(2, ObjectAnimationTypePrototypePtr(new ObjectAnimationTypePrototype(2, "STAND_RIGHT")));
-            Database::setPrototype(3, ObjectAnimationTypePrototypePtr(new ObjectAnimationTypePrototype(3, "STAND_UP")));
-            Database::setPrototype(4, ObjectAnimationTypePrototypePtr(new ObjectAnimationTypePrototype(4, "STAND_DOWN")));
-            Database::setPrototype(5, ObjectAnimationTypePrototypePtr(new ObjectAnimationTypePrototype(5, "WALK_LEFT")));
-            Database::setPrototype(6, ObjectAnimationTypePrototypePtr(new ObjectAnimationTypePrototype(6, "WALK_RIGHT")));
-            Database::setPrototype(7, ObjectAnimationTypePrototypePtr(new ObjectAnimationTypePrototype(7, "WALK_UP")));
-            Database::setPrototype(8, ObjectAnimationTypePrototypePtr(new ObjectAnimationTypePrototype(8, "WALK_DOWN")));
+            Database::setItem(1, ObjectAnimationTypePrototypePtr(new ObjectAnimationTypePrototype(1, "STAND_LEFT")));
+            Database::setItem(2, ObjectAnimationTypePrototypePtr(new ObjectAnimationTypePrototype(2, "STAND_RIGHT")));
+            Database::setItem(3, ObjectAnimationTypePrototypePtr(new ObjectAnimationTypePrototype(3, "STAND_UP")));
+            Database::setItem(4, ObjectAnimationTypePrototypePtr(new ObjectAnimationTypePrototype(4, "STAND_DOWN")));
+            Database::setItem(5, ObjectAnimationTypePrototypePtr(new ObjectAnimationTypePrototype(5, "WALK_LEFT")));
+            Database::setItem(6, ObjectAnimationTypePrototypePtr(new ObjectAnimationTypePrototype(6, "WALK_RIGHT")));
+            Database::setItem(7, ObjectAnimationTypePrototypePtr(new ObjectAnimationTypePrototype(7, "WALK_UP")));
+            Database::setItem(8, ObjectAnimationTypePrototypePtr(new ObjectAnimationTypePrototype(8, "WALK_DOWN")));
         }
 
-        void setPrototype(uint32 uiID, ObjectAnimationTypePrototypePtr &prototype)
+        void setItem(uint32 uiID, ObjectAnimationTypePrototypePtr &prototype)
         {
             if (uiID > MIN_DYNAMIC_OBJECT_POSE)
-                Database::setPrototype(uiID, prototype);
+                Database::setItem(uiID, prototype);
         }
     };
     // object animation type database typedefs

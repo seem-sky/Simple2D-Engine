@@ -15,44 +15,34 @@ namespace MAP
     class MapReader : public XML_IO::XMLReader
     {
     private:
-        void _parseTileString(const Point<uint32> &pos, QString &tileString);
+        void _parseTileString(const Point<uint32> &pos, QString &tileString, Layer layer);
+        void _loadTiles(const QDomNode &parentNode, Layer layer);
         void _loadTiles(const QDomNode &parentNode, bool &result);
+
         void _loadObjects(const QDomNode &parentNode, bool &result);
         bool checkoutChildren(const QDomNode &parentNode);
 
     public:
-        MapReader(MapPrototypePtr &map) : m_pMap(map), m_State(STATE_NONE), XMLReader() {}
-
-        //void loadMapThreaded(const QString &sFileName, bool &result);
+        MapReader(MapPrototypePtr &map) : m_pMap(map), XMLReader() {}
 
     private:
-        enum MapLoadState
-        {
-            STATE_NONE,
-            STATE_IN_PROGRESS,
-            STATE_DONE
-        };
-
-        MapLoadState m_State;
-
         MapPrototypePtr &m_pMap;
     };
 
     /*#####
     # MapWriter
     #####*/
-    class MapWriter
+    class MapWriter : public XML_IO::XMLStreamWriter
     {
     private:
-        //void _storeTiles(XML::XML_WriteData &xmlResult);
-        //void _storeObjects(XML::XML_WriteData &xmlResult);
+        bool _writeChildren(QXmlStreamWriter &writer);
+        void _storeTiles(QXmlStreamWriter &writer, Layer layer);
+        void _storeTiles(QXmlStreamWriter &writer);
+        void _storeObjects(QXmlStreamWriter &writer);
+        void _getXMLDataFromObject(const MapObjectPtr &obj, QXmlStreamWriter &writer);
 
     public:
-        MapWriter(MapPrototypePtr &map) : m_pMap(map){}
-
-        void storeMapThreaded(const QString &sFileName, bool &result);
-
-        //static void getXMLDataFromObject(const MapObjectPtr &obj, XML::XML_WriteData &xmlResult);
+        MapWriter(MapPrototypePtr &map) : XMLStreamWriter(), m_pMap(map){}
 
     private:
         MapPrototypePtr &m_pMap;

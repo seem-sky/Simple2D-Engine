@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Database</class>
+ <widget class="QDialog" name="Database">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>798</width>
+    <height>587</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>798</width>
+    <height>587</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Game Database</string>
+  </property>
+  <widget class="QPushButton" name="ButtonCancel">
+   <property name="geometry">
+    <rect>
+     <x>550</x>
+     <y>550</y>
+     <width>121</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Cancel</string>
+   </property>
+  </widget>
+  <widget class="QTabWidget" name="m_pSections">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>781</width>
+     <height>531</height>
+    </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>0</width>
+     <height>0</height>
+    </size>
+   </property>
+   <property name="currentIndex">
+    <number>2</number>
+   </property>
+   <widget class="QWidget" name="widget">
+    <attribute name="title">
+     <string>Textures</string>
+    </attribute>
+    <widget class="QTabWidget" name="m_pTextureTabs">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>761</width>
+       <height>491</height>
+      </rect>
+     </property>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="TileDatabaseWidget" name="m_pTiles">
+      <attribute name="title">
+       <string>Tiles</string>
+      </attribute>
+     </widget>
+     <widget class="AutoTileDatabaseWidget" name="m_pAutoTiles">
+      <attribute name="title">
+       <string>AutoTiles</string>
+      </attribute>
+     </widget>
+     <widget class="SpriteDatabaseWidget" name="m_pSprites">
+      <attribute name="title">
+       <string>Sprites</string>
+      </attribute>
+     </widget>
+     <widget class="AnimationDatabaseWidget" name="m_pAnimations">
+      <attribute name="title">
+       <string>Animations</string>
+      </attribute>
+     </widget>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="Objects">
+    <attribute name="title">
+     <string>Objects</string>
+    </attribute>
+    <widget class="QTabWidget" name="m_pObjectTabs">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>761</width>
+       <height>491</height>
+      </rect>
+     </property>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="WorldObjectDatabaseWidget" name="m_pWorldObjects">
+      <attribute name="title">
+       <string>WorldObjects</string>
+      </attribute>
+     </widget>
+     <widget class="ObjectAnimationTypeDatabaseWidget" name="m_pObjectAnimationTypes">
+      <attribute name="title">
+       <string>ObjectAnimationTypes</string>
+      </attribute>
+     </widget>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="Text">
+    <attribute name="title">
+     <string>Text</string>
+    </attribute>
+    <widget class="QTabWidget" name="m_pTextTabs">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>761</width>
+       <height>491</height>
+      </rect>
+     </property>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="TextDatabaseWidget" name="m_pTexts">
+      <attribute name="title">
+       <string>Locals</string>
+      </attribute>
+     </widget>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QPushButton" name="ButtonOK">
+   <property name="geometry">
+    <rect>
+     <x>430</x>
+     <y>550</y>
+     <width>121</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>OK</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="ButtonApply">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>670</x>
+     <y>550</y>
+     <width>121</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Apply</string>
+   </property>
+  </widget>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>TileDatabaseWidget</class>
+   <extends>QWidget</extends>
+   <header>tiledatabasewidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>SpriteDatabaseWidget</class>
+   <extends>QWidget</extends>
+   <header>spritedatabasewidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>AutoTileDatabaseWidget</class>
+   <extends>QWidget</extends>
+   <header>autotiledatabasewidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>TextDatabaseWidget</class>
+   <extends>QWidget</extends>
+   <header>textdatabasewidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>AnimationDatabaseWidget</class>
+   <extends>QWidget</extends>
+   <header>animationdatabasewidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WorldObjectDatabaseWidget</class>
+   <extends>QWidget</extends>
+   <header>worldobjectdatabasewidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ObjectAnimationTypeDatabaseWidget</class>
+   <extends>QWidget</extends>
+   <header>objectanimationtypedatabasewidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>m_pSections</tabstop>
+  <tabstop>m_pTextureTabs</tabstop>
+  <tabstop>ButtonOK</tabstop>
+  <tabstop>ButtonCancel</tabstop>
+  <tabstop>ButtonApply</tabstop>
+  <tabstop>m_pTextTabs</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

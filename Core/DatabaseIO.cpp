@@ -213,9 +213,14 @@ bool MapDatabaseXMLReader::getAttributeFromXML(MAP::MapPrototypePtr proto, const
         proto->m_Size.y = attributeValue.toUInt();
         return true;
     }
-    else if (attributeName == "Layer")
+    else if (attributeName == "BackgroundLayer")
     {
-        proto->m_Size.z = attributeValue.toUInt();
+        proto->m_uiBackgroundLayer = attributeValue.toUInt();
+        return true;
+    }
+    else if (attributeName == "ForegroundLayer")
+    {
+        proto->m_uiForegroundLayer = attributeValue.toUInt();
         return true;
     }
     else if (attributeName == "ParentID")
@@ -243,7 +248,8 @@ void MapDatabaseXMLWriter::getXMLFromAttributes(MAP::MapPrototypePtr proto, QXml
     DatabaseWriter::getXMLFromAttributes(proto, writer);
     writer.writeAttribute("MapSizeX", QString::number(proto->getSize().x));
     writer.writeAttribute("MapSizeY", QString::number(proto->getSize().y));
-    writer.writeAttribute("Layer", QString::number(proto->getSize().z));
+    writer.writeAttribute("BackgroundLayer", QString::number(proto->getLayerSize(MAP::LAYER_BACKGROUND)));
+    writer.writeAttribute("ForegroundLayer", QString::number(proto->getLayerSize(MAP::LAYER_FOREGROUND)));
     writer.writeAttribute("ParentID", QString::number(proto->getParentID()));
     writer.writeAttribute("MapScript", proto->getScriptName());
     writer.writeAttribute("File", proto->getFileName());

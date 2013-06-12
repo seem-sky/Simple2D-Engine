@@ -159,6 +159,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Config.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Logfile.cpp"
 				>
 			</File>
@@ -178,6 +182,14 @@
 			>
 			<File
 				RelativePath=".\Color.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Config.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Container.h"
 				>
 			</File>
 			<File
@@ -202,6 +214,10 @@
 			</File>
 			<File
 				RelativePath=".\Point.h"
+				>
+			</File>
+			<File
+				RelativePath=".\QtGlobal.h"
 				>
 			</File>
 			<File
@@ -289,6 +305,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\MapDatabaseChanger.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\MapDatabaseChanger.h"
+				>
+			</File>
+			<File
 				RelativePath=".\MapIO.cpp"
 				>
 			</File>
@@ -296,6 +320,34 @@
 				RelativePath=".\MapIO.h"
 				>
 			</File>
+			<Filter
+				Name="Tile"
+				>
+				<File
+					RelativePath=".\AutoTile.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\AutoTile.h"
+					>
+				</File>
+				<File
+					RelativePath=".\AutoTileCache.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\AutoTileCache.h"
+					>
+				</File>
+				<File
+					RelativePath=".\TileCache.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\TileCache.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Object"
@@ -309,6 +361,10 @@
 				>
 			</File>
 		</Filter>
+		<File
+			RelativePath=".\ClassDiagram1.cd"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

@@ -69,7 +69,7 @@ namespace XML_IO
     public:
         XMLStreamWriter() : XML() {}
 
-        XML_Result writeFile(const QString &fileName, const QString &nodeName);
+        virtual XML_Result writeFile(const QString &fileName, const QString &nodeName);
     };
 }
 #endif

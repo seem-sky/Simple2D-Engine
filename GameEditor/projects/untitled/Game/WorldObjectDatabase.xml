@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WorldObjectDatabase>
+    <prototype ID="1" Name="Object1" boundingX="2" boundingY="24" boundingWidth="18" boundingHeight="8" animationSpeed="100" scriptName="">
+        <AnimationInfo animationID="2" animationTypeID="1"/>
+        <AnimationInfo animationID="1" animationTypeID="2"/>
+        <AnimationInfo animationID="2" animationTypeID="3"/>
+        <AnimationInfo animationID="2" animationTypeID="4"/>
+    </prototype>
+    <prototype ID="2" Name="explosion" boundingX="0" boundingY="0" boundingWidth="0" boundingHeight="0" animationSpeed="100" scriptName="">
+        <AnimationInfo animationID="1" animationTypeID="1"/>
+        <AnimationInfo animationID="1" animationTypeID="2"/>
+        <AnimationInfo animationID="1" animationTypeID="3"/>
+        <AnimationInfo animationID="1" animationTypeID="4"/>
+    </prototype>
+    <prototype ID="3" Name="Tree" boundingX="14" boundingY="65" boundingWidth="36" boundingHeight="12" animationSpeed="100" scriptName="">
+        <AnimationInfo animationID="3" animationTypeID="1"/>
+        <AnimationInfo animationID="3" animationTypeID="2"/>
+        <AnimationInfo animationID="3" animationTypeID="3"/>
+        <AnimationInfo animationID="3" animationTypeID="4"/>
+    </prototype>
+</WorldObjectDatabase>

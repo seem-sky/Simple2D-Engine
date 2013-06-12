@@ -1,0 +1,155 @@
+#include "MapView.h"
+#include <QtGui/QPixmap>
+#include <QtGui/QBitmap>
+#include "moc_MapView.h"
+#include <QtGui/QPainterPath>
+#include <QtGui/QMessageBox>
+#include <algorithm>
+#include "Config.h"
+#include "MapIO.h"
+#include "MainWindow.h"
+
+using namespace MAP;
+using namespace DATABASE;
+
+/*#####
+# MapTabWidget
+#####*/
+MapTabWidget::MapTabWidget(QWidget* pParent) : QTabWidget(pParent), MapEditorObject()
+{
+    connect(this, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
+}
+
+void MapTabWidget::setSharedData(SharedMapEditorDataPtr pData)
+{
+    MapEditorObject::setSharedData(pData);
+    for (int i = 0; i < count(); ++i)
+    {
+        if (MapViewer* pWidget = dynamic_cast<MapViewer*>(widget(i)))
+        {
+            if (MapViewScene* pScene = pWidget->getScene())
+                pScene->setSharedEditorData(m_pSharedData);
+        }
+    }
+}
+
+void MapTabWidget::addMapTab(MapPrototypePtr map)
+{
+    if (!map || !m_pSharedData)
+        return;
+
+    if (MapDatabaseChangerPtr pMapDB = m_pSharedData->getMapDatabase())
+    {
+        MapViewer *pWidget = getTabWithMap(map);
+        if (!pWidget)
+        {
+            pMapDB->loadMapFile(map->getID(), Config::Get()->getProjectDirectory());
+            pWidget = new MapViewer(map, m_pSharedData, this);
+            addTab(pWidget, "");
+            connect(this, SIGNAL(changedZoom(uint32)), pWidget, SLOT(_changeZoom(uint32)));
+            connect(pWidget->getScene(), SIGNAL(brushPressed(MapViewer*, Point3D<uint32>, uint32)), parent(), SLOT(_pressBrush(MapViewer*, Point3D<uint32>, uint32)));
+            connect(pWidget->getScene(), SIGNAL(brushReleased(MapViewer*, Point3D<uint32>, uint32)), parent(), SLOT(_releaseBrush(MapViewer*, Point3D<uint32>, uint32)));
+            connect(pWidget->getScene(), SIGNAL(brushMoved(MapViewer*, Point3D<uint32>)), parent(), SLOT(_moveBrush(MapViewer*, Point3D<uint32>)));
+            connect(pWidget, SIGNAL(textUpdated(MapViewer*, const QString&)), this, SLOT(_updateTabText(MapViewer*, const QString&)));
+            pWidget->updateText();
+            Config::Get()->addOpenMap(map->getID());
+        }
+        setCurrentWidget(pWidget);
+    }
+}
+
+void MapTabWidget::_updateTabText(MapViewer *pWidget, const QString &sTabName)
+{
+    setTabText(indexOf(pWidget), sTabName);
+}
+
+void MapTabWidget::closeMap(MapPrototypePtr map)
+{
+    if (MapViewer* pTab = getTabWithMap(map))
+    {
+        removeTab(indexOf(pTab));
+        Config::Get()->removeOpenMap(map->getID());
+    }
+}
+
+void MapTabWidget::updateMap(MapPrototypePtr map)
+{
+    if (MapViewer* pTab = getTabWithMap(map))
+        pTab->changedMap();
+}
+
+void MapTabWidget::closeTab(int index)
+{
+    MapDatabaseChangerPtr pMapDB;
+    if (m_pSharedData)
+        pMapDB = m_pSharedData->getMapDatabase();
+
+    if (MapViewer *pTab = (MapViewer*)widget(index))
+    {
+        if (!pTab->getMap())
+            return;
+        // ask for saving map, if changed
+        if (pTab->hasChanged())
+        {
+            switch (QMessageBox::question(this, "close " + pTab->getMap()->getFileName(), pTab->getMap()->getFileName() +
+                " has been changed. Do you want to save changes?", QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel))
+            {
+            case QMessageBox::Yes:
+                pTab->saveCurrentMap();
+                // unload map from memory
+                if (pMapDB)
+                    pMapDB->unloadMapFile(pTab->getMap()->getID());
+                break;
+            case QMessageBox::No:
+                pMapDB->undoChanges(pTab->getMap()->getID());
+                break;
+            case QMessageBox::Cancel: return;
+            }
+        }
+
+        Config::Get()->removeOpenMap(pTab->getMap()->getID());
+        removeTab(index);
+    }
+}
+
+MapViewer* MapTabWidget::getTabWithMap(const MAP::MapPrototypePtr &map) const
+{
+    if (map)
+    {
+        for (int i = 0; i < count(); ++i)
+        {
+            if (MapViewer* pWidget = dynamic_cast<MapViewer*>(widget(i)))
+            {
+                if (pWidget->getMap() == map)
+                    return dynamic_cast<MapViewer*>(widget(i));
+            }
+        }
+    }
+    return NULL;
+}
+
+
+bool MapTabWidget::isMapOpened(const MAP::MapPrototypePtr &map) const
+{
+    return getTabWithMap(map) != 0;
+}
+
+void MapTabWidget::setCurrentCursor(const QCursor &cursor)
+{
+    m_cursor = cursor;
+    // apply cursor to all open map tabs
+    //for (int32 i = 0; i < count(); ++i)
+    //{
+    //    if (MapViewer *pWidget = dynamic_cast<MapViewer*>(widget(i)))
+    //        pWidget->viewport()->setCursor(m_cursor);
+    //}
+}
+
+void MapTabWidget::updateWidget()
+{
+    for (int i = 0; i < count(); ++i)
+    {
+        if (MapViewer* pWidget = dynamic_cast<MapViewer*>(widget(i)))
+            pWidget->updateWidget();
+    }
+}

@@ -13,7 +13,7 @@ namespace DATABASE
     class DatabaseReader : public XML_IO::XMLReader
     {
     private:
-        void _getPrototypeFromXML(const QDomNode &node)
+        void _getItemFromXML(const QDomNode &node)
         {
             if (node.isNull())
                 return;
@@ -28,7 +28,7 @@ namespace DATABASE
             }
             // get children
             checkoutChildren(node, proto);
-            m_pDB->setPrototype(proto->getID(), proto);
+            m_pDB->setItem(proto->getID(), proto);
         }
 
     protected:
@@ -52,7 +52,7 @@ namespace DATABASE
                 return false;
             QDomNodeList childNodeList = parentNode.childNodes();
             for (uint32 i = 0; i < childNodeList.length(); ++i)
-                _getPrototypeFromXML(childNodeList.at(i));
+                _getItemFromXML(childNodeList.at(i));
             return true;
         }
 
@@ -88,7 +88,7 @@ namespace DATABASE
         bool _writePrototype(uint32 uiID, QXmlStreamWriter &writer)
         {
             boost::shared_ptr<T> proto;
-            if (!m_pDB->getPrototype(uiID, proto))
+            if (!m_pDB->getItem(uiID, proto))
                 return false;
             writer.writeStartElement("prototype");
             getXMLFromAttributes(proto, writer);
@@ -98,7 +98,7 @@ namespace DATABASE
 
         bool _writeChildren(QXmlStreamWriter &writer)
         {
-            for (uint32 i = 1; i <= m_pDB->getDBSize()+1; ++i)
+            for (uint32 i = 1; i <= m_pDB->getSize()+1; ++i)
                 _writePrototype(i, writer);
             return true;
         }

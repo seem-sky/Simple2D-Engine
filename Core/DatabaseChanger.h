@@ -9,32 +9,32 @@ namespace DATABASE
     class DatabaseChanger
     {
     private:
-        inline void setNewDBSize()
+        inline void _setNewDBSize()
         {
-            m_NewDB.clear();
+            m_pNewDB->clear();
             if (m_pTargetDB)
-                m_NewDB.resizeDB(m_pTargetDB->getDBSize(), false);
+                m_pNewDB->resize(m_pTargetDB->getSize(), false);
         }
 
     public:
-        DatabaseChanger(boost::shared_ptr<Database<T>> pDB)
+        DatabaseChanger(boost::shared_ptr<Database<T>> pDB) : m_pNewDB(new Database<T>())
         {
             setDB(pDB);
         }
-        DatabaseChanger() {}
-        inline void setDB(boost::shared_ptr<Database<T>> pDB)
+        DatabaseChanger() : m_pNewDB(new Database<T>()) {}
+        virtual void setDB(boost::shared_ptr<Database<T>> pDB)
         {
             m_pTargetDB = pDB;
-            setNewDBSize();
+            _setNewDBSize();
         }
 
-        inline bool getPrototype(uint32 uiID, boost::shared_ptr<const T> &result) const
+        inline bool getItem(uint32 uiID, boost::shared_ptr<const T> &result) const
         {
             if (!m_pTargetDB)
                 return false;
-            if (m_NewDB.getPrototype(uiID, result))
+            if (m_pNewDB->getItem(uiID, result))
                 return true;
-            if (m_pTargetDB->getPrototype(uiID, result))
+            if (m_pTargetDB->getItem(uiID, result))
             {
                 result = boost::shared_ptr<const T>(new T(*result));
                 return true;
@@ -42,10 +42,10 @@ namespace DATABASE
             return false;
         }
 
-        inline bool getPrototype(uint32 uiID, boost::shared_ptr<T> &result)
+        inline bool getItem(uint32 uiID, boost::shared_ptr<T> &result)
         {
             boost::shared_ptr<const T> temp;
-            if (const_cast<const DatabaseChanger<T>&>(*this).getPrototype(uiID, temp))
+            if (const_cast<const DatabaseChanger<T>&>(*this).getItem(uiID, temp))
             {
                 result = boost::const_pointer_cast<T>(temp);
                 return true;
@@ -53,49 +53,50 @@ namespace DATABASE
             return false;
         }
 
-        inline void getPrototypeShortInfos(UInt32StringMap &result) const
+        inline void getItemShortInfos(UInt32StringMap &result) const
         {
             if (!m_pTargetDB)
                 return;
-            m_NewDB.getPrototypeShortInfos(result);
-            m_pTargetDB->getPrototypeShortInfos(result);
+            m_pNewDB->getItemShortInfos(result);
+            m_pTargetDB->getItemShortInfos(result);
             UInt32StringMap::iterator itr = result.begin();
-            std::advance(itr, m_NewDB.getDBSize());
+            std::advance(itr, m_pNewDB->getSize());
             result.erase(itr, result.end());
         }
 
-        inline void setPrototype(uint32 uiID, boost::shared_ptr<T> &prototype)
+        inline void setItem(uint32 uiID, boost::shared_ptr<T> &prototype)
         {
-            m_NewDB.setPrototype(uiID, prototype);
+            m_pNewDB->setItem(uiID, prototype);
         }
 
-        inline uint32 getDBSize()
+        inline uint32 getSize()
         {
-            return m_NewDB.getDBSize();
+            return m_pNewDB->getSize();
         }
 
-        inline void resizeDB(uint32 newSize)
+        inline void resize(uint32 newSize)
         {
-            m_NewDB.resizeDB(newSize);
+            m_pNewDB->resize(newSize);
         }
 
-        inline void storeChanges()
+        virtual void storeChanges()
         {
             if (!m_pTargetDB)
                 return;
-            for (uint32 i = 1; i <= m_NewDB.getDBSize(); ++i)
+            for (uint32 i = 1; i <= m_pNewDB->getSize(); ++i)
             {
                 boost::shared_ptr<T> proto;
-                if (m_NewDB.getPrototype(i, proto))
-                    m_pTargetDB->setPrototype(i, proto);
+                if (m_pNewDB->getItem(i, proto))
+                    m_pTargetDB->setItem(i, proto);
             }
-            m_pTargetDB->resizeDB(m_NewDB.getDBSize());
-            setNewDBSize();
+            m_pTargetDB->resize(m_pNewDB->getSize());
+            m_pNewDB->clear();
+            _setNewDBSize();
         }
 
-    private:
+    protected:
         boost::shared_ptr<Database<T>> m_pTargetDB;
-        Database<T> m_NewDB;
+        boost::shared_ptr<Database<T>> m_pNewDB;
     };
 
     typedef boost::shared_ptr<const DatabaseChanger<TexturePrototype>> ConstTextureDatabaseChangerPtr;
