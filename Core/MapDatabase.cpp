@@ -4,10 +4,16 @@
 using namespace MAP;
 using namespace DATABASE;
 
+MapPrototype::MapPrototype(uint32 uiID, const QString &sFileName) : DATABASE::Prototype(uiID), m_sFileName(sFileName), m_uiParentID(0),
+m_DataLoaded(false)
+{
+    memset(&m_uiLayer, 0, sizeof(m_uiLayer));
+}
+
 void MapPrototype::addMapObject(MapObjectPtr pObject)
 {
     if (pObject)
-        m_Objects.push_back(pObject);
+        m_Objects.setItem(pObject->m_GUID, pObject);
 }
 
 MapObjectPtr MapPrototype::addMapObject(DATABASE::ObjectType type, uint32 uiID, Point3D<uint32> pos)
@@ -16,26 +22,26 @@ MapObjectPtr MapPrototype::addMapObject(DATABASE::ObjectType type, uint32 uiID, 
     newObject->m_ObjectID = uiID;
     newObject->m_Type = type;
     newObject->m_Position = pos;
-    m_Objects.push_back(newObject);
-    newObject->m_GUID = m_Objects.size();
+    newObject->m_GUID = m_Objects.getSize()+1;
+    m_Objects.setItem(newObject->m_GUID, newObject);
     //m_Grid.addObject(newObject);
     return newObject;
 }
 
-void MapPrototype::moveMapObject(uint32 uiGUID, const Point3D<uint32> &newPos)
-{
-    if (uiGUID < m_Objects.size() && m_Objects.at(uiGUID))
-    {
-        //m_Grid.removeObject(m_Objects.at(uiGUID), MapGrid::getGridFromMapPos(m_Objects.at(uiGUID)->m_Position));
-        m_Objects.at(uiGUID)->m_Position = newPos;
-        //m_Grid.addObject(m_Objects.at(uiGUID));
-    }
-}
+//void MapPrototype::moveMapObject(uint32 uiGUID, const Point3D<uint32> &newPos)
+//{
+//    if (uiGUID < m_Objects.size() && m_Objects.at(uiGUID))
+//    {
+//        //m_Grid.removeObject(m_Objects.at(uiGUID), MapGrid::getGridFromMapPos(m_Objects.at(uiGUID)->m_Position));
+//        m_Objects.at(uiGUID)->m_Position = newPos;
+//        //m_Grid.addObject(m_Objects.at(uiGUID));
+//    }
+//}
 
-uint32 MapPrototype::getPositionsAroundWithID(const uint32 &uiID, const Point3D<uint32> &pos, UInt32PointSet &result, uint32 resultFlag)
+uint32 MapPrototype::getPositionsAroundWithID(const uint32 &uiID, const Point3D<uint32> &pos, UInt32PointSet &result, Layer layer, uint32 resultFlag)
 {
     uint32 uiBorderCheck = 0;
-    MapTile centerTile = getMapTile(pos);
+    MapTile centerTile = getMapTile(pos, layer);
     for (uint32 i = 0; i < 8; ++i)
     {
         DATABASE::AutoTilePrototype::TILE_CHECK curTileCheck = DATABASE::AutoTilePrototype::SAME_AROUND;
@@ -103,7 +109,7 @@ uint32 MapPrototype::getPositionsAroundWithID(const uint32 &uiID, const Point3D<
             curTileCheck = DATABASE::AutoTilePrototype::OTHER_BOTTOM_RIGHT;
             break;
         }
-        MapTile mapTile = getMapTile(checkPos);
+        MapTile mapTile = getMapTile(checkPos, layer);
         // if bad object, continue
         if (mapTile.m_uiAutoTileSetID == MAX_UINT32 || mapTile.m_uiTileID == MAX_UINT32)
             continue;
@@ -137,88 +143,89 @@ void MapPrototype::_clearTiles()
 
 void MapPrototype::setSize(Point<uint32> size, uint32 uiForegroundLayerSize, uint32 uiBackgroundLayerSize)
 {
-    if (size != getSize() || uiForegroundLayerSize != m_uiForegroundLayer || uiBackgroundLayerSize != m_uiBackgroundLayer)
+    if (size != getSize() || m_uiLayer[LAYER_FOREGROUND] != uiForegroundLayerSize || m_uiLayer[LAYER_FOREGROUND] != uiBackgroundLayerSize)
     {
         if (hasMapDataStored())
             _resizeMap(size, uiForegroundLayerSize, uiBackgroundLayerSize);
         m_Size = size;
+        m_uiLayer[LAYER_BACKGROUND] = uiBackgroundLayerSize;
+        m_uiLayer[LAYER_FOREGROUND] = uiForegroundLayerSize;
     }
 }
 
 uint32 MapPrototype::getTile(Point3D<uint32> at, Layer layer) const
 {
-    if (hasMapDataStored() && isInMap(at))
+    if (hasMapDataStored() && isInMap(at) && m_uiLayer[layer] > at.z)
     {
-        if (layer == LAYER_BACKGROUND && m_uiBackgroundLayer > at.z)
-            return m_BackgroundTiles[at.x][at.y][layer].m_uiTileID;
-        else if (layer == LAYER_FOREGROUND && m_uiForegroundLayer > at.z)
-            return m_ForegroundTiles[at.x][at.y][layer].m_uiTileID;
+        switch (layer)
+        {
+        case LAYER_BACKGROUND: return m_BackgroundTiles[at.x][at.y][at.z].m_uiTileID;
+        case LAYER_FOREGROUND: return m_ForegroundTiles[at.x][at.y][layer].m_uiTileID;
+        }
     }
     return MAX_UINT32;
 }
 
 void MapPrototype::setTile(Point3D<uint32> at, uint32 uiID, Layer layer)
 {
-    if (hasMapDataStored() && isInMap(at))
+    if (hasMapDataStored() && isInMap(at) && m_uiLayer[layer] > at.z)
     {
-        if (layer == LAYER_BACKGROUND && m_uiBackgroundLayer > at.z)
-            m_BackgroundTiles[at.x][at.y][at.z].m_uiTileID = uiID;
-        else if (layer == LAYER_FOREGROUND && m_uiForegroundLayer > at.z)
-            m_ForegroundTiles[at.x][at.y][at.z].m_uiTileID = uiID;
+        switch (layer)
+        {
+        case LAYER_BACKGROUND: m_BackgroundTiles[at.x][at.y][at.z].m_uiTileID = uiID; break;
+        case LAYER_FOREGROUND: m_ForegroundTiles[at.x][at.y][at.z].m_uiTileID = uiID; break;
+        }            
     }
 }
 
 uint32 MapPrototype::getAutoTile(Point3D<uint32> at, Layer layer) const
 {
-    if (hasMapDataStored() && isInMap(at))
+    if (hasMapDataStored() && isInMap(at) && m_uiLayer[layer] > at.z)
     {
-        if (layer == LAYER_BACKGROUND && m_uiBackgroundLayer > at.z)
-            return m_BackgroundTiles[at.x][at.y][layer].m_uiAutoTileSetID;
-        else if (layer == LAYER_FOREGROUND && m_uiForegroundLayer > at.z)
-            return m_ForegroundTiles[at.x][at.y][layer].m_uiAutoTileSetID;
+        switch (layer)
+        {
+        case LAYER_BACKGROUND: return m_BackgroundTiles[at.x][at.y][at.z].m_uiAutoTileSetID;
+        case LAYER_FOREGROUND: return m_ForegroundTiles[at.x][at.y][at.z].m_uiAutoTileSetID;
+        }
     }
     return MAX_UINT32;
 }
 
 void MapPrototype::setAutoTile(Point3D<uint32> at, uint32 uiID, Layer layer)
 {
-    if (hasMapDataStored() && isInMap(at))
+    if (hasMapDataStored() && isInMap(at) && m_uiLayer[layer] > at.z)
     {
-        if (layer == LAYER_BACKGROUND && m_uiBackgroundLayer > at.z)
-            m_BackgroundTiles[at.x][at.y][at.z].m_uiAutoTileSetID = uiID;
-        else if (layer == LAYER_FOREGROUND && m_uiForegroundLayer > at.z)
-            m_ForegroundTiles[at.x][at.y][at.z].m_uiAutoTileSetID = uiID;
+        switch (layer)
+        {
+        case LAYER_BACKGROUND: m_BackgroundTiles[at.x][at.y][at.z].m_uiAutoTileSetID = uiID; break;
+        case LAYER_FOREGROUND: m_ForegroundTiles[at.x][at.y][at.z].m_uiAutoTileSetID = uiID; break;
+        }            
     }
 }
 
 void MapPrototype::setMapTile(Point3D<uint32> at, MapTile mapTile, Layer layer)
 {
-    if (hasMapDataStored() && isInMap(at))
+    if (hasMapDataStored() && isInMap(at) && m_uiLayer[layer] > at.z)
     {
-        if (layer == LAYER_BACKGROUND && m_uiBackgroundLayer > at.z)
-            m_BackgroundTiles[at.x][at.y][at.z] = mapTile;
-        else if (layer == LAYER_FOREGROUND && m_uiForegroundLayer > at.z)
-            m_ForegroundTiles[at.x][at.y][at.z] = mapTile;
+        switch (layer)
+        {
+        case LAYER_BACKGROUND: m_BackgroundTiles[at.x][at.y][at.z] = mapTile; break;
+        case LAYER_FOREGROUND: m_ForegroundTiles[at.x][at.y][at.z] = mapTile; break;
+        }            
     }
 }
 
 MapTile MapPrototype::getMapTile(Point3D<uint32> at, Layer layer) const
 {
-    if (hasMapDataStored() && isInMap(at))
+    if (hasMapDataStored() && isInMap(at) && m_uiLayer[layer] > at.z)
     {
-        if (layer == LAYER_BACKGROUND && m_uiBackgroundLayer > at.z)
-            return m_BackgroundTiles[at.x][at.y][at.z];
-        else if (layer == LAYER_FOREGROUND && m_uiForegroundLayer > at.z)
-            return m_ForegroundTiles[at.x][at.y][at.z];
+        switch (layer)
+        {
+        case LAYER_BACKGROUND: return m_BackgroundTiles[at.x][at.y][at.z];
+        case LAYER_FOREGROUND: return m_ForegroundTiles[at.x][at.y][at.z];
+        }
     }
-    return MAX_UINT32;
-}
-
-uint32 MapPrototype::getLayerSize(Layer layer) const
-{
-    if (layer == LAYER_BACKGROUND)
-        return m_uiBackgroundLayer;
-    return m_uiForegroundLayer;
+    return MapTile(MAX_UINT32, MAX_UINT32);
 }
 
 MapDatabase::MapDatabase(void) : Database()
@@ -239,22 +246,6 @@ bool MapDatabase::hasMapDataStored(uint32 uiIndex) const
     return false;
 }
 
-//void MapDatabase::deleteRemovedMaps(const QString &path)
-//{
-//    for (uint32 i = 0; i < m_RemovedMaps.size(); ++i)
-//        _deleteRemovedMap(m_RemovedMaps.at(i), path);
-//    m_RemovedMaps.clear();
-//}
-//
-//void MapDatabase::_deleteRemovedMap(const MapPrototypePtr &map, const QString &path)
-//{
-//    if (map)
-//    {
-//        QFile file(path+ "/Maps/" + map->getFileName());
-//        file.remove();
-//    }
-//}
-
 bool MapDatabase::removeMap(uint32 uiID)
 {
     MapPrototypePtr pMap;
@@ -263,21 +254,6 @@ bool MapDatabase::removeMap(uint32 uiID)
     setItem(uiID, MapPrototypePtr());
     return true;
 }
-
-//MapPrototypePtr MapDatabase::getNewMap()
-//{
-//    MapPrototypePtr pMap;
-//    uint32 i = 0;
-//    for (; i < getSize(); ++i)
-//    {
-//        if (!getItem(i+1, pMap) || !pMap)
-//            break;
-//    }
-//    // add new map
-//    pMap = MapPrototypePtr(new MapPrototype(i+1, "map" + QString::number(i+1) + ".xml"));
-//    setItem(i+1, pMap);
-//    return pMap;
-//}
 
 bool MapDatabase::loadMapFile(uint32 uiMapID, const QString &path)
 {

@@ -42,6 +42,7 @@ private slots:
     void _releaseBrush(MapViewer *pWidget, Point3D<uint32> point, uint32 uiButton);
     void _moveBrush(MapViewer *pWidget, Point3D<uint32> point);
 
+    void _layerChanged(bool state);
     void _MappingModeChanged(int index);
     void _objectTabChanged(int index);
     void _currentObjectChanged(QTreeWidgetItem *pItem, QTreeWidgetItem *pPreviousItem);
@@ -52,6 +53,8 @@ private slots:
     void _revertButtonClicked(bool clicked);
 
     void _tabSelected(int index);
+
+    void _mapUpdated(MAP::MapPrototypePtr map);
 
 signals:
     void leftTileChanged(uint32 uiID, bool isAutoTile);

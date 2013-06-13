@@ -24,13 +24,14 @@ public:
     MapViewer* getTabWithMap(const MAP::MapPrototypePtr &map) const;
     MapViewer* getCurrentWidget() const { return dynamic_cast<MapViewer*>(currentWidget()); }
 
-    void updateWidget();
+    void updateObject();
     void setSharedData(SharedMapEditorDataPtr pData);
+
+    void redrawMaps();
 
 public slots:
     void addMapTab(MAP::MapPrototypePtr map);
     void closeMap(MAP::MapPrototypePtr map);
-    void updateMap(MAP::MapPrototypePtr map);
 
     void closeTab(int index);
     void setCurrentCursor(const QCursor &cursor);

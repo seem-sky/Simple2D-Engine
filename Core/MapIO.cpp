@@ -128,6 +128,8 @@ void MapReader::_loadObjects(const QDomNode &parentNode, bool &result)
                 newObject->m_Position.y = attribute.nodeValue().toUInt();
             else if (attribute.nodeName() == "Direction")
                 newObject->m_Direction = static_cast<MAP::MapDirection>(attribute.nodeValue().toUInt());
+            else if (attribute.nodeName() == "Layer")
+                newObject->m_Layer = static_cast<MAP::MapObjectLayer>(attribute.nodeValue().toUInt());
         }
         m_pMap->addMapObject(newObject);
     }
@@ -176,11 +178,17 @@ void MapWriter::_storeTiles(QXmlStreamWriter &writer, Layer curLayer)
 
 void MapWriter::_storeObjects(QXmlStreamWriter &writer)
 {
-    for (uint32 i = 0; i < m_pMap->m_Objects.size(); ++i)
-        _getXMLDataFromObject(m_pMap->m_Objects.at(i), writer);
+    writer.writeStartElement("ObjectData");
+    for (uint32 i = 1; i <= m_pMap->getMapObjectCount(); ++i)
+    {
+        ConstMapObjectPtr obj;
+        if (m_pMap->getMapObject(i, obj))
+            _getXMLDataFromObject(obj, writer);
+    }
+    writer.writeEndElement();
 }
 
-void MapWriter::_getXMLDataFromObject(const MapObjectPtr &obj, QXmlStreamWriter &writer)
+void MapWriter::_getXMLDataFromObject(ConstMapObjectPtr obj, QXmlStreamWriter &writer)
 {
     if (!obj)
         return;
@@ -191,4 +199,5 @@ void MapWriter::_getXMLDataFromObject(const MapObjectPtr &obj, QXmlStreamWriter 
     writer.writeAttribute("XPos", QString::number(obj->m_Position.x));
     writer.writeAttribute("YPos", QString::number(obj->m_Position.y));
     writer.writeAttribute("Direction", QString::number(obj->m_Direction));
+    writer.writeAttribute("Layer", QString::number(obj->m_Layer));
 }

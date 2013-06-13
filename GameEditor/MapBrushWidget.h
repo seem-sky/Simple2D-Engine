@@ -15,7 +15,7 @@ private:
 public:
     MapBrushWidget(QWidget *pParent = NULL);
 
-    void updateWidget();
+    void updateObject();
     void clearWidget();
 
     MAP::TileBrush::BrushType getCurrentBrushType() const;

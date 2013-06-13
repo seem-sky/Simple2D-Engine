@@ -16,6 +16,7 @@ MapObjectDialog::MapObjectDialog(DATABASE::ConstWorldObjectDatabasePtr pWODB, DA
     m_pView->setAnimationDB(pAnimationDB);
     m_pView->setSpriteDB(pSpriteDB);
     m_pView->setEditable(false);
+    m_pView->setGridDraw(false);
     _getDataFromObject();
 }
 

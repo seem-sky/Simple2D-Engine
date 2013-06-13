@@ -48,7 +48,7 @@ public:
     TileView(QWidget* pParent = NULL);
 
     void clearScene();
-    void updateWidget();
+    void updateObject();
 
 signals:
     void tileClicked(uint32 uiID, Qt::MouseButton button);

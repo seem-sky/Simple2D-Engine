@@ -36,11 +36,13 @@ namespace MAP
         DATABASE::ObjectType m_Type;
         uint32 m_ObjectID;
         uint32 m_GUID;
-        Point3D<uint32> m_Position;
+        Point<uint32> m_Position;
         MapDirection m_Direction;
         MapObjectLayer m_Layer;
     };
     typedef boost::shared_ptr<MapObject> MapObjectPtr;
+    typedef boost::shared_ptr<const MapObject> ConstMapObjectPtr;
+    typedef Container<MapObject> MapObjectContainer;
     typedef std::vector<MapObjectPtr> MapObjectPtrVector;
     typedef boost::multi_array<MapObjectPtrVector, 3> MapObjectPtrVectorMultiarray3D;
 
@@ -73,9 +75,7 @@ namespace MAP
         void _clearTiles();
 
     public:
-        MapPrototype(uint32 uiID = 0, const QString &sFileName = "") : DATABASE::Prototype(uiID), m_sFileName(sFileName), m_uiParentID(0), m_DataLoaded(false),
-            m_uiBackgroundLayer(0), m_uiForegroundLayer(0)
-        {}
+        MapPrototype(uint32 uiID = 0, const QString &sFileName = "");
 
         inline bool hasMapDataStored() const { return m_DataLoaded; }
 
@@ -84,23 +84,26 @@ namespace MAP
         inline QString getScriptName() const { return m_sScriptName; }
         void setSize(Point<uint32> size, uint32 uiForegroundLayerSize, uint32 uiBackgroundLayerSize);
         inline Point<uint32> getSize() const { return m_Size; }
-        uint32 getLayerSize(Layer layer) const;
+        inline uint32 getLayerSize(Layer layer) const { return m_uiLayer[layer]; };
 
         inline uint32 getParentID() const { return m_uiParentID; }
         inline void setParentID(uint32 uiParentID) { m_uiParentID = uiParentID; }
 
-        uint32 getTile(Point3D<uint32> at, Layer layer = LAYER_BACKGROUND) const;
-        void setTile(Point3D<uint32> at, uint32 uiID, Layer layer = LAYER_BACKGROUND);
+        uint32 getTile(Point3D<uint32> at, Layer layer) const;
+        void setTile(Point3D<uint32> at, uint32 uiID, Layer layer);
 
-        uint32 getAutoTile(Point3D<uint32> at, Layer layer = LAYER_BACKGROUND) const;
-        void setAutoTile(Point3D<uint32> at, uint32 uiID, Layer layer = LAYER_BACKGROUND);
+        uint32 getAutoTile(Point3D<uint32> at, Layer layer) const;
+        void setAutoTile(Point3D<uint32> at, uint32 uiID, Layer layer);
 
-        void setMapTile(Point3D<uint32> at, MapTile mapTile, Layer layer = LAYER_BACKGROUND);
-        MapTile getMapTile(Point3D<uint32> at, Layer layer = LAYER_BACKGROUND) const;
+        void setMapTile(Point3D<uint32> at, MapTile mapTile, Layer layer);
+        MapTile getMapTile(Point3D<uint32> at, Layer layer) const;
 
         void addMapObject(MapObjectPtr pObject);
         MapObjectPtr addMapObject(DATABASE::ObjectType type, uint32 uiID, Point3D<uint32> pos);
-        void moveMapObject(uint32 uiGUID, const Point3D<uint32> &newPos);
+        //void moveMapObject(uint32 uiGUID, const Point3D<uint32> &newPos);
+        inline uint32 getMapObjectCount() const { return m_Objects.getSize(); }
+        inline bool getMapObject(uint32 GUID, ConstMapObjectPtr &pResult) const { return m_Objects.getItem(GUID, pResult); }
+        inline bool getMapObject(uint32 GUID, MapObjectPtr &pResult)  { return m_Objects.getItem(GUID, pResult); }
 
         inline bool isInMap(Point<uint32> at) const { return at.x < m_Size.x && at.y < m_Size.y; }
 
@@ -111,19 +114,18 @@ namespace MAP
             FLAG_OTHER      = 0x2,
             FLAG_ALL        = FLAG_SAME | FLAG_OTHER
         };
-        uint32 getPositionsAroundWithID(const uint32 &uiID, const Point3D<uint32> &pos, UInt32PointSet &result, uint32 resultFlag = FLAG_ALL);
+        uint32 getPositionsAroundWithID(const uint32 &uiID, const Point3D<uint32> &pos, UInt32PointSet &result, Layer layer, uint32 resultFlag = FLAG_ALL);
 
     private:
         bool m_DataLoaded;
 
         uint32 m_uiParentID;
         Point<uint32> m_Size;
-        uint32 m_uiBackgroundLayer;
-        uint32 m_uiForegroundLayer;
+        uint32 m_uiLayer[2];
         QString m_sFileName;
         QString m_sScriptName;
 
-        MapObjectPtrVector m_Objects;
+        MapObjectContainer m_Objects;
         TileDataMultiarray3D m_BackgroundTiles;
         TileDataMultiarray3D m_ForegroundTiles;
     };
@@ -134,15 +136,10 @@ namespace MAP
 
     class MapDatabase : public DATABASE::Database<MapPrototype>
     {
-    private:
-        //void _deleteRemovedMap(const MapPrototypePtr &map, const QString &path);
-        //void _createNewMap(const MapPrototypePtr &map, const QString &path);
-
     public:
         MapDatabase(void);
 
         bool removeMap(uint32 uiID);
-        //void deleteRemovedMaps(const QString &path);
 
         void clear();
 

@@ -9,7 +9,8 @@
 enum MappingMode
 {
     MODE_TILE,
-    MODE_OBJECT
+    MODE_OBJECT,
+    MODE_VIEW
 };
 
 class MapEditorWidget;
@@ -25,6 +26,7 @@ public:
     SharedMapEditorData();
 
     inline MappingMode getMappingMode() const { return m_MappingMode; }
+    inline MAP::Layer getCurrentLayer() const { return m_CurrentLayer; }
 
     DATABASE::ConstTileDatabasePtr getTileDatabase() const;
     DATABASE::ConstAutoTileDatabasePtr getAutoTileDatabase() const;
@@ -44,6 +46,7 @@ private:
     AutoTileCachePtr m_pAutoTileCache;
 
     MappingMode m_MappingMode;
+    MAP::Layer m_CurrentLayer;
 };
 typedef boost::shared_ptr<SharedMapEditorData> SharedMapEditorDataPtr;
 typedef boost::shared_ptr<const SharedMapEditorData> ConstSharedMapEditorDataPtr;

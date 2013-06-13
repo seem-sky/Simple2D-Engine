@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <MapDatabase>
-    <prototype ID="1" Name="500er maker vergleich" MapSizeX="500" MapSizeY="500" BackgroundLayer="1" ParentID="0" MapScript="" File="map1.xml"/>
-    <prototype ID="2" Name="" MapSizeX="20" MapSizeY="20" BackgroundLayer="1" ParentID="0" MapScript="" File="map2.xml"/>
-    <prototype ID="4" Name="test2" MapSizeX="18" MapSizeY="18" BackgroundLayer="3" ParentID="0" MapScript="" File="map4.xml"/>
-    <prototype ID="20" Name="blubb" MapSizeX="1000" MapSizeY="1000" BackgroundLayer="2" ParentID="21" MapScript="" File="map20.xml"/>
-    <prototype ID="21" Name="jojojojojo" MapSizeX="5" MapSizeY="5" BackgroundLayer="3" ParentID="0" MapScript="" File="map21.xml"/>
+    <prototype ID="1" Name="500er maker vergleich" MapSizeX="500" MapSizeY="500" BackgroundLayer="1" ForegroundLayer="0" ParentID="0" MapScript="" File="map1.xml"/>
+    <prototype ID="2" Name="" MapSizeX="20" MapSizeY="20" BackgroundLayer="1" ForegroundLayer="0" ParentID="0" MapScript="" File="map2.xml"/>
+    <prototype ID="4" Name="test2" MapSizeX="18" MapSizeY="18" BackgroundLayer="3" ForegroundLayer="2" ParentID="0" MapScript="" File="map4.xml"/>
+    <prototype ID="20" Name="blubb" MapSizeX="1000" MapSizeY="1000" BackgroundLayer="2" ForegroundLayer="0" ParentID="21" MapScript="" File="map20.xml"/>
+    <prototype ID="21" Name="jojojojojo" MapSizeX="5" MapSizeY="5" BackgroundLayer="3" ForegroundLayer="0" ParentID="0" MapScript="" File="map21.xml"/>
 </MapDatabase>

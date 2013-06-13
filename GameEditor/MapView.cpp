@@ -72,19 +72,13 @@ void MapTabWidget::closeMap(MapPrototypePtr map)
     }
 }
 
-void MapTabWidget::updateMap(MapPrototypePtr map)
-{
-    if (MapViewer* pTab = getTabWithMap(map))
-        pTab->changedMap();
-}
-
 void MapTabWidget::closeTab(int index)
 {
     MapDatabaseChangerPtr pMapDB;
     if (m_pSharedData)
         pMapDB = m_pSharedData->getMapDatabase();
 
-    if (MapViewer *pTab = (MapViewer*)widget(index))
+    if (MapViewer *pTab = dynamic_cast<MapViewer*>(widget(index)))
     {
         if (!pTab->getMap())
             return;
@@ -96,9 +90,6 @@ void MapTabWidget::closeTab(int index)
             {
             case QMessageBox::Yes:
                 pTab->saveCurrentMap();
-                // unload map from memory
-                if (pMapDB)
-                    pMapDB->unloadMapFile(pTab->getMap()->getID());
                 break;
             case QMessageBox::No:
                 pMapDB->undoChanges(pTab->getMap()->getID());
@@ -107,6 +98,9 @@ void MapTabWidget::closeTab(int index)
             }
         }
 
+        // unload map from memory
+        if (pMapDB)
+            pMapDB->unloadMapFile(pTab->getMap()->getID());
         Config::Get()->removeOpenMap(pTab->getMap()->getID());
         removeTab(index);
     }
@@ -145,11 +139,20 @@ void MapTabWidget::setCurrentCursor(const QCursor &cursor)
     //}
 }
 
-void MapTabWidget::updateWidget()
+void MapTabWidget::updateObject()
 {
     for (int i = 0; i < count(); ++i)
     {
         if (MapViewer* pWidget = dynamic_cast<MapViewer*>(widget(i)))
-            pWidget->updateWidget();
+            pWidget->updateObject();
+    }
+}
+
+void MapTabWidget::redrawMaps()
+{
+    for (int i = 0; i < count(); ++i)
+    {
+        if (MapViewer* pWidget = dynamic_cast<MapViewer*>(widget(i)))
+            pWidget->redrawViewport();
     }
 }

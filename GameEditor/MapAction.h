@@ -11,7 +11,7 @@ namespace MAP
     class MapAction
     {
     public:
-        MapAction(const MapPrototypePtr &map);
+        MapAction(MapPrototypePtr map);
 
         virtual void revertMapAction() = 0;
 
@@ -29,19 +29,20 @@ namespace MAP
     class TileMapAction : public MapAction
     {
     public:
-        TileMapAction(const Point3D<uint32> &pos, const MapTile &uiTileID, const MapPrototypePtr &map);
+        TileMapAction(Point3D<uint32> pos, MapTile uiTileID, Layer layer, MapPrototypePtr map);
 
         void revertMapAction();
 
     private:
         Point3D<uint32> m_Pos;
         MapTile m_MapTile;
+        Layer m_Layer;
     };
 
     class MultiTileMapAction : public MapAction
     {
     public:
-        MultiTileMapAction(const MapTile &mapTile, const MapPrototypePtr &map, const uint32 &uiLayer);
+        MultiTileMapAction(MapTile mapTile, MapPrototypePtr map, uint32 uiLayer, Layer layer);
 
         void revertMapAction();
         void addPosition(const Point<uint32> &pos);
@@ -50,6 +51,7 @@ namespace MAP
         UInt32PointVector m_Positions;
         uint32 m_uiLayer;
         MapTile m_MapTile;
+        Layer m_Layer;
     };
     typedef boost::shared_ptr<MultiTileMapAction> MultiTileMapActionPtr;
 }

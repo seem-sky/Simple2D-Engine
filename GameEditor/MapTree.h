@@ -33,7 +33,7 @@ protected:
 public:
     MapTreeWidget(QWidget *pParent = NULL);
 
-    void updateWidget();
+    void updateObject();
 
 private slots:
     void _openMapSettingsDialog();

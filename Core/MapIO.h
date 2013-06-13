@@ -39,7 +39,7 @@ namespace MAP
         void _storeTiles(QXmlStreamWriter &writer, Layer layer);
         void _storeTiles(QXmlStreamWriter &writer);
         void _storeObjects(QXmlStreamWriter &writer);
-        void _getXMLDataFromObject(const MapObjectPtr &obj, QXmlStreamWriter &writer);
+        void _getXMLDataFromObject(ConstMapObjectPtr obj, QXmlStreamWriter &writer);
 
     public:
         MapWriter(MapPrototypePtr &map) : XMLStreamWriter(), m_pMap(map){}

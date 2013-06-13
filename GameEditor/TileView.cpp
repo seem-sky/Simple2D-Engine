@@ -59,7 +59,7 @@ TileView::TileView(QWidget* pParent) : QGraphicsView(pParent), MapEditorObject()
     clearScene();
 }
 
-void TileView::updateWidget()
+void TileView::updateObject()
 {
     clearScene();
     if (!m_pSharedData)

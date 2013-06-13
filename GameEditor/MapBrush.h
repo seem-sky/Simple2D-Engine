@@ -36,6 +36,9 @@ namespace MAP
         inline void setTile(uint32 uiID) { m_uiTileID = uiID; }
         inline uint32 getTile() const { return m_uiTileID; }
 
+        inline void setLayer(Layer layer) { m_Layer = layer; }
+        inline Layer getLayer() const { return m_Layer; }
+
         virtual bool isAutoTileBrush() const = 0;
 
         void drawOnMap(MapViewer *pWidget, Point3D<uint32> center);
@@ -49,6 +52,7 @@ namespace MAP
         MapViewer *m_pLastEmitter;
         BrushType m_Type;
         uint32 m_uiTileID;
+        Layer m_Layer;
     };
     typedef boost::shared_ptr<TileBrush> MapBrushPtr;
 
@@ -90,28 +94,29 @@ namespace MAP
     /*#####
     # MapObjectBrush
     #####*/
-    class MapObjectBrush
+    class MapObjectBrush : public MapEditorObject
     {
     public:
+        MapObjectBrush() : MapEditorObject() {}
+
         inline void setObjectType(DATABASE::ObjectType type) { m_ObjectType = type; }
         inline DATABASE::ObjectType getObjectType() const { return m_ObjectType; }
 
         inline void setObjectID(uint32 uiID) { m_uiObjectID = uiID; }
         inline uint32 getObjectID() const { return m_uiObjectID; }
 
+        void updateObject() {}
+
         // return true if draw was successful
         bool drawObject(MapViewer *pWidget, Point3D<uint32> pos);
 
-        void setAdditionalDBs(DATABASE::ConstWorldObjectDatabasePtr pWorldObjectDB, DATABASE::ConstAnimationDatabasePtr pAnimationDB,
-            DATABASE::ConstSpriteDatabasePtr pSpriteDB);
+        static QPixmap getObjectPixmap(uint32 uiObjectID, DATABASE::ObjectType type, MAP::MapDirection direction,
+            DATABASE::ConstWorldObjectDatabasePtr pWorldObjectDB, DATABASE::ConstAnimationDatabasePtr pAnimationDB, DATABASE::ConstSpriteDatabasePtr pSpriteDB,
+            QRect &boundingRect);
 
     private:
         uint32 m_uiObjectID;
         DATABASE::ObjectType m_ObjectType;
-
-        DATABASE::ConstWorldObjectDatabasePtr m_pWorldObjectDB;
-        DATABASE::ConstAnimationDatabasePtr m_pAnimationDB;
-        DATABASE::ConstSpriteDatabasePtr m_pSpriteDB;
     };
 }
 #endif

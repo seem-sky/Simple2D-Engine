@@ -215,12 +215,12 @@ bool MapDatabaseXMLReader::getAttributeFromXML(MAP::MapPrototypePtr proto, const
     }
     else if (attributeName == "BackgroundLayer")
     {
-        proto->m_uiBackgroundLayer = attributeValue.toUInt();
+        proto->m_uiLayer[MAP::LAYER_BACKGROUND] = attributeValue.toUInt();
         return true;
     }
     else if (attributeName == "ForegroundLayer")
     {
-        proto->m_uiForegroundLayer = attributeValue.toUInt();
+        proto->m_uiLayer[MAP::LAYER_FOREGROUND] = attributeValue.toUInt();
         return true;
     }
     else if (attributeName == "ParentID")

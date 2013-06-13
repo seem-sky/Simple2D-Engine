@@ -10,9 +10,10 @@ MapBrushWidget::MapBrushWidget(QWidget *pParent) : QWidget(pParent), MapEditorOb
     connect(m_pMode, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(_changeDrawMode(const QString&)));
 }
 
-void MapBrushWidget::updateWidget()
+void MapBrushWidget::updateObject()
 {
     changeBrush(m_pBrush->getTile(), m_pBrush->isAutoTileBrush());
+
 }
 
 void MapBrushWidget::clearWidget()
@@ -89,6 +90,7 @@ MapBrushPtr MapBrushWidget::_getNewAutoTileBrush()
     {
         pNewBrush = MapBrushPtr(new MapAutoTileBrush(m_pSharedData->getAutoTileDatabase()));
         pNewBrush->setBrushType(getCurrentBrushType());
+        pNewBrush->setLayer(m_pSharedData->getCurrentLayer());
     }
     return pNewBrush;
 }

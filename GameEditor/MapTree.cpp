@@ -129,7 +129,7 @@ void MapTreeWidget::_openWidgetContextMenu(const QPoint &pos)
     pMenu->popup(pos);
 }
 
-void MapTreeWidget::updateWidget()
+void MapTreeWidget::updateObject()
 {
     clear();
     if (!m_pSharedData)
