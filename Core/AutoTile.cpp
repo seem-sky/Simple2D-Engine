@@ -21,77 +21,99 @@ void AutoTile::_createPixmaps(ConstTileCachePtr pTileCache)
     // inner edges
     for (uint32 i = AutoTilePrototype::INDEX_INNER_EDGE_TOP_LEFT; i <= AutoTilePrototype::INDEX_INNER_EDGE_BOTTOM_RIGHT; ++i)
     {
-        QPoint pos(0, 0);
-        switch (i)
-        {
-        case AutoTilePrototype::INDEX_INNER_EDGE_TOP_RIGHT:
-            pos.setX(TILE_SIZE/2);
-            break;
-        case AutoTilePrototype::INDEX_INNER_EDGE_BOTTOM_LEFT:
-            pos.setY(TILE_SIZE/2);
-            break;
-        case AutoTilePrototype::INDEX_INNER_EDGE_BOTTOM_RIGHT:
-            pos.setX(TILE_SIZE/2);
-            pos.setY(TILE_SIZE/2);
-            break;
-        }
         ConstQPixmapPtr pInnerCenter;
         ConstQPixmapPtr pCenter;
         if (!pTileCache->getItem(m_pProto->getTileID(AutoTilePrototype::INDEX_INNER_CENTER), pInnerCenter) ||
             !pTileCache->getItem(m_pProto->getTileID(AutoTilePrototype::INDEX_CENTER), pCenter))
             break;
-        QPixmapPtr pNewPixmap(new QPixmap(*pCenter.get()));
+        QPixmapPtr pNewPixmap(new QPixmap(QSize(TILE_SIZE, TILE_SIZE)));
+        pNewPixmap->fill(Qt::transparent);
         QPainter pixmapPainter(pNewPixmap.get());
-        pixmapPainter.drawTiledPixmap(pos.x(), pos.y(), TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter.get(), pos.x(), pos.y());
+        switch (i)
+        {
+        case AutoTilePrototype::INDEX_INNER_EDGE_TOP_LEFT:
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pCenter, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pCenter, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pCenter, TILE_SIZE/2, TILE_SIZE/2);
+            break;
+        case AutoTilePrototype::INDEX_INNER_EDGE_TOP_RIGHT:
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pCenter, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pCenter, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pCenter, TILE_SIZE/2, TILE_SIZE/2);
+            break;
+        case AutoTilePrototype::INDEX_INNER_EDGE_BOTTOM_LEFT:
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pCenter, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pCenter, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pCenter, TILE_SIZE/2, TILE_SIZE/2);
+            break;
+        case AutoTilePrototype::INDEX_INNER_EDGE_BOTTOM_RIGHT:
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pCenter, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pCenter, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pCenter, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, TILE_SIZE/2, TILE_SIZE/2);
+            break;
+        }
         _setPixmap(static_cast<AutoTilePrototype::AUTO_TILE_INDEX>(i), pNewPixmap);
     }
 
     // multi inner edges
     for (uint32 i = AutoTilePrototype::INDEX_INNER_EDGE_TOP_LEFT_BOTTOM_RIGHT; i <= AutoTilePrototype::INDEX_INNER_EDGE_BOTTOM_LEFT_BOTTOM_RIGHT; ++i)
     {
-        QPoint pos1(0, 0);
-        QPoint pos2(0, 0);
-        switch (i)
-        {
-        case AutoTilePrototype::INDEX_INNER_EDGE_TOP_LEFT_BOTTOM_RIGHT:
-            pos2.setX(TILE_SIZE/2);
-            pos2.setY(TILE_SIZE/2);
-            break;
-
-        case AutoTilePrototype::INDEX_INNER_EDGE_TOP_RIGHT_BOTTOM_LEFT:
-            pos1.setX(TILE_SIZE/2);
-            pos2.setY(TILE_SIZE/2);
-            break;
-
-        case AutoTilePrototype::INDEX_INNER_EDGE_TOP_LEFT_TOP_RIGHT:
-            pos2.setX(TILE_SIZE/2);
-            break;
-
-        case AutoTilePrototype::INDEX_INNER_EDGE_TOP_LEFT_BOTTOM_LEFT:
-            pos2.setY(TILE_SIZE/2);
-            break;
-
-        case AutoTilePrototype::INDEX_INNER_EDGE_TOP_RIGHT_BOTTOM_RIGHT:
-            pos1.setX(TILE_SIZE/2);
-            pos2.setX(TILE_SIZE/2);
-            pos2.setY(TILE_SIZE/2);
-            break;
-
-        case AutoTilePrototype::INDEX_INNER_EDGE_BOTTOM_LEFT_BOTTOM_RIGHT:
-            pos1.setY(TILE_SIZE/2);
-            pos2.setX(TILE_SIZE/2);
-            pos2.setY(TILE_SIZE/2);
-            break;
-        }
         ConstQPixmapPtr pInnerCenter;
         ConstQPixmapPtr pCenter;
         if (!pTileCache->getItem(m_pProto->getTileID(AutoTilePrototype::INDEX_INNER_CENTER), pInnerCenter) ||
             !pTileCache->getItem(m_pProto->getTileID(AutoTilePrototype::INDEX_CENTER), pCenter))
             break;
-        QPixmapPtr pNewPixmap(new QPixmap(*pCenter.get()));
+        QPixmapPtr pNewPixmap(new QPixmap(QSize(TILE_SIZE, TILE_SIZE)));
+        pNewPixmap->fill(Qt::transparent);
         QPainter pixmapPainter(pNewPixmap.get());
-        pixmapPainter.drawTiledPixmap(pos1.x(), pos1.y(), TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter.get(), pos1.x(), pos1.y());
-        pixmapPainter.drawTiledPixmap(pos2.x(), pos2.y(), TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter.get(), pos2.x(), pos2.y());
+        switch (i)
+        {
+        case AutoTilePrototype::INDEX_INNER_EDGE_TOP_LEFT_BOTTOM_RIGHT:
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pCenter, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pCenter, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, TILE_SIZE/2, TILE_SIZE/2);
+            break;
+
+        case AutoTilePrototype::INDEX_INNER_EDGE_TOP_RIGHT_BOTTOM_LEFT:
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pCenter, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pCenter, TILE_SIZE/2, TILE_SIZE/2);
+            break;
+
+        case AutoTilePrototype::INDEX_INNER_EDGE_TOP_LEFT_TOP_RIGHT:
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pCenter, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pCenter, TILE_SIZE/2, TILE_SIZE/2);
+            break;
+
+        case AutoTilePrototype::INDEX_INNER_EDGE_TOP_LEFT_BOTTOM_LEFT:
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pCenter, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pCenter, TILE_SIZE/2, TILE_SIZE/2);
+            break;
+
+        case AutoTilePrototype::INDEX_INNER_EDGE_TOP_RIGHT_BOTTOM_RIGHT:
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pCenter, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pCenter, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, TILE_SIZE/2, TILE_SIZE/2);
+            break;
+
+        case AutoTilePrototype::INDEX_INNER_EDGE_BOTTOM_LEFT_BOTTOM_RIGHT:
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pCenter, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pCenter, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, TILE_SIZE/2, TILE_SIZE/2);
+            break;
+        }
         _setPixmap(static_cast<AutoTilePrototype::AUTO_TILE_INDEX>(i), pNewPixmap);
     }
 
@@ -117,9 +139,12 @@ void AutoTile::_createPixmaps(ConstTileCachePtr pTileCache)
         if (!pTileCache->getItem(m_pProto->getTileID(uiIndex[0]), pSide[0]) ||
             !pTileCache->getItem(m_pProto->getTileID(uiIndex[1]), pSide[1]))
             break;
-        QPixmapPtr pNewPixmap(new QPixmap(*pSide[0].get()));
+        QPixmapPtr pNewPixmap(new QPixmap(QSize(TILE_SIZE, TILE_SIZE)));
+        pNewPixmap->fill(Qt::transparent);
         QPainter pixmapPainter(pNewPixmap.get());
-        pixmapPainter.drawTiledPixmap(0, 0, size.width(), size.height(), *pSide[1].get(), 0, 0);
+        pixmapPainter.drawTiledPixmap(size.width() % TILE_SIZE, size.height() % TILE_SIZE, size.width(), size.height(), *pSide[0],
+            size.width() % TILE_SIZE, size.height() % TILE_SIZE);
+        pixmapPainter.drawTiledPixmap(0, 0, size.width(), size.height(), *pSide[1], 0, 0);
         _setPixmap(static_cast<AutoTilePrototype::AUTO_TILE_INDEX>(i), pNewPixmap);
     }
 
@@ -127,37 +152,40 @@ void AutoTile::_createPixmaps(ConstTileCachePtr pTileCache)
     for (uint32 i = AutoTilePrototype::INDEX_T_TOP; i <= AutoTilePrototype::INDEX_T_RIGHT; ++i)
     {
         AutoTilePrototype::AUTO_TILE_INDEX uiIndex;
-        QPoint pos(0,0);
-        QSize size(TILE_SIZE, TILE_SIZE);
         switch (i)
         {
-        case AutoTilePrototype::INDEX_T_TOP:
-            uiIndex = AutoTilePrototype::INDEX_TOP;
-            size.setHeight(TILE_SIZE/2);
-            pos.setY(TILE_SIZE/2);
-            break;
-        case AutoTilePrototype::INDEX_T_BOTTOM:
-            uiIndex = AutoTilePrototype::INDEX_BOTTOM;
-            size.setHeight(TILE_SIZE/2);
-            break;
-        case AutoTilePrototype::INDEX_T_LEFT:
-            uiIndex = AutoTilePrototype::INDEX_LEFT;
-            size.setWidth(TILE_SIZE/2);
-            pos.setX(TILE_SIZE/2);
-            break;
-        case AutoTilePrototype::INDEX_T_RIGHT:
-            uiIndex = AutoTilePrototype::INDEX_RIGHT;
-            size.setWidth(TILE_SIZE/2);
-            break;
+        case AutoTilePrototype::INDEX_T_TOP: uiIndex = AutoTilePrototype::INDEX_TOP; break;
+        case AutoTilePrototype::INDEX_T_BOTTOM: uiIndex = AutoTilePrototype::INDEX_BOTTOM; break;
+        case AutoTilePrototype::INDEX_T_LEFT: uiIndex = AutoTilePrototype::INDEX_LEFT; break;
+        case AutoTilePrototype::INDEX_T_RIGHT: uiIndex = AutoTilePrototype::INDEX_RIGHT; break;
         }
         ConstQPixmapPtr pSide;
         ConstQPixmapPtr pInnerCenter;
         if (!pTileCache->getItem(m_pProto->getTileID(uiIndex), pSide) ||
             !pTileCache->getItem(m_pProto->getTileID(AutoTilePrototype::INDEX_INNER_CENTER), pInnerCenter))
             break;
-        QPixmapPtr pNewPixmap(new QPixmap(*pSide.get()));
+        QPixmapPtr pNewPixmap(new QPixmap(QSize(TILE_SIZE, TILE_SIZE)));
+        pNewPixmap->fill(Qt::transparent);
         QPainter pixmapPainter(pNewPixmap.get());
-        pixmapPainter.drawTiledPixmap(pos.x(), pos.y(), size.width(), size.height(), *pInnerCenter.get(), pos.x(), pos.y());
+        switch (i)
+        {
+        case AutoTilePrototype::INDEX_T_TOP:
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE, TILE_SIZE/2, *pSide, 0, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE, TILE_SIZE/2, *pInnerCenter, 0, TILE_SIZE/2);
+            break;
+        case AutoTilePrototype::INDEX_T_BOTTOM:
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE, TILE_SIZE/2, *pInnerCenter, 0, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE, TILE_SIZE/2, *pSide, 0, TILE_SIZE/2);
+            break;
+        case AutoTilePrototype::INDEX_T_LEFT:
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE, *pSide, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE, *pInnerCenter, TILE_SIZE/2, 0);
+            break;
+        case AutoTilePrototype::INDEX_T_RIGHT:
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE, *pInnerCenter, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE, *pSide, TILE_SIZE/2, 0);
+            break;
+        }
         _setPixmap(static_cast<AutoTilePrototype::AUTO_TILE_INDEX>(i), pNewPixmap);
     }
 
@@ -206,9 +234,40 @@ void AutoTile::_createPixmaps(ConstTileCachePtr pTileCache)
         if (!pTileCache->getItem(m_pProto->getTileID(uiIndex), pSide) ||
             !pTileCache->getItem(m_pProto->getTileID(AutoTilePrototype::INDEX_INNER_CENTER), pInnerCenter))
             break;
-        QPixmapPtr pNewPixmap(new QPixmap(*pSide.get()));
+        QPixmapPtr pNewPixmap(new QPixmap(QSize(TILE_SIZE, TILE_SIZE)));
+        pNewPixmap->fill(Qt::transparent);
         QPainter pixmapPainter(pNewPixmap.get());
-        pixmapPainter.drawTiledPixmap(pos.x(), pos.y(), TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter.get(), pos.x(), pos.y());
+        switch (i)
+        {
+        case AutoTilePrototype::INDEX_Y_TOP_BOTTOM_LEFT:
+        case AutoTilePrototype::INDEX_Y_RIGHT_BOTTOM_LEFT:
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pSide, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pSide, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pSide, TILE_SIZE/2, TILE_SIZE/2);
+            break;
+        case AutoTilePrototype::INDEX_Y_TOP_BOTTOM_RIGHT:
+        case AutoTilePrototype::INDEX_Y_LEFT_BOTTOM_RIGHT:
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pSide, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pSide, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pSide, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, TILE_SIZE/2, TILE_SIZE/2);
+            break;
+        case AutoTilePrototype::INDEX_Y_BOTTOM_TOP_LEFT:
+        case AutoTilePrototype::INDEX_Y_RIGHT_TOP_LEFT:
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pSide, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pSide, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pSide, TILE_SIZE/2, TILE_SIZE/2);
+            break;
+        case AutoTilePrototype::INDEX_Y_BOTTOM_TOP_RIGHT:
+        case AutoTilePrototype::INDEX_Y_LEFT_TOP_RIGHT:
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pSide, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pSide, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pSide, TILE_SIZE/2, TILE_SIZE/2);
+            break;
+        }
         _setPixmap(static_cast<AutoTilePrototype::AUTO_TILE_INDEX>(i), pNewPixmap);
     }
 
@@ -216,64 +275,90 @@ void AutoTile::_createPixmaps(ConstTileCachePtr pTileCache)
     for (uint32 i = AutoTilePrototype::INDEX_CURVE_TOP_LEFT; i <= AutoTilePrototype::INDEX_CURVE_BOTTOM_RIGHT; ++i)
     {
         AutoTilePrototype::AUTO_TILE_INDEX uiIndex;
-        QPoint pos(0,0);
         switch (i)
         {
-        case AutoTilePrototype::INDEX_CURVE_TOP_LEFT:
-            uiIndex = AutoTilePrototype::INDEX_TOP_LEFT;
-            pos.setX(TILE_SIZE/2);
-            pos.setY(TILE_SIZE/2);
-            break;
-        case AutoTilePrototype::INDEX_CURVE_TOP_RIGHT:
-            uiIndex = AutoTilePrototype::INDEX_TOP_RIGHT;
-            pos.setY(TILE_SIZE/2);
-            break;
-        case AutoTilePrototype::INDEX_CURVE_BOTTOM_LEFT:
-            uiIndex = AutoTilePrototype::INDEX_BOTTOM_LEFT;
-            pos.setX(TILE_SIZE/2);
-            break;
-        case AutoTilePrototype::INDEX_CURVE_BOTTOM_RIGHT:
-            uiIndex = AutoTilePrototype::INDEX_BOTTOM_RIGHT;
-            break;
+        case AutoTilePrototype::INDEX_CURVE_TOP_LEFT: uiIndex = AutoTilePrototype::INDEX_TOP_LEFT; break;
+        case AutoTilePrototype::INDEX_CURVE_TOP_RIGHT: uiIndex = AutoTilePrototype::INDEX_TOP_RIGHT; break;
+        case AutoTilePrototype::INDEX_CURVE_BOTTOM_LEFT: uiIndex = AutoTilePrototype::INDEX_BOTTOM_LEFT; break;
+        case AutoTilePrototype::INDEX_CURVE_BOTTOM_RIGHT: uiIndex = AutoTilePrototype::INDEX_BOTTOM_RIGHT; break;
         }
+
         ConstQPixmapPtr pEdge;
         ConstQPixmapPtr pInnerCenter;
         if (!pTileCache->getItem(m_pProto->getTileID(uiIndex), pEdge) ||
             !pTileCache->getItem(m_pProto->getTileID(AutoTilePrototype::INDEX_INNER_CENTER), pInnerCenter))
             break;
-        QPixmapPtr pNewPixmap(new QPixmap(*pEdge.get()));
+        QPixmapPtr pNewPixmap(new QPixmap(QSize(TILE_SIZE, TILE_SIZE)));
+        pNewPixmap->fill(Qt::transparent);
         QPainter pixmapPainter(pNewPixmap.get());
-        pixmapPainter.drawTiledPixmap(pos.x(), pos.y(), TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter.get(), pos.x(), pos.y());
+        switch (i)
+        {
+        case AutoTilePrototype::INDEX_CURVE_TOP_LEFT:
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pEdge, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pEdge, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pEdge, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, TILE_SIZE/2, TILE_SIZE/2);
+            break;
+        case AutoTilePrototype::INDEX_CURVE_TOP_RIGHT:
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pEdge, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pEdge, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pEdge, TILE_SIZE/2, TILE_SIZE/2);
+            break;
+        case AutoTilePrototype::INDEX_CURVE_BOTTOM_LEFT:
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pEdge, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pEdge, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pEdge, TILE_SIZE/2, TILE_SIZE/2);
+            break;
+        case AutoTilePrototype::INDEX_CURVE_BOTTOM_RIGHT:
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pEdge, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pEdge, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pEdge, TILE_SIZE/2, TILE_SIZE/2);
+            break;
+        }
         _setPixmap(static_cast<AutoTilePrototype::AUTO_TILE_INDEX>(i), pNewPixmap);
     }
 
     // triple inner edges
     for (uint32 i = AutoTilePrototype::INDEX_INNER_EDGE_TOP_LEFT_TOP_RIGHT_BOTTOM_LEFT; i <= AutoTilePrototype::INDEX_INNER_EDGE_TOP_RIGHT_BOTTOM_LEFT_BOTTOM_RIGHT; ++i)
     {
-        QPoint pos(0,0);
-        switch (i)
-        {
-        case AutoTilePrototype::INDEX_INNER_EDGE_TOP_LEFT_TOP_RIGHT_BOTTOM_LEFT:
-            pos.setX(TILE_SIZE/2);
-            pos.setY(TILE_SIZE/2);
-            break;
-        case AutoTilePrototype::INDEX_INNER_EDGE_TOP_LEFT_TOP_RIGHT_BOTTOM_RIGHT:
-            pos.setY(TILE_SIZE/2);
-            break;
-        case AutoTilePrototype::INDEX_INNER_EDGE_TOP_LEFT_BOTTOM_LEFT_BOTTOM_RIGHT:
-            pos.setX(TILE_SIZE/2);
-            break;
-        case AutoTilePrototype::INDEX_INNER_EDGE_TOP_RIGHT_BOTTOM_LEFT_BOTTOM_RIGHT:
-            break;
-        }
         ConstQPixmapPtr pCenter;
         ConstQPixmapPtr pInnerCenter;
         if (!pTileCache->getItem(m_pProto->getTileID(AutoTilePrototype::INDEX_CENTER), pCenter) ||
             !pTileCache->getItem(m_pProto->getTileID(AutoTilePrototype::INDEX_INNER_CENTER), pInnerCenter))
             break;
-        QPixmapPtr pNewPixmap(new QPixmap(*pInnerCenter.get()));
+        QPixmapPtr pNewPixmap(new QPixmap(QSize(TILE_SIZE, TILE_SIZE)));
+        pNewPixmap->fill(Qt::transparent);
         QPainter pixmapPainter(pNewPixmap.get());
-        pixmapPainter.drawTiledPixmap(pos.x(), pos.y(), TILE_SIZE/2, TILE_SIZE/2, *pCenter.get(), pos.x(), pos.y());
+        switch (i)
+        {
+        case AutoTilePrototype::INDEX_INNER_EDGE_TOP_LEFT_TOP_RIGHT_BOTTOM_LEFT:
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pCenter, TILE_SIZE/2, TILE_SIZE/2);
+            break;
+        case AutoTilePrototype::INDEX_INNER_EDGE_TOP_LEFT_TOP_RIGHT_BOTTOM_RIGHT:
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pCenter, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, TILE_SIZE/2, TILE_SIZE/2);
+            break;
+        case AutoTilePrototype::INDEX_INNER_EDGE_TOP_LEFT_BOTTOM_LEFT_BOTTOM_RIGHT:
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pCenter, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, TILE_SIZE/2, TILE_SIZE/2);
+            break;
+        case AutoTilePrototype::INDEX_INNER_EDGE_TOP_RIGHT_BOTTOM_LEFT_BOTTOM_RIGHT:
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pCenter, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, TILE_SIZE/2, TILE_SIZE/2);
+            break;
+        }
         _setPixmap(static_cast<AutoTilePrototype::AUTO_TILE_INDEX>(i), pNewPixmap);
     }
 
@@ -309,9 +394,12 @@ void AutoTile::_createPixmaps(ConstTileCachePtr pTileCache)
         if (!pTileCache->getItem(m_pProto->getTileID(uiIndex[0]), pSide[0]) ||
             !pTileCache->getItem(m_pProto->getTileID(uiIndex[1]), pSide[1]))
             break;
-        QPixmapPtr pNewPixmap(new QPixmap(*pSide[0].get()));
+        QPixmapPtr pNewPixmap(new QPixmap(QSize(TILE_SIZE, TILE_SIZE)));
+        pNewPixmap->fill(Qt::transparent);
         QPainter pixmapPainter(pNewPixmap.get());
-        pixmapPainter.drawTiledPixmap(0, 0, size.width(), size.height(), *pSide[1].get(), 0, 0);
+        pixmapPainter.drawTiledPixmap(size.width() % TILE_SIZE, size.height() % TILE_SIZE, size.width(), size.height(), *pSide[0],
+            size.width() % TILE_SIZE, size.height() % TILE_SIZE);
+        pixmapPainter.drawTiledPixmap(0, 0, size.width(), size.height(), *pSide[1], 0, 0);
         _setPixmap(static_cast<AutoTilePrototype::AUTO_TILE_INDEX>(i), pNewPixmap);
     }
 
@@ -322,10 +410,12 @@ void AutoTile::_createPixmaps(ConstTileCachePtr pTileCache)
         !pTileCache->getItem(m_pProto->getTileID(AutoTilePrototype::INDEX_BOTTOM_LEFT), pSide[2]) ||
         !pTileCache->getItem(m_pProto->getTileID(AutoTilePrototype::INDEX_BOTTOM_RIGHT), pSide[3]))
         return;
-    QPixmapPtr pNewPixmap(new QPixmap(*pSide[0].get()));
+    QPixmapPtr pNewPixmap(new QPixmap(QSize(TILE_SIZE, TILE_SIZE)));
+    pNewPixmap->fill(Qt::transparent);
     QPainter pixmapPainter(pNewPixmap.get());
-    pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pSide[1].get(), TILE_SIZE/2, 0);
-    pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pSide[2].get(), 0, TILE_SIZE/2);
-    pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pSide[3].get(), TILE_SIZE/2, TILE_SIZE/2);
+    pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pSide[0], 0, 0);
+    pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pSide[1], TILE_SIZE/2, 0);
+    pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pSide[2], 0, TILE_SIZE/2);
+    pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pSide[3], TILE_SIZE/2, TILE_SIZE/2);
     _setPixmap(AutoTilePrototype::INDEX_CIRCLE, pNewPixmap);
 }
