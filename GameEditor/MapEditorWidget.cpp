@@ -3,6 +3,8 @@
 #include <QtGui/QBitmap>
 #include <QtGui/QPainter>
 #include "moc_MapEditorWidget.h"
+#include <QtGui/QApplication>
+#include <QtGui/QClipboard>
 
 using namespace DATABASE;
 using namespace MAP;
@@ -337,4 +339,15 @@ void MapEditorWidget::_saveChanges()
 void MapEditorWidget::setDBMgr(const DATABASE::DatabaseMgrPtr &pDBMgr)
 {
     m_pSharedData->_setDatabaseMgr(pDBMgr);
+}
+
+void MapEditorWidget::storeCurrentMapInClipboard() const
+{
+    if (MapViewer *pWidget = m_pMapEditor->getCurrentWidget())
+    {
+        MappingMode mode = m_pSharedData->getMappingMode();
+        m_pSharedData->m_MappingMode = MODE_VIEW;
+        QApplication::clipboard()->setPixmap(QPixmap::grabWidget(pWidget->viewport(), pWidget->getScene()->itemsBoundingRect().toRect()));
+        m_pSharedData->m_MappingMode = mode;
+    }
 }

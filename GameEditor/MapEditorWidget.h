@@ -31,6 +31,8 @@ public:
 
     void updateMapEditor();
 
+    void storeCurrentMapInClipboard() const;
+
 private slots:
     void _projectOpened();
     void _saveChanges();

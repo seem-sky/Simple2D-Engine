@@ -24,6 +24,7 @@ MainWindow::MainWindow(QMainWindow *pParent) : QMainWindow(pParent)
     connect(actionLoad, SIGNAL(triggered()), this, SLOT(_loadProject()));
     connect(actionSave, SIGNAL(triggered()), this, SLOT(_saveProject()));
     connect(actionClose, SIGNAL(triggered()), this, SLOT(_closeProject()));
+    connect(actionMapScreenshot, SIGNAL(triggered()), this, SLOT(_mapScreenshot()));
     actionSave->setShortcut(QKeySequence(tr("Ctrl+S", "File|Save")));
     actionLoad->setShortcut(QKeySequence(tr("Ctrl+O", "File|Open")));
     actionNew->setShortcut(QKeySequence(tr("Ctrl+N", "File|New")));
@@ -55,6 +56,11 @@ MainWindow::~MainWindow(void)
     Config::Get()->Del();
     if (Logfile *pLog = Logfile::Get())
         pLog->Del();
+}
+
+void MainWindow::_mapScreenshot()
+{
+    m_pMapEditor->storeCurrentMapInClipboard();
 }
 
 void MainWindow::_openDatabase()

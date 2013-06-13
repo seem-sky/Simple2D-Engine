@@ -63,11 +63,12 @@
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="enabled">
-     <bool>false</bool>
+     <bool>true</bool>
     </property>
     <property name="title">
      <string>Edit</string>
     </property>
+    <addaction name="actionMapScreenshot"/>
    </widget>
    <widget class="QMenu" name="menuDatabase">
     <property name="sizePolicy">
@@ -115,6 +116,14 @@
   <action name="actionOpen">
    <property name="text">
     <string>Open</string>
+   </property>
+  </action>
+  <action name="actionMapScreenshot">
+   <property name="text">
+    <string>map screenshot</string>
+   </property>
+   <property name="toolTip">
+    <string>Stores screenshot of currentmap in clipboard.</string>
    </property>
   </action>
  </widget>

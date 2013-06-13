@@ -17,6 +17,7 @@ private slots:
     void _loadProject();
     void _saveProject();
     void _closeProject();
+    void _mapScreenshot();
 
 signals:
     void projectLoadDone();
