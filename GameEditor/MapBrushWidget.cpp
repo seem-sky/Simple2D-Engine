@@ -42,6 +42,7 @@ void MapBrushWidget::changeBrush(uint32 uiID, bool isAutoTile)
     else
     {
         ConstQPixmapPtr pPixmap;
+        m_pBrush = _getNewTileBrush();
         if (m_pSharedData->getTileCache()->getItem(uiID, pPixmap))
             m_pCurrentTile->setPixmap(*pPixmap.get());
         else
@@ -78,8 +79,13 @@ void MapBrushWidget::_changeDrawMode(const QString& mode)
 
 MapBrushPtr MapBrushWidget::_getNewTileBrush()
 {
-    MapBrushPtr pNewBrush(new MapTileBrush());
-    pNewBrush->setBrushType(getCurrentBrushType());
+    MapBrushPtr pNewBrush;
+    if (m_pSharedData)
+    {
+        pNewBrush = MapBrushPtr(new MapTileBrush());
+        pNewBrush->setBrushType(getCurrentBrushType());
+        pNewBrush->setLayer(m_pSharedData->getCurrentLayer());
+    }
     return pNewBrush;
 }
 
