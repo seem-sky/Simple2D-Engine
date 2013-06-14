@@ -190,4 +190,9 @@
             <Sprite spriteID="1" posX="32" posY="40" scale="100" rotation="0" opacity="100"/>
         </Frame>
     </prototype>
+    <prototype ID="4" Name="fallen-tree">
+        <Frame time_msec="0">
+            <Sprite spriteID="31" posX="22" posY="7" scale="100" rotation="0" opacity="100"/>
+        </Frame>
+    </prototype>
 </AnimationDatabase>

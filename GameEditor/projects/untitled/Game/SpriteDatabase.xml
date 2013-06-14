@@ -30,4 +30,5 @@
     <prototype ID="28" Name="char1-walk-right-1" FileName="char1-walk-right-1.png" Path="chars/char1/walk-right/" transparent_color="R0G128B128"/>
     <prototype ID="29" Name="char1-walk-right-2" FileName="char1-walk-right-2.png" Path="chars/char1/walk-right/" transparent_color="R0G128B128"/>
     <prototype ID="30" Name="char1-walk-right-3" FileName="char1-walk-right-3.png" Path="chars/char1/walk-right/" transparent_color="R0G128B128"/>
+    <prototype ID="31" Name="fallen-tree" FileName="fallen-tree.png" Path="" transparent_color="R7G146B151"/>
 </SpriteDatabase>

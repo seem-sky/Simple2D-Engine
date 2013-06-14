@@ -30,4 +30,30 @@
     <prototype ID="28" Name="ice-bottom" FileName="bottom.png" Path="ice/" transparent_color="" terraintype="0" passability="15"/>
     <prototype ID="29" Name="ice-bottom-right" FileName="bottom-right.png" Path="ice/" transparent_color="" terraintype="0" passability="15"/>
     <prototype ID="30" Name="ice-inner-edges" FileName="inner-edges.png" Path="ice/" transparent_color="" terraintype="0" passability="15"/>
+    <prototype ID="31" Name="top-left" FileName="top-left.png" Path="forest_top/" transparent_color="R7G146B151" terraintype="0" passability="0"/>
+    <prototype ID="32" Name="top" FileName="top.png" Path="forest_top/" transparent_color="R7G146B151" terraintype="0" passability="0"/>
+    <prototype ID="33" Name="top-right" FileName="top-right.png" Path="forest_top/" transparent_color="R7G146B151" terraintype="0" passability="0"/>
+    <prototype ID="34" Name="left" FileName="left.png" Path="forest_top/" transparent_color="R7G146B151" terraintype="0" passability="0"/>
+    <prototype ID="35" Name="center" FileName="center.png" Path="forest_top/" transparent_color="R7G146B151" terraintype="0" passability="0"/>
+    <prototype ID="36" Name="right" FileName="right.png" Path="forest_top/" transparent_color="R7G146B151" terraintype="0" passability="0"/>
+    <prototype ID="37" Name="bottom-left" FileName="bottom-left.png" Path="forest_top/" transparent_color="R7G146B151" terraintype="0" passability="0"/>
+    <prototype ID="38" Name="bottom" FileName="bottom.png" Path="forest_top/" transparent_color="R7G146B151" terraintype="0" passability="0"/>
+    <prototype ID="39" Name="bottom-right" FileName="bottom-right.png" Path="forest_top/" transparent_color="R7G146B151" terraintype="0" passability="0"/>
+    <prototype ID="40" Name="inner-center" FileName="inner-center.png" Path="forest_top/" transparent_color="R7G146B151" terraintype="0" passability="15"/>
+    <prototype ID="41" Name="top-left" FileName="top-left.png" Path="high-gras/" transparent_color="R255G127B39" terraintype="0" passability="0"/>
+    <prototype ID="42" Name="top" FileName="top.png" Path="high-gras/" transparent_color="R255G127B39" terraintype="0" passability="0"/>
+    <prototype ID="43" Name="top-right" FileName="top-right.png" Path="high-gras/" transparent_color="R255G127B39" terraintype="0" passability="0"/>
+    <prototype ID="44" Name="left" FileName="left.png" Path="high-gras/" transparent_color="R255G127B39" terraintype="0" passability="0"/>
+    <prototype ID="45" Name="center" FileName="center.png" Path="high-gras/" transparent_color="R255G127B39" terraintype="0" passability="0"/>
+    <prototype ID="46" Name="right" FileName="right.png" Path="high-gras/" transparent_color="R255G127B39" terraintype="0" passability="0"/>
+    <prototype ID="47" Name="bottom-left" FileName="bottom-left.png" Path="high-gras/" transparent_color="R255G127B39" terraintype="0" passability="0"/>
+    <prototype ID="48" Name="bottom" FileName="bottom.png" Path="high-gras/" transparent_color="R255G127B39" terraintype="0" passability="0"/>
+    <prototype ID="49" Name="bottom-right" FileName="bottom-right.png" Path="high-gras/" transparent_color="R255G127B39" terraintype="0" passability="0"/>
+    <prototype ID="50" Name="inner-center" FileName="inner-center.png" Path="high-gras/" transparent_color="R255G127B39" terraintype="0" passability="0"/>
+    <prototype ID="51" Name="forest-1" FileName="forest-1.png" Path="forest/" transparent_color="R255G127B39" terraintype="0" passability="0"/>
+    <prototype ID="52" Name="forest-2" FileName="forest-2.png" Path="forest/" transparent_color="R255G127B39" terraintype="0" passability="0"/>
+    <prototype ID="53" Name="forest-3" FileName="forest-3.png" Path="forest/" transparent_color="R255G127B39" terraintype="0" passability="0"/>
+    <prototype ID="54" Name="forest-4" FileName="forest-4.png" Path="forest/" transparent_color="R255G127B39" terraintype="0" passability="0"/>
+    <prototype ID="55" Name="forest-5" FileName="forest-5.png" Path="forest/" transparent_color="R255G127B39" terraintype="0" passability="0"/>
+    <prototype ID="56" Name="forest-6" FileName="forest-6.png" Path="forest/" transparent_color="R255G127B39" terraintype="0" passability="0"/>
 </TileDatabase>
