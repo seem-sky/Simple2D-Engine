@@ -108,7 +108,7 @@ namespace MAP
         void updateObject() {}
 
         // return true if draw was successful
-        bool drawObject(MapViewer *pWidget, Point3D<uint32> pos);
+        bool drawObject(MapViewer *pWidget, Point<int32> pos);
 
         static QPixmap getObjectPixmap(uint32 uiObjectID, DATABASE::ObjectType type, MAP::MapDirection direction,
             DATABASE::ConstWorldObjectDatabasePtr pWorldObjectDB, DATABASE::ConstAnimationDatabasePtr pAnimationDB, DATABASE::ConstSpriteDatabasePtr pSpriteDB,

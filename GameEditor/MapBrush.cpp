@@ -258,7 +258,7 @@ void MapAutoTileBrush::_doAutoTileCheckForPosList(const MAP::MapPrototypePtr &ma
 /*#####
 # MapObjectBrush
 #####*/
-bool MapObjectBrush::drawObject(MapViewer *pWidget, Point3D<uint32> pos)
+bool MapObjectBrush::drawObject(MapViewer *pWidget, Point<int32> pos)
 {
     if (!pWidget || !pWidget->getMap() || !pWidget->getScene() || !m_pSharedData)
         return false;

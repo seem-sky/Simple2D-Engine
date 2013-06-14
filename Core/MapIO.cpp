@@ -123,9 +123,9 @@ void MapReader::_loadObjects(const QDomNode &parentNode, bool &result)
             else if (attribute.nodeName() == "Type")
                 newObject->m_Type = static_cast<DATABASE::ObjectType>(attribute.nodeValue().toUInt());
             else if (attribute.nodeName() == "XPos")
-                newObject->m_Position.x = attribute.nodeValue().toUInt();
+                newObject->m_Position.x = attribute.nodeValue().toInt();
             else if (attribute.nodeName() == "YPos")
-                newObject->m_Position.y = attribute.nodeValue().toUInt();
+                newObject->m_Position.y = attribute.nodeValue().toInt();
             else if (attribute.nodeName() == "Direction")
                 newObject->m_Direction = static_cast<MAP::MapDirection>(attribute.nodeValue().toUInt());
             else if (attribute.nodeName() == "Layer")

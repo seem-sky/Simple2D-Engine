@@ -16,7 +16,7 @@ void MapPrototype::addMapObject(MapObjectPtr pObject)
         m_Objects.setItem(pObject->m_GUID, pObject);
 }
 
-MapObjectPtr MapPrototype::addMapObject(DATABASE::ObjectType type, uint32 uiID, Point3D<uint32> pos)
+MapObjectPtr MapPrototype::addMapObject(DATABASE::ObjectType type, uint32 uiID, Point<int32> pos)
 {
     MapObjectPtr newObject(new MapObject());
     newObject->m_ObjectID = uiID;
@@ -143,7 +143,7 @@ void MapPrototype::_clearTiles()
 
 void MapPrototype::setSize(Point<uint32> size, uint32 uiForegroundLayerSize, uint32 uiBackgroundLayerSize)
 {
-    if (size != getSize() || m_uiLayer[LAYER_FOREGROUND] != uiForegroundLayerSize || m_uiLayer[LAYER_FOREGROUND] != uiBackgroundLayerSize)
+    if (size != getSize() || m_uiLayer[LAYER_FOREGROUND] != uiForegroundLayerSize || m_uiLayer[LAYER_BACKGROUND] != uiBackgroundLayerSize)
     {
         if (hasMapDataStored())
             _resizeMap(size, uiForegroundLayerSize, uiBackgroundLayerSize);

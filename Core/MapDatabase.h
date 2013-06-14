@@ -36,7 +36,7 @@ namespace MAP
         DATABASE::ObjectType m_Type;
         uint32 m_ObjectID;
         uint32 m_GUID;
-        Point<uint32> m_Position;
+        Point<int32> m_Position;
         MapDirection m_Direction;
         MapObjectLayer m_Layer;
     };
@@ -99,7 +99,7 @@ namespace MAP
         MapTile getMapTile(Point3D<uint32> at, Layer layer) const;
 
         void addMapObject(MapObjectPtr pObject);
-        MapObjectPtr addMapObject(DATABASE::ObjectType type, uint32 uiID, Point3D<uint32> pos);
+        MapObjectPtr addMapObject(DATABASE::ObjectType type, uint32 uiID, Point<int32> pos);
         //void moveMapObject(uint32 uiGUID, const Point3D<uint32> &newPos);
         inline uint32 getMapObjectCount() const { return m_Objects.getSize(); }
         inline bool getMapObject(uint32 GUID, ConstMapObjectPtr &pResult) const { return m_Objects.getItem(GUID, pResult); }

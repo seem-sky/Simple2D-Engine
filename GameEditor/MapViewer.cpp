@@ -13,10 +13,10 @@ using namespace MAP;
 #####*/
 void MapObjectItem::move(int x, int y)
 {
-    m_pMapObject->m_Position.x += x;
-    m_pMapObject->m_Position.y += y;
     ModifyItem::move(x, y);
-    setZValue(this->y() + pixmap().height());
+    setZValue(scenePos().y() + pixmap().height());
+    m_pMapObject->m_Position.x = scenePos().x();
+    m_pMapObject->m_Position.y = scenePos().y();
     if (MapViewScene *pScene = dynamic_cast<MapViewScene*>(scene()))
         pScene->emitItemChanged(this);
 }
