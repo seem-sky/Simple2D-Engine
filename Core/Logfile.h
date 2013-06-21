@@ -1,8 +1,8 @@
 #ifndef LOGFILE_H
 #define LOGFILE_H
 
-#include <fstream>
 #include "Singleton.h"
+#include <QtCore/QFile>
 
 // ToDo: add this in makro __FILE__ and __LINE__
 #define BASIC_LOG Logfile::Get()->WriteMessage
@@ -13,7 +13,7 @@ class Logfile : public TSingleton<Logfile>
 public:
     Logfile();
     ~Logfile();
-    void WriteMessage(QString msg, std::ios_base::openmode mode = std::ios::out | std::ios::app);
-    void WriteErrorMessage(QString msg, std::ios_base::openmode mode = std::ios::app);
+    void WriteMessage(const QString &msg, bool append = true);
+    void WriteErrorMessage(const QString &msg);
 };
 #endif

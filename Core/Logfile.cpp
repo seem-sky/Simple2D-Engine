@@ -1,4 +1,5 @@
 #include "Logfile.h"
+#include <QtCore/QTextStream>
 
 const QString LOGFILE_FILENAME               = "Logfile.log";
 const QString LOGFILE_OPENING_MESSAGE        = "Logfile open and ready to write in";
@@ -7,7 +8,7 @@ const QString LOGFILE_CLOSING_MESSAGE        = "Logfile shutting down...";
 Logfile::Logfile() : TSingleton()
 {
     m_logLocationName = LOGFILE_ENGINE_LOG_NAME + "Logfile : ";
-    WriteMessage(m_logLocationName + LOGFILE_OPENING_MESSAGE, std::ios::out);
+    WriteMessage(m_logLocationName + LOGFILE_OPENING_MESSAGE, false);
 }
 
 Logfile::~Logfile()
@@ -15,9 +16,15 @@ Logfile::~Logfile()
     WriteMessage(m_logLocationName + LOGFILE_CLOSING_MESSAGE);
 }
 
-void Logfile::WriteMessage(QString msg, std::ios_base::openmode mode)
+void Logfile::WriteMessage(const QString &msg, bool append)
 {
     // ToDo: rewrite logfile output
+    QFile file(LOGFILE_FILENAME);
+    if (file.open(append ? QIODevice::Append : QIODevice::WriteOnly))
+    {
+        QTextStream out(&file);
+        out << msg << "\n";
+    }
     /*ps_msg += "\n";
     std::fstream t_file;
     t_file.open(LOGFILE_FILENAME.c_str(), p_mode);
@@ -25,8 +32,7 @@ void Logfile::WriteMessage(QString msg, std::ios_base::openmode mode)
     t_file.close();*/
 }
 
-void Logfile::WriteErrorMessage(QString msg, std::ios_base::openmode mode)
+void Logfile::WriteErrorMessage(const QString &msg)
 {
-    msg = "ERROR! " + msg;
-    WriteMessage(msg, mode);
+    WriteMessage("ERROR! " + msg);
 }
