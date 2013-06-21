@@ -11,6 +11,7 @@ using namespace DATABASE;
 
 MainWindow::MainWindow(QMainWindow *pParent) : QMainWindow(pParent)
 {
+    Logfile::Get();
     setupUi(this);
 
     // setup move/resize widgets

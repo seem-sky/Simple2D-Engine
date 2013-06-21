@@ -2,9 +2,13 @@
 #include <boost/thread.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/bind.hpp>
+#include <QtCore/QTime>
 
 using namespace MAP;
 using namespace XML_IO;
+
+const QString TILE_AUTOTILE_DELIMITER = ":";
+const QString TILE_OBJECT_DELIMITER = ",";
 
 /*#####
 # MapReader
@@ -25,6 +29,8 @@ void MapReader::_loadTiles(const QDomNode &parentNode, bool &result)
     if (!m_pMap)
         return;
 
+    QTime t;
+    t.start();
     // resize map data
     m_pMap->_clearTiles();
     m_pMap->_resizeMap(m_pMap->getSize(), m_pMap->getLayerSize(LAYER_FOREGROUND), m_pMap->getLayerSize(LAYER_BACKGROUND));
@@ -38,6 +44,7 @@ void MapReader::_loadTiles(const QDomNode &parentNode, bool &result)
     node = getSingleNode(parentNode, "LayerForeground");
     if (!node.isNull())
         _loadTiles(node, LAYER_FOREGROUND);
+    BASIC_LOG("Time elapsed while loading " + m_pMap->getFileName() + " = " + QString::number(t.elapsed()) + "msec.");
     result = true;
 }
 
@@ -60,33 +67,15 @@ void MapReader::_loadTiles(const QDomNode &parentNode, Layer layer)
     }
 }
 
-void MapReader::_parseTileString(const Point<uint32> &pos, QString &tileString, Layer layer)
+void MapReader::_parseTileString(const Point<uint32> &pos, const QString &tileString, Layer layer)
 {
-    for (uint32 x = 0; x < m_pMap->getSize().x && !tileString.isEmpty(); ++x)
+    QStringList tileObjectStrings = tileString.split(TILE_OBJECT_DELIMITER);
+    QStringList::const_iterator itr = tileObjectStrings.begin();
+    for (uint32 x = 0; x < m_pMap->getSize().x && itr != tileObjectStrings.end(); ++x, ++itr)
     {
-        bool tileStored = false;
-        while (!tileStored && !tileString.isEmpty())
-        {
-            // if first sign is a number
-            if (tileString.at(0) <= 57 && tileString.at(0) >= 48)
-            {
-                MapTile tileObject;
-                uint32 uiColonIndex = tileString.indexOf(','), uiDblPointIndex = tileString.indexOf(':');
-                tileObject.m_uiTileID = tileString.left(uiColonIndex < uiDblPointIndex ? uiColonIndex : uiDblPointIndex).toUInt();
-                if (uiDblPointIndex < uiColonIndex)
-                {
-                    tileString.remove(0, uiDblPointIndex != -1 ? uiDblPointIndex+1 : uiDblPointIndex);
-                    uiColonIndex = tileString.indexOf(',');
-                    tileObject.m_uiAutoTileSetID = tileString.left(uiColonIndex).toUInt();
-                }
-                tileString.remove(0, uiColonIndex != -1 ? uiColonIndex+1 : uiColonIndex);
-                m_pMap->setMapTile(Point3D<uint32>(x, pos.x, pos.y), tileObject, layer);
-                tileStored = true;
-            }
-            // if first sign is a not a number, delete it
-            else
-                tileString.remove(0, 1);
-        }
+        int delimiterIndex = itr->indexOf(TILE_AUTOTILE_DELIMITER);
+        MapTile tileObject(itr->left(delimiterIndex).toUInt(), itr->right(itr->length() -1 -delimiterIndex).toUInt());
+        m_pMap->setMapTile(Point3D<uint32>(x, pos.x, pos.y), tileObject, layer);
     }
 }
 
@@ -168,7 +157,7 @@ void MapWriter::_storeTiles(QXmlStreamWriter &writer, Layer curLayer)
             for (uint32 x = 0; x < m_pMap->getSize().x; ++x)
             {
                 MapTile tile = m_pMap->getMapTile(Point3D<uint32>(x, y, layer), curLayer);
-                line.append(QString::number(tile.m_uiTileID) + ':' + QString::number(tile.m_uiAutoTileSetID) + ',');
+                line.append(QString::number(tile.m_uiTileID) + TILE_AUTOTILE_DELIMITER + QString::number(tile.m_uiAutoTileSetID) + TILE_OBJECT_DELIMITER);
             }
             writer.writeAttribute("Tiles", line);
         }

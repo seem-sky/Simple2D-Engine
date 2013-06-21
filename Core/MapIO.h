@@ -15,7 +15,7 @@ namespace MAP
     class MapReader : public XML_IO::XMLReader
     {
     private:
-        void _parseTileString(const Point<uint32> &pos, QString &tileString, Layer layer);
+        void _parseTileString(const Point<uint32> &pos, const QString &tileString, Layer layer);
         void _loadTiles(const QDomNode &parentNode, Layer layer);
         void _loadTiles(const QDomNode &parentNode, bool &result);
 
