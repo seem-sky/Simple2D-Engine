@@ -56,4 +56,8 @@
     <prototype ID="54" Name="forest-4" FileName="forest-4.png" Path="forest/" transparent_color="R255G127B39" terraintype="0" passability="0"/>
     <prototype ID="55" Name="forest-5" FileName="forest-5.png" Path="forest/" transparent_color="R255G127B39" terraintype="0" passability="0"/>
     <prototype ID="56" Name="forest-6" FileName="forest-6.png" Path="forest/" transparent_color="R255G127B39" terraintype="0" passability="0"/>
+    <prototype ID="57" Name="fallen-tree.png" FileName="fallen-tree.png" Path="" transparent_color="" terraintype="0" passability="0"/>
+    <prototype ID="58" Name="gras.png" FileName="gras.png" Path="" transparent_color="" terraintype="0" passability="0"/>
+    <prototype ID="59" Name="halfgras.png" FileName="halfgras.png" Path="" transparent_color="" terraintype="0" passability="0"/>
+    <prototype ID="60" Name="stone.png" FileName="stone.png" Path="" transparent_color="" terraintype="0" passability="0"/>
 </TileDatabase>

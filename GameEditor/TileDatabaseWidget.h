@@ -22,6 +22,7 @@ public:
 private slots:
     void _passabilityButtonClicked(bool clicked);
 
+    void _massImportClicked() { massImport(); }
     void _choseTransparentColorButtonClicked() { choseTransparencyColor(); }
     void _choseFileButtonClicked() { choseFile(); }
     void _changeTransparencyColor() { transparencyColorChanged(); }

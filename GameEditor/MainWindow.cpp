@@ -6,6 +6,7 @@
 #include <QtCore/QTimer>
 #include <QtGui/QErrorMessage>
 #include "Logfile.h"
+#include <QtCore/QTime>
 
 using namespace DATABASE;
 
@@ -107,18 +108,21 @@ void MainWindow::_loadProject()
 
 bool MainWindow::_loadProject(const QString &dir)
 {
+    QTime time;
+    time.start();
+    BASIC_LOG("Begin project load: " + dir);
     if (m_project.loadProject(dir))
     {
         _setDBs();
         Config::Get()->setProjectDirectory(dir);
-        BASIC_LOG("Successfully load " + dir + ".");
+        BASIC_LOG("Project load successfully ends after " + QString::number(time.elapsed()) + "msec.");
         m_pMapEditor->updateMapEditor();
         emit projectLoadDone();
         return true;
     }
     QErrorMessage *pMsg = new QErrorMessage(this);
     pMsg->showMessage(dir + " is no valid project directory.");
-    BASIC_LOG("Unable to load " + dir + ". Corrupt project or no such directory.");
+    ERROR_LOG("Unable to load " + dir + ". Corrupt project or no such directory.");
     Config::Get()->clear();
     return false;
 }

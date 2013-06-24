@@ -19,6 +19,7 @@ public:
     SpriteDatabaseWidget(QWidget *pParent = NULL);
 
 private slots:
+    void _massImportClicked() { massImport(); }
     void _choseTransparentColorButtonClicked() { choseTransparencyColor(); }
     void _choseFileButtonClicked() { choseFile(); }
     void _changeTransparencyColor() { transparencyColorChanged(); }

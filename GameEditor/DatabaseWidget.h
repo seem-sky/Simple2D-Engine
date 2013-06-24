@@ -71,10 +71,13 @@ protected:
     virtual void changeCurrentItem(uint32 uiID)
     {
         boost::shared_ptr<T> proto;
-        if (!m_pDBChanger->getItem(uiID, proto))
-            return;
-
-        setWidgetsFromPrototype(proto);
+        QList<QTreeWidgetItem*> items = m_pList->findItems(QString::number(uiID), Qt::MatchExactly);
+        if (!items.isEmpty() && m_pDBChanger->getItem(uiID, proto))
+        {
+            if (m_pList->currentItem() != items.first())
+                m_pList->setCurrentItem(items.first());
+            setWidgetsFromPrototype(proto);
+        }
     }
 
     virtual void clearWidgets()

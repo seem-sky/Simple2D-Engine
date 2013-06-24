@@ -2,9 +2,7 @@
 #include "IniParser.h"
 
 Config::Config(void) : TSingleton()
-{
-    m_logLocationName = LOGFILE_ENGINE_LOG_NAME + "Config : ";
-}
+{}
 
 void Config::clear()
 {

@@ -16,10 +16,53 @@
 //void _choseTransparentColorButtonClicked() { choseTransparencyColor(); }
 //void _choseFileButtonClicked() { choseFile(); }
 //void _changeTransparencyColor() { transparencyColorChanged(); }
+//void _massImportClicked() { massImport(); }
 
 template <class T>
 class TextureDatabaseWidget : public DatabaseWidget<T>, protected Ui_TextureDatabaseWidget
 {
+private:
+    void import(const QString fileName, uint32 uiID)
+    {
+        if (uiID == 0)
+            return;
+        QFileInfo fileInfo(fileName);
+        if (fileInfo.isFile())
+        {
+            // clear previous data
+            m_pPath->clear();
+            if (m_pView->scene())
+                m_pView->scene()->clear();
+
+            boost::shared_ptr<T> proto;
+            bool exist = true;
+            if (!m_pDBChanger->getItem(uiID, proto))
+            {
+                proto = boost::shared_ptr<T>(new T(uiID));
+                exist = false;
+            }
+
+            QString path(fileInfo.absolutePath());
+            path = path.remove(0, path.lastIndexOf("/Textures")+10);
+            if (!path.isEmpty())
+            {
+                path += "/";
+                proto->setPath(path);
+            }
+            proto->setFileName(fileInfo.fileName());
+            if (proto->getName().isEmpty())
+                proto->setName(fileInfo.fileName());
+            m_pDBChanger->setItem(uiID, proto);
+            if (!exist)
+            {
+                QStringList stringList;
+                stringList.push_back(QString::number(uiID));
+                stringList.push_back(proto->getName());
+                m_pList->addTopLevelItem(new PrototypeTreeWidgetItem(stringList));
+            }
+        }
+    }
+
 protected:
     virtual void connectWidgets()
     {
@@ -27,6 +70,7 @@ protected:
         connect(m_pChoseFile, SIGNAL(clicked()), this, SLOT(_choseFileButtonClicked()));
         connect(m_pChoseColor, SIGNAL(clicked()), this, SLOT(_choseTransparentColorButtonClicked()));
         connect(m_pTransparencyColor, SIGNAL(editingFinished()), this, SLOT(_changeTransparencyColor()));
+        connect(m_pMassImport, SIGNAL(clicked()), this, SLOT(_massImportClicked()));
     }
 
     virtual void clearWidgets()
@@ -101,40 +145,32 @@ protected:
             showPixmap(proto);
     }
 
+    void massImport()
+    {
+        QString projectDir = Config::Get()->getProjectDirectory();
+        QStringList fileNames = QFileDialog::getOpenFileNames(this, tr("Chose Textures"), Config::Get()->getProjectDirectory()+"/Textures", tr("Images (*.png)"));
+        if (!fileNames.isEmpty())
+        {
+            uint32 currentID = m_pDBChanger->getSize();
+            for (QStringList::const_iterator itr = fileNames.begin(); itr != fileNames.end(); ++itr)
+                import(*itr, ++currentID);
+            change();
+            changeCurrentItem(currentID);
+        }
+    }
+
     void choseFile()
     {
 
-        QString sProjectDir = Config::Get()->getProjectDirectory();
-        QString sFileName = QFileDialog::getOpenFileName(this, tr("Chose Texture"), sProjectDir+"/Textures", tr("Images (*.png)"));
-        QFileInfo fileInfo(sFileName);
-        if (fileInfo.isFile())
-        {
-            // clear previous data
-            m_pPath->clear();
-            if (m_pView->scene())
-                m_pView->scene()->clear();
-
-            QString sPath(fileInfo.absolutePath());
-            sPath = sPath.remove(0, sPath.lastIndexOf("/Textures")+10);
-            if (!sPath.isEmpty())
-            {
-                sPath += "/";
-                m_pPath->setText(sPath);
-            }
-            m_pFileName->setText(fileInfo.fileName());
-            if (m_pName->text().isEmpty())
-                setName(fileInfo.fileName().left(fileInfo.fileName().indexOf(".")));
-            updateItem();
-            boost::shared_ptr<T> proto;
-            if (m_pDBChanger->getItem(getCurrentID(), proto))
-                showPixmap(proto);
-        }
+        import(QFileDialog::getOpenFileName(this, tr("Chose Texture"), Config::Get()->getProjectDirectory()+"/Textures", tr("Images (*.png)")), getCurrentID());
+        changeCurrentItem(getCurrentID());
     }
 
 public:
     TextureDatabaseWidget(QWidget *pParent = NULL) : DatabaseWidget(pParent), Ui_TextureDatabaseWidget()
     {
         Ui_TextureDatabaseWidget::setupUi(this);
+        m_pList->move(m_pList->x(), m_pList->y() + m_pMassImport->height() + 5);
     }
 
 private:

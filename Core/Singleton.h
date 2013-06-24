@@ -8,18 +8,8 @@ class TSingleton
 {
 protected:
     static T *m_pSingleton;
-    QString m_logLocationName;
 
 public:
-    TSingleton()
-    {
-        m_logLocationName = LOGFILE_ENGINE_LOG_NAME + "TSingleton : ";
-    }
-
-    virtual ~TSingleton()
-    {
-
-    }
     inline static T* Get()
     {
         if (!m_pSingleton)
