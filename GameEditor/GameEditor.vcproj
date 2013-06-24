@@ -76,6 +76,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="QtXmld4.lib QTGuid4.lib QTCored4.lib Cored.lib"
+				OutputFile="$(SolutionDir)\Simple2D-GameEditor\$(ProjectName)_d.exe"
 				GenerateDebugInformation="true"
 				SubSystem="0"
 				TargetMachine="1"
@@ -159,6 +160,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="QtXml4.lib  QTGui4.lib QTCore4.lib Core.lib"
+				OutputFile="$(SolutionDir)\Simple2D-GameEditor\$(ProjectName).exe"
 				GenerateDebugInformation="true"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"

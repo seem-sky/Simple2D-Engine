@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TileDatabase>
+    <prototype ID="1" Name="gras" FileName="gras.png" Path="" transparent_color="" terraintype="0" passability="15"/>
+    <prototype ID="2" Name="gras" FileName="gras.png" Path="" transparent_color="" terraintype="0" passability="0"/>
+    <prototype ID="3" Name="" FileName="" Path="" transparent_color="" terraintype="0" passability="0"/>
+</TileDatabase>
