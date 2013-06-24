@@ -98,8 +98,11 @@ void MainWindow::_newProject()
 void MainWindow::_loadProject()
 {
     QString path = QFileDialog::getExistingDirectory(this, tr("Open Project"), QDir::current().path()+"/projects", QFileDialog::ShowDirsOnly);
-    _closeProject();
-    _loadProject(path);
+    if (!path.isEmpty())
+    {
+        _closeProject();
+        _loadProject(path);
+    }
 }
 
 bool MainWindow::_loadProject(const QString &dir)
