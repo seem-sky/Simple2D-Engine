@@ -11,6 +11,7 @@
 #include <QtGui/QBitmap>
 #include "TransparencyWindow.h"
 #include "QtGlobal.h"
+#include "Logfile.h"
 
 // slots for child class, paste them after "private slots:"
 //void _choseTransparentColorButtonClicked() { choseTransparencyColor(); }
@@ -60,6 +61,7 @@ private:
                 stringList.push_back(proto->getName());
                 m_pList->addTopLevelItem(new PrototypeTreeWidgetItem(stringList));
             }
+            BASIC_LOG("File import succeeded: ID: " + QString::number(proto->getID()) + "; file name: " + proto->getPathName());
         }
     }
 
@@ -99,7 +101,7 @@ protected:
 
         m_pFileName->setText(proto->getFileName());
         m_pPath->setText(proto->getPath());
-        // set transparency first, so that pixmap is displayed correctly.
+        // set transparency first, so pixmap will be displayed correctly.
         m_pTransparencyColor->setText(proto->getTransparencyColor().getColorString());
         showPixmap(proto);
         return true;

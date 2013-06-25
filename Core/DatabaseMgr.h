@@ -56,7 +56,7 @@ namespace DATABASE
     typedef boost::shared_ptr<TileDatabase> TileDatabasePtr;
     typedef boost::shared_ptr<const TileDatabase> ConstTileDatabasePtr;
     // autotile database typedefs
-    typedef Database<AutoTilePrototype> AutoTileDatabase;
+    typedef Database<AUTO_TILE::AutoTilePrototype> AutoTileDatabase;
     typedef boost::shared_ptr<AutoTileDatabase> AutoTileDatabasePtr;
     typedef boost::shared_ptr<const AutoTileDatabase> ConstAutoTileDatabasePtr;
     // sprite database typedefs

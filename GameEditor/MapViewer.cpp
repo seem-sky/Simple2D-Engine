@@ -121,7 +121,7 @@ void MapViewScene::_drawTiles(QPainter *painter, const QRectF &rect, Layer curre
                     ConstQPixmapPtr pPixmap;
                     ConstAutoTilePtr pAutoTile;
                     if (m_pSharedData->getAutoTileCache()->getItem(tileObj.m_uiAutoTileSetID, pAutoTile) &&
-                        pAutoTile->getPixmap(static_cast<DATABASE::AutoTilePrototype::AUTO_TILE_INDEX>(tileObj.m_uiTileID), pPixmap))
+                        pAutoTile->getPixmap(static_cast<DATABASE::AUTO_TILE::AUTO_TILE_INDEX>(tileObj.m_uiTileID), pPixmap))
                         painter->drawTiledPixmap(x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE, TILE_SIZE, *pPixmap);
                 }
             }

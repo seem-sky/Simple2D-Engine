@@ -15,12 +15,17 @@ const QString TILE_OBJECT_DELIMITER = ",";
 #####*/
 bool MapReader::checkoutChildren(const QDomNode &parentNode)
 {
+    BASIC_LOG("Map load start: ID:" + QString::number(m_pMap->getID()) + " file name:" + m_pMap->getFileName() + ".");
+    QTime t;
+    t.start();
     bool tileResult = false, objectResult = false;
     _loadTiles(parentNode, tileResult);
     _loadObjects(parentNode, objectResult);
     if (tileResult && objectResult)
-        return true;
-    return false;
+        BASIC_LOG("Map load succeeded after " + QString::number(t.elapsed()) + "msec.");
+    else
+        ERROR_LOG("Map load failed.");
+    return tileResult && objectResult;
 }
 
 void MapReader::_loadTiles(const QDomNode &parentNode, bool &result)
@@ -29,8 +34,6 @@ void MapReader::_loadTiles(const QDomNode &parentNode, bool &result)
     if (!m_pMap)
         return;
 
-    QTime t;
-    t.start();
     // resize map data
     m_pMap->_clearTiles();
     m_pMap->_resizeMap(m_pMap->getSize(), m_pMap->getLayerSize(LAYER_FOREGROUND), m_pMap->getLayerSize(LAYER_BACKGROUND));
@@ -44,7 +47,6 @@ void MapReader::_loadTiles(const QDomNode &parentNode, bool &result)
     node = getSingleNode(parentNode, "LayerForeground");
     if (!node.isNull())
         _loadTiles(node, LAYER_FOREGROUND);
-    BASIC_LOG("Time elapsed while loading " + m_pMap->getFileName() + " = " + QString::number(t.elapsed()) + "msec.");
     result = true;
 }
 
@@ -86,6 +88,7 @@ void MapReader::_loadObjects(const QDomNode &parentNode, bool &result)
         return;
 
     m_pMap->m_Objects.clear();
+    result = true;
     QDomNode node = getSingleNode(parentNode, "ObjectData");
     if (node.isNull())
         return;
@@ -122,7 +125,7 @@ void MapReader::_loadObjects(const QDomNode &parentNode, bool &result)
         }
         m_pMap->addMapObject(newObject);
     }
-    result = true;
+    BASIC_LOG("Added " + QString::number(m_pMap->getMapObjectCount()) + " objects to map.");
 }
 
 /*#####
@@ -130,8 +133,12 @@ void MapReader::_loadObjects(const QDomNode &parentNode, bool &result)
 #####*/
 bool MapWriter::_writeChildren(QXmlStreamWriter &writer)
 {
+    BASIC_LOG("Map write start: ID:" + QString::number(m_pMap->getID()) + " file name:" + m_pMap->getFileName() + ".");
+    QTime t;
+    t.start();
     _storeTiles(writer);
     _storeObjects(writer);
+    BASIC_LOG("Map write succeeded after " + QString::number(t.elapsed()) + "msec.");
     return true;
 }
 

@@ -10,7 +10,6 @@
 #include "math_extensions.h"
 #include <boost/dynamic_bitset.hpp>
 #include <QtCore/QString>
-#include "Exception.h"
 
 #pragma warning(disable : 4996)
 

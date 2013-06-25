@@ -193,10 +193,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Exception.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Global.h"
 				>
 			</File>
@@ -241,6 +237,10 @@
 			Name="Database"
 			>
 			<File
+				RelativePath=".\Database.h"
+				>
+			</File>
+			<File
 				RelativePath=".\DatabaseChanger.h"
 				>
 			</File>
@@ -250,6 +250,10 @@
 			</File>
 			<File
 				RelativePath=".\DatabaseMgr.h"
+				>
+			</File>
+			<File
+				RelativePath=".\DatabasePrototypes.cpp"
 				>
 			</File>
 			<File

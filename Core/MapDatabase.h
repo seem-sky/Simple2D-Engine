@@ -114,7 +114,7 @@ namespace MAP
             FLAG_OTHER      = 0x2,
             FLAG_ALL        = FLAG_SAME | FLAG_OTHER
         };
-        uint32 getPositionsAroundWithID(const uint32 &uiID, const Point3D<uint32> &pos, UInt32PointSet &result, Layer layer, uint32 resultFlag = FLAG_ALL);
+        uint32 checkAutoTiles(const uint32 &uiID, const Point3D<uint32> &pos, UInt32PointSet &result, Layer layer, uint32 resultFlag = FLAG_ALL);
 
     private:
         bool m_DataLoaded;

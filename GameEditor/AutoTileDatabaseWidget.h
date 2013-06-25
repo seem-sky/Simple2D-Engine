@@ -4,12 +4,12 @@
 #include "DatabaseWidget.h"
 #include "UI/UI_AutoTileDatabaseWidget.h"
 
-class AutoTileDatabaseWidget : public DatabaseWidget<DATABASE::AutoTilePrototype>, Ui_AutoTileDatabaseWidget
+class AutoTileDatabaseWidget : public DatabaseWidget<DATABASE::AUTO_TILE::AutoTilePrototype>, Ui_AutoTileDatabaseWidget
 {
     Q_OBJECT
 private:
-    TileDropLabel* _getLabelForIndex(DATABASE::AutoTilePrototype::AUTO_TILE_INDEX index);
-    DATABASE::AutoTilePrototype::AUTO_TILE_INDEX _getIndexForLabel(TileDropLabel *pLabel);
+    TileDropLabel* _getLabelForIndex(DATABASE::AUTO_TILE::AUTO_TILE_INDEX index);
+    DATABASE::AUTO_TILE::AUTO_TILE_INDEX _getIndexForLabel(TileDropLabel *pLabel);
 
 protected:
     bool getItemFromWidgets(DATABASE::AutoTilePrototypePtr &proto);
@@ -32,6 +32,6 @@ private slots:
 private:
     DATABASE::ConstTileDatabaseChangerPtr m_pTileDB;
     QLabel *m_pCurrentLabel;
-    uint32 m_uiAutoTileSet[DATABASE::AUTO_TILE_SET_COUNT];
+    uint32 m_uiAutoTileSet[DATABASE::AUTO_TILE::AUTO_TILE_SET_COUNT];
 };
 #endif

@@ -7,23 +7,23 @@
 class AutoTile
 {
 private:
-    inline void _setPixmap(DATABASE::AutoTilePrototype::AUTO_TILE_INDEX index, ConstQPixmapPtr pixmap)
+    inline void _setPixmap(DATABASE::AUTO_TILE::AUTO_TILE_INDEX index, ConstQPixmapPtr pixmap)
     {
-        if (index < DATABASE::AutoTilePrototype::INDEX_NONE)
+        if (index < DATABASE::AUTO_TILE::INDEX_NONE)
             m_pPixmaps[index] = pixmap;
     }
 
     void _createPixmaps(ConstTileCachePtr pTileCache);
     void _clearPixmaps()
     {
-        for (uint32 i = 0; i < DATABASE::AutoTilePrototype::INDEX_NONE; ++i)
+        for (uint32 i = 0; i < DATABASE::AUTO_TILE::INDEX_NONE; ++i)
             m_pPixmaps[i] = QPixmapPtr();
     }
 
 public:
-    inline bool getPixmap(DATABASE::AutoTilePrototype::AUTO_TILE_INDEX index, ConstQPixmapPtr &result) const
+    inline bool getPixmap(DATABASE::AUTO_TILE::AUTO_TILE_INDEX index, ConstQPixmapPtr &result) const
     {
-        if (index >= DATABASE::AutoTilePrototype::INDEX_NONE || !m_pPixmaps[index])
+        if (index >= DATABASE::AUTO_TILE::INDEX_NONE || !m_pPixmaps[index])
             return false;
         result = m_pPixmaps[index];
         return true;
@@ -32,7 +32,7 @@ public:
     inline void setAutoTilePrototype(DATABASE::ConstAutoTilePrototypePtr proto, ConstTileCachePtr pTileCache) { m_pProto = proto; _createPixmaps(pTileCache); }
 
 private:
-    ConstQPixmapPtr m_pPixmaps[DATABASE::AutoTilePrototype::INDEX_NONE];
+    ConstQPixmapPtr m_pPixmaps[DATABASE::AUTO_TILE::INDEX_NONE];
     DATABASE::ConstAutoTilePrototypePtr m_pProto;
 };
 typedef boost::shared_ptr<AutoTile> AutoTilePtr;

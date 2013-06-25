@@ -31,7 +31,7 @@ void MapBrushWidget::changeBrush(uint32 uiID, bool isAutoTile)
     {
         ConstAutoTilePtr pAutoTile;
         ConstQPixmapPtr pPixmap;
-        if (m_pSharedData->getAutoTileCache()->getItem(uiID, pAutoTile) && pAutoTile->getPixmap(DATABASE::AutoTilePrototype::INDEX_CIRCLE, pPixmap))
+        if (m_pSharedData->getAutoTileCache()->getItem(uiID, pAutoTile) && pAutoTile->getPixmap(DATABASE::AUTO_TILE::INDEX_CIRCLE, pPixmap))
         {
             m_pBrush = _getNewAutoTileBrush();
             m_pCurrentTile->setPixmap(*pPixmap.get());

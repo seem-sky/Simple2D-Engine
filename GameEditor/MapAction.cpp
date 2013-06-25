@@ -2,6 +2,7 @@
 
 using namespace MAP;
 using namespace DATABASE;
+using namespace AUTO_TILE;
 
 /*#####
 # MapAction
@@ -24,13 +25,13 @@ void TileMapAction::revertMapAction()
     getMap()->setMapTile(m_Pos, m_MapTile, m_Layer);
     UInt32PointSet positions;
     if (m_MapTile.m_uiAutoTileSetID)
-        getMap()->setTile(m_Pos, AutoTilePrototype::getAutoTileIndexForTileCheck(getMap()->getPositionsAroundWithID(m_MapTile.m_uiAutoTileSetID, m_Pos, positions, m_Layer)), m_Layer);
+        getMap()->setTile(m_Pos, getAutoTileIndexForTileCheck(getMap()->checkAutoTiles(m_MapTile.m_uiAutoTileSetID, m_Pos, positions, m_Layer)), m_Layer);
     for (UInt32PointSet::const_iterator itr = positions.begin(); itr != positions.end(); ++itr)
     {
         Point3D<uint32> pos(*itr, m_Pos.z);
         uint32 uiCurAutoTileID = getMap()->getAutoTile(pos, m_Layer);
         if (uiCurAutoTileID)
-            getMap()->setTile(pos, AutoTilePrototype::getAutoTileIndexForTileCheck(getMap()->getPositionsAroundWithID(uiCurAutoTileID, pos,
+            getMap()->setTile(pos, getAutoTileIndexForTileCheck(getMap()->checkAutoTiles(uiCurAutoTileID, pos,
             UInt32PointSet(), m_Layer, MapPrototype::FLAG_NOTHING)), m_Layer);
     }
 }
@@ -60,16 +61,16 @@ void MultiTileMapAction::revertMapAction()
     for (UInt32PointVector::const_iterator itr = m_Positions.begin(); itr != m_Positions.end(); ++itr)
     {
         Point3D<uint32> pos(*itr, m_uiLayer);
-        uint32 uiTileCheck = getMap()->getPositionsAroundWithID(m_MapTile.m_uiAutoTileSetID, pos, positions, m_Layer, MapPrototype::FLAG_OTHER);
+        uint32 uiTileCheck = getMap()->checkAutoTiles(m_MapTile.m_uiAutoTileSetID, pos, positions, m_Layer, MapPrototype::FLAG_OTHER);
         if (m_MapTile.m_uiAutoTileSetID)
-            getMap()->setTile(pos, AutoTilePrototype::getAutoTileIndexForTileCheck(uiTileCheck), m_Layer);
+            getMap()->setTile(pos, getAutoTileIndexForTileCheck(uiTileCheck), m_Layer);
     }
 
     for (UInt32PointSet::const_iterator itr = positions.begin(); itr != positions.end(); ++itr)
     {
         Point3D<uint32> pos(*itr, m_uiLayer);
         if (getMap()->getAutoTile(pos, m_Layer))
-            getMap()->setTile(pos, AutoTilePrototype::getAutoTileIndexForTileCheck(getMap()->getPositionsAroundWithID(
+            getMap()->setTile(pos, getAutoTileIndexForTileCheck(getMap()->checkAutoTiles(
                 getMap()->getAutoTile(pos, m_Layer), pos, UInt32PointSet(), m_Layer, MapPrototype::FLAG_NOTHING)), m_Layer);
     }
 }

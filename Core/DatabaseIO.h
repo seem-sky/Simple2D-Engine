@@ -30,7 +30,7 @@ namespace DATABASE
     /*####
     # AutoTileDatabase
     ####*/
-    class AutoTileDatabaseXMLReader : public DatabaseReader<AutoTilePrototype>
+    class AutoTileDatabaseXMLReader : public DatabaseReader<AUTO_TILE::AutoTilePrototype>
     {
     protected:
         bool getAttributeFromXML(AutoTilePrototypePtr proto, const QString &attributeName, const QString &attributeValue);
@@ -39,7 +39,7 @@ namespace DATABASE
         AutoTileDatabaseXMLReader(const AutoTileDatabasePtr &pDB) : DatabaseReader(pDB) {}
     };
 
-    class AutoTileDatabaseXMLWriter : public DatabaseWriter<AutoTilePrototype>
+    class AutoTileDatabaseXMLWriter : public DatabaseWriter<AUTO_TILE::AutoTilePrototype>
     {
     protected:
         virtual void getXMLFromAttributes(AutoTilePrototypePtr proto, QXmlStreamWriter &writer);

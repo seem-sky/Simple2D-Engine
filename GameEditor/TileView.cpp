@@ -44,7 +44,7 @@ void AutoTileItem::paint(QPainter *pPainter, const QStyleOptionGraphicsItem *pOp
     ConstAutoTilePtr pAutoTile;
     ConstQPixmapPtr pPixmap;
     if (m_pSharedData->getAutoTileCache()->getItem(getID(), pAutoTile))
-        pAutoTile->getPixmap(DATABASE::AutoTilePrototype::INDEX_CIRCLE, pPixmap);
+        pAutoTile->getPixmap(DATABASE::AUTO_TILE::INDEX_CIRCLE, pPixmap);
     drawItem(pPainter, pPixmap);
 }
 

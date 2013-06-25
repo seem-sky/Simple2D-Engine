@@ -47,9 +47,9 @@ bool AutoTileDatabaseXMLReader::getAttributeFromXML(AutoTilePrototypePtr proto, 
 
     QString tempName = attributeName;
     uint32 uiIndex = tempName.remove("Index").toUInt();
-    if (uiIndex < AUTO_TILE_SET_COUNT)
+    if (uiIndex < AUTO_TILE::AUTO_TILE_SET_COUNT)
     {
-        proto->setTileID(static_cast<AutoTilePrototype::AUTO_TILE_INDEX>(uiIndex), attributeValue.toUInt());
+        proto->setTileID(static_cast<AUTO_TILE::AUTO_TILE_INDEX>(uiIndex), attributeValue.toUInt());
         return true;
     }
 
@@ -61,8 +61,8 @@ void AutoTileDatabaseXMLWriter::getXMLFromAttributes(AutoTilePrototypePtr proto,
     if (!proto)
         return;
     DatabaseWriter::getXMLFromAttributes(proto, writer);
-    for (uint32 i = 0; i < AUTO_TILE_SET_COUNT; ++i)
-        writer.writeAttribute("Index" + QString::number(i), QString::number(proto->getTileID(static_cast<AutoTilePrototype::AUTO_TILE_INDEX>(i))));
+    for (uint32 i = 0; i < AUTO_TILE::AUTO_TILE_SET_COUNT; ++i)
+        writer.writeAttribute("Index" + QString::number(i), QString::number(proto->getTileID(static_cast<AUTO_TILE::AUTO_TILE_INDEX>(i))));
 }
 
 /*####

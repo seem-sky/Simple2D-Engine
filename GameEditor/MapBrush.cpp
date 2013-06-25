@@ -91,7 +91,7 @@ void TileBrush::calculateFillArea(MapViewer *pWidget, const Point3D<uint32> &cen
     {
         UInt32PointSet posAround;
         Point<uint32> checkPoint = openPoints.at(0);
-        map->getPositionsAroundWithID(getTile(), checkPoint, posAround, m_Layer);
+        map->checkAutoTiles(getTile(), checkPoint, posAround, m_Layer);
         for (UInt32PointSet::const_iterator itr = posAround.begin(); itr != posAround.end(); ++itr)
         {
             Point3D<uint32> curPos(*itr, center.z);
@@ -136,11 +136,11 @@ void MapTileBrush::_drawPen(MapViewer *pWidget, const Point3D<uint32> &center)
 
         // update autotiles around
         UInt32PointSet positions;
-        map->getPositionsAroundWithID(0, center, positions, getLayer(), MapPrototype::FLAG_OTHER);
+        map->checkAutoTiles(0, center, positions, getLayer(), MapPrototype::FLAG_OTHER);
         for (UInt32PointSet::const_iterator itr = positions.begin(); itr != positions.end(); ++itr)
         {
             Point3D<uint32> pos(*itr, center.z);
-            map->setTile(pos, AutoTilePrototype::getAutoTileIndexForTileCheck(map->getPositionsAroundWithID(map->getAutoTile(pos, getLayer()), pos, UInt32PointSet(),
+            map->setTile(pos, AUTO_TILE::getAutoTileIndexForTileCheck(map->checkAutoTiles(map->getAutoTile(pos, getLayer()), pos, UInt32PointSet(),
                 getLayer(), MapPrototype::FLAG_NOTHING)),getLayer());
         }
     }
@@ -192,7 +192,7 @@ void MapAutoTileBrush::_drawFill(MapViewer *pWidget, const Point3D<uint32> &cent
         return;
 
     calculateFillArea(pWidget, center);
-    map->setMapTile(center, MapTile(AutoTilePrototype::INDEX_CENTER, getTile()), getLayer());
+    map->setMapTile(center, MapTile(AUTO_TILE::INDEX_CENTER, getTile()), getLayer());
 
     // get border tiles
     UInt32PointSet setBorder;
@@ -200,9 +200,9 @@ void MapAutoTileBrush::_drawFill(MapViewer *pWidget, const Point3D<uint32> &cent
     {
         Point3D<uint32> pos(*itr, center.z);
         if (map->getAutoTile(pos, getLayer()) != getTile())
-            map->getPositionsAroundWithID(getTile(), pos, setBorder, getLayer(), MapPrototype::FLAG_SAME);
+            map->checkAutoTiles(getTile(), pos, setBorder, getLayer(), MapPrototype::FLAG_SAME);
         else
-            map->setTile(pos, AutoTilePrototype::getAutoTileIndexForTileCheck(map->getPositionsAroundWithID(getTile(), pos, setBorder, getLayer(), MapPrototype::FLAG_SAME)), getLayer());
+            map->setTile(pos, AUTO_TILE::getAutoTileIndexForTileCheck(map->checkAutoTiles(getTile(), pos, setBorder, getLayer(), MapPrototype::FLAG_SAME)), getLayer());
     }
 
     // update border tiles
@@ -224,7 +224,7 @@ bool MapAutoTileBrush::_checkFill(MapPrototypePtr const &map, const MAP::MapTile
         if (!centerTile.m_uiAutoTileSetID && centerTile.m_uiTileID != curMapTile.m_uiTileID)
             return false;
         openPoints.push_back(pos);
-        map->setMapTile(pos, MapTile(AutoTilePrototype::INDEX_CENTER, getTile()), getLayer());
+        map->setMapTile(pos, MapTile(AUTO_TILE::INDEX_CENTER, getTile()), getLayer());
         return true;
     }
     else
@@ -238,7 +238,7 @@ void MapAutoTileBrush::_setAutoTile(const MAP::MapPrototypePtr &map, const Point
         return;
 
     UInt32PointSet result;
-    map->setTile(center, AutoTilePrototype::getAutoTileIndexForTileCheck(map->getPositionsAroundWithID(getTile(), center, result, getLayer(), MapPrototype::FLAG_ALL)), getLayer());
+    map->setTile(center, AUTO_TILE::getAutoTileIndexForTileCheck(map->checkAutoTiles(getTile(), center, result, getLayer(), MapPrototype::FLAG_ALL)), getLayer());
     map->setAutoTile(center, proto->getID(), getLayer());
     _doAutoTileCheckForPosList(map, center.z, result);
 }
@@ -250,7 +250,7 @@ void MapAutoTileBrush::_doAutoTileCheckForPosList(const MAP::MapPrototypePtr &ma
         Point3D<uint32> pos(*itr, uiLayer);
         if (!map->getAutoTile(pos, getLayer()))
             continue;
-        map->setTile(pos, AutoTilePrototype::getAutoTileIndexForTileCheck(map->getPositionsAroundWithID(map->getAutoTile(pos, getLayer()), pos, UInt32PointSet(),
+        map->setTile(pos, AUTO_TILE::getAutoTileIndexForTileCheck(map->checkAutoTiles(map->getAutoTile(pos, getLayer()), pos, UInt32PointSet(),
             getLayer(), MapPrototype::FLAG_NOTHING)), getLayer());
     }
 }

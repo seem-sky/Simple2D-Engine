@@ -1,64 +1,11 @@
 #ifndef DATABASE_PROTOTYPES_H
 #define DATABASE_PROTOTYPES_H
 
-#include "Container.h"
+#include "Database.h"
 #include "Color.h"
 
 namespace DATABASE
 {
-    /*#####
-    # Prototype superclass
-    #####*/
-    class Prototype
-    {
-    public:
-        Prototype(uint32 uiID) : m_uiID(uiID) {}
-
-        inline void setName(const QString &sName) { m_sName = sName; }
-        inline QString getName() const { return m_sName; }
-        inline uint32 getID() const { return m_uiID; }
-        inline void setID(uint32 uiID) { m_uiID = uiID; }
-
-    private:
-        uint32 m_uiID;
-        QString m_sName;
-    };
-    typedef boost::shared_ptr<Prototype> PrototypePtr;
-    typedef std::vector<PrototypePtr> PrototypePtrVector;
-
-    /*#####
-    # Database
-    #####*/
-    template <class T>
-    class DatabaseChanger;
-    template <class T>
-    class Database : public Container<T>
-    {
-        friend class DatabaseMgr;
-        friend class DatabaseChanger<T>;
-
-    public:
-        void getItemShortInfos(UInt32StringMap &result) const
-        {
-            for (uint32 i = 0; i < getSize(); ++i)
-            {
-                if (m_Items.at(i) && m_Items.at(i)->getID() != 0)
-                    result.insert(std::make_pair(m_Items.at(i)->getID(), m_Items.at(i)->getName()));
-            }
-        }
-
-        void resize(uint32 uiSize, bool fillNew = true)
-        {
-            uint32 uiOldSize = getSize();
-            m_Items.resize(uiSize);
-            if (fillNew && uiSize > uiOldSize)
-            {
-                for (uint32 i = uiOldSize; i < uiSize; ++i)                 // first ID == 1, so use i+1 for ID at position i
-                    m_Items.at(i) = boost::shared_ptr<T>(new T(i+1));
-            }
-        }
-    };
-
     /*#####
     # TexturePrototype
     #####*/
@@ -122,11 +69,8 @@ namespace DATABASE
     /*#####
     # AutoTilePrototype
     #####*/
-    const uint32 MAX_AUTO_TILE_COLUMNS      = 3;
-    const uint32 AUTO_TILE_SET_COUNT        = 10;
-    class AutoTilePrototype : public Prototype
+    namespace AUTO_TILE
     {
-    public:
         enum TILE_CHECK
         {
             SAME_AROUND         = 0x00,
@@ -213,7 +157,6 @@ namespace DATABASE
             INDEX_NONE
         };
 
-    private:
         enum AUTO_TILE_TILE_REQUIREMENTS
         {
             CENTER                              = SAME_AROUND,
@@ -278,151 +221,29 @@ namespace DATABASE
             INNER_EDGE_TOP_RIGHT_BOTTOM_LEFT_BOTTOM_RIGHT   = INNER_EDGE_BOTTOM_LEFT_BOTTOM_RIGHT | INNER_EDGE_TOP_RIGHT
         };
 
-    public:
-        AutoTilePrototype(uint32 uiID = 0) : Prototype(uiID)
+        const uint32 MAX_AUTO_TILE_COLUMNS      = 3;
+        const uint32 AUTO_TILE_SET_COUNT        = 10;
+        class AutoTilePrototype : public Prototype
         {
-            memset(&m_uiTileID, NULL, sizeof(m_uiTileID));
-        }
+        public:
+            AutoTilePrototype(uint32 uiID = 0) : Prototype(uiID)
+            {
+                memset(&m_uiTileID, NULL, sizeof(m_uiTileID));
+            }
 
-        inline void setTileID(AUTO_TILE_INDEX index, uint32 uiID) { m_uiTileID[index] = uiID; }
-        inline uint32 getTileID(AUTO_TILE_INDEX index) const { return m_uiTileID[index]; }
+            inline void setTileID(AUTO_TILE_INDEX index, uint32 uiID) { m_uiTileID[index] = uiID; }
+            inline uint32 getTileID(AUTO_TILE_INDEX index) const { return m_uiTileID[index]; }
 
-        inline static bool hasTileCheck(const uint32 &uiTileCheck, AUTO_TILE_TILE_REQUIREMENTS tiles)
-        {
-            if ((uiTileCheck & tiles) == tiles)
-                return true;
-            return false;
-        }
+        private:
+            uint32 m_uiTileID[AUTO_TILE_SET_COUNT];
+        };
 
-        inline static AUTO_TILE_INDEX getAutoTileIndexForTileCheck(uint32 uiTileCheck)
-        {
-            // lonely tile
-            if (hasTileCheck(uiTileCheck, CIRCLE))
-                return INDEX_CIRCLE;
-
-            // end sides
-            if (hasTileCheck(uiTileCheck, LEFT_END))
-                return INDEX_SIDE_END_LEFT;
-            if (hasTileCheck(uiTileCheck, RIGHT_END))
-                return INDEX_SIDE_END_RIGHT;
-            if (hasTileCheck(uiTileCheck, TOP_END))
-                return INDEX_SIDE_END_TOP;
-            if (hasTileCheck(uiTileCheck, BOTTOM_END))
-                return INDEX_SIDE_END_BOTTOM;
-
-            // double sides
-            if (hasTileCheck(uiTileCheck, SIDE_VERTICAL))
-                return INDEX_SIDE_VERTICAL;
-            if (hasTileCheck(uiTileCheck, SIDE_HORIZONTAL))
-                return INDEX_SIDE_HORIZONTAL;
-
-            // curves
-            if (hasTileCheck(uiTileCheck, CURVE_TOP_LEFT))
-                return INDEX_CURVE_TOP_LEFT;
-            if (hasTileCheck(uiTileCheck, CURVE_TOP_RIGHT))
-                return INDEX_CURVE_TOP_RIGHT;
-            if (hasTileCheck(uiTileCheck, CURVE_BOTTOM_LEFT))
-                return INDEX_CURVE_BOTTOM_LEFT;
-            if (hasTileCheck(uiTileCheck, CURVE_BOTTOM_RIGHT))
-                return INDEX_CURVE_BOTTOM_RIGHT;
-
-            // T tiles
-            if (hasTileCheck(uiTileCheck, T_TOP))
-                return INDEX_T_TOP;
-            if (hasTileCheck(uiTileCheck, T_LEFT))
-                return INDEX_T_LEFT;
-            if (hasTileCheck(uiTileCheck, T_RIGHT))
-                return INDEX_T_RIGHT;
-            if (hasTileCheck(uiTileCheck, T_BOTTOM))
-                return INDEX_T_BOTTOM;
-
-            // edges
-            if (hasTileCheck(uiTileCheck, EDGE_TOP_LEFT))
-                return INDEX_TOP_LEFT;
-            if (hasTileCheck(uiTileCheck, EDGE_TOP_RIGHT))
-                return INDEX_TOP_RIGHT;
-            if (hasTileCheck(uiTileCheck, EDGE_BOTTOM_LEFT))
-                return INDEX_BOTTOM_LEFT;
-            if (hasTileCheck(uiTileCheck, EDGE_BOTTOM_RIGHT))
-                return INDEX_BOTTOM_RIGHT;
-
-            // Y tiles
-            if (hasTileCheck(uiTileCheck, Y_TOP_BOTTOM_LEFT))
-                return INDEX_Y_TOP_BOTTOM_LEFT;
-            if (hasTileCheck(uiTileCheck, Y_TOP_BOTTOM_RIGHT))
-                return INDEX_Y_TOP_BOTTOM_RIGHT;
-            if (hasTileCheck(uiTileCheck, Y_LEFT_TOP_RIGHT))
-                return INDEX_Y_LEFT_TOP_RIGHT;
-            if (hasTileCheck(uiTileCheck, Y_LEFT_BOTTOM_RIGHT))
-                return INDEX_Y_LEFT_BOTTOM_RIGHT;
-            if (hasTileCheck(uiTileCheck, Y_BOTTOM_TOP_LEFT))
-                return INDEX_Y_BOTTOM_TOP_LEFT;
-            if (hasTileCheck(uiTileCheck, Y_BOTTOM_TOP_RIGHT))
-                return INDEX_Y_BOTTOM_TOP_RIGHT;
-            if (hasTileCheck(uiTileCheck, Y_RIGHT_TOP_LEFT))
-                return INDEX_Y_RIGHT_TOP_LEFT;
-            if (hasTileCheck(uiTileCheck, Y_RIGHT_BOTTOM_LEFT))
-                return INDEX_Y_RIGHT_BOTTOM_LEFT;
-
-            // like a star
-            if (hasTileCheck(uiTileCheck, INNER_EDGE_CENTER))
-                return INDEX_INNER_CENTER;
-
-            // triple inner edges
-            if (hasTileCheck(uiTileCheck, INNER_EDGE_TOP_LEFT_TOP_RIGHT_BOTTOM_LEFT))
-                return INDEX_INNER_EDGE_TOP_LEFT_TOP_RIGHT_BOTTOM_LEFT;
-            if (hasTileCheck(uiTileCheck, INNER_EDGE_TOP_LEFT_TOP_RIGHT_BOTTOM_RIGHT))
-                return INDEX_INNER_EDGE_TOP_LEFT_TOP_RIGHT_BOTTOM_RIGHT;
-            if (hasTileCheck(uiTileCheck, INNER_EDGE_TOP_LEFT_BOTTOM_LEFT_BOTTOM_RIGHT))
-                return INDEX_INNER_EDGE_TOP_LEFT_BOTTOM_LEFT_BOTTOM_RIGHT;
-            if (hasTileCheck(uiTileCheck, INNER_EDGE_TOP_RIGHT_BOTTOM_LEFT_BOTTOM_RIGHT))
-                return INDEX_INNER_EDGE_TOP_RIGHT_BOTTOM_LEFT_BOTTOM_RIGHT;
-
-            // sides
-            if (hasTileCheck(uiTileCheck, SIDE_TOP))
-                return INDEX_TOP;
-            if (hasTileCheck(uiTileCheck, SIDE_LEFT))
-                return INDEX_LEFT;
-            if (hasTileCheck(uiTileCheck, SIDE_RIGHT))
-                return INDEX_RIGHT;
-            if (hasTileCheck(uiTileCheck, SIDE_BOTTOM))
-                return INDEX_BOTTOM;
-
-            // diagonal inner edges
-            if (hasTileCheck(uiTileCheck, INNER_EDGE_TOP_LEFT_BOTTOM_RIGHT))
-                return INDEX_INNER_EDGE_TOP_LEFT_BOTTOM_RIGHT;
-            if (hasTileCheck(uiTileCheck, INNER_EDGE_TOP_RIGHT_BOTTOM_LEFT))
-                return INDEX_INNER_EDGE_TOP_RIGHT_BOTTOM_LEFT;
-
-            // double inner edges
-            if (hasTileCheck(uiTileCheck, INNER_EDGE_TOP_LEFT_BOTTOM_LEFT))
-                return INDEX_INNER_EDGE_TOP_LEFT_BOTTOM_LEFT;
-            if (hasTileCheck(uiTileCheck, INNER_EDGE_TOP_LEFT_TOP_RIGHT))
-                return INDEX_INNER_EDGE_TOP_LEFT_TOP_RIGHT;
-            if (hasTileCheck(uiTileCheck, INNER_EDGE_TOP_RIGHT_BOTTOM_RIGHT))
-                return INDEX_INNER_EDGE_TOP_RIGHT_BOTTOM_RIGHT;
-            if (hasTileCheck(uiTileCheck, INNER_EDGE_BOTTOM_LEFT_BOTTOM_RIGHT))
-                return INDEX_INNER_EDGE_BOTTOM_LEFT_BOTTOM_RIGHT;
-
-            // single inner edges
-            if (hasTileCheck(uiTileCheck, INNER_EDGE_TOP_LEFT))
-                return INDEX_INNER_EDGE_TOP_LEFT;
-            if (hasTileCheck(uiTileCheck, INNER_EDGE_TOP_RIGHT))
-                return INDEX_INNER_EDGE_TOP_RIGHT;
-            if (hasTileCheck(uiTileCheck, INNER_EDGE_BOTTOM_LEFT))
-                return INDEX_INNER_EDGE_BOTTOM_LEFT;
-            if (hasTileCheck(uiTileCheck, INNER_EDGE_BOTTOM_RIGHT))
-                return INDEX_INNER_EDGE_BOTTOM_RIGHT;
-
-            // if nothing other matches return center
-            return INDEX_CENTER;
-        }
-
-    private:
-        uint32 m_uiTileID[AUTO_TILE_SET_COUNT];
+        AUTO_TILE_INDEX getAutoTileIndexForTileCheck(uint32 uiTileCheck);
+        bool hasTileCheck(uint32 uiTileCheck, AUTO_TILE_TILE_REQUIREMENTS tiles);
     };
-    typedef boost::shared_ptr<AutoTilePrototype> AutoTilePrototypePtr;
-    typedef boost::shared_ptr<const AutoTilePrototype> ConstAutoTilePrototypePtr;
+
+    typedef boost::shared_ptr<AUTO_TILE::AutoTilePrototype> AutoTilePrototypePtr;
+    typedef boost::shared_ptr<const AUTO_TILE::AutoTilePrototype> ConstAutoTilePrototypePtr;
     typedef std::vector<ConstAutoTilePrototypePtr> ConstAutoTilePrototypePtrVector;
 
     /*#####
@@ -467,33 +288,9 @@ namespace DATABASE
     public:
         AnimationPrototype(uint32 uiID = 0) : Prototype(uiID) {}
 
-        inline bool getFrame(uint32 uiIndex, Frame &frame) const
-        {
-            if (uiIndex < m_Frames.size())
-            {
-                frame = m_Frames.at(uiIndex);
-                return true;
-            }
-            return false;
-        }
-
-        inline void setFrame(uint32 uiIndex, const Frame &frame)
-        {
-            if (uiIndex >= m_Frames.size())
-                m_Frames.resize(uiIndex+1);
-            m_Frames.at(uiIndex) = frame;
-        }
-
-        inline void removeFrame(uint32 uiIndex)
-        {
-            if (uiIndex >= m_Frames.size())
-                return;
-            if (uiIndex == m_Frames.size()-1)
-                m_Frames.resize(uiIndex);
-            else
-                m_Frames.at(uiIndex) = Frame();
-        }
-
+        bool getFrame(uint32 uiIndex, Frame &frame) const;
+        void setFrame(uint32 uiIndex, const Frame &frame);
+        void removeFrame(uint32 uiIndex);
         inline uint32 getFrameCount() const { return m_Frames.size(); }
 
     private:
