@@ -53,12 +53,12 @@ void MapReader::_loadTiles(const QDomNode &parentNode, bool &result)
 void MapReader::_loadTiles(const QDomNode &parentNode, Layer layer)
 {
     QDomNodeList layerChildren = parentNode.childNodes();
-    for (uint32 j = 0; j < layerChildren.length() && j < m_pMap->getLayerSize(layer); ++j)
+    for (uint32 j = 0; j < static_cast<uint32>(layerChildren.length()) && j < m_pMap->getLayerSize(layer); ++j)
     {
         QDomNode layerNode = layerChildren.at(j);
         QDomNodeList rows = layerNode.childNodes();
         // iterate through rows
-        for (uint32 i = 0; i < rows.length() && i < m_pMap->getSize().y; ++i)
+        for (uint32 i = 0; i < static_cast<uint32>(rows.length()) && i < m_pMap->getSize().y; ++i)
         {
             if (rows.at(i).isNull())
                 continue;
@@ -95,7 +95,7 @@ void MapReader::_loadObjects(const QDomNode &parentNode, bool &result)
 
     // get objects
     QDomNodeList objects = node.childNodes();
-    for (uint32 j = 0; j < objects.length(); j++)
+    for (int32 j = 0; j < objects.length(); j++)
     {
         QDomNode currentObject = objects.at(j);
         if (currentObject.isNull())
@@ -103,7 +103,7 @@ void MapReader::_loadObjects(const QDomNode &parentNode, bool &result)
         MapObjectPtr newObject(new MapObject());
         QDomNamedNodeMap objectAttributes = currentObject.attributes();
         // parse attributes
-        for (uint32 k = 0; k < objectAttributes.length(); k++)
+        for (int32 k = 0; k < objectAttributes.length(); k++)
         {
             QDomNode attribute = objectAttributes.item(k);
             if (attribute.isNull())

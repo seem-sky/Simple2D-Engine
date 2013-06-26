@@ -1,6 +1,6 @@
 #include "TextDatabaseWidget.h"
 #include "moc_TextDatabaseWidget.h"
-#include <QtGui/QTextEdit>
+#include <QtWidgets/QTextEdit>
 
 using namespace DATABASE;
 

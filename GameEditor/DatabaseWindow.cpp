@@ -1,9 +1,9 @@
 #include "DatabaseWindow.h"
 #include "moc_DatabaseWindow.h"
-#include <QTGui/QFileDialog>
+#include <QtWidgets/QFileDialog>
 #include <QtCore/QTimer>
 #include <QtGui/QPainter>
-#include <QtGui/QGraphicsPixmapItem>
+#include <QtWidgets/QGraphicsPixmapItem>
 #include "Config.h"
 #include "MainWindow.h"
 #include "DatabaseIO.h"

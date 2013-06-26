@@ -1,7 +1,7 @@
 #ifndef CONTEXT_MENU_H
 #define CONTEXT_MENU_H
 
-#include <QtGui/QMenu>
+#include <QtWidgets/QMenu>
 
 namespace CONTEXT_MENU
 {

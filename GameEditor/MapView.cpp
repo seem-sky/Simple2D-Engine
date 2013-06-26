@@ -3,7 +3,7 @@
 #include <QtGui/QBitmap>
 #include "moc_MapView.h"
 #include <QtGui/QPainterPath>
-#include <QtGui/QMessageBox>
+#include <QtWidgets/QMessageBox>
 #include <algorithm>
 #include "Config.h"
 #include "MapIO.h"

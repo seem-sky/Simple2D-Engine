@@ -1,7 +1,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#include <Singleton.h>
+#include "Singleton.h"
 #include "Global.h"
 
 class Config : public TSingleton<Config>
@@ -13,7 +13,7 @@ public:
     void saveConfig();
 
     inline QString getProjectDirectory() const { return m_projectDirectory; }
-    inline void setProjectDirectory(const QString &p_sProjectDir) { m_projectDirectory = p_sProjectDir; saveConfig(); }
+    inline void setProjectDirectory(const QString &projectDir) { m_projectDirectory = projectDir; saveConfig(); }
 
     void clear();
 

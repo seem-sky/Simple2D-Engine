@@ -2,9 +2,9 @@
 #include "moc_AnimationViewWidget.h"
 #include <QtGui/QDragEnterEvent>
 #include <QtGui/QDragMoveEvent>
-#include <QtGui/QTreeWidget>
+#include <QtWidgets/QTreeWidget>
 #include <QtGui/QKeyEvent>
-#include <QtGui/QGraphicsSceneWheelEvent>
+#include <QtWidgets/QGraphicsSceneWheelEvent>
 #include <QtGui/QTransform>
 #include "AnimationDatabaseWidget.h"
 

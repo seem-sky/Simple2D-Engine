@@ -3,7 +3,7 @@
 #include <QtGui/QBitmap>
 #include <QtGui/QPainter>
 #include "moc_MapEditorWidget.h"
-#include <QtGui/QApplication>
+#include <QtWidgets/QApplication>
 #include <QtGui/QClipboard>
 
 using namespace DATABASE;

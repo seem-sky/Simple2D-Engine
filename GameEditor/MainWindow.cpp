@@ -1,10 +1,10 @@
 #include "MainWindow.h"
 #include "moc_MainWindow.h"
 #include "DatabaseWindow.h"
-#include <QtGui/QFileDialog>
+#include <QtWidgets/QFileDialog>
 #include <QtCore/QDir>
 #include <QtCore/QTimer>
-#include <QtGui/QErrorMessage>
+#include <QtWidgets/QErrorMessage>
 #include "Logfile.h"
 #include <QtCore/QTime>
 

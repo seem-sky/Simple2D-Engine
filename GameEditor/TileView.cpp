@@ -2,7 +2,7 @@
 #include <QtGui/QBitmap>
 #include <math.h>
 #include <QtGui/QMouseEvent>
-#include <QtGui/QScrollBar>
+#include <QtWidgets/QScrollBar>
 #include "moc_TileView.h"
 
 /*#####
@@ -101,7 +101,7 @@ void TileView::mousePressEvent(QMouseEvent *pEvent)
 
     if (pEvent->button() == Qt::RightButton || pEvent->button() == Qt::LeftButton)
     {
-        if (TileItem *pItem = dynamic_cast<TileItem*>(scene()->itemAt(mapToScene(pEvent->pos()))))
+        if (TileItem *pItem = dynamic_cast<TileItem*>(scene()->itemAt(mapToScene(pEvent->pos()), QTransform())))
             emit tileClicked(pItem->getID(), pEvent->button());
     }
 }

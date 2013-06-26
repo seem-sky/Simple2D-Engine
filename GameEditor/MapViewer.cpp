@@ -1,7 +1,7 @@
 #include "MapViewer.h"
 #include "MapView.h"
 #include "moc_MapViewer.h"
-#include <QtGui/QGraphicsSceneMouseEvent>
+#include <QtWidgets/QGraphicsSceneMouseEvent>
 #include "MapObjectDialog.h"
 #include "MapIO.h"
 #include "MapBrush.h"

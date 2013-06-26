@@ -1,8 +1,8 @@
 #ifndef ANIMATION_VIEW_WIDGET_H
 #define ANIMATION_VIEW_WIDGET_H
 
-#include <QtGui/QGraphicsView>
-#include <QtGui/QGraphicsPixmapItem>
+#include <QtWidgets/QGraphicsView>
+#include <QtWidgets/QGraphicsPixmapItem>
 #include "QtGlobal.h"
 #include "DatabaseChanger.h"
 #include <QtCore/QTimer>

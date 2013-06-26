@@ -1,10 +1,10 @@
 #ifndef TILE_VIEW_H
 #define TILE_VIEW_H
 
-#include <QtGui/QGraphicsView>
+#include <QtWidgets/QGraphicsView>
 #include "DatabaseMgr.h"
 #include "QtGlobal.h"
-#include "QtGui/QGraphicsItem"
+#include <QtWidgets/QGraphicsItem>
 #include "MapEditorObject.h"
 
 class TileItem : public QGraphicsItem

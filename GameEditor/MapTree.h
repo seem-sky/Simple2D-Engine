@@ -1,7 +1,7 @@
 #ifndef MAP_TREE_H
 #define MAP_TREE_H
 
-#include <QtGui/QTreeWidget>
+#include <QtWidgets/QTreeWidget>
 #include "DatabaseMgr.h"
 #include "QtGlobal.h"
 #include "MapEditorObject.h"

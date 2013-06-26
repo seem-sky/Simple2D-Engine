@@ -1,8 +1,10 @@
 #ifndef DRAG_TREE_WIDGET_H
 #define DRAG_TREE_WIDGET_H
 
-#include <QtGui/QTreeWidget>
-#include <QtGui/QLabel>
+#include <QtWidgets/QTreeWidget>
+#include <QtWidgets/QLabel>
+#include <QtGui/QDrag>
+#include <QtCore/QMimeData>
 #include "DatabaseChanger.h"
 #include "AnimationViewWidget.h"
 

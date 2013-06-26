@@ -1,8 +1,8 @@
 #ifndef MODIFY_VIEW_H
 #define MODIFY_VIEW_H
 
-#include <QtGui/QGraphicsView>
-#include <QtGui/QGraphicsPixmapItem>
+#include <QtWidgets/QGraphicsView>
+#include <QtWidgets/QGraphicsPixmapItem>
 #include "Global.h"
 
 class ModifyItem : public QGraphicsPixmapItem

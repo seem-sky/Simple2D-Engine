@@ -1,11 +1,11 @@
 #ifndef MAP_VIEW_H
 #define MAP_VIEW_H
 
-#include <QtGui/QTabWidget>
-#include <QtGui/QGraphicsView>
+#include <QtWidgets/QTabWidget>
+#include <QtWidgets/QGraphicsView>
 #include "MapDatabase.h"
-#include <QtGui/QGraphicsPixmapItem>
-#include <QtGui/QGraphicsPathItem>
+#include <QtWidgets/QGraphicsPixmapItem>
+#include <QtWidgets/QGraphicsPathItem>
 #include "DatabaseMgr.h"
 #include "MapEditorObject.h"
 #include "ModifyObject.h"

@@ -1,6 +1,6 @@
 #include "AnimationDatabaseWidget.h"
 #include "moc_AnimationDatabaseWidget.h"
-#include <QtGui/QScrollBar>
+#include <QtWidgets/QScrollBar>
 
 using namespace DATABASE;
 

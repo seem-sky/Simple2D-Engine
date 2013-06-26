@@ -2,7 +2,7 @@
 #define TRANSPARENCY_WINDOW_H
 
 #include <QtGui/QResizeEvent>
-#include <QtGui/QDialog>
+#include <QtWidgets/QDialog>
 #include "Ui/UI_TransparentColorDialog.h"
 #include <Color.h>
 

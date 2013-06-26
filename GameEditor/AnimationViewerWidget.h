@@ -2,7 +2,7 @@
 #define ANIMATION_VIEWER_WIDGET_H
 
 #include "Ui/UI_AnimationViewerWidget.h"
-#include <QtGui/QTableWidget>
+#include <QtWidgets/QTableWidget>
 #include "AnimationViewWidget.h"
 #include "DragTreeWidget.h"
 

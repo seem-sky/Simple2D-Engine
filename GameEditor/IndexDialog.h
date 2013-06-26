@@ -1,7 +1,7 @@
 #ifndef INDEX_DIALOG_H
 #define INDEX_DIALOG_H
 
-#include <QTGui/QDialog>
+#include <QtWidgets/QDialog>
 #include "ui/UI_IndexDialog.h"
 #include "Global.h"
 

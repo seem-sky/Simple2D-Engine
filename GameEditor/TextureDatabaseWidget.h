@@ -2,12 +2,12 @@
 #define TEXTURE_DATABASE_WIDGET_H
 
 #include "Ui/Ui_TextureDatabaseWidget.h"
-#include <QtGui/QWidget>
+#include <QtWidgets/QWidget>
 #include <QtGui/QPixmap>
-#include <QtGui/QTreeWidgetItem>
+#include <QtWidgets/QTreeWidgetItem>
 #include "Config.h"
 #include "DatabaseWidget.h"
-#include <QtGui/QFileDialog>
+#include <QtWidgets/QFileDialog>
 #include <QtGui/QBitmap>
 #include "TransparencyWindow.h"
 #include "QtGlobal.h"

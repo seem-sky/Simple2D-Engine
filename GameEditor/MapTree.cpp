@@ -1,11 +1,11 @@
 #include "MapTree.h"
 #include "moc_MapTree.h"
-#include <QtGui/QMenu>
+#include <QtWidgets/QMenu>
 #include <QtGui/QtEvents>
 #include "ContextMenu.h"
 #include "MapSettings.h"
 #include "Config.h"
-#include <QtGui/QMessageBox>
+#include <QtWidgets/QMessageBox>
 #include "MainWindow.h"
 
 using namespace MAP;

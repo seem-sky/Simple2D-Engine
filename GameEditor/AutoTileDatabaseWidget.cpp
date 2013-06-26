@@ -1,9 +1,9 @@
 #include "AutoTileDatabaseWidget.h"
 #include "moc_AutoTileDatabaseWidget.h"
-#include <QtGui/QMessageBox>
+#include <QtWidgets/QMessageBox>
 #include <QtGui/QBitmap>
 #include "Config.h"
-#include <QtGui/QGraphicsItem>
+#include <QtWidgets/QGraphicsItem>
 #include <QtGui/QMouseEvent>
 
 using namespace DATABASE;

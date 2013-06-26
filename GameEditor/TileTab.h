@@ -1,7 +1,7 @@
 #ifndef TILE_TAB_H
 #define TILE_TAB_H
 
-#include <QtGui/QTabWidget>
+#include <QtWidgets/QTabWidget>
 #include "ModifyObject.h"
 #include "TileView.h"
 #include "MapEditorObject.h"

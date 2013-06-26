@@ -4,7 +4,7 @@
 #include "UI/UI_DatabaseWidget.h"
 #include "Global.h"
 #include "DatabaseChanger.h"
-#include <QtGui/QMessageBox>
+#include <QtWidgets/QMessageBox>
 #include "QtGlobal.h"
 #include "ModifyObject.h"
 

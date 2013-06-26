@@ -1,5 +1,5 @@
 #include "GameLoop.h"
-#include <QTGui/QApplication>
+#include <QtWidgets/QApplication>
 
 GameLoop::GameLoop() : pMainWindow(new QMainWindow())
 {

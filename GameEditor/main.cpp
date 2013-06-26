@@ -1,11 +1,10 @@
 #include "MainWindow.h"
 #include <Global.h>
-#include <QTGui/QApplication>
-#include <windows.h>
+#include <QtWidgets/QApplication>
 
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int32 nCmdShow)
+int main(int argc, char *argv[])
 {
-    QApplication app(nCmdShow, (char**)lpCmdLine);
+    QApplication app(argc, argv);
     MainWindow mainWindow;
     mainWindow.show();
     return app.exec();

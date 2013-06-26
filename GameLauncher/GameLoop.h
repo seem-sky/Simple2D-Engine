@@ -2,7 +2,7 @@
 #define GAME_LOOP_H
 
 #include "Global.h"
-#include <QtGui/QMainWindow>
+#include <QtWidgets/QMainWindow>
 #include <boost/smart_ptr.hpp>
 
 typedef boost::shared_ptr<QMainWindow> QMainWindowPtr;

@@ -1,7 +1,7 @@
 #ifndef QT_GLOBAL_H
 #define QT_GLOBAL_H
 
-#include <QtGui/QTreeWidgetItem>
+#include <QtWidgets/QTreeWidgetItem>
 #include <QtGui/QPixmap>
 #include <QtGui/QBitmap>
 #include "DatabasePrototypes.h"

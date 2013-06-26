@@ -1,7 +1,7 @@
 #ifndef RESIZE_WIDGET_H
 #define RESIZE_WIDGET_H
 
-#include <QtGui/QWidget>
+#include <QtWidgets/QWidget>
 #include <QtGui/QResizeEvent>
 #include <map>
 #include "Global.h"

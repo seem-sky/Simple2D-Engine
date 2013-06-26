@@ -20,7 +20,7 @@ namespace DATABASE
             QDomNamedNodeMap attributeMap = node.attributes();
             boost::shared_ptr<T> proto(new T());
             // get attributes
-            for (uint32 i = 0; i < attributeMap.length(); ++i)
+            for (int32 i = 0; i < attributeMap.length(); ++i)
             {
                 QDomNode attributeNode = attributeMap.item(i);
                 if (!attributeNode.isNull())
@@ -38,7 +38,7 @@ namespace DATABASE
             if (node.isNull())
                 return false;
             QDomNodeList childNodeList = node.childNodes();
-            for (uint32 i = 0; i < childNodeList.length(); ++i)
+            for (int32 i = 0; i < childNodeList.length(); ++i)
             {
                 if (!childNodeList.at(i).isNull())
                     getChildrenFromXML(childNodeList.at(i), proto, childNodeList.at(i).nodeName());
@@ -51,7 +51,7 @@ namespace DATABASE
             if (parentNode.isNull())
                 return false;
             QDomNodeList childNodeList = parentNode.childNodes();
-            for (uint32 i = 0; i < childNodeList.length(); ++i)
+            for (int32 i = 0; i < childNodeList.length(); ++i)
                 _getItemFromXML(childNodeList.at(i));
             return true;
         }

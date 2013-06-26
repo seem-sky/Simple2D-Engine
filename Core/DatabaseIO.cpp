@@ -125,7 +125,7 @@ bool AnimationDatabaseXMLReader::getChildrenFromXML(const QDomNode &node, Animat
         AnimationPrototype::Sprite newSprite;
         // get attributes
         QDomNamedNodeMap attributeNodes = node.attributes();
-        for (uint32 i = 0; i < attributeNodes.length(); ++i)
+        for (int32 i = 0; i < attributeNodes.length(); ++i)
         {
             QDomNode attributeNode = attributeNodes.item(i);
             if (attributeNode.isNull())
@@ -334,7 +334,7 @@ bool WorldObjectDatabaseXMLReader::getChildrenFromXML(const QDomNode &node, Worl
         WorldObjectPrototype::AnimationInfo newAnimationInfo;
         QDomNamedNodeMap attributeList = node.attributes();
         // get attributes
-        for (uint32 i = 0; i < attributeList.length(); ++i)
+        for (int32 i = 0; i < attributeList.length(); ++i)
         {
             QDomNode tempNode = attributeList.item(i);
             if (tempNode.nodeName() == "animationID")

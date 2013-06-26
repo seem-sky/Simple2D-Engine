@@ -62,7 +62,7 @@ QDomNode XMLReader::getSingleNode(const QDomNode &parentNode, const QString &nod
     if (!parentNode.isNull() && !nodeName.isEmpty())
     {
         QDomNodeList childNodes = parentNode.childNodes();
-        for (uint32 i = 0; i < childNodes.length(); ++i)
+        for (int32 i = 0; i < childNodes.length(); ++i)
         {
             if (childNodes.at(i).nodeName() == nodeName)
                 return childNodes.at(i);
