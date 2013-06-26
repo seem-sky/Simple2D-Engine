@@ -11,7 +11,7 @@
 /*#####
 # PixmapTooltipTreeWidget
 #####*/
-typedef boost::shared_ptr<QWidget> QWidgetPtr;
+typedef std::shared_ptr<QWidget> QWidgetPtr;
 class PixmapTooltipTreeWidget : public QTreeWidget
 {
     Q_OBJECT
@@ -94,10 +94,10 @@ public:
             setCurrentItem(pItem);
     }
 
-    inline void setDB(boost::shared_ptr<const T> pDB) { m_pDB = pDB; fillWithPrototypes(); }
+    inline void setDB(std::shared_ptr<const T> pDB) { m_pDB = pDB; fillWithPrototypes(); }
 
 protected:
-    boost::shared_ptr<const T> m_pDB;
+    std::shared_ptr<const T> m_pDB;
 };
 typedef PrototypeTreeWidget<DATABASE::DatabaseChanger<DATABASE::ObjectAnimationTypePrototype>> ObjectAnimationTypeTreeWidget;
 
@@ -130,7 +130,7 @@ protected:
         if (QTreeWidgetItem *pItem = currentItem())
         {
             QPixmap pixmap;
-            boost::shared_ptr<const T> proto;
+            std::shared_ptr<const T> proto;
             if (m_pDB && m_pDB->getItem(pItem->text(0).toUInt(), proto) && createPixmapFromTexturePrototype(proto, pixmap))
             {
                 QDrag* pDrag = new QDrag(this);
@@ -145,7 +145,7 @@ protected:
 
     QWidget* setTooltipWidget(uint32 uiPrototypeID)
     {
-        boost::shared_ptr<const T> proto;
+        std::shared_ptr<const T> proto;
         QPixmap pixmap;
         if (m_pDB && m_pDB->getItem(uiPrototypeID, proto) && createPixmapFromTexturePrototype(proto, pixmap))
         {

@@ -2,7 +2,7 @@
 #define CONTAINER_H
 
 #include "Global.h"
-#include <boost/smart_ptr.hpp>
+#include <memory>
 
 template <class T>
 class Container
@@ -10,7 +10,7 @@ class Container
 public:
     virtual void clear() { m_Items.clear(); }
 
-    virtual void setItem(uint32 uiID, boost::shared_ptr<T> &item)
+    virtual void setItem(uint32 uiID, std::shared_ptr<T> &item)
     {
         if (uiID)
         {
@@ -20,7 +20,7 @@ public:
         }
     }
 
-    virtual bool getItem(uint32 uiID, boost::shared_ptr<const T> &result) const
+    virtual bool getItem(uint32 uiID, std::shared_ptr<const T> &result) const
     {
         if (uiID && --uiID < m_Items.size() && m_Items.at(uiID))
         {
@@ -30,12 +30,12 @@ public:
         return false;
     }
 
-    bool getItem(uint32 uiID, boost::shared_ptr<T> &result)
+    bool getItem(uint32 uiID, std::shared_ptr<T> &result)
     {
-        boost::shared_ptr<const T> temp;
+        std::shared_ptr<const T> temp;
         if (const_cast<const Container<T>&>(*this).getItem(uiID, temp))
         {
-            result = boost::const_pointer_cast<T>(temp);
+            result = std::const_pointer_cast<T>(temp);
             return true;
         }
         return false;
@@ -45,12 +45,12 @@ public:
     virtual void resize(uint32 uiSize, bool fillNew = true)
     {
         if (fillNew)
-            m_Items.resize(uiSize, boost::shared_ptr<T>(new T()));
+            m_Items.resize(uiSize, std::shared_ptr<T>(new T()));
         else
             m_Items.resize(uiSize);
     }
 
 protected:
-    std::vector<boost::shared_ptr<T>> m_Items;
+    std::vector<std::shared_ptr<T>> m_Items;
 };
 #endif

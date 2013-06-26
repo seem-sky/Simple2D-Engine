@@ -18,7 +18,7 @@ namespace DATABASE
             if (node.isNull())
                 return;
             QDomNamedNodeMap attributeMap = node.attributes();
-            boost::shared_ptr<T> proto(new T());
+            std::shared_ptr<T> proto(new T());
             // get attributes
             for (int32 i = 0; i < attributeMap.length(); ++i)
             {
@@ -32,8 +32,8 @@ namespace DATABASE
         }
 
     protected:
-        virtual bool getChildrenFromXML(const QDomNode &node, boost::shared_ptr<T> proto, const QString &childName) { return false; }
-        bool checkoutChildren(const QDomNode &node, boost::shared_ptr<T> proto)
+        virtual bool getChildrenFromXML(const QDomNode &node, std::shared_ptr<T> proto, const QString &childName) { return false; }
+        bool checkoutChildren(const QDomNode &node, std::shared_ptr<T> proto)
         {
             if (node.isNull())
                 return false;
@@ -56,7 +56,7 @@ namespace DATABASE
             return true;
         }
 
-        virtual bool getAttributeFromXML(boost::shared_ptr<T> proto, const QString &attributeName, const QString &attributeValue)
+        virtual bool getAttributeFromXML(std::shared_ptr<T> proto, const QString &attributeName, const QString &attributeValue)
         {
             if (!proto || attributeName.isEmpty() || attributeValue.isEmpty())
                 return false;
@@ -75,10 +75,10 @@ namespace DATABASE
         }
 
     public:
-        DatabaseReader(const boost::shared_ptr<Database<T>> &pDB) : XMLReader(), m_pDB(pDB) {}
+        DatabaseReader(const std::shared_ptr<Database<T>> &pDB) : XMLReader(), m_pDB(pDB) {}
 
     protected:
-        boost::shared_ptr<Database<T>> m_pDB;
+        std::shared_ptr<Database<T>> m_pDB;
     };
 
     template <class T>
@@ -87,7 +87,7 @@ namespace DATABASE
     private:
         bool _writePrototype(uint32 uiID, QXmlStreamWriter &writer)
         {
-            boost::shared_ptr<T> proto;
+            std::shared_ptr<T> proto;
             if (!m_pDB->getItem(uiID, proto))
                 return false;
             writer.writeStartElement("prototype");
@@ -104,7 +104,7 @@ namespace DATABASE
         }
 
     protected:
-        virtual void getXMLFromAttributes(boost::shared_ptr<T> proto, QXmlStreamWriter &writer)
+        virtual void getXMLFromAttributes(std::shared_ptr<T> proto, QXmlStreamWriter &writer)
         {
             if (!proto)
                 return;
@@ -113,10 +113,10 @@ namespace DATABASE
         }
 
     public:
-        DatabaseWriter(const boost::shared_ptr<Database<T>> &pDB) : XMLStreamWriter(), m_pDB(pDB) {}
+        DatabaseWriter(const std::shared_ptr<Database<T>> &pDB) : XMLStreamWriter(), m_pDB(pDB) {}
 
     protected:
-        boost::shared_ptr<Database<T>> m_pDB;
+        std::shared_ptr<Database<T>> m_pDB;
     };
 
     /*#####
@@ -126,7 +126,7 @@ namespace DATABASE
     class TextureDatabaseReader : public DatabaseReader<T>
     {
     protected:
-        virtual bool getAttributeFromXML(boost::shared_ptr<T> proto, const QString &attributeName, const QString &attributeValue)
+        virtual bool getAttributeFromXML(std::shared_ptr<T> proto, const QString &attributeName, const QString &attributeValue)
         {
             if (!proto || attributeName.isEmpty() || attributeValue.isEmpty())
                 return false;
@@ -152,14 +152,14 @@ namespace DATABASE
         }
 
     public:
-        TextureDatabaseReader(const boost::shared_ptr<Database<T>> &pDB) : DatabaseReader(pDB){}
+        TextureDatabaseReader(const std::shared_ptr<Database<T>> &pDB) : DatabaseReader(pDB){}
     };
 
     template <class T>
     class TextureDatabaseWriter : public DatabaseWriter<T>
     {
     protected:
-        virtual void getXMLFromAttributes(boost::shared_ptr<T> proto, QXmlStreamWriter &writer)
+        virtual void getXMLFromAttributes(std::shared_ptr<T> proto, QXmlStreamWriter &writer)
         {
             if (!proto)
                 return;
@@ -170,7 +170,7 @@ namespace DATABASE
         }
 
     public:
-        TextureDatabaseWriter(const boost::shared_ptr<Database<T>> &pDB) : DatabaseWriter(pDB) {}
+        TextureDatabaseWriter(const std::shared_ptr<Database<T>> &pDB) : DatabaseWriter(pDB) {}
     };
 }
 #endif

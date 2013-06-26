@@ -45,43 +45,43 @@ namespace DATABASE
         }
     };
     // object animation type database typedefs
-    typedef boost::shared_ptr<ObjectAnimationTypeDatabase> ObjectAnimationTypeDatabasePtr;
-    typedef boost::shared_ptr<const ObjectAnimationTypeDatabase> ConstObjectAnimationTypeDatabasePtr;
+    typedef std::shared_ptr<ObjectAnimationTypeDatabase> ObjectAnimationTypeDatabasePtr;
+    typedef std::shared_ptr<const ObjectAnimationTypeDatabase> ConstObjectAnimationTypeDatabasePtr;
 
     /*#####
     # DatabaseMgr
     #####*/
     // tile database typedefs
     typedef Database<TilePrototype> TileDatabase;
-    typedef boost::shared_ptr<TileDatabase> TileDatabasePtr;
-    typedef boost::shared_ptr<const TileDatabase> ConstTileDatabasePtr;
+    typedef std::shared_ptr<TileDatabase> TileDatabasePtr;
+    typedef std::shared_ptr<const TileDatabase> ConstTileDatabasePtr;
     // autotile database typedefs
     typedef Database<AUTO_TILE::AutoTilePrototype> AutoTileDatabase;
-    typedef boost::shared_ptr<AutoTileDatabase> AutoTileDatabasePtr;
-    typedef boost::shared_ptr<const AutoTileDatabase> ConstAutoTileDatabasePtr;
+    typedef std::shared_ptr<AutoTileDatabase> AutoTileDatabasePtr;
+    typedef std::shared_ptr<const AutoTileDatabase> ConstAutoTileDatabasePtr;
     // sprite database typedefs
     typedef Database<SpritePrototype> SpriteDatabase;
-    typedef boost::shared_ptr<SpriteDatabase> SpriteDatabasePtr;
-    typedef boost::shared_ptr<const SpriteDatabase> ConstSpriteDatabasePtr;
+    typedef std::shared_ptr<SpriteDatabase> SpriteDatabasePtr;
+    typedef std::shared_ptr<const SpriteDatabase> ConstSpriteDatabasePtr;
     // animation database typedefs
     typedef Database<AnimationPrototype> AnimationDatabase;
-    typedef boost::shared_ptr<AnimationDatabase> AnimationDatabasePtr;
-    typedef boost::shared_ptr<const AnimationDatabase> ConstAnimationDatabasePtr;
+    typedef std::shared_ptr<AnimationDatabase> AnimationDatabasePtr;
+    typedef std::shared_ptr<const AnimationDatabase> ConstAnimationDatabasePtr;
     // world object database typedefs
     typedef Database<WorldObjectPrototype> WorldObjectDatabase;
-    typedef boost::shared_ptr<WorldObjectDatabase> WorldObjectDatabasePtr;
-    typedef boost::shared_ptr<const WorldObjectDatabase> ConstWorldObjectDatabasePtr;
+    typedef std::shared_ptr<WorldObjectDatabase> WorldObjectDatabasePtr;
+    typedef std::shared_ptr<const WorldObjectDatabase> ConstWorldObjectDatabasePtr;
     // dynamic object database typedefs
     typedef Database<DynamicObjectPrototype> DynamicObjectDatabase;
-    typedef boost::shared_ptr<DynamicObjectDatabase> DynamicObjectDatabasePtr;
-    typedef boost::shared_ptr<const DynamicObjectDatabase> ConstDynamicObjectDatabasePtr;
+    typedef std::shared_ptr<DynamicObjectDatabase> DynamicObjectDatabasePtr;
+    typedef std::shared_ptr<const DynamicObjectDatabase> ConstDynamicObjectDatabasePtr;
     // text database typedefs
     typedef Database<LocalisationPrototype> LocalsDatabase;
-    typedef boost::shared_ptr<LocalsDatabase> LocalsDatabasePtr;
-    typedef boost::shared_ptr<const LocalsDatabase> ConstTextDatabasePtr;
+    typedef std::shared_ptr<LocalsDatabase> LocalsDatabasePtr;
+    typedef std::shared_ptr<const LocalsDatabase> ConstTextDatabasePtr;
     // map database typedefs
-    typedef boost::shared_ptr<MAP::MapDatabase> MapDatabasePtr;
-    typedef boost::shared_ptr<const MAP::MapDatabase> ConstMapDatabasePtr;
+    typedef std::shared_ptr<MAP::MapDatabase> MapDatabasePtr;
+    typedef std::shared_ptr<const MAP::MapDatabase> ConstMapDatabasePtr;
     class DatabaseMgr
     {
     public:
@@ -140,7 +140,7 @@ namespace DATABASE
         MapDatabasePtr m_pMapDatabase;
         LocalsDatabasePtr m_pTextDatabase;
     };
-    typedef boost::shared_ptr<DatabaseMgr> DatabaseMgrPtr;
-    typedef boost::shared_ptr<const DatabaseMgr> ConstDatabaseMgrPtr;
+    typedef std::shared_ptr<DatabaseMgr> DatabaseMgrPtr;
+    typedef std::shared_ptr<const DatabaseMgr> ConstDatabaseMgrPtr;
 }
 #endif

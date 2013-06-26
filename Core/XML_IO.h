@@ -9,7 +9,7 @@
 #include <boost/smart_ptr.hpp>
 #include <boost/thread.hpp>
 
-typedef boost::shared_ptr<boost::thread> ThreadPtr;
+typedef std::shared_ptr<boost::thread> ThreadPtr;
 
 namespace XML_IO
 {

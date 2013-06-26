@@ -1,8 +1,8 @@
 #ifndef AUTO_TILE_PIXMAPS_H
 #define AUTO_TILE_PIXMAPS_H
 
-#include "QtGlobal.h"
 #include "TileCache.h"
+#include <array>
 
 class AutoTile
 {
@@ -32,11 +32,11 @@ public:
     inline void setAutoTilePrototype(DATABASE::ConstAutoTilePrototypePtr proto, ConstTileCachePtr pTileCache) { m_pProto = proto; _createPixmaps(pTileCache); }
 
 private:
-    ConstQPixmapPtr m_pPixmaps[DATABASE::AUTO_TILE::INDEX_NONE];
+    std::array<ConstQPixmapPtr, DATABASE::AUTO_TILE::INDEX_NONE> m_pPixmaps;
     DATABASE::ConstAutoTilePrototypePtr m_pProto;
 };
-typedef boost::shared_ptr<AutoTile> AutoTilePtr;
-typedef boost::shared_ptr<const AutoTile> ConstAutoTilePtr;
+typedef std::shared_ptr<AutoTile> AutoTilePtr;
+typedef std::shared_ptr<const AutoTile> ConstAutoTilePtr;
 typedef std::vector<AutoTilePtr> AutoTilePtrVector;
 typedef Container<AutoTile> AutoTileContainer;
 

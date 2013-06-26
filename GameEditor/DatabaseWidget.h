@@ -70,7 +70,7 @@ protected:
 
     virtual void changeCurrentItem(uint32 uiID)
     {
-        boost::shared_ptr<T> proto;
+        std::shared_ptr<T> proto;
         QList<QTreeWidgetItem*> items = m_pList->findItems(QString::number(uiID), Qt::MatchExactly);
         if (!items.isEmpty() && m_pDBChanger->getItem(uiID, proto))
         {
@@ -86,7 +86,7 @@ protected:
         m_pName->clear();
     }
 
-    virtual bool getItemFromWidgets(boost::shared_ptr<T> &proto)
+    virtual bool getItemFromWidgets(std::shared_ptr<T> &proto)
     {
         if (!proto)
             return false;
@@ -96,7 +96,7 @@ protected:
         return true;
     }
 
-    virtual bool setWidgetsFromPrototype(const boost::shared_ptr<T> &proto)
+    virtual bool setWidgetsFromPrototype(const std::shared_ptr<T> &proto)
     {
         if (!proto)
             return false;
@@ -115,7 +115,7 @@ protected:
 
     void updateItem()
     {
-        boost::shared_ptr<T> proto(new T());
+        std::shared_ptr<T> proto(new T());
         if (!getItemFromWidgets(proto))
             return;
         m_pDBChanger->setItem(proto->getID(), proto);
@@ -160,7 +160,7 @@ public:
 
     inline uint32 getCurrentID() const { return m_pID->value(); }
     inline bool hasChanged() const { return m_Changes; }
-    virtual void setDB(const boost::shared_ptr<DATABASE::Database<T>> &pDB) { m_pDBChanger->setDB(pDB); _updateWidget(); }
+    virtual void setDB(const std::shared_ptr<DATABASE::Database<T>> &pDB) { m_pDBChanger->setDB(pDB); _updateWidget(); }
     inline uint32 getListCountValue() const { return m_pListCount->value(); }
     void updateName(QTreeWidgetItem *pItem, const QString &sName)
     {
@@ -169,13 +169,13 @@ public:
         updateItem();
     }
 
-    inline boost::shared_ptr<DATABASE::DatabaseChanger<T>> getDBChanger()
+    inline std::shared_ptr<DATABASE::DatabaseChanger<T>> getDBChanger()
     {
         return m_pDBChanger;
     }
 
 protected:
-    boost::shared_ptr<DATABASE::DatabaseChanger<T>> m_pDBChanger;
+    std::shared_ptr<DATABASE::DatabaseChanger<T>> m_pDBChanger;
     ModifyObject m_ModObj;
 
 private:

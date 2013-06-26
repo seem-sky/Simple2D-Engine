@@ -17,18 +17,18 @@ namespace DATABASE
         }
 
     public:
-        DatabaseChanger(boost::shared_ptr<Database<T>> pDB) : m_pNewDB(new Database<T>())
+        DatabaseChanger(std::shared_ptr<Database<T>> pDB) : m_pNewDB(new Database<T>())
         {
             setDB(pDB);
         }
         DatabaseChanger() : m_pNewDB(new Database<T>()) {}
-        virtual void setDB(boost::shared_ptr<Database<T>> pDB)
+        virtual void setDB(std::shared_ptr<Database<T>> pDB)
         {
             m_pTargetDB = pDB;
             _setNewDBSize();
         }
 
-        inline bool getItem(uint32 uiID, boost::shared_ptr<const T> &result) const
+        inline bool getItem(uint32 uiID, std::shared_ptr<const T> &result) const
         {
             if (!m_pTargetDB)
                 return false;
@@ -36,18 +36,18 @@ namespace DATABASE
                 return true;
             if (m_pTargetDB->getItem(uiID, result))
             {
-                result = boost::shared_ptr<const T>(new T(*result));
+                result = std::shared_ptr<const T>(new T(*result));
                 return true;
             }
             return false;
         }
 
-        inline bool getItem(uint32 uiID, boost::shared_ptr<T> &result)
+        inline bool getItem(uint32 uiID, std::shared_ptr<T> &result)
         {
-            boost::shared_ptr<const T> temp;
+            std::shared_ptr<const T> temp;
             if (const_cast<const DatabaseChanger<T>&>(*this).getItem(uiID, temp))
             {
-                result = boost::const_pointer_cast<T>(temp);
+                result = std::const_pointer_cast<T>(temp);
                 return true;
             }
             return false;
@@ -64,7 +64,7 @@ namespace DATABASE
             result.erase(itr, result.end());
         }
 
-        inline void setItem(uint32 uiID, boost::shared_ptr<T> &prototype)
+        inline void setItem(uint32 uiID, std::shared_ptr<T> &prototype)
         {
             m_pNewDB->setItem(uiID, prototype);
         }
@@ -85,7 +85,7 @@ namespace DATABASE
                 return;
             for (uint32 i = 1; i <= m_pNewDB->getSize(); ++i)
             {
-                boost::shared_ptr<T> proto;
+                std::shared_ptr<T> proto;
                 if (m_pNewDB->getItem(i, proto))
                     m_pTargetDB->setItem(i, proto);
             }
@@ -95,16 +95,16 @@ namespace DATABASE
         }
 
     protected:
-        boost::shared_ptr<Database<T>> m_pTargetDB;
-        boost::shared_ptr<Database<T>> m_pNewDB;
+        std::shared_ptr<Database<T>> m_pTargetDB;
+        std::shared_ptr<Database<T>> m_pNewDB;
     };
 
-    typedef boost::shared_ptr<const DatabaseChanger<TexturePrototype>> ConstTextureDatabaseChangerPtr;
-    typedef boost::shared_ptr<const DatabaseChanger<TilePrototype>> ConstTileDatabaseChangerPtr;
-    typedef boost::shared_ptr<const DatabaseChanger<SpritePrototype>> ConstSpriteDatabaseChangerPtr;
-    typedef boost::shared_ptr<DatabaseChanger<WorldObjectPrototype>> WorldObjectDatabaseChangerPtr;
-    typedef boost::shared_ptr<DatabaseChanger<AnimationPrototype>> AnimationDatabaseChangerPtr;
-    typedef boost::shared_ptr<const DatabaseChanger<AnimationPrototype>> ConstAnimationDatabaseChangerPtr;
-    typedef boost::shared_ptr<const DatabaseChanger<ObjectAnimationTypePrototype>> ConstObjectAnimationTypeDatabaseChangerPtr;
+    typedef std::shared_ptr<const DatabaseChanger<TexturePrototype>> ConstTextureDatabaseChangerPtr;
+    typedef std::shared_ptr<const DatabaseChanger<TilePrototype>> ConstTileDatabaseChangerPtr;
+    typedef std::shared_ptr<const DatabaseChanger<SpritePrototype>> ConstSpriteDatabaseChangerPtr;
+    typedef std::shared_ptr<DatabaseChanger<WorldObjectPrototype>> WorldObjectDatabaseChangerPtr;
+    typedef std::shared_ptr<DatabaseChanger<AnimationPrototype>> AnimationDatabaseChangerPtr;
+    typedef std::shared_ptr<const DatabaseChanger<AnimationPrototype>> ConstAnimationDatabaseChangerPtr;
+    typedef std::shared_ptr<const DatabaseChanger<ObjectAnimationTypePrototype>> ConstObjectAnimationTypeDatabaseChangerPtr;
 }
 #endif

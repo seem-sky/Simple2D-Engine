@@ -48,7 +48,7 @@ private:
     MappingMode m_MappingMode;
     MAP::Layer m_CurrentLayer;
 };
-typedef boost::shared_ptr<SharedMapEditorData> SharedMapEditorDataPtr;
-typedef boost::shared_ptr<const SharedMapEditorData> ConstSharedMapEditorDataPtr;
+typedef std::shared_ptr<SharedMapEditorData> SharedMapEditorDataPtr;
+typedef std::shared_ptr<const SharedMapEditorData> ConstSharedMapEditorDataPtr;
 
 #endif

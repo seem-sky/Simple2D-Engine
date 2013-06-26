@@ -18,6 +18,6 @@ public:
 private:
     DATABASE::ConstTileDatabasePtr m_pTileDB;
 };
-typedef boost::shared_ptr<TileCache> TileCachePtr;
-typedef boost::shared_ptr<const TileCache> ConstTileCachePtr;
+typedef std::shared_ptr<TileCache> TileCachePtr;
+typedef std::shared_ptr<const TileCache> ConstTileCachePtr;
 #endif

@@ -18,6 +18,6 @@ private:
     ConstTileCachePtr m_pTileCache;
     DATABASE::ConstAutoTileDatabasePtr m_pAutoTileDB;
 };
-typedef boost::shared_ptr<AutoTileCache> AutoTileCachePtr;
-typedef boost::shared_ptr<const AutoTileCache> ConstAutoTileCachePtr;
+typedef std::shared_ptr<AutoTileCache> AutoTileCachePtr;
+typedef std::shared_ptr<const AutoTileCache> ConstAutoTileCachePtr;
 #endif

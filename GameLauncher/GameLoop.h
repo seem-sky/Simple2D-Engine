@@ -5,7 +5,7 @@
 #include <QtWidgets/QMainWindow>
 #include <boost/smart_ptr.hpp>
 
-typedef boost::shared_ptr<QMainWindow> QMainWindowPtr;
+typedef std::shared_ptr<QMainWindow> QMainWindowPtr;
 
 class GameLoop
 {

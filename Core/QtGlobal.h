@@ -10,8 +10,8 @@
 
 // QPixmap typedefs
 typedef Container<QPixmap> QPixmapCotainer;
-typedef boost::shared_ptr<QPixmap> QPixmapPtr;
-typedef boost::shared_ptr<const QPixmap> ConstQPixmapPtr;
+typedef std::shared_ptr<QPixmap> QPixmapPtr;
+typedef std::shared_ptr<const QPixmap> ConstQPixmapPtr;
 
 class PrototypeTreeWidgetItem : public QTreeWidgetItem
 {

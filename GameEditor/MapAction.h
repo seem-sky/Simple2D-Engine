@@ -20,7 +20,7 @@ namespace MAP
     private:
         MapPrototypePtr m_pMap;
     };
-    typedef boost::shared_ptr<MapAction> MapActionPtr;
+    typedef std::shared_ptr<MapAction> MapActionPtr;
     typedef std::vector<MapActionPtr> MapActionPtrVector;
 
     /*#####
@@ -53,6 +53,6 @@ namespace MAP
         MapTile m_MapTile;
         Layer m_Layer;
     };
-    typedef boost::shared_ptr<MultiTileMapAction> MultiTileMapActionPtr;
+    typedef std::shared_ptr<MultiTileMapAction> MultiTileMapActionPtr;
 }
 #endif

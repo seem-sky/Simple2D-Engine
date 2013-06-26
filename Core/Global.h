@@ -2,10 +2,9 @@
 #define GLOBAL_H
 
 #include <set>
-#include <boost/unordered_set.hpp>
+#include <unordered_set>
 #include <vector>
 #include <map>
-#include <list>
 #include "Rect.h"
 #include "math_extensions.h"
 #include <boost/dynamic_bitset.hpp>
@@ -33,7 +32,7 @@ const uint32 MAX_TILE_PER_PIXMAP    = 20;
 const uint32 TILE_SIZE              = 32;
 
 // unordered_set typedefs
-typedef boost::unordered_set<uint32> UInt32UnorderedSet;
+typedef std::unordered_set<uint32> UInt32UnorderedSet;
 
 // set typedefs
 typedef std::set<Point<uint16>> UInt16PointSet;
@@ -60,7 +59,7 @@ typedef std::vector<StringVector> String2DVector;
 typedef std::map<uint32, QString> UInt32StringMap;
 
 // rect typedefs
-typedef Rect<uint32> UInt32Rect;
+typedef Rect<uint32, uint32> UInt32Rect;
 
 // bitset typedefs
 typedef std::vector<boost::dynamic_bitset<>> BitsetVector;

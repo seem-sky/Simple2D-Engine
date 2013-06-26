@@ -35,11 +35,11 @@ private:
             if (m_pView->scene())
                 m_pView->scene()->clear();
 
-            boost::shared_ptr<T> proto;
+            std::shared_ptr<T> proto;
             bool exist = true;
             if (!m_pDBChanger->getItem(uiID, proto))
             {
-                proto = boost::shared_ptr<T>(new T(uiID));
+                proto = std::shared_ptr<T>(new T(uiID));
                 exist = false;
             }
 
@@ -83,7 +83,7 @@ protected:
         m_pView->setScene(new QGraphicsScene());
     }
 
-    virtual bool getItemFromWidgets(boost::shared_ptr<T> &proto)
+    virtual bool getItemFromWidgets(std::shared_ptr<T> &proto)
     {
         if (!proto || !DatabaseWidget::getItemFromWidgets(proto))
             return false;
@@ -94,7 +94,7 @@ protected:
         return true;
     }
 
-    virtual bool setWidgetsFromPrototype(const boost::shared_ptr<T> &proto)
+    virtual bool setWidgetsFromPrototype(const std::shared_ptr<T> &proto)
     {
         if (!proto || !DatabaseWidget::setWidgetsFromPrototype(proto))
             return false;
@@ -107,7 +107,7 @@ protected:
         return true;
     }
 
-    virtual QPixmap showPixmap(const boost::shared_ptr<T> &proto)
+    virtual QPixmap showPixmap(const std::shared_ptr<T> &proto)
     {
         QPixmap pixmap;
         if (createPixmapFromTexturePrototype(proto, pixmap))
@@ -142,7 +142,7 @@ protected:
         if (!m_pDBChanger)
             return;
         updateItem();
-        boost::shared_ptr<T> proto;
+        std::shared_ptr<T> proto;
         if (m_pDBChanger->getItem(getCurrentID(), proto))
             showPixmap(proto);
     }

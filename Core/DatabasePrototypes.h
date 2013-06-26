@@ -27,8 +27,8 @@ namespace DATABASE
         QString m_sPath;        // path from ~/textures
         QString m_sFileName;    // filename
     };
-    typedef boost::shared_ptr<TexturePrototype> TexturePrototypePtr;
-    typedef boost::shared_ptr<const TexturePrototype> ConstTexturePrototypePtr;
+    typedef std::shared_ptr<TexturePrototype> TexturePrototypePtr;
+    typedef std::shared_ptr<const TexturePrototype> ConstTexturePrototypePtr;
 
     /*#####
     # TilePrototype
@@ -62,8 +62,8 @@ namespace DATABASE
         uint8 m_uiPassable;
         uint32 m_uiTerrainType;
     };
-    typedef boost::shared_ptr<TilePrototype> TilePrototypePtr;
-    typedef boost::shared_ptr<const TilePrototype> ConstTilePrototypePtr;
+    typedef std::shared_ptr<TilePrototype> TilePrototypePtr;
+    typedef std::shared_ptr<const TilePrototype> ConstTilePrototypePtr;
     typedef std::vector<ConstTilePrototypePtr> ConstTilePrototypePtrVector;
 
     /*#####
@@ -242,8 +242,8 @@ namespace DATABASE
         bool hasTileCheck(uint32 uiTileCheck, AUTO_TILE_TILE_REQUIREMENTS tiles);
     };
 
-    typedef boost::shared_ptr<AUTO_TILE::AutoTilePrototype> AutoTilePrototypePtr;
-    typedef boost::shared_ptr<const AUTO_TILE::AutoTilePrototype> ConstAutoTilePrototypePtr;
+    typedef std::shared_ptr<AUTO_TILE::AutoTilePrototype> AutoTilePrototypePtr;
+    typedef std::shared_ptr<const AUTO_TILE::AutoTilePrototype> ConstAutoTilePrototypePtr;
     typedef std::vector<ConstAutoTilePrototypePtr> ConstAutoTilePrototypePtrVector;
 
     /*#####
@@ -254,8 +254,8 @@ namespace DATABASE
     public:
         SpritePrototype(uint32 uiID = 0) : TexturePrototype(uiID) {}
     };
-    typedef boost::shared_ptr<SpritePrototype> SpritePrototypePtr;
-    typedef boost::shared_ptr<const SpritePrototype> ConstSpritePrototypePtr;
+    typedef std::shared_ptr<SpritePrototype> SpritePrototypePtr;
+    typedef std::shared_ptr<const SpritePrototype> ConstSpritePrototypePtr;
     typedef std::vector<ConstSpritePrototypePtr> ConstSpritePrototypePtrVector;
 
     /*#####
@@ -296,8 +296,8 @@ namespace DATABASE
     private:
         FrameVector m_Frames;
     };
-    typedef boost::shared_ptr<AnimationPrototype> AnimationPrototypePtr;
-    typedef boost::shared_ptr<const AnimationPrototype> ConstAnimationPrototypePtr;
+    typedef std::shared_ptr<AnimationPrototype> AnimationPrototypePtr;
+    typedef std::shared_ptr<const AnimationPrototype> ConstAnimationPrototypePtr;
     typedef std::vector<ConstAnimationPrototypePtr> ConstAnimationPrototypePtrVector;
 
     /*#####
@@ -329,8 +329,8 @@ namespace DATABASE
         inline void setBoundingWidth(uint32 width) { m_BoundingRect.setWidth(width); }
         inline uint32 getBoundingHeight() const { return m_BoundingRect.getHeight(); }
         inline void setBoundingHeight(uint32 height) { m_BoundingRect.setHeight(height); }
-        inline Rect<uint32> getBoundingRect() const { return m_BoundingRect; }
-        inline void setBoundingRect(const Rect<uint32> rect) { m_BoundingRect = rect; }
+        inline UInt32Rect getBoundingRect() const { return m_BoundingRect; }
+        inline void setBoundingRect(const UInt32Rect rect) { m_BoundingRect = rect; }
 
         inline void setAnimationSpeed(uint16 uiSpeed) { m_uiAnimationSpeed = uiSpeed; }
         inline uint16 getAnimationSpeed() const { return m_uiAnimationSpeed; }
@@ -384,13 +384,13 @@ namespace DATABASE
         }
 
     private:
-        Rect<uint32> m_BoundingRect;
+        UInt32Rect m_BoundingRect;
         AnimationInfoVector m_AnimationInfos;
         uint16 m_uiAnimationSpeed;
         QString m_ScriptName;
     };
-    typedef boost::shared_ptr<WorldObjectPrototype> WorldObjectPrototypePtr;
-    typedef boost::shared_ptr<const WorldObjectPrototype> ConstWorldObjectPrototypePtr;
+    typedef std::shared_ptr<WorldObjectPrototype> WorldObjectPrototypePtr;
+    typedef std::shared_ptr<const WorldObjectPrototype> ConstWorldObjectPrototypePtr;
     typedef std::vector<ConstWorldObjectPrototypePtr> ConstWorldObjectPrototypePtrVector;
 
     /*#####
@@ -413,8 +413,8 @@ namespace DATABASE
     private:
         uint16 m_uiSpeed;
     };
-    typedef boost::shared_ptr<DynamicObjectPrototype> DynamicObjectPrototypePtr;
-    typedef boost::shared_ptr<const DynamicObjectPrototype> ConstDynamicObjectPrototypePtr;
+    typedef std::shared_ptr<DynamicObjectPrototype> DynamicObjectPrototypePtr;
+    typedef std::shared_ptr<const DynamicObjectPrototype> ConstDynamicObjectPrototypePtr;
     typedef std::vector<ConstDynamicObjectPrototypePtr> ConstDynamicObjectPrototypePtrVector;
 
     /*#####
@@ -428,8 +428,8 @@ namespace DATABASE
             setName(sName);
         }
     };
-    typedef boost::shared_ptr<ObjectAnimationTypePrototype> ObjectAnimationTypePrototypePtr;
-    typedef boost::shared_ptr<const ObjectAnimationTypePrototype> ConstObjectAnimationTypePrototypePtr;
+    typedef std::shared_ptr<ObjectAnimationTypePrototype> ObjectAnimationTypePrototypePtr;
+    typedef std::shared_ptr<const ObjectAnimationTypePrototype> ConstObjectAnimationTypePrototypePtr;
     typedef std::vector<ConstObjectAnimationTypePrototypePtr> ConstObjectAnimationPrototypePtrVector;
 
     /*#####
@@ -462,8 +462,8 @@ namespace DATABASE
     private:
         StringVector m_Locals;
     };
-    typedef boost::shared_ptr<LocalisationPrototype> LocalisationPrototypePtr;
-    typedef boost::shared_ptr<const LocalisationPrototype> ConstLocalisationPrototypePtr;
+    typedef std::shared_ptr<LocalisationPrototype> LocalisationPrototypePtr;
+    typedef std::shared_ptr<const LocalisationPrototype> ConstLocalisationPrototypePtr;
     typedef std::vector<ConstLocalisationPrototypePtr> ConstLocalisationPrototypePtrVector;
 }
 #endif

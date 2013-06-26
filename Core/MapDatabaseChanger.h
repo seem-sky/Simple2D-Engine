@@ -9,8 +9,8 @@ namespace MAP
     class MapDatabaseChanger : public DATABASE::DatabaseChanger<MAP::MapPrototype>
     {
     private:
-        inline DATABASE::MapDatabasePtr _getTargetDB() { return boost::dynamic_pointer_cast<MapDatabase>(m_pTargetDB); }
-        inline DATABASE::MapDatabasePtr _getNewDB() { return boost::dynamic_pointer_cast<MapDatabase>(m_pNewDB); }
+        inline DATABASE::MapDatabasePtr _getTargetDB() { return std::dynamic_pointer_cast<MapDatabase>(m_pTargetDB); }
+        inline DATABASE::MapDatabasePtr _getNewDB() { return std::dynamic_pointer_cast<MapDatabase>(m_pNewDB); }
     public:
         MapDatabaseChanger(DATABASE::MapDatabasePtr pMapDB);
         MapDatabaseChanger();
@@ -29,6 +29,6 @@ namespace MAP
         UInt32MapPrototypeMap m_removedMaps;
     };
 
-    typedef boost::shared_ptr<MapDatabaseChanger> MapDatabaseChangerPtr;
+    typedef std::shared_ptr<MapDatabaseChanger> MapDatabaseChangerPtr;
 }
 #endif

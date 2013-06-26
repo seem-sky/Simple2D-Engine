@@ -54,7 +54,7 @@ namespace MAP
         uint32 m_uiTileID;
         Layer m_Layer;
     };
-    typedef boost::shared_ptr<TileBrush> MapBrushPtr;
+    typedef std::shared_ptr<TileBrush> MapBrushPtr;
 
     class MapTileBrush : public TileBrush
     {

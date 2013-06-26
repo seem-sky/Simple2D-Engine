@@ -23,7 +23,7 @@ namespace DATABASE
         uint32 m_uiID;
         QString m_sName;
     };
-    typedef boost::shared_ptr<Prototype> PrototypePtr;
+    typedef std::shared_ptr<Prototype> PrototypePtr;
     typedef std::vector<PrototypePtr> PrototypePtrVector;
 
     /*#####
@@ -56,7 +56,7 @@ namespace DATABASE
             {
                 BASIC_LOG("Fill database entrys from " + QString::number(uiOldSize) + " to " + QString::number(uiSize) + " with data.");
                 for (uint32 i = uiOldSize; i < uiSize; ++i)                 // first ID == 1, so use i+1 for ID at position i
-                    m_Items.at(i) = boost::shared_ptr<T>(new T(i+1));
+                    m_Items.at(i) = std::shared_ptr<T>(new T(i+1));
             }
             else if (uiSize < uiOldSize)
                 BASIC_LOG("Erase database entrys from " + QString::number(uiOldSize) + " to " + QString::number(uiSize) + ".");

@@ -40,8 +40,8 @@ namespace MAP
         MapDirection m_Direction;
         MapObjectLayer m_Layer;
     };
-    typedef boost::shared_ptr<MapObject> MapObjectPtr;
-    typedef boost::shared_ptr<const MapObject> ConstMapObjectPtr;
+    typedef std::shared_ptr<MapObject> MapObjectPtr;
+    typedef std::shared_ptr<const MapObject> ConstMapObjectPtr;
     typedef Container<MapObject> MapObjectContainer;
     typedef std::vector<MapObjectPtr> MapObjectPtrVector;
     typedef boost::multi_array<MapObjectPtrVector, 3> MapObjectPtrVectorMultiarray3D;
@@ -129,8 +129,8 @@ namespace MAP
         TileDataMultiarray3D m_BackgroundTiles;
         TileDataMultiarray3D m_ForegroundTiles;
     };
-    typedef boost::shared_ptr<MapPrototype> MapPrototypePtr;
-    typedef boost::shared_ptr<const MapPrototype> ConstMapPrototypePtr;
+    typedef std::shared_ptr<MapPrototype> MapPrototypePtr;
+    typedef std::shared_ptr<const MapPrototype> ConstMapPrototypePtr;
     typedef std::vector<MapPrototypePtr> MapPrototypePtrVector;
     typedef std::map<uint32, MapPrototypePtr> MapPrototypePtrMap;
 
