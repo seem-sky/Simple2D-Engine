@@ -18,7 +18,6 @@ MainWindow::MainWindow(QMainWindow *pParent) : QMainWindow(pParent)
     // setup move/resize widgets
     m_ModifyObj.setWidget(m_pMapEditor, MODIFY_RESIZE, QPoint(0, 20));
 
-    connect(this, SIGNAL(projectSave()), m_pMapEditor, SLOT(_saveMaps()));
     connect(this, SIGNAL(projectLoadDone()), m_pMapEditor, SLOT(_projectOpened()));
     connect(menuDatabase, SIGNAL(aboutToShow()), this, SLOT(_openDatabase()));
     connect(this, SIGNAL(saveProject()), m_pMapEditor, SLOT(_saveChanges()));
@@ -44,7 +43,7 @@ MainWindow::MainWindow(QMainWindow *pParent) : QMainWindow(pParent)
 void MainWindow::resizeEvent(QResizeEvent *pEvent)
 {
     m_ModifyObj.resizeEvent(this);
-    Config::Get()->setMainWindowSize(Point<uint32>(pEvent->size().width(), pEvent->size().height()));
+    Config::Get()->setMainWindowSize(UInt32Point(pEvent->size().width(), pEvent->size().height()));
 }
 
 void MainWindow::_setDBs()

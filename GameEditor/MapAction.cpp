@@ -75,7 +75,7 @@ void MultiTileMapAction::revertMapAction()
     }
 }
 
-void MultiTileMapAction::addPosition(const Point<uint32> &pos)
+void MultiTileMapAction::addPosition(const UInt32Point &pos)
 {
     m_Positions.push_back(pos);
 }

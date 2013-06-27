@@ -82,8 +82,8 @@ void MapViewScene::_drawTiles(QPainter *painter, const QRectF &rect, Layer curre
         return;
 
     MapPrototypePtr map = ((MapViewer*)parent())->getMap();
-    const Point<uint32> startTile(rect.x() <= 0 ? 0 : (uint32)rect.x() / TILE_SIZE, rect.y() <= 0 ? 0 : (uint32)rect.y() / TILE_SIZE);
-    const Point<uint32> endTile(qMin<uint32>(ceil(rect.width() / TILE_SIZE) + startTile.x + 1, map->getSize().x),
+    const UInt32Point startTile(rect.x() <= 0 ? 0 : (uint32)rect.x() / TILE_SIZE, rect.y() <= 0 ? 0 : (uint32)rect.y() / TILE_SIZE);
+    const UInt32Point endTile(qMin<uint32>(ceil(rect.width() / TILE_SIZE) + startTile.x + 1, map->getSize().x),
         qMin<uint32>(ceil(rect.height() / TILE_SIZE) + startTile.y + 1, map->getSize().y));
     uint32 uiActiveLayer = ((MapViewer*)parent())->getCurrentLayer(currentLayer)-1;
     QRectF tileRect(0, 0, TILE_SIZE, TILE_SIZE);
@@ -136,8 +136,8 @@ void MapViewScene::_drawGrid(QPainter *painter, const QRectF &rect)
         return;
 
     MapPrototypePtr map = ((MapViewer*)parent())->getMap();
-    const Point<uint32> startTile(rect.x() <= 0 ? 0 : (uint32)rect.x() / TILE_SIZE * TILE_SIZE, rect.y() <= 0 ? 0 : (uint32)rect.y() / TILE_SIZE * TILE_SIZE);
-    const Point<uint32> endTile(qMin<uint32>(ceil(rect.width() / TILE_SIZE) + startTile.x + 1, map->getSize().x) * TILE_SIZE,
+    const UInt32Point startTile(rect.x() <= 0 ? 0 : (uint32)rect.x() / TILE_SIZE * TILE_SIZE, rect.y() <= 0 ? 0 : (uint32)rect.y() / TILE_SIZE * TILE_SIZE);
+    const UInt32Point endTile(qMin<uint32>(ceil(rect.width() / TILE_SIZE) + startTile.x + 1, map->getSize().x) * TILE_SIZE,
         qMin<uint32>(ceil(rect.height() / TILE_SIZE) + startTile.y + 1, map->getSize().y) * TILE_SIZE);
     QVector<QPoint> pointPairs;
     for (uint32 x = startTile.x; x < endTile.x; x += TILE_SIZE)

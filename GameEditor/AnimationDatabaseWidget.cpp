@@ -27,8 +27,7 @@ AnimationDatabaseWidget::AnimationDatabaseWidget(QWidget *pParent) : DatabaseWid
     connect(m_pAniViewer, SIGNAL(changedCurrentFrame(uint32, const DATABASE::AnimationPrototype::Frame&)), this, SLOT(_onFrameChange(uint32, const DATABASE::AnimationPrototype::Frame&)));
     connect(m_pFrameTime, SIGNAL(editingFinished()), this, SLOT(_onFrameTimeChange()));
     connect(m_pAniPlayerButton, SIGNAL(clicked()), this, SLOT(_onAnimationPlayerClicked()));
-    connect(m_pAniViewer, SIGNAL(onDrop(AnimationView*, uint32, Point<int32>)), this, SLOT(_onDrop(AnimationView*, uint32, Point<int32>)));
-    connect(m_pSpriteList, SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)), this, SLOT(_onSpriteSelectionChanged(QTreeWidgetItem*, QTreeWidgetItem*)));
+    connect(m_pAniViewer, SIGNAL(onDrop(AnimationView*, uint32, Int32Point)), this, SLOT(_onDrop(AnimationView*, uint32, Int32Point)));
     connect(m_pAniViewer, SIGNAL(onItemChange(ModifyItem*)), this, SLOT(_onSpriteChange(ModifyItem*)));
 }
 
@@ -109,7 +108,7 @@ void AnimationDatabaseWidget::_onSpriteChange(ModifyItem *pItem)
     _updateSelectedSprite();
 }
 
-void AnimationDatabaseWidget::_onDrop(AnimationView *pTarget, uint32 uiID, Point<int32> pos)
+void AnimationDatabaseWidget::_onDrop(AnimationView *pTarget, uint32 uiID, Int32Point pos)
 {
     ConstSpritePrototypePtr proto;
     QPixmap pixmap;
@@ -158,7 +157,7 @@ bool AnimationDatabaseWidget::getItemFromWidgets(AnimationPrototypePtr &proto)
         if (AnimationViewItem *pItem = dynamic_cast<AnimationViewItem*>(*itr))
         {
             AnimationPrototype::Sprite sprite;
-            sprite.m_Pos = Point<int32>(pItem->pos().x(), pItem->pos().y());
+            sprite.m_Pos = Int32Point(pItem->pos().x(), pItem->pos().y());
             sprite.m_uiSpriteID = pItem->getSpriteID();
             sprite.m_uiScale = round(pItem->scale()*100);
             sprite.m_uiRotation = pItem->rotation();

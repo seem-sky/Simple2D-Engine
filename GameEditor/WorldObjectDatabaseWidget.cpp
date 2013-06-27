@@ -52,7 +52,7 @@ void WorldObjectDatabaseWidget::setupAnimationViewer(AnimationView* pViewer, uin
     pViewer->playCurrentAnimation();
 }
 
-void WorldObjectDatabaseWidget::_onDrop(AnimationView *pTarget, uint32 uiID, Point<int32> pos)
+void WorldObjectDatabaseWidget::_onDrop(AnimationView *pTarget, uint32 uiID, Int32Point pos)
 {
     setupAnimationViewer(pTarget, uiID);
     updateItem();
@@ -64,8 +64,8 @@ bool WorldObjectDatabaseWidget::getItemFromWidgets(WorldObjectPrototypePtr &prot
         return false;
 
     proto->setAnimationSpeed(m_pSpeedModifyer->value());
-    proto->setBoundingRect(UInt32Rect(Point<uint32>(m_pBoundingLeft->value(), m_pBoundingUp->value()),
-        Point<uint32>(m_pBoundingRight->value(), m_pBoundingBottom->value())));
+    proto->setBoundingRect(UInt32Rect(UInt32Point(m_pBoundingLeft->value(), m_pBoundingUp->value()),
+        UInt32Point(m_pBoundingRight->value(), m_pBoundingBottom->value())));
     for (uint32 i = 0; i < m_pAnimationTable->getCellCount(); ++i)
         proto->setAnimationInfo(i, m_pAnimationTable->getCellAnimationInfo(i));
     return true;

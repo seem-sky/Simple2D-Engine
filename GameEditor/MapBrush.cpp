@@ -90,7 +90,7 @@ void TileBrush::calculateFillArea(MapViewer *pWidget, const Point3D<uint32> &cen
     while (!openPoints.empty())
     {
         UInt32PointSet posAround;
-        Point<uint32> checkPoint = openPoints.at(0);
+        UInt32Point checkPoint = openPoints.at(0);
         map->checkAutoTiles(getTile(), checkPoint, posAround, m_Layer);
         for (UInt32PointSet::const_iterator itr = posAround.begin(); itr != posAround.end(); ++itr)
         {
@@ -258,7 +258,7 @@ void MapAutoTileBrush::_doAutoTileCheckForPosList(const MAP::MapPrototypePtr &ma
 /*#####
 # MapObjectBrush
 #####*/
-bool MapObjectBrush::drawObject(MapViewer *pWidget, Point<int32> pos)
+bool MapObjectBrush::drawObject(MapViewer *pWidget, Int32Point pos)
 {
     if (!pWidget || !pWidget->getMap() || !pWidget->getScene() || !m_pSharedData)
         return false;
@@ -306,5 +306,5 @@ QPixmap MapObjectBrush::getObjectPixmap(uint32 uiObjectID, DATABASE::ObjectType 
     aniViewer.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     aniViewer.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     aniViewer.setSceneRect(boundingRect);
-    return QPixmap::grabWidget(&aniViewer);
+    return aniViewer.grab();
 }

@@ -36,7 +36,7 @@ private slots:
     void _onFrameTimeChange();
     void _onFrameChange(int value);
     void _onFrameChange(uint32 uiFrame, const DATABASE::AnimationPrototype::Frame &curFrame);
-    void _onDrop(AnimationView *pTarget, uint32 uiID, Point<int32> pos);
+    void _onDrop(AnimationView *pTarget, uint32 uiID, Int32Point pos);
 
     // parent slots
     void _resizeButtonClicked() { resizeDatabase(getListCountValue()); }

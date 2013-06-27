@@ -161,7 +161,7 @@ void WorldObjectPrototypeDragTreeWidget::leaveEvent(QEvent *pEvent)
         aniViewer.setSceneRect(boundingRect);
 
         // create new widget cursor
-        QCursor newCursor(QPixmap::grabWidget(&aniViewer), boundingRect.x(), boundingRect.y());
+        QCursor newCursor(aniViewer.grab(), boundingRect.x(), boundingRect.y());
         emit newCursorSet(newCursor);
     }
 }
@@ -191,7 +191,7 @@ void TileDropLabel::dropEvent(QDropEvent *pEvent)
         if (QTreeWidgetItem *pItem = dynamic_cast<QTreeWidgetItem*>(pWidget->currentItem()))
         {
             setCurrentTileID(pItem->text(0).toUInt());
-            emit onDrop(getCurrentTileID(), Point<int32>(pEvent->pos().x(), pEvent->pos().y()));
+            emit onDrop(getCurrentTileID(), Int32Point(pEvent->pos().x(), pEvent->pos().y()));
         }
     }
 }

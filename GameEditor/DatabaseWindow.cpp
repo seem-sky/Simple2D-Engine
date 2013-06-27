@@ -19,6 +19,9 @@ m_pDBMgr(pDBMgr)
     // setup db for specific widgets
     // texture section
     m_pTiles->setDB(m_pDBMgr->getTileDatabase());
+    // 2 dbs for tileset widget
+    m_pTileSets->setTileDB(m_pTiles->getDBChanger());
+    m_pTileSets->setDB(m_pDBMgr->getTileSetDatabase());
     // 2 dbs for AutoTile widget
     m_pAutoTiles->setTileDB(m_pTiles->getDBChanger());
     m_pAutoTiles->setDB(m_pDBMgr->getAutoTileDatabase());
@@ -58,13 +61,13 @@ m_pDBMgr(pDBMgr)
 
 void DatabaseWindow::_focusChanged(int index)
 {
-    QString sParentTabName = m_pSections->tabText(m_pSections->currentIndex());
+    QString parentTabName = m_pSections->tabText(m_pSections->currentIndex());
     QTabWidget *pTabWidget = NULL;
-    if (sParentTabName == "Textures")
+    if (parentTabName == "Textures")
         pTabWidget = m_pTextureTabs;
-    else if (sParentTabName == "Objects")
+    else if (parentTabName == "Objects")
         pTabWidget = m_pObjectTabs;
-    else if (sParentTabName == "Texts")
+    else if (parentTabName == "Texts")
         pTabWidget = m_pTextTabs;
     else
         return;
@@ -78,6 +81,10 @@ void DatabaseWindow::saveDatabase()
     // TileDB
     if (m_pTiles->hasChanged())
         m_pTiles->storeDBChanges();
+
+    // TileSetDB
+    if (m_pTileSets->hasChanged())
+        m_pTileSets->storeDBChanges();
 
     // AutoTileDB
     if (m_pAutoTiles->hasChanged())

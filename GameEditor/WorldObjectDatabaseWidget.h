@@ -36,7 +36,7 @@ private slots:
     void _onAddAnimationButtonClicked();
     void _updateAnimationSpeed();
     void _dataChanged(int value);
-    void _onDrop(AnimationView *pTarget, uint32 uiID, Point<int32> pos);
+    void _onDrop(AnimationView *pTarget, uint32 uiID, Int32Point pos);
     void _onItemChanged();
     void _onItemAdded(AnimationViewerWidget *pWidget);
     void _onItemRemoved(AnimationViewerWidget *pWidget);

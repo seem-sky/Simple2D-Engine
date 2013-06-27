@@ -45,7 +45,7 @@ namespace MAP
         MultiTileMapAction(MapTile mapTile, MapPrototypePtr map, uint32 uiLayer, Layer layer);
 
         void revertMapAction();
-        void addPosition(const Point<uint32> &pos);
+        void addPosition(const UInt32Point &pos);
 
     private:
         UInt32PointVector m_Positions;

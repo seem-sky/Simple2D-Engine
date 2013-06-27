@@ -54,7 +54,7 @@ public:
     AnimationViewerWidget* getAnimationWidget(uint32 index);
     void removeAnimationWidget(uint32 index);
 
-    Point<int32> getCellFromIndex(uint32 uiIndex);
+    Int32Point getCellFromIndex(uint32 uiIndex);
 
     uint32 getCellCount() const { return m_uiSize; }
 

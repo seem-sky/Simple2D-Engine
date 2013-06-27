@@ -17,13 +17,12 @@ AutoTileDatabaseWidget::AutoTileDatabaseWidget(QWidget *pParent) : DatabaseWidge
     connectWidgets();
     m_pTileList->sortByColumn(0, Qt::AscendingOrder);
 
-    connect(m_pTileList, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(_tileDoubleClicked(QTreeWidgetItem*, int)));
     // connect auto tile labels
     for (uint32 i = 0; i < AUTO_TILE_SET_COUNT; ++i)
     {
         if (TileDropLabel *pLabel = _getLabelForIndex(static_cast<AUTO_TILE_INDEX>(i)))
         {
-            connect(pLabel, SIGNAL(onDrop(uint32, const Point<int32>&)), this, SLOT(_onTileDrop(uint32, const Point<int32>&)));
+            connect(pLabel, SIGNAL(onDrop(uint32, const Int32Point&)), this, SLOT(_onTileDrop(uint32, const Int32Point&)));
             pLabel->resize(TILE_SIZE, TILE_SIZE);
         }
     }
@@ -118,7 +117,7 @@ bool AutoTileDatabaseWidget::getItemFromWidgets(AutoTilePrototypePtr &proto)
     return true;
 }
 
-void AutoTileDatabaseWidget::_onTileDrop(uint32 uiID, const Point<int32> &pos)
+void AutoTileDatabaseWidget::_onTileDrop(uint32 uiID, const Int32Point &pos)
 {
     updateItem();
 }

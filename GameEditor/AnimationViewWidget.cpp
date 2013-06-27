@@ -84,7 +84,7 @@ void AnimationView::dropEvent(QDropEvent *pEvent)
         {
             uint32 uiID = pItem->text(0).toUInt();
             QPoint scenePos = mapToScene(pEvent->pos()).toPoint();
-            emit onDrop(this, uiID, Point<int32>(scenePos.x(), scenePos.y()));
+            emit onDrop(this, uiID, Int32Point(scenePos.x(), scenePos.y()));
         }
     }
 }
@@ -159,7 +159,6 @@ void AnimationView::createNewAnimationScene()
         if (!m_DrawPreviousFrame)
             pScene->setPreviousFrameDraw(false);
         setScene(pScene);
-        connect(pScene, SIGNAL(selectionChanged()), parent(), SLOT(_sceneSelectionChanged()));
     }
 }
 
@@ -269,9 +268,7 @@ bool AnimationViewDB::_getSpritePrototype(uint32 uiID, DATABASE::ConstSpriteProt
 # AnimationViewScene
 #####*/
 AnimationViewScene::AnimationViewScene(AnimationView *pParent) : QGraphicsScene(pParent), m_DrawGrid(true), m_DrawPreviousFrame(true)
-{
-    connect(this, SIGNAL(changed(const QList<QRectF>&)), this, SLOT(_onSceneChanged()));
-}
+{}
 
 void AnimationViewScene::_drawPreviousFrame(QPainter *painter, const QRectF &rect)
 {

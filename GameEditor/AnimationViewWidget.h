@@ -77,7 +77,7 @@ private slots:
 
 signals:
     void onAnimationStateChanged(bool started);
-    void onDrop(AnimationView *pTarget, uint32 uiID, Point<int32> pos);
+    void onDrop(AnimationView *pTarget, uint32 uiID, Int32Point pos);
     void changedCurrentFrame(uint32 uiFrame, const DATABASE::AnimationPrototype::Frame &curFrame);
 
 private:

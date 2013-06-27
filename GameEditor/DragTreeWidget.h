@@ -215,7 +215,7 @@ public:
     inline void setCurrentTileID(uint32 uiTileID) { m_uiCurrentTileID = uiTileID; drawCurrentTile(); }
 
 signals:
-    void onDrop(uint32 uiID, const Point<int32> &pos);
+    void onDrop(uint32 uiID, const Int32Point &pos);
 
 private:
     DATABASE::ConstTileDatabaseChangerPtr m_pTileDB;

@@ -86,7 +86,7 @@ AnimationViewerWidget* AnimationViewerTableWidget::getNewAnimationViewerWidget()
 
     if (WorldObjectDatabaseWidget *pParent = dynamic_cast<WorldObjectDatabaseWidget*>(parent()))
     {
-        connect(pWidget->m_pAnimationView, SIGNAL(onDrop(AnimationView*, uint32, Point<int32>)), pParent, SLOT(_onDrop(AnimationView*, uint32, Point<int32>)));
+        connect(pWidget->m_pAnimationView, SIGNAL(onDrop(AnimationView*, uint32, Int32Point)), pParent, SLOT(_onDrop(AnimationView*, uint32, Int32Point)));
         pWidget->m_pAnimationView->setAnimationDB(pParent->getAnimationDB());
         pWidget->m_pAnimationView->setSpriteDB(pParent->getSpriteDB());
         pWidget->m_pAnimationView->setEditable(false);
@@ -161,17 +161,17 @@ void AnimationViewerTableWidget::setSpeedModifyer(uint32 uiSpeedModifyer)
     }
 }
 
-Point<int32> AnimationViewerTableWidget::getCellFromIndex(uint32 uiIndex)
+Int32Point AnimationViewerTableWidget::getCellFromIndex(uint32 uiIndex)
 {
-    return Point<int32>(uiIndex / WIDGETS_PER_ROW, uiIndex % WIDGETS_PER_ROW);
+    return Int32Point(uiIndex / WIDGETS_PER_ROW, uiIndex % WIDGETS_PER_ROW);
 }
 
 void AnimationViewerTableWidget::_resizeIfNeeded(uint32 uiIndex)
 {
     if (uiIndex < m_uiSize)
         return;
-    Point<int32> oldSize(columnCount(), rowCount());
-    Point<int32> cell(getCellFromIndex(uiIndex));
+    Int32Point oldSize(columnCount(), rowCount());
+    Int32Point cell(getCellFromIndex(uiIndex));
     if (oldSize.x < cell.x+1)
         setColumnCount(cell.x+1);
     if (oldSize.y < WIDGETS_PER_ROW)
@@ -182,7 +182,7 @@ void AnimationViewerTableWidget::_resizeIfNeeded(uint32 uiIndex)
 
 void AnimationViewerTableWidget::_setAnimationWidget(uint32 uiIndex, AnimationViewerWidget *pWidget)
 {
-    Point<int32> cell(getCellFromIndex(uiIndex));
+    Int32Point cell(getCellFromIndex(uiIndex));
     if (pWidget && columnWidth(cell.x) < pWidget->width())
         setColumnWidth(cell.x, pWidget->width());
     if (pWidget && rowHeight(cell.y) < pWidget->height())
@@ -201,7 +201,7 @@ void AnimationViewerTableWidget::setAnimationWidget(uint32 uiIndex, AnimationVie
 
 AnimationViewerWidget* AnimationViewerTableWidget::getAnimationWidget(uint32 uiIndex)
 {
-    Point<int32> cell(getCellFromIndex(uiIndex));
+    Int32Point cell(getCellFromIndex(uiIndex));
     if (columnCount() <= cell.x || rowCount() <= cell.y)
         return NULL;
     return dynamic_cast<AnimationViewerWidget*>(cellWidget(cell.y, cell.x));
@@ -209,7 +209,7 @@ AnimationViewerWidget* AnimationViewerTableWidget::getAnimationWidget(uint32 uiI
 
 void AnimationViewerTableWidget::removeAnimationWidget(uint32 uiIndex)
 {
-    Point<int32> cell(getCellFromIndex(uiIndex));
+    Int32Point cell(getCellFromIndex(uiIndex));
     emit onItemRemove(dynamic_cast<AnimationViewerWidget*>(cellWidget(cell.y, cell.x)));
     removeCellWidget(cell.y, cell.x);
     m_uiSize = uiIndex;
@@ -218,6 +218,6 @@ void AnimationViewerTableWidget::removeAnimationWidget(uint32 uiIndex)
 
 void AnimationViewerTableWidget::_resizeToShortestColumn(uint32 lastIndex)
 {
-    Point<int32> lastCell = getCellFromIndex(lastIndex);
+    Int32Point lastCell = getCellFromIndex(lastIndex);
     setColumnCount(lastCell.x+1);
 }

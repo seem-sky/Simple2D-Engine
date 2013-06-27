@@ -303,7 +303,7 @@ void MapEditorWidget::_releaseBrush(MapViewer *pWidget, Point3D<uint32> point, u
         if (Qt::LeftButton == uiButton)
         {
             QPoint pos = pWidget->mapToScene(pWidget->mapFromGlobal(QCursor::pos())).toPoint(); 
-            m_MapObjectBrush.drawObject(pWidget, Point<int32>(pos.x(), pos.y()));
+            m_MapObjectBrush.drawObject(pWidget, Int32Point(pos.x(), pos.y()));
         }
         break;
     }
@@ -358,7 +358,7 @@ void MapEditorWidget::storeCurrentMapInClipboard() const
             boundingRect.setWidth(mapSize.width());
         if (mapSize.height() > boundingRect.height())
             boundingRect.setHeight(mapSize.height());
-        QApplication::clipboard()->setPixmap(QPixmap::grabWidget(pWidget->viewport(), boundingRect));
+        QApplication::clipboard()->setPixmap(pWidget->viewport()->grab(boundingRect));
         m_pSharedData->m_MappingMode = mode;
     }
 }

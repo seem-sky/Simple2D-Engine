@@ -3,6 +3,7 @@
 
 #include "DatabaseWidget.h"
 #include "UI/UI_AutoTileDatabaseWidget.h"
+#include <array>
 
 class AutoTileDatabaseWidget : public DatabaseWidget<DATABASE::AUTO_TILE::AutoTilePrototype>, Ui_AutoTileDatabaseWidget
 {
@@ -22,7 +23,7 @@ public:
     void setFocus();
 
 private slots:
-    void _onTileDrop(uint32 uiID, const Point<int32> &pos);
+    void _onTileDrop(uint32 uiID, const Int32Point &pos);
 
     // parent slots
     void _resizeButtonClicked() { resizeDatabase(getListCountValue()); }
@@ -32,6 +33,6 @@ private slots:
 private:
     DATABASE::ConstTileDatabaseChangerPtr m_pTileDB;
     QLabel *m_pCurrentLabel;
-    uint32 m_uiAutoTileSet[DATABASE::AUTO_TILE::AUTO_TILE_SET_COUNT];
+    std::array<uint32, DATABASE::AUTO_TILE::AUTO_TILE_SET_COUNT> m_uiAutoTileSet;
 };
 #endif

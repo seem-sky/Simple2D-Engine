@@ -30,5 +30,5 @@ void MapSettings::_accepted()
         return;
     m_pMap->setName(m_pName->text());
     m_pMap->setScriptName(m_pScriptName->text());
-    m_pMap->setSize(Point<uint32>(m_pSizeX->value(), m_pSizeY->value()), m_pForegroundLayer->value(), m_pBackgroundLayer->value());
+    m_pMap->setSize(UInt32Point(m_pSizeX->value(), m_pSizeY->value()), m_pForegroundLayer->value(), m_pBackgroundLayer->value());
 }
