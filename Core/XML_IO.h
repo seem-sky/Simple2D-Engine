@@ -6,13 +6,11 @@
 #include <QtXml/QtXml>
 #include <QtCore/QStringList>
 #include <QtCore/QXmlStreamWriter>
-#include <boost/smart_ptr.hpp>
 #include <boost/thread.hpp>
-
-typedef std::shared_ptr<boost::thread> ThreadPtr;
 
 namespace XML_IO
 {
+    typedef std::unique_ptr<boost::thread> ThreadPtr;
     enum XML_Result
     {
         NONE,
@@ -29,11 +27,13 @@ namespace XML_IO
     public:
         XML() : m_result(NONE) {}
 
-        bool waitForSuccess() const;
+        bool waitForSuccess();
 
         inline XML_Result getXMLResult() const { return m_result; }
 
         void execThreaded(const QString &fileName, const QString &nodeName);
+
+        bool isThreaded() const;
 
     protected:
         XML_Result m_result;

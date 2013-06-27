@@ -5,18 +5,29 @@ using namespace XML_IO;
 /*####
 # XML
 ####*/
-bool XML::waitForSuccess() const
+bool XML::waitForSuccess()
 {
-    if (!m_pThread)
-        false;
-    m_pThread->join();
-    return m_result != DONE;
+    if (isThreaded())
+    {
+        m_pThread->join();
+        m_pThread = ThreadPtr();
+        return m_result != DONE;
+    }
+    return true;
 }
 
 void XML::execThreaded(const QString &fileName, const QString &nodeName)
 {
     if (m_result == NONE)
+    {
         m_pThread = ThreadPtr(new boost::thread(boost::bind(&XML::_execThreaded, this, fileName, nodeName, m_result)));
+        m_pThread->start_thread();
+    }
+}
+
+bool XML::isThreaded() const
+{
+    return m_pThread;
 }
 
 /*####
