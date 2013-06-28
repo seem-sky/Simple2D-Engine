@@ -39,7 +39,7 @@ MapEditorWidget::MapEditorWidget(QWidget *pParent) : QWidget(pParent), Ui_MapEdi
     connect(m_pMappingModeTab, SIGNAL(currentChanged(int)), this, SLOT(_MappingModeChanged(int)));
     connect(m_pObjectTabs, SIGNAL(currentChanged(int)), this, SLOT(_objectTabChanged(int)));
     connect(m_pWorldObjects, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)), this, SLOT(_currentObjectChanged(QTreeWidgetItem*, QTreeWidgetItem*)));
-    connect(m_pDynamicObjects, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)), this, SLOT(_currentObjectChanged(QTreeWidgetItem*, QTreeWidgetItem*)));
+    //connect(m_pDynamicObjects, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)), this, SLOT(_currentObjectChanged(QTreeWidgetItem*, QTreeWidgetItem*)));
 
     connect(m_pWorldObjects, SIGNAL(newCursorSet(const QCursor&)), m_pMapEditor, SLOT(setCurrentCursor(const QCursor&)));
 

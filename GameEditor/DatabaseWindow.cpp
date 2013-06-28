@@ -5,7 +5,6 @@
 #include <QtGui/QPainter>
 #include <QtWidgets/QGraphicsPixmapItem>
 #include "Config.h"
-#include "MainWindow.h"
 #include "DatabaseIO.h"
 
 using namespace DATABASE;

@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <LocalsDatabase>
-    <prototype ID="1" Name="test String" Local0="Wo ist mein Text hin???&#10;&#10;&#10;&#10;!!!!!!!!!1;" Local1="Was geht ab?"/>
-    <prototype ID="2" Name="test" Local0="bitte, bitte!"/>
+    <prototype ID="1" Name="test String" Local0="Hallo,&#10;ich bin ein&#10;Beispiel-Text." Local1="Hello,&#10;I am an&#10;example-text."/>
 </LocalsDatabase>

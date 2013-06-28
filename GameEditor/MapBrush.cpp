@@ -112,7 +112,7 @@ void TileBrush::calculateFillArea(MapViewer *pWidget, const UInt32Point3D &cente
         openPoints.erase(openPoints.begin());
     }
 
-    pWidget->addAction(pRedoAction);
+    pWidget->addAction(std::move(pRedoAction));
 }
 
 /*#####
@@ -231,7 +231,7 @@ void MapTileSetBrush::_drawPen(MapViewer *pWidget, const UInt32Point3D &center)
             }
         }
         if (changed)
-            pWidget->addAction(pRedoAction);
+            pWidget->addAction(std::move(pRedoAction));
     }
 }
 

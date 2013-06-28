@@ -227,20 +227,6 @@
        <string>WorldObjects</string>
       </attribute>
      </widget>
-     <widget class="QWidget" name="m_pDynamicObjects">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <attribute name="title">
-       <string>DynamicObjects</string>
-      </attribute>
-     </widget>
     </widget>
    </widget>
   </widget>
