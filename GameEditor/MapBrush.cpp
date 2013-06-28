@@ -6,54 +6,62 @@
 
 using namespace MAP;
 using namespace DATABASE;
+using namespace BRUSH;
+
+BrushMode BRUSH::getBrushMode(const QString &mode)
+{
+    if (mode == "Fill")
+        return MODE_FILL;
+    return MODE_PEN;
+}
 
 /*#####
 # MapBrush
 #####*/
-TileBrush::TileBrush() : m_buttonHold(false), m_pLastEmitter(NULL), m_Type(BRUSH_PEN), m_uiTileID(0), m_Layer(LAYER_BACKGROUND)
+TileBrush::TileBrush() : m_buttonHold(false), m_pLastEmitter(NULL), m_mode(MODE_PEN), m_uiTileID(0), m_Layer(LAYER_BACKGROUND)
 {}
 
-void TileBrush::brushPress(MapViewer *pWidget, Point3D<uint32> center)
+void TileBrush::brushPress(MapViewer *pWidget, UInt32Point3D center)
 {
     m_pLastEmitter = pWidget;
     m_buttonHold = true;
     drawOnMap(pWidget, center);
 }
 
-void TileBrush::brushRelease(MapViewer *pWidget, Point3D<uint32> center)
+void TileBrush::brushRelease(MapViewer *pWidget, UInt32Point3D center)
 {
     if (m_pLastEmitter != pWidget || !m_buttonHold)
         return;
 
     m_pLastEmitter = pWidget;
     m_buttonHold = false;
-    switch (m_Type)
+    switch (m_mode)
     {
-    case BRUSH_RECT: drawOnMap(pWidget, center); break;
+    case MODE_RECT: drawOnMap(pWidget, center); break;
     }
 }
 
-void TileBrush::brushMove(MapViewer *pWidget, Point3D<uint32> center)
+void TileBrush::brushMove(MapViewer *pWidget, UInt32Point3D center)
 {
     if (m_pLastEmitter != pWidget || !m_buttonHold)
         return;
-    switch (m_Type)
+    switch (m_mode)
     {
-    case BRUSH_PEN: drawOnMap(pWidget, center); break;
+    case MODE_PEN: drawOnMap(pWidget, center); break;
     }
 }
 
-void TileBrush::drawOnMap(MapViewer *pWidget, Point3D<uint32> center)
+void TileBrush::drawOnMap(MapViewer *pWidget, UInt32Point3D center)
 {
     if (!pWidget || !pWidget->getMap())
         return;
 
-    switch (m_Type)
+    switch (m_mode)
     {
-    case BRUSH_PEN:
+    case MODE_PEN:
             _drawPen(pWidget, center);
         break;
-    case BRUSH_FILL: _drawFill(pWidget, center); break;
+    case MODE_FILL: _drawFill(pWidget, center); break;
     }
 
     pWidget->changedMap();
@@ -65,7 +73,7 @@ void TileBrush::setupBitset(const MAP::MapPrototypePtr &map, BitsetVector &mapBi
         mapBitset = BitsetVector(map->getSize().x, boost::dynamic_bitset<>(map->getSize().y));
 }
 
-void TileBrush::calculateFillArea(MapViewer *pWidget, const Point3D<uint32> &center, BitsetVector &mapBitset)
+void TileBrush::calculateFillArea(MapViewer *pWidget, const UInt32Point3D &center, BitsetVector &mapBitset)
 {
     mapBitset.clear();
     MapPrototypePtr map = pWidget->getMap();
@@ -77,7 +85,7 @@ void TileBrush::calculateFillArea(MapViewer *pWidget, const Point3D<uint32> &cen
         return;
 
     // new action
-    MultiTileMapActionPtr pRedoAction(new MultiTileMapAction(startTile, map, center.z, m_Layer));
+    MultiPositionTileMapActionPtr pRedoAction(new MultiPositionTileMapAction(startTile, map, center.z, m_Layer));
     pRedoAction->addPosition(center);
 
     // store center in open points, and change tile
@@ -94,7 +102,7 @@ void TileBrush::calculateFillArea(MapViewer *pWidget, const Point3D<uint32> &cen
         map->checkAutoTiles(getTile(), checkPoint, posAround, m_Layer);
         for (UInt32PointSet::const_iterator itr = posAround.begin(); itr != posAround.end(); ++itr)
         {
-            Point3D<uint32> curPos(*itr, center.z);
+            UInt32Point3D curPos(*itr, center.z);
             // continue if its a diagonal tile
             if (curPos.x != checkPoint.x && curPos.y != checkPoint.y)
                 continue;
@@ -107,11 +115,10 @@ void TileBrush::calculateFillArea(MapViewer *pWidget, const Point3D<uint32> &cen
     pWidget->addAction(pRedoAction);
 }
 
-
 /*#####
 # MapTileBrush
 #####*/
-void MapTileBrush::_drawFill(MapViewer *pWidget, const Point3D<uint32> &center)
+void MapTileBrush::_drawFill(MapViewer *pWidget, const UInt32Point3D &center)
 {
     if (!pWidget || !pWidget->getMap() || pWidget->getMap()->getTile(center, getLayer()) == getTile())
         return;
@@ -120,7 +127,7 @@ void MapTileBrush::_drawFill(MapViewer *pWidget, const Point3D<uint32> &center)
     pWidget->getMap()->setMapTile(center, MapTile(getTile(), 0), getLayer());
 }
 
-void MapTileBrush::_drawPen(MapViewer *pWidget, const Point3D<uint32> &center)
+void MapTileBrush::_drawPen(MapViewer *pWidget, const UInt32Point3D &center)
 {
     if (!pWidget || !pWidget->getMap())
         return;
@@ -134,20 +141,22 @@ void MapTileBrush::_drawPen(MapViewer *pWidget, const Point3D<uint32> &center)
         pWidget->addAction(MapActionPtr(new TileMapAction(center, mapTile, getLayer(), pWidget->getMap())));
         map->setMapTile(center, MapTile(getTile(), 0), getLayer());
 
-        // update autotiles around
-        UInt32PointSet positions;
-        map->checkAutoTiles(0, center, positions, getLayer(), MapPrototype::FLAG_OTHER);
-        for (UInt32PointSet::const_iterator itr = positions.begin(); itr != positions.end(); ++itr)
+        if (mapTile.m_uiAutoTileSetID)
         {
-            Point3D<uint32> pos(*itr, center.z);
-            map->setTile(pos, AUTO_TILE::getAutoTileIndexForTileCheck(map->checkAutoTiles(map->getAutoTile(pos, getLayer()), pos, UInt32PointSet(),
-                getLayer(), MapPrototype::FLAG_NOTHING)),getLayer());
+            // update autotiles around
+            UInt32PointSet positions;
+            map->checkAutoTiles(0, center, positions, getLayer(), MapPrototype::FLAG_OTHER);
+            for (UInt32PointSet::const_iterator itr = positions.begin(); itr != positions.end(); ++itr)
+            {
+                UInt32Point3D pos(*itr, center.z);
+                map->setTile(pos, AUTO_TILE::getAutoTileIndexForTileCheck(map->checkAutoTiles(map->getAutoTile(pos, getLayer()), pos, UInt32PointSet(),
+                    getLayer(), MapPrototype::FLAG_NOTHING)),getLayer());
+            }
         }
     }
 }
 
-bool MapTileBrush::_checkFill(MapPrototypePtr const &map, const MAP::MapTile &centerTile, Point3D<uint32> const &pos,
-                          std::vector<boost::dynamic_bitset<>> &mapBitset, UInt32PointVector &openPoints)
+bool MapTileBrush::_checkFill(MapPrototypePtr map, MapTile centerTile, UInt32Point3D pos, BitsetVector &mapBitset, UInt32PointVector &openPoints)
 {
     // return if already checked
     if (mapBitset.at(pos.x)[pos.y])
@@ -166,9 +175,100 @@ bool MapTileBrush::_checkFill(MapPrototypePtr const &map, const MAP::MapTile &ce
 }
 
 /*#####
+# MapTileSetBrush
+#####*/
+void MapTileSetBrush::_drawFill(MapViewer *pWidget, const UInt32Point3D &center)
+{
+    if (!pWidget || !pWidget->getMap())
+        return;
+
+    m_centerPos = center;
+    calculateFillArea(pWidget, center);
+    ConstTileSetPrototypePtr tileSetProto;
+    if (m_pTileSetDB->getItem(getTile(), tileSetProto))
+        pWidget->getMap()->setMapTile(center, MapTile(tileSetProto->getTileID(UInt32Point(0, 0)), 0), getLayer());
+    m_centerPos = UInt32Point3D();
+}
+
+void MapTileSetBrush::_drawPen(MapViewer *pWidget, const UInt32Point3D &center)
+{
+    if (!pWidget || !pWidget->getMap() || !m_pTileSetDB)
+        return;
+
+    MapPrototypePtr map = pWidget->getMap();
+    ConstTileSetPrototypePtr proto;
+    if (m_pTileSetDB->getItem(getTile(), proto))
+    {
+        MultiPositionMultiTileMapActionPtr pRedoAction(new MultiPositionMultiTileMapAction(map, center.z, getLayer()));
+        bool changed = false;
+        for (uint32 x = 0; x < proto->getTileCount().x; ++x)
+        {
+            for (uint32 y = 0; y < proto->getTileCount().y; ++y)
+            {
+                if (uint32 uiNewID = proto->getTileID(UInt32Point(x, y)))
+                {
+                    UInt32Point3D currentPos(center.x + x, center.y + y, center.z);
+                    MapTile oldTile = map->getMapTile(currentPos, getLayer());
+                    if (oldTile.m_uiAutoTileSetID != 0 || oldTile.m_uiTileID != uiNewID)
+                    {
+                        changed = true;
+                        map->setMapTile(currentPos, MapTile(uiNewID, 0), getLayer());
+                        pRedoAction->addPosition(currentPos, oldTile);
+                        // update autotiles around
+                        if (oldTile.m_uiAutoTileSetID)
+                        {
+                            UInt32PointSet positions;
+                            map->checkAutoTiles(0, currentPos, positions, getLayer(), MapPrototype::FLAG_OTHER);
+                            for (UInt32PointSet::const_iterator itr = positions.begin(); itr != positions.end(); ++itr)
+                            {
+                                UInt32Point3D pos(*itr, center.z);
+                                map->setTile(pos, AUTO_TILE::getAutoTileIndexForTileCheck(map->checkAutoTiles(map->getAutoTile(pos, getLayer()), pos, UInt32PointSet(),
+                                    getLayer(), MapPrototype::FLAG_NOTHING)),getLayer());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if (changed)
+            pWidget->addAction(pRedoAction);
+    }
+}
+
+bool MapTileSetBrush::_checkFill(MapPrototypePtr map, MapTile centerTile, UInt32Point3D pos, BitsetVector &mapBitset, UInt32PointVector &openPoints)
+{
+    // return if already checked
+    if (mapBitset.at(pos.x)[pos.y] || !m_pTileSetDB)
+        return false;
+
+    mapBitset.at(pos.x)[pos.y] = true;
+    MapTile curMapTile = map->getMapTile(pos, getLayer());
+    if (centerTile.m_uiAutoTileSetID == curMapTile.m_uiAutoTileSetID &&
+        ((centerTile.m_uiAutoTileSetID == 0 && centerTile.m_uiTileID == curMapTile.m_uiTileID) || centerTile.m_uiAutoTileSetID != 0))
+    {
+        openPoints.push_back(pos);
+        ConstTileSetPrototypePtr tileSetProto;
+        if (m_pTileSetDB->getItem(getTile(), tileSetProto))
+        {
+            
+            UInt32Point index(pos.x % tileSetProto->getTileCount().x - m_centerPos.x % tileSetProto->getTileCount().x,
+                pos.y % tileSetProto->getTileCount().y - m_centerPos.y % tileSetProto->getTileCount().y);
+            // if index overflows, add tileCount
+            if (index.x > tileSetProto->getTileCount().x)
+                index.x += tileSetProto->getTileCount().x;
+            if (index.y > tileSetProto->getTileCount().y)
+                index.y += tileSetProto->getTileCount().y;
+            map->setMapTile(pos, MapTile(tileSetProto->getTileID(index), 0), getLayer());
+        }
+        return true;
+    }
+    return false;
+}
+
+/*#####
 # MapAutoTileBrush
 #####*/
-void MapAutoTileBrush::_drawPen(MapViewer *pWidget, const Point3D<uint32> &center)
+void MapAutoTileBrush::_drawPen(MapViewer *pWidget, const UInt32Point3D &center)
 {
     m_BorderPosResult.clear();
     ConstAutoTilePrototypePtr proto;
@@ -183,7 +283,7 @@ void MapAutoTileBrush::_drawPen(MapViewer *pWidget, const Point3D<uint32> &cente
     }
 }
 
-void MapAutoTileBrush::_drawFill(MapViewer *pWidget, const Point3D<uint32> &center)
+void MapAutoTileBrush::_drawFill(MapViewer *pWidget, const UInt32Point3D &center)
 {
     m_BorderPosResult.clear();
     ConstAutoTilePrototypePtr proto;
@@ -198,7 +298,7 @@ void MapAutoTileBrush::_drawFill(MapViewer *pWidget, const Point3D<uint32> &cent
     UInt32PointSet setBorder;
     for (UInt32PointSet::const_iterator itr = m_BorderPosResult.begin(); itr != m_BorderPosResult.end(); ++itr)
     {
-        Point3D<uint32> pos(*itr, center.z);
+        UInt32Point3D pos(*itr, center.z);
         if (map->getAutoTile(pos, getLayer()) != getTile())
             map->checkAutoTiles(getTile(), pos, setBorder, getLayer(), MapPrototype::FLAG_SAME);
         else
@@ -209,8 +309,7 @@ void MapAutoTileBrush::_drawFill(MapViewer *pWidget, const Point3D<uint32> &cent
     _doAutoTileCheckForPosList(map, center.z, setBorder);
 }
 
-bool MapAutoTileBrush::_checkFill(MapPrototypePtr const &map, const MAP::MapTile &centerTile, Point3D<uint32> const &pos,
-                              std::vector<boost::dynamic_bitset<>> &mapBitset, UInt32PointVector &openPoints)
+bool MapAutoTileBrush::_checkFill(MapPrototypePtr map, MapTile centerTile, UInt32Point3D pos, BitsetVector &mapBitset, UInt32PointVector &openPoints)
 {
     // return if already checked
     if (mapBitset.at(pos.x)[pos.y])
@@ -232,7 +331,7 @@ bool MapAutoTileBrush::_checkFill(MapPrototypePtr const &map, const MAP::MapTile
     return false;
 }
 
-void MapAutoTileBrush::_setAutoTile(const MAP::MapPrototypePtr &map, const Point3D<uint32> &center, DATABASE::ConstAutoTilePrototypePtr proto)
+void MapAutoTileBrush::_setAutoTile(const MAP::MapPrototypePtr &map, const UInt32Point3D &center, DATABASE::ConstAutoTilePrototypePtr proto)
 {
     if (!map || !proto)
         return;
@@ -247,7 +346,7 @@ void MapAutoTileBrush::_doAutoTileCheckForPosList(const MAP::MapPrototypePtr &ma
 {
     for (UInt32PointSet::const_iterator itr = positions.begin(); itr != positions.end(); ++itr)
     {
-        Point3D<uint32> pos(*itr, uiLayer);
+        UInt32Point3D pos(*itr, uiLayer);
         if (!map->getAutoTile(pos, getLayer()))
             continue;
         map->setTile(pos, AUTO_TILE::getAutoTileIndexForTileCheck(map->checkAutoTiles(map->getAutoTile(pos, getLayer()), pos, UInt32PointSet(),

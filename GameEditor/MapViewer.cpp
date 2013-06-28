@@ -44,7 +44,7 @@ void MapObjectItem::updateItemPixmap()
         if (ConstSharedMapEditorDataPtr pSharedData = pScene->getSharedData())
         {
             // get new pixmap
-            setPixmap(MapObjectBrush::getObjectPixmap(m_pMapObject->m_ObjectID, m_pMapObject->m_Type, m_pMapObject->m_Direction, pSharedData->getWorldObjectDatabase(),
+            setPixmap(BRUSH::MapObjectBrush::getObjectPixmap(m_pMapObject->m_ObjectID, m_pMapObject->m_Type, m_pMapObject->m_Direction, pSharedData->getWorldObjectDatabase(),
                 pSharedData->getAnimationDatabase(), pSharedData->getSpriteDatabase(), QRect()));
             setZValue(this->y() + pixmap().height());
         }
@@ -105,7 +105,7 @@ void MapViewScene::_drawTiles(QPainter *painter, const QRectF &rect, Layer curre
         {
             for (uint32 y = startTile.y; y < endTile.y; ++y)
             {
-                MapTile tileObj = map->getMapTile(Point3D<uint32>(x, y, layer), currentLayer);
+                MapTile tileObj = map->getMapTile(UInt32Point3D(x, y, layer), currentLayer);
                 if (tileObj.m_uiTileID == 0 && tileObj.m_uiAutoTileSetID == 0)      // ignore tile ID 0; empty tile
                     continue;
                 // is no auto tile
@@ -126,7 +126,7 @@ void MapViewScene::_drawTiles(QPainter *painter, const QRectF &rect, Layer curre
                 }
             }
         }
-        painter->save();
+        //painter->save();
     }
 }
 
@@ -163,7 +163,7 @@ void MapViewScene::mouseMoveEvent(QGraphicsSceneMouseEvent *pEvent)
     }
 
     if (MapViewer *pWidget = dynamic_cast<MapViewer*>(parent()))
-        emit brushMoved(pWidget, Point3D<uint32>(pEvent->scenePos().x() / TILE_SIZE, pEvent->scenePos().y() / TILE_SIZE,
+        emit brushMoved(pWidget, UInt32Point3D(pEvent->scenePos().x() / TILE_SIZE, pEvent->scenePos().y() / TILE_SIZE,
                         pWidget->getCurrentLayer(m_pSharedData->getCurrentLayer())-1));
 }
 
@@ -177,7 +177,7 @@ void MapViewScene::mousePressEvent(QGraphicsSceneMouseEvent *pEvent)
     if (pEvent->button() == Qt::LeftButton || pEvent->button() == Qt::RightButton)
     {
         if (MapViewer *pWidget = dynamic_cast<MapViewer*>(parent()))
-            emit brushPressed(pWidget, Point3D<uint32>(pEvent->scenePos().x() / TILE_SIZE, pEvent->scenePos().y() / TILE_SIZE,
+            emit brushPressed(pWidget, UInt32Point3D(pEvent->scenePos().x() / TILE_SIZE, pEvent->scenePos().y() / TILE_SIZE,
                             pWidget->getCurrentLayer(m_pSharedData->getCurrentLayer())-1), pEvent->button());
     }
 }
@@ -194,7 +194,7 @@ void MapViewScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *pEvent)
     if (pEvent->button() == Qt::LeftButton || pEvent->button() == Qt::RightButton)
     {
         if (MapViewer *pWidget = dynamic_cast<MapViewer*>(parent()))
-            emit brushReleased(pWidget, Point3D<uint32>(pEvent->scenePos().x() / TILE_SIZE, pEvent->scenePos().y() / TILE_SIZE,
+            emit brushReleased(pWidget, UInt32Point3D(pEvent->scenePos().x() / TILE_SIZE, pEvent->scenePos().y() / TILE_SIZE,
                                 pWidget->getCurrentLayer(m_pSharedData->getCurrentLayer())-1), pEvent->button());
     }
 }
@@ -237,7 +237,7 @@ void MapViewer::_placeMapObjects()
         {
             MapObjectItem *pItem = new MapObjectItem(obj);
             QRect boundingRect;
-            pItem->setPixmap(MapObjectBrush::getObjectPixmap(obj->m_ObjectID, obj->m_Type, obj->m_Direction,
+            pItem->setPixmap(BRUSH::MapObjectBrush::getObjectPixmap(obj->m_ObjectID, obj->m_Type, obj->m_Direction,
                 m_pSharedData->getWorldObjectDatabase(), m_pSharedData->getAnimationDatabase(),
                 m_pSharedData->getSpriteDatabase(), boundingRect));
             pItem->move(boundingRect.x() + obj->m_Position.x, boundingRect.y() + obj->m_Position.y);

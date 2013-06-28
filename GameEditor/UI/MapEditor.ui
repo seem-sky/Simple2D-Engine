@@ -156,6 +156,11 @@
        <string>Tiles</string>
       </attribute>
      </widget>
+     <widget class="TileSetPrototypeDragTreeWidget" name="m_pTileSets">
+      <attribute name="title">
+       <string>TileSets</string>
+      </attribute>
+     </widget>
      <widget class="AutoTileView" name="m_pAutoTiles">
       <property name="enabled">
        <bool>true</bool>
@@ -481,6 +486,12 @@
    <class>MapBrushWidget</class>
    <extends>QWidget</extends>
    <header>mapbrushwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>TileSetPrototypeDragTreeWidget</class>
+   <extends>QWidget</extends>
+   <header>dragtreewidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

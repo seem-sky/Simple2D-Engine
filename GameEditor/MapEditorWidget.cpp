@@ -25,6 +25,7 @@ MapEditorWidget::MapEditorWidget(QWidget *pParent) : QWidget(pParent), Ui_MapEdi
 
     m_pRevert->setShortcut(QKeySequence(tr("Ctrl+Z", "Map|Revert")));
 
+    connect(m_pTileSets, SIGNAL(itemClicked(uint32, Qt::MouseButton)), this, SLOT(_tileSetClicked(uint32, Qt::MouseButton)));
     connect(m_pTiles, SIGNAL(tileClicked(uint32, Qt::MouseButton)), this, SLOT(_tileClicked(uint32, Qt::MouseButton)));
     connect(m_pAutoTiles, SIGNAL(tileClicked(uint32, Qt::MouseButton)), this, SLOT(_autoTileClicked(uint32, Qt::MouseButton)));
 
@@ -32,8 +33,8 @@ MapEditorWidget::MapEditorWidget(QWidget *pParent) : QWidget(pParent), Ui_MapEdi
     connect(m_pMapTree, SIGNAL(mapDeleted(MAP::MapPrototypePtr)), m_pMapEditor, SLOT(closeMap(MAP::MapPrototypePtr)));
     connect(m_pMapTree, SIGNAL(mapUpdated(MAP::MapPrototypePtr)), this, SLOT(_mapUpdated(MAP::MapPrototypePtr)));
 
-    connect(this, SIGNAL(leftTileChanged(uint32, bool)), m_pLHBrush, SLOT(changeBrush(uint32, bool)));
-    connect(this, SIGNAL(rightTileChanged(uint32, bool)), m_pRHBrush, SLOT(changeBrush(uint32, bool)));
+    connect(this, SIGNAL(leftTileChanged(uint32, MAP::BRUSH::BrushType)), m_pLHBrush, SLOT(changeBrush(uint32, MAP::BRUSH::BrushType)));
+    connect(this, SIGNAL(rightTileChanged(uint32, MAP::BRUSH::BrushType)), m_pRHBrush, SLOT(changeBrush(uint32, MAP::BRUSH::BrushType)));
 
     connect(m_pMappingModeTab, SIGNAL(currentChanged(int)), this, SLOT(_MappingModeChanged(int)));
     connect(m_pObjectTabs, SIGNAL(currentChanged(int)), this, SLOT(_objectTabChanged(int)));
@@ -176,6 +177,8 @@ void MapEditorWidget::updateMapEditorWidgets()
     // tile tabs
     m_pTiles->updateObject();
     m_pAutoTiles->updateObject();
+    m_pTileSets->setAdditionalDBs(m_pSharedData->getTileDatabase());
+    m_pTileSets->setDB(m_pSharedData->getTileSetDatabase());
 
     // object tabs
     m_pWorldObjects->setAdditionalDBs(m_pSharedData->getSpriteDatabase(), m_pSharedData->getAnimationDatabase());
@@ -242,8 +245,17 @@ void MapEditorWidget::_tileClicked(uint32 uiID, Qt::MouseButton button)
 {
     switch (button)
     {
-    case Qt::RightButton: emit rightTileChanged(uiID, false); break;
-    case Qt::LeftButton: emit leftTileChanged(uiID, false); break;
+    case Qt::RightButton: emit rightTileChanged(uiID, MAP::BRUSH::BRUSH_TILE); break;
+    case Qt::LeftButton: emit leftTileChanged(uiID, MAP::BRUSH::BRUSH_TILE); break;
+    }
+}
+
+void MapEditorWidget::_tileSetClicked(uint32 uiID, Qt::MouseButton button)
+{
+    switch (button)
+    {
+    case Qt::RightButton: emit rightTileChanged(uiID, MAP::BRUSH::BRUSH_TILE_SET); break;
+    case Qt::LeftButton: emit leftTileChanged(uiID, MAP::BRUSH::BRUSH_TILE_SET); break;
     }
 }
 
@@ -251,8 +263,8 @@ void MapEditorWidget::_autoTileClicked(uint32 uiID, Qt::MouseButton button)
 {
     switch (button)
     {
-    case Qt::RightButton: emit rightTileChanged(uiID, true); break;
-    case Qt::LeftButton: emit leftTileChanged(uiID, true); break;
+    case Qt::RightButton: emit rightTileChanged(uiID, MAP::BRUSH::BRUSH_AUTO_TILE); break;
+    case Qt::LeftButton: emit leftTileChanged(uiID, MAP::BRUSH::BRUSH_AUTO_TILE); break;
     }
 }
 
@@ -275,7 +287,7 @@ void MapEditorWidget::_MappingModeChanged(int index)
     }
 }
 
-void MapEditorWidget::_pressBrush(MapViewer *pWidget, Point3D<uint32> point, uint32 uiButton)
+void MapEditorWidget::_pressBrush(MapViewer *pWidget, UInt32Point3D point, uint32 uiButton)
 {
     if (!pWidget || m_pSharedData->getMappingMode() != MODE_TILE)
         return;
@@ -286,7 +298,7 @@ void MapEditorWidget::_pressBrush(MapViewer *pWidget, Point3D<uint32> point, uin
         m_pRHBrush->getMapBrush()->brushPress(pWidget, point);
 }
 
-void MapEditorWidget::_releaseBrush(MapViewer *pWidget, Point3D<uint32> point, uint32 uiButton)
+void MapEditorWidget::_releaseBrush(MapViewer *pWidget, UInt32Point3D point, uint32 uiButton)
 {
     if (!pWidget)
         return;
@@ -309,7 +321,7 @@ void MapEditorWidget::_releaseBrush(MapViewer *pWidget, Point3D<uint32> point, u
     }
 }
 
-void MapEditorWidget::_moveBrush(MapViewer *pWidget, Point3D<uint32> point)
+void MapEditorWidget::_moveBrush(MapViewer *pWidget, UInt32Point3D point)
 {
     if (!pWidget || m_pSharedData->getMappingMode() != MODE_TILE)
         return;

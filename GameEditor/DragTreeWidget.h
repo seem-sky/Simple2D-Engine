@@ -61,7 +61,7 @@ template <class T>
 class PrototypeTreeWidget : public PixmapTooltipTreeWidget
 {
 public:
-    PrototypeTreeWidget(QWidget *pParent = NULL) : PixmapTooltipTreeWidget(pParent)
+    PrototypeTreeWidget(QWidget *pParent = NULL) : PixmapTooltipTreeWidget(pParent), m_showNULLPrototype(false)
     {
         setSortingEnabled(true);
         QStringList sHeader;
@@ -79,6 +79,14 @@ public:
         if (!m_pDB)
             return;
 
+        if (m_showNULLPrototype)
+        {
+            QStringList stringList;
+            stringList.push_back(QString::number(0));
+            stringList.push_back("empty prototype");
+            addTopLevelItem(new PrototypeTreeWidgetItem(stringList));
+        }
+
         UInt32StringMap spriteList;
         m_pDB->getItemShortInfos(spriteList);
         for (UInt32StringMap::const_iterator itr = spriteList.begin(); itr != spriteList.end(); ++itr)
@@ -95,6 +103,18 @@ public:
     }
 
     inline void setDB(std::shared_ptr<const T> pDB) { m_pDB = pDB; fillWithPrototypes(); }
+
+    void showNULLPrototype(bool show = true)
+    {
+        if (show != m_showNULLPrototype)
+        {
+            m_showNULLPrototype = show;
+            fillWithPrototypes();
+        }
+    }
+
+private:
+    bool m_showNULLPrototype;
 
 protected:
     std::shared_ptr<const T> m_pDB;
@@ -167,6 +187,31 @@ public:
         setDragEnabled(true);
         setDragDropMode(QAbstractItemView::DragOnly);
     }
+};
+
+/*#####
+# TileSetPrototypeDragTreeWidget
+#####*/
+class TileSetPrototypeDragTreeWidget : public PrototypeTreeWidget<DATABASE::Database<DATABASE::TILE_SET::TileSetPrototype>>
+{
+    Q_OBJECT
+protected:
+    QWidget* setTooltipWidget(uint32 uiPrototypeID);
+    void mousePressEvent(QMouseEvent *pEvent);
+
+public:
+    TileSetPrototypeDragTreeWidget(QWidget *pParent = NULL);
+
+    inline void setAdditionalDBs(DATABASE::ConstTileDatabasePtr pTileDB)
+    {
+        m_pTileDB = pTileDB;
+    }
+
+signals:
+    void itemClicked(uint32 uiID, Qt::MouseButton button);
+
+private:
+    DATABASE::ConstTileDatabasePtr m_pTileDB;
 };
 
 /*#####

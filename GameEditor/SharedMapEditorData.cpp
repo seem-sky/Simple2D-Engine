@@ -32,6 +32,13 @@ DATABASE::ConstTileDatabasePtr SharedMapEditorData::getTileDatabase() const
     return DATABASE::ConstTileDatabasePtr();
 }
 
+DATABASE::ConstTileSetDatabasePtr SharedMapEditorData::getTileSetDatabase() const
+{
+    if (m_pDatabaseMgr)
+        return m_pDatabaseMgr->getTileSetDatabase();
+    return DATABASE::ConstTileSetDatabasePtr();
+}
+
 DATABASE::ConstAutoTileDatabasePtr SharedMapEditorData::getAutoTileDatabase() const
 {
     if (m_pDatabaseMgr)

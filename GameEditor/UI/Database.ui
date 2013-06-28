@@ -71,6 +71,11 @@
        <string>Tiles</string>
       </attribute>
      </widget>
+     <widget class="TileSetDatabaseWidget" name="m_pTileSets">
+      <attribute name="title">
+       <string>TileSets</string>
+      </attribute>
+     </widget>
      <widget class="AutoTileDatabaseWidget" name="m_pAutoTiles">
       <attribute name="title">
        <string>AutoTiles</string>
@@ -211,6 +216,12 @@
    <class>ObjectAnimationTypeDatabaseWidget</class>
    <extends>QWidget</extends>
    <header>objectanimationtypedatabasewidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>TileSetDatabaseWidget</class>
+   <extends>QWidget</extends>
+   <header>tilesetdatabasewidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

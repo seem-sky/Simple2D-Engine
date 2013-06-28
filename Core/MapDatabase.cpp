@@ -16,7 +16,7 @@ void MapPrototype::addMapObject(MapObjectPtr pObject)
         m_Objects.setItem(pObject->m_GUID, pObject);
 }
 
-MapObjectPtr MapPrototype::addMapObject(DATABASE::ObjectType type, uint32 uiID, Point<int32> pos)
+MapObjectPtr MapPrototype::addMapObject(DATABASE::ObjectType type, uint32 uiID, Int32Point pos)
 {
     MapObjectPtr newObject(new MapObject());
     newObject->m_ObjectID = uiID;
@@ -28,7 +28,7 @@ MapObjectPtr MapPrototype::addMapObject(DATABASE::ObjectType type, uint32 uiID, 
     return newObject;
 }
 
-//void MapPrototype::moveMapObject(uint32 uiGUID, const Point3D<uint32> &newPos)
+//void MapPrototype::moveMapObject(uint32 uiGUID, const UInt32Point3D &newPos)
 //{
 //    if (uiGUID < m_Objects.size() && m_Objects.at(uiGUID))
 //    {
@@ -38,7 +38,7 @@ MapObjectPtr MapPrototype::addMapObject(DATABASE::ObjectType type, uint32 uiID, 
 //    }
 //}
 
-uint32 MapPrototype::checkAutoTiles(const uint32 &uiID, const Point3D<uint32> &pos, UInt32PointSet &result, Layer layer, uint32 resultFlag)
+uint32 MapPrototype::checkAutoTiles(const uint32 &uiID, const UInt32Point3D &pos, UInt32PointSet &result, Layer layer, uint32 resultFlag)
 {
     uint32 uiBorderCheck = 0;
     MapTile centerTile = getMapTile(pos, layer);
@@ -46,7 +46,7 @@ uint32 MapPrototype::checkAutoTiles(const uint32 &uiID, const Point3D<uint32> &p
     {
         DATABASE::AUTO_TILE::TILE_CHECK curTileCheck = DATABASE::AUTO_TILE::SAME_AROUND;
         // set position check
-        Point3D<uint32> checkPos = pos;
+        UInt32Point3D checkPos = pos;
         switch (i)
         {
         case 0: // top-left
@@ -128,7 +128,7 @@ uint32 MapPrototype::checkAutoTiles(const uint32 &uiID, const Point3D<uint32> &p
     return uiBorderCheck;
 }
 
-void MapPrototype::_resizeMap(Point<uint32> size, uint32 uiForegroundLayerSize, uint32 uiBackgroundLayerSize)
+void MapPrototype::_resizeMap(UInt32Point size, uint32 uiForegroundLayerSize, uint32 uiBackgroundLayerSize)
 {
     m_BackgroundTiles.resize(boost::extents[size.x][size.y][uiBackgroundLayerSize]);
     m_ForegroundTiles.resize(boost::extents[size.x][size.y][uiForegroundLayerSize]);
@@ -141,7 +141,7 @@ void MapPrototype::_clearTiles()
     m_ForegroundTiles.resize(boost::extents[0][0][0]);
 }
 
-void MapPrototype::setSize(Point<uint32> size, uint32 uiForegroundLayerSize, uint32 uiBackgroundLayerSize)
+void MapPrototype::setSize(UInt32Point size, uint32 uiForegroundLayerSize, uint32 uiBackgroundLayerSize)
 {
     if (size != getSize() || m_uiLayer[LAYER_FOREGROUND] != uiForegroundLayerSize || m_uiLayer[LAYER_BACKGROUND] != uiBackgroundLayerSize)
     {
@@ -153,7 +153,7 @@ void MapPrototype::setSize(Point<uint32> size, uint32 uiForegroundLayerSize, uin
     }
 }
 
-uint32 MapPrototype::getTile(Point3D<uint32> at, Layer layer) const
+uint32 MapPrototype::getTile(UInt32Point3D at, Layer layer) const
 {
     if (hasMapDataStored() && isInMap(at) && m_uiLayer[layer] > at.z)
     {
@@ -166,7 +166,7 @@ uint32 MapPrototype::getTile(Point3D<uint32> at, Layer layer) const
     return MAX_UINT32;
 }
 
-void MapPrototype::setTile(Point3D<uint32> at, uint32 uiID, Layer layer)
+void MapPrototype::setTile(UInt32Point3D at, uint32 uiID, Layer layer)
 {
     if (hasMapDataStored() && isInMap(at) && m_uiLayer[layer] > at.z)
     {
@@ -178,7 +178,7 @@ void MapPrototype::setTile(Point3D<uint32> at, uint32 uiID, Layer layer)
     }
 }
 
-uint32 MapPrototype::getAutoTile(Point3D<uint32> at, Layer layer) const
+uint32 MapPrototype::getAutoTile(UInt32Point3D at, Layer layer) const
 {
     if (hasMapDataStored() && isInMap(at) && m_uiLayer[layer] > at.z)
     {
@@ -191,7 +191,7 @@ uint32 MapPrototype::getAutoTile(Point3D<uint32> at, Layer layer) const
     return MAX_UINT32;
 }
 
-void MapPrototype::setAutoTile(Point3D<uint32> at, uint32 uiID, Layer layer)
+void MapPrototype::setAutoTile(UInt32Point3D at, uint32 uiID, Layer layer)
 {
     if (hasMapDataStored() && isInMap(at) && m_uiLayer[layer] > at.z)
     {
@@ -203,7 +203,7 @@ void MapPrototype::setAutoTile(Point3D<uint32> at, uint32 uiID, Layer layer)
     }
 }
 
-void MapPrototype::setMapTile(Point3D<uint32> at, MapTile mapTile, Layer layer)
+void MapPrototype::setMapTile(UInt32Point3D at, MapTile mapTile, Layer layer)
 {
     if (hasMapDataStored() && isInMap(at) && m_uiLayer[layer] > at.z)
     {
@@ -215,7 +215,7 @@ void MapPrototype::setMapTile(Point3D<uint32> at, MapTile mapTile, Layer layer)
     }
 }
 
-MapTile MapPrototype::getMapTile(Point3D<uint32> at, Layer layer) const
+MapTile MapPrototype::getMapTile(UInt32Point3D at, Layer layer) const
 {
     if (hasMapDataStored() && isInMap(at) && m_uiLayer[layer] > at.z)
     {

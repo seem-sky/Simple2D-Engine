@@ -12,22 +12,22 @@ namespace MAP
     class MapGrid
     {
     //private:
-    //    void _resizeGrid(const Point3D<uint32> &size);
+    //    void _resizeGrid(const UInt32Point3D &size);
 
-    //    bool _isValidGrid(const Point3D<uint32> &grid);
+    //    bool _isValidGrid(const UInt32Point3D &grid);
 
     //public:
-    //    static Point3D<uint32> getGridFromMapPos(const Point3D<uint32> &mapPos);
+    //    static UInt32Point3D getGridFromMapPos(const UInt32Point3D &mapPos);
 
-    //    void updateGridSize(Point3D<uint32> mapSize);
-    //    inline void clearGrid() { _resizeGrid(Point3D<uint32>()); }
+    //    void updateGridSize(UInt32Point3D mapSize);
+    //    inline void clearGrid() { _resizeGrid(UInt32Point3D()); }
 
     //    void addObject(MapObjectPtr pObject);
-    //    void removeObject(MapObjectPtr pObject, const Point3D<uint32> &grid);
+    //    void removeObject(MapObjectPtr pObject, const UInt32Point3D &grid);
 
     //private:
     //    MapObjectPtrVectorMultiarray3D m_ObjectGrid;
-    //    Point3D<uint32> m_GridSize;
+    //    UInt32Point3D m_GridSize;
     };
 }
 #endif

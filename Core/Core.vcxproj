@@ -83,7 +83,7 @@
     <OutDir>$(SolutionDir)\</OutDir>
     <IntDir>$(Configuration)\</IntDir>
     <LibraryPath>C:\Qt\Qt5.0.2-x86\qtbase\lib;$(SolutionDir);$(LibraryPath)</LibraryPath>
-    <IncludePath>C:\Qt\Qt5.0.2-x86\qtbase\lib;C:\Users\anti-freak\Documents\SDKs\boost_1_53_0;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Qt\Qt5.0.2-x86\qtbase\include;C:\Users\anti-freak\Documents\SDKs\boost_1_53_0;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LibraryPath>C:\Users\anti-freak\Documents\SDKs\qt-everywhere-opensource-src-4.8.1\lib;$(LibraryPath)</LibraryPath>

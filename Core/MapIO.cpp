@@ -64,12 +64,12 @@ void MapReader::_loadTiles(const QDomNode &parentNode, Layer layer)
                 continue;
             QDomNamedNodeMap attributes = rows.at(i).attributes();
             if (rows.at(i).hasAttributes())
-                _parseTileString(Point<uint32>(i, j), rows.at(i).attributes().item(0).nodeValue(), layer);
+                _parseTileString(UInt32Point(i, j), rows.at(i).attributes().item(0).nodeValue(), layer);
         }
     }
 }
 
-void MapReader::_parseTileString(const Point<uint32> &pos, const QString &tileString, Layer layer)
+void MapReader::_parseTileString(const UInt32Point &pos, const QString &tileString, Layer layer)
 {
     QStringList tileObjectStrings = tileString.split(TILE_OBJECT_DELIMITER);
     QStringList::const_iterator itr = tileObjectStrings.begin();
@@ -77,7 +77,7 @@ void MapReader::_parseTileString(const Point<uint32> &pos, const QString &tileSt
     {
         int delimiterIndex = itr->indexOf(TILE_AUTOTILE_DELIMITER);
         MapTile tileObject(itr->left(delimiterIndex).toUInt(), itr->right(itr->length() -1 -delimiterIndex).toUInt());
-        m_pMap->setMapTile(Point3D<uint32>(x, pos.x, pos.y), tileObject, layer);
+        m_pMap->setMapTile(UInt32Point3D(x, pos.x, pos.y), tileObject, layer);
     }
 }
 
@@ -163,7 +163,7 @@ void MapWriter::_storeTiles(QXmlStreamWriter &writer, Layer curLayer)
             QString line;
             for (uint32 x = 0; x < m_pMap->getSize().x; ++x)
             {
-                MapTile tile = m_pMap->getMapTile(Point3D<uint32>(x, y, layer), curLayer);
+                MapTile tile = m_pMap->getMapTile(UInt32Point3D(x, y, layer), curLayer);
                 line.append(QString::number(tile.m_uiTileID) + TILE_AUTOTILE_DELIMITER + QString::number(tile.m_uiAutoTileSetID) + TILE_OBJECT_DELIMITER);
             }
             writer.writeAttribute("Tiles", line);

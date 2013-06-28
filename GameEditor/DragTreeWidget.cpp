@@ -99,12 +99,42 @@ QWidget* AnimationPrototypeDragTreeWidget::setTooltipWidget(uint32 uiPrototypeID
 }
 
 /*#####
+# TileSetPrototypeDragTreeWidget
+#####*/
+TileSetPrototypeDragTreeWidget::TileSetPrototypeDragTreeWidget(QWidget *pParent) : PrototypeTreeWidget(pParent)
+{
+    setDragEnabled(false);
+    setToolTipPosition(TOOLTIP_RIGHT);
+}
+
+QWidget* TileSetPrototypeDragTreeWidget::setTooltipWidget(uint32 uiPrototypeID)
+{
+    ConstTileSetPrototypePtr proto;
+    if (!m_pDB || !m_pDB->getItem(uiPrototypeID, proto))
+        return NULL;
+
+    QLabel *pLabel = new QLabel();
+    QPixmap tileSetPixmap(TILE_SET::createTileSetPixmap(proto, m_pTileDB));
+    pLabel->setPixmap(tileSetPixmap);
+    pLabel->resize(tileSetPixmap.size());
+    setTooltipSize(tileSetPixmap.size());
+    return pLabel;
+}
+
+void TileSetPrototypeDragTreeWidget::mousePressEvent(QMouseEvent *pEvent)
+{
+    PrototypeTreeWidget::mousePressEvent(pEvent);
+    if (PrototypeTreeWidgetItem *pItem = dynamic_cast<PrototypeTreeWidgetItem*>(currentItem()))
+        emit itemClicked(pItem->text(0).toUInt(), pEvent->button());
+}
+
+
+/*#####
 # WorldObjectPrototypeDragTreeWidget
 #####*/
 WorldObjectPrototypeDragTreeWidget::WorldObjectPrototypeDragTreeWidget(QWidget *pParent) : PrototypeTreeWidget(pParent)
 {
     setDragEnabled(false);
-    //setDragDropMode(QAbstractItemView::DragOnly);
 }
 
 QWidget* WorldObjectPrototypeDragTreeWidget::setTooltipWidget(uint32 uiPrototypeID)
@@ -198,6 +228,7 @@ void TileDropLabel::dropEvent(QDropEvent *pEvent)
 
 void TileDropLabel::drawCurrentTile()
 {
+    clear();
     if (!m_pTileDB || !m_uiCurrentTileID)
         return;
 

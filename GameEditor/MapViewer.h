@@ -53,9 +53,9 @@ public:
     inline void emitItemChanged(MapObjectItem *pItem) { emit itemChanged(pItem); }
 
 signals:
-    void brushPressed(MapViewer *pWidget, Point3D<uint32> point, uint32 uiButton);
-    void brushReleased(MapViewer *pWidget, Point3D<uint32> point, uint32 uiButton);
-    void brushMoved(MapViewer *pWidget, Point3D<uint32> point);
+    void brushPressed(MapViewer *pWidget, UInt32Point3D point, uint32 uiButton);
+    void brushReleased(MapViewer *pWidget, UInt32Point3D point, uint32 uiButton);
+    void brushMoved(MapViewer *pWidget, UInt32Point3D point);
 
     void itemChanged(MapObjectItem *pItem);
 

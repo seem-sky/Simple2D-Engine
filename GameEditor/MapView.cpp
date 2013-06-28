@@ -46,9 +46,9 @@ void MapTabWidget::addMapTab(MapPrototypePtr map)
             pMapDB->loadMapFile(map->getID(), Config::Get()->getProjectDirectory());
             pWidget = new MapViewer(map, m_pSharedData, this);
             addTab(pWidget, "");
-            connect(pWidget->getScene(), SIGNAL(brushPressed(MapViewer*, Point3D<uint32>, uint32)), parent(), SLOT(_pressBrush(MapViewer*, Point3D<uint32>, uint32)));
-            connect(pWidget->getScene(), SIGNAL(brushReleased(MapViewer*, Point3D<uint32>, uint32)), parent(), SLOT(_releaseBrush(MapViewer*, Point3D<uint32>, uint32)));
-            connect(pWidget->getScene(), SIGNAL(brushMoved(MapViewer*, Point3D<uint32>)), parent(), SLOT(_moveBrush(MapViewer*, Point3D<uint32>)));
+            connect(pWidget->getScene(), SIGNAL(brushPressed(MapViewer*, UInt32Point3D, uint32)), parent(), SLOT(_pressBrush(MapViewer*, UInt32Point3D, uint32)));
+            connect(pWidget->getScene(), SIGNAL(brushReleased(MapViewer*, UInt32Point3D, uint32)), parent(), SLOT(_releaseBrush(MapViewer*, UInt32Point3D, uint32)));
+            connect(pWidget->getScene(), SIGNAL(brushMoved(MapViewer*, UInt32Point3D)), parent(), SLOT(_moveBrush(MapViewer*, UInt32Point3D)));
             connect(pWidget, SIGNAL(textUpdated(MapViewer*, const QString&)), this, SLOT(_updateTabText(MapViewer*, const QString&)));
             pWidget->updateText();
             Config::Get()->addOpenMap(map->getID());

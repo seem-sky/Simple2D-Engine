@@ -12,7 +12,7 @@ namespace DATABASE
     class TileDatabaseXMLReader : public TextureDatabaseReader<TilePrototype>
     {
     protected:
-        bool getAttributeFromXML(TilePrototypePtr proto, const QString &attributeName, const QString &attributeValue);
+        virtual bool getAttributeFromXML(TilePrototypePtr proto, const QString &attributeName, const QString &attributeValue);
 
     public:
         TileDatabaseXMLReader(const TileDatabasePtr &pDB) : TextureDatabaseReader(pDB) {}
@@ -28,12 +28,33 @@ namespace DATABASE
     };
 
     /*####
+    # TileSetDatabase
+    ####*/
+    class TileSetDatabaseXMLReader : public DatabaseReader<TILE_SET::TileSetPrototype>
+    {
+    protected:
+        virtual bool getAttributeFromXML(TileSetPrototypePtr proto, const QString &attributeName, const QString &attributeValue);
+
+    public:
+        TileSetDatabaseXMLReader(const TileSetDatabasePtr &pDB) : DatabaseReader(pDB) {}
+    };
+
+    class TileSetDatabaseXMLWriter : public DatabaseWriter<TILE_SET::TileSetPrototype>
+    {
+    protected:
+        virtual void getXMLFromAttributes(TileSetPrototypePtr proto, QXmlStreamWriter &writer);
+
+    public:
+        TileSetDatabaseXMLWriter(const TileSetDatabasePtr &pDB) : DatabaseWriter(pDB) {}
+    };
+
+    /*####
     # AutoTileDatabase
     ####*/
     class AutoTileDatabaseXMLReader : public DatabaseReader<AUTO_TILE::AutoTilePrototype>
     {
     protected:
-        bool getAttributeFromXML(AutoTilePrototypePtr proto, const QString &attributeName, const QString &attributeValue);
+        virtual bool getAttributeFromXML(AutoTilePrototypePtr proto, const QString &attributeName, const QString &attributeValue);
 
     public:
         AutoTileDatabaseXMLReader(const AutoTileDatabasePtr &pDB) : DatabaseReader(pDB) {}
@@ -64,7 +85,7 @@ namespace DATABASE
         bool _getSpriteAttribute(DATABASE::AnimationPrototype::Sprite &sprite, const QString &nodeName, const QString &nodeValue);
 
     protected:
-        bool getChildrenFromXML(const QDomNode &node, AnimationPrototypePtr proto, const QString &childName);
+        virtual bool getChildrenFromXML(const QDomNode &node, AnimationPrototypePtr proto, const QString &childName);
 
     public:
         AnimationDatabaseXMLReader(const AnimationDatabasePtr &pDB) : DatabaseReader(pDB) {}
@@ -85,7 +106,7 @@ namespace DATABASE
     class MapDatabaseXMLReader : public DatabaseReader<MAP::MapPrototype>
     {
     protected:
-        bool getAttributeFromXML(MAP::MapPrototypePtr proto, const QString &attributeName, const QString &attributeValue);
+        virtual bool getAttributeFromXML(MAP::MapPrototypePtr proto, const QString &attributeName, const QString &attributeValue);
 
     public:
         MapDatabaseXMLReader(const MapDatabasePtr &pDB) : DatabaseReader(pDB) {}
@@ -106,7 +127,7 @@ namespace DATABASE
     class LocalsDatabaseXMLReader : public DatabaseReader<LocalisationPrototype>
     {
     protected:
-        bool getAttributeFromXML(LocalisationPrototypePtr proto, const QString &attributeName, const QString &attributeValue);
+        virtual bool getAttributeFromXML(LocalisationPrototypePtr proto, const QString &attributeName, const QString &attributeValue);
 
     public:
         LocalsDatabaseXMLReader(const LocalsDatabasePtr &pDB) : DatabaseReader(pDB) {}
@@ -127,8 +148,8 @@ namespace DATABASE
     class WorldObjectDatabaseXMLReader : public DatabaseReader<WorldObjectPrototype>
     {
     protected:
-        bool getChildrenFromXML(const QDomNode &node, WorldObjectPrototypePtr proto, const QString &childName);
-        bool getAttributeFromXML(WorldObjectPrototypePtr proto, const QString &attributeName, const QString &attributeValue);
+        virtual bool getChildrenFromXML(const QDomNode &node, WorldObjectPrototypePtr proto, const QString &childName);
+        virtual bool getAttributeFromXML(WorldObjectPrototypePtr proto, const QString &attributeName, const QString &attributeValue);
 
     public:
         WorldObjectDatabaseXMLReader(const WorldObjectDatabasePtr &pDB) : DatabaseReader(pDB) {}

@@ -37,12 +37,13 @@ private slots:
     void _projectOpened();
     void _saveChanges();
 
+    void _tileSetClicked(uint32 uiID, Qt::MouseButton button);
     void _autoTileClicked(uint32 uiID, Qt::MouseButton button);
     void _tileClicked(uint32 uiID, Qt::MouseButton button);
 
-    void _pressBrush(MapViewer *pWidget, Point3D<uint32> point, uint32 uiButton);
-    void _releaseBrush(MapViewer *pWidget, Point3D<uint32> point, uint32 uiButton);
-    void _moveBrush(MapViewer *pWidget, Point3D<uint32> point);
+    void _pressBrush(MapViewer *pWidget, UInt32Point3D point, uint32 uiButton);
+    void _releaseBrush(MapViewer *pWidget, UInt32Point3D point, uint32 uiButton);
+    void _moveBrush(MapViewer *pWidget, UInt32Point3D point);
 
     void _layerChanged(bool state);
     void _MappingModeChanged(int index);
@@ -59,12 +60,12 @@ private slots:
     void _mapUpdated(MAP::MapPrototypePtr map);
 
 signals:
-    void leftTileChanged(uint32 uiID, bool isAutoTile);
-    void rightTileChanged(uint32 uiID, bool isAutoTile);
+    void leftTileChanged(uint32 uiID, MAP::BRUSH::BrushType type);
+    void rightTileChanged(uint32 uiID, MAP::BRUSH::BrushType type);
 
 private:
     ModifyObject m_ModifyObj;
-    MAP::MapObjectBrush m_MapObjectBrush;
+    MAP::BRUSH::MapObjectBrush m_MapObjectBrush;
 
     SharedMapEditorDataPtr m_pSharedData;
 };

@@ -8,6 +8,7 @@ namespace DATABASE
 {
     // database store path
     const QString TILE_DATABASE_PATH = "/Game/TileDatabase.xml";
+    const QString TILE_SET_DATABASE_PATH = "/Game/TileSetDatabase.xml";
     const QString AUTO_TILE_DATABASE_PATH = "/Game/AutoTileDatabase.xml";
     const QString SPRITE_DATABASE_PATH = "/Game/SpriteDatabase.xml";
     const QString ANIMATION_DATABASE_PATH = "/Game/AnimationDatabase.xml";
@@ -55,6 +56,10 @@ namespace DATABASE
     typedef Database<TilePrototype> TileDatabase;
     typedef std::shared_ptr<TileDatabase> TileDatabasePtr;
     typedef std::shared_ptr<const TileDatabase> ConstTileDatabasePtr;
+    // tileset database typedefs
+    typedef Database<TILE_SET::TileSetPrototype> TileSetDatabase;
+    typedef std::shared_ptr<TileSetDatabase> TileSetDatabasePtr;
+    typedef std::shared_ptr<const TileSetDatabase> ConstTileSetDatabasePtr;
     // autotile database typedefs
     typedef Database<AUTO_TILE::AutoTilePrototype> AutoTileDatabase;
     typedef std::shared_ptr<AutoTileDatabase> AutoTileDatabasePtr;
@@ -78,10 +83,30 @@ namespace DATABASE
     // text database typedefs
     typedef Database<LocalisationPrototype> LocalsDatabase;
     typedef std::shared_ptr<LocalsDatabase> LocalsDatabasePtr;
-    typedef std::shared_ptr<const LocalsDatabase> ConstTextDatabasePtr;
+    typedef std::shared_ptr<const LocalsDatabase> ConstLocalsDatabasePtr;
     // map database typedefs
     typedef std::shared_ptr<MAP::MapDatabase> MapDatabasePtr;
     typedef std::shared_ptr<const MAP::MapDatabase> ConstMapDatabasePtr;
+    enum DatabaseType
+    {
+        TILE_DATABASE           = 0x0001,
+        TILE_SET_DATABASE       = 0x0002,
+        AUTO_TILE_DATABASE      = 0x0004,
+        SPRITE_DATABASE         = 0x0008,
+        ANIMATION_DATABASE      = 0x0010,
+        OBJECT_ANIMATION_TYPE_DATABASE  = 0x0020,
+
+        WORLD_OBJECT_DATABASE   = 0x0040,
+        DYNAMIC_OBJECT_DATABASE = 0x0080,
+
+        MAP_DATABASE            = 0x0100,
+
+        LOCALS_DATABASE         = 0x0200,
+
+        ALL_DATABASES           = TILE_DATABASE | TILE_SET_DATABASE | AUTO_TILE_DATABASE | SPRITE_DATABASE | ANIMATION_DATABASE | OBJECT_ANIMATION_TYPE_DATABASE |
+                                    WORLD_OBJECT_DATABASE | DYNAMIC_OBJECT_DATABASE | MAP_DATABASE | LOCALS_DATABASE
+    };
+
     class DatabaseMgr
     {
     public:
@@ -89,7 +114,11 @@ namespace DATABASE
 
         inline ConstTileDatabasePtr getTileDatabase() const { return m_pTileDatabase; }
         inline TileDatabasePtr getTileDatabase() { return m_pTileDatabase; }
-        inline void setTileDatabase(const TileDatabasePtr &db) { *m_pTileDatabase.get() = *db; }
+        inline void setTileDatabase(const TileDatabasePtr &db) { *m_pTileDatabase = *db; }
+
+        inline ConstTileSetDatabasePtr getTileSetDatabase() const { return m_pTileSetDatabase; }
+        inline TileSetDatabasePtr getTileSetDatabase() { return m_pTileSetDatabase; }
+        inline void setTileSetDatabase(const TileSetDatabasePtr &db) { *m_pTileSetDatabase = *db; }
 
         inline ConstAutoTileDatabasePtr getAutoTileDatabase() const { return m_pAutoTileDatabase; }
         inline AutoTileDatabasePtr getAutoTileDatabase() { return m_pAutoTileDatabase; }
@@ -119,18 +148,19 @@ namespace DATABASE
         inline ConstMapDatabasePtr getMapDatabase() const { return m_pMapDatabase; }
         inline void setMapDatabase(const MapDatabasePtr &db) { *m_pMapDatabase = *db; }
 
-        inline LocalsDatabasePtr getLocalsDatabase() { return m_pTextDatabase; }
-        inline ConstTextDatabasePtr getLocalsDatabase() const { return m_pTextDatabase; }
-        inline void setTextDatabase(const LocalsDatabasePtr &db) { *m_pTextDatabase = *db; }
+        inline LocalsDatabasePtr getLocalsDatabase() { return m_pLocalsDatabase; }
+        inline ConstLocalsDatabasePtr getLocalsDatabase() const { return m_pLocalsDatabase; }
+        inline void setTextDatabase(const LocalsDatabasePtr &db) { *m_pLocalsDatabase = *db; }
 
         virtual void clear();
 
         // in/output
-        virtual bool loadDatabase(const QString &projectPath);
-        virtual bool saveDatabase(const QString &projectPath);
+        virtual bool loadDatabase(const QString &projectPath, uint32 databases = ALL_DATABASES);
+        virtual bool saveDatabase(const QString &projectPath, uint32 databases = ALL_DATABASES);
 
     private:
         TileDatabasePtr m_pTileDatabase;
+        TileSetDatabasePtr m_pTileSetDatabase;
         AutoTileDatabasePtr m_pAutoTileDatabase;
         SpriteDatabasePtr m_pSpriteDatabase;
         AnimationDatabasePtr m_pAnimationDatabase;
@@ -138,9 +168,14 @@ namespace DATABASE
         DynamicObjectDatabasePtr m_pDynamicObjectDatabase;
         ObjectAnimationTypeDatabasePtr m_pObjectAnimationTypeDatabase;
         MapDatabasePtr m_pMapDatabase;
-        LocalsDatabasePtr m_pTextDatabase;
+        LocalsDatabasePtr m_pLocalsDatabase;
     };
     typedef std::shared_ptr<DatabaseMgr> DatabaseMgrPtr;
     typedef std::shared_ptr<const DatabaseMgr> ConstDatabaseMgrPtr;
+
+    namespace TILE_SET
+    {
+        QPixmap createTileSetPixmap(ConstTileSetPrototypePtr proto, ConstTileDatabasePtr tileDB);
+    }
 }
 #endif

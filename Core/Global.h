@@ -5,6 +5,7 @@
 #include <unordered_set>
 #include <vector>
 #include <map>
+#include <algorithm>
 #include "Rect.h"
 #include "math_extensions.h"
 #include <boost/dynamic_bitset.hpp>
@@ -31,13 +32,20 @@ const uint32 DAY             = 24;
 const uint32 MAX_TILE_PER_PIXMAP    = 20;
 const uint32 TILE_SIZE              = 32;
 
+// Point typedefs
+typedef Point<int32> Int32Point;
+typedef Point<uint32> UInt32Point;
+
+typedef Point3D<int32> Int32Point3D;
+typedef Point3D<uint32> UInt32Point3D;
+
 // unordered_set typedefs
 typedef std::unordered_set<uint32> UInt32UnorderedSet;
 
 // set typedefs
 typedef std::set<Point<uint16>> UInt16PointSet;
-typedef std::set<Point<uint32>> UInt32PointSet;
-typedef std::set<Point<int32>> Int32PointSet;
+typedef std::set<UInt32Point> UInt32PointSet;
+typedef std::set<Int32Point> Int32PointSet;
 
 typedef std::set<uint32> UInt32Set;
 
@@ -49,8 +57,8 @@ typedef std::vector<UInt32Vector> UInt32Vector2D;
 typedef std::vector<UInt32Vector2D> UInt32Vector3D;
 
 typedef std::vector<Point<uint16>> UInt16PointVector;
-typedef std::vector<Point<uint32>> UInt32PointVector;
-typedef std::vector<Point3D<uint32>> UInt32Point3DVector;
+typedef std::vector<UInt32Point> UInt32PointVector;
+typedef std::vector<UInt32Point3D> UInt32Point3DVector;
 
 typedef std::vector<QString> StringVector;
 typedef std::vector<StringVector> String2DVector;

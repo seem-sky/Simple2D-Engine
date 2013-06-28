@@ -1,122 +1,161 @@
-#ifndef MAP_BRUSH
-#define MAP_BRUSH
+#ifndef MAP_BRUSH_H
+#define MAP_BRUSH_H
 
 #include "Global.h"
 #include "MapView.h"
 
 namespace MAP
 {
-    /*#####
-    # TileBrushes
-    #####*/
-    class TileBrush
+    namespace BRUSH
     {
-    public:
-        enum BrushType
+        /*#####
+        # TileBrushes
+        #####*/
+        enum BrushMode
         {
-            BRUSH_PEN,
-            BRUSH_RECT,
-            BRUSH_FILL,
+            MODE_PEN,
+            MODE_RECT,
+            MODE_FILL,
         };
 
-    private:
-        virtual void _drawPen(MapViewer *pWidget, const Point3D<uint32> &center) = 0;
-        virtual void _drawFill(MapViewer *pWidget, const Point3D<uint32> &center) = 0;
-        virtual bool _checkFill(MapPrototypePtr const &map, const MAP::MapTile &centerTile, Point3D<uint32> const &pos,
-            std::vector<boost::dynamic_bitset<>> &mapBitset, UInt32PointVector &openPoints) = 0;
+        BrushMode getBrushMode(const QString &mode);
 
-    protected:
-        void calculateFillArea(MapViewer *pWidget, const Point3D<uint32> &center, BitsetVector &mapBitset = BitsetVector());
-        void setupBitset(const MAP::MapPrototypePtr &map, BitsetVector &mapBitset);
+        enum BrushType
+        {
+            BRUSH_TILE,
+            BRUSH_TILE_SET,
+            BRUSH_AUTO_TILE
+        };
 
-    public:
-        TileBrush();
-        inline void setBrushType(BrushType type) { m_Type = type; }
-        inline BrushType getBrushType() const { return m_Type; }
-        inline void setTile(uint32 uiID) { m_uiTileID = uiID; }
-        inline uint32 getTile() const { return m_uiTileID; }
+        class TileBrush
+        {
+        public:
 
-        inline void setLayer(Layer layer) { m_Layer = layer; }
-        inline Layer getLayer() const { return m_Layer; }
 
-        virtual bool isAutoTileBrush() const = 0;
+        private:
+            virtual void _drawPen(MapViewer *pWidget, const UInt32Point3D &center) = 0;
+            virtual void _drawFill(MapViewer *pWidget, const UInt32Point3D &center) = 0;
+            virtual bool _checkFill(MapPrototypePtr map, MapTile centerTile, UInt32Point3D pos, BitsetVector &mapBitset, UInt32PointVector &openPoints) = 0;
 
-        void drawOnMap(MapViewer *pWidget, Point3D<uint32> center);
+        protected:
+            void calculateFillArea(MapViewer *pWidget, const UInt32Point3D &center, BitsetVector &mapBitset = BitsetVector());
+            void setupBitset(const MAP::MapPrototypePtr &map, BitsetVector &mapBitset);
 
-        void brushPress(MapViewer *pWidget, Point3D<uint32> center);
-        void brushRelease(MapViewer *pWidget, Point3D<uint32> center);
-        void brushMove(MapViewer *pWidget, Point3D<uint32> center);
+        public:
+            TileBrush();
+            inline void setBrushMode(BrushMode type) { m_mode = type; }
+            inline BrushMode getBrushMode() const { return m_mode; }
+            inline void setTile(uint32 uiID) { m_uiTileID = uiID; }
+            inline uint32 getTile() const { return m_uiTileID; }
 
-    private:
-        bool m_buttonHold;
-        MapViewer *m_pLastEmitter;
-        BrushType m_Type;
-        uint32 m_uiTileID;
-        Layer m_Layer;
-    };
-    typedef std::shared_ptr<TileBrush> MapBrushPtr;
+            inline void setLayer(Layer layer) { m_Layer = layer; }
+            inline Layer getLayer() const { return m_Layer; }
 
-    class MapTileBrush : public TileBrush
-    {
-    private:
-        void _drawPen(MapViewer *pWidget, const Point3D<uint32> &center);
-        void _drawFill(MapViewer *pWidget, const Point3D<uint32> &center);
-        bool _checkFill(MapPrototypePtr const &map, const MAP::MapTile &centerTile, Point3D<uint32> const &pos,
-            std::vector<boost::dynamic_bitset<>> &mapBitset, UInt32PointVector &openPoints);
+            void drawOnMap(MapViewer *pWidget, UInt32Point3D center);
 
-    public:
-        bool isAutoTileBrush() const { return false; }
-    };
+            void brushPress(MapViewer *pWidget, UInt32Point3D center);
+            void brushRelease(MapViewer *pWidget, UInt32Point3D center);
+            void brushMove(MapViewer *pWidget, UInt32Point3D center);
 
-    class MapAutoTileBrush : public TileBrush
-    {
-    private:
-        void _drawPen(MapViewer *pWidget, const Point3D<uint32> &center);
-        void _drawFill(MapViewer *pWidget, const Point3D<uint32> &center);
-        bool _checkFill(MapPrototypePtr const &map, const MAP::MapTile &centerTile, Point3D<uint32> const &pos,
-            std::vector<boost::dynamic_bitset<>> &mapBitset, UInt32PointVector &openPoints);
+            inline BrushType getBrushType() const { return m_BrushType; }
 
-        void _setAutoTile(MapPrototypePtr const &map, const Point3D<uint32> &center, DATABASE::ConstAutoTilePrototypePtr proto);
+        private:
+            bool m_buttonHold;
+            MapViewer *m_pLastEmitter;
+            BrushMode m_mode;
+            uint32 m_uiTileID;
+            Layer m_Layer;
 
-        void _doAutoTileCheckForPosList(const MAP::MapPrototypePtr &map, const uint32 &uiLayer, const UInt32PointSet &posVector);
+        protected:
+            BrushType m_BrushType;
+        };
 
-    public:
-        MapAutoTileBrush(DATABASE::ConstAutoTileDatabasePtr pDB) : TileBrush(), m_pAutoTileDB(pDB) {}
-        inline void setAutoTileDB(DATABASE::ConstAutoTileDatabasePtr pAutoTileDB) { m_pAutoTileDB = pAutoTileDB; }
+        class MapTileBrush : public TileBrush
+        {
+        private:
+            void _drawPen(MapViewer *pWidget, const UInt32Point3D &center);
+            void _drawFill(MapViewer *pWidget, const UInt32Point3D &center);
+            bool _checkFill(MapPrototypePtr map, MapTile centerTile, UInt32Point3D pos, BitsetVector &mapBitset, UInt32PointVector &openPoints);
 
-        bool isAutoTileBrush() const { return true; }
+        public:
+            MapTileBrush() : TileBrush()
+            {
+                m_BrushType = BRUSH_TILE;
+            }
+        };
 
-    private:
-        DATABASE::ConstAutoTileDatabasePtr m_pAutoTileDB;
-        UInt32PointSet m_BorderPosResult;
-    };
+        class MapTileSetBrush : public TileBrush
+        {
+        private:
+            void _drawPen(MapViewer *pWidget, const UInt32Point3D &center);
+            void _drawFill(MapViewer *pWidget, const UInt32Point3D &center);
+            bool _checkFill(MapPrototypePtr map, MapTile centerTile, UInt32Point3D pos, BitsetVector &mapBitset, UInt32PointVector &openPoints);
 
-    /*#####
-    # MapObjectBrush
-    #####*/
-    class MapObjectBrush : public MapEditorObject
-    {
-    public:
-        MapObjectBrush() : MapEditorObject() {}
+        public:
+            MapTileSetBrush(DATABASE::ConstTileSetDatabasePtr pTileSetDB) : TileBrush(), m_pTileSetDB(pTileSetDB)
+            {
+                m_BrushType = BRUSH_TILE_SET;
+            }
 
-        inline void setObjectType(DATABASE::ObjectType type) { m_ObjectType = type; }
-        inline DATABASE::ObjectType getObjectType() const { return m_ObjectType; }
+            inline void setTileSetDB(DATABASE::ConstTileSetDatabasePtr pTileSetDB) { m_pTileSetDB = pTileSetDB; }
 
-        inline void setObjectID(uint32 uiID) { m_uiObjectID = uiID; }
-        inline uint32 getObjectID() const { return m_uiObjectID; }
+        private:
+            DATABASE::ConstTileSetDatabasePtr m_pTileSetDB;
+            UInt32Point3D m_centerPos;
+        };
 
-        void updateObject() {}
+        class MapAutoTileBrush : public TileBrush
+        {
+        private:
+            void _drawPen(MapViewer *pWidget, const UInt32Point3D &center);
+            void _drawFill(MapViewer *pWidget, const UInt32Point3D &center);
+            bool _checkFill(MapPrototypePtr map, MapTile centerTile, UInt32Point3D pos, BitsetVector &mapBitset, UInt32PointVector &openPoints);
 
-        // return true if draw was successful
-        bool drawObject(MapViewer *pWidget, Int32Point pos);
+            void _setAutoTile(MapPrototypePtr const &map, const UInt32Point3D &center, DATABASE::ConstAutoTilePrototypePtr proto);
 
-        static QPixmap getObjectPixmap(uint32 uiObjectID, DATABASE::ObjectType type, MAP::MapDirection direction,
-            DATABASE::ConstWorldObjectDatabasePtr pWorldObjectDB, DATABASE::ConstAnimationDatabasePtr pAnimationDB, DATABASE::ConstSpriteDatabasePtr pSpriteDB,
-            QRect &boundingRect);
+            void _doAutoTileCheckForPosList(const MAP::MapPrototypePtr &map, const uint32 &uiLayer, const UInt32PointSet &posVector);
 
-    private:
-        uint32 m_uiObjectID;
-        DATABASE::ObjectType m_ObjectType;
-    };
+        public:
+            MapAutoTileBrush(DATABASE::ConstAutoTileDatabasePtr pDB) : TileBrush(), m_pAutoTileDB(pDB)
+            {
+                m_BrushType = BRUSH_AUTO_TILE;
+            }
+
+            inline void setAutoTileDB(DATABASE::ConstAutoTileDatabasePtr pAutoTileDB) { m_pAutoTileDB = pAutoTileDB; }
+
+        private:
+            DATABASE::ConstAutoTileDatabasePtr m_pAutoTileDB;
+            UInt32PointSet m_BorderPosResult;
+        };
+
+        /*#####
+        # MapObjectBrush
+        #####*/
+        class MapObjectBrush : public MapEditorObject
+        {
+        public:
+            MapObjectBrush() : MapEditorObject() {}
+
+            inline void setObjectType(DATABASE::ObjectType type) { m_ObjectType = type; }
+            inline DATABASE::ObjectType getObjectType() const { return m_ObjectType; }
+
+            inline void setObjectID(uint32 uiID) { m_uiObjectID = uiID; }
+            inline uint32 getObjectID() const { return m_uiObjectID; }
+
+            void updateObject() {}
+
+            // return true if draw was successful
+            bool drawObject(MapViewer *pWidget, Int32Point pos);
+
+            static QPixmap getObjectPixmap(uint32 uiObjectID, DATABASE::ObjectType type, MAP::MapDirection direction,
+                DATABASE::ConstWorldObjectDatabasePtr pWorldObjectDB, DATABASE::ConstAnimationDatabasePtr pAnimationDB, DATABASE::ConstSpriteDatabasePtr pSpriteDB,
+                QRect &boundingRect);
+
+        private:
+            uint32 m_uiObjectID;
+            DATABASE::ObjectType m_ObjectType;
+        };
+    }
+    typedef std::shared_ptr<BRUSH::TileBrush> MapBrushPtr;
 }
 #endif

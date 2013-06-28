@@ -29,23 +29,23 @@ namespace MAP
     class TileMapAction : public MapAction
     {
     public:
-        TileMapAction(Point3D<uint32> pos, MapTile uiTileID, Layer layer, MapPrototypePtr map);
+        TileMapAction(UInt32Point3D pos, MapTile uiTileID, Layer layer, MapPrototypePtr map);
 
         void revertMapAction();
 
     private:
-        Point3D<uint32> m_Pos;
+        UInt32Point3D m_Pos;
         MapTile m_MapTile;
         Layer m_Layer;
     };
 
-    class MultiTileMapAction : public MapAction
+    class MultiPositionTileMapAction : public MapAction
     {
     public:
-        MultiTileMapAction(MapTile mapTile, MapPrototypePtr map, uint32 uiLayer, Layer layer);
+        MultiPositionTileMapAction(MapTile mapTile, MapPrototypePtr map, uint32 uiLayer, Layer layer);
 
         void revertMapAction();
-        void addPosition(const UInt32Point &pos);
+        void addPosition(UInt32Point pos);
 
     private:
         UInt32PointVector m_Positions;
@@ -53,6 +53,26 @@ namespace MAP
         MapTile m_MapTile;
         Layer m_Layer;
     };
-    typedef std::shared_ptr<MultiTileMapAction> MultiTileMapActionPtr;
+    typedef std::shared_ptr<MultiPositionTileMapAction> MultiPositionTileMapActionPtr;
+
+    typedef std::pair<UInt32Point, MapTile> UInt32PointMapTilePair;
+    typedef std::vector<UInt32PointMapTilePair> UInt32PointMapTilePairVector;
+    class MultiPositionMultiTileMapAction : public MapAction
+    {
+    private:
+        void _revertAction(UInt32PointMapTilePair pair);
+
+    public:
+        MultiPositionMultiTileMapAction(MapPrototypePtr map, uint32 uiLayer, Layer layer);
+
+        void revertMapAction();
+        void addPosition(UInt32Point pos, MapTile tile);
+
+    private:
+        UInt32PointMapTilePairVector m_Positions;
+        uint32 m_uiLayer;
+        Layer m_Layer;
+    };
+    typedef std::shared_ptr<MultiPositionMultiTileMapAction> MultiPositionMultiTileMapActionPtr;
 }
 #endif

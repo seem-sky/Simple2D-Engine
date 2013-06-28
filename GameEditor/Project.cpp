@@ -9,7 +9,7 @@ bool Project::loadProject(const QString &path)
     if (isOpenProject())
         closeCurrentProject();
 
-    if (m_pDBMgr->loadDatabase(path, DATABASE::TILE_SET_DATABASE))
+    if (m_pDBMgr->loadDatabase(path))
     {
         m_projectPath = path;
         return true;

@@ -19,10 +19,7 @@ bool XML::waitForSuccess()
 void XML::execThreaded(const QString &fileName, const QString &nodeName)
 {
     if (m_result == NONE)
-    {
         m_pThread = ThreadPtr(new boost::thread(boost::bind(&XML::_execThreaded, this, fileName, nodeName, m_result)));
-        m_pThread->start_thread();
-    }
 }
 
 bool XML::isThreaded() const

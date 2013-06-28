@@ -36,6 +36,50 @@ void TileDatabaseXMLWriter::getXMLFromAttributes(TilePrototypePtr proto, QXmlStr
 }
 
 /*####
+# TileSetDatabase
+####*/
+bool TileSetDatabaseXMLReader::getAttributeFromXML(TileSetPrototypePtr proto, const QString &attributeName, const QString &attributeValue)
+{
+    if (!proto || attributeName.isEmpty() || attributeValue.isEmpty())
+        return false;
+    if (DatabaseReader::getAttributeFromXML(proto, attributeName, attributeValue))
+        return true;
+
+    if (attributeName == "columnCount")
+    {
+        proto->resizeTiles(UInt32Point(attributeValue.toUInt(), proto->getTileCount().y));
+        return true;
+    }
+    else if (attributeName == "rowCount")
+    {
+        proto->resizeTiles(UInt32Point(proto->getTileCount().x, attributeValue.toUInt()));
+        return true;
+    }
+    // check tile IDs
+    else
+    {
+        uint32 uiDelimiter1 = attributeName.indexOf("x"), uiDelimiter2 = attributeName.indexOf("y");
+        proto->setTileID(UInt32Point(attributeName.mid(uiDelimiter1+1, uiDelimiter2-uiDelimiter1-1).toUInt(), attributeName.right(attributeName.length()-uiDelimiter2-1).toUInt()), attributeValue.toUInt());
+    }
+    return false;
+}
+
+void TileSetDatabaseXMLWriter::getXMLFromAttributes(TileSetPrototypePtr proto, QXmlStreamWriter &writer)
+{
+    if (!proto)
+        return;
+    DatabaseWriter::getXMLFromAttributes(proto, writer);
+    writer.writeAttribute("columnCount", QString::number(proto->getTileCount().x));
+    writer.writeAttribute("rowCount", QString::number(proto->getTileCount().y));
+    // get tile IDs
+    for (uint32 x = 0; x < proto->getTileCount().x; ++x)
+    {
+        for (uint32 y = 0; y < proto->getTileCount().y; ++y)
+            writer.writeAttribute("x"+QString::number(x)+"y"+QString::number(y), QString::number(proto->getTileID(UInt32Point(x, y))));
+    }
+}
+
+/*####
 # AutoTileDatabase
 ####*/
 bool AutoTileDatabaseXMLReader::getAttributeFromXML(AutoTilePrototypePtr proto, const QString &attributeName, const QString &attributeValue)

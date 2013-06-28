@@ -140,6 +140,50 @@ namespace DATABASE
     };
 
     /*#####
+    # TileSetPrototype
+    #####*/
+    TILE_SET::TileSetPrototype::TileSetPrototype(uint32 uiID) : Prototype(uiID)
+    {
+        resizeTiles(UInt32Point(DEFAULT_COLUMN_COUNT, DEFAULT_ROW_COUNT));
+    }
+
+    void TILE_SET::TileSetPrototype::resizeTiles(UInt32Point size)
+    {
+        m_Tiles.resize(boost::extents[size.x][size.y]);
+        m_Size = size;
+    }
+
+    void TILE_SET::TileSetPrototype::clear()
+    {
+        m_Tiles.resize(boost::extents[0][0]);
+        m_Size = UInt32Point(0, 0);
+    }
+
+    void TILE_SET::TileSetPrototype::setTileID(UInt32Point pos, uint32 ID)
+    {
+        _resizeIfNeeded(UInt32Point(pos.x+1, pos.y+1));
+        m_Tiles[pos.x][pos.y] = ID;
+    }
+
+    uint32 TILE_SET::TileSetPrototype::getTileID(UInt32Point pos) const
+    {
+        if (pos.x < m_Size.x && pos.y < m_Size.y)
+            return m_Tiles[pos.x][pos.y];
+        return 0;
+    }
+
+    void TILE_SET::TileSetPrototype::_resizeIfNeeded(UInt32Point size)
+    {
+        UInt32Point newSize(m_Size);
+        if (size.x > newSize.x)
+            newSize.x = size.x;
+        if (size.y > newSize.y)
+            newSize.y = size.y;
+        if (newSize != m_Size)
+            resizeTiles(newSize);
+    }
+
+    /*#####
     # AnimationPrototype
     #####*/
     bool AnimationPrototype::getFrame(uint32 uiIndex, Frame &frame) const

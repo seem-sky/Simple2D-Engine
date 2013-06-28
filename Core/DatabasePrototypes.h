@@ -3,6 +3,7 @@
 
 #include "Database.h"
 #include "Color.h"
+#include <boost/multi_array.hpp>
 
 namespace DATABASE
 {
@@ -65,6 +66,38 @@ namespace DATABASE
     typedef std::shared_ptr<TilePrototype> TilePrototypePtr;
     typedef std::shared_ptr<const TilePrototype> ConstTilePrototypePtr;
     typedef std::vector<ConstTilePrototypePtr> ConstTilePrototypePtrVector;
+
+    /*#####
+    # TilePrototype
+    #####*/
+    namespace TILE_SET
+    {
+        typedef boost::multi_array<uint32, 2> UInt32Multiarray2D;
+        const uint32 DEFAULT_COLUMN_COUNT = 2;
+        const uint32 DEFAULT_ROW_COUNT = 2;
+        class TileSetPrototype : public Prototype
+        {
+        private:
+            void _resizeIfNeeded(UInt32Point size);
+
+        public:
+            TileSetPrototype(uint32 uiID = 0);
+
+            void resizeTiles(UInt32Point size);
+            inline UInt32Point getTileCount() const { return m_Size; }
+            void clear();
+
+            void setTileID(UInt32Point pos, uint32 ID);
+            uint32 getTileID(UInt32Point pos) const;
+
+        private:
+            UInt32Point m_Size;
+            UInt32Multiarray2D m_Tiles;
+        };
+    }
+    typedef std::shared_ptr<TILE_SET::TileSetPrototype> TileSetPrototypePtr;
+    typedef std::shared_ptr<const TILE_SET::TileSetPrototype> ConstTileSetPrototypePtr;
+    typedef std::vector<ConstTileSetPrototypePtr> ConstTileSetPrototypePtrVector;
 
     /*#####
     # AutoTilePrototype
@@ -268,7 +301,7 @@ namespace DATABASE
         {
         public:
             Sprite() : m_uiSpriteID(0), m_uiRotation(0), m_uiScale(100), m_uiOpacity(100) {}
-            Point<int32> m_Pos;
+            Int32Point m_Pos;
             uint32 m_uiSpriteID;
             uint16 m_uiRotation;
             uint32 m_uiScale;

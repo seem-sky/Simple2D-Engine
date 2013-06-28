@@ -29,6 +29,7 @@ public:
     inline MAP::Layer getCurrentLayer() const { return m_CurrentLayer; }
 
     DATABASE::ConstTileDatabasePtr getTileDatabase() const;
+    DATABASE::ConstTileSetDatabasePtr getTileSetDatabase() const;
     DATABASE::ConstAutoTileDatabasePtr getAutoTileDatabase() const;
     DATABASE::ConstSpriteDatabasePtr getSpriteDatabase() const;
     DATABASE::ConstAnimationDatabasePtr getAnimationDatabase() const;
