@@ -5,17 +5,18 @@
 #include "DatabaseMgr.h"
 #include "QtGlobal.h"
 #include "MapEditorObject.h"
+#include "PrototypeTreeWidgetItem.h"
 
 class MapTreeItem : public PrototypeTreeWidgetItem
 {
 public:
-    MapTreeItem(const MAP::MapPrototypePtr &map);
+    MapTreeItem(const DATABASE::MAP::MapPrototypePtr &map);
 
-    inline MAP::MapPrototypePtr getMap() const { return m_pMap; }
+    inline DATABASE::MAP::MapPrototypePtr getMap() const { return m_pMap; }
     void updateMapText();
 
 private:
-    const MAP::MapPrototypePtr m_pMap;
+    const DATABASE::MAP::MapPrototypePtr m_pMap;
 };
 
 class MapTreeWidget : public QTreeWidget, public MapEditorObject
@@ -42,9 +43,9 @@ private slots:
     void _openMap();
 
 signals:
-    void mapOpened(MAP::MapPrototypePtr pMap);
-    void mapDeleted(MAP::MapPrototypePtr pMap);
-    void mapUpdated(MAP::MapPrototypePtr pMap);
+    void mapOpened(DATABASE::MAP::MapPrototypePtr pMap);
+    void mapDeleted(DATABASE::MAP::MapPrototypePtr pMap);
+    void mapUpdated(DATABASE::MAP::MapPrototypePtr pMap);
 };
 
 #endif

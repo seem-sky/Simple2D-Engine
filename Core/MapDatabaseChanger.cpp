@@ -2,8 +2,8 @@
 #include <QtCore/QFile>
 #include "Config.h"
 
-using namespace MAP;
 using namespace DATABASE;
+using namespace DATABASE::MAP;
 
 MapDatabaseChanger::MapDatabaseChanger(MapDatabasePtr pMapDB) : DatabaseChanger(pMapDB)
 {

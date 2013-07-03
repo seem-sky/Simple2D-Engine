@@ -20,8 +20,8 @@ class MapTabWidget : public QTabWidget, public MapEditorObject
 public:
     MapTabWidget(QWidget *pParent = NULL);
 
-    bool isMapOpened(const MAP::MapPrototypePtr &map) const;
-    MapViewer* getTabWithMap(const MAP::MapPrototypePtr &map) const;
+    bool isMapOpened(const DATABASE::MAP::MapPrototypePtr &map) const;
+    MapViewer* getTabWithMap(const DATABASE::MAP::MapPrototypePtr &map) const;
     MapViewer* getCurrentWidget() const { return dynamic_cast<MapViewer*>(currentWidget()); }
 
     void updateObject();
@@ -30,8 +30,8 @@ public:
     void redrawMaps();
 
 public slots:
-    void addMapTab(MAP::MapPrototypePtr map);
-    void closeMap(MAP::MapPrototypePtr map);
+    void addMapTab(DATABASE::MAP::MapPrototypePtr map);
+    void closeMap(DATABASE::MAP::MapPrototypePtr map);
 
     void closeTab(int index);
     void setCurrentCursor(const QCursor &cursor);

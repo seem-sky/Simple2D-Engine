@@ -6,9 +6,8 @@
 #include "MapSettings.h"
 #include "Config.h"
 #include <QtWidgets/QMessageBox>
-#include "MainWindow.h"
 
-using namespace MAP;
+using namespace DATABASE::MAP;
 using namespace DATABASE;
 
 /*#####

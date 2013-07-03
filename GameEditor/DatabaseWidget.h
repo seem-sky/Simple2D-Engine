@@ -7,6 +7,7 @@
 #include <QtWidgets/QMessageBox>
 #include "QtGlobal.h"
 #include "ModifyObject.h"
+#include "PrototypeTreeWidgetItem.h"
 
 // slots for child class, paste them after "private slots:"
 //void _resizeButtonClicked() { _resizeDatabase(getListCountValue()); }

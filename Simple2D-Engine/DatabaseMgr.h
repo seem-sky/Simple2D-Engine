@@ -175,7 +175,7 @@ namespace DATABASE
 
     namespace TILE_SET
     {
-        QPixmap createTileSetPixmap(ConstTileSetPrototypePtr proto, ConstTileDatabasePtr tileDB);
+        QPixmap createTileSetPixmap(const QString &path, ConstTileSetPrototypePtr proto, ConstTileDatabasePtr tileDB);
     }
 }
 #endif

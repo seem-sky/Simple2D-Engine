@@ -50,6 +50,7 @@ m_pDBMgr(pDBMgr)
 
     connect(ButtonOK, SIGNAL(clicked()), this, SLOT(clickButtonOK()));
     connect(ButtonApply, SIGNAL(clicked()), this, SLOT(clickButtonApply()));
+    connect(ButtonCancel, SIGNAL(clicked()), this, SLOT(clickButtonCancel()));
 
     /* ####focus connections####*/
     connect(m_pSections, SIGNAL(currentChanged (int)), this, SLOT(_focusChanged(int)));
@@ -118,5 +119,10 @@ void DatabaseWindow::clickButtonApply()
 void DatabaseWindow::clickButtonOK()
 {
     clickButtonApply();
+    close();
+}
+
+void DatabaseWindow::clickButtonCancel()
+{
     close();
 }

@@ -1,5 +1,6 @@
 #include "ObjectAnimationTypeDatabaseWidget.h"
 #include "moc_ObjectAnimationTypeDatabaseWidget.h"
+#include "PrototypeTreeWidgetItem.h"
 
 using namespace DATABASE;
 

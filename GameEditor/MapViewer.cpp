@@ -5,8 +5,9 @@
 #include "MapObjectDialog.h"
 #include "MapIO.h"
 #include "MapBrush.h"
+#include "Config.h"
 
-using namespace MAP;
+using namespace DATABASE::MAP;
 
 /*#####
 # MapObjectItem
@@ -289,7 +290,7 @@ void MapViewer::revertAction()
     }
 }
 
-void MapViewer::addAction(MAP::MapActionPtr pAction)
+void MapViewer::addAction(MapActionPtr pAction)
 {
     m_Actions.push_back(pAction);
 }

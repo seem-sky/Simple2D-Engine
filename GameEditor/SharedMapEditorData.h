@@ -26,7 +26,7 @@ public:
     SharedMapEditorData();
 
     inline MappingMode getMappingMode() const { return m_MappingMode; }
-    inline MAP::Layer getCurrentLayer() const { return m_CurrentLayer; }
+    inline DATABASE::MAP::Layer getCurrentLayer() const { return m_CurrentLayer; }
 
     DATABASE::ConstTileDatabasePtr getTileDatabase() const;
     DATABASE::ConstTileSetDatabasePtr getTileSetDatabase() const;
@@ -35,19 +35,19 @@ public:
     DATABASE::ConstAnimationDatabasePtr getAnimationDatabase() const;
     DATABASE::ConstWorldObjectDatabasePtr getWorldObjectDatabase() const;
 
-    MAP::MapDatabaseChangerPtr getMapDatabase();
+    DATABASE::MAP::MapDatabaseChangerPtr getMapDatabase();
 
     inline ConstTileCachePtr getTileCache() const { return m_pTileCache; }
     inline ConstAutoTileCachePtr getAutoTileCache() const { return m_pAutoTileCache; }
 
 private:
     DATABASE::DatabaseMgrPtr m_pDatabaseMgr;
-    MAP::MapDatabaseChangerPtr m_pMapDBChanger;
+    DATABASE::MAP::MapDatabaseChangerPtr m_pMapDBChanger;
     TileCachePtr m_pTileCache;
     AutoTileCachePtr m_pAutoTileCache;
 
     MappingMode m_MappingMode;
-    MAP::Layer m_CurrentLayer;
+    DATABASE::MAP::Layer m_CurrentLayer;
 };
 typedef std::shared_ptr<SharedMapEditorData> SharedMapEditorDataPtr;
 typedef std::shared_ptr<const SharedMapEditorData> ConstSharedMapEditorDataPtr;

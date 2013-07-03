@@ -1,8 +1,8 @@
 #include "MapDatabase.h"
 #include "MapIO.h"
 
-using namespace MAP;
 using namespace DATABASE;
+using namespace DATABASE::MAP;
 
 MapPrototype::MapPrototype(uint32 uiID, const QString &sFileName) : DATABASE::Prototype(uiID), m_sFileName(sFileName), m_uiParentID(0),
 m_DataLoaded(false)
@@ -24,19 +24,8 @@ MapObjectPtr MapPrototype::addMapObject(DATABASE::ObjectType type, uint32 uiID, 
     newObject->m_Position = pos;
     newObject->m_GUID = m_Objects.getSize()+1;
     m_Objects.setItem(newObject->m_GUID, newObject);
-    //m_Grid.addObject(newObject);
     return newObject;
 }
-
-//void MapPrototype::moveMapObject(uint32 uiGUID, const UInt32Point3D &newPos)
-//{
-//    if (uiGUID < m_Objects.size() && m_Objects.at(uiGUID))
-//    {
-//        //m_Grid.removeObject(m_Objects.at(uiGUID), MapGrid::getGridFromMapPos(m_Objects.at(uiGUID)->m_Position));
-//        m_Objects.at(uiGUID)->m_Position = newPos;
-//        //m_Grid.addObject(m_Objects.at(uiGUID));
-//    }
-//}
 
 uint32 MapPrototype::checkAutoTiles(const uint32 &uiID, const UInt32Point3D &pos, UInt32PointSet &result, Layer layer, uint32 resultFlag)
 {

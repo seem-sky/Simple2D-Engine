@@ -7,9 +7,8 @@
 #include <algorithm>
 #include "Config.h"
 #include "MapIO.h"
-#include "MainWindow.h"
 
-using namespace MAP;
+using namespace DATABASE::MAP;
 using namespace DATABASE;
 
 /*#####

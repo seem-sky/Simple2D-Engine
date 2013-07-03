@@ -2,9 +2,9 @@
 Color::Color(int32 red, int32 green, int32 blue) : m_Red(red), m_Green(green), m_Blue(blue)
 {}
 
-Color::Color(const QString &p_sColorText) : m_Red(-1), m_Green(-1), m_Blue(-1)
+Color::Color(const QString &colorText) : m_Red(-1), m_Green(-1), m_Blue(-1)
 {
-    setColor(p_sColorText);
+    setColor(colorText);
 }
 
 void Color::setColor(const QString &colorText)

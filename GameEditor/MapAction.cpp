@@ -1,7 +1,7 @@
 #include "MapAction.h"
 
-using namespace MAP;
 using namespace DATABASE;
+using namespace DATABASE::MAP;
 using namespace AUTO_TILE;
 
 /*#####

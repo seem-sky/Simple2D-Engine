@@ -4,8 +4,8 @@
 #include "Config.h"
 #include "AnimationViewWidget.h"
 
-using namespace MAP;
 using namespace DATABASE;
+using namespace DATABASE::MAP;
 using namespace BRUSH;
 
 BrushMode BRUSH::getBrushMode(const QString &mode)

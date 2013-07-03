@@ -2,7 +2,7 @@
 #include "moc_MapObjectDialog.h"
 
 using namespace DATABASE;
-using namespace MAP;
+using namespace DATABASE::MAP;
 
 MapObjectDialog::MapObjectDialog(DATABASE::ConstWorldObjectDatabasePtr pWODB, DATABASE::ConstAnimationDatabasePtr pAnimationDB,
                                  DATABASE::ConstSpriteDatabasePtr pSpriteDB, MAP::MapObjectPtr pObject, QWidget *pParent)

@@ -2,7 +2,9 @@
 #include "moc_MapSettings.h"
 #include "MapTree.h"
 
-MapSettings::MapSettings(const MAP::MapPrototypePtr &map, QWidget *pParent) : m_pMap(map), QDialog(pParent), Ui_MapSettings()
+using namespace DATABASE::MAP;
+
+MapSettings::MapSettings(const MapPrototypePtr &map, QWidget *pParent) : m_pMap(map), QDialog(pParent), Ui_MapSettings()
 {
     setupUi(this);
     connect(m_pButtons, SIGNAL(accepted()), this, SLOT(_accepted()));
@@ -20,8 +22,8 @@ void MapSettings::updateWidgets()
     m_pScriptName->setText(m_pMap->getScriptName());
     m_pSizeX->setValue(m_pMap->getSize().x);
     m_pSizeY->setValue(m_pMap->getSize().y);
-    m_pBackgroundLayer->setValue(m_pMap->getLayerSize(MAP::LAYER_BACKGROUND));
-    m_pForegroundLayer->setValue(m_pMap->getLayerSize(MAP::LAYER_FOREGROUND));
+    m_pBackgroundLayer->setValue(m_pMap->getLayerSize(LAYER_BACKGROUND));
+    m_pForegroundLayer->setValue(m_pMap->getLayerSize(LAYER_FOREGROUND));
 }
 
 void MapSettings::_accepted()

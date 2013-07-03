@@ -7,6 +7,8 @@
 #include <QtCore/QMimeData>
 #include "DatabaseChanger.h"
 #include "AnimationViewWidget.h"
+#include "Config.h"
+#include "PrototypeTreeWidgetItem.h"
 
 /*#####
 # PixmapTooltipTreeWidget
@@ -17,7 +19,7 @@ class PixmapTooltipTreeWidget : public QTreeWidget
     Q_OBJECT
 private:
     void _endTracking();
-    void _beginTracking(QTreeWidgetItem* pItem);
+    //void _beginTracking(QTreeWidgetItem* pItem);
 
 protected:
     virtual void leaveEvent(QEvent *pEvent);
@@ -151,7 +153,7 @@ protected:
         {
             QPixmap pixmap;
             std::shared_ptr<const T> proto;
-            if (m_pDB && m_pDB->getItem(pItem->text(0).toUInt(), proto) && createPixmapFromTexturePrototype(proto, pixmap))
+            if (m_pDB && m_pDB->getItem(pItem->text(0).toUInt(), proto) && createPixmapFromTexturePrototype(Config::Get()->getProjectDirectory(), proto, pixmap))
             {
                 QDrag* pDrag = new QDrag(this);
                 pDrag->setPixmap(pixmap);
@@ -167,7 +169,7 @@ protected:
     {
         std::shared_ptr<const T> proto;
         QPixmap pixmap;
-        if (m_pDB && m_pDB->getItem(uiPrototypeID, proto) && createPixmapFromTexturePrototype(proto, pixmap))
+        if (m_pDB && m_pDB->getItem(uiPrototypeID, proto) && createPixmapFromTexturePrototype(Config::Get()->getProjectDirectory(), proto, pixmap))
         {
             QGraphicsView *pViewer = new QGraphicsView(this);
             pViewer->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);

@@ -4,6 +4,7 @@
 #include <QtGui/QDrag>
 #include <QtCore/QMimeData>
 #include "moc_DragTreeWidget.h"
+#include "Config.h"
 
 using namespace DATABASE;
 
@@ -21,12 +22,24 @@ m_ToolTipPos(TOOLTIP_LEFT)
     connect(&m_Timer, SIGNAL(timeout()), this, SLOT(_showPixmapTooltip()));
 }
 
+void PixmapTooltipTreeWidget::_endTracking()
+{
+    m_Timer.stop();
+    if (m_pTooltipViewer)
+        m_pTooltipViewer->hide();
+    m_pCurrentItem = NULL;
+}
+
 void PixmapTooltipTreeWidget::_onItemEnter(QTreeWidgetItem *pItem, int column)
 {
     if (!pItem || !showTooltip())
         return;
     if (!m_pTooltipViewer || m_pTooltipViewer->isHidden())
-        _beginTracking(pItem);
+    {
+        _endTracking();
+        m_pCurrentItem = pItem;
+        m_Timer.start(250);
+    }
     else
     {
         m_pCurrentItem = pItem;
@@ -55,21 +68,6 @@ void PixmapTooltipTreeWidget::leaveEvent(QEvent *pEvent)
 {
     _endTracking();
     pEvent->accept();
-}
-
-void PixmapTooltipTreeWidget::_endTracking()
-{
-    m_Timer.stop();
-    if (m_pTooltipViewer)
-        m_pTooltipViewer->hide();
-    m_pCurrentItem = NULL;
-}
-
-void PixmapTooltipTreeWidget::_beginTracking(QTreeWidgetItem* pItem)
-{
-    _endTracking();
-    m_pCurrentItem = pItem;
-    m_Timer.start(250);
 }
 
 /*#####
@@ -114,7 +112,7 @@ QWidget* TileSetPrototypeDragTreeWidget::setTooltipWidget(uint32 uiPrototypeID)
         return NULL;
 
     QLabel *pLabel = new QLabel();
-    QPixmap tileSetPixmap(TILE_SET::createTileSetPixmap(proto, m_pTileDB));
+    QPixmap tileSetPixmap(TILE_SET::createTileSetPixmap(Config::Get()->getProjectDirectory(), proto, m_pTileDB));
     pLabel->setPixmap(tileSetPixmap);
     pLabel->resize(tileSetPixmap.size());
     setTooltipSize(tileSetPixmap.size());
@@ -234,6 +232,6 @@ void TileDropLabel::drawCurrentTile()
 
     ConstTilePrototypePtr proto;
     QPixmap pixmap;
-    if (m_pTileDB->getItem(m_uiCurrentTileID, proto) && createPixmapFromTexturePrototype(proto, pixmap))
+    if (m_pTileDB->getItem(m_uiCurrentTileID, proto) && createPixmapFromTexturePrototype(Config::Get()->getProjectDirectory(), proto, pixmap))
         setPixmap(pixmap);
 }

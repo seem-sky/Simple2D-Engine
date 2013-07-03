@@ -169,7 +169,7 @@ bool DatabaseMgr::saveDatabase(const QString &projectPath, uint32 databases)
     return success;
 }
 
-QPixmap TILE_SET::createTileSetPixmap(ConstTileSetPrototypePtr proto, ConstTileDatabasePtr tileDB)
+QPixmap TILE_SET::createTileSetPixmap(const QString &path, ConstTileSetPrototypePtr proto, ConstTileDatabasePtr tileDB)
 {
     if (!proto || !tileDB)
         return std::move(QPixmap());
@@ -183,7 +183,7 @@ QPixmap TILE_SET::createTileSetPixmap(ConstTileSetPrototypePtr proto, ConstTileD
         {
             ConstTilePrototypePtr tileProto;
             QPixmap tempPixmap;
-            if (tileDB->getItem(proto->getTileID(UInt32Point(x,y)), tileProto) && createPixmapFromTexturePrototype(tileProto, tempPixmap))
+            if (tileDB->getItem(proto->getTileID(UInt32Point(x,y)), tileProto) && createPixmapFromTexturePrototype(path, tileProto, tempPixmap))
                 painter.drawTiledPixmap(x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE, TILE_SIZE, tempPixmap);
         }
     }

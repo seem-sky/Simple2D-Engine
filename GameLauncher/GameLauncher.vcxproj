@@ -19,29 +19,29 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{EF50DD0D-6C98-4570-8036-AB5D9874C997}</ProjectGuid>
-    <RootNamespace>EngineSupport</RootNamespace>
+    <ProjectGuid>{052F0CF2-EF76-4237-B6C7-6376736E64F6}</ProjectGuid>
+    <RootNamespace>GameLauncher</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <PlatformToolset>v110</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <PlatformToolset>v110</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <PlatformToolset>v110</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <PlatformToolset>v110</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -65,135 +65,98 @@
     <_ProjectFileVersion>11.0.50727.1</_ProjectFileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)\</OutDir>
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
     <IntDir>$(Configuration)\</IntDir>
-    <TargetName>$(ProjectName)d</TargetName>
+    <IncludePath>C:\Qt\Qt5.0.2-x86\qtbase\include;C:\Users\anti-freak\Documents\SDKs\boost_1_53_0;$(SolutionDir)\Core;$(SolutionDir)\Simple2D-Engine;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Qt\Qt5.0.2-x86\qtbase\lib;$(SolutionDir);$(LibraryPath)</LibraryPath>
-    <ReferencePath>
-    </ReferencePath>
-    <IncludePath>C:\Qt\Qt5.0.2-x86\qtbase\include;C:\Users\anti-freak\Documents\SDKs\boost_1_53_0;$(SolutionDir)\Simple2D-Engine;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <TargetName>$(ProjectName)d</TargetName>
+    <IncludePath>C:\Qt\Qt5.0.2\5.0.2\msvc2012_64\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Qt\Qt5.0.2\5.0.2\msvc2012_64\lib;$(LibraryPath)</LibraryPath>
-    <ReferencePath />
-    <IncludePath>C:\Users\anti-freak\Documents\SDKs\boost_1_53_0;C:\Qt\Qt5.0.2\5.0.2\msvc2012_64\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)\</OutDir>
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
     <IntDir>$(Configuration)\</IntDir>
     <LibraryPath>C:\Qt\Qt5.0.2-x86\qtbase\lib;$(SolutionDir);$(LibraryPath)</LibraryPath>
-    <IncludePath>C:\Qt\Qt5.0.2-x86\qtbase\include;C:\Users\anti-freak\Documents\SDKs\boost_1_53_0;$(SolutionDir)\Simple2D-Engine;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Qt\Qt5.0.2-x86\qtbase\include;C:\Users\anti-freak\Documents\SDKs\boost_1_53_0;$(SolutionDir)\Core;$(SolutionDir)\Simple2D-Engine;$(IncludePath)</IncludePath>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LibraryPath>C:\Users\anti-freak\Documents\SDKs\qt-everywhere-opensource-src-4.8.1\lib;$(LibraryPath)</LibraryPath>
-  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <CustomBuildStep>
-      <Message>Ein benutzerdefinierter Buildschritt wird ausgeführt.</Message>
-      <Command />
-    </CustomBuildStep>
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
-    <Lib>
-      <OutputFile>$(SolutionDir)\$(ProjectName)d.lib</OutputFile>
-      <AdditionalDependencies>
-      </AdditionalDependencies>
-    </Lib>
+    <Link>
+      <AdditionalDependencies>Qt5Widgetsd.lib;QT5Guid.lib;QT5Cored.lib;Cored.lib;Simple2D-Engine_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <CustomBuildStep>
-      <Message>Ein benutzerdefinierter Buildschritt wird ausgeführt.</Message>
-      <Command>
-      </Command>
-    </CustomBuildStep>
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
-    <Lib>
-      <OutputFile>$(SolutionDir)\$(ProjectName)d.lib</OutputFile>
-      <AdditionalDependencies>Qt5Cored.lib</AdditionalDependencies>
-    </Lib>
+    <Link>
+      <AdditionalDependencies>QTGuid4.lib;QTCored4.lib;Cored.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <CustomBuildStep>
-      <Message>Ein benutzerdefinierter Buildschritt wird ausgeführt.</Message>
-      <Command />
-    </CustomBuildStep>
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
-      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
-    <Lib>
-      <OutputFile>$(SolutionDir)\$(ProjectName).lib</OutputFile>
-      <AdditionalDependencies>
-      </AdditionalDependencies>
-    </Lib>
+    <Link>
+      <AdditionalDependencies>Qt5Widgets.lib;QT5Gui.lib;QT5Core.lib;Core.lib;Simple2D-Engine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <CustomBuildStep>
-      <Message>Ein benutzerdefinierter Buildschritt wird ausgeführt.</Message>
-      <Command>
-      </Command>
-    </CustomBuildStep>
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
-      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
-    <Lib>
-      <OutputFile>$(SolutionDir)\$(ProjectName).lib</OutputFile>
-      <AdditionalDependencies>QtXmld4.lib;QTGuid4.lib;QTCored4.lib;%(AdditionalDependencies)</AdditionalDependencies>
-    </Lib>
+    <Link>
+      <AdditionalDependencies>QTGui4.lib;QTCore4.lib;Core.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+    </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Config.cpp" />
-    <ClCompile Include="VariableHolder.cpp" />
-    <ClCompile Include="IniParser.cpp" />
-    <ClCompile Include="MapDatabaseChanger.cpp" />
-    <ClCompile Include="AutoTile.cpp" />
-    <ClCompile Include="AutoTileCache.cpp" />
-    <ClCompile Include="TileCache.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Config.h" />
-    <ClInclude Include="VariableHolder.h" />
-    <ClInclude Include="WrapperFunctions.h" />
-    <ClInclude Include="DatabaseChanger.h" />
-    <ClInclude Include="IniParser.h" />
-    <ClInclude Include="MapDatabaseChanger.h" />
-    <ClInclude Include="AutoTile.h" />
-    <ClInclude Include="AutoTileCache.h" />
-    <ClInclude Include="TileCache.h" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="GameLoop.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GameLoop.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Core.vcxproj">
+      <Project>{ef50dd0d-6c98-4570-8036-ab5d9874c997}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

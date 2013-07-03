@@ -1,0 +1,439 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="MainWindow">
+      <UniqueIdentifier>{1a1fddbb-68fc-464a-9955-32bdc1d0cb79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database">
+      <UniqueIdentifier>{1ab761ae-7a2a-4e47-9937-134847639fd2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Pages">
+      <UniqueIdentifier>{36675d9d-6096-4c61-b989-8e3282981365}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Pages\Texture">
+      <UniqueIdentifier>{f65adc2c-f174-4d5e-807d-abf6b589c494}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Pages\Texture\Transparency">
+      <UniqueIdentifier>{7652dbce-bf88-4cc8-9096-ad5ba20f323f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Pages\Texture\Tiles">
+      <UniqueIdentifier>{722718c2-f661-4f70-8c06-1da37610ecd4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Pages\Texture\Sprites">
+      <UniqueIdentifier>{51338027-6855-4144-8848-88b1ef6566d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Pages\Texture\AutoTiles">
+      <UniqueIdentifier>{f36992ff-cde3-4422-9ab3-c5ef6c8f5cfc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Pages\Texture\Animation">
+      <UniqueIdentifier>{6761e2ab-596a-4ffe-81fc-b007a2c636c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Pages\Object">
+      <UniqueIdentifier>{f41b5470-bc7f-495f-8193-f1a07cbabc0a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Pages\Object\WorldObjects">
+      <UniqueIdentifier>{73796d2c-ae6d-439e-8fd1-0aca4bf9d51a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Pages\Object\ObjectAnimationType">
+      <UniqueIdentifier>{880162fc-c46e-43a4-a24d-d990a7d8f5f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Pages\GlobalVariable">
+      <UniqueIdentifier>{41e8c057-0ea3-49e9-babc-d662d61b2291}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Pages\DatabaseWidget">
+      <UniqueIdentifier>{8904c57e-5990-4301-b813-4b728c6dcebe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Pages\Text">
+      <UniqueIdentifier>{add681b8-ce8c-45af-8826-0876423776a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EventEditor">
+      <UniqueIdentifier>{f60932d1-da26-4e22-b5d8-afb26c64dcaa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EventEditor\EventCommands">
+      <UniqueIdentifier>{4b4c4a04-8b5f-4d03-a493-2495acbb69fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EventEditor\EventCommands\UIs">
+      <UniqueIdentifier>{de1de55e-db0b-4d78-90f2-2356def8a9d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EventEditor\EventCommands\Condition">
+      <UniqueIdentifier>{e8bf181b-83b1-45d8-86ca-82c4fd7e2812}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EventEditor\LocalVariableDialog">
+      <UniqueIdentifier>{eb53f3e8-8e7c-4373-ace2-fe97bbd424a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MapEditor">
+      <UniqueIdentifier>{14c792e8-7617-4d06-a7ed-eb7c98e6bf29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MapEditor\MapView">
+      <UniqueIdentifier>{41fb85e0-5308-4695-bc6b-57945bd2bbfd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MapEditor\MapTree">
+      <UniqueIdentifier>{392ffa6e-1328-425e-9686-1bedd4d8c258}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MapEditor\MappingMode">
+      <UniqueIdentifier>{65ffd5f0-9325-4211-9a8a-c22b592bee4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MapEditor\MappingMode\TileView">
+      <UniqueIdentifier>{f23e5f92-0398-410c-94a0-05ac6ad69f57}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MapEditor\MapObjectDialog">
+      <UniqueIdentifier>{d31af8ee-261e-464f-b0ea-8df1eb8ce568}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MapEditor\MapEditor">
+      <UniqueIdentifier>{29ce8c74-d71e-4c5e-9fe6-be5be8d67443}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MapEditor\MapBrush">
+      <UniqueIdentifier>{9750222b-3d1a-4f7f-965b-74b968403c95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EditorCore">
+      <UniqueIdentifier>{b46099a1-d6ec-435a-8490-084e174b952f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EditorCore\IndexDialog">
+      <UniqueIdentifier>{8b111eda-301d-4bfb-8234-618dc9c25e6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CustomWidgets">
+      <UniqueIdentifier>{bb764a43-ff5b-41a3-a072-22bb2e8198e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CustomWidgets\CustomVariable">
+      <UniqueIdentifier>{0c8eb7a5-18db-47e9-b9ec-743c1002c3ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CustomWidgets\CustomVariable\Bool">
+      <UniqueIdentifier>{26c62dcf-8e37-43bb-91a1-20fb86a2eb86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CustomWidgets\CustomVariable\Int">
+      <UniqueIdentifier>{21cf1c08-9ada-4ac4-8ec9-84e72337638a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CustomWidgets\CustomVariable\String">
+      <UniqueIdentifier>{de890f7c-6622-4e11-bee6-ed9d991de0d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CustomWidgets\CustomVariable\Float">
+      <UniqueIdentifier>{f31eea59-a4ca-4057-82d2-a0777f96350d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CustomWidgets\AnimationWidgets">
+      <UniqueIdentifier>{91c77559-935c-41ab-b065-d7afa34defbb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Pages\Text\LocalsDatabase">
+      <UniqueIdentifier>{07cdfd20-58e1-4c4b-a439-6385a626dae7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Pages\Texture\TileSet">
+      <UniqueIdentifier>{0472c71d-12b5-49bf-a85d-e843ce8f61b7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="MainWindow.cpp">
+      <Filter>MainWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabaseWindow.cpp">
+      <Filter>Database</Filter>
+    </ClCompile>
+    <ClCompile Include="TransparencyWindow.cpp">
+      <Filter>Database\Pages\Texture\Transparency</Filter>
+    </ClCompile>
+    <ClCompile Include="TileDatabaseWidget.cpp">
+      <Filter>Database\Pages\Texture\Tiles</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteDatabaseWidget.cpp">
+      <Filter>Database\Pages\Texture\Sprites</Filter>
+    </ClCompile>
+    <ClCompile Include="AutoTileDatabaseWidget.cpp">
+      <Filter>Database\Pages\Texture\AutoTiles</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationDatabaseWidget.cpp">
+      <Filter>Database\Pages\Texture\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldObjectDatabaseWidget.cpp">
+      <Filter>Database\Pages\Object\WorldObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectAnimationTypeDatabaseWidget.cpp">
+      <Filter>Database\Pages\Object\ObjectAnimationType</Filter>
+    </ClCompile>
+    <ClCompile Include="TextDatabaseWidget.cpp">
+      <Filter>Database\Pages\Text\LocalsDatabase</Filter>
+    </ClCompile>
+    <ClCompile Include="MapAction.cpp">
+      <Filter>MapEditor\MapView</Filter>
+    </ClCompile>
+    <ClCompile Include="MapView.cpp">
+      <Filter>MapEditor\MapView</Filter>
+    </ClCompile>
+    <ClCompile Include="MapViewer.cpp">
+      <Filter>MapEditor\MapView</Filter>
+    </ClCompile>
+    <ClCompile Include="MapSettings.cpp">
+      <Filter>MapEditor\MapTree</Filter>
+    </ClCompile>
+    <ClCompile Include="MapTree.cpp">
+      <Filter>MapEditor\MapTree</Filter>
+    </ClCompile>
+    <ClCompile Include="TileTab.cpp">
+      <Filter>MapEditor\MappingMode\TileView</Filter>
+    </ClCompile>
+    <ClCompile Include="TileView.cpp">
+      <Filter>MapEditor\MappingMode\TileView</Filter>
+    </ClCompile>
+    <ClCompile Include="MapObjectDialog.cpp">
+      <Filter>MapEditor\MapObjectDialog</Filter>
+    </ClCompile>
+    <ClCompile Include="MapEditorWidget.cpp">
+      <Filter>MapEditor\MapEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="SharedMapEditorData.cpp">
+      <Filter>MapEditor\MapEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="MapBrush.cpp">
+      <Filter>MapEditor\MapBrush</Filter>
+    </ClCompile>
+    <ClCompile Include="MapBrushWidget.cpp">
+      <Filter>MapEditor\MapBrush</Filter>
+    </ClCompile>
+    <ClCompile Include="ContextMenu.cpp">
+      <Filter>EditorCore</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>EditorCore</Filter>
+    </ClCompile>
+    <ClCompile Include="ModifyObject.cpp">
+      <Filter>EditorCore</Filter>
+    </ClCompile>
+    <ClCompile Include="ModifyView.cpp">
+      <Filter>EditorCore</Filter>
+    </ClCompile>
+    <ClCompile Include="Project.cpp">
+      <Filter>EditorCore</Filter>
+    </ClCompile>
+    <ClCompile Include="IndexDialog.cpp">
+      <Filter>EditorCore\IndexDialog</Filter>
+    </ClCompile>
+    <ClCompile Include="DragTreeWidget.cpp">
+      <Filter>CustomWidgets</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationViewerWidget.cpp">
+      <Filter>CustomWidgets\AnimationWidgets</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationViewWidget.cpp">
+      <Filter>CustomWidgets\AnimationWidgets</Filter>
+    </ClCompile>
+    <ClCompile Include="TileSetDatabaseWidget.cpp">
+      <Filter>Database\Pages\Texture\TileSet</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <compile_QT_Files Include="UI\MainWindow.ui">
+      <Filter>MainWindow</Filter>
+    </compile_QT_Files>
+    <compile_QT_Files Include="UI\Database.ui">
+      <Filter>Database</Filter>
+    </compile_QT_Files>
+    <compile_QT_Files Include="UI\TextureDatabaseWidget.ui">
+      <Filter>Database\Pages\Texture</Filter>
+    </compile_QT_Files>
+    <compile_QT_Files Include="UI\TransparentColorDialog.ui">
+      <Filter>Database\Pages\Texture\Transparency</Filter>
+    </compile_QT_Files>
+    <compile_QT_Files Include="UI\TileDatabaseWidget.ui">
+      <Filter>Database\Pages\Texture\Tiles</Filter>
+    </compile_QT_Files>
+    <compile_QT_Files Include="UI\SpriteDatabaseWidget.ui">
+      <Filter>Database\Pages\Texture\Sprites</Filter>
+    </compile_QT_Files>
+    <compile_QT_Files Include="UI\AutoTileDatabaseWidget.ui">
+      <Filter>Database\Pages\Texture\AutoTiles</Filter>
+    </compile_QT_Files>
+    <compile_QT_Files Include="UI\AnimationWidget.ui">
+      <Filter>Database\Pages\Texture\Animation</Filter>
+    </compile_QT_Files>
+    <compile_QT_Files Include="UI\WorldObjectDatabaseWidget.ui">
+      <Filter>Database\Pages\Object\WorldObjects</Filter>
+    </compile_QT_Files>
+    <compile_QT_Files Include="UI\GlobalVariableDatabase.ui">
+      <Filter>Database\Pages\GlobalVariable</Filter>
+    </compile_QT_Files>
+    <compile_QT_Files Include="UI\DatabaseWidget.ui">
+      <Filter>Database\Pages\DatabaseWidget</Filter>
+    </compile_QT_Files>
+    <compile_QT_Files Include="UI\TextDatabaseWidget.ui">
+      <Filter>Database\Pages\Text\LocalsDatabase</Filter>
+    </compile_QT_Files>
+    <compile_QT_Files Include="UI\MapSettings.ui">
+      <Filter>MapEditor\MapTree</Filter>
+    </compile_QT_Files>
+    <compile_QT_Files Include="UI\MapObjectDialog.ui">
+      <Filter>MapEditor\MapObjectDialog</Filter>
+    </compile_QT_Files>
+    <compile_QT_Files Include="UI\MapEditor.ui">
+      <Filter>MapEditor\MapEditor</Filter>
+    </compile_QT_Files>
+    <compile_QT_Files Include="UI\MapBrushWidget.ui">
+      <Filter>MapEditor\MapBrush</Filter>
+    </compile_QT_Files>
+    <compile_QT_Files Include="UI\IndexDialog.ui">
+      <Filter>EditorCore\IndexDialog</Filter>
+    </compile_QT_Files>
+    <compile_QT_Files Include="UI\AnimationViewerWidget.ui">
+      <Filter>CustomWidgets\AnimationWidgets</Filter>
+    </compile_QT_Files>
+    <compile_QT_Files Include="UI\TileSetDatabaseWidget.ui">
+      <Filter>Database\Pages\Texture\TileSet</Filter>
+    </compile_QT_Files>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="TextureDatabaseWidget.h">
+      <Filter>Database\Pages\Texture</Filter>
+    </CustomBuild>
+    <CustomBuild Include="TransparencyWindow.h">
+      <Filter>Database\Pages\Texture\Transparency</Filter>
+    </CustomBuild>
+    <CustomBuild Include="DatabaseWidget.h">
+      <Filter>Database\Pages\DatabaseWidget</Filter>
+    </CustomBuild>
+    <CustomBuild Include="EventEditor.ui">
+      <Filter>EventEditor</Filter>
+    </CustomBuild>
+    <CustomBuild Include="UI\EventEditorDialog.ui">
+      <Filter>EventEditor</Filter>
+    </CustomBuild>
+    <CustomBuild Include="UI\CommandChangeVariable.ui">
+      <Filter>EventEditor\EventCommands\UIs</Filter>
+    </CustomBuild>
+    <CustomBuild Include="UI\CommandComment.ui">
+      <Filter>EventEditor\EventCommands\UIs</Filter>
+    </CustomBuild>
+    <CustomBuild Include="UI\CommandDialog.ui">
+      <Filter>EventEditor\EventCommands\UIs</Filter>
+    </CustomBuild>
+    <CustomBuild Include="UI\CommandIfCondition.ui">
+      <Filter>EventEditor\EventCommands\UIs</Filter>
+    </CustomBuild>
+    <CustomBuild Include="UI\ConditionWidget.ui">
+      <Filter>EventEditor\EventCommands\Condition</Filter>
+    </CustomBuild>
+    <CustomBuild Include="UI\LocalVariableDialog.ui">
+      <Filter>EventEditor\LocalVariableDialog</Filter>
+    </CustomBuild>
+    <CustomBuild Include="MapAction.h">
+      <Filter>MapEditor\MapView</Filter>
+    </CustomBuild>
+    <CustomBuild Include="MapEditorObject.h">
+      <Filter>MapEditor\MapEditor</Filter>
+    </CustomBuild>
+    <CustomBuild Include="SharedMapEditorData.h">
+      <Filter>MapEditor\MapEditor</Filter>
+    </CustomBuild>
+    <CustomBuild Include="MapBrush.h">
+      <Filter>MapEditor\MapBrush</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ContextMenu.h">
+      <Filter>EditorCore</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ModifyObject.h">
+      <Filter>EditorCore</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Project.h">
+      <Filter>EditorCore</Filter>
+    </CustomBuild>
+    <CustomBuild Include="IndexDialog.h">
+      <Filter>EditorCore\IndexDialog</Filter>
+    </CustomBuild>
+    <CustomBuild Include="UI\CustomVariablePageTemplate.ui">
+      <Filter>CustomWidgets\CustomVariable</Filter>
+    </CustomBuild>
+    <CustomBuild Include="UI\VariableCountDialog.ui">
+      <Filter>CustomWidgets\CustomVariable</Filter>
+    </CustomBuild>
+    <CustomBuild Include="UI\CustomVariableBoolPage.ui">
+      <Filter>CustomWidgets\CustomVariable\Bool</Filter>
+    </CustomBuild>
+    <CustomBuild Include="UI\CustomVariableIntPage.ui">
+      <Filter>CustomWidgets\CustomVariable\Int</Filter>
+    </CustomBuild>
+    <CustomBuild Include="UI\CustomVariableStringPage.ui">
+      <Filter>CustomWidgets\CustomVariable\String</Filter>
+    </CustomBuild>
+    <CustomBuild Include="UI\CustomVariableFloatPage.ui">
+      <Filter>CustomWidgets\CustomVariable\Float</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <moc_header Include="TileView.h">
+      <Filter>MapEditor\MappingMode\TileView</Filter>
+    </moc_header>
+    <moc_header Include="WorldObjectDatabaseWidget.h">
+      <Filter>Database\Pages\Object\WorldObjects</Filter>
+    </moc_header>
+    <moc_header Include="TileTab.h">
+      <Filter>MapEditor\MappingMode\TileView</Filter>
+    </moc_header>
+    <moc_header Include="TileDatabaseWidget.h">
+      <Filter>Database\Pages\Texture\Tiles</Filter>
+    </moc_header>
+    <moc_header Include="TextDatabaseWidget.h">
+      <Filter>Database\Pages\Text\LocalsDatabase</Filter>
+    </moc_header>
+    <moc_header Include="SpriteDatabaseWidget.h">
+      <Filter>Database\Pages\Texture\Sprites</Filter>
+    </moc_header>
+    <moc_header Include="ObjectAnimationTypeDatabaseWidget.h">
+      <Filter>Database\Pages\Object\ObjectAnimationType</Filter>
+    </moc_header>
+    <moc_header Include="ModifyView.h">
+      <Filter>EditorCore</Filter>
+    </moc_header>
+    <moc_header Include="MapViewer.h">
+      <Filter>MapEditor\MapView</Filter>
+    </moc_header>
+    <moc_header Include="MapTree.h">
+      <Filter>MapEditor\MapTree</Filter>
+    </moc_header>
+    <moc_header Include="MapSettings.h">
+      <Filter>MapEditor\MapTree</Filter>
+    </moc_header>
+    <moc_header Include="MapObjectDialog.h">
+      <Filter>MapEditor\MapObjectDialog</Filter>
+    </moc_header>
+    <moc_header Include="MapEditorWidget.h">
+      <Filter>MapEditor\MapEditor</Filter>
+    </moc_header>
+    <moc_header Include="MapBrushWidget.h">
+      <Filter>MapEditor\MapBrush</Filter>
+    </moc_header>
+    <moc_header Include="DragTreeWidget.h">
+      <Filter>CustomWidgets</Filter>
+    </moc_header>
+    <moc_header Include="DatabaseWindow.h">
+      <Filter>Database</Filter>
+    </moc_header>
+    <moc_header Include="AutoTileDatabaseWidget.h">
+      <Filter>Database\Pages\Texture\AutoTiles</Filter>
+    </moc_header>
+    <moc_header Include="AnimationViewerWidget.h">
+      <Filter>CustomWidgets\AnimationWidgets</Filter>
+    </moc_header>
+    <moc_header Include="AnimationViewWidget.h">
+      <Filter>CustomWidgets\AnimationWidgets</Filter>
+    </moc_header>
+    <moc_header Include="AnimationDatabaseWidget.h">
+      <Filter>Database\Pages\Texture\Animation</Filter>
+    </moc_header>
+    <moc_header Include="TileSetDatabaseWidget.h">
+      <Filter>Database\Pages\Texture\TileSet</Filter>
+    </moc_header>
+    <moc_header Include="MapView.h">
+      <Filter>MapEditor\MapView</Filter>
+    </moc_header>
+    <moc_header Include="MainWindow.h">
+      <Filter>MainWindow</Filter>
+    </moc_header>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="PrototypeTreeWidgetItem.h">
+      <Filter>CustomWidgets</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="GameEditor.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon-clean-32x32.ico" />
+  </ItemGroup>
+</Project>

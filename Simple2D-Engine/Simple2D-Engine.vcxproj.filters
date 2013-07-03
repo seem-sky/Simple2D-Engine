@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Core">
+      <UniqueIdentifier>{bf963a45-3dc2-4c79-90f5-f252e9d08a3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database">
+      <UniqueIdentifier>{431f0cd1-fc82-4dc1-ac6e-c4d8122842b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map">
+      <UniqueIdentifier>{a9219d95-08d3-40c0-acdd-7e5a297e1a5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map\MapObjects">
+      <UniqueIdentifier>{42e367d7-7966-43f9-bccf-dbdf54b71d3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Map">
+      <UniqueIdentifier>{3fb00fff-57bf-4cf3-80a6-517ecf3edd9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\IO">
+      <UniqueIdentifier>{3229efed-d3f8-4a07-9842-eb6e708c0780}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Color.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabaseMgr.cpp">
+      <Filter>Database</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabasePrototypes.cpp">
+      <Filter>Database</Filter>
+    </ClCompile>
+    <ClCompile Include="MapGrid.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldObject.cpp">
+      <Filter>Map\MapObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="XML_IO.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Logfile.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="MapDatabase.cpp">
+      <Filter>Database\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="MapIO.cpp">
+      <Filter>Database\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabaseIO.cpp">
+      <Filter>Database\IO</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Color.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Container.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Global.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="math_extensions.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Point.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Rect.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Database.h">
+      <Filter>Database</Filter>
+    </ClInclude>
+    <ClInclude Include="DatabaseMgr.h">
+      <Filter>Database</Filter>
+    </ClInclude>
+    <ClInclude Include="DatabasePrototypes.h">
+      <Filter>Database</Filter>
+    </ClInclude>
+    <ClInclude Include="MapGrid.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldObject.h">
+      <Filter>Map\MapObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="XML_IO.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Logfile.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Singleton.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="MapDatabase.h">
+      <Filter>Database\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="MapIO.h">
+      <Filter>Database\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="QtGlobal.h" />
+    <ClInclude Include="DatabaseIO.h">
+      <Filter>Database\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="DatabaseIOTemplates.h">
+      <Filter>Database\IO</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

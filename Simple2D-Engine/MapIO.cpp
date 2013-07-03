@@ -1,10 +1,9 @@
 #include "MapIO.h"
 #include <boost/thread.hpp>
-#include <boost/filesystem.hpp>
 #include <boost/bind.hpp>
 #include <QtCore/QTime>
 
-using namespace MAP;
+using namespace DATABASE::MAP;
 using namespace XML_IO;
 
 const QString TILE_AUTOTILE_DELIMITER = ":";

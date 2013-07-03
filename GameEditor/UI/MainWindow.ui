@@ -82,6 +82,7 @@
     <property name="separatorsCollapsible">
      <bool>false</bool>
     </property>
+    <addaction name="openDatabase"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -125,6 +126,11 @@
     <string>Stores screenshot of currentmap in clipboard.</string>
    </property>
   </action>
+  <action name="openDatabase">
+   <property name="text">
+    <string>open</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -134,8 +140,6 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="../resource.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

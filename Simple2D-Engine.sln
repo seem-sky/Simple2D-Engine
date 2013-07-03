@@ -2,15 +2,26 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Core", "Core\Core.vcxproj", "{EF50DD0D-6C98-4570-8036-AB5D9874C997}"
+	ProjectSection(ProjectDependencies) = postProject
+		{37D8C7EC-10AA-433F-82C0-DBE8EF36ABCC} = {37D8C7EC-10AA-433F-82C0-DBE8EF36ABCC}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameLauncher", "GameLauncher\GameLauncher.vcxproj", "{052F0CF2-EF76-4237-B6C7-6376736E64F6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{37D8C7EC-10AA-433F-82C0-DBE8EF36ABCC} = {37D8C7EC-10AA-433F-82C0-DBE8EF36ABCC}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameEditor", "GameEditor\GameEditor.vcxproj", "{88755B49-72E2-42CE-8332-213BD4CBE137}"
+	ProjectSection(ProjectDependencies) = postProject
+		{37D8C7EC-10AA-433F-82C0-DBE8EF36ABCC} = {37D8C7EC-10AA-433F-82C0-DBE8EF36ABCC}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D56BF584-2715-4EF3-BD77-CA351D0A7E82}"
 	ProjectSection(SolutionItems) = preProject
 		Performance1.psess = Performance1.psess
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Simple2D-Engine", "Simple2D-Engine\Simple2D-Engine.vcxproj", "{37D8C7EC-10AA-433F-82C0-DBE8EF36ABCC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,6 +55,12 @@ Global
 		{88755B49-72E2-42CE-8332-213BD4CBE137}.Release|Win32.Build.0 = Release|Win32
 		{88755B49-72E2-42CE-8332-213BD4CBE137}.Release|x64.ActiveCfg = Release|x64
 		{88755B49-72E2-42CE-8332-213BD4CBE137}.Release|x64.Build.0 = Release|x64
+		{37D8C7EC-10AA-433F-82C0-DBE8EF36ABCC}.Debug|Win32.ActiveCfg = Debug|Win32
+		{37D8C7EC-10AA-433F-82C0-DBE8EF36ABCC}.Debug|Win32.Build.0 = Debug|Win32
+		{37D8C7EC-10AA-433F-82C0-DBE8EF36ABCC}.Debug|x64.ActiveCfg = Debug|Win32
+		{37D8C7EC-10AA-433F-82C0-DBE8EF36ABCC}.Release|Win32.ActiveCfg = Release|Win32
+		{37D8C7EC-10AA-433F-82C0-DBE8EF36ABCC}.Release|Win32.Build.0 = Release|Win32
+		{37D8C7EC-10AA-433F-82C0-DBE8EF36ABCC}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -25,6 +25,7 @@ public:
 private slots:
     void clickButtonOK();
     void clickButtonApply();
+    void clickButtonCancel();
     void _focusChanged(int index);
 
 private:

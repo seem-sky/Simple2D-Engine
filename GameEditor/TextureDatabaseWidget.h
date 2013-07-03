@@ -110,7 +110,7 @@ protected:
     virtual QPixmap showPixmap(const std::shared_ptr<T> &proto)
     {
         QPixmap pixmap;
-        if (createPixmapFromTexturePrototype(proto, pixmap))
+        if (createPixmapFromTexturePrototype(Config::Get()->getProjectDirectory(), proto, pixmap))
         {
             QGraphicsScene *pScene = new QGraphicsScene();
             pScene->addPixmap(pixmap);

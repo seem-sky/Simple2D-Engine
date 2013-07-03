@@ -9,9 +9,9 @@ class MapBrushWidget : public QWidget, public MapEditorObject, Ui_MapBrushWidget
 {
     Q_OBJECT
 private:
-    MAP::MapBrushPtr _getNewTileBrush();
-    MAP::MapBrushPtr _getNewTileSetBrush();
-    MAP::MapBrushPtr _getNewAutoTileBrush();
+    DATABASE::MAP::MapBrushPtr _getNewTileBrush();
+    DATABASE::MAP::MapBrushPtr _getNewTileSetBrush();
+    DATABASE::MAP::MapBrushPtr _getNewAutoTileBrush();
 
 public:
     MapBrushWidget(QWidget *pParent = NULL);
@@ -19,17 +19,17 @@ public:
     void updateObject();
     void clearWidget();
 
-    MAP::BRUSH::BrushMode getCurrentBrushMode() const;
+    DATABASE::MAP::BRUSH::BrushMode getCurrentBrushMode() const;
 
-    inline MAP::MapBrushPtr getMapBrush() { return m_pBrush; }
+    inline DATABASE::MAP::MapBrushPtr getMapBrush() { return m_pBrush; }
 
 private:
-    MAP::MapBrushPtr m_pBrush;
+    DATABASE::MAP::MapBrushPtr m_pBrush;
 
 private slots:
     void _changeDrawMode(const QString& mode);
 
 public slots:
-    void changeBrush(uint32 uiID, MAP::BRUSH::BrushType type);
+    void changeBrush(uint32 uiID, DATABASE::MAP::BRUSH::BrushType type);
 };
 #endif

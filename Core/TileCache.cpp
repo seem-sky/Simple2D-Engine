@@ -1,4 +1,5 @@
 #include "TileCache.h"
+#include "Config.h"
 
 using namespace DATABASE;
 
@@ -24,7 +25,7 @@ bool TileCache::_createPixmap(uint32 uiID, ConstQPixmapPtr &result)
 {
     ConstTilePrototypePtr proto;
     QPixmap newPixmap;
-    if (m_pTileDB && m_pTileDB->getItem(uiID, proto) && createPixmapFromTexturePrototype(proto, newPixmap))
+    if (m_pTileDB && m_pTileDB->getItem(uiID, proto) && createPixmapFromTexturePrototype(Config::Get()->getProjectDirectory(), proto, newPixmap))
     {
         QPixmapPtr pPixmap = QPixmapPtr(new QPixmap(newPixmap));
         setItem(uiID, pPixmap);

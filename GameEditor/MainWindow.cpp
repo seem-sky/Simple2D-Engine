@@ -19,7 +19,7 @@ MainWindow::MainWindow(QMainWindow *pParent) : QMainWindow(pParent)
     m_ModifyObj.setWidget(m_pMapEditor, MODIFY_RESIZE, QPoint(0, 20));
 
     connect(this, SIGNAL(projectLoadDone()), m_pMapEditor, SLOT(_projectOpened()));
-    connect(menuDatabase, SIGNAL(aboutToShow()), this, SLOT(_openDatabase()));
+    connect(openDatabase, SIGNAL(triggered()), this, SLOT(_openDatabase()));
     connect(this, SIGNAL(saveProject()), m_pMapEditor, SLOT(_saveChanges()));
     connect(actionNew, SIGNAL(triggered()), this, SLOT(_newProject()));
     connect(actionLoad, SIGNAL(triggered()), this, SLOT(_loadProject()));
