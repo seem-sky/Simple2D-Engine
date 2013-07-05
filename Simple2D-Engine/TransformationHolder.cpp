@@ -54,21 +54,24 @@ void Move::_update(uint32 uiDiff)
 /*#####
 # TransformationHolder
 #####*/
-void TransformationHolder::updateTransformations(uint32 uiDiff)
+TransformationHolder::TransformationHolder()
 {
-    typedef std::vector<TransformationPtrList::iterator> TransformationPtrListIteratorVector;
-    TransformationPtrListIteratorVector itrs;
-    for (auto itr = m_Transformations.begin(); itr != m_Transformations.end(); ++itr)
-    {
-        if ((*itr)->update(uiDiff) == TRANSFORMATION::DONE)
-            itrs.push_back(itr);
-    }
-    // remove finished transformations
-    for (auto itr : itrs)
-        m_Transformations.erase(itr);
+    for (TransformationArray::iterator itr = m_Transformations.begin(); itr != m_Transformations.end(); ++itr)
+        *itr = TransformationPtrVectorPtr(new TransformationPtrVector());
 }
 
-void TransformationHolder::addTransformation(TransformationPtr &pTransformation)
+void TransformationHolder::updateTransformations(uint32 uiDiff)
 {
-    m_Transformations.push_back(std::move(pTransformation));
+    // update transformations
+    for (TransformationArray::iterator itr = m_Transformations.begin(); itr != m_Transformations.end(); ++itr)
+    {
+        if (!(*itr)->empty() && (*itr)->front()->update(uiDiff) == DONE)
+            (*itr)->erase((*itr)->begin());
+    }
+}
+
+void TransformationHolder::addTransformation(MovePtr &pTransformation)
+{
+    if (pTransformation)
+        m_Transformations.at(TRANSFORMATION_MOVE)->push_back(TransformationPtr(pTransformation.release()));
 }

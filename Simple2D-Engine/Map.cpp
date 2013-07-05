@@ -7,14 +7,16 @@ using namespace MAP;
 #####*/
 Map::Map(uint32 uiID, MapLayer &layer) : m_Layer(std::move(layer)), m_uiID(uiID)
 {
-    m_TransformationHolder.addTransformation(TRANSFORMATION::TransformationPtr(new TRANSFORMATION::Move(1*IN_MILLISECOND, m_Position, Int32Point(-64, 0))));
+    m_TransformationHolder.addTransformation(TRANSFORMATION::MovePtr(new TRANSFORMATION::Move(5*IN_MILLISECOND, m_Position, Int32Point(-64, 0))));
+    m_TransformationHolder.addTransformation(TRANSFORMATION::MovePtr(new TRANSFORMATION::Move(5*IN_MILLISECOND, m_Position, Int32Point(0, -64))));
+    m_TransformationHolder.addTransformation(TRANSFORMATION::MovePtr(new TRANSFORMATION::Move(5*IN_MILLISECOND, m_Position, Int32Point(64, 0))));
+    m_TransformationHolder.addTransformation(TRANSFORMATION::MovePtr(new TRANSFORMATION::Move(5*IN_MILLISECOND, m_Position, Int32Point(0, 64))));
 }
 
 void Map::update(uint32 uiDiff)
 {
     m_TransformationHolder.updateTransformations(uiDiff);
 }
-
 
 /*#####
 # non-member functions

@@ -27,7 +27,8 @@ namespace TRANSFORMATION
         uint32 m_uiTimer;
     };
     typedef std::unique_ptr<Transformation> TransformationPtr;
-    typedef std::list<TransformationPtr> TransformationPtrList;
+    typedef std::vector<TransformationPtr> TransformationPtrVector;
+    typedef std::unique_ptr<TransformationPtrVector> TransformationPtrVectorPtr;
 
     class Move : public Transformation
     {
@@ -43,15 +44,25 @@ namespace TRANSFORMATION
         Int32Point m_Range;
         Int32Point &m_Position;
     };
+    typedef std::unique_ptr<Move> MovePtr;
+
+    enum TransformationTypes
+    {
+        TRANSFORMATION_MOVE
+    };
+    const uint32 TRANSFORMATION_TYPES_COUNT = 1;
 
     class TransformationHolder
     {
     public:
+        TransformationHolder();
+
         void updateTransformations(uint32 uiDiff);
-        void addTransformation(TransformationPtr &pTransformation);
+        void addTransformation(MovePtr &pTransformation);
 
     private:
-        TransformationPtrList m_Transformations;
+        typedef std::array<TransformationPtrVectorPtr, TRANSFORMATION_TYPES_COUNT> TransformationArray;
+        TransformationArray m_Transformations;
     };
 }
 #endif
