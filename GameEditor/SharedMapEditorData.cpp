@@ -1,7 +1,7 @@
 #include "SharedMapEditorData.h"
 
 SharedMapEditorData::SharedMapEditorData() : m_pTileCache(new TileCache()), m_pAutoTileCache(new AutoTileCache(m_pTileCache)),
-m_pMapDBChanger(new DATABASE::MAP::MapDatabaseChanger()), m_CurrentLayer(DATABASE::MAP::LAYER_BACKGROUND)
+m_pMapDBChanger(new DATABASE::MAP_STRUCTURE::MapDatabaseChanger()), m_CurrentLayer(MAP::LAYER_BACKGROUND)
 {}
 
 void SharedMapEditorData::_setDatabaseMgr(DATABASE::DatabaseMgrPtr pDBMgr)
@@ -20,7 +20,7 @@ void SharedMapEditorData::_updateData()
     m_pAutoTileCache->setAutoTileDB(m_pDatabaseMgr->getAutoTileDatabase());
 }
 
-DATABASE::MAP::MapDatabaseChangerPtr SharedMapEditorData::getMapDatabase()
+DATABASE::MAP_STRUCTURE::MapDatabaseChangerPtr SharedMapEditorData::getMapDatabase()
 {
     return m_pMapDBChanger;
 }

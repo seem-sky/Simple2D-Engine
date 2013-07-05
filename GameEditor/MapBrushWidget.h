@@ -9,9 +9,9 @@ class MapBrushWidget : public QWidget, public MapEditorObject, Ui_MapBrushWidget
 {
     Q_OBJECT
 private:
-    DATABASE::MAP::MapBrushPtr _getNewTileBrush();
-    DATABASE::MAP::MapBrushPtr _getNewTileSetBrush();
-    DATABASE::MAP::MapBrushPtr _getNewAutoTileBrush();
+    DATABASE::MAP_STRUCTURE::MapBrushPtr _getNewTileBrush();
+    DATABASE::MAP_STRUCTURE::MapBrushPtr _getNewTileSetBrush();
+    DATABASE::MAP_STRUCTURE::MapBrushPtr _getNewAutoTileBrush();
 
 public:
     MapBrushWidget(QWidget *pParent = NULL);
@@ -19,17 +19,17 @@ public:
     void updateObject();
     void clearWidget();
 
-    DATABASE::MAP::BRUSH::BrushMode getCurrentBrushMode() const;
+    DATABASE::MAP_STRUCTURE::BRUSH::BrushMode getCurrentBrushMode() const;
 
-    inline DATABASE::MAP::MapBrushPtr getMapBrush() { return m_pBrush; }
+    inline DATABASE::MAP_STRUCTURE::MapBrushPtr getMapBrush() { return m_pBrush; }
 
 private:
-    DATABASE::MAP::MapBrushPtr m_pBrush;
+    DATABASE::MAP_STRUCTURE::MapBrushPtr m_pBrush;
 
 private slots:
     void _changeDrawMode(const QString& mode);
 
 public slots:
-    void changeBrush(uint32 uiID, DATABASE::MAP::BRUSH::BrushType type);
+    void changeBrush(uint32 uiID, DATABASE::MAP_STRUCTURE::BRUSH::BrushType type);
 };
 #endif

@@ -7,7 +7,7 @@
 #include <QtGui/QClipboard>
 
 using namespace DATABASE;
-using namespace MAP;
+using namespace DATABASE::MAP_STRUCTURE;
 
 /*#####
 # MapEditor
@@ -29,12 +29,12 @@ MapEditorWidget::MapEditorWidget(QWidget *pParent) : QWidget(pParent), Ui_MapEdi
     connect(m_pTiles, SIGNAL(tileClicked(uint32, Qt::MouseButton)), this, SLOT(_tileClicked(uint32, Qt::MouseButton)));
     connect(m_pAutoTiles, SIGNAL(tileClicked(uint32, Qt::MouseButton)), this, SLOT(_autoTileClicked(uint32, Qt::MouseButton)));
 
-    connect(m_pMapTree, SIGNAL(mapOpened(MAP::MapPrototypePtr)), m_pMapEditor, SLOT(addMapTab(MAP::MapPrototypePtr)));
-    connect(m_pMapTree, SIGNAL(mapDeleted(MAP::MapPrototypePtr)), m_pMapEditor, SLOT(closeMap(MAP::MapPrototypePtr)));
-    connect(m_pMapTree, SIGNAL(mapUpdated(MAP::MapPrototypePtr)), this, SLOT(_mapUpdated(MAP::MapPrototypePtr)));
+    connect(m_pMapTree, SIGNAL(mapOpened(MapPrototypePtr)), m_pMapEditor, SLOT(addMapTab(MapPrototypePtr)));
+    connect(m_pMapTree, SIGNAL(mapDeleted(MapPrototypePtr)), m_pMapEditor, SLOT(closeMap(MapPrototypePtr)));
+    connect(m_pMapTree, SIGNAL(mapUpdated(MapPrototypePtr)), this, SLOT(_mapUpdated(MapPrototypePtr)));
 
-    connect(this, SIGNAL(leftTileChanged(uint32, MAP::BRUSH::BrushType)), m_pLHBrush, SLOT(changeBrush(uint32, MAP::BRUSH::BrushType)));
-    connect(this, SIGNAL(rightTileChanged(uint32, MAP::BRUSH::BrushType)), m_pRHBrush, SLOT(changeBrush(uint32, MAP::BRUSH::BrushType)));
+    connect(this, SIGNAL(leftTileChanged(uint32, BRUSH::BrushType)), m_pLHBrush, SLOT(changeBrush(uint32, BRUSH::BrushType)));
+    connect(this, SIGNAL(rightTileChanged(uint32, BRUSH::BrushType)), m_pRHBrush, SLOT(changeBrush(uint32, BRUSH::BrushType)));
 
     connect(m_pMappingModeTab, SIGNAL(currentChanged(int)), this, SLOT(_MappingModeChanged(int)));
     connect(m_pObjectTabs, SIGNAL(currentChanged(int)), this, SLOT(_objectTabChanged(int)));
@@ -58,7 +58,7 @@ MapEditorWidget::MapEditorWidget(QWidget *pParent) : QWidget(pParent), Ui_MapEdi
     _MappingModeChanged(m_pMappingModeTab->currentIndex());
 }
 
-void MapEditorWidget::_mapUpdated(MAP::MapPrototypePtr map)
+void MapEditorWidget::_mapUpdated(MapPrototypePtr map)
 {
     // if current tab, update layer widgets
     if (MapViewer* pTab = m_pMapEditor->getTabWithMap(map))
@@ -77,13 +77,13 @@ void MapEditorWidget::_layerChanged(bool state)
         {
             if (m_pLayerBackground->isChecked())
             {
-                m_pSharedData->m_CurrentLayer = LAYER_BACKGROUND;
+                m_pSharedData->m_CurrentLayer = MAP::LAYER_BACKGROUND;
                 m_pCurLayer->setMinimum(1);
             }
             else if (m_pLayerForeground->isChecked())
             {
-                m_pSharedData->m_CurrentLayer = LAYER_FOREGROUND;
-                m_pCurLayer->setMinimum(pWidget->getMaxLayer(LAYER_FOREGROUND) ? 1 : 0);
+                m_pSharedData->m_CurrentLayer = MAP::LAYER_FOREGROUND;
+                m_pCurLayer->setMinimum(pWidget->getMaxLayer(MAP::LAYER_FOREGROUND) ? 1 : 0);
             }
             pWidget->setLayer(m_pSharedData->getCurrentLayer());
             m_pCurLayer->setMaximum(pWidget->getMaxLayer(m_pSharedData->getCurrentLayer()));
@@ -107,8 +107,8 @@ void MapEditorWidget::_tabSelected(int index)
         disconnect(m_pLayerBackground, SIGNAL(toggled(bool)), this, SLOT(_layerChanged(bool)));
         switch (pWidget->getLayer())
         {
-        case LAYER_BACKGROUND: m_pLayerBackground->setChecked(true); break;
-        case LAYER_FOREGROUND: m_pLayerForeground->setChecked(true); break;
+        case MAP::LAYER_BACKGROUND: m_pLayerBackground->setChecked(true); break;
+        case MAP::LAYER_FOREGROUND: m_pLayerForeground->setChecked(true); break;
         }
         connect(m_pLayerForeground, SIGNAL(toggled(bool)), this, SLOT(_layerChanged(bool)));
         connect(m_pLayerBackground, SIGNAL(toggled(bool)), this, SLOT(_layerChanged(bool)));
@@ -245,8 +245,8 @@ void MapEditorWidget::_tileClicked(uint32 uiID, Qt::MouseButton button)
 {
     switch (button)
     {
-    case Qt::RightButton: emit rightTileChanged(uiID, MAP::BRUSH::BRUSH_TILE); break;
-    case Qt::LeftButton: emit leftTileChanged(uiID, MAP::BRUSH::BRUSH_TILE); break;
+    case Qt::RightButton: emit rightTileChanged(uiID, BRUSH::BRUSH_TILE); break;
+    case Qt::LeftButton: emit leftTileChanged(uiID, BRUSH::BRUSH_TILE); break;
     }
 }
 
@@ -254,8 +254,8 @@ void MapEditorWidget::_tileSetClicked(uint32 uiID, Qt::MouseButton button)
 {
     switch (button)
     {
-    case Qt::RightButton: emit rightTileChanged(uiID, MAP::BRUSH::BRUSH_TILE_SET); break;
-    case Qt::LeftButton: emit leftTileChanged(uiID, MAP::BRUSH::BRUSH_TILE_SET); break;
+    case Qt::RightButton: emit rightTileChanged(uiID, BRUSH::BRUSH_TILE_SET); break;
+    case Qt::LeftButton: emit leftTileChanged(uiID, BRUSH::BRUSH_TILE_SET); break;
     }
 }
 
@@ -263,8 +263,8 @@ void MapEditorWidget::_autoTileClicked(uint32 uiID, Qt::MouseButton button)
 {
     switch (button)
     {
-    case Qt::RightButton: emit rightTileChanged(uiID, MAP::BRUSH::BRUSH_AUTO_TILE); break;
-    case Qt::LeftButton: emit leftTileChanged(uiID, MAP::BRUSH::BRUSH_AUTO_TILE); break;
+    case Qt::RightButton: emit rightTileChanged(uiID, BRUSH::BRUSH_AUTO_TILE); break;
+    case Qt::LeftButton: emit leftTileChanged(uiID, BRUSH::BRUSH_AUTO_TILE); break;
     }
 }
 

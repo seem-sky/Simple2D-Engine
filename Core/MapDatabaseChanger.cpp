@@ -3,7 +3,7 @@
 #include "Config.h"
 
 using namespace DATABASE;
-using namespace DATABASE::MAP;
+using namespace DATABASE::MAP_STRUCTURE;
 
 MapDatabaseChanger::MapDatabaseChanger(MapDatabasePtr pMapDB) : DatabaseChanger(pMapDB)
 {
@@ -22,7 +22,7 @@ void MapDatabaseChanger::undoChanges(uint32 uiID)
     MapPrototypePtr pNewMap;
     MapPrototypePtr pTargetMap;
     if (_getTargetDB()->getItem(uiID, pTargetMap) && _getNewDB()->getItem(uiID, pNewMap))
-        pNewMap->setSize(pTargetMap->getSize(), pTargetMap->getLayerSize(LAYER_FOREGROUND), pTargetMap->getLayerSize(LAYER_BACKGROUND));
+        pNewMap->setSize(pTargetMap->getSize(), pTargetMap->getLayerSize(MAP::LAYER_FOREGROUND), pTargetMap->getLayerSize(MAP::LAYER_BACKGROUND));
 }
 
 void MapDatabaseChanger::storeChanges()

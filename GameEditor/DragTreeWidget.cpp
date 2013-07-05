@@ -147,7 +147,7 @@ QWidget* WorldObjectPrototypeDragTreeWidget::setTooltipWidget(uint32 uiPrototype
     pViewer->setAnimationDB(m_pAnimationDB);
     pViewer->setSpriteDB(m_pSpriteDB);
     pViewer->setContinuesAnimation();
-    pViewer->setCurrentAnimation(proto->getAnimationInfo(MAP::DIRECTION_DOWN).m_uiAnimationID);
+    pViewer->setCurrentAnimation(proto->getAnimationInfo(MAP_STRUCTURE::DIRECTION_DOWN).m_uiAnimationID);
     pViewer->setPreviousFrameDraw(false);
     pViewer->setGridDraw(false);
     pViewer->viewport()->resize(QSize(200, 200));
@@ -167,7 +167,7 @@ void WorldObjectPrototypeDragTreeWidget::leaveEvent(QEvent *pEvent)
         if (!m_pDB->getItem(pItem->text(0).toUInt(), objectProto))
             return;
         // create frame
-        WorldObjectPrototype::AnimationInfo animationInfo = objectProto->getAnimationInfo(MAP::DIRECTION_DOWN);
+        WorldObjectPrototype::AnimationInfo animationInfo = objectProto->getAnimationInfo(MAP_STRUCTURE::DIRECTION_DOWN);
         AnimationViewDB aniViewer;
         aniViewer.setAttribute(Qt::WA_TranslucentBackground);
         aniViewer.setWindowFlags(Qt::FramelessWindowHint);

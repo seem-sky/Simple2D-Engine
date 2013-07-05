@@ -2,10 +2,10 @@
 #include "moc_MapObjectDialog.h"
 
 using namespace DATABASE;
-using namespace DATABASE::MAP;
+using namespace DATABASE::MAP_STRUCTURE;
 
 MapObjectDialog::MapObjectDialog(DATABASE::ConstWorldObjectDatabasePtr pWODB, DATABASE::ConstAnimationDatabasePtr pAnimationDB,
-                                 DATABASE::ConstSpriteDatabasePtr pSpriteDB, MAP::MapObjectPtr pObject, QWidget *pParent)
+                                 DATABASE::ConstSpriteDatabasePtr pSpriteDB, MapObjectPtr pObject, QWidget *pParent)
                                  : m_pMapObject(pObject), m_pWorldObjectDB(pWODB), QDialog(pParent), Ui_MapObjectDialog()
 {
     setupUi(this);
@@ -28,7 +28,7 @@ void MapObjectDialog::accept()
 
 void MapObjectDialog::_storeData()
 {
-    m_pMapObject->m_Layer = static_cast<MAP::MapObjectLayer>(m_pLayer->currentIndex());
+    m_pMapObject->m_Layer = static_cast<MapObjectLayer>(m_pLayer->currentIndex());
     if (m_pDirDown->isChecked())
         m_pMapObject->m_Direction = DIRECTION_DOWN;
     else if (m_pDirLeft->isChecked())

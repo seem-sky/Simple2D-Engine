@@ -3,6 +3,7 @@
 
 #include <QtGui/QPixmap>
 #include <QtGui/QBitmap>
+#include <QtCore/QString>
 #include "DatabasePrototypes.h"
 #include "Container.h"
 

@@ -7,13 +7,13 @@
 #include "Config.h"
 #include <QtWidgets/QMessageBox>
 
-using namespace DATABASE::MAP;
+using namespace DATABASE::MAP_STRUCTURE;
 using namespace DATABASE;
 
 /*#####
 # MapTreeItem
 #####*/
-MapTreeItem::MapTreeItem(const MAP::MapPrototypePtr &map) : m_pMap(map), PrototypeTreeWidgetItem(QStringList())
+MapTreeItem::MapTreeItem(const MapPrototypePtr &map) : m_pMap(map), PrototypeTreeWidgetItem(QStringList())
 {
     updateMapText();
 }

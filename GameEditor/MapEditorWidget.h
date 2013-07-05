@@ -57,15 +57,15 @@ private slots:
 
     void _tabSelected(int index);
 
-    void _mapUpdated(DATABASE::MAP::MapPrototypePtr map);
+    void _mapUpdated(DATABASE::MAP_STRUCTURE::MapPrototypePtr map);
 
 signals:
-    void leftTileChanged(uint32 uiID, DATABASE::MAP::BRUSH::BrushType type);
-    void rightTileChanged(uint32 uiID, DATABASE::MAP::BRUSH::BrushType type);
+    void leftTileChanged(uint32 uiID, DATABASE::MAP_STRUCTURE::BRUSH::BrushType type);
+    void rightTileChanged(uint32 uiID, DATABASE::MAP_STRUCTURE::BRUSH::BrushType type);
 
 private:
     ModifyObject m_ModifyObj;
-    DATABASE::MAP::BRUSH::MapObjectBrush m_MapObjectBrush;
+    DATABASE::MAP_STRUCTURE::BRUSH::MapObjectBrush m_MapObjectBrush;
 
     SharedMapEditorDataPtr m_pSharedData;
 };

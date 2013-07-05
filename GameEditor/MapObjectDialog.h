@@ -17,13 +17,13 @@ protected:
 
 public:
     MapObjectDialog(DATABASE::ConstWorldObjectDatabasePtr pWODB, DATABASE::ConstAnimationDatabasePtr pAnimationDB,
-        DATABASE::ConstSpriteDatabasePtr pSpriteDB, DATABASE::MAP::MapObjectPtr pObject, QWidget *pParent = NULL);
+        DATABASE::ConstSpriteDatabasePtr pSpriteDB, DATABASE::MAP_STRUCTURE::MapObjectPtr pObject, QWidget *pParent = NULL);
 
 private slots:
     void _directionButtonToggled(bool checked);
 
 private:
-    DATABASE::MAP::MapObjectPtr m_pMapObject;
+    DATABASE::MAP_STRUCTURE::MapObjectPtr m_pMapObject;
     DATABASE::ConstWorldObjectDatabasePtr m_pWorldObjectDB;
 };
 #endif

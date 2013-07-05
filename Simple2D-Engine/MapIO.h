@@ -9,7 +9,7 @@
 
 namespace DATABASE
 {
-    namespace MAP
+    namespace MAP_STRUCTURE
     {
         /*#####
         # MapReader

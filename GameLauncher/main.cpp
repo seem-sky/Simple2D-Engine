@@ -1,8 +1,11 @@
-#include <windows.h>
-#include "GameLoop.h"
+#include "Program.h"
+#include "Game.h"
 
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int32 nCmdShow)
+#ifndef DEBUG
+#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
+#endif
+int main(int argc, char *argv[])
 {
-    GameLoop gameLoop;
-    gameLoop.exec();
+    PROGRAM::Simple2D_Engine_Program.init(argc, argv);
+    return PROGRAM::Simple2D_Engine_Program.exec();
 }

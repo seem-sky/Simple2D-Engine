@@ -1,11 +1,12 @@
 #ifndef INI_PARSER_H
 #define INI_PARSER_H
 
-#include <fstream>
 #include "Global.h"
+#include <QtCore/QString>
 
 typedef std::multimap<QString, QString> DataMultimap;
 typedef std::map<QString, DataMultimap> SectorData;
+typedef std::vector<QString> StringVector;
 
 class IniParser
 {

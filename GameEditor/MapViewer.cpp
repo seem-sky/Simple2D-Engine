@@ -7,7 +7,7 @@
 #include "MapBrush.h"
 #include "Config.h"
 
-using namespace DATABASE::MAP;
+using namespace DATABASE::MAP_STRUCTURE;
 
 /*#####
 # MapObjectItem
@@ -67,13 +67,13 @@ void MapViewScene::drawBackground(QPainter *pPainter, const QRectF &rect)
 {
     // fill background with pink color
     pPainter->fillRect(rect, QColor(255, 0, 249, 255));
-    _drawTiles(pPainter, rect, LAYER_BACKGROUND);
+    _drawTiles(pPainter, rect, MAP::LAYER_BACKGROUND);
 
 }
 
 void MapViewScene::drawForeground(QPainter *painter, const QRectF &rect)
 {
-    _drawTiles(painter, rect, LAYER_FOREGROUND);
+    _drawTiles(painter, rect, MAP::LAYER_FOREGROUND);
     _drawGrid(painter, rect);
 }
 
@@ -88,8 +88,8 @@ void MapViewScene::_drawTiles(QPainter *painter, const QRectF &rect, Layer curre
         qMin<uint32>(ceil(rect.height() / TILE_SIZE) + startTile.y + 1, map->getSize().y));
     uint32 uiActiveLayer = ((MapViewer*)parent())->getCurrentLayer(currentLayer)-1;
     QRectF tileRect(0, 0, TILE_SIZE, TILE_SIZE);
-    if ((m_pSharedData->getMappingMode() == MODE_OBJECT && currentLayer == LAYER_FOREGROUND) ||
-        (m_pSharedData->getMappingMode() == MODE_TILE && m_pSharedData->getCurrentLayer() == LAYER_BACKGROUND && currentLayer == LAYER_FOREGROUND))
+    if ((m_pSharedData->getMappingMode() == MODE_OBJECT && currentLayer == MAP::LAYER_FOREGROUND) ||
+        (m_pSharedData->getMappingMode() == MODE_TILE && m_pSharedData->getCurrentLayer() == MAP::LAYER_BACKGROUND && currentLayer == MAP::LAYER_FOREGROUND))
         painter->setOpacity(0.5);
     for (uint32 layer = 0; layer < map->getLayerSize(currentLayer); ++layer)
     {
@@ -127,7 +127,6 @@ void MapViewScene::_drawTiles(QPainter *painter, const QRectF &rect, Layer curre
                 }
             }
         }
-        //painter->save();
     }
 }
 
@@ -204,10 +203,10 @@ void MapViewScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *pEvent)
 # MapViewer
 #####*/
 MapViewer::MapViewer(const MapPrototypePtr &map, SharedMapEditorDataPtr pSharedData, QWidget* pParent) : ModifyView(pParent),
-m_CurZoom(100), m_hasChanges(false), m_showGrid(true), m_pMap(map), m_Layer(LAYER_BACKGROUND)
+m_CurZoom(100), m_hasChanges(false), m_showGrid(true), m_pMap(map), m_Layer(MAP::LAYER_BACKGROUND)
 {
-    m_uiCurrentLayer[LAYER_BACKGROUND] = 1;
-    m_uiCurrentLayer[LAYER_FOREGROUND] = 0;
+    m_uiCurrentLayer[MAP::LAYER_BACKGROUND] = 1;
+    m_uiCurrentLayer[MAP::LAYER_FOREGROUND] = 0;
     setSharedData(pSharedData);
     MapViewScene *pScene = new MapViewScene(this);
     pScene->setSharedEditorData(pSharedData);

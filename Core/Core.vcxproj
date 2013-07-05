@@ -71,7 +71,7 @@
     <LibraryPath>C:\Qt\Qt5.0.2-x86\qtbase\lib;$(SolutionDir);$(LibraryPath)</LibraryPath>
     <ReferencePath>
     </ReferencePath>
-    <IncludePath>C:\Qt\Qt5.0.2-x86\qtbase\include;C:\Users\anti-freak\Documents\SDKs\boost_1_53_0;$(SolutionDir)\Simple2D-Engine;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Qt\Qt5.0.2-x86\qtbase\include;C:\Users\anti-freak\Documents\SDKs\boost_1_53_0;$(SolutionDir)\Simple2D-Engine;$(SolutionDir)\Simple2D-GameEditor\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <TargetName>$(ProjectName)d</TargetName>
@@ -83,7 +83,7 @@
     <OutDir>$(SolutionDir)\</OutDir>
     <IntDir>$(Configuration)\</IntDir>
     <LibraryPath>C:\Qt\Qt5.0.2-x86\qtbase\lib;$(SolutionDir);$(LibraryPath)</LibraryPath>
-    <IncludePath>C:\Qt\Qt5.0.2-x86\qtbase\include;C:\Users\anti-freak\Documents\SDKs\boost_1_53_0;$(SolutionDir)\Simple2D-Engine;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Qt\Qt5.0.2-x86\qtbase\include;C:\Users\anti-freak\Documents\SDKs\boost_1_53_0;$(SolutionDir)\Simple2D-Engine;$(SolutionDir)\Simple2D-GameEditor\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LibraryPath>C:\Users\anti-freak\Documents\SDKs\qt-everywhere-opensource-src-4.8.1\lib;$(LibraryPath)</LibraryPath>
@@ -177,9 +177,6 @@
     <ClCompile Include="VariableHolder.cpp" />
     <ClCompile Include="IniParser.cpp" />
     <ClCompile Include="MapDatabaseChanger.cpp" />
-    <ClCompile Include="AutoTile.cpp" />
-    <ClCompile Include="AutoTileCache.cpp" />
-    <ClCompile Include="TileCache.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Config.h" />
@@ -188,9 +185,6 @@
     <ClInclude Include="DatabaseChanger.h" />
     <ClInclude Include="IniParser.h" />
     <ClInclude Include="MapDatabaseChanger.h" />
-    <ClInclude Include="AutoTile.h" />
-    <ClInclude Include="AutoTileCache.h" />
-    <ClInclude Include="TileCache.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />

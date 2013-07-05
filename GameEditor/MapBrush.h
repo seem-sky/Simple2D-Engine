@@ -3,13 +3,15 @@
 
 #include "Global.h"
 #include "MapView.h"
+#include <boost/dynamic_bitset.hpp>
 
 namespace DATABASE
 {
-    namespace MAP
+    namespace MAP_STRUCTURE
     {
         namespace BRUSH
         {
+            typedef std::vector<boost::dynamic_bitset<>> BitsetVector;
             /*#####
             # TileBrushes
             #####*/
@@ -41,7 +43,7 @@ namespace DATABASE
 
             protected:
                 void calculateFillArea(MapViewer *pWidget, const UInt32Point3D &center, BitsetVector &mapBitset = BitsetVector());
-                void setupBitset(const MAP::MapPrototypePtr &map, BitsetVector &mapBitset);
+                void setupBitset(const MAP_STRUCTURE::MapPrototypePtr &map, BitsetVector &mapBitset);
 
             public:
                 TileBrush();
@@ -115,7 +117,7 @@ namespace DATABASE
 
                 void _setAutoTile(MapPrototypePtr const &map, const UInt32Point3D &center, DATABASE::ConstAutoTilePrototypePtr proto);
 
-                void _doAutoTileCheckForPosList(const MAP::MapPrototypePtr &map, const uint32 &uiLayer, const UInt32PointSet &posVector);
+                void _doAutoTileCheckForPosList(const MAP_STRUCTURE::MapPrototypePtr &map, const uint32 &uiLayer, const UInt32PointSet &posVector);
 
             public:
                 MapAutoTileBrush(DATABASE::ConstAutoTileDatabasePtr pDB) : TileBrush(), m_pAutoTileDB(pDB)
@@ -149,7 +151,7 @@ namespace DATABASE
                 // return true if draw was successful
                 bool drawObject(MapViewer *pWidget, Int32Point pos);
 
-                static QPixmap getObjectPixmap(uint32 uiObjectID, DATABASE::ObjectType type, MAP::MapDirection direction,
+                static QPixmap getObjectPixmap(uint32 uiObjectID, DATABASE::ObjectType type, MAP_STRUCTURE::MapDirection direction,
                     DATABASE::ConstWorldObjectDatabasePtr pWorldObjectDB, DATABASE::ConstAnimationDatabasePtr pAnimationDB, DATABASE::ConstSpriteDatabasePtr pSpriteDB,
                     QRect &boundingRect);
 

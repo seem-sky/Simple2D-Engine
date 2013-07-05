@@ -46,8 +46,6 @@ m_pDBMgr(pDBMgr)
     m_ModifyObj.setWidget(ButtonCancel, MODIFY_MOVE, QPoint(ButtonApply->width()+10, 10));
     m_ModifyObj.setWidget(ButtonOK, MODIFY_MOVE, QPoint(ButtonApply->width()+ButtonOK->width()+10, 10));
 
-    m_sLogLocationName = LOGFILE_ENGINE_LOG_NAME + "DatabaseWindow : ";
-
     connect(ButtonOK, SIGNAL(clicked()), this, SLOT(clickButtonOK()));
     connect(ButtonApply, SIGNAL(clicked()), this, SLOT(clickButtonApply()));
     connect(ButtonCancel, SIGNAL(clicked()), this, SLOT(clickButtonCancel()));

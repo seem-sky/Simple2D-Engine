@@ -11,13 +11,13 @@ private:
     void updateWidgets();
 
 public:
-    MapSettings(const DATABASE::MAP::MapPrototypePtr &map, QWidget *pParent = NULL);
+    MapSettings(const DATABASE::MAP_STRUCTURE::MapPrototypePtr &map, QWidget *pParent = NULL);
 
 private slots:
     void _accepted();
 
 private:
-    DATABASE::MAP::MapPrototypePtr m_pMap;
+    DATABASE::MAP_STRUCTURE::MapPrototypePtr m_pMap;
 };
 
 #endif

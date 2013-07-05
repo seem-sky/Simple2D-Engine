@@ -18,7 +18,7 @@ DatabaseMgr::DatabaseMgr()
     m_pWorldObjectDatabase = WorldObjectDatabasePtr(new WorldObjectDatabase());
     m_pDynamicObjectDatabase = DynamicObjectDatabasePtr(new DynamicObjectDatabase());
     m_pObjectAnimationTypeDatabase = ObjectAnimationTypeDatabasePtr(new ObjectAnimationTypeDatabase());
-    m_pMapDatabase = MapDatabasePtr(new MAP::MapDatabase());
+    m_pMapDatabase = MapDatabasePtr(new MAP_STRUCTURE::MapDatabase());
     m_pLocalsDatabase = LocalsDatabasePtr(new LocalsDatabase());
 }
 

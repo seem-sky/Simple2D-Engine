@@ -15,7 +15,7 @@ protected:
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *pEvent);
 
 public:
-    MapObjectItem(DATABASE::MAP::MapObjectPtr pMapObj) : ModifyItem(), m_pMapObject(pMapObj)
+    MapObjectItem(DATABASE::MAP_STRUCTURE::MapObjectPtr pMapObj) : ModifyItem(), m_pMapObject(pMapObj)
     {}
 
     void move(int x, int y);
@@ -23,7 +23,7 @@ public:
     void updateItemPixmap();
 
 private:
-    DATABASE::MAP::MapObjectPtr m_pMapObject;
+    DATABASE::MAP_STRUCTURE::MapObjectPtr m_pMapObject;
 };
 
 /*#####
@@ -35,7 +35,7 @@ class MapViewScene : public QGraphicsScene
     Q_OBJECT
 private:
     void _drawGrid(QPainter *painter, const QRectF &rect);
-    void _drawTiles(QPainter *painter, const QRectF &rect, DATABASE::MAP::Layer layer);
+    void _drawTiles(QPainter *painter, const QRectF &rect, DATABASE::MAP_STRUCTURE::Layer layer);
 
 protected:
     void drawBackground(QPainter *painter, const QRectF &rect);
@@ -73,17 +73,17 @@ private:
     void _placeMapObjects();
 
 public:
-    MapViewer(const DATABASE::MAP::MapPrototypePtr &map, SharedMapEditorDataPtr pDBMgr, QWidget *pParent = NULL);
+    MapViewer(const DATABASE::MAP_STRUCTURE::MapPrototypePtr &map, SharedMapEditorDataPtr pDBMgr, QWidget *pParent = NULL);
 
-    const DATABASE::MAP::MapPrototypePtr& getMap() const { return m_pMap; }
+    const DATABASE::MAP_STRUCTURE::MapPrototypePtr& getMap() const { return m_pMap; }
     inline MapViewScene* getScene() { return dynamic_cast<MapViewScene*>(scene()); }
 
-    inline uint32 getCurrentLayer(DATABASE::MAP::Layer layer) const { return m_uiCurrentLayer[layer]; }
-    inline void setCurrentLayer(uint32 uiCurrentLayer, DATABASE::MAP::Layer layer) { m_uiCurrentLayer[layer] = uiCurrentLayer; redrawViewport(); }
-    uint32 getMaxLayer(DATABASE::MAP::Layer layer) const { return m_pMap->getLayerSize(layer); }
+    inline uint32 getCurrentLayer(DATABASE::MAP_STRUCTURE::Layer layer) const { return m_uiCurrentLayer[layer]; }
+    inline void setCurrentLayer(uint32 uiCurrentLayer, DATABASE::MAP_STRUCTURE::Layer layer) { m_uiCurrentLayer[layer] = uiCurrentLayer; redrawViewport(); }
+    uint32 getMaxLayer(DATABASE::MAP_STRUCTURE::Layer layer) const { return m_pMap->getLayerSize(layer); }
 
-    inline DATABASE::MAP::Layer getLayer() const { return m_Layer; }
-    inline void setLayer(DATABASE::MAP::Layer layer) { m_Layer = layer; }
+    inline DATABASE::MAP_STRUCTURE::Layer getLayer() const { return m_Layer; }
+    inline void setLayer(DATABASE::MAP_STRUCTURE::Layer layer) { m_Layer = layer; }
 
     inline int32 getZoom() const { return m_CurZoom; }
     void setZoom(int32 zoom);
@@ -98,7 +98,7 @@ public:
     void updateText();
 
     void revertAction();
-    void addAction(DATABASE::MAP::MapActionPtr pAction);
+    void addAction(DATABASE::MAP_STRUCTURE::MapActionPtr pAction);
 
     inline void setShowGrid(bool show) { m_showGrid = show; redrawViewport(); }
     inline bool getShowGrid() const { return m_showGrid; }
@@ -113,11 +113,11 @@ signals:
 
 private:
     uint32 m_uiCurrentLayer[2];
-    DATABASE::MAP::Layer m_Layer;
+    DATABASE::MAP_STRUCTURE::Layer m_Layer;
     int m_CurZoom;
     bool m_showGrid;
-    DATABASE::MAP::MapPrototypePtr m_pMap;
+    DATABASE::MAP_STRUCTURE::MapPrototypePtr m_pMap;
     bool m_hasChanges;
-    DATABASE::MAP::MapActionPtrVector m_Actions;
+    DATABASE::MAP_STRUCTURE::MapActionPtrVector m_Actions;
 };
 #endif

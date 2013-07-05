@@ -103,19 +103,19 @@ namespace DATABASE
     /*####
     # MapDatabase
     ####*/
-    class MapDatabaseXMLReader : public DatabaseReader<MAP::MapPrototype>
+    class MapDatabaseXMLReader : public DatabaseReader<MAP_STRUCTURE::MapPrototype>
     {
     protected:
-        virtual bool getAttributeFromXML(MAP::MapPrototypePtr proto, const QString &attributeName, const QString &attributeValue);
+        virtual bool getAttributeFromXML(MAP_STRUCTURE::MapPrototypePtr proto, const QString &attributeName, const QString &attributeValue);
 
     public:
         MapDatabaseXMLReader(const MapDatabasePtr &pDB) : DatabaseReader(pDB) {}
     };
 
-    class MapDatabaseXMLWriter : public DatabaseWriter<MAP::MapPrototype>
+    class MapDatabaseXMLWriter : public DatabaseWriter<MAP_STRUCTURE::MapPrototype>
     {
     protected:
-        virtual void getXMLFromAttributes(MAP::MapPrototypePtr proto, QXmlStreamWriter &writer);
+        virtual void getXMLFromAttributes(MAP_STRUCTURE::MapPrototypePtr proto, QXmlStreamWriter &writer);
 
     public:
         MapDatabaseXMLWriter(const MapDatabasePtr &pDB) : DatabaseWriter(pDB) {}

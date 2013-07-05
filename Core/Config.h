@@ -3,6 +3,7 @@
 
 #include "Singleton.h"
 #include "Global.h"
+#include <QtCore/QString>
 
 class Config : public TSingleton<Config>
 {

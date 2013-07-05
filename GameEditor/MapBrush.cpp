@@ -5,7 +5,7 @@
 #include "AnimationViewWidget.h"
 
 using namespace DATABASE;
-using namespace DATABASE::MAP;
+using namespace DATABASE::MAP_STRUCTURE;
 using namespace BRUSH;
 
 BrushMode BRUSH::getBrushMode(const QString &mode)
@@ -18,7 +18,7 @@ BrushMode BRUSH::getBrushMode(const QString &mode)
 /*#####
 # MapBrush
 #####*/
-TileBrush::TileBrush() : m_buttonHold(false), m_pLastEmitter(NULL), m_mode(MODE_PEN), m_uiTileID(0), m_Layer(LAYER_BACKGROUND)
+TileBrush::TileBrush() : m_buttonHold(false), m_pLastEmitter(NULL), m_mode(MODE_PEN), m_uiTileID(0), m_Layer(MAP::LAYER_BACKGROUND)
 {}
 
 void TileBrush::brushPress(MapViewer *pWidget, UInt32Point3D center)
@@ -67,7 +67,7 @@ void TileBrush::drawOnMap(MapViewer *pWidget, UInt32Point3D center)
     pWidget->changedMap();
 }
 
-void TileBrush::setupBitset(const MAP::MapPrototypePtr &map, BitsetVector &mapBitset)
+void TileBrush::setupBitset(const MapPrototypePtr &map, BitsetVector &mapBitset)
 {
     if (map)
         mapBitset = BitsetVector(map->getSize().x, boost::dynamic_bitset<>(map->getSize().y));
@@ -331,7 +331,7 @@ bool MapAutoTileBrush::_checkFill(MapPrototypePtr map, MapTile centerTile, UInt3
     return false;
 }
 
-void MapAutoTileBrush::_setAutoTile(const MAP::MapPrototypePtr &map, const UInt32Point3D &center, DATABASE::ConstAutoTilePrototypePtr proto)
+void MapAutoTileBrush::_setAutoTile(const MapPrototypePtr &map, const UInt32Point3D &center, DATABASE::ConstAutoTilePrototypePtr proto)
 {
     if (!map || !proto)
         return;
@@ -342,7 +342,7 @@ void MapAutoTileBrush::_setAutoTile(const MAP::MapPrototypePtr &map, const UInt3
     _doAutoTileCheckForPosList(map, center.z, result);
 }
 
-void MapAutoTileBrush::_doAutoTileCheckForPosList(const MAP::MapPrototypePtr &map, const uint32 &uiLayer, const UInt32PointSet &positions)
+void MapAutoTileBrush::_doAutoTileCheckForPosList(const MapPrototypePtr &map, const uint32 &uiLayer, const UInt32PointSet &positions)
 {
     for (UInt32PointSet::const_iterator itr = positions.begin(); itr != positions.end(); ++itr)
     {
@@ -367,14 +367,14 @@ bool MapObjectBrush::drawObject(MapViewer *pWidget, Int32Point pos)
     // add pixmap to MapObjectItem
     QRect boundingRect;
     MapObjectItem *pItem = new MapObjectItem(pWidget->getMap()->addMapObject(m_ObjectType, m_uiObjectID, pos));
-    pItem->setPixmap(getObjectPixmap(m_uiObjectID, m_ObjectType, MAP::DIRECTION_DOWN, m_pSharedData->getWorldObjectDatabase(), m_pSharedData->getAnimationDatabase(),
+    pItem->setPixmap(getObjectPixmap(m_uiObjectID, m_ObjectType, DIRECTION_DOWN, m_pSharedData->getWorldObjectDatabase(), m_pSharedData->getAnimationDatabase(),
                     m_pSharedData->getSpriteDatabase(), boundingRect));
     pScene->addItem(pItem);
     pItem->move(boundingRect.x() + pos.x, boundingRect.y() + pos.y);
     return true;
 }
 
-QPixmap MapObjectBrush::getObjectPixmap(uint32 uiObjectID, DATABASE::ObjectType type, MAP::MapDirection direction, DATABASE::ConstWorldObjectDatabasePtr pWorldObjectDB,
+QPixmap MapObjectBrush::getObjectPixmap(uint32 uiObjectID, DATABASE::ObjectType type, MapDirection direction, DATABASE::ConstWorldObjectDatabasePtr pWorldObjectDB,
                                         DATABASE::ConstAnimationDatabasePtr pAnimationDB, DATABASE::ConstSpriteDatabasePtr pSpriteDB, QRect &boundingRect)
 {
     if (!uiObjectID || !pWorldObjectDB || !pAnimationDB || !pSpriteDB)

@@ -240,7 +240,7 @@ void AnimationDatabaseXMLWriter::getXMLFromAttributes(AnimationPrototypePtr prot
 /*####
 # MapDatabase
 ####*/
-bool MapDatabaseXMLReader::getAttributeFromXML(MAP::MapPrototypePtr proto, const QString &attributeName, const QString &attributeValue)
+bool MapDatabaseXMLReader::getAttributeFromXML(MAP_STRUCTURE::MapPrototypePtr proto, const QString &attributeName, const QString &attributeValue)
 {
     if (!proto || attributeName.isEmpty() || attributeValue.isEmpty())
         return false;
@@ -249,22 +249,22 @@ bool MapDatabaseXMLReader::getAttributeFromXML(MAP::MapPrototypePtr proto, const
 
     if (attributeName == "MapSizeX")
     {
-        proto->m_Size.x = attributeValue.toUInt();
+        proto->setSizeX(attributeValue.toUInt());
         return true;
     }
     else if (attributeName == "MapSizeY")
     {
-        proto->m_Size.y = attributeValue.toUInt();
+        proto->setSizeY(attributeValue.toUInt());
         return true;
     }
     else if (attributeName == "BackgroundLayer")
     {
-        proto->m_uiLayer[MAP::LAYER_BACKGROUND] = attributeValue.toUInt();
+        proto->setLayerSize(attributeValue.toUInt(), MAP::LAYER_BACKGROUND);
         return true;
     }
     else if (attributeName == "ForegroundLayer")
     {
-        proto->m_uiLayer[MAP::LAYER_FOREGROUND] = attributeValue.toUInt();
+        proto->setLayerSize(attributeValue.toUInt(), MAP::LAYER_FOREGROUND);
         return true;
     }
     else if (attributeName == "ParentID")
@@ -285,7 +285,7 @@ bool MapDatabaseXMLReader::getAttributeFromXML(MAP::MapPrototypePtr proto, const
     return false;
 }
 
-void MapDatabaseXMLWriter::getXMLFromAttributes(MAP::MapPrototypePtr proto, QXmlStreamWriter &writer)
+void MapDatabaseXMLWriter::getXMLFromAttributes(MAP_STRUCTURE::MapPrototypePtr proto, QXmlStreamWriter &writer)
 {
     if (!proto)
         return;

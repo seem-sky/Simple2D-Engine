@@ -25,7 +25,7 @@ QPixmap SpriteDatabaseWidget::showPixmap(const QString &sFilePath)
     if (!m_Pixmap.isNull())
     {
         // set transparency color
-        Color color(m_pTransparencyColor->text());
+        Color color(m_pTransparencyColor->text().toStdString());
         if (color.hasValidColor())
             m_Pixmap.setMask(m_Pixmap.createMaskFromColor(QColor(color.getRed(), color.getGreen(), color.getBlue())));
     }

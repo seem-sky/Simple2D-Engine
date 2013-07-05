@@ -8,7 +8,7 @@
 #include "Config.h"
 #include "MapIO.h"
 
-using namespace DATABASE::MAP;
+using namespace DATABASE::MAP_STRUCTURE;
 using namespace DATABASE;
 
 /*#####
@@ -104,7 +104,7 @@ void MapTabWidget::closeTab(int index)
     }
 }
 
-MapViewer* MapTabWidget::getTabWithMap(const MAP::MapPrototypePtr &map) const
+MapViewer* MapTabWidget::getTabWithMap(const MapPrototypePtr &map) const
 {
     if (map)
     {
@@ -121,7 +121,7 @@ MapViewer* MapTabWidget::getTabWithMap(const MAP::MapPrototypePtr &map) const
 }
 
 
-bool MapTabWidget::isMapOpened(const MAP::MapPrototypePtr &map) const
+bool MapTabWidget::isMapOpened(const MapPrototypePtr &map) const
 {
     return getTabWithMap(map) != 0;
 }

@@ -2,7 +2,7 @@
 #include "moc_MapBrushWidget.h"
 #include "Config.h"
 
-using namespace DATABASE::MAP;
+using namespace DATABASE::MAP_STRUCTURE;
 using namespace BRUSH;
 
 MapBrushWidget::MapBrushWidget(QWidget *pParent) : QWidget(pParent), MapEditorObject(), Ui_MapBrushWidget(), m_pBrush(new MapTileBrush())

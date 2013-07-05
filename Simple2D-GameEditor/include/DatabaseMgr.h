@@ -1,7 +1,7 @@
 #ifndef DATABASE_MGR_H
 #define DATABASE_MGR_H
 
-#include "DatabasePrototypes.h"
+#include "Database.h"
 #include "MapDatabase.h"
 
 namespace DATABASE
@@ -18,75 +18,6 @@ namespace DATABASE
     const QString MAP_DATABASE_PATH = "/Game/MapDatabase.xml";
     const QString LOCALS_DATABASE_PATH = "/Game/LocalsDatabase.xml";
 
-    class ObjectAnimationTypeDatabase : public Database<ObjectAnimationTypePrototype>
-    {
-    public:
-        ObjectAnimationTypeDatabase() : Database()
-        {
-            clear();
-        }
-
-        void clear()
-        {
-            Database::clear();
-            Database::setItem(MAP::DIRECTION_UP+1, ObjectAnimationTypePrototypePtr(new ObjectAnimationTypePrototype(MAP::DIRECTION_UP+1, "STAND_UP")));
-            Database::setItem(MAP::DIRECTION_RIGHT+1, ObjectAnimationTypePrototypePtr(new ObjectAnimationTypePrototype(MAP::DIRECTION_RIGHT+1, "STAND_RIGHT")));
-            Database::setItem(MAP::DIRECTION_DOWN+1, ObjectAnimationTypePrototypePtr(new ObjectAnimationTypePrototype(MAP::DIRECTION_DOWN+1, "STAND_DOWN")));
-            Database::setItem(MAP::DIRECTION_LEFT+1, ObjectAnimationTypePrototypePtr(new ObjectAnimationTypePrototype(MAP::DIRECTION_LEFT+1, "STAND_LEFT")));
-            Database::setItem(5, ObjectAnimationTypePrototypePtr(new ObjectAnimationTypePrototype(5, "WALK_UP")));
-            Database::setItem(6, ObjectAnimationTypePrototypePtr(new ObjectAnimationTypePrototype(6, "WALK_RIGHT")));
-            Database::setItem(7, ObjectAnimationTypePrototypePtr(new ObjectAnimationTypePrototype(7, "WALK_DOWN")));
-            Database::setItem(8, ObjectAnimationTypePrototypePtr(new ObjectAnimationTypePrototype(8, "WALK_LEFT")));
-        }
-
-        void setItem(uint32 uiID, ObjectAnimationTypePrototypePtr &prototype)
-        {
-            if (uiID > MIN_DYNAMIC_OBJECT_POSE)
-                Database::setItem(uiID, prototype);
-        }
-    };
-    // object animation type database typedefs
-    typedef std::shared_ptr<ObjectAnimationTypeDatabase> ObjectAnimationTypeDatabasePtr;
-    typedef std::shared_ptr<const ObjectAnimationTypeDatabase> ConstObjectAnimationTypeDatabasePtr;
-
-    /*#####
-    # DatabaseMgr
-    #####*/
-    // tile database typedefs
-    typedef Database<TilePrototype> TileDatabase;
-    typedef std::shared_ptr<TileDatabase> TileDatabasePtr;
-    typedef std::shared_ptr<const TileDatabase> ConstTileDatabasePtr;
-    // tileset database typedefs
-    typedef Database<TILE_SET::TileSetPrototype> TileSetDatabase;
-    typedef std::shared_ptr<TileSetDatabase> TileSetDatabasePtr;
-    typedef std::shared_ptr<const TileSetDatabase> ConstTileSetDatabasePtr;
-    // autotile database typedefs
-    typedef Database<AUTO_TILE::AutoTilePrototype> AutoTileDatabase;
-    typedef std::shared_ptr<AutoTileDatabase> AutoTileDatabasePtr;
-    typedef std::shared_ptr<const AutoTileDatabase> ConstAutoTileDatabasePtr;
-    // sprite database typedefs
-    typedef Database<SpritePrototype> SpriteDatabase;
-    typedef std::shared_ptr<SpriteDatabase> SpriteDatabasePtr;
-    typedef std::shared_ptr<const SpriteDatabase> ConstSpriteDatabasePtr;
-    // animation database typedefs
-    typedef Database<AnimationPrototype> AnimationDatabase;
-    typedef std::shared_ptr<AnimationDatabase> AnimationDatabasePtr;
-    typedef std::shared_ptr<const AnimationDatabase> ConstAnimationDatabasePtr;
-    // world object database typedefs
-    typedef Database<WorldObjectPrototype> WorldObjectDatabase;
-    typedef std::shared_ptr<WorldObjectDatabase> WorldObjectDatabasePtr;
-    typedef std::shared_ptr<const WorldObjectDatabase> ConstWorldObjectDatabasePtr;
-    // dynamic object database typedefs
-    typedef Database<DynamicObjectPrototype> DynamicObjectDatabase;
-    typedef std::shared_ptr<DynamicObjectDatabase> DynamicObjectDatabasePtr;
-    typedef std::shared_ptr<const DynamicObjectDatabase> ConstDynamicObjectDatabasePtr;
-    // text database typedefs
-    typedef Database<LocalisationPrototype> LocalsDatabase;
-    typedef std::shared_ptr<LocalsDatabase> LocalsDatabasePtr;
-    typedef std::shared_ptr<const LocalsDatabase> ConstLocalsDatabasePtr;
-    // map database typedefs
-    typedef std::shared_ptr<MAP::MapDatabase> MapDatabasePtr;
-    typedef std::shared_ptr<const MAP::MapDatabase> ConstMapDatabasePtr;
     enum DatabaseType
     {
         TILE_DATABASE           = 0x0001,

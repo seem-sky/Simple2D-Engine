@@ -26,6 +26,20 @@ struct Point
         y -= p.y;
         return *this;
     }
+
+    inline Point<T>& operator *=(const T &t)
+    {
+        x *= t;
+        y *= t;
+        return *this;
+    }
+
+    inline Point<T>& operator /=(const T &t)
+    {
+        x /= t;
+        y /= t;
+        return *this;
+    }
 };
 
 template<typename T>
@@ -91,6 +105,22 @@ inline const Point<T> operator -(Point<T> const& lhs, Point<T> const& rhs)
 {
     Point<T> tmp(lhs);
     tmp -= rhs;
+    return tmp;
+}
+
+template <typename T>
+inline const Point<T> operator *(Point<T> const& lhs, T const& rhs)
+{
+    Point<T> tmp(lhs);
+    tmp *= rhs;
+    return tmp;
+}
+
+template <typename T>
+inline const Point<T> operator /(Point<T> const& lhs, T const& rhs)
+{
+    Point<T> tmp(lhs);
+    tmp /= rhs;
     return tmp;
 }
 

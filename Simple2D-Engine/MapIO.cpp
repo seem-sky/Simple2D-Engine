@@ -3,7 +3,7 @@
 #include <boost/bind.hpp>
 #include <QtCore/QTime>
 
-using namespace DATABASE::MAP;
+using namespace DATABASE::MAP_STRUCTURE;
 using namespace XML_IO;
 
 const QString TILE_AUTOTILE_DELIMITER = ":";
@@ -35,17 +35,17 @@ void MapReader::_loadTiles(const QDomNode &parentNode, bool &result)
 
     // resize map data
     m_pMap->_clearTiles();
-    m_pMap->_resizeMap(m_pMap->getSize(), m_pMap->getLayerSize(LAYER_FOREGROUND), m_pMap->getLayerSize(LAYER_BACKGROUND));
+    m_pMap->m_Layer.resizeMap(m_pMap->getSize(), m_pMap->getLayerSize(MAP::LAYER_FOREGROUND), m_pMap->getLayerSize(MAP::LAYER_BACKGROUND));
     m_pMap->m_DataLoaded = true;
 
     // load background
     QDomNode node = getSingleNode(parentNode, "LayerBackground");
     if (!node.isNull())
-        _loadTiles(node, LAYER_BACKGROUND);
+        _loadTiles(node, MAP::LAYER_BACKGROUND);
     // load foreground
     node = getSingleNode(parentNode, "LayerForeground");
     if (!node.isNull())
-        _loadTiles(node, LAYER_FOREGROUND);
+        _loadTiles(node, MAP::LAYER_FOREGROUND);
     result = true;
 }
 
@@ -118,9 +118,9 @@ void MapReader::_loadObjects(const QDomNode &parentNode, bool &result)
             else if (attribute.nodeName() == "YPos")
                 newObject->m_Position.y = attribute.nodeValue().toInt();
             else if (attribute.nodeName() == "Direction")
-                newObject->m_Direction = static_cast<MAP::MapDirection>(attribute.nodeValue().toUInt());
+                newObject->m_Direction = static_cast<MAP_STRUCTURE::MapDirection>(attribute.nodeValue().toUInt());
             else if (attribute.nodeName() == "Layer")
-                newObject->m_Layer = static_cast<MAP::MapObjectLayer>(attribute.nodeValue().toUInt());
+                newObject->m_Layer = static_cast<MAP_STRUCTURE::MapObjectLayer>(attribute.nodeValue().toUInt());
         }
         m_pMap->addMapObject(newObject);
     }
@@ -144,10 +144,10 @@ bool MapWriter::_writeChildren(QXmlStreamWriter &writer)
 void MapWriter::_storeTiles(QXmlStreamWriter &writer)
 {
     writer.writeStartElement("LayerBackground");
-    _storeTiles(writer, LAYER_BACKGROUND);
+    _storeTiles(writer, MAP::LAYER_BACKGROUND);
     writer.writeEndElement();
     writer.writeStartElement("LayerForeground");
-    _storeTiles(writer, LAYER_FOREGROUND);
+    _storeTiles(writer, MAP::LAYER_FOREGROUND);
     writer.writeEndElement();
 }
 

@@ -145,7 +145,7 @@ namespace DATABASE
             }
             else if (attributeName == "transparent_color")
             {
-                proto->setTransparencyColor(Color(attributeValue));
+                proto->setTransparencyColor(Color(attributeValue.toStdString()));
                 return true;
             }
             return false;
@@ -166,7 +166,7 @@ namespace DATABASE
             DatabaseWriter::getXMLFromAttributes(proto, writer);
             writer.writeAttribute("FileName", proto->getFileName());
             writer.writeAttribute("Path", proto->getPath());
-            writer.writeAttribute("transparent_color", proto->getTransparencyColor().getColorString());
+            writer.writeAttribute("transparent_color", QString::fromStdString(proto->getTransparencyColor().getColorString()));
         }
 
     public:

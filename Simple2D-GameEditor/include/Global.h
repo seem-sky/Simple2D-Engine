@@ -1,19 +1,18 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
+#include <array>
 #include <set>
 #include <unordered_set>
 #include <vector>
 #include <map>
 #include <algorithm>
+#include <memory>
+#include <string>
 #include "Rect.h"
 #include "math_extensions.h"
-#include <boost/dynamic_bitset.hpp>
-#include <QtCore/QString>
 
-#pragma warning(disable : 4996)
-
-const QString LOGFILE_ENGINE_LOG_NAME = "ENGINE::";
+const std::string ENGINE_VERSION = "v0.0.1";
 
 typedef unsigned int uint32;
 typedef int int32;
@@ -35,6 +34,7 @@ const uint32 TILE_SIZE              = 32;
 // Point typedefs
 typedef Point<int32> Int32Point;
 typedef Point<uint32> UInt32Point;
+typedef Point<double> DoublePoint;
 
 typedef Point3D<int32> Int32Point3D;
 typedef Point3D<uint32> UInt32Point3D;
@@ -60,16 +60,7 @@ typedef std::vector<Point<uint16>> UInt16PointVector;
 typedef std::vector<UInt32Point> UInt32PointVector;
 typedef std::vector<UInt32Point3D> UInt32Point3DVector;
 
-typedef std::vector<QString> StringVector;
-typedef std::vector<StringVector> String2DVector;
-
-// special typedefs
-typedef std::map<uint32, QString> UInt32StringMap;
-
 // rect typedefs
 typedef Rect<uint32, uint32> UInt32Rect;
-
-// bitset typedefs
-typedef std::vector<boost::dynamic_bitset<>> BitsetVector;
 
 #endif

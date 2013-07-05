@@ -9,12 +9,25 @@
     <ClCompile Include="main.cpp">
       <Filter>Launcher Core</Filter>
     </ClCompile>
-    <ClCompile Include="GameLoop.cpp" />
+    <ClCompile Include="Program.cpp">
+      <Filter>Launcher Core</Filter>
+    </ClCompile>
+    <ClCompile Include="SplashScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GameLoop.h" />
+    <ClInclude Include="Program.h">
+      <Filter>Launcher Core</Filter>
+    </ClInclude>
+    <ClInclude Include="SplashScreen.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="GameLauncher.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon-clean-32x32.ico" />
   </ItemGroup>
 </Project>

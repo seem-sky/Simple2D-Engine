@@ -90,7 +90,7 @@ protected:
 
         proto->setFileName(m_pFileName->text());
         proto->setPath(m_pPath->text());
-        proto->setTransparencyColor(Color(m_pTransparencyColor->text()));
+        proto->setTransparencyColor(Color(m_pTransparencyColor->text().toStdString()));
         return true;
     }
 
@@ -102,7 +102,7 @@ protected:
         m_pFileName->setText(proto->getFileName());
         m_pPath->setText(proto->getPath());
         // set transparency first, so pixmap will be displayed correctly.
-        m_pTransparencyColor->setText(proto->getTransparencyColor().getColorString());
+        m_pTransparencyColor->setText(QString::fromStdString(proto->getTransparencyColor().getColorString()));
         showPixmap(proto);
         return true;
     }
@@ -130,7 +130,7 @@ protected:
                 Color color = transparencyWindow.getColor();
                 if (color.hasValidColor())
                 {
-                    m_pTransparencyColor->setText(color.getColorString());
+                    m_pTransparencyColor->setText(QString::fromStdString(color.getColorString()));
                     transparencyColorChanged();
                 }
             }

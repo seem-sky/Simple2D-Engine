@@ -6,6 +6,6 @@
 class WorldObject
 {
 public:
-    uint32 temp;
+    WorldObject();
 };
 #endif

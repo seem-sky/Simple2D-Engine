@@ -29,7 +29,6 @@ private slots:
     void _focusChanged(int index);
 
 private:
-    QString m_sLogLocationName;
     ModifyObject m_ModifyObj;
     DATABASE::DatabaseMgrPtr m_pDBMgr;
 };

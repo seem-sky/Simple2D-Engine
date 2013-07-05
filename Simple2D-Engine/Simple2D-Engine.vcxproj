@@ -11,36 +11,62 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Color.cpp" />
+    <ClCompile Include="..\Simple2D-GameEditor\include\Color.cpp" />
+    <ClCompile Include="..\Simple2D-GameEditor\include\DatabaseMgr.cpp" />
+    <ClCompile Include="..\Simple2D-GameEditor\include\DatabasePrototypes.cpp" />
+    <ClCompile Include="..\Simple2D-GameEditor\include\Game.cpp" />
+    <ClCompile Include="..\Simple2D-GameEditor\include\Logfile.cpp" />
+    <ClCompile Include="..\Simple2D-GameEditor\include\MapDatabase.cpp" />
+    <ClCompile Include="..\Simple2D-GameEditor\include\MapGrid.cpp" />
+    <ClCompile Include="..\Simple2D-GameEditor\include\WorldObject.cpp" />
+    <ClCompile Include="AutoTile.cpp" />
+    <ClCompile Include="AutoTileCache.cpp" />
     <ClCompile Include="DatabaseIO.cpp" />
-    <ClCompile Include="DatabaseMgr.cpp" />
-    <ClCompile Include="DatabasePrototypes.cpp" />
-    <ClCompile Include="Logfile.cpp" />
-    <ClCompile Include="MapDatabase.cpp" />
-    <ClCompile Include="MapGrid.cpp" />
+    <ClCompile Include="GameScene.cpp" />
+    <ClCompile Include="GameWindow.cpp" />
+    <ClCompile Include="Map.cpp" />
     <ClCompile Include="MapIO.cpp" />
-    <ClCompile Include="WorldObject.cpp" />
+    <ClCompile Include="MapLayer.cpp" />
+    <ClCompile Include="MapMgr.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SceneMgr.cpp" />
+    <ClCompile Include="TileCache.cpp" />
+    <ClCompile Include="TransformationHolder.cpp" />
     <ClCompile Include="XML_IO.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Color.h" />
-    <ClInclude Include="Container.h" />
-    <ClInclude Include="Database.h" />
+    <ClInclude Include="..\Simple2D-GameEditor\include\Application.h" />
+    <ClInclude Include="..\Simple2D-GameEditor\include\Color.h" />
+    <ClInclude Include="..\Simple2D-GameEditor\include\Container.h" />
+    <ClInclude Include="..\Simple2D-GameEditor\include\Database.h" />
+    <ClInclude Include="..\Simple2D-GameEditor\include\DatabaseMgr.h" />
+    <ClInclude Include="..\Simple2D-GameEditor\include\DatabasePrototypes.h" />
+    <ClInclude Include="..\Simple2D-GameEditor\include\Game.h" />
+    <ClInclude Include="..\Simple2D-GameEditor\include\Global.h" />
+    <ClInclude Include="..\Simple2D-GameEditor\include\Logfile.h" />
+    <ClInclude Include="..\Simple2D-GameEditor\include\MapDatabase.h" />
+    <ClInclude Include="..\Simple2D-GameEditor\include\MapGrid.h" />
+    <ClInclude Include="..\Simple2D-GameEditor\include\math_extensions.h" />
+    <ClInclude Include="..\Simple2D-GameEditor\include\Point.h" />
+    <ClInclude Include="..\Simple2D-GameEditor\include\Rect.h" />
+    <ClInclude Include="..\Simple2D-GameEditor\include\WorldObject.h" />
+    <ClInclude Include="AutoTile.h" />
+    <ClInclude Include="AutoTileCache.h" />
     <ClInclude Include="DatabaseIO.h" />
     <ClInclude Include="DatabaseIOTemplates.h" />
-    <ClInclude Include="DatabaseMgr.h" />
-    <ClInclude Include="DatabasePrototypes.h" />
-    <ClInclude Include="Global.h" />
-    <ClInclude Include="Logfile.h" />
-    <ClInclude Include="MapDatabase.h" />
-    <ClInclude Include="MapGrid.h" />
+    <ClInclude Include="GameScene.h" />
+    <ClInclude Include="Manager.h" />
+    <ClInclude Include="Map.h" />
+    <ClInclude Include="MapLayer.h" />
+    <ClInclude Include="MapMgr.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="GameWindow.h" />
     <ClInclude Include="MapIO.h" />
-    <ClInclude Include="math_extensions.h" />
-    <ClInclude Include="Point.h" />
     <ClInclude Include="QtGlobal.h" />
-    <ClInclude Include="Rect.h" />
+    <ClInclude Include="SceneMgr.h" />
     <ClInclude Include="Singleton.h" />
-    <ClInclude Include="WorldObject.h" />
+    <ClInclude Include="TileCache.h" />
+    <ClInclude Include="TransformationHolder.h" />
     <ClInclude Include="XML_IO.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -72,14 +98,14 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)</OutDir>
+    <OutDir>$(SolutionDir)\Simple2D-GameEditor\lib\</OutDir>
     <TargetName>$(ProjectName)_d</TargetName>
-    <IncludePath>C:\Qt\Qt5.0.2-x86\qtbase\include;C:\Users\anti-freak\Documents\SDKs\boost_1_53_0;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Qt\Qt5.0.2-x86\qtbase\include;C:\Users\anti-freak\Documents\SDKs\boost_1_53_0;$(SolutionDir)\Simple2D-GameEditor\include;$(SolutionDir)\Simple2D-Engine;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Qt\Qt5.0.2-x86\qtbase\lib;$(SolutionDir);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)</OutDir>
-    <IncludePath>C:\Qt\Qt5.0.2-x86\qtbase\include;C:\Users\anti-freak\Documents\SDKs\boost_1_53_0;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)\Simple2D-GameEditor\lib\</OutDir>
+    <IncludePath>C:\Qt\Qt5.0.2-x86\qtbase\include;C:\Users\anti-freak\Documents\SDKs\boost_1_53_0;$(SolutionDir)\Simple2D-GameEditor\include;$(SolutionDir)\Simple2D-Engine;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Qt\Qt5.0.2-x86\qtbase\lib;$(SolutionDir);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -93,6 +119,9 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <OutputFile>$(SolutionDir)</OutputFile>
     </Link>
+    <Lib>
+      <OutputFile>$(SolutionDir)\Simple2D-GameEditor\lib\$(ProjectName)_d.lib</OutputFile>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -109,6 +138,9 @@
       <OptimizeReferences>true</OptimizeReferences>
       <OutputFile>$(SolutionDir)</OutputFile>
     </Link>
+    <Lib>
+      <OutputFile>$(SolutionDir)\Simple2D-GameEditor\lib\$(ProjectName).lib</OutputFile>
+    </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
