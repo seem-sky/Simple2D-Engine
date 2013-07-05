@@ -30,7 +30,7 @@ private:
 
 protected:
     void resizeEvent(QResizeEvent *pEvent);
-    void moveEvent(QMoveEvent *pEvent) { Config::Get()->setMainWindowPos(UInt32Point(pEvent->pos().x(), pEvent->pos().y())); }
+    void moveEvent(QMoveEvent *pEvent) { Config::get()->setMainWindowPos(UInt32Point(pEvent->pos().x(), pEvent->pos().y())); }
 
 public:
     MainWindow(QMainWindow *parent = 0);

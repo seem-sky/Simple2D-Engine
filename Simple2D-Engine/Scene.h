@@ -4,6 +4,7 @@
 #include <QtWidgets/QGraphicsScene>
 #include <QtCore/QTime>
 #include "Global.h"
+#include "Player.h"
 
 namespace GAME_LOGIC
 {
@@ -41,8 +42,7 @@ namespace GAME_LOGIC
             void _updateFPS(uint32 uiDiff);
 
         public:
-            Scene(SceneMgr &sceneMgr) : m_SceneMgr(sceneMgr), m_pSceneView(nullptr), m_ShowFPS(false)
-            {}
+            Scene(SceneMgr &sceneMgr, const KEY::Keyboard &keyboard);
 
             SceneView* getSceneView() { return m_pSceneView; }
 
@@ -54,6 +54,8 @@ namespace GAME_LOGIC
         protected:
             SceneMgr &m_SceneMgr;
             SceneView *m_pSceneView;
+            PLAYER::PlayerPtr m_pPlayer;
+            const KEY::Keyboard &m_Keyboard;
 
         private:
             bool m_ShowFPS;

@@ -17,7 +17,7 @@ namespace GAME_LOGIC
         class GameScene : public Scene
         {
         public:
-            GameScene(SceneMgr &sceneMgr);
+            GameScene(SceneMgr &sceneMgr, const KEY::Keyboard &keyboard);
 
             void update(uint32 uiDiff);
 

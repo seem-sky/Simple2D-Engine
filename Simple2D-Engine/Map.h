@@ -3,7 +3,7 @@
 
 #include "MapLayer.h"
 #include "DatabaseMgr.h"
-#include "TransformationHolder.h"
+#include "Object.h"
 
 //namespace DATABASE
 //{
@@ -16,13 +16,12 @@
 
 namespace MAP
 {
-    class Map
+    class Map : public ENTITY::Object
     {
     public:
-        Map(uint32 uiID, MapLayer &layer);
+        Map(uint32 uiID, const std::string &name, MapLayer &layer);
 
-        void update(uint32 uiDiff);
-        void generatePassabilityMap();
+        virtual void update(uint32 uiDiff);
 
         inline uint32 getWidth() const { return getSize().x; }
         inline uint32 getHeight() const { return getSize().y; }
@@ -31,15 +30,9 @@ namespace MAP
 
         inline MapTile getMapTile(UInt32Point3D pos, Layer layer) const { return m_Layer.getMapTile(pos, layer); }
 
-        inline Int32Point getMapPosition() const { return m_Position; }
-
     private:
         MapLayer m_Layer;
-        std::string m_MapName;
         std::string m_ScriptName;
-        uint32 m_uiID;
-        Int32Point m_Position;
-        TRANSFORMATION::TransformationHolder m_TransformationHolder;
     };
     typedef std::unique_ptr<Map> MapPtr;
 

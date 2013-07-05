@@ -8,11 +8,12 @@ Game::Game() : Application(), m_closeGame(false), m_SceneMgr(this)
 {
     m_pWidget = QWidgetPtr(new GameWindow(this));
     m_pWidget->show();
-    setScene(SCENE::ScenePtr(new SCENE::GameScene(m_SceneMgr)));
+    setScene(SCENE::ScenePtr(new SCENE::GameScene(m_SceneMgr, m_Keyboard)));
 }
 
 int Game::update(uint32 uiDiff)
 {
+    // update game logic
     m_SceneMgr.updateCurrent(uiDiff);
     return m_closeGame;
 }

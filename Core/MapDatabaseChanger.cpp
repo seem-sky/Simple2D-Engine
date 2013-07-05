@@ -35,7 +35,7 @@ void MapDatabaseChanger::storeChanges()
         _getTargetDB()->removeMap(itr->first);
         if (itr->second)
         {
-            QFile file(Config::Get()->getProjectDirectory() + "/Maps/" + itr->second->getFileName());
+            QFile file(Config::get()->getProjectDirectory() + "/Maps/" + itr->second->getFileName());
             file.remove();
         }
     }

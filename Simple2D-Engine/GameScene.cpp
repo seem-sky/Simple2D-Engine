@@ -3,6 +3,7 @@
 #include "QtGlobal.h"
 #include "Map.h"
 #include "GameWindow.h"
+#include "Player_Game.h"
 
 using namespace GAME_LOGIC;
 using namespace SCENE;
@@ -10,8 +11,9 @@ using namespace SCENE;
 /*#####
 # GameScene
 #####*/
-GameScene::GameScene(SceneMgr &sceneMgr) : Scene(sceneMgr), m_pDatabaseMgr(new DATABASE::DatabaseMgr())
+GameScene::GameScene(SceneMgr &sceneMgr, const KEY::Keyboard &keyboard) : Scene(sceneMgr, keyboard), m_pDatabaseMgr(new DATABASE::DatabaseMgr())
 {
+    m_pPlayer = PLAYER::PlayerPtr(new PLAYER::Player_Game(m_Keyboard));
     m_pDatabaseMgr->loadDatabase("projects/untitled/", DATABASE::ALL_DATABASES^DATABASE::TILE_SET_DATABASE);
     m_MapMgr.setDatabaseMgr(m_pDatabaseMgr);
     m_MapMgr.change(m_MapMgr.loadMap(3));
@@ -21,19 +23,24 @@ GameScene::GameScene(SceneMgr &sceneMgr) : Scene(sceneMgr), m_pDatabaseMgr(new D
 
 void GameScene::update(uint32 uiDiff)
 {
+    // update player
+    m_pPlayer->update(uiDiff);
+
+    // update map
     m_MapMgr.updateCurrent(uiDiff);
+
     // update scene position
     if (m_MapMgr.getCurrent())
     {
-        Int32Point pos = m_MapMgr.getCurrent()->getMapPosition();
+        Int32Point pos = m_MapMgr.getCurrent()->getPosition();
         QRectF sceneRect = m_pSceneView->sceneRect();
-        if (sceneRect.x() != pos.x || sceneRect.y() != pos.y)
-        {
-            sceneRect.setX(pos.x);
-            sceneRect.setY(pos.y);
-            m_pSceneView->setSceneRect(sceneRect);
-        }
+        sceneRect.setX(pos.x);
+        sceneRect.setY(pos.y);
+        m_pSceneView->setSceneRect(sceneRect);
     }
+
+    // redraw scene
+    m_pSceneView->update();
 }
 
 /*#####

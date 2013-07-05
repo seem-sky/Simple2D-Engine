@@ -42,7 +42,7 @@ void MapTabWidget::addMapTab(MapPrototypePtr map)
         MapViewer *pWidget = getTabWithMap(map);
         if (!pWidget)
         {
-            pMapDB->loadMapFile(map->getID(), Config::Get()->getProjectDirectory());
+            pMapDB->loadMapFile(map->getID(), Config::get()->getProjectDirectory());
             pWidget = new MapViewer(map, m_pSharedData, this);
             addTab(pWidget, "");
             connect(pWidget->getScene(), SIGNAL(brushPressed(MapViewer*, UInt32Point3D, uint32)), parent(), SLOT(_pressBrush(MapViewer*, UInt32Point3D, uint32)));
@@ -50,7 +50,7 @@ void MapTabWidget::addMapTab(MapPrototypePtr map)
             connect(pWidget->getScene(), SIGNAL(brushMoved(MapViewer*, UInt32Point3D)), parent(), SLOT(_moveBrush(MapViewer*, UInt32Point3D)));
             connect(pWidget, SIGNAL(textUpdated(MapViewer*, const QString&)), this, SLOT(_updateTabText(MapViewer*, const QString&)));
             pWidget->updateText();
-            Config::Get()->addOpenMap(map->getID());
+            Config::get()->addOpenMap(map->getID());
         }
         setCurrentWidget(pWidget);
     }
@@ -66,7 +66,7 @@ void MapTabWidget::closeMap(MapPrototypePtr map)
     if (MapViewer* pTab = getTabWithMap(map))
     {
         removeTab(indexOf(pTab));
-        Config::Get()->removeOpenMap(map->getID());
+        Config::get()->removeOpenMap(map->getID());
     }
 }
 
@@ -99,7 +99,7 @@ void MapTabWidget::closeTab(int index)
         // unload map from memory
         if (pMapDB)
             pMapDB->unloadMapFile(pTab->getMap()->getID());
-        Config::Get()->removeOpenMap(pTab->getMap()->getID());
+        Config::get()->removeOpenMap(pTab->getMap()->getID());
         removeTab(index);
     }
 }

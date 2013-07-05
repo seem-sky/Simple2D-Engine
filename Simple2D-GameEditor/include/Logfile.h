@@ -5,8 +5,8 @@
 #include <QtCore/QFile>
 
 // ToDo: add this in makro __FILE__ and __LINE__
-#define BASIC_LOG Logfile::Get()->WriteMessage
-#define ERROR_LOG Logfile::Get()->WriteErrorMessage
+#define BASIC_LOG Logfile::get()->WriteMessage
+#define ERROR_LOG Logfile::get()->WriteErrorMessage
 
 class Logfile : public TSingleton<Logfile>
 {

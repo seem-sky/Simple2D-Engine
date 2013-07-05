@@ -28,8 +28,14 @@
     <Filter Include="Map\Tiles\AutoTiles">
       <UniqueIdentifier>{dcf521e5-0af4-42f0-ae22-4c34a68b66ef}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MapObjects">
+    <Filter Include="Map\MapObjects">
       <UniqueIdentifier>{42e367d7-7966-43f9-bccf-dbdf54b71d3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Player">
+      <UniqueIdentifier>{fd95caed-fe41-48ae-83e4-bf8a5dce356f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\KeyInput">
+      <UniqueIdentifier>{b49eb0ea-5af5-487a-a837-fd420f2691fd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -58,7 +64,7 @@
       <Filter>Map</Filter>
     </ClCompile>
     <ClCompile Include="..\Simple2D-GameEditor\include\WorldObject.cpp">
-      <Filter>MapObjects</Filter>
+      <Filter>Map\MapObjects</Filter>
     </ClCompile>
     <ClCompile Include="XML_IO.cpp">
       <Filter>Core</Filter>
@@ -96,7 +102,24 @@
     <ClCompile Include="MapMgr.cpp">
       <Filter>Map</Filter>
     </ClCompile>
-    <ClCompile Include="TransformationHolder.cpp" />
+    <ClCompile Include="TransformationHolder.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="DynamicObject.cpp">
+      <Filter>Map\MapObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Game\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Keyboard.cpp">
+      <Filter>Core\KeyInput</Filter>
+    </ClCompile>
+    <ClCompile Include="Player_Game.cpp">
+      <Filter>Game\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Singleton.h">
@@ -151,7 +174,7 @@
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="..\Simple2D-GameEditor\include\WorldObject.h">
-      <Filter>MapObjects</Filter>
+      <Filter>Map\MapObjects</Filter>
     </ClInclude>
     <ClInclude Include="QtGlobal.h">
       <Filter>Core</Filter>
@@ -195,6 +218,23 @@
     <ClInclude Include="MapMgr.h">
       <Filter>Map</Filter>
     </ClInclude>
-    <ClInclude Include="TransformationHolder.h" />
+    <ClInclude Include="TransformationHolder.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="DynamicObject.h">
+      <Filter>Map\MapObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Game\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Keyboard.h">
+      <Filter>Core\KeyInput</Filter>
+    </ClInclude>
+    <ClInclude Include="Player_Game.h">
+      <Filter>Game\Player</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

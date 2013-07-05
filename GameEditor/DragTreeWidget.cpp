@@ -112,7 +112,7 @@ QWidget* TileSetPrototypeDragTreeWidget::setTooltipWidget(uint32 uiPrototypeID)
         return NULL;
 
     QLabel *pLabel = new QLabel();
-    QPixmap tileSetPixmap(TILE_SET::createTileSetPixmap(Config::Get()->getProjectDirectory(), proto, m_pTileDB));
+    QPixmap tileSetPixmap(TILE_SET::createTileSetPixmap(Config::get()->getProjectDirectory(), proto, m_pTileDB));
     pLabel->setPixmap(tileSetPixmap);
     pLabel->resize(tileSetPixmap.size());
     setTooltipSize(tileSetPixmap.size());
@@ -232,6 +232,6 @@ void TileDropLabel::drawCurrentTile()
 
     ConstTilePrototypePtr proto;
     QPixmap pixmap;
-    if (m_pTileDB->getItem(m_uiCurrentTileID, proto) && createPixmapFromTexturePrototype(Config::Get()->getProjectDirectory(), proto, pixmap))
+    if (m_pTileDB->getItem(m_uiCurrentTileID, proto) && createPixmapFromTexturePrototype(Config::get()->getProjectDirectory(), proto, pixmap))
         setPixmap(pixmap);
 }

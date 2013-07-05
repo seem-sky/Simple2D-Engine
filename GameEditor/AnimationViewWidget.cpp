@@ -19,7 +19,7 @@ AnimationViewItem::AnimationViewItem(DATABASE::ConstSpritePrototypePtr pProto) :
     if (pProto)
     {
         QPixmap pixmap;
-        if (createPixmapFromTexturePrototype(Config::Get()->getProjectDirectory(), pProto, pixmap))
+        if (createPixmapFromTexturePrototype(Config::get()->getProjectDirectory(), pProto, pixmap))
         {
             setPixmap(pixmap);
             QSize pixmapSize = pixmap.size();
@@ -287,7 +287,7 @@ void AnimationViewScene::_drawPreviousFrame(QPainter *painter, const QRectF &rec
         for (uint32 i = 0; i < m_PreviousFrame.m_Sprites.size(); ++i)
         {
             DATABASE::AnimationPrototype::Sprite sprite = m_PreviousFrame.m_Sprites.at(i);
-            if (!pDB->getItem(sprite.m_uiSpriteID, proto) || !createPixmapFromTexturePrototype(Config::Get()->getProjectDirectory(), proto, pixmap))
+            if (!pDB->getItem(sprite.m_uiSpriteID, proto) || !createPixmapFromTexturePrototype(Config::get()->getProjectDirectory(), proto, pixmap))
                 continue;
             painter->setOpacity(0.5f*(qreal(sprite.m_uiOpacity)/100));
             painter->rotate(sprite.m_uiRotation);

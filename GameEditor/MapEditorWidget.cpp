@@ -191,7 +191,7 @@ void MapEditorWidget::updateMapEditorWidgets()
 
 void MapEditorWidget::_loadOpenMapsFromConfig()
 {
-    const UInt32UnorderedSet openMaps = Config::Get()->getOpenMaps();
+    const UInt32UnorderedSet openMaps = Config::get()->getOpenMaps();
     for (UInt32UnorderedSet::const_iterator itr = openMaps.begin(); itr != openMaps.end(); ++itr)
     {
         //MapPrototypePtr map;

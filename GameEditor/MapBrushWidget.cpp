@@ -47,7 +47,7 @@ void MapBrushWidget::changeBrush(uint32 uiID, BrushType type)
             m_pBrush = _getNewTileSetBrush();
             DATABASE::ConstTileSetPrototypePtr proto;
             if (m_pSharedData->getTileSetDatabase() && m_pSharedData->getTileSetDatabase()->getItem(uiID, proto))
-                m_pCurrentTile->setPixmap(DATABASE::TILE_SET::createTileSetPixmap(Config::Get()->getProjectDirectory(), proto, m_pSharedData->getTileDatabase()));
+                m_pCurrentTile->setPixmap(DATABASE::TILE_SET::createTileSetPixmap(Config::get()->getProjectDirectory(), proto, m_pSharedData->getTileDatabase()));
         }
         else
             return;

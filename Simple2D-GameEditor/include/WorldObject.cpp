@@ -1,6 +1,7 @@
 #include "WorldObject.h"
 
-WorldObject::WorldObject()
-{
+using namespace MAP;
+using namespace OBJECT;
 
-}
+WorldObject::WorldObject(uint32 uiID, const std::string &name) : Object(uiID, name)
+{}

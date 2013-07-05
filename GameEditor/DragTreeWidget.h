@@ -153,7 +153,7 @@ protected:
         {
             QPixmap pixmap;
             std::shared_ptr<const T> proto;
-            if (m_pDB && m_pDB->getItem(pItem->text(0).toUInt(), proto) && createPixmapFromTexturePrototype(Config::Get()->getProjectDirectory(), proto, pixmap))
+            if (m_pDB && m_pDB->getItem(pItem->text(0).toUInt(), proto) && createPixmapFromTexturePrototype(Config::get()->getProjectDirectory(), proto, pixmap))
             {
                 QDrag* pDrag = new QDrag(this);
                 pDrag->setPixmap(pixmap);
@@ -169,7 +169,7 @@ protected:
     {
         std::shared_ptr<const T> proto;
         QPixmap pixmap;
-        if (m_pDB && m_pDB->getItem(uiPrototypeID, proto) && createPixmapFromTexturePrototype(Config::Get()->getProjectDirectory(), proto, pixmap))
+        if (m_pDB && m_pDB->getItem(uiPrototypeID, proto) && createPixmapFromTexturePrototype(Config::get()->getProjectDirectory(), proto, pixmap))
         {
             QGraphicsView *pViewer = new QGraphicsView(this);
             pViewer->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);

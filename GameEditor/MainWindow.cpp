@@ -12,7 +12,7 @@ using namespace DATABASE;
 
 MainWindow::MainWindow(QMainWindow *pParent) : QMainWindow(pParent)
 {
-    Logfile::Get();
+    Logfile::get();
     setupUi(this);
 
     // setup move/resize widgets
@@ -31,19 +31,19 @@ MainWindow::MainWindow(QMainWindow *pParent) : QMainWindow(pParent)
     actionNew->setShortcut(QKeySequence(tr("Ctrl+N", "File|New")));
 
     // load old config data and open last project
-    Config::Get()->loadConfig();
-    //move(Config::Get()->getMainWindowPos().x, Config::Get()->getMainWindowPos().y);
-    //QSize newSize = QSize(Config::Get()->getMainWindowSize().x, Config::Get()->getMainWindowSize().y);
+    Config::get()->loadConfig();
+    //move(Config::get()->getMainWindowPos().x, Config::get()->getMainWindowPos().y);
+    //QSize newSize = QSize(Config::get()->getMainWindowSize().x, Config::get()->getMainWindowSize().y);
     //if (newSize.width() >= minimumWidth() && newSize.height() >= minimumHeight())
     //    resize(newSize);
-    //if (!Config::Get()->getProjectDirectory().isEmpty())
-    //    _loadProject(Config::Get()->getProjectDirectory());
+    //if (!Config::get()->getProjectDirectory().isEmpty())
+    //    _loadProject(Config::get()->getProjectDirectory());
 }
 
 void MainWindow::resizeEvent(QResizeEvent *pEvent)
 {
     m_ModifyObj.resizeEvent(this);
-    Config::Get()->setMainWindowSize(UInt32Point(pEvent->size().width(), pEvent->size().height()));
+    Config::get()->setMainWindowSize(UInt32Point(pEvent->size().width(), pEvent->size().height()));
 }
 
 void MainWindow::_setDBs()
@@ -54,9 +54,8 @@ void MainWindow::_setDBs()
 
 MainWindow::~MainWindow(void)
 {
-    Config::Get()->Del();
-    if (Logfile *pLog = Logfile::Get())
-        pLog->Del();
+    Config::get()->del();
+    Logfile::get()->del();
 }
 
 void MainWindow::_mapScreenshot()
@@ -113,7 +112,7 @@ bool MainWindow::_loadProject(const QString &dir)
     if (m_project.loadProject(dir))
     {
         _setDBs();
-        Config::Get()->setProjectDirectory(dir);
+        Config::get()->setProjectDirectory(dir);
         BASIC_LOG("Project load successfully ends after " + QString::number(time.elapsed()) + "msec.");
         m_pMapEditor->updateMapEditor();
         emit projectLoadDone();
@@ -122,7 +121,7 @@ bool MainWindow::_loadProject(const QString &dir)
     QErrorMessage *pMsg = new QErrorMessage(this);
     pMsg->showMessage(dir + " is no valid project directory.");
     ERROR_LOG("Unable to load " + dir + ". Corrupt project or no such directory.");
-    Config::Get()->clear();
+    Config::get()->clear();
     return false;
 }
 
@@ -133,6 +132,6 @@ void MainWindow::_closeProject()
         BASIC_LOG("Close project " + m_project.getProjectPath());
         m_pMapEditor->clearWidgets();
         m_project.closeCurrentProject();
-        Config::Get()->clear();
+        Config::get()->clear();
     }
 }

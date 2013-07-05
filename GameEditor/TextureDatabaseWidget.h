@@ -110,7 +110,7 @@ protected:
     virtual QPixmap showPixmap(const std::shared_ptr<T> &proto)
     {
         QPixmap pixmap;
-        if (createPixmapFromTexturePrototype(Config::Get()->getProjectDirectory(), proto, pixmap))
+        if (createPixmapFromTexturePrototype(Config::get()->getProjectDirectory(), proto, pixmap))
         {
             QGraphicsScene *pScene = new QGraphicsScene();
             pScene->addPixmap(pixmap);
@@ -121,7 +121,7 @@ protected:
 
     void choseTransparencyColor()
     {
-        QFileInfo info(Config::Get()->getProjectDirectory()+"/Textures/" + m_pPath->text() + m_pFileName->text());
+        QFileInfo info(Config::get()->getProjectDirectory()+"/Textures/" + m_pPath->text() + m_pFileName->text());
         if (info.isFile())
         {
             TransparencyWindow transparencyWindow(this, QPixmap(info.absoluteFilePath()));
@@ -149,8 +149,8 @@ protected:
 
     void massImport()
     {
-        QString projectDir = Config::Get()->getProjectDirectory();
-        QStringList fileNames = QFileDialog::getOpenFileNames(this, tr("Chose Textures"), Config::Get()->getProjectDirectory()+"/Textures", tr("Images (*.png)"));
+        QString projectDir = Config::get()->getProjectDirectory();
+        QStringList fileNames = QFileDialog::getOpenFileNames(this, tr("Chose Textures"), Config::get()->getProjectDirectory()+"/Textures", tr("Images (*.png)"));
         if (!fileNames.isEmpty())
         {
             uint32 currentID = m_pDBChanger->getSize();
@@ -164,7 +164,7 @@ protected:
     void choseFile()
     {
 
-        import(QFileDialog::getOpenFileName(this, tr("Chose Texture"), Config::Get()->getProjectDirectory()+"/Textures", tr("Images (*.png)")), getCurrentID());
+        import(QFileDialog::getOpenFileName(this, tr("Chose Texture"), Config::get()->getProjectDirectory()+"/Textures", tr("Images (*.png)")), getCurrentID());
         changeCurrentItem(getCurrentID());
     }
 

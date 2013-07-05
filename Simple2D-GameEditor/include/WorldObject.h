@@ -1,11 +1,17 @@
 #ifndef WORLD_OBJECT_H
 #define WORLD_OBJECT_H
 
-#include "Global.h"
+#include "Object.h"
 
-class WorldObject
+namespace MAP
 {
-public:
-    WorldObject();
-};
+    namespace OBJECT
+    {
+        class WorldObject : public ENTITY::Object
+        {
+        public:
+            WorldObject(uint32 uiID, const std::string &name);
+        };
+    }
+}
 #endif

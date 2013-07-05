@@ -1,12 +1,13 @@
 #include "TransformationHolder.h"
-#include <functional>
+#include "Object.h"
 
+using namespace ENTITY;
 using namespace TRANSFORMATION;
 
 /*#####
 # Transformation
 #####*/
-Transformation::Transformation(uint32 uiTime) : m_uiTimer(uiTime)
+Transformation::Transformation(uint32 uiTime, Object *pOwner) : m_uiTimer(uiTime), m_pOwner(pOwner)
 {}
 
 TransformationProcess Transformation::update(uint32 uiDiff)
@@ -27,7 +28,7 @@ TransformationProcess Transformation::update(uint32 uiDiff)
 /*#####
 # Move
 #####*/
-Move::Move(uint32 uiTime, Int32Point &position, Int32Point range) : m_Position(position), m_Range(range), Transformation(uiTime)
+Move::Move(uint32 uiTime, Object *pOwner, Int32Point range) : m_Range(range), Transformation(uiTime, pOwner)
 {
     m_RangePerMSEC.x = static_cast<double>(m_Range.x) / getTimeRemain();
     m_RangePerMSEC.y = static_cast<double>(m_Range.y) / getTimeRemain();
@@ -48,7 +49,7 @@ void Move::_update(uint32 uiDiff)
     }
     else
         temp = m_Range;
-    m_Position += temp;
+    getOwner()->setPosition(getOwner()->getPosition()+temp);
 }
 
 /*#####

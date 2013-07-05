@@ -29,7 +29,7 @@ bool TileCache::_createPixmap(uint32 uiID, ConstQPixmapPtr &result)
     QPixmap newPixmap;
     if (m_pTileDB && m_pTileDB->getItem(uiID, proto) &&
 #ifdef GAME_EDITOR
-        createPixmapFromTexturePrototype(Config::Get()->getProjectDirectory(), proto, newPixmap))
+        createPixmapFromTexturePrototype(Config::get()->getProjectDirectory(), proto, newPixmap))
 #else
         createPixmapFromTexturePrototype("projects/untitled/", proto, newPixmap))
 #endif

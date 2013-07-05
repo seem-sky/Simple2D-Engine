@@ -7,6 +7,10 @@ using namespace SCENE;
 
 const UInt32Point FPS_SPACE(75, 40);
 
+Scene::Scene(SceneMgr &sceneMgr, const KEY::Keyboard &keyboard) : m_SceneMgr(sceneMgr), m_pSceneView(nullptr), m_ShowFPS(false), m_Keyboard(keyboard),
+     m_pPlayer(new PLAYER::Player(keyboard))
+{}
+
 void SceneView::drawFPSCounter(QPainter *painter, const QRectF &rect)
 {
     if (m_pScene->isFPSShown())

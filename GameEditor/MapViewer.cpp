@@ -299,13 +299,13 @@ void MapViewer::saveCurrentMap()
     if (!m_pMap)
         return;
 
-    Config *pConfig = Config::Get();
+    Config *pConfig = Config::get();
     if (!pConfig)
         return;
 
     MapWriter writer(m_pMap);
     QString filePath;
-    if (MapDatabase::getFilePath(m_pMap, filePath, Config::Get()->getProjectDirectory()))
+    if (MapDatabase::getFilePath(m_pMap, filePath, Config::get()->getProjectDirectory()))
     {
         writer.writeFile(filePath, "Map");
         if (writer.getXMLResult() == XML_IO::DONE)
