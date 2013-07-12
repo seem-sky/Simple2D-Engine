@@ -211,7 +211,7 @@
         <Object ID="4" Type="0" GUID="12" XPos="543" YPos="573" Direction="2" Layer="1"/>
         <Object ID="4" Type="0" GUID="13" XPos="233" YPos="560" Direction="2" Layer="1"/>
         <Object ID="1" Type="0" GUID="14" XPos="482" YPos="669" Direction="2" Layer="1"/>
-        <Object ID="3" Type="0" GUID="15" XPos="846" YPos="848" Direction="2" Layer="1"/>
+        <Object ID="3" Type="0" GUID="15" XPos="808" YPos="752" Direction="2" Layer="1"/>
         <Object ID="3" Type="0" GUID="16" XPos="818" YPos="281" Direction="2" Layer="1"/>
     </ObjectData>
 </Map>

@@ -29,9 +29,9 @@ MapEditorWidget::MapEditorWidget(QWidget *pParent) : QWidget(pParent), Ui_MapEdi
     connect(m_pTiles, SIGNAL(tileClicked(uint32, Qt::MouseButton)), this, SLOT(_tileClicked(uint32, Qt::MouseButton)));
     connect(m_pAutoTiles, SIGNAL(tileClicked(uint32, Qt::MouseButton)), this, SLOT(_autoTileClicked(uint32, Qt::MouseButton)));
 
-    connect(m_pMapTree, SIGNAL(mapOpened(MapPrototypePtr)), m_pMapEditor, SLOT(addMapTab(MapPrototypePtr)));
-    connect(m_pMapTree, SIGNAL(mapDeleted(MapPrototypePtr)), m_pMapEditor, SLOT(closeMap(MapPrototypePtr)));
-    connect(m_pMapTree, SIGNAL(mapUpdated(MapPrototypePtr)), this, SLOT(_mapUpdated(MapPrototypePtr)));
+    connect(m_pMapTree, SIGNAL(mapOpened(DATABASE::MAP_STRUCTURE::MapPrototypePtr)), m_pMapEditor, SLOT(addMapTab(DATABASE::MAP_STRUCTURE::MapPrototypePtr)));
+    connect(m_pMapTree, SIGNAL(mapDeleted(DATABASE::MAP_STRUCTURE::MapPrototypePtr)), m_pMapEditor, SLOT(closeMap(DATABASE::MAP_STRUCTURE::MapPrototypePtr)));
+    connect(m_pMapTree, SIGNAL(mapUpdated(DATABASE::MAP_STRUCTURE::MapPrototypePtr)), this, SLOT(_mapUpdated(DATABASE::MAP_STRUCTURE::MapPrototypePtr)));
 
     connect(this, SIGNAL(leftTileChanged(uint32, BRUSH::BrushType)), m_pLHBrush, SLOT(changeBrush(uint32, BRUSH::BrushType)));
     connect(this, SIGNAL(rightTileChanged(uint32, BRUSH::BrushType)), m_pRHBrush, SLOT(changeBrush(uint32, BRUSH::BrushType)));
@@ -223,12 +223,12 @@ void MapEditorWidget::_objectTabChanged(int index)
 {
     if (m_pObjectTabs->tabText(index) == "WorldObjects")
     {
-        m_MapObjectBrush.setObjectType(DATABASE::TYPE_WORLDOBJECT);
+        m_MapObjectBrush.setObjectType(DATABASE::MAP_OBJECT::TYPE_WORLDOBJECT);
         _currentObjectChanged(m_pWorldObjects->currentItem(), NULL);
     }
     else if (m_pObjectTabs->tabText(index) == "DynamicObjects")
     {
-        m_MapObjectBrush.setObjectType(DATABASE::TYPE_DYNAMIC_OBJECT);
+        m_MapObjectBrush.setObjectType(DATABASE::MAP_OBJECT::TYPE_DYNAMIC_OBJECT);
         //_currentObjectChanged(m_pDynamicObjects->currentItem(), NULL);
     }
 }

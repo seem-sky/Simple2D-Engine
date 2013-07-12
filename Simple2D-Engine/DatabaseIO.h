@@ -145,7 +145,7 @@ namespace DATABASE
     /*####
     # WorldObjectDatabase
     ####*/
-    class WorldObjectDatabaseXMLReader : public DatabaseReader<WorldObjectPrototype>
+    class WorldObjectDatabaseXMLReader : public DatabaseReader<MAP_OBJECT::WorldObjectPrototype>
     {
     protected:
         virtual bool getChildrenFromXML(const QDomNode &node, WorldObjectPrototypePtr proto, const QString &childName);
@@ -155,7 +155,7 @@ namespace DATABASE
         WorldObjectDatabaseXMLReader(const WorldObjectDatabasePtr &pDB) : DatabaseReader(pDB) {}
     };
 
-    class WorldObjectDatabaseXMLWriter : public DatabaseWriter<WorldObjectPrototype>
+    class WorldObjectDatabaseXMLWriter : public DatabaseWriter<MAP_OBJECT::WorldObjectPrototype>
     {
     protected:
         virtual void getXMLFromAttributes(WorldObjectPrototypePtr proto, QXmlStreamWriter &writer);

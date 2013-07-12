@@ -9,11 +9,17 @@ namespace PLAYER
     class Player_Game : public Player
     {
     public:
-        Player_Game(const KEY::Keyboard &keyboard);
+        Player_Game();
 
         void setControle(MAP::OBJECT::DynamicObjectPtr pObject);
         inline MAP::OBJECT::DynamicObjectPtr getControledObject() { return m_pControledObject; }
         void releaseControle();
+
+        // keybinds
+        //void moveUp();
+        //void moveDown();
+        //void moveRight();
+        //void moveDown();
 
     private:
         MAP::OBJECT::DynamicObjectPtr m_pControledObject;

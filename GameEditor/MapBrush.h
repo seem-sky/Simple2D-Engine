@@ -140,8 +140,8 @@ namespace DATABASE
             public:
                 MapObjectBrush() : MapEditorObject() {}
 
-                inline void setObjectType(DATABASE::ObjectType type) { m_ObjectType = type; }
-                inline DATABASE::ObjectType getObjectType() const { return m_ObjectType; }
+                inline void setObjectType(DATABASE::MAP_OBJECT::ObjectType type) { m_ObjectType = type; }
+                inline DATABASE::MAP_OBJECT::ObjectType getObjectType() const { return m_ObjectType; }
 
                 inline void setObjectID(uint32 uiID) { m_uiObjectID = uiID; }
                 inline uint32 getObjectID() const { return m_uiObjectID; }
@@ -151,13 +151,13 @@ namespace DATABASE
                 // return true if draw was successful
                 bool drawObject(MapViewer *pWidget, Int32Point pos);
 
-                static QPixmap getObjectPixmap(uint32 uiObjectID, DATABASE::ObjectType type, MAP_STRUCTURE::MapDirection direction,
+                static QPixmap getObjectPixmap(uint32 uiObjectID, DATABASE::MAP_OBJECT::ObjectType type, MAP_STRUCTURE::MapDirection direction,
                     DATABASE::ConstWorldObjectDatabasePtr pWorldObjectDB, DATABASE::ConstAnimationDatabasePtr pAnimationDB, DATABASE::ConstSpriteDatabasePtr pSpriteDB,
                     QRect &boundingRect);
 
             private:
                 uint32 m_uiObjectID;
-                DATABASE::ObjectType m_ObjectType;
+                DATABASE::MAP_OBJECT::ObjectType m_ObjectType;
             };
         }
         typedef std::shared_ptr<BRUSH::TileBrush> MapBrushPtr;

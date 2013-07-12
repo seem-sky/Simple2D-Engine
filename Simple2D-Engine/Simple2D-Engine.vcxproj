@@ -19,6 +19,7 @@
     <ClCompile Include="..\Simple2D-GameEditor\include\MapDatabase.cpp" />
     <ClCompile Include="..\Simple2D-GameEditor\include\MapGrid.cpp" />
     <ClCompile Include="..\Simple2D-GameEditor\include\WorldObject.cpp" />
+    <ClCompile Include="AnimationHolder.cpp" />
     <ClCompile Include="AutoTile.cpp" />
     <ClCompile Include="AutoTileCache.cpp" />
     <ClCompile Include="DatabaseIO.cpp" />
@@ -31,6 +32,7 @@
     <ClCompile Include="MapLayer.cpp" />
     <ClCompile Include="MapMgr.cpp" />
     <ClCompile Include="Object.cpp" />
+    <ClCompile Include="ObjectAnimationWidget.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Player_Game.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -55,6 +57,7 @@
     <ClInclude Include="..\Simple2D-GameEditor\include\Point.h" />
     <ClInclude Include="..\Simple2D-GameEditor\include\Rect.h" />
     <ClInclude Include="..\Simple2D-GameEditor\include\WorldObject.h" />
+    <ClInclude Include="AnimationHolder.h" />
     <ClInclude Include="AutoTile.h" />
     <ClInclude Include="AutoTileCache.h" />
     <ClInclude Include="DatabaseIO.h" />
@@ -67,6 +70,7 @@
     <ClInclude Include="MapLayer.h" />
     <ClInclude Include="MapMgr.h" />
     <ClInclude Include="Object.h" />
+    <ClInclude Include="ObjectAnimationWidget.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Player_Game.h" />
     <ClInclude Include="Scene.h" />
@@ -110,13 +114,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)\Simple2D-GameEditor\lib\</OutDir>
     <TargetName>$(ProjectName)_d</TargetName>
-    <IncludePath>C:\Qt\Qt5.0.2-x86\qtbase\include;C:\Users\anti-freak\Documents\SDKs\boost_1_53_0;$(SolutionDir)\Simple2D-GameEditor\include;$(SolutionDir)\Simple2D-Engine;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Qt\Qt5.0.2-x86\qtbase\lib;$(SolutionDir);$(LibraryPath)</LibraryPath>
+    <IncludePath>$(QtDir)\include;$(BoostDir);$(SolutionDir)\Simple2D-GameEditor\include;$(SolutionDir)\Simple2D-Engine;$(IncludePath)</IncludePath>
+    <LibraryPath>$(QtDir)\lib;$(SolutionDir);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)\Simple2D-GameEditor\lib\</OutDir>
-    <IncludePath>C:\Qt\Qt5.0.2-x86\qtbase\include;C:\Users\anti-freak\Documents\SDKs\boost_1_53_0;$(SolutionDir)\Simple2D-GameEditor\include;$(SolutionDir)\Simple2D-Engine;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Qt\Qt5.0.2-x86\qtbase\lib;$(SolutionDir);$(LibraryPath)</LibraryPath>
+    <IncludePath>$(QtDir)\include;$(BoostDir);$(SolutionDir)\Simple2D-GameEditor\include;$(SolutionDir)\Simple2D-Engine;$(IncludePath)</IncludePath>
+    <LibraryPath>$(QtDir)\lib;$(SolutionDir);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

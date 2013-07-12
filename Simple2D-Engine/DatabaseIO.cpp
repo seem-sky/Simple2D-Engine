@@ -375,7 +375,7 @@ bool WorldObjectDatabaseXMLReader::getChildrenFromXML(const QDomNode &node, Worl
     // checkout animation info
     if (childName == "AnimationInfo")
     {
-        WorldObjectPrototype::AnimationInfo newAnimationInfo;
+        MAP_OBJECT::AnimationInfo newAnimationInfo;
         QDomNamedNodeMap attributeList = node.attributes();
         // get attributes
         for (int32 i = 0; i < attributeList.length(); ++i)
@@ -386,7 +386,7 @@ bool WorldObjectDatabaseXMLReader::getChildrenFromXML(const QDomNode &node, Worl
             else if (tempNode.nodeName() == "animationTypeID")
                 newAnimationInfo.m_uiObjectAnimationTypeID = tempNode.nodeValue().toUInt();
         }
-        if (newAnimationInfo.m_uiObjectAnimationTypeID <= MIN_WORLD_OBJECT_POSE)
+        if (newAnimationInfo.m_uiObjectAnimationTypeID <= MAP_OBJECT::MIN_WORLD_OBJECT_POSE)
             proto->setAnimationInfo(newAnimationInfo.m_uiObjectAnimationTypeID-1, newAnimationInfo);
         else
             proto->setAnimationInfo(proto->getAnimationCount(), newAnimationInfo);
@@ -409,7 +409,7 @@ void WorldObjectDatabaseXMLWriter::getXMLFromAttributes(WorldObjectPrototypePtr 
     // store animation infos
     for (uint32 i = 0; i < proto->getAnimationCount(); ++i)
     {
-        WorldObjectPrototype::AnimationInfo animationInfo = proto->getAnimationInfo(i);
+        MAP_OBJECT::AnimationInfo animationInfo = proto->getAnimationInfo(i);
         if (animationInfo.m_uiAnimationID == 0 && animationInfo.m_uiObjectAnimationTypeID == 0)
             continue;
         writer.writeEmptyElement("AnimationInfo");

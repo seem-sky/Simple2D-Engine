@@ -42,7 +42,7 @@ namespace GAME_LOGIC
             void _updateFPS(uint32 uiDiff);
 
         public:
-            Scene(SceneMgr &sceneMgr, const KEY::Keyboard &keyboard);
+            Scene(SceneMgr &sceneMgr);
 
             SceneView* getSceneView() { return m_pSceneView; }
 
@@ -55,7 +55,6 @@ namespace GAME_LOGIC
             SceneMgr &m_SceneMgr;
             SceneView *m_pSceneView;
             PLAYER::PlayerPtr m_pPlayer;
-            const KEY::Keyboard &m_Keyboard;
 
         private:
             bool m_ShowFPS;

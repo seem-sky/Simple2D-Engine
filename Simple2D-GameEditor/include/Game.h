@@ -19,12 +19,9 @@ namespace GAME_LOGIC
         void setSceneView(SCENE::SceneView *pScene);
         void setScene(SCENE::ScenePtr pScene);
 
-        inline KEY::Keyboard& getKeyboard() { return m_Keyboard; }
-
     private:
         bool m_closeGame;
         SCENE::SceneMgr m_SceneMgr;
-        KEY::Keyboard m_Keyboard;
     };
 }
 #endif

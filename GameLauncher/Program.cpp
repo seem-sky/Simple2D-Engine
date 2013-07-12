@@ -5,8 +5,20 @@
 #include <QtCore/QTime>
 #include <QtGui/QIcon>
 #include <windows.h>
+#include <QtCore/QDebug>
 
 using namespace PROGRAM;
+
+CMD_Params::CMD_Params() : m_DebugMode(false)
+{}
+
+void CMD_Params::parseParam(const QString &param)
+{
+    if (param == "-debug")
+        m_DebugMode = true;
+    else
+        qDebug() << param << " is an unknown command line command.";
+}
 
 void Program::setApplication(ApplicationPtr pApp)
 {
@@ -15,17 +27,22 @@ void Program::setApplication(ApplicationPtr pApp)
 
 void Program::init(int argc, char *argv[])
 {
+    // parse command line commands
+    for (int32 i = 1; i < argc; ++i)
+        m_CMDparams.parseParam(QString(argv[i]));
+    // setup application name
     m_pQtApplication = QApplicationPtr(new QApplication(argc, argv));
     m_pQtApplication->setWindowIcon(QIcon("icons/Logo-clean.png"));
     m_pQtApplication->setApplicationVersion(QString::fromStdString(ENGINE_VERSION));
     m_pQtApplication->setApplicationDisplayName(m_pQtApplication->applicationName() + " " + m_pQtApplication->applicationVersion());
 
-#ifndef DEBUG
-    // show engine splash screen and hold 5sec
-    setApplication(PROGRAM::ApplicationPtr(new SPLASH_SCREEN::SplashScreen()));
-    m_pQtApplication->processEvents();
-    Sleep(5000);
-#endif
+    // show engine splash screen for 5sec
+    if (!m_CMDparams.isDebugMode())
+    {
+        setApplication(PROGRAM::ApplicationPtr(new SPLASH_SCREEN::SplashScreen()));
+        m_pQtApplication->processEvents();
+        Sleep(5000);
+    }
     // set "game" as new application
     setApplication(PROGRAM::ApplicationPtr(new GAME_LOGIC::Game()));
 }

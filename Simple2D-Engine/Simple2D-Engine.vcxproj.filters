@@ -37,6 +37,9 @@
     <Filter Include="Core\KeyInput">
       <UniqueIdentifier>{b49eb0ea-5af5-487a-a837-fd420f2691fd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Scene\ObjectAnimation">
+      <UniqueIdentifier>{cb9f51f7-c22c-4f96-bd26-22878a5d4201}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MapIO.cpp">
@@ -119,6 +122,12 @@
     </ClCompile>
     <ClCompile Include="Player_Game.cpp">
       <Filter>Game\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationHolder.cpp">
+      <Filter>Map\MapObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectAnimationWidget.cpp">
+      <Filter>Map\MapObjects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -235,6 +244,12 @@
     </ClInclude>
     <ClInclude Include="Player_Game.h">
       <Filter>Game\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationHolder.h">
+      <Filter>Map\MapObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectAnimationWidget.h">
+      <Filter>Map\MapObjects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

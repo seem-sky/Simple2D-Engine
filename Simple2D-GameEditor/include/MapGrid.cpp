@@ -1,6 +1,8 @@
-//#include "MapGrid.h"
-//
-//using namespace MAP;
+#include "MapGrid.h"
+
+using namespace MAP;
+using namespace GRID;
+
 //
 //void MapGrid::_resizeGrid(const UInt32Point3D &size)
 //{
@@ -25,26 +27,14 @@
 //    return UInt32Point3D(mapPos.x/GRID_SIZE, mapPos.y/GRID_SIZE, mapPos.z);
 //}
 //
-//void MapGrid::addObject(MapObjectPtr pObject)
-//{
-//    if (!pObject)
-//        return;
-//    UInt32Point3D grid = getGridFromMapPos(pObject->m_Position);
-//    if (!_isValidGrid(grid))
-//        return;
-//    m_ObjectGrid[grid.x][grid.y][grid.z].push_back(pObject);
-//}
-//
-//void MapGrid::removeObject(MAP::MapObjectPtr pObject, const UInt32Point3D &grid)
-//{
-//    if (!pObject || !_isValidGrid(grid))
-//        return;
-//    for (MapObjectPtrVector::const_iterator itr = m_ObjectGrid[grid.x][grid.y][grid.z].begin(); itr != m_ObjectGrid[grid.x][grid.y][grid.z].end(); ++itr)
-//    {
-//        if (*itr == pObject)
-//        {
-//            m_ObjectGrid[grid.x][grid.y][grid.z].erase(itr);
-//            return;
-//        }
-//    }
-//}
+void MapGrid::addObject(OBJECT::WorldObjectPtr pObject)
+{
+    if (pObject && !m_WorldObjects.getItem(pObject->getGUID(), OBJECT::WorldObjectPtr()))
+        m_WorldObjects.setItem(pObject->getGUID(), pObject);
+}
+
+void MapGrid::removeObject(OBJECT::WorldObjectPtr pObject)
+{
+    if (pObject)
+        m_WorldObjects.setItem(pObject->getGUID(), pObject, false);
+}

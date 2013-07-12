@@ -228,7 +228,7 @@ namespace DATABASE
                 m_Objects.setItem(pObject->m_GUID, pObject);
         }
 
-        MapObjectPtr MapPrototype::addMapObject(DATABASE::ObjectType type, uint32 uiID, Int32Point pos)
+        MapObjectPtr MapPrototype::addMapObject(DATABASE::MAP_OBJECT::ObjectType type, uint32 uiID, Int32Point pos)
         {
             MapObjectPtr newObject(new MapObject());
             newObject->m_ObjectID = uiID;

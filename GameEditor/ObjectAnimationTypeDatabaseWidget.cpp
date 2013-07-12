@@ -14,15 +14,15 @@ bool ObjectAnimationTypeDatabaseWidget::setWidgetsFromPrototype(const DATABASE::
     if (!DatabaseWidget::setWidgetsFromPrototype(proto))
         return false;
     // prevent editing basic object animations
-    m_pName->setReadOnly(proto->getID() <= MIN_DYNAMIC_OBJECT_POSE);
+    m_pName->setReadOnly(proto->getID() <= MAP_OBJECT::MIN_DYNAMIC_OBJECT_POSE);
     return true;
 }
 
 void ObjectAnimationTypeDatabaseWidget::resizeDatabase(uint32 uiSize)
 {
     // prevent editing basic object animations
-    if (uiSize < MIN_DYNAMIC_OBJECT_POSE)
-        uiSize = MIN_DYNAMIC_OBJECT_POSE;
+    if (uiSize < MAP_OBJECT::MIN_DYNAMIC_OBJECT_POSE)
+        uiSize = MAP_OBJECT::MIN_DYNAMIC_OBJECT_POSE;
     DatabaseWidget::resizeDatabase(uiSize);
 }
 
@@ -38,7 +38,7 @@ void ObjectAnimationTypeDatabaseWidget::fillListWidget(const UInt32StringMap &sS
         stringList.push_back(itr->second);
         PrototypeTreeWidgetItem *pItem = new PrototypeTreeWidgetItem(stringList);
         // if standard entry, set blue color
-        if (itr->first <= MIN_DYNAMIC_OBJECT_POSE)
+        if (itr->first <=MAP_OBJECT::MIN_DYNAMIC_OBJECT_POSE)
             pItem->setForeground(1, QBrush(QColor(0, 0, 255)));
         m_pList->addTopLevelItem(pItem);
     }

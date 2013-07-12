@@ -10,7 +10,7 @@ namespace MAP
         class DynamicObject : public WorldObject
         {
         public:
-            DynamicObject(uint32 uiID, const std::string &name);
+            DynamicObject(uint32 GUID, DATABASE::ConstDynamicObjectPrototypePtr pDynamicObject);
         };
         typedef std::shared_ptr<DynamicObject> DynamicObjectPtr;
     }

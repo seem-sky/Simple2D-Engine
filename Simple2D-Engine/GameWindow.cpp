@@ -41,20 +41,20 @@ void GameWindow::setSceneView(SCENE::SceneView *pScene)
 void GameWindow::keyPressEvent(QKeyEvent *pEvent)
 {
     //QMainWindow::keyPressEvent(pEvent);
-    m_pGame->getKeyboard().changeKeyState(KEY::wrapKeyFromQT(pEvent->key()), true);
+    KEY::GlobalKeyboard::get()->changeKeyState(KEY::wrapKeyFromQT(pEvent->key()), true);
 }
 
 void GameWindow::keyReleaseEvent(QKeyEvent *pEvent)
 {
     //QMainWindow::keyReleaseEvent(pEvent);
-    m_pGame->getKeyboard().changeKeyState(KEY::wrapKeyFromQT(pEvent->key()), false);
+    KEY::GlobalKeyboard::get()->changeKeyState(KEY::wrapKeyFromQT(pEvent->key()), false);
 }
 
 bool GameWindow::event(QEvent *pEvent)
 {
     if (pEvent->type() == QEvent::WindowDeactivate)
     {
-        m_pGame->getKeyboard().resetKeyStates();
+        KEY::GlobalKeyboard::get()->resetKeyStates();
         return true;
     }
     return QMainWindow::event(pEvent);

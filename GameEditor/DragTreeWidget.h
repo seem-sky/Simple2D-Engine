@@ -219,7 +219,7 @@ private:
 /*#####
 # WorldObjectPrototypeDragTreeWidget
 #####*/
-class WorldObjectPrototypeDragTreeWidget : public PrototypeTreeWidget<DATABASE::Database<DATABASE::WorldObjectPrototype>>
+class WorldObjectPrototypeDragTreeWidget : public PrototypeTreeWidget<DATABASE::Database<DATABASE::MAP_OBJECT::WorldObjectPrototype>>
 {
     Q_OBJECT
 protected:

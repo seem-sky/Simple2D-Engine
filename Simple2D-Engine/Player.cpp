@@ -2,14 +2,14 @@
 
 using namespace PLAYER;
 
-Player::Player(const KEY::Keyboard &keyboard) : m_Keyboard(keyboard)
+Player::Player()
 {}
 
 void Player::update(uint32 uiDiff)
 {
     for (auto pair : m_KeyBindings)
     {
-        if (m_Keyboard.isKeyPressed(pair.first))
+        if (KEY::GlobalKeyboard::get()->isKeyPressed(pair.first))
             pair.second();
     }
 }

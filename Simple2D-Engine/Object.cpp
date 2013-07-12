@@ -2,7 +2,7 @@
 
 using namespace ENTITY;
 
-Object::Object(uint32 uiID, const std::string &name) : m_uiID(uiID), m_Name(name)
+Object::Object(uint32 GUID, uint32 uiID, const std::string &name) : m_uiID(uiID), m_Name(name), m_uiGUID(GUID)
 {}
 
 void Object::move(const Int32Point &range, uint32 time)

@@ -44,8 +44,8 @@ public:
     void setAdditionalDBs(DATABASE::ConstSpriteDatabaseChangerPtr pSpriteDB, DATABASE::ConstAnimationDatabaseChangerPtr pAnimationDB,
         DATABASE::ConstObjectAnimationTypeDatabaseChangerPtr pObjAniTypeDB);
 
-    void setCellAnimationInfo(uint32 uiRow, DATABASE::WorldObjectPrototype::AnimationInfo animationInfo);
-    DATABASE::WorldObjectPrototype::AnimationInfo getCellAnimationInfo(uint32 uiRow);
+    void setCellAnimationInfo(uint32 uiRow, DATABASE::MAP_OBJECT::AnimationInfo animationInfo);
+    DATABASE::MAP_OBJECT::AnimationInfo getCellAnimationInfo(uint32 uiRow);
 
     void setSpeedModifyer(uint32 uiSpeedModifyer);
     void setSceneBoundingRect(const QRect &boundingRect);

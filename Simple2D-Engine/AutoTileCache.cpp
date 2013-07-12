@@ -1,10 +1,10 @@
 #include "AutoTileCache.h"
 
-AutoTileCache::AutoTileCache(ConstTileCachePtr pTileCache) : Container(), m_pTileCache(pTileCache) {}
+AutoTileCache::AutoTileCache(ConstTileCachePtr pTileCache) : SpaceContainer(), m_pTileCache(pTileCache) {}
 
 bool AutoTileCache::getItem(uint32 uiID, ConstAutoTilePtr &result) const
 {
-    if (Container::getItem(uiID, result) || const_cast<AutoTileCache&>(*this)._createAutoTile(uiID, result))
+    if (SpaceContainer::getItem(uiID, result) || const_cast<AutoTileCache&>(*this)._createAutoTile(uiID, result))
         return true;
     return false;
 }
@@ -14,7 +14,7 @@ void AutoTileCache::setAutoTileDB(DATABASE::ConstAutoTileDatabasePtr pAutoTileDB
     m_pAutoTileDB = pAutoTileDB;
     clear();
     if (m_pAutoTileDB)
-        resize(m_pAutoTileDB->getSize(), false);
+        resize(m_pAutoTileDB->getSize());
 }
 
 bool AutoTileCache::_createAutoTile(uint32 uiID, ConstAutoTilePtr &result)

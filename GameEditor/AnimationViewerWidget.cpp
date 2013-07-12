@@ -115,7 +115,7 @@ void AnimationViewerTableWidget::setAdditionalDBs(ConstSpriteDatabaseChangerPtr 
     }
 }
 
-void AnimationViewerTableWidget::setCellAnimationInfo(uint32 uiIndex, WorldObjectPrototype::AnimationInfo animationInfo)
+void AnimationViewerTableWidget::setCellAnimationInfo(uint32 uiIndex, MAP_OBJECT::AnimationInfo animationInfo)
 {
     _resizeIfNeeded(uiIndex);
     if (AnimationViewerWidget *pWidget = getAnimationWidget(uiIndex))
@@ -127,11 +127,11 @@ void AnimationViewerTableWidget::setCellAnimationInfo(uint32 uiIndex, WorldObjec
     }
 }
 
-WorldObjectPrototype::AnimationInfo AnimationViewerTableWidget::getCellAnimationInfo(uint32 uiIndex)
+MAP_OBJECT::AnimationInfo AnimationViewerTableWidget::getCellAnimationInfo(uint32 uiIndex)
 {
     if (AnimationViewerWidget *pWidget = getAnimationWidget(uiIndex))
-        return  WorldObjectPrototype::AnimationInfo(pWidget->m_pAnimationView->getCurrentAnimationID(), pWidget->getCurrentObjectAnimationType());
-    return  WorldObjectPrototype::AnimationInfo();
+        return  MAP_OBJECT::AnimationInfo(pWidget->m_pAnimationView->getCurrentAnimationID(), pWidget->getCurrentObjectAnimationType());
+    return  MAP_OBJECT::AnimationInfo();
 }
 
 void AnimationViewerTableWidget::setSceneBoundingRect(const QRect &boundingRect)
@@ -189,7 +189,7 @@ void AnimationViewerTableWidget::_setAnimationWidget(uint32 uiIndex, AnimationVi
         setRowHeight(cell.y, pWidget->height());
     setCellWidget(cell.y, cell.x, pWidget);
     emit onItemAdd(pWidget);
-    if (uiIndex < MIN_WORLD_OBJECT_POSE)
+    if (uiIndex < MAP_OBJECT::MIN_WORLD_OBJECT_POSE)
         pWidget->m_pObjectAnimationType->setDisabled(true);
 }
 

@@ -53,7 +53,7 @@ void MapObjectDialog::_setAnimationForDirection()
     ConstWorldObjectPrototypePtr proto;
     if (m_pWorldObjectDB->getItem(m_pMapObject->m_ObjectID, proto))
     {
-        WorldObjectPrototype::AnimationInfo animationInfo;
+        MAP_OBJECT::AnimationInfo animationInfo;
         if (m_pDirUp->isChecked())
             animationInfo = proto->getAnimationInfo(0);
         else if (m_pDirRight->isChecked())
@@ -76,7 +76,7 @@ void MapObjectDialog::_getDataFromObject()
 
     m_pGUID->setValue(m_pMapObject->m_GUID);
     m_pID->setValue(m_pMapObject->m_ObjectID);
-    m_pType->setText(DATABASE::WorldObjectPrototype::getTypeString(m_pMapObject->m_Type));
+    m_pType->setText(DATABASE::MAP_OBJECT::getTypeString(m_pMapObject->m_Type));
     switch (m_pMapObject->m_Direction)
     {
     case DIRECTION_UP: m_pDirUp->setChecked(true); break;

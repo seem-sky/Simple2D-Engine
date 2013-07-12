@@ -102,7 +102,7 @@ namespace DATABASE
     typedef std::shared_ptr<const DatabaseChanger<TexturePrototype>> ConstTextureDatabaseChangerPtr;
     typedef std::shared_ptr<const DatabaseChanger<TilePrototype>> ConstTileDatabaseChangerPtr;
     typedef std::shared_ptr<const DatabaseChanger<SpritePrototype>> ConstSpriteDatabaseChangerPtr;
-    typedef std::shared_ptr<DatabaseChanger<WorldObjectPrototype>> WorldObjectDatabaseChangerPtr;
+    typedef std::shared_ptr<DatabaseChanger<MAP_OBJECT::WorldObjectPrototype>> WorldObjectDatabaseChangerPtr;
     typedef std::shared_ptr<DatabaseChanger<AnimationPrototype>> AnimationDatabaseChangerPtr;
     typedef std::shared_ptr<const DatabaseChanger<AnimationPrototype>> ConstAnimationDatabaseChangerPtr;
     typedef std::shared_ptr<const DatabaseChanger<ObjectAnimationTypePrototype>> ConstObjectAnimationTypeDatabaseChangerPtr;

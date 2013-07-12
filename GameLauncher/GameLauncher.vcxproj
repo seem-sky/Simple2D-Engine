@@ -67,8 +67,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)Simple2D-GameEditor\</OutDir>
     <IntDir>$(Configuration)\</IntDir>
-    <IncludePath>C:\Qt\Qt5.0.2-x86\qtbase\include;C:\Users\anti-freak\Documents\SDKs\boost_1_53_0;$(SolutionDir)\Core;$(SolutionDir)\Simple2D-GameEditor\include;$(SolutionDir)\Simple2D-Engine;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\Simple2D-GameEditor\lib;C:\Qt\Qt5.0.2-x86\qtbase\lib;$(SolutionDir);$(LibraryPath)</LibraryPath>
+    <IncludePath>$(QtDir)\include;$(BoostDir);$(SolutionDir)\Core;$(SolutionDir)\Simple2D-GameEditor\include;$(SolutionDir)\Simple2D-Engine;$(IncludePath)</IncludePath>
+    <LibraryPath>$(QtDir)\lib;$(BoostBin);$(SolutionDir)\Simple2D-GameEditor\lib;$(SolutionDir);$(LibraryPath)</LibraryPath>
     <TargetName>$(ProjectName)_d</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -78,8 +78,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)Simple2D-GameEditor\</OutDir>
     <IntDir>$(Configuration)\</IntDir>
-    <LibraryPath>C:\Qt\Qt5.0.2-x86\qtbase\lib;$(SolutionDir)\Simple2D-GameEditor\lib;$(SolutionDir);$(LibraryPath)</LibraryPath>
-    <IncludePath>C:\Qt\Qt5.0.2-x86\qtbase\include;C:\Users\anti-freak\Documents\SDKs\boost_1_53_0;$(SolutionDir)\Core;$(SolutionDir)\Simple2D-GameEditor\include;$(SolutionDir)\Simple2D-Engine;$(IncludePath)</IncludePath>
+    <LibraryPath>$(QtDir)\lib;$(BoostBin);$(SolutionDir)\Simple2D-GameEditor\lib;$(SolutionDir);$(LibraryPath)</LibraryPath>
+    <IncludePath>$(QtDir)\include;$(BoostDir);$(SolutionDir)\Core;$(SolutionDir)\Simple2D-GameEditor\include;$(SolutionDir)\Simple2D-Engine;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

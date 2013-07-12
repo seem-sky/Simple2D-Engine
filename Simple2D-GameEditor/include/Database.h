@@ -71,7 +71,7 @@ namespace DATABASE
 
         void setItem(uint32 uiID, ObjectAnimationTypePrototypePtr &prototype)
         {
-            if (uiID > MIN_DYNAMIC_OBJECT_POSE)
+            if (uiID > MAP_OBJECT::MIN_DYNAMIC_OBJECT_POSE)
                 Database::setItem(uiID, prototype);
         }
     };
@@ -103,11 +103,11 @@ namespace DATABASE
     typedef std::shared_ptr<AnimationDatabase> AnimationDatabasePtr;
     typedef std::shared_ptr<const AnimationDatabase> ConstAnimationDatabasePtr;
     // world object database typedefs
-    typedef Database<WorldObjectPrototype> WorldObjectDatabase;
+    typedef Database<MAP_OBJECT::WorldObjectPrototype> WorldObjectDatabase;
     typedef std::shared_ptr<WorldObjectDatabase> WorldObjectDatabasePtr;
     typedef std::shared_ptr<const WorldObjectDatabase> ConstWorldObjectDatabasePtr;
     // dynamic object database typedefs
-    typedef Database<DynamicObjectPrototype> DynamicObjectDatabase;
+    typedef Database<MAP_OBJECT::DynamicObjectPrototype> DynamicObjectDatabase;
     typedef std::shared_ptr<DynamicObjectDatabase> DynamicObjectDatabasePtr;
     typedef std::shared_ptr<const DynamicObjectDatabase> ConstDynamicObjectDatabasePtr;
     // text database typedefs

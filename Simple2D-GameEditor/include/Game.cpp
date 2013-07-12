@@ -8,7 +8,7 @@ Game::Game() : Application(), m_closeGame(false), m_SceneMgr(this)
 {
     m_pWidget = QWidgetPtr(new GameWindow(this));
     m_pWidget->show();
-    setScene(SCENE::ScenePtr(new SCENE::GameScene(m_SceneMgr, m_Keyboard)));
+    setScene(SCENE::ScenePtr(new SCENE::GameScene(m_SceneMgr)));
 }
 
 int Game::update(uint32 uiDiff)

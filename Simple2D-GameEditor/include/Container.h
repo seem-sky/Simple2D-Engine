@@ -5,12 +5,12 @@
 #include <memory>
 
 template <class T>
-class Container
+class SpaceContainer
 {
 public:
     virtual void clear() { m_Items.clear(); }
 
-    virtual void setItem(uint32 uiID, std::shared_ptr<T> &item)
+    virtual void setItem(uint32 uiID, std::shared_ptr<T> &item, bool fillWithItems = true)
     {
         if (uiID)
         {
@@ -33,7 +33,7 @@ public:
     bool getItem(uint32 uiID, std::shared_ptr<T> &result)
     {
         std::shared_ptr<const T> temp;
-        if (const_cast<const Container<T>&>(*this).getItem(uiID, temp))
+        if (const_cast<const SpaceContainer<T>&>(*this).getItem(uiID, temp))
         {
             result = std::const_pointer_cast<T>(temp);
             return true;
@@ -42,15 +42,22 @@ public:
     }
 
     inline uint32 getSize() const { return m_Items.size(); }
-    virtual void resize(uint32 uiSize, bool fillNew = true)
+    virtual void resize(uint32 uiSize)
     {
-        if (fillNew)
-            m_Items.resize(uiSize, std::shared_ptr<T>(new T()));
-        else
-            m_Items.resize(uiSize);
+        m_Items.resize(uiSize);
     }
 
 protected:
     std::vector<std::shared_ptr<T>> m_Items;
+};
+
+template <class T>
+class Container : public SpaceContainer<T>
+{
+public:
+    virtual void resize(uint32 uiSize)
+    {
+        m_Items.resize(uiSize, std::shared_ptr<T>(new T()));
+    }
 };
 #endif

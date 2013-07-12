@@ -3,7 +3,7 @@
 
 #include "AutoTile.h"
 
-class AutoTileCache : public Container<AutoTile>
+class AutoTileCache : public SpaceContainer<AutoTile>
 {
 private:
     bool _createAutoTile(uint32 uiID, ConstAutoTilePtr &result);

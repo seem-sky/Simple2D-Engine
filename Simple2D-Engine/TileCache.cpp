@@ -5,12 +5,12 @@
 
 using namespace DATABASE;
 
-TileCache::TileCache() : Container()
+TileCache::TileCache() : SpaceContainer()
 {}
 
 bool TileCache::getItem(uint32 uiID, ConstQPixmapPtr &result) const
 {
-    if (Container::getItem(uiID, result) || const_cast<TileCache&>(*this)._createPixmap(uiID, result))
+    if (SpaceContainer::getItem(uiID, result) || const_cast<TileCache&>(*this)._createPixmap(uiID, result))
         return true;
     return false;
 }
@@ -20,7 +20,7 @@ void TileCache::setTileDB(DATABASE::ConstTileDatabasePtr pTileDB)
     m_pTileDB = pTileDB;
     clear();
     if (m_pTileDB)
-        resize(m_pTileDB->getSize(), false);
+        resize(m_pTileDB->getSize());
 }
 
 bool TileCache::_createPixmap(uint32 uiID, ConstQPixmapPtr &result)

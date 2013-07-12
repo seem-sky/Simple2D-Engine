@@ -124,6 +124,8 @@ namespace KEY
     };
     const uint32 KEY_COUNT = 99;
 
+    //ToDo: Store this in separate class, in a layer above this.
+
     //enum KeyState
     //{
     //    STATE_DOWN,
@@ -152,8 +154,6 @@ namespace KEY
     public:
         Keyboard();
 
-        void update(uint32 uiDiff);
-
         inline void changeKeyState(Keys key, bool down) { m_KeyStates.at(key) = down; }
         inline bool isKeyPressed(Keys key) const { return m_KeyStates.at(key); }
         inline void resetKeyStates() { m_KeyStates.reset(); }
@@ -161,6 +161,7 @@ namespace KEY
     private:
         std::bitset<KEY_COUNT> m_KeyStates;
     };
+    typedef TSingleton<Keyboard> GlobalKeyboard;
 
     Keys wrapKeyFromQT(int key);
 }

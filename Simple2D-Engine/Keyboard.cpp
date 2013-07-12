@@ -46,11 +46,6 @@ const uint32 JUST_RELEASED_TIME = 100;
 #####*/
 Keyboard::Keyboard()
 {}
-void Keyboard::update(uint32 uiDiff)
-{
-    //for (auto key : m_KeyStates)
-    //    key.update(uiDiff);
-}
 
 /*#####
 # non-member functions

@@ -374,7 +374,7 @@ bool MapObjectBrush::drawObject(MapViewer *pWidget, Int32Point pos)
     return true;
 }
 
-QPixmap MapObjectBrush::getObjectPixmap(uint32 uiObjectID, DATABASE::ObjectType type, MapDirection direction, DATABASE::ConstWorldObjectDatabasePtr pWorldObjectDB,
+QPixmap MapObjectBrush::getObjectPixmap(uint32 uiObjectID, DATABASE::MAP_OBJECT::ObjectType type, MapDirection direction, DATABASE::ConstWorldObjectDatabasePtr pWorldObjectDB,
                                         DATABASE::ConstAnimationDatabasePtr pAnimationDB, DATABASE::ConstSpriteDatabasePtr pSpriteDB, QRect &boundingRect)
 {
     if (!uiObjectID || !pWorldObjectDB || !pAnimationDB || !pSpriteDB)
@@ -385,7 +385,7 @@ QPixmap MapObjectBrush::getObjectPixmap(uint32 uiObjectID, DATABASE::ObjectType 
     if (!pWorldObjectDB->getItem(uiObjectID, objectProto))
         return false;
     // create frame
-    WorldObjectPrototype::AnimationInfo animationInfo = objectProto->getAnimationInfo(direction);
+    MAP_OBJECT::AnimationInfo animationInfo = objectProto->getAnimationInfo(direction);
     AnimationViewDB aniViewer;
     aniViewer.setAttribute(Qt::WA_TranslucentBackground);
     aniViewer.setWindowFlags(Qt::FramelessWindowHint);

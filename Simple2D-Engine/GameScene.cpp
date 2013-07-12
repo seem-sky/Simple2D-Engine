@@ -4,6 +4,7 @@
 #include "Map.h"
 #include "GameWindow.h"
 #include "Player_Game.h"
+#include "ObjectAnimationWidget.h"
 
 using namespace GAME_LOGIC;
 using namespace SCENE;
@@ -11,9 +12,9 @@ using namespace SCENE;
 /*#####
 # GameScene
 #####*/
-GameScene::GameScene(SceneMgr &sceneMgr, const KEY::Keyboard &keyboard) : Scene(sceneMgr, keyboard), m_pDatabaseMgr(new DATABASE::DatabaseMgr())
+GameScene::GameScene(SceneMgr &sceneMgr) : Scene(sceneMgr), m_pDatabaseMgr(new DATABASE::DatabaseMgr())
 {
-    m_pPlayer = PLAYER::PlayerPtr(new PLAYER::Player_Game(m_Keyboard));
+    m_pPlayer = PLAYER::PlayerPtr(new PLAYER::Player_Game());
     m_pDatabaseMgr->loadDatabase("projects/untitled/", DATABASE::ALL_DATABASES^DATABASE::TILE_SET_DATABASE);
     m_MapMgr.setDatabaseMgr(m_pDatabaseMgr);
     m_MapMgr.change(m_MapMgr.loadMap(3));
@@ -21,17 +22,35 @@ GameScene::GameScene(SceneMgr &sceneMgr, const KEY::Keyboard &keyboard) : Scene(
     showFPS();
 }
 
+MapItem* GameScene::createNewWorldObject(MAP::OBJECT::WorldObjectPtr pObject)
+{
+    MapItem *pItem = new MapItem(pObject, m_pDatabaseMgr->getSpriteDatabase(), m_pDatabaseMgr->getAnimationDatabase());
+    pItem->setPos(pObject->getPosition().x, pObject->getPosition().y);
+    return pItem;
+}
+
 void GameScene::update(uint32 uiDiff)
 {
     // update player
     m_pPlayer->update(uiDiff);
 
+    if (m_MapMgr.getCurrent())
+    {
+        // update MapItems
+        for (auto pItem : m_pSceneView->items())
+            dynamic_cast<MapItem*>(pItem)->syncWithWorldObject();
+
+        // add new world objects
+        for (auto obj : m_MapMgr.getCurrent()->getNewWorldObjects())
+            m_pSceneView->addItem(createNewWorldObject(obj));
+    }
+
     // update map
     m_MapMgr.updateCurrent(uiDiff);
 
-    // update scene position
     if (m_MapMgr.getCurrent())
     {
+        // update scene position
         Int32Point pos = m_MapMgr.getCurrent()->getPosition();
         QRectF sceneRect = m_pSceneView->sceneRect();
         sceneRect.setX(pos.x);
@@ -41,6 +60,51 @@ void GameScene::update(uint32 uiDiff)
 
     // redraw scene
     m_pSceneView->update();
+}
+
+/*#####
+# MapItem
+#####*/
+MapItem::MapItem(MAP::OBJECT::WorldObjectPtr pWorldObject, DATABASE::ConstSpriteDatabasePtr pSpriteDB, DATABASE::ConstAnimationDatabasePtr pAnimationDB) :
+    QGraphicsItem(), m_pSpriteDB(pSpriteDB), m_pAnimationDB(pAnimationDB), m_pWorldObject(pWorldObject)
+{
+}
+
+bool MapItem::_animationChanged()
+{
+    return m_pCurrentAnimation != m_pWorldObject->getCurrentAnimation() || m_uiCurrentFrame != m_pWorldObject->getCurrentFrame();
+}
+
+QRectF MapItem::boundingRect() const
+{
+    return m_Pixmap.rect();
+}
+
+void MapItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    painter->drawPixmap(m_BoundingRect.x(), m_BoundingRect.y(), m_Pixmap);
+}
+
+void MapItem::syncWithWorldObject()
+{
+    if (!m_pWorldObject->getCurrentAnimation())
+        return;
+    // update pixmap if needed
+    if (_animationChanged())
+    {
+        m_pCurrentAnimation = m_pWorldObject->getCurrentAnimation();
+        m_uiCurrentFrame = m_pWorldObject->getCurrentFrame();
+        ObjectAnimationWidget widget(m_pCurrentAnimation, m_pSpriteDB, m_uiCurrentFrame);
+        widget.setAttribute(Qt::WA_TranslucentBackground);
+        widget.setWindowFlags(Qt::FramelessWindowHint);
+        widget.setStyleSheet("background:transparent");
+        widget.setFrameShape(QFrame::NoFrame);
+        m_BoundingRect = widget.scene()->itemsBoundingRect().toRect();
+        widget.resize(m_BoundingRect.width(), m_BoundingRect.height());
+        widget.setSceneRect(m_BoundingRect);
+        m_Pixmap = widget.grab();
+    }
+    setPos(m_pWorldObject->getPosition().x, m_pWorldObject->getPosition().y);
 }
 
 /*#####

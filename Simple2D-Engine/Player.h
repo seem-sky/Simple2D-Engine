@@ -14,15 +14,14 @@ namespace PLAYER
     class Player
     {
     public:
-        Player(const KEY::Keyboard &keyboard);
+        Player();
         virtual void update(uint32 uiDiff);
 
-        void addKeyBind(KEY::Keys key, VoidFunction function, bool releaseOldBind);
+        void addKeyBind(KEY::Keys key, VoidFunction function, bool releaseOldBind = false);
         void releaseKeyBind(KEY::Keys key);
 
     private:
         KeyFunctionUnorderedMap m_KeyBindings;
-        const KEY::Keyboard &m_Keyboard;
     };
     typedef std::unique_ptr<Player> PlayerPtr;
 }

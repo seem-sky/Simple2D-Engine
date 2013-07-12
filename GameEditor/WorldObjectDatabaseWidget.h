@@ -7,7 +7,7 @@
 /*#####
 # WorldObjectDatabaseWidget
 #####*/
-class WorldObjectDatabaseWidget : public DatabaseWidget<DATABASE::WorldObjectPrototype>, Ui_WorldObjectDatabaseWidget
+class WorldObjectDatabaseWidget : public DatabaseWidget<DATABASE::MAP_OBJECT::WorldObjectPrototype>, Ui_WorldObjectDatabaseWidget
 {
     Q_OBJECT
 private:

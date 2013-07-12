@@ -167,7 +167,7 @@ void WorldObjectPrototypeDragTreeWidget::leaveEvent(QEvent *pEvent)
         if (!m_pDB->getItem(pItem->text(0).toUInt(), objectProto))
             return;
         // create frame
-        WorldObjectPrototype::AnimationInfo animationInfo = objectProto->getAnimationInfo(MAP_STRUCTURE::DIRECTION_DOWN);
+        MAP_OBJECT::AnimationInfo animationInfo = objectProto->getAnimationInfo(MAP_STRUCTURE::DIRECTION_DOWN);
         AnimationViewDB aniViewer;
         aniViewer.setAttribute(Qt::WA_TranslucentBackground);
         aniViewer.setWindowFlags(Qt::FramelessWindowHint);

@@ -6,18 +6,48 @@
 #include "DatabaseMgr.h"
 #include "AutoTileCache.h"
 #include "TileCache.h"
+#include "WorldObject.h"
+#include <QtWidgets/QGraphicsItem>
 
 namespace GAME_LOGIC
 {
     namespace SCENE
     {
         /*#####
+        # MapItem
+        #####*/
+        class MapItem : public QGraphicsItem
+        {
+        private:
+            bool _animationChanged();
+
+        public:
+            MapItem(MAP::OBJECT::WorldObjectPtr pWorldObject, DATABASE::ConstSpriteDatabasePtr pSpriteDB, DATABASE::ConstAnimationDatabasePtr pAnimationDB);
+
+            void syncWithWorldObject();
+
+            QRectF boundingRect() const;
+            void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+
+        private:
+            DATABASE::ConstSpriteDatabasePtr m_pSpriteDB;
+            DATABASE::ConstAnimationDatabasePtr m_pAnimationDB;
+            MAP::OBJECT::WorldObjectPtr m_pWorldObject;
+            DATABASE::ConstAnimationPrototypePtr m_pCurrentAnimation;
+            uint32 m_uiCurrentFrame;
+            QPixmap m_Pixmap;
+            QRect m_BoundingRect;
+        };
+
+        /*#####
         # GameScene
         #####*/
         class GameScene : public Scene
         {
+            MapItem* createNewWorldObject(MAP::OBJECT::WorldObjectPtr pObject);
+
         public:
-            GameScene(SceneMgr &sceneMgr, const KEY::Keyboard &keyboard);
+            GameScene(SceneMgr &sceneMgr);
 
             void update(uint32 uiDiff);
 

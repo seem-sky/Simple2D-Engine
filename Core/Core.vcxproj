@@ -68,10 +68,10 @@
     <OutDir>$(SolutionDir)\</OutDir>
     <IntDir>$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)d</TargetName>
-    <LibraryPath>C:\Qt\Qt5.0.2-x86\qtbase\lib;$(SolutionDir);$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(QtDir)\lib;$(SolutionDir);$(LibraryPath)</LibraryPath>
     <ReferencePath>
     </ReferencePath>
-    <IncludePath>C:\Qt\Qt5.0.2-x86\qtbase\include;C:\Users\anti-freak\Documents\SDKs\boost_1_53_0;$(SolutionDir)\Simple2D-Engine;$(SolutionDir)\Simple2D-GameEditor\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(QtDir)\include;$(BoostDir);$(SolutionDir)\Simple2D-Engine;$(SolutionDir)\Simple2D-GameEditor\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <TargetName>$(ProjectName)d</TargetName>
@@ -82,8 +82,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)\</OutDir>
     <IntDir>$(Configuration)\</IntDir>
-    <LibraryPath>C:\Qt\Qt5.0.2-x86\qtbase\lib;$(SolutionDir);$(LibraryPath)</LibraryPath>
-    <IncludePath>C:\Qt\Qt5.0.2-x86\qtbase\include;C:\Users\anti-freak\Documents\SDKs\boost_1_53_0;$(SolutionDir)\Simple2D-Engine;$(SolutionDir)\Simple2D-GameEditor\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(QtDir)\lib;$(SolutionDir);$(LibraryPath)</LibraryPath>
+    <IncludePath>$(QtDir)\include;$(BoostDir);$(SolutionDir)\Simple2D-Engine;$(SolutionDir)\Simple2D-GameEditor\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LibraryPath>C:\Users\anti-freak\Documents\SDKs\qt-everywhere-opensource-src-4.8.1\lib;$(LibraryPath)</LibraryPath>
