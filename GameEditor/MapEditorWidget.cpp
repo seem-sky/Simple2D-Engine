@@ -33,8 +33,8 @@ MapEditorWidget::MapEditorWidget(QWidget *pParent) : QWidget(pParent), Ui_MapEdi
     connect(m_pMapTree, SIGNAL(mapDeleted(DATABASE::MAP_STRUCTURE::MapPrototypePtr)), m_pMapEditor, SLOT(closeMap(DATABASE::MAP_STRUCTURE::MapPrototypePtr)));
     connect(m_pMapTree, SIGNAL(mapUpdated(DATABASE::MAP_STRUCTURE::MapPrototypePtr)), this, SLOT(_mapUpdated(DATABASE::MAP_STRUCTURE::MapPrototypePtr)));
 
-    connect(this, SIGNAL(leftTileChanged(uint32, BRUSH::BrushType)), m_pLHBrush, SLOT(changeBrush(uint32, BRUSH::BrushType)));
-    connect(this, SIGNAL(rightTileChanged(uint32, BRUSH::BrushType)), m_pRHBrush, SLOT(changeBrush(uint32, BRUSH::BrushType)));
+    connect(this, SIGNAL(leftTileChanged(uint32, DATABASE::MAP_STRUCTURE::BRUSH::BrushType)), m_pLHBrush, SLOT(changeBrush(uint32, DATABASE::MAP_STRUCTURE::BRUSH::BrushType)));
+    connect(this, SIGNAL(rightTileChanged(uint32, DATABASE::MAP_STRUCTURE::BRUSH::BrushType)), m_pRHBrush, SLOT(changeBrush(uint32, DATABASE::MAP_STRUCTURE::BRUSH::BrushType)));
 
     connect(m_pMappingModeTab, SIGNAL(currentChanged(int)), this, SLOT(_MappingModeChanged(int)));
     connect(m_pObjectTabs, SIGNAL(currentChanged(int)), this, SLOT(_objectTabChanged(int)));

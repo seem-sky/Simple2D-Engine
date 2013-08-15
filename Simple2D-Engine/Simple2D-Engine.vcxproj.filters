@@ -108,9 +108,6 @@
     <ClCompile Include="TransformationHolder.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="Object.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
     <ClCompile Include="DynamicObject.cpp">
       <Filter>Map\MapObjects</Filter>
     </ClCompile>
@@ -127,6 +124,15 @@
       <Filter>Map\MapObjects</Filter>
     </ClCompile>
     <ClCompile Include="ObjectAnimationWidget.cpp">
+      <Filter>Map\MapObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Game\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
       <Filter>Map\MapObjects</Filter>
     </ClCompile>
   </ItemGroup>
@@ -230,9 +236,6 @@
     <ClInclude Include="TransformationHolder.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Object.h">
-      <Filter>Core</Filter>
-    </ClInclude>
     <ClInclude Include="DynamicObject.h">
       <Filter>Map\MapObjects</Filter>
     </ClInclude>
@@ -249,6 +252,15 @@
       <Filter>Map\MapObjects</Filter>
     </ClInclude>
     <ClInclude Include="ObjectAnimationWidget.h">
+      <Filter>Map\MapObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Game\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
       <Filter>Map\MapObjects</Filter>
     </ClInclude>
   </ItemGroup>

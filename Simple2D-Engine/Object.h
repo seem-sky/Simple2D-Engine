@@ -1,39 +1,32 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
-#include "Global.h"
+#include "Entity.h"
 #include "TransformationHolder.h"
 
-namespace ENTITY
+namespace MAP
 {
-    class Object
+    namespace OBJECT
     {
-    protected:
-        inline void setID(uint32 uiID) { m_uiID = uiID;}
+        class Object : public ENTITY::Entity
+        {
+        public:
+            Object(uint32 GUID, uint32 ID = 0, const std::string &name = "", const std::string &script = "");
 
-    public:
-        Object(uint32 GUID, uint32 uiID = 0, const std::string &name = "");
+            inline Int32Point getPosition() const { return m_Position; }
+            inline void setPosition(const Int32Point &newPos) { m_Position = newPos; }
+            void move(const Int32Point &range, uint32 time);
 
-        inline Int32Point getPosition() const { return m_Position; }
-        inline void setPosition(const Int32Point &newPos) { m_Position = newPos; }
-        void move(const Int32Point &range, uint32 time);
+            inline void setMapGUID(uint32 MapGUID) { m_MapGUID = MapGUID; }
+            inline uint32 getMapGUID() const { return m_MapGUID; }
 
-        inline void setScript(const std::string &script) { m_Script = script; }
-        inline std::string getScript() const { return m_Script; }
+            virtual void update(uint32 uiDiff);
 
-        virtual void update(uint32 uiDiff);
-
-        inline void setName(const std::string &name) { m_Name = name; }
-
-        inline uint32 getGUID() const { return m_uiGUID; }
-
-    private:
-        uint32 m_uiID;
-        std::string m_Name;
-        std::string m_Script;
-        Int32Point m_Position;
-        uint32 m_uiGUID;
-        TRANSFORMATION::TransformationHolder m_TransformationHolder;
-    };
+        private:
+            Int32Point m_Position;
+            TRANSFORMATION::TransformationHolder m_TransformationHolder;
+            uint32 m_MapGUID;
+        };
+    }
 }
 #endif

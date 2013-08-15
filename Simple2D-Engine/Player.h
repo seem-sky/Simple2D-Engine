@@ -1,7 +1,6 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "Global.h"
 #include "Keyboard.h"
 #include <unordered_map>
 #include <functional>

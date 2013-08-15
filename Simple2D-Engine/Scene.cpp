@@ -1,11 +1,13 @@
 #include "Scene.h"
 #include <QtGui/QPainter>
 #include <QtWidgets/QGraphicsView>
+#include <QtWidgets/QGraphicsSceneWheelEvent>
 
 using namespace GAME_LOGIC;
 using namespace SCENE;
 
-const UInt32Point FPS_SPACE(75, 40);
+const uint8 FPS_SPACE = 25;
+const uint8 FPS_BORDER = 15;
 
 Scene::Scene(SceneMgr &sceneMgr) : m_SceneMgr(sceneMgr), m_pSceneView(nullptr), m_ShowFPS(false)
 {}
@@ -16,13 +18,16 @@ void SceneView::drawFPSCounter(QPainter *painter, const QRectF &rect)
     {
         if (QGraphicsView *pView = dynamic_cast<QGraphicsView*>(parent()))
         {
+            QString frameString = QString::number(m_FPSCounter.elapsed() ? IN_MILLISECOND/m_FPSCounter.elapsed() : 0);
             QFont newFont(painter->font());
             newFont.setBold(true);
-            newFont.setPointSize(FPS_SPACE.x/3);
+            newFont.setPointSize(FPS_SPACE);
             painter->setFont(newFont);
             painter->setPen(QColor(255,215,0));
-            QPointF textPos = pView->mapToScene(pView->width()-FPS_SPACE.x, FPS_SPACE.y);
-            painter->drawText(textPos, QString::number(m_FPSCounter.elapsed() ? IN_MILLISECOND/m_FPSCounter.elapsed() : 0));
+            // calculate pView scaling
+            QPointF textPos = pView->mapToScene(pView->width()-(FPS_SPACE*frameString.length()+FPS_BORDER)*pView->transform().m11(),
+                (FPS_SPACE+FPS_BORDER)*pView->transform().m22());
+            painter->drawText(textPos, frameString);
         }
     }
     m_FPSCounter.restart();

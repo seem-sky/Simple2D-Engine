@@ -3,23 +3,41 @@
 #include <QtGui/QResizeEvent>
 #include <QtWidgets/QGraphicsScene>
 #include <QtGui/QKeyEvent>
+#include <QtGui/QWheelEvent>
 #include "Keyboard.h"
 #include "Scene.h"
 
 using namespace GAME_LOGIC;
 
-GameWindow::GameWindow(Game *pGame) : QMainWindow(), m_pGame(pGame)
+GameWindow::GameWindow(Game *pGame) : QMainWindow(), m_pGame(pGame), m_Viewer(this)
 {
     installEventFilter(this);
     grabKeyboard();
-    m_Viewer.setParent(this);
-    m_Viewer.setGeometry(0, 0, width(), height());
-    m_Viewer.setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    m_Viewer.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_Viewer.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_Viewer.setScene(new QGraphicsScene(&m_Viewer));
-    resize(1024, 576);
-    //setWindowState(Qt::WindowFullScreen);
+    setStyleSheet("background-color: black;");
+    resize(768, 432);
+    setFixedSize(size());
+    //resize(640, 480);
+    setFullScreen();
+}
+
+void GameWindow::setFullScreen(bool fullScreen)
+{
+    if (fullScreen)
+    {
+        QSize oldSize = size();
+        showFullScreen();
+        QSize newSize = size();
+        float modifier = qMin(static_cast<float>(newSize.width()) / oldSize.width(), static_cast<float>(newSize.height()) / oldSize.height());
+        m_Viewer.setGeometry((newSize.width()-oldSize.width()*modifier)/2, (newSize.height()-oldSize.height()*modifier)/2,
+            oldSize.width()*modifier, oldSize.height()*modifier);
+        m_Viewer.scale(modifier, modifier);
+    }
+    else
+    {
+        showNormal();
+        m_Viewer.move(-m_Viewer.x(), -m_Viewer.y());
+        m_Viewer.scale(1/m_Viewer.transform().m11(), 1/m_Viewer.transform().m22());
+    }
 }
 
 void GameWindow::closeEvent(QCloseEvent *pEvent)
@@ -50,7 +68,7 @@ void GameWindow::keyReleaseEvent(QKeyEvent *pEvent)
     KEY::GlobalKeyboard::get()->changeKeyState(KEY::wrapKeyFromQT(pEvent->key()), false);
 }
 
-bool GameWindow::event(QEvent *pEvent)
+bool GameWindow::eventFilter(QObject *pObj, QEvent *pEvent)
 {
     if (pEvent->type() == QEvent::WindowDeactivate)
     {
@@ -58,4 +76,22 @@ bool GameWindow::event(QEvent *pEvent)
         return true;
     }
     return QMainWindow::event(pEvent);
+}
+
+GameViewer::GameViewer(QWidget *pParent) : QGraphicsView(pParent)
+{
+    //setGeometry(0, 0, width(), height());
+    setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    viewport()->installEventFilter(this);
+    setLineWidth(0);
+    setFrameShape(Shape::NoFrame);
+}
+
+bool GameViewer::eventFilter(QObject *pObj, QEvent *pEvent)
+{
+    if(pObj == viewport() && pEvent->type() == QEvent::Wheel)
+        return true;
+    return QWidget::eventFilter(pObj, pEvent);
 }

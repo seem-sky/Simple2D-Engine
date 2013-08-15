@@ -3,71 +3,74 @@
 
 #include "Global.h"
 
-namespace ENTITY
+namespace TRANSFORMATION
 {
-    class Object;
-    namespace TRANSFORMATION
+    enum TransformationProcess
     {
-        enum TransformationProcess
-        {
-            IN_PROGRESS,
-            DONE
-        };
+        IN_PROGRESS,
+        DONE
+    };
 
-        class Transformation
-        {
-        private:
-            virtual void _update(uint32 uiDiff) = 0;
+    enum TransformationType
+    {
+        TRANSFORMATION_MOVE
+    };
+    const uint32 TRANSFORMATION_TYPES_COUNT = 1;
 
-        public:
-            Transformation(uint32 uiTime, Object *pOwner);
+    /*#####
+    # Transformations
+    #####*/
+    class Transformation
+    {
+    private:
+        virtual void _update(uint32 uiDiff) = 0;
 
-            TransformationProcess update(uint32 uiDiff);
+    public:
+        Transformation(uint32 uiTime, TransformationType type);
 
-            inline uint32 getTimeRemain() const { return m_uiTimer; }
-            inline Object* getOwner() const { return m_pOwner; }
+        TransformationProcess update(uint32 uiDiff);
 
-        private:
-            uint32 m_uiTimer;
-            Object *m_pOwner;
-        };
-        typedef std::unique_ptr<Transformation> TransformationPtr;
-        typedef std::vector<TransformationPtr> TransformationPtrVector;
-        typedef std::unique_ptr<TransformationPtrVector> TransformationPtrVectorPtr;
+        inline uint32 getTimeRemain() const { return m_uiTimer; }
 
-        class Move : public Transformation
-        {
-        private:
-            void _update(uint32 uiDiff);
+        inline TransformationType getType() const { return m_Type; }
 
-        public:
-            Move(uint32 uiTime, Object *pOwner, Int32Point range);
+    private:
+        TransformationType m_Type;
+        uint32 m_uiTimer;
+    };
+    typedef std::unique_ptr<Transformation> TransformationPtr;
+    typedef std::list<TransformationPtr> TransformationPtrList;
 
-        private:
-            DoublePoint m_RangePerMSEC;
-            DoublePoint m_RangeBuffer;
-            Int32Point m_Range;
-        };
-        typedef std::unique_ptr<Move> MovePtr;
+    class Move : public Transformation
+    {
+    private:
+        void _update(uint32 uiDiff);
 
-        enum TransformationTypes
-        {
-            TRANSFORMATION_MOVE
-        };
-        const uint32 TRANSFORMATION_TYPES_COUNT = 1;
+    public:
+        Move(uint32 uiTime, Int32Point range, Int32Point &position);
 
-        class TransformationHolder
-        {
-        public:
-            TransformationHolder();
+    private:
+        DoublePoint m_RangePerMSEC;
+        DoublePoint m_RangeBuffer;
+        Int32Point m_Range;
+        Int32Point &m_Position;
+    };
 
-            void updateTransformations(uint32 uiDiff);
-            void addTransformation(MovePtr &pTransformation);
+    /*#####
+    # TransformationHolder
+    #####*/
+    class TransformationHolder
+    {
+    public:
+        void updateTransformations(uint32 uiDiff);
 
-        private:
-            typedef std::array<TransformationPtrVectorPtr, TRANSFORMATION_TYPES_COUNT> TransformationArray;
-            TransformationArray m_Transformations;
-        };
-    }
+        void addTransformation(Transformation *pTransformation);
+        void clearTransformation(TransformationType type);
+        void clearAllTransformations();
+
+    private:
+        typedef std::array<TransformationPtrList, TRANSFORMATION_TYPES_COUNT> TransformationArray;
+        TransformationArray m_Transformations;
+    };
 }
 #endif

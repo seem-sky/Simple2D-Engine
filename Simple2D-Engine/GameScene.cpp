@@ -1,9 +1,9 @@
 #include "GameScene.h"
 #include <QtGui/QPainter>
+#include <QtWidgets/QScrollBar>
 #include "QtGlobal.h"
 #include "Map.h"
 #include "GameWindow.h"
-#include "Player_Game.h"
 #include "ObjectAnimationWidget.h"
 
 using namespace GAME_LOGIC;
@@ -12,14 +12,27 @@ using namespace SCENE;
 /*#####
 # GameScene
 #####*/
-GameScene::GameScene(SceneMgr &sceneMgr) : Scene(sceneMgr), m_pDatabaseMgr(new DATABASE::DatabaseMgr())
+GameScene::GameScene(SceneMgr &sceneMgr) : Scene(sceneMgr), m_pDatabaseMgr(new DATABASE::DatabaseMgr()), m_Player(m_MapMgr)
 {
-    m_pPlayer = PLAYER::PlayerPtr(new PLAYER::Player_Game());
+    m_pSceneView = new GameSceneView(this, m_pDatabaseMgr);
     m_pDatabaseMgr->loadDatabase("projects/untitled/", DATABASE::ALL_DATABASES^DATABASE::TILE_SET_DATABASE);
     m_MapMgr.setDatabaseMgr(m_pDatabaseMgr);
-    m_MapMgr.change(m_MapMgr.loadMap(3));
-    m_pSceneView = new GameSceneView(this, m_pDatabaseMgr);
+    playerChangesMap(m_MapMgr.loadMap(3));
     showFPS();
+}
+
+void GameScene::playerChangesMap(MAP::MapPtr pMap)
+{
+    if (pMap)
+    {
+        m_Player.setMapGUID(pMap->getGUID());
+        m_pSceneView->setSceneRect(0,0,pMap->getWidth()*TILE_SIZE, pMap->getHeight()*TILE_SIZE);
+    }
+    else
+    {
+        m_Player.setMapGUID(0);
+        m_pSceneView->setSceneRect(0,0,0,0);
+    }
 }
 
 MapItem* GameScene::createNewWorldObject(MAP::OBJECT::WorldObjectPtr pObject)
@@ -32,31 +45,21 @@ MapItem* GameScene::createNewWorldObject(MAP::OBJECT::WorldObjectPtr pObject)
 void GameScene::update(uint32 uiDiff)
 {
     // update player
-    m_pPlayer->update(uiDiff);
-
-    if (m_MapMgr.getCurrent())
+    m_Player.update(uiDiff);
+    // get screen changes for current map
+    MAP::MapPtr pMap;
+    if (m_MapMgr.getItem(m_Player.getMapGUID(), pMap))
     {
-        // update MapItems
-        for (auto pItem : m_pSceneView->items())
-            dynamic_cast<MapItem*>(pItem)->syncWithWorldObject();
-
         // add new world objects
-        for (auto obj : m_MapMgr.getCurrent()->getNewWorldObjects())
+        for (auto &obj : pMap->getNewWorldObjects())
             m_pSceneView->addItem(createNewWorldObject(obj));
     }
 
-    // update map
-    m_MapMgr.updateCurrent(uiDiff);
+    // update maps
+    m_MapMgr.updateMaps(uiDiff);
 
-    if (m_MapMgr.getCurrent())
-    {
-        // update scene position
-        Int32Point pos = m_MapMgr.getCurrent()->getPosition();
-        QRectF sceneRect = m_pSceneView->sceneRect();
-        sceneRect.setX(pos.x);
-        sceneRect.setY(pos.y);
-        m_pSceneView->setSceneRect(sceneRect);
-    }
+    //// update camera position
+    m_pSceneView->views().first()->centerOn(m_Player.getCamera().getPositionX(), m_Player.getCamera().getPositionY());
 
     // redraw scene
     m_pSceneView->update();
@@ -67,8 +70,7 @@ void GameScene::update(uint32 uiDiff)
 #####*/
 MapItem::MapItem(MAP::OBJECT::WorldObjectPtr pWorldObject, DATABASE::ConstSpriteDatabasePtr pSpriteDB, DATABASE::ConstAnimationDatabasePtr pAnimationDB) :
     QGraphicsItem(), m_pSpriteDB(pSpriteDB), m_pAnimationDB(pAnimationDB), m_pWorldObject(pWorldObject)
-{
-}
+{}
 
 bool MapItem::_animationChanged()
 {
@@ -77,34 +79,48 @@ bool MapItem::_animationChanged()
 
 QRectF MapItem::boundingRect() const
 {
-    return m_Pixmap.rect();
+    QPixmap pixmap;
+    if (QPixmapCache::find(m_PixmapIdentify, pixmap))
+        return pixmap.rect();
+    return QRectF();
 }
 
 void MapItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    painter->drawPixmap(m_BoundingRect.x(), m_BoundingRect.y(), m_Pixmap);
+    syncWithWorldObject();
+    QPixmap pixmap;
+    if (!QPixmapCache::find(m_PixmapIdentify, pixmap))
+    {
+        // generate new pixmap
+        // ToDo: store bounding rect for pixmap, they should not be shown at 0/0!
+        if (m_pCurrentAnimation)
+        {
+            ObjectAnimationWidget widget(m_pCurrentAnimation, m_pSpriteDB, m_uiCurrentFrame);
+            QRect boundingRect = widget.scene()->itemsBoundingRect().toRect();
+            widget.resize(boundingRect.width(), boundingRect.height());
+            widget.setSceneRect(boundingRect);
+            pixmap = widget.grab();
+            QPixmapCache::insert(m_PixmapIdentify, pixmap);
+        }
+    }
+    painter->drawPixmap(0, 0, pixmap);
 }
 
 void MapItem::syncWithWorldObject()
 {
-    if (!m_pWorldObject->getCurrentAnimation())
-        return;
     // update pixmap if needed
     if (_animationChanged())
     {
         m_pCurrentAnimation = m_pWorldObject->getCurrentAnimation();
         m_uiCurrentFrame = m_pWorldObject->getCurrentFrame();
-        ObjectAnimationWidget widget(m_pCurrentAnimation, m_pSpriteDB, m_uiCurrentFrame);
-        widget.setAttribute(Qt::WA_TranslucentBackground);
-        widget.setWindowFlags(Qt::FramelessWindowHint);
-        widget.setStyleSheet("background:transparent");
-        widget.setFrameShape(QFrame::NoFrame);
-        m_BoundingRect = widget.scene()->itemsBoundingRect().toRect();
-        widget.resize(m_BoundingRect.width(), m_BoundingRect.height());
-        widget.setSceneRect(m_BoundingRect);
-        m_Pixmap = widget.grab();
+        m_BoundingRect = QRect();
+        if (m_pWorldObject->getCurrentAnimation())
+            m_PixmapIdentify = "Animation" + QString::number(m_pCurrentAnimation->getID()) + "/" + QString::number(m_uiCurrentFrame);
+        else
+            m_PixmapIdentify.clear();
     }
     setPos(m_pWorldObject->getPosition().x, m_pWorldObject->getPosition().y);
+    setZValue(pos().y()+m_BoundingRect.y()+m_BoundingRect.height());
 }
 
 /*#####
@@ -132,10 +148,13 @@ void GameSceneView::drawForeground(QPainter *painter, const QRectF &rect)
 void GameSceneView::drawTiles(QPainter *painter, const QRectF &rect, MAP::Layer layerType)
 {
     GameScene *pScene = getGameScene();
-    if (!pScene || !pScene->getCurrentMap())
+    if (!pScene)
         return;
 
-    const MAP::MapPtr &pMap = pScene->getCurrentMap();
+    const PLAYER::GamePlayer &player = pScene->getPlayer();
+    MAP::ConstMapPtr pMap = player.getMap();
+    if (!pMap)
+        return;
     const UInt32Point startTile(rect.x() <= 0 ? 0 : (uint32)rect.x() / TILE_SIZE, rect.y() <= 0 ? 0 : (uint32)rect.y() / TILE_SIZE);
     const UInt32Point endTile(qMin<uint32>(ceil(rect.width() / TILE_SIZE) + startTile.x + 1, pMap->getWidth()),
         qMin<uint32>(ceil(rect.height() / TILE_SIZE) + startTile.y + 1, pMap->getHeight()));

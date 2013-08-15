@@ -4,7 +4,6 @@
 #include <QtWidgets/QGraphicsScene>
 #include <QtCore/QTime>
 #include "Global.h"
-#include "Player.h"
 
 namespace GAME_LOGIC
 {
@@ -54,7 +53,6 @@ namespace GAME_LOGIC
         protected:
             SceneMgr &m_SceneMgr;
             SceneView *m_pSceneView;
-            PLAYER::PlayerPtr m_pPlayer;
 
         private:
             bool m_ShowFPS;

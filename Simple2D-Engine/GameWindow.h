@@ -12,6 +12,15 @@ namespace GAME_LOGIC
     }
     class Game;
 
+    class GameViewer : public QGraphicsView
+    {
+    protected:
+        bool eventFilter(QObject *pObj, QEvent *pEvent);
+
+    public:
+        GameViewer(QWidget *pParent = 0);
+    };
+
     class GameWindow : public QMainWindow
     {
     protected:
@@ -19,16 +28,17 @@ namespace GAME_LOGIC
         void resizeEvent(QResizeEvent *pEvent);
         void keyPressEvent(QKeyEvent *pEvent);
         void keyReleaseEvent(QKeyEvent *pEvent);
-        bool event(QEvent *pEvent);
+        bool eventFilter(QObject *pObj, QEvent *pEvent);
 
     public:
         GameWindow(Game *pGame);
 
         void setSceneView(SCENE::SceneView *pScene);
+        void setFullScreen(bool fullScreen = true);
 
     private:
         Game *m_pGame;
-        QGraphicsView m_Viewer;
+        GameViewer m_Viewer;
     };
 }
 #endif

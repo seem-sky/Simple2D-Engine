@@ -361,7 +361,7 @@ namespace DATABASE
         uint32 MapPrototype::getTile(UInt32Point3D at, Layer layer) const
         {
             if (hasMapDataStored())
-                m_Layer.getMapTile(at, layer).m_uiTileID;
+                return m_Layer.getMapTile(at, layer).m_uiTileID;
             return MAX_UINT32;
         }
 
@@ -374,7 +374,7 @@ namespace DATABASE
         uint32 MapPrototype::getAutoTile(UInt32Point3D at, Layer layer) const
         {
             if (hasMapDataStored())
-                m_Layer.getMapTile(at, layer).m_uiAutoTileSetID;
+                return m_Layer.getMapTile(at, layer).m_uiAutoTileSetID;
             return MAX_UINT32;
         }
 
@@ -393,7 +393,7 @@ namespace DATABASE
         MapTile MapPrototype::getMapTile(UInt32Point3D at, Layer layer) const
         {
             if (hasMapDataStored())
-                m_Layer.getMapTile(at, layer);
+                return m_Layer.getMapTile(at, layer);
             return MapTile(MAX_UINT32, MAX_UINT32);
         }
     }

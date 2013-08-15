@@ -8,6 +8,8 @@
 #include "TileCache.h"
 #include "WorldObject.h"
 #include <QtWidgets/QGraphicsItem>
+#include <QtGui/QPixmapCache>
+#include "Player_Game.h"
 
 namespace GAME_LOGIC
 {
@@ -35,7 +37,7 @@ namespace GAME_LOGIC
             MAP::OBJECT::WorldObjectPtr m_pWorldObject;
             DATABASE::ConstAnimationPrototypePtr m_pCurrentAnimation;
             uint32 m_uiCurrentFrame;
-            QPixmap m_Pixmap;
+            QString m_PixmapIdentify;
             QRect m_BoundingRect;
         };
 
@@ -51,9 +53,13 @@ namespace GAME_LOGIC
 
             void update(uint32 uiDiff);
 
-            inline const MAP::MapPtr& getCurrentMap() const { return m_MapMgr.getCurrent(); }
+            inline const PLAYER::GamePlayer& getPlayer() const { return m_Player; }
+            inline PLAYER::GamePlayer& getPlayer() { return m_Player; }
+
+            void playerChangesMap(MAP::MapPtr pMap);
 
         private:
+            PLAYER::GamePlayer m_Player;
             MAP::MapMgr m_MapMgr;
             DATABASE::DatabaseMgrPtr m_pDatabaseMgr;
         };

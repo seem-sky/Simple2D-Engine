@@ -7,7 +7,7 @@ Player::Player()
 
 void Player::update(uint32 uiDiff)
 {
-    for (auto pair : m_KeyBindings)
+    for (auto &pair : m_KeyBindings)
     {
         if (KEY::GlobalKeyboard::get()->isKeyPressed(pair.first))
             pair.second();

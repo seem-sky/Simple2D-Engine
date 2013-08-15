@@ -5,18 +5,18 @@ using namespace MAP;
 /*#####
 # Map
 #####*/
-Map::Map(uint32 GUID, uint32 uiID, const std::string &name, MapLayer &layer, const DATABASE::MAP_STRUCTURE::MapObjectContainer &objects,
-         DATABASE::ConstDatabaseMgrPtr pDBMgr) :
-    m_Layer(std::move(layer)), m_pDBMgr(pDBMgr), Object(GUID, uiID, name)
+Map::Map(uint32 GUID, uint32 ID, MapLayer &layer, const DATABASE::MAP_STRUCTURE::MapObjectContainer &objects, DATABASE::ConstDatabaseMgrPtr pDBMgr,
+         const std::string &name, const std::string &script) :
+    m_Layer(std::move(layer)), m_pDBMgr(pDBMgr), Entity(GUID, ID, name, script)
 {
-    move(Int32Point(0, 400), 5*IN_MILLISECOND);
+    //move(Int32Point(0, 400), 5*IN_MILLISECOND);
     _setupObjects(objects);
 }
 
 void Map::update(uint32 uiDiff)
 {
     m_NewObjects.clear();
-    ENTITY::Object::update(uiDiff);
+    //ENTITY::Object::update(uiDiff);
 
     // update objects
     for (uint32 i = 1; i < m_Grid.getObjects().getSize(); ++i)
@@ -29,34 +29,30 @@ void Map::update(uint32 uiDiff)
 
 void Map::_setupObjects(const DATABASE::MAP_STRUCTURE::MapObjectContainer &objects)
 {
-    for (uint32 j = 0; j < 100; ++j)
+    for (uint32 i = 1; i < objects.getSize(); ++i)
     {
-        Int32Point point(j*10, j*10);
-        for (uint32 i = 1; i < objects.getSize(); ++i)
+        DATABASE::MAP_STRUCTURE::ConstMapObjectPtr obj;
+        if (objects.getItem(i, obj))
         {
-            DATABASE::MAP_STRUCTURE::ConstMapObjectPtr obj;
-            if (objects.getItem(i, obj))
+            OBJECT::WorldObjectPtr pWorldObject;
+            switch (obj->m_Type)
             {
-                OBJECT::WorldObjectPtr pWorldObject;
-                switch (obj->m_Type)
+            case DATABASE::MAP_OBJECT::TYPE_WORLDOBJECT:
                 {
-                case DATABASE::MAP_OBJECT::TYPE_WORLDOBJECT:
-                    {
-                        DATABASE::ConstWorldObjectPrototypePtr pWObj;
-                        if (!m_pDBMgr->getWorldObjectDatabase()->getItem(obj->m_ObjectID, pWObj))
-                            continue;
-                        pWorldObject = OBJECT::WorldObjectPtr(new OBJECT::WorldObject(i+100*j, pWObj));
-                        pWorldObject->setPosition(obj->m_Position+point);
-                        pWorldObject->setDirection(obj->m_Direction);
-                        break;
-                    }
-                case DATABASE::MAP_OBJECT::TYPE_DYNAMIC_OBJECT:
-                    {
-                        break;
-                    }
+                    DATABASE::ConstWorldObjectPrototypePtr pWObj;
+                    if (!m_pDBMgr->getWorldObjectDatabase()->getItem(obj->m_ObjectID, pWObj))
+                        continue;
+                    pWorldObject = OBJECT::WorldObjectPtr(new OBJECT::WorldObject(i, pWObj));
+                    pWorldObject->setPosition(obj->m_Position);
+                    pWorldObject->setDirection(obj->m_Direction);
+                    break;
                 }
-                addWorldObject(pWorldObject);
+            case DATABASE::MAP_OBJECT::TYPE_DYNAMIC_OBJECT:
+                {
+                    break;
+                }
             }
+            addWorldObject(pWorldObject);
         }
     }
 }
@@ -66,10 +62,18 @@ void Map::addWorldObject(OBJECT::WorldObjectPtr pWorldObject)
     // add object to grid
     if (pWorldObject)
     {
+        pWorldObject->setMapGUID(getGUID());
         m_Grid.addObject(pWorldObject);
         m_NewObjects.insert(pWorldObject);
         pWorldObject->setDBMgr(m_pDBMgr);
     }
+}
+
+OBJECT::WorldObjectPtr Map::getWorldObject(uint32 GUID)
+{
+    OBJECT::WorldObjectPtr pObject;
+    m_Grid.getObjects().getItem(GUID, pObject);
+    return pObject;
 }
 
 /*#####

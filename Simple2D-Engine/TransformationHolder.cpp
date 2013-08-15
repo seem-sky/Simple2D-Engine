@@ -7,7 +7,7 @@ using namespace TRANSFORMATION;
 /*#####
 # Transformation
 #####*/
-Transformation::Transformation(uint32 uiTime, Object *pOwner) : m_uiTimer(uiTime), m_pOwner(pOwner)
+Transformation::Transformation(uint32 uiTime, TransformationType type) : m_uiTimer(uiTime), m_Type(type)
 {}
 
 TransformationProcess Transformation::update(uint32 uiDiff)
@@ -28,7 +28,8 @@ TransformationProcess Transformation::update(uint32 uiDiff)
 /*#####
 # Move
 #####*/
-Move::Move(uint32 uiTime, Object *pOwner, Int32Point range) : m_Range(range), Transformation(uiTime, pOwner)
+Move::Move(uint32 uiTime, Int32Point range, Int32Point &position) : m_Range(range), m_Position(position),
+    Transformation(uiTime, TRANSFORMATION_MOVE)
 {
     m_RangePerMSEC.x = static_cast<double>(m_Range.x) / getTimeRemain();
     m_RangePerMSEC.y = static_cast<double>(m_Range.y) / getTimeRemain();
@@ -49,30 +50,35 @@ void Move::_update(uint32 uiDiff)
     }
     else
         temp = m_Range;
-    getOwner()->setPosition(getOwner()->getPosition()+temp);
+    m_Position += temp;
 }
 
 /*#####
 # TransformationHolder
 #####*/
-TransformationHolder::TransformationHolder()
-{
-    for (TransformationArray::iterator itr = m_Transformations.begin(); itr != m_Transformations.end(); ++itr)
-        *itr = TransformationPtrVectorPtr(new TransformationPtrVector());
-}
-
 void TransformationHolder::updateTransformations(uint32 uiDiff)
 {
     // update transformations
     for (TransformationArray::iterator itr = m_Transformations.begin(); itr != m_Transformations.end(); ++itr)
     {
-        if (!(*itr)->empty() && (*itr)->front()->update(uiDiff) == DONE)
-            (*itr)->erase((*itr)->begin());
+        if (!itr->empty() && itr->front()->update(uiDiff) == DONE)
+            itr->pop_front();
     }
 }
 
-void TransformationHolder::addTransformation(MovePtr &pTransformation)
+void TransformationHolder::addTransformation(Transformation *pTransformation)
 {
     if (pTransformation)
-        m_Transformations.at(TRANSFORMATION_MOVE)->push_back(TransformationPtr(pTransformation.release()));
+        m_Transformations.at(pTransformation->getType()).push_back(TransformationPtr(pTransformation));
+}
+
+void TransformationHolder::clearTransformation(TransformationType type)
+{
+    m_Transformations.at(type).clear();
+}
+
+void TransformationHolder::clearAllTransformations()
+{
+    for (auto &x : m_Transformations)
+        x.clear();
 }

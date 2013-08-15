@@ -3,16 +3,18 @@
 
 #include "Player.h"
 #include "DynamicObject.h"
+#include "Camera.h"
+#include "MapMgr.h"
 
 namespace PLAYER
 {
-    class Player_Game : public Player
+    class GamePlayer : public Player
     {
     public:
-        Player_Game();
+        GamePlayer(MAP::MapMgr &mapMgr);
 
         void setControle(MAP::OBJECT::DynamicObjectPtr pObject);
-        inline MAP::OBJECT::DynamicObjectPtr getControledObject() { return m_pControledObject; }
+        MAP::OBJECT::DynamicObjectPtr getControledObject();
         void releaseControle();
 
         // keybinds
@@ -21,8 +23,26 @@ namespace PLAYER
         //void moveRight();
         //void moveDown();
 
+        // active map
+        inline void setMapGUID(uint32 mapGUID) { m_MapGUID = mapGUID; }
+        inline uint32 getMapGUID() const { return m_MapGUID; }
+        inline uint32 getMapGUID() { return m_MapGUID; }
+        inline const MAP::MapMgr& getMapMgr() const { return m_MapMgr; }
+        MAP::ConstMapPtr getMap() const; 
+
+        // camera
+        inline const CAMERA::Camera& getCamera() const { return m_Camera; }
+        inline CAMERA::Camera& getCamera() { return m_Camera; }
+
+        void update(uint32 uiDiff);
+
     private:
-        MAP::OBJECT::DynamicObjectPtr m_pControledObject;
+        uint32 m_ObjectGUID;
+        uint32 m_MapGUID;
+        MAP::MapMgr &m_MapMgr;
+
+    protected:
+        CAMERA::MapCamera m_Camera;
     };
 }
 #endif

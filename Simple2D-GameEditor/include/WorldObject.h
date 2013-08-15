@@ -12,7 +12,7 @@ namespace MAP
     {
         typedef std::unordered_map<uint32, uint32> UInt32UInt32UMap;
         typedef DATABASE::MAP_STRUCTURE::MapDirection MapDirection;
-        class WorldObject : public ENTITY::Object
+        class WorldObject : public Object
         {
         private:
             void _setupFromPrototype(DATABASE::ConstWorldObjectPrototypePtr pWorldObject);
