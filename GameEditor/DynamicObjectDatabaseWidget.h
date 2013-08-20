@@ -14,5 +14,10 @@ public:
 
 private slots:
     OBJECT_DATABASE_WIDGET_SLOTS
+
+private:
+    QLabel *m_pMovementSpeedLabel;
+    QSpinBox *m_pMovementSpeed;
+    QLabel *m_pPixelPerSecLabel;
 };
 #endif

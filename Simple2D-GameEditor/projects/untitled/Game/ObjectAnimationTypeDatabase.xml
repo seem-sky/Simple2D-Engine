@@ -8,5 +8,4 @@
     <prototype ID="6" Name="WALK_RIGHT"/>
     <prototype ID="7" Name="WALK_DOWN"/>
     <prototype ID="8" Name="WALK_LEFT"/>
-    <prototype ID="9" Name="test"/>
 </ObjectAnimationTypeDatabase>

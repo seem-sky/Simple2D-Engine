@@ -4,22 +4,6 @@
 #include "DatabaseWidget.h"
 #include "Ui/UI_WorldObjectDatabaseWidget.h"
 
-/* #### slots for childs ####
-private slots:
-void _animationSpeedChanged() { updateAnimationSpeed(); }
-void _boundingRectChanged(int value) { updateBoundingRect(); }
-void _onRemoveAnimationButtonClicked() { removeAnimation(); }
-void _onAddAnimationButtonClicked() { addAnimation(); }
-void _onDrop(AnimationView *pTarget, uint32 uiID, Int32Point pos) { dropAnimation(pTarget, uiID, pos); }
-void _onItemChanged() { updateItem(); }
-void _onItemAdded(AnimationViewerWidget *pWidget) { addedItem(pWidget); }
-
-//parent slots
-void _resizeButtonClicked() { resizeDatabase(getListCountValue()); }
-void _currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous) { currentItemChanged(current); }
-void _changeName() { changeName(); }
-###################################*/
-
 #define OBJECT_DATABASE_WIDGET_SLOTS void _animationSpeedChanged() { updateAnimationSpeed(); }\
     void _boundingRectChanged(int value) { updateBoundingRect(); }\
     void _onRemoveAnimationButtonClicked() { removeAnimation(); }\
