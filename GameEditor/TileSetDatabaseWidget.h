@@ -32,10 +32,7 @@ private slots:
 
     void _onTileDrop(uint32 uiID, Int32Point pos);
 
-    // parent slots
-    void _resizeButtonClicked() { resizeDatabase(getListCountValue()); }
-    void _currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous) { currentItemChanged(current); }
-    void _changeName() { changeName(); }
+    DATABASE_WIDGET_SLOTS
 
 private:
     DATABASE::ConstTileDatabaseChangerPtr m_pTileDB;

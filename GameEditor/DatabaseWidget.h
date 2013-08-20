@@ -9,10 +9,9 @@
 #include "ModifyObject.h"
 #include "PrototypeTreeWidgetItem.h"
 
-// slots for child class, paste them after "private slots:"
-//void _resizeButtonClicked() { _resizeDatabase(getListCountValue()); }
-//void _currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous) { currentItemChanged(current); }
-//void _changeName() { changeName(); }
+#define DATABASE_WIDGET_SLOTS void _resizeButtonClicked() { resizeDatabase(getListCountValue()); }\
+    void _currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous) { currentItemChanged(current); }\
+    void _changeName() { changeName(); }
 
 class DatabaseWidgetObject : public QWidget
 {

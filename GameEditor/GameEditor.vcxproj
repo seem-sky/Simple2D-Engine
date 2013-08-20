@@ -204,6 +204,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DynamicObjectDatabaseWidget.cpp" />
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="DatabaseWindow.cpp" />
     <ClCompile Include="TileSetDatabaseWidget.cpp" />
@@ -636,6 +637,8 @@
     <moc_header Include="TileSetDatabaseWidget.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DynamicObjectDatabaseWidget.h" />
+    <ClInclude Include="ObjectDatabaseWidget.h" />
     <ClInclude Include="PrototypeTreeWidgetItem.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>

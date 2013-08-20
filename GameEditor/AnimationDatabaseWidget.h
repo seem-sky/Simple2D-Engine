@@ -38,10 +38,7 @@ private slots:
     void _onFrameChange(uint32 uiFrame, const DATABASE::AnimationPrototype::Frame &curFrame);
     void _onDrop(AnimationView *pTarget, uint32 uiID, Int32Point pos);
 
-    // parent slots
-    void _resizeButtonClicked() { resizeDatabase(getListCountValue()); }
-    void _currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous) { currentItemChanged(current); }
-    void _changeName() { changeName(); }
+    DATABASE_WIDGET_SLOTS
 
 private:
     DATABASE::ConstSpriteDatabaseChangerPtr m_pSpriteDB;

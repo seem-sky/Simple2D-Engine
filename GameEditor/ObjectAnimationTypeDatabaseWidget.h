@@ -15,8 +15,6 @@ public:
     ObjectAnimationTypeDatabaseWidget(QWidget *pParent = NULL);
 
 private slots:
-    void _resizeButtonClicked() { resizeDatabase(getListCountValue()); }
-    void _currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous) { currentItemChanged(current); }
-    void _changeName() { changeName(); }
+    DATABASE_WIDGET_SLOTS
 };
 #endif

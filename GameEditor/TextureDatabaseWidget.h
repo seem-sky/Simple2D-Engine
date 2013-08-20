@@ -13,11 +13,11 @@
 #include "QtGlobal.h"
 #include "Logfile.h"
 
-// slots for child class, paste them after "private slots:"
-//void _choseTransparentColorButtonClicked() { choseTransparencyColor(); }
-//void _choseFileButtonClicked() { choseFile(); }
-//void _changeTransparencyColor() { transparencyColorChanged(); }
-//void _massImportClicked() { massImport(); }
+#define TEXTURE_DATABASE_WIDGET_SLOTS void _massImportClicked() { massImport(); }\
+    void _choseTransparentColorButtonClicked() { choseTransparencyColor(); }\
+    void _choseFileButtonClicked() { choseFile(); }\
+    void _changeTransparencyColor() { transparencyColorChanged(); }\
+    DATABASE_WIDGET_SLOTS
 
 template <class T>
 class TextureDatabaseWidget : public DatabaseWidget<T>, protected Ui_TextureDatabaseWidget

@@ -118,6 +118,9 @@
     <Filter Include="Database\Pages\Texture\TileSet">
       <UniqueIdentifier>{0472c71d-12b5-49bf-a85d-e843ce8f61b7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Database\Pages\Object\DynamicObjects">
+      <UniqueIdentifier>{ec9584f0-3b86-4d4d-8fca-98575c9c23d4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainWindow.cpp">
@@ -215,6 +218,9 @@
     </ClCompile>
     <ClCompile Include="TileSetDatabaseWidget.cpp">
       <Filter>Database\Pages\Texture\TileSet</Filter>
+    </ClCompile>
+    <ClCompile Include="DynamicObjectDatabaseWidget.cpp">
+      <Filter>Database\Pages\Object\DynamicObjects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -428,6 +434,12 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="PrototypeTreeWidgetItem.h">
       <Filter>CustomWidgets</Filter>
+    </ClInclude>
+    <ClInclude Include="DynamicObjectDatabaseWidget.h">
+      <Filter>Database\Pages\Object\DynamicObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectDatabaseWidget.h">
+      <Filter>Database\Pages\Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

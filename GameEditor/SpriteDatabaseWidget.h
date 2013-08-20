@@ -19,13 +19,7 @@ public:
     SpriteDatabaseWidget(QWidget *pParent = NULL);
 
 private slots:
-    void _massImportClicked() { massImport(); }
-    void _choseTransparentColorButtonClicked() { choseTransparencyColor(); }
-    void _choseFileButtonClicked() { choseFile(); }
-    void _changeTransparencyColor() { transparencyColorChanged(); }
-    void _resizeButtonClicked() { resizeDatabase(getListCountValue()); }
-    void _currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous) { currentItemChanged(current); }
-    void _changeName() { changeName(); }
+    TEXTURE_DATABASE_WIDGET_SLOTS
 
 private:
     QPixmap m_Pixmap;
