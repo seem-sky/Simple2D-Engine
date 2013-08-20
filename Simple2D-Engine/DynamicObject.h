@@ -11,6 +11,8 @@ namespace MAP
         {
         public:
             DynamicObject(uint32 GUID, DATABASE::ConstDynamicObjectPrototypePtr pDynamicObject);
+
+            void move(const Int32Point &range, uint32 time);
         };
         typedef std::shared_ptr<DynamicObject> DynamicObjectPtr;
     }

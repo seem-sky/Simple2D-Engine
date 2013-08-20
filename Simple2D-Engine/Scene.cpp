@@ -2,6 +2,9 @@
 #include <QtGui/QPainter>
 #include <QtWidgets/QGraphicsView>
 #include <QtWidgets/QGraphicsSceneWheelEvent>
+#include <QtGui/QGuiApplication>
+#include <QtGui/QWindow>
+#include "GameWindow.h"
 
 using namespace GAME_LOGIC;
 using namespace SCENE;
@@ -9,7 +12,7 @@ using namespace SCENE;
 const uint8 FPS_SPACE = 25;
 const uint8 FPS_BORDER = 15;
 
-Scene::Scene(SceneMgr &sceneMgr) : m_SceneMgr(sceneMgr), m_pSceneView(nullptr), m_ShowFPS(false)
+Scene::Scene(Game &game) : m_Game(game), m_pSceneView(nullptr), m_ShowFPS(false)
 {}
 
 void SceneView::drawFPSCounter(QPainter *painter, const QRectF &rect)

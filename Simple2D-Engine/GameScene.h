@@ -49,7 +49,7 @@ namespace GAME_LOGIC
             MapItem* createNewWorldObject(MAP::OBJECT::WorldObjectPtr pObject);
 
         public:
-            GameScene(SceneMgr &sceneMgr);
+            GameScene(Game &game);
 
             void update(uint32 uiDiff);
 

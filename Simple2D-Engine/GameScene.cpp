@@ -5,6 +5,7 @@
 #include "Map.h"
 #include "GameWindow.h"
 #include "ObjectAnimationWidget.h"
+#include "Game.h"
 
 using namespace GAME_LOGIC;
 using namespace SCENE;
@@ -12,13 +13,16 @@ using namespace SCENE;
 /*#####
 # GameScene
 #####*/
-GameScene::GameScene(SceneMgr &sceneMgr) : Scene(sceneMgr), m_pDatabaseMgr(new DATABASE::DatabaseMgr()), m_Player(m_MapMgr)
+GameScene::GameScene(Game &game) : Scene(game), m_pDatabaseMgr(new DATABASE::DatabaseMgr()), m_Player(m_MapMgr)
 {
     m_pSceneView = new GameSceneView(this, m_pDatabaseMgr);
     m_pDatabaseMgr->loadDatabase("projects/untitled/", DATABASE::ALL_DATABASES^DATABASE::TILE_SET_DATABASE);
     m_MapMgr.setDatabaseMgr(m_pDatabaseMgr);
     playerChangesMap(m_MapMgr.loadMap(3));
     showFPS();
+
+    // player key binds
+    m_Player.addKeyBind(KEY::KEY_F11, std::bind(&Game::toggleFullScreen, &m_Game), 500);
 }
 
 void GameScene::playerChangesMap(MAP::MapPtr pMap)

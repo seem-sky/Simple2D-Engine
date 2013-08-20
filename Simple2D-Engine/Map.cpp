@@ -62,7 +62,7 @@ void Map::addWorldObject(OBJECT::WorldObjectPtr pWorldObject)
     // add object to grid
     if (pWorldObject)
     {
-        pWorldObject->setMapGUID(getGUID());
+        pWorldObject->setMap(this);
         m_Grid.addObject(pWorldObject);
         m_NewObjects.insert(pWorldObject);
         pWorldObject->setDBMgr(m_pDBMgr);

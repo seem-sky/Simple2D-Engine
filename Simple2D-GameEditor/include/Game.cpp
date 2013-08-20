@@ -8,7 +8,7 @@ Game::Game() : Application(), m_closeGame(false), m_SceneMgr(this)
 {
     m_pWidget = QWidgetPtr(new GameWindow(this));
     m_pWidget->show();
-    setScene(SCENE::ScenePtr(new SCENE::GameScene(m_SceneMgr)));
+    setScene(SCENE::ScenePtr(new SCENE::GameScene(*this)));
 }
 
 int Game::update(uint32 uiDiff)
@@ -27,4 +27,17 @@ void Game::setSceneView(SCENE::SceneView *pScene)
 void Game::setScene(SCENE::ScenePtr pScene)
 {
     m_SceneMgr.change(pScene);
+}
+
+bool Game::isFullScreen() const
+{
+    if (m_pWidget)
+        return m_pWidget->windowState() & Qt::WindowFullScreen;
+    return false;
+}
+
+void Game::toggleFullScreen()
+{
+    if (GameWindow *pWindow = dynamic_cast<GameWindow*>(&*m_pWidget))
+        pWindow->setFullScreen(!isFullScreen());
 }

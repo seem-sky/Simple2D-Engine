@@ -8,7 +8,16 @@
 namespace PLAYER
 {
     typedef std::function<void()> VoidFunction;
-    typedef std::unordered_map<KEY::Keys, VoidFunction> KeyFunctionUnorderedMap;
+    struct Hotkey
+    {
+        Hotkey() : m_uiRepeatTime(250), m_uiRepeatTimer(0)
+        {}
+
+        uint32 m_uiRepeatTime;
+        uint32 m_uiRepeatTimer;
+        VoidFunction m_Function;
+    };
+    typedef std::unordered_map<KEY::Keys, Hotkey> HotkeyUMap;
 
     class Player
     {
@@ -16,11 +25,11 @@ namespace PLAYER
         Player();
         virtual void update(uint32 uiDiff);
 
-        void addKeyBind(KEY::Keys key, VoidFunction function, bool releaseOldBind = false);
+        void addKeyBind(KEY::Keys key, VoidFunction function, uint32 m_uiRepeatTime = 250, bool releaseOldBind = true);
         void releaseKeyBind(KEY::Keys key);
 
     private:
-        KeyFunctionUnorderedMap m_KeyBindings;
+        HotkeyUMap m_KeyBindings;
     };
     typedef std::unique_ptr<Player> PlayerPtr;
 }

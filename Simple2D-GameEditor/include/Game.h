@@ -19,6 +19,9 @@ namespace GAME_LOGIC
         void setSceneView(SCENE::SceneView *pScene);
         void setScene(SCENE::ScenePtr pScene);
 
+        bool isFullScreen() const;
+        void toggleFullScreen();
+
     private:
         bool m_closeGame;
         SCENE::SceneMgr m_SceneMgr;

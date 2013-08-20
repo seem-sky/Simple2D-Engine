@@ -7,6 +7,8 @@
 
 namespace GAME_LOGIC
 {
+    class Game;
+
     namespace SCENE
     {
         /*#####
@@ -34,6 +36,13 @@ namespace GAME_LOGIC
         /*#####
         # Scene
         #####*/
+        enum UpdateResult
+        {
+            NONE                    = 0x000,
+            CLOSE_GAME              = 0x001,
+            TOGGLE_FULL_SCREEN      = 0x002
+        };
+
         class SceneMgr;
         class Scene
         {
@@ -41,7 +50,7 @@ namespace GAME_LOGIC
             void _updateFPS(uint32 uiDiff);
 
         public:
-            Scene(SceneMgr &sceneMgr);
+            Scene(Game &game);
 
             SceneView* getSceneView() { return m_pSceneView; }
 
@@ -51,7 +60,7 @@ namespace GAME_LOGIC
             inline void showFPS(bool show = true) { m_ShowFPS = show; }
 
         protected:
-            SceneMgr &m_SceneMgr;
+            Game &m_Game;
             SceneView *m_pSceneView;
 
         private:

@@ -6,6 +6,7 @@
 
 namespace MAP
 {
+    class Map;
     namespace OBJECT
     {
         class Object : public ENTITY::Entity
@@ -15,17 +16,20 @@ namespace MAP
 
             inline Int32Point getPosition() const { return m_Position; }
             inline void setPosition(const Int32Point &newPos) { m_Position = newPos; }
-            void move(const Int32Point &range, uint32 time);
 
-            inline void setMapGUID(uint32 MapGUID) { m_MapGUID = MapGUID; }
-            inline uint32 getMapGUID() const { return m_MapGUID; }
+            inline void setMap(Map *pMap) { m_pMap = pMap; }
+            inline const Map* getMap() const { return m_pMap; }
+            inline Map* getMap() { return m_pMap; }
+            uint32 getMapGUID() const;
 
             virtual void update(uint32 uiDiff);
 
         private:
+            Map *m_pMap;
+
+        protected:
             Int32Point m_Position;
             TRANSFORMATION::TransformationHolder m_TransformationHolder;
-            uint32 m_MapGUID;
         };
     }
 }
