@@ -387,13 +387,7 @@ namespace DATABASE
         class WorldObjectPrototype : public Prototype
         {
         public:
-            WorldObjectPrototype(uint32 uiID = 0) : Prototype(uiID), m_uiAnimationSpeed(100)
-            {
-                // set minimum poses, so we have stand pose for all directions
-                m_AnimationInfos.resize(getMinimumAnimationCount());
-                for (uint32 i = 1; i <= getMinimumAnimationCount(); ++i)
-                    setAnimationInfo(i-1, AnimationInfo());
-            }
+            WorldObjectPrototype(uint32 uiID = 0);
 
             inline uint32 getBoundingX() const { return m_BoundingRect.getPositionX(); }
             inline void setBoundingX(uint32 x) { m_BoundingRect.setPositionX(x); }
@@ -412,32 +406,11 @@ namespace DATABASE
             inline void setScriptName(const QString &sScriptName) { m_ScriptName = sScriptName; }
             inline QString getScriptName() const { return m_ScriptName; }
 
-            inline AnimationInfo getAnimationInfo(uint32 uiIndex) const
-            {
-                ConstAnimationInfoPtr info;
-                if (m_AnimationInfos.getItem(uiIndex, info))
-                    return *info;
-                return AnimationInfo();
-            }
-
-            inline void setAnimationInfo(uint32 uiIndex, AnimationInfo animationInfo)
-            {
-                AnimationInfoPtr info;
-                // do not change animation type id if its an standard entry
-                if (uiIndex <= getMinimumAnimationCount())
-                    info = AnimationInfoPtr(new AnimationInfo(animationInfo.m_uiAnimationID, uiIndex+1));
-                else
-                    AnimationInfoPtr(new AnimationInfo(animationInfo));
-                m_AnimationInfos.setItem(uiIndex, info);
-            }
+            AnimationInfo getAnimationInfo(uint32 uiIndex) const;
+            void setAnimationInfo(uint32 uiIndex, AnimationInfo animationInfo);
 
             inline uint32 getAnimationCount() const { return m_AnimationInfos.getSize(); }
-            virtual void setAnimationCount(uint32 uiCount)
-            {
-                if (uiCount < getMinimumAnimationCount())
-                    uiCount = getMinimumAnimationCount();
-                m_AnimationInfos.resize(uiCount);
-            }
+            void setAnimationCount(uint32 uiCount);
 
             virtual uint32 getMinimumAnimationCount() const { return MIN_WORLD_OBJECT_POSE; }
 
@@ -465,15 +438,7 @@ namespace DATABASE
             uint16 m_uiSpeed;
         };
 
-        static QString getTypeString(ObjectType type)
-        {
-            switch (type)
-            {
-            case TYPE_WORLDOBJECT: return "WorldObject";
-            case TYPE_DYNAMIC_OBJECT: return "DynamicObject";
-            }
-            return "";
-        }
+        QString getTypeString(ObjectType type);
     }
     typedef std::shared_ptr<MAP_OBJECT::WorldObjectPrototype> WorldObjectPrototypePtr;
     typedef std::shared_ptr<const MAP_OBJECT::WorldObjectPrototype> ConstWorldObjectPrototypePtr;

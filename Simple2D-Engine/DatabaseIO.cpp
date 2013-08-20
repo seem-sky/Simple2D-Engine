@@ -386,10 +386,8 @@ bool WorldObjectDatabaseXMLReader::getChildrenFromXML(const QDomNode &node, Worl
             else if (tempNode.nodeName() == "animationTypeID")
                 newAnimationInfo.m_uiObjectAnimationTypeID = tempNode.nodeValue().toUInt();
         }
-        if (newAnimationInfo.m_uiObjectAnimationTypeID <= MAP_OBJECT::MIN_WORLD_OBJECT_POSE)
-            proto->setAnimationInfo(newAnimationInfo.m_uiObjectAnimationTypeID-1, newAnimationInfo);
-        else
-            proto->setAnimationInfo(proto->getAnimationCount(), newAnimationInfo);
+        proto->setAnimationInfo(newAnimationInfo.m_uiObjectAnimationTypeID, newAnimationInfo);
+        return true;
     }
     return false;
 }
@@ -407,7 +405,7 @@ void WorldObjectDatabaseXMLWriter::getXMLFromAttributes(WorldObjectPrototypePtr 
     writer.writeAttribute("scriptName", proto->getScriptName());
 
     // store animation infos
-    for (uint32 i = 0; i < proto->getAnimationCount(); ++i)
+    for (uint32 i = 1; i <= proto->getAnimationCount(); ++i)
     {
         MAP_OBJECT::AnimationInfo animationInfo = proto->getAnimationInfo(i);
         if (animationInfo.m_uiAnimationID == 0 && animationInfo.m_uiObjectAnimationTypeID == 0)
