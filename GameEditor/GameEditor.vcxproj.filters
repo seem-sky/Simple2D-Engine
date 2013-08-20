@@ -429,14 +429,14 @@
     <moc_header Include="MainWindow.h">
       <Filter>MainWindow</Filter>
     </moc_header>
+    <moc_header Include="DynamicObjectDatabaseWidget.h">
+      <Filter>Database\Pages\Object\DynamicObjects</Filter>
+    </moc_header>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
     <ClInclude Include="PrototypeTreeWidgetItem.h">
       <Filter>CustomWidgets</Filter>
-    </ClInclude>
-    <ClInclude Include="DynamicObjectDatabaseWidget.h">
-      <Filter>Database\Pages\Object\DynamicObjects</Filter>
     </ClInclude>
     <ClInclude Include="ObjectDatabaseWidget.h">
       <Filter>Database\Pages\Object</Filter>

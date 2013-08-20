@@ -34,6 +34,9 @@ m_pDBMgr(pDBMgr)
     m_pWorldObjects->setAdditionalDB(m_pSprites->getDBChanger(), m_pAnimations->getDBChanger(), m_pObjectAnimationTypes->getDBChanger());
     m_pWorldObjects->setDB(m_pDBMgr->getWorldObjectDatabase());
 
+    m_pDynamicObjects->setAdditionalDB(m_pSprites->getDBChanger(), m_pAnimations->getDBChanger(), m_pObjectAnimationTypes->getDBChanger());
+    m_pDynamicObjects->setDB(m_pDBMgr->getDynamicObjectDatabase());
+
     // text section
     m_pTexts->setDB(m_pDBMgr->getLocalsDatabase());
 

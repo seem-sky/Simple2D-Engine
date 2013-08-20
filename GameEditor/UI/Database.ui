@@ -48,7 +48,7 @@
     </size>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="widget">
     <attribute name="title">
@@ -107,11 +107,16 @@
       </rect>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="WorldObjectDatabaseWidget" name="m_pWorldObjects">
       <attribute name="title">
        <string>WorldObjects</string>
+      </attribute>
+     </widget>
+     <widget class="DynamicObjectDatabaseWidget" name="m_pDynamicObjects">
+      <attribute name="title">
+       <string>DynamicObjects</string>
       </attribute>
      </widget>
      <widget class="ObjectAnimationTypeDatabaseWidget" name="m_pObjectAnimationTypes">
@@ -222,6 +227,12 @@
    <class>TileSetDatabaseWidget</class>
    <extends>QWidget</extends>
    <header>tilesetdatabasewidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>DynamicObjectDatabaseWidget</class>
+   <extends>QWidget</extends>
+   <header>dynamicobjectdatabasewidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

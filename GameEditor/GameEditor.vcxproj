@@ -637,7 +637,7 @@
     <moc_header Include="TileSetDatabaseWidget.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DynamicObjectDatabaseWidget.h" />
+    <moc_header Include="DynamicObjectDatabaseWidget.h" />
     <ClInclude Include="ObjectDatabaseWidget.h" />
     <ClInclude Include="PrototypeTreeWidgetItem.h" />
     <ClInclude Include="resource.h" />
