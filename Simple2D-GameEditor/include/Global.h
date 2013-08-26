@@ -62,5 +62,6 @@ typedef std::vector<UInt32Point3D> UInt32Point3DVector;
 
 // rect typedefs
 typedef Rect<uint32, uint32> UInt32Rect;
+typedef Rect<int32, uint32> Int32Rect;
 
 #endif

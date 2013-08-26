@@ -389,16 +389,16 @@ namespace DATABASE
         public:
             WorldObjectPrototype(uint32 uiID = 0);
 
-            inline uint32 getBoundingX() const { return m_BoundingRect.getPositionX(); }
-            inline void setBoundingX(uint32 x) { m_BoundingRect.setPositionX(x); }
-            inline uint32 getBoundingY() const { return m_BoundingRect.getPositionY(); }
-            inline void setBoundingY(uint32 y) { m_BoundingRect.setPositionY(y); }
+            inline int32 getBoundingX() const { return m_BoundingRect.getPositionX(); }
+            inline void setBoundingX(int32 x) { m_BoundingRect.setPositionX(x); }
+            inline int32 getBoundingY() const { return m_BoundingRect.getPositionY(); }
+            inline void setBoundingY(int32 y) { m_BoundingRect.setPositionY(y); }
             inline uint32 getBoundingWidth() const { return m_BoundingRect.getWidth(); }
             inline void setBoundingWidth(uint32 width) { m_BoundingRect.setWidth(width); }
             inline uint32 getBoundingHeight() const { return m_BoundingRect.getHeight(); }
             inline void setBoundingHeight(uint32 height) { m_BoundingRect.setHeight(height); }
-            inline UInt32Rect getBoundingRect() const { return m_BoundingRect; }
-            inline void setBoundingRect(const UInt32Rect rect) { m_BoundingRect = rect; }
+            inline Int32Rect getBoundingRect() const { return m_BoundingRect; }
+            inline void setBoundingRect(Int32Rect rect) { m_BoundingRect = std::move(rect); }
 
             inline void setAnimationSpeed(uint16 uiSpeed) { m_uiAnimationSpeed = uiSpeed; }
             inline uint16 getAnimationSpeed() const { return m_uiAnimationSpeed; }
@@ -415,7 +415,7 @@ namespace DATABASE
             virtual uint32 getMinimumAnimationCount() const { return MIN_WORLD_OBJECT_POSE; }
 
         private:
-            UInt32Rect m_BoundingRect;
+            Int32Rect m_BoundingRect;
             AnimationInfoContainer m_AnimationInfos;
             uint16 m_uiAnimationSpeed;
             QString m_ScriptName;
@@ -428,14 +428,15 @@ namespace DATABASE
         class DynamicObjectPrototype : public WorldObjectPrototype
         {
         public:
-            DynamicObjectPrototype(uint32 uiID = 0) : WorldObjectPrototype(uiID), m_uiSpeed(0) {}
-            inline void setSpeed(uint16 uiSpeed) { m_uiSpeed = uiSpeed; }
-            inline uint16 getSpeed() const { return m_uiSpeed; }
+            DynamicObjectPrototype(uint32 uiID = 0) : WorldObjectPrototype(uiID), m_uiMovementSpeed(0) {}
+
+            inline void setMovementSpeed(uint16 uiSpeed) { m_uiMovementSpeed = uiSpeed; }
+            inline uint16 getMovementSpeed() const { return m_uiMovementSpeed; }
 
             uint32 getMinimumAnimationCount() const { return MIN_DYNAMIC_OBJECT_POSE; }
 
         private:
-            uint16 m_uiSpeed;
+            uint16 m_uiMovementSpeed;
         };
 
         QString getTypeString(ObjectType type);
@@ -548,7 +549,6 @@ namespace DATABASE
             friend class MapDatabaseXMLReader;
 
         private:
-            inline void setFileName(const QString &sFileName) { m_FileName = sFileName; }
             void _clearTiles();
 
         public:
@@ -557,6 +557,7 @@ namespace DATABASE
             inline bool hasMapDataStored() const { return m_DataLoaded; }
 
             inline QString getFileName() const { return m_FileName; }
+            inline void setFileName(const QString &sFileName) { m_FileName = sFileName; }
             inline void setScriptName(const QString &sScriptName) { m_ScriptName = sScriptName; }
             inline QString getScriptName() const { return m_ScriptName; }
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<TileSetDatabase>
-    <prototype ID="1" Name="Gras" columnCount="2" rowCount="2" x0y0="1" x0y1="1" x1y0="1" x1y1="2"/>
-    <prototype ID="2" Name="forest" columnCount="3" rowCount="2" x0y0="55" x0y1="56" x1y0="53" x1y1="54" x2y0="51" x2y1="52"/>
-</TileSetDatabase>
+<DB>
+    <p ID="1" name="Gras" columns="2" rows="2" tiles="1,1,1,2"/>
+    <p ID="2" name="forest" columns="3" rows="3" tiles="55,56,0,54,0,53,0,51,52"/>
+</DB>

@@ -135,6 +135,9 @@
     <ClCompile Include="Object.cpp">
       <Filter>Map\MapObjects</Filter>
     </ClCompile>
+    <ClCompile Include="PrototypeParser.cpp">
+      <Filter>Database\IO</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Singleton.h">
@@ -262,6 +265,12 @@
     </ClInclude>
     <ClInclude Include="Object.h">
       <Filter>Map\MapObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="PrototypeParser.h">
+      <Filter>Database\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="Database_IO.h">
+      <Filter>Database\IO</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

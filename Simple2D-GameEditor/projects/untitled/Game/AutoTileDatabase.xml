@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<AutoTileDatabase>
-    <prototype ID="1" Name="gras-set" Index0="12" Index1="13" Index2="14" Index3="15" Index4="16" Index5="17" Index6="18" Index7="19" Index8="20" Index9="11"/>
-    <prototype ID="2" Name="test2" Index0="21" Index1="22" Index2="23" Index3="24" Index4="25" Index5="26" Index6="27" Index7="28" Index8="29" Index9="30"/>
-    <prototype ID="3" Name="forest-top" Index0="31" Index1="32" Index2="33" Index3="34" Index4="35" Index5="36" Index6="37" Index7="38" Index8="39" Index9="40"/>
-    <prototype ID="4" Name="high gras" Index0="41" Index1="42" Index2="43" Index3="44" Index4="45" Index5="46" Index6="47" Index7="48" Index8="49" Index9="50"/>
-</AutoTileDatabase>
+<DB>
+    <p ID="1" name="gras-set" tiles="12,13,14,15,16,17,18,19,20,11"/>
+    <p ID="2" name="test2" tiles="21,22,23,24,25,26,27,28,29,30"/>
+    <p ID="3" name="forest-top" tiles="31,32,33,34,35,36,37,38,39,40"/>
+    <p ID="4" name="high gras" tiles="41,42,43,44,45,46,47,48,49,50"/>
+</DB>

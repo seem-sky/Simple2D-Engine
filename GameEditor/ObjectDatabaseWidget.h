@@ -122,7 +122,7 @@ public:
             return false;
 
         proto->setAnimationSpeed(m_pSpeedModifyer->value());
-        proto->setBoundingRect(UInt32Rect(UInt32Point(m_pBoundingLeft->value(), m_pBoundingUp->value()),
+        proto->setBoundingRect(Int32Rect(Int32Point(m_pBoundingLeft->value(), m_pBoundingUp->value()),
             UInt32Point(m_pBoundingRight->value(), m_pBoundingBottom->value())));
         for (uint32 i = 1; i <= m_pAnimationTable->getCellCount(); ++i)
             proto->setAnimationInfo(i, m_pAnimationTable->getCellAnimationInfo(i-1));

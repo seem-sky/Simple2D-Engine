@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<SpriteDatabase>
-    <prototype ID="1" Name="Baum1" FileName="tree1.png" Path="chars/" transparent_color="R0G128B128"/>
-    <prototype ID="2" Name="Hero1" FileName="Char1.png" Path="chars/" transparent_color="R0G128B128"/>
-    <prototype ID="3" Name="flare1" FileName="flare1.png" Path="animation/flare/" transparent_color="R0G0B0"/>
-    <prototype ID="4" Name="flare2" FileName="flare2.png" Path="animation/flare/" transparent_color="R0G0B0"/>
-    <prototype ID="5" Name="flare3" FileName="flare3.png" Path="animation/flare/" transparent_color="R0G0B0"/>
-    <prototype ID="6" Name="flare4" FileName="flare4.png" Path="animation/flare/" transparent_color="R0G0B0"/>
-    <prototype ID="7" Name="flare5" FileName="flare5.png" Path="animation/flare/" transparent_color="R0G0B0"/>
-    <prototype ID="8" Name="flare6" FileName="flare6.png" Path="animation/flare/" transparent_color="R0G0B0"/>
-    <prototype ID="9" Name="flare7" FileName="flare7.png" Path="animation/flare/" transparent_color="R0G0B0"/>
-    <prototype ID="10" Name="flare8" FileName="flare8.png" Path="animation/flare/" transparent_color="R0G0B0"/>
-    <prototype ID="11" Name="flare9" FileName="flare9.png" Path="animation/flare/" transparent_color="R0G0B0"/>
-    <prototype ID="12" Name="flare10" FileName="flare10.png" Path="animation/flare/" transparent_color="R0G0B0"/>
-    <prototype ID="13" Name="flare11" FileName="flare11.png" Path="animation/flare/" transparent_color="R0G0B0"/>
-    <prototype ID="14" Name="flare12" FileName="flare12.png" Path="animation/flare/" transparent_color="R0G0B0"/>
-    <prototype ID="15" Name="flare13" FileName="flare13.png" Path="animation/flare/" transparent_color="R0G0B0"/>
-    <prototype ID="16" Name="flare14" FileName="flare14.png" Path="animation/flare/" transparent_color="R0G0B0"/>
-    <prototype ID="17" Name="flare15" FileName="flare15.png" Path="animation/flare/" transparent_color="R0G0B0"/>
-    <prototype ID="18" Name="flare16" FileName="flare16.png" Path="animation/flare/" transparent_color="R0G0B0"/>
-    <prototype ID="19" Name="flare17" FileName="flare17.png" Path="animation/flare/" transparent_color="R0G0B0"/>
-    <prototype ID="20" Name="flare18" FileName="flare18.png" Path="animation/flare/" transparent_color="R0G0B0"/>
-    <prototype ID="21" Name="flare19" FileName="flare19.png" Path="animation/flare/" transparent_color="R0G0B0"/>
-    <prototype ID="22" Name="flare20" FileName="flare20.png" Path="animation/flare/" transparent_color="R0G0B0"/>
-    <prototype ID="23" Name="flare21" FileName="flare21.png" Path="animation/flare/" transparent_color="R0G0B0"/>
-    <prototype ID="24" Name="flare22" FileName="flare22.png" Path="animation/flare/" transparent_color="R0G0B0"/>
-    <prototype ID="25" Name="flare23" FileName="flare23.png" Path="animation/flare/" transparent_color="R0G0B0"/>
-    <prototype ID="26" Name="flare24" FileName="flare24.png" Path="animation/flare/" transparent_color="R0G0B0"/>
-    <prototype ID="27" Name="flare25" FileName="flare25.png" Path="animation/flare/" transparent_color="R0G0B0"/>
-    <prototype ID="28" Name="char1-walk-right-1" FileName="char1-walk-right-1.png" Path="chars/char1/walk-right/" transparent_color="R0G128B128"/>
-    <prototype ID="29" Name="char1-walk-right-2" FileName="char1-walk-right-2.png" Path="chars/char1/walk-right/" transparent_color="R0G128B128"/>
-    <prototype ID="30" Name="char1-walk-right-3" FileName="char1-walk-right-3.png" Path="chars/char1/walk-right/" transparent_color="R0G128B128"/>
-    <prototype ID="31" Name="fallen-tree" FileName="fallen-tree.png" Path="" transparent_color="R7G146B151"/>
-</SpriteDatabase>
+<DB>
+    <p ID="1" name="Baum1" file="tree1.png" path="chars/" transparency_color="R0G128B128"/>
+    <p ID="2" name="Hero1" file="Char1.png" path="chars/" transparency_color="R0G128B128"/>
+    <p ID="3" name="flare1" file="flare1.png" path="animation/flare/" transparency_color="R0G0B0"/>
+    <p ID="4" name="flare2" file="flare2.png" path="animation/flare/" transparency_color="R0G0B0"/>
+    <p ID="5" name="flare3" file="flare3.png" path="animation/flare/" transparency_color="R0G0B0"/>
+    <p ID="6" name="flare4" file="flare4.png" path="animation/flare/" transparency_color="R0G0B0"/>
+    <p ID="7" name="flare5" file="flare5.png" path="animation/flare/" transparency_color="R0G0B0"/>
+    <p ID="8" name="flare6" file="flare6.png" path="animation/flare/" transparency_color="R0G0B0"/>
+    <p ID="9" name="flare7" file="flare7.png" path="animation/flare/" transparency_color="R0G0B0"/>
+    <p ID="10" name="flare8" file="flare8.png" path="animation/flare/" transparency_color="R0G0B0"/>
+    <p ID="11" name="flare9" file="flare9.png" path="animation/flare/" transparency_color="R0G0B0"/>
+    <p ID="12" name="flare10" file="flare10.png" path="animation/flare/" transparency_color="R0G0B0"/>
+    <p ID="13" name="flare11" file="flare11.png" path="animation/flare/" transparency_color="R0G0B0"/>
+    <p ID="14" name="flare12" file="flare12.png" path="animation/flare/" transparency_color="R0G0B0"/>
+    <p ID="15" name="flare13" file="flare13.png" path="animation/flare/" transparency_color="R0G0B0"/>
+    <p ID="16" name="flare14" file="flare14.png" path="animation/flare/" transparency_color="R0G0B0"/>
+    <p ID="17" name="flare15" file="flare15.png" path="animation/flare/" transparency_color="R0G0B0"/>
+    <p ID="18" name="flare16" file="flare16.png" path="animation/flare/" transparency_color="R0G0B0"/>
+    <p ID="19" name="flare17" file="flare17.png" path="animation/flare/" transparency_color="R0G0B0"/>
+    <p ID="20" name="flare18" file="flare18.png" path="animation/flare/" transparency_color="R0G0B0"/>
+    <p ID="21" name="flare19" file="flare19.png" path="animation/flare/" transparency_color="R0G0B0"/>
+    <p ID="22" name="flare20" file="flare20.png" path="animation/flare/" transparency_color="R0G0B0"/>
+    <p ID="23" name="flare21" file="flare21.png" path="animation/flare/" transparency_color="R0G0B0"/>
+    <p ID="24" name="flare22" file="flare22.png" path="animation/flare/" transparency_color="R0G0B0"/>
+    <p ID="25" name="flare23" file="flare23.png" path="animation/flare/" transparency_color="R0G0B0"/>
+    <p ID="26" name="flare24" file="flare24.png" path="animation/flare/" transparency_color="R0G0B0"/>
+    <p ID="27" name="flare25" file="flare25.png" path="animation/flare/" transparency_color="R0G0B0"/>
+    <p ID="28" name="char1-walk-right-1" file="char1-walk-right-1.png" path="chars/char1/walk-right/" transparency_color="R0G128B128"/>
+    <p ID="29" name="char1-walk-right-2" file="char1-walk-right-2.png" path="chars/char1/walk-right/" transparency_color="R0G128B128"/>
+    <p ID="30" name="char1-walk-right-3" file="char1-walk-right-3.png" path="chars/char1/walk-right/" transparency_color="R0G128B128"/>
+    <p ID="31" name="fallen-tree" file="fallen-tree.png" path="" transparency_color="R7G146B151"/>
+</DB>

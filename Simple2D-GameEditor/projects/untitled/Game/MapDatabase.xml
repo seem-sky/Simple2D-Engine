@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<MapDatabase>
-    <prototype ID="1" Name="500er maker vergleich" MapSizeX="500" MapSizeY="500" BackgroundLayer="1" ForegroundLayer="0" ParentID="0" MapScript="" File="map1.xml"/>
-    <prototype ID="2" Name="" MapSizeX="20" MapSizeY="20" BackgroundLayer="1" ForegroundLayer="0" ParentID="0" MapScript="" File="map2.xml"/>
-    <prototype ID="3" Name="atelier-testmap" MapSizeX="30" MapSizeY="30" BackgroundLayer="3" ForegroundLayer="3" ParentID="0" MapScript="" File="map3.xml"/>
-    <prototype ID="4" Name="test2" MapSizeX="18" MapSizeY="18" BackgroundLayer="3" ForegroundLayer="2" ParentID="0" MapScript="" File="map4.xml"/>
-    <prototype ID="20" Name="blubb" MapSizeX="1000" MapSizeY="1000" BackgroundLayer="2" ForegroundLayer="0" ParentID="21" MapScript="" File="map20.xml"/>
-    <prototype ID="21" Name="jojojojojo" MapSizeX="5" MapSizeY="5" BackgroundLayer="3" ForegroundLayer="0" ParentID="0" MapScript="" File="map21.xml"/>
-</MapDatabase>
+<DB>
+    <p ID="1" name="500er maker vergleich" sizeX="500" sizeY="500" backLayer="1" foreLayer="0" parentID="0" script="" file=""/>
+    <p ID="2" name="" sizeX="20" sizeY="20" backLayer="1" foreLayer="0" parentID="0" script="" file=""/>
+    <p ID="3" name="atelier-testmap" sizeX="30" sizeY="30" backLayer="3" foreLayer="3" parentID="0" script="" file=""/>
+    <p ID="4" name="test2" sizeX="18" sizeY="18" backLayer="3" foreLayer="2" parentID="0" script="" file=""/>
+    <p ID="20" name="blubb" sizeX="1000" sizeY="1000" backLayer="2" foreLayer="0" parentID="0" script="" file=""/>
+    <p ID="21" name="jojojojojo" sizeX="5" sizeY="5" backLayer="3" foreLayer="0" parentID="0" script="" file=""/>
+</DB>

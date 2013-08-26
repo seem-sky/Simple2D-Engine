@@ -37,6 +37,7 @@
     <ClCompile Include="ObjectAnimationWidget.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Player_Game.cpp" />
+    <ClCompile Include="PrototypeParser.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneMgr.cpp" />
     <ClCompile Include="TileCache.cpp" />
@@ -65,6 +66,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="DatabaseIO.h" />
     <ClInclude Include="DatabaseIOTemplates.h" />
+    <ClInclude Include="Database_IO.h" />
     <ClInclude Include="DynamicObject.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="GameScene.h" />
@@ -77,6 +79,7 @@
     <ClInclude Include="ObjectAnimationWidget.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Player_Game.h" />
+    <ClInclude Include="PrototypeParser.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="GameWindow.h" />
     <ClInclude Include="MapIO.h" />

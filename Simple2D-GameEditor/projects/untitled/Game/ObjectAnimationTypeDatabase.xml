@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ObjectAnimationTypeDatabase>
-    <prototype ID="1" Name="STAND_UP"/>
-    <prototype ID="2" Name="STAND_RIGHT"/>
-    <prototype ID="3" Name="STAND_DOWN"/>
-    <prototype ID="4" Name="STAND_LEFT"/>
-    <prototype ID="5" Name="WALK_UP"/>
-    <prototype ID="6" Name="WALK_RIGHT"/>
-    <prototype ID="7" Name="WALK_DOWN"/>
-    <prototype ID="8" Name="WALK_LEFT"/>
-</ObjectAnimationTypeDatabase>
+<DB>
+    <p ID="1" name="STAND_UP"/>
+    <p ID="2" name="STAND_RIGHT"/>
+    <p ID="3" name="STAND_DOWN"/>
+    <p ID="4" name="STAND_LEFT"/>
+    <p ID="5" name="WALK_UP"/>
+    <p ID="6" name="WALK_RIGHT"/>
+    <p ID="7" name="WALK_DOWN"/>
+    <p ID="8" name="WALK_LEFT"/>
+</DB>

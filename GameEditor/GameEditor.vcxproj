@@ -74,6 +74,7 @@
     <TargetName>$(ProjectName)_d</TargetName>
     <LibraryPath>$(QtDir)\lib;$(BoostBin);$(SolutionDir);$(SolutionDir)\Simple2D-GameEditor\lib;$(LibraryPath)</LibraryPath>
     <IncludePath>$(QtDir)\include;$(BoostDir);$(SolutionDir)\Core;$(SolutionDir)\Simple2D-Engine;$(IncludePath);$(SolutionDir)\Simple2D-GameEditor\include</IncludePath>
+    <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <PreBuildEventUseInBuild>false</PreBuildEventUseInBuild>
@@ -86,6 +87,7 @@
     <IntDir>$(Configuration)\</IntDir>
     <LibraryPath>$(QtDir)\lib;$(BoostBin);$(SolutionDir);$(SolutionDir)\Simple2D-GameEditor\lib;$(LibraryPath)</LibraryPath>
     <IncludePath>$(QtDir)\include;$(BoostDir);$(SolutionDir)\Core;$(SolutionDir)\Simple2D-Engine;$(IncludePath);$(SolutionDir)\Simple2D-GameEditor\include</IncludePath>
+    <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LibraryPath>C:\Users\anti-freak\Documents\Visual Studio 2012\Projects\Simple2D-Engine;$(LibraryPath)</LibraryPath>

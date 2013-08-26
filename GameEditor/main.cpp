@@ -2,9 +2,9 @@
 #include <QtWidgets/QApplication>
 #include <QtGui/QIcon>
 
-#ifndef DEBUG
-#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
-#endif
+//#ifndef DEBUG
+//#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
+//#endif
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);

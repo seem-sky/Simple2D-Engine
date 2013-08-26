@@ -35,7 +35,7 @@ namespace MAP
             ANIMATION::AnimationHolder m_AnimationHolder;
             UInt32UInt32UMap m_Animations;
             DATABASE::MAP_STRUCTURE::MapDirection m_Direction;
-            UInt32Rect m_BoundingRect;
+            Int32Rect m_BoundingRect;
             DATABASE::ConstDatabaseMgrPtr m_pDBMgr;
         };
         typedef std::shared_ptr<WorldObject> WorldObjectPtr;

@@ -257,12 +257,13 @@ namespace DATABASE
         #####*/
         QString getTypeString(ObjectType type)
         {
+            QString result;
             switch (type)
             {
-            case TYPE_WORLDOBJECT: return "WorldObject";
-            case TYPE_DYNAMIC_OBJECT: return "DynamicObject";
+            case TYPE_WORLDOBJECT: result = "WorldObject";
+            case TYPE_DYNAMIC_OBJECT: result ="DynamicObject";
             }
-            return "";
+            return std::move(result);
         }
     }
 

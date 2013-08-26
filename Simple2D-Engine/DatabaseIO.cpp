@@ -325,93 +325,27 @@ void LocalsDatabaseXMLWriter::getXMLFromAttributes(LocalisationPrototypePtr prot
 }
 
 /*####
-# WorldObjectDatabase
+# DynamicObjectDatabase
 ####*/
-bool WorldObjectDatabaseXMLReader::getAttributeFromXML(WorldObjectPrototypePtr proto, const QString &attributeName, const QString &attributeValue)
+bool DynamicObjectDatabaseXMLReader::getAttributeFromXML(DynamicObjectPrototypePtr proto, const QString &attributeName, const QString &attributeValue)
 {
     if (!proto || attributeName.isEmpty() || attributeValue.isEmpty())
         return false;
-    if (DatabaseReader::getAttributeFromXML(proto, attributeName, attributeValue))
+    if (ObjectDatabaseXMLReader::getAttributeFromXML(proto, attributeName, attributeValue))
         return true;
 
-    if (attributeName == "boundingX")
+    if (attributeName == "MSpeed")
     {
-        proto->setBoundingX(attributeValue.toUInt());
-        return true;
-    }
-    else if (attributeName == "boundingY")
-    {
-        proto->setBoundingY(attributeValue.toUInt());
-        return true;
-    }
-    else if (attributeName == "boundingWidth")
-    {
-        proto->setBoundingWidth(attributeValue.toUInt());
-        return true;
-    }
-    else if (attributeName == "boundingHeight")
-    {
-        proto->setBoundingHeight(attributeValue.toUInt());
-        return true;
-    }
-    else if (attributeName == "animationSpeed")
-    {
-        proto->setAnimationSpeed(attributeValue.toUShort());
-        return true;
-    }
-    else if (attributeName == "scriptName")
-    {
-        proto->setScriptName(attributeValue);
+        proto->setMovementSpeed(attributeValue.toUShort());
         return true;
     }
     return false;
 }
 
-bool WorldObjectDatabaseXMLReader::getChildrenFromXML(const QDomNode &node, WorldObjectPrototypePtr proto, const QString &childName)
-{
-    if (node.isNull() || !proto || childName.isEmpty())
-        return false;
-
-    // checkout animation info
-    if (childName == "AnimationInfo")
-    {
-        MAP_OBJECT::AnimationInfo newAnimationInfo;
-        QDomNamedNodeMap attributeList = node.attributes();
-        // get attributes
-        for (int32 i = 0; i < attributeList.length(); ++i)
-        {
-            QDomNode tempNode = attributeList.item(i);
-            if (tempNode.nodeName() == "animationID")
-                newAnimationInfo.m_uiAnimationID = tempNode.nodeValue().toUInt();
-            else if (tempNode.nodeName() == "animationTypeID")
-                newAnimationInfo.m_uiObjectAnimationTypeID = tempNode.nodeValue().toUInt();
-        }
-        proto->setAnimationInfo(newAnimationInfo.m_uiObjectAnimationTypeID, newAnimationInfo);
-        return true;
-    }
-    return false;
-}
-
-void WorldObjectDatabaseXMLWriter::getXMLFromAttributes(WorldObjectPrototypePtr proto, QXmlStreamWriter &writer)
+void DynamicObjectDatabaseXMLWriter::getXMLFromAttributes(DynamicObjectPrototypePtr proto, QXmlStreamWriter &writer)
 {
     if (!proto)
         return;
     DatabaseWriter::getXMLFromAttributes(proto, writer);
-    writer.writeAttribute("boundingX", QString::number(proto->getBoundingX()));
-    writer.writeAttribute("boundingY", QString::number(proto->getBoundingY()));
-    writer.writeAttribute("boundingWidth", QString::number(proto->getBoundingWidth()));
-    writer.writeAttribute("boundingHeight", QString::number(proto->getBoundingHeight()));
-    writer.writeAttribute("animationSpeed", QString::number(proto->getAnimationSpeed()));
-    writer.writeAttribute("scriptName", proto->getScriptName());
-
-    // store animation infos
-    for (uint32 i = 1; i <= proto->getAnimationCount(); ++i)
-    {
-        MAP_OBJECT::AnimationInfo animationInfo = proto->getAnimationInfo(i);
-        if (animationInfo.m_uiAnimationID == 0 && animationInfo.m_uiObjectAnimationTypeID == 0)
-            continue;
-        writer.writeEmptyElement("AnimationInfo");
-        writer.writeAttribute("animationID", QString::number(animationInfo.m_uiAnimationID));
-        writer.writeAttribute("animationTypeID", QString::number(animationInfo.m_uiObjectAnimationTypeID));
-    }
+    writer.writeAttribute("MSpeed", QString::number(proto->getMovementSpeed()));
 }
