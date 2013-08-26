@@ -3,7 +3,7 @@
     <p ID="1" name="500er maker vergleich" sizeX="500" sizeY="500" backLayer="1" foreLayer="0" parentID="0" script="" file="map1.xml"/>
     <p ID="2" name="" sizeX="20" sizeY="20" backLayer="1" foreLayer="0" parentID="0" script="" file="map2.xml"/>
     <p ID="3" name="atelier-testmap" sizeX="30" sizeY="30" backLayer="3" foreLayer="3" parentID="0" script="" file="map3.xml"/>
-    <p ID="4" name="test2" sizeX="18" sizeY="18" backLayer="3" foreLayer="2" parentID="0" script="" file="map4.xml"/>
+    <p ID="4" name="test2" sizeX="18" sizeY="18" backLayer="3" foreLayer="0" parentID="0" script="" file="map4.xml"/>
     <p ID="20" name="blubb" sizeX="1000" sizeY="1000" backLayer="2" foreLayer="0" parentID="0" script="" file=""/>
     <p ID="21" name="jojojojojo" sizeX="5" sizeY="5" backLayer="1" foreLayer="0" parentID="0" script="" file="map21.xml"/>
 </DB>

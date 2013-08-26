@@ -109,20 +109,20 @@ void AnimationView::setCurrentAnimation(uint32 uiAnimationID)
 
 bool AnimationView::_drawFrame(const DATABASE::AnimationPrototype::Frame &frame)
 {
-    for (uint32 i = 0; i < frame.m_Sprites.size(); ++i)
+    for (const auto &sprite : frame.getSprites())
     {
         ConstSpritePrototypePtr proto;
-        if (_getSpritePrototype(frame.m_Sprites.at(i).m_uiSpriteID, proto))
+        if (_getSpritePrototype(sprite.m_uiSpriteID, proto))
         {
             AnimationViewItem *pItem = new AnimationViewItem(proto);
             scene()->addItem(pItem);
             pItem->setFlag(QGraphicsItem::ItemIsMovable, !m_ActiveAnimation && isEditable());
             pItem->setFlag(QGraphicsItem::ItemIsSelectable, !m_ActiveAnimation && isEditable());
             pItem->setFlag(QGraphicsItem::ItemIsFocusable, !m_ActiveAnimation && isEditable());
-            pItem->setPos(QPoint(frame.m_Sprites.at(i).m_Pos.x, frame.m_Sprites.at(i).m_Pos.y));
-            pItem->setScale(qreal(frame.m_Sprites.at(i).m_uiScale)/100);
-            pItem->setRotation(frame.m_Sprites.at(i).m_uiRotation);
-            pItem->setOpacity(qreal(frame.m_Sprites.at(i).m_uiOpacity)/100);
+            pItem->setPos(QPoint(sprite.m_Pos.x, sprite.m_Pos.y));
+            pItem->setScale(qreal(sprite.m_uiScale)/100);
+            pItem->setRotation(sprite.m_uiRotation);
+            pItem->setOpacity(qreal(sprite.m_uiOpacity)/100);
         }
     }
     return true;
@@ -205,7 +205,7 @@ void AnimationView::_onUpdateAnimation(bool firstTime)
         ConstAnimationPrototypePtr proto;
         AnimationPrototype::Frame frame;
         if (_getAnimationPrototype(m_uiCurrentAnimationID, proto) && proto->getFrame(m_uiCurrentFrame, frame))
-            m_Timer.start(frame.m_uiMsecTime * 100 / m_uiSpeedModifyer);
+            m_Timer.start(frame.getTimeInMsec() * 100 / m_uiSpeedModifyer);
     }
     else
         stopCurrentAnimation();
@@ -284,9 +284,8 @@ void AnimationViewScene::_drawPreviousFrame(QPainter *painter, const QRectF &rec
 
         DATABASE::ConstSpritePrototypePtr proto;
         QPixmap pixmap;
-        for (uint32 i = 0; i < m_PreviousFrame.m_Sprites.size(); ++i)
+        for (const auto &sprite : m_PreviousFrame.getSprites())
         {
-            DATABASE::AnimationPrototype::Sprite sprite = m_PreviousFrame.m_Sprites.at(i);
             if (!pDB->getItem(sprite.m_uiSpriteID, proto) || !createPixmapFromTexturePrototype(Config::get()->getProjectDirectory(), proto, pixmap))
                 continue;
             painter->setOpacity(0.5f*(qreal(sprite.m_uiOpacity)/100));

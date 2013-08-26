@@ -10,7 +10,7 @@ namespace MAP
         class DynamicObject : public WorldObject
         {
         public:
-            DynamicObject(uint32 GUID, DATABASE::ConstDynamicObjectPrototypePtr pDynamicObject);
+            DynamicObject(DATABASE::ConstDatabaseMgrPtr pDBMgr, uint32 GUID, DATABASE::ConstDynamicObjectPrototypePtr pDynamicObject);
 
             void move(const Int32Point &range, uint32 time);
         };

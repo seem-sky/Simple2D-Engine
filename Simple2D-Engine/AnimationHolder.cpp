@@ -33,7 +33,7 @@ void AnimationHolder::_changeCurrentFrame(uint32 uiFrame)
         return;
     DATABASE::AnimationPrototype::Frame frame;
     if (m_pAnimation->getFrame(uiFrame, frame))
-        m_uiTimer = static_cast<uint32>(static_cast<double>(frame.m_uiMsecTime*100)/m_uiAnimationSpeed);
+        m_uiTimer = static_cast<uint32>(static_cast<double>(frame.getTimeInMsec()*100)/m_uiAnimationSpeed);
     else
         m_uiTimer = 0;
 }

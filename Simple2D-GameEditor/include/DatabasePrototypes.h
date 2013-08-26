@@ -332,6 +332,8 @@ namespace DATABASE
             uint16 m_uiRotation;
             uint32 m_uiScale;
             uint8 m_uiOpacity;
+
+            inline bool isEmpty() const { return !m_uiSpriteID; }
         };
         typedef std::vector<Sprite> SpriteVector;
 
@@ -339,8 +341,29 @@ namespace DATABASE
         {
         public:
             Frame() : m_uiMsecTime(0) {}
-            uint32 m_uiMsecTime;
+
+            Sprite getSprite(uint32 index) const;
+            void setSprite(uint32 index, Sprite sprite);
+            void addSprite(Sprite sprite);
+            void removeSprite(uint32 index, Sprite sprite);
+
+            inline uint32 getSpriteCount() const { return m_Sprites.size(); }
+            inline void setSpriteCount(uint32 size) { m_Sprites.resize(size); calculateOffset(); }
+            inline const SpriteVector& getSprites() const { return m_Sprites; }
+
+            inline const Int32Point& getOffset() const { return m_FrameOffset; }
+            void calculateOffset();
+            void setOffsetIfNeeded(const Int32Point &offset);
+
+            inline uint32 getTimeInMsec() const { return m_uiMsecTime; }
+            inline void setTimeInMsec(uint32 time) { m_uiMsecTime = time; }
+
+            inline bool isEmpty() const { return m_Sprites.empty() && !m_uiMsecTime; }
+
+        private:
+            Int32Point m_FrameOffset;
             SpriteVector m_Sprites;
+            uint32 m_uiMsecTime;
         };
         typedef std::vector<Frame> FrameVector;
 
@@ -348,7 +371,7 @@ namespace DATABASE
         AnimationPrototype(uint32 uiID = 0) : Prototype(uiID) {}
 
         bool getFrame(uint32 uiIndex, Frame &frame) const;
-        void setFrame(uint32 uiIndex, const Frame &frame);
+        void setFrame(uint32 uiIndex, Frame frame);
         void removeFrame(uint32 uiIndex);
         inline uint32 getFrameCount() const { return m_Frames.size(); }
 

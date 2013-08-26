@@ -21,7 +21,7 @@ MapPtr MapMgr::loadMap(uint32 uiID)
         m_Maps.push_back(pMap);
         setItem(pMap->getGUID(), pMap);
     }
-    return std::move(pMap);
+    return pMap;
 }
 
 void MapMgr::updateMaps(uint32 uiDiff)

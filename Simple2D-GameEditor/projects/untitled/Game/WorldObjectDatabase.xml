@@ -24,4 +24,10 @@
         <animation entry="3" ID="4" typeID="3"/>
         <animation entry="4" ID="4" typeID="4"/>
     </p>
+    <p ID="5" name="test-hero" boundingX="0" boundingY="0" boundingWidth="0" boundingHeight="0" animationSpeed="100" script="">
+        <animation entry="1" ID="5" typeID="1"/>
+        <animation entry="2" ID="5" typeID="2"/>
+        <animation entry="3" ID="5" typeID="3"/>
+        <animation entry="4" ID="5" typeID="4"/>
+    </p>
 </DB>

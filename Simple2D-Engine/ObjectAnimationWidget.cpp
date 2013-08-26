@@ -19,7 +19,7 @@ ObjectAnimationWidget::ObjectAnimationWidget(DATABASE::ConstAnimationPrototypePt
 
 void ObjectAnimationWidget::_drawFrame(const DATABASE::AnimationPrototype::Frame &frame)
 {
-    for (auto sprite : frame.m_Sprites)
+    for (const auto &sprite : frame.getSprites())
     {
         DATABASE::ConstSpritePrototypePtr proto;
         QPixmap pixmap;

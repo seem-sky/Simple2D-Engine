@@ -196,11 +196,11 @@ namespace DATABASE
         return false;
     }
 
-    void AnimationPrototype::setFrame(uint32 uiIndex, const Frame &frame)
+    void AnimationPrototype::setFrame(uint32 uiIndex, Frame frame)
     {
         if (uiIndex >= m_Frames.size())
             m_Frames.resize(uiIndex+1);
-        m_Frames.at(uiIndex) = frame;
+        m_Frames.at(uiIndex) = std::move(frame);
     }
 
     void AnimationPrototype::removeFrame(uint32 uiIndex)
@@ -211,6 +211,48 @@ namespace DATABASE
             m_Frames.resize(uiIndex);
         else
             m_Frames.at(uiIndex) = Frame();
+    }
+
+    void AnimationPrototype::Frame::calculateOffset()
+    {
+        m_FrameOffset.x = 0;
+        m_FrameOffset.y = 0;
+        for (auto &sprite : m_Sprites)
+        {
+            if (sprite.m_Pos.x < m_FrameOffset.x)
+                m_FrameOffset.x = sprite.m_Pos.x;
+            if (sprite.m_Pos.y < m_FrameOffset.y)
+                m_FrameOffset.y = sprite.m_Pos.y;
+        }
+    }
+
+    void AnimationPrototype::Frame::setSprite(uint32 index, Sprite sprite)
+    {
+        if (index >= m_Sprites.size())
+            m_Sprites.resize(index+1);
+        m_Sprites.at(index) = std::move(sprite);
+        calculateOffset();
+    }
+
+    AnimationPrototype::Sprite AnimationPrototype::Frame::getSprite(uint32 index) const
+    {
+        if (index < m_Sprites.size())
+            return m_Sprites.at(index);
+        return AnimationPrototype::Sprite();
+    }
+
+    void AnimationPrototype::Frame::addSprite(AnimationPrototype::Sprite sprite)
+    {
+        m_Sprites.push_back(std::move(sprite));
+        setOffsetIfNeeded(sprite.m_Pos);
+    }
+
+    void AnimationPrototype::Frame::setOffsetIfNeeded(const Int32Point &offset)
+    {
+        if (m_FrameOffset.x > offset.x)
+            m_FrameOffset.x = offset.x;
+        if (m_FrameOffset.y > offset.y)
+            m_FrameOffset.y = offset.y;
     }
 
     /*#####

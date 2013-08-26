@@ -19,7 +19,8 @@ namespace MAP
             void _setCurrentAnimation(uint32 pose);
 
         public:
-            WorldObject(uint32 GUID = 0, DATABASE::ConstWorldObjectPrototypePtr pWorldObject = DATABASE::ConstWorldObjectPrototypePtr());
+            WorldObject(DATABASE::ConstDatabaseMgrPtr pDBMgr, uint32 GUID = 0,
+                DATABASE::ConstWorldObjectPrototypePtr pWorldObject = DATABASE::ConstWorldObjectPrototypePtr());
 
             inline DATABASE::ConstAnimationPrototypePtr getCurrentAnimation() const { return m_AnimationHolder.getCurrentAnimation(); }
             inline uint32 getCurrentFrame() const { return m_AnimationHolder.getCurrentFrame(); }

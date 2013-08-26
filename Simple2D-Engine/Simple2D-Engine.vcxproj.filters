@@ -45,9 +45,6 @@
     <ClCompile Include="MapIO.cpp">
       <Filter>Database\Map</Filter>
     </ClCompile>
-    <ClCompile Include="DatabaseIO.cpp">
-      <Filter>Database\IO</Filter>
-    </ClCompile>
     <ClCompile Include="..\Simple2D-GameEditor\include\Game.cpp">
       <Filter>Game</Filter>
     </ClCompile>
@@ -145,9 +142,6 @@
     </ClInclude>
     <ClInclude Include="MapIO.h">
       <Filter>Database\Map</Filter>
-    </ClInclude>
-    <ClInclude Include="DatabaseIO.h">
-      <Filter>Database\IO</Filter>
     </ClInclude>
     <ClInclude Include="DatabaseIOTemplates.h">
       <Filter>Database\IO</Filter>
@@ -272,5 +266,8 @@
     <ClInclude Include="Database_IO.h">
       <Filter>Database\IO</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

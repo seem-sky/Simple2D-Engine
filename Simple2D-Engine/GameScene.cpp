@@ -18,7 +18,7 @@ GameScene::GameScene(Game &game) : Scene(game), m_pDatabaseMgr(new DATABASE::Dat
     m_pSceneView = new GameSceneView(this, m_pDatabaseMgr);
     m_pDatabaseMgr->loadDatabase("projects/untitled/", DATABASE::ALL_DATABASES^DATABASE::TILE_SET_DATABASE);
     m_MapMgr.setDatabaseMgr(m_pDatabaseMgr);
-    playerChangesMap(m_MapMgr.loadMap(3));
+    playerChangesMap(m_MapMgr.loadMap(2));
     showFPS();
 
     // player key binds
@@ -98,14 +98,10 @@ void MapItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, Q
         // generate new pixmap
         if (m_pCurrentAnimation)
         {
-            if (m_pCurrentAnimation->getID() == 2)
-                int x = 0;
             ObjectAnimationWidget widget(m_pCurrentAnimation, m_pSpriteDB, m_uiCurrentFrame);
             QRect boundingRect = widget.scene()->itemsBoundingRect().toRect();
             widget.resize(boundingRect.width(), boundingRect.height());
-            widget.setSceneRect(boundingRect);
             pixmap = widget.grab();
-            m_PixmapPos = boundingRect.topLeft();
             QPixmapCache::insert(m_PixmapIdentify, pixmap);
         }
     }
@@ -120,13 +116,21 @@ void MapItem::syncWithWorldObject()
         m_pCurrentAnimation = m_pWorldObject->getCurrentAnimation();
         m_uiCurrentFrame = m_pWorldObject->getCurrentFrame();
         m_BoundingRect = QRect();
-        if (m_pWorldObject->getCurrentAnimation())
+        m_PixmapPos.setX(0);
+        m_PixmapPos.setY(0);
+        // store current animation infos
+        if (m_pCurrentAnimation)
+        {
+            DATABASE::AnimationPrototype::Frame frame;
+            m_pCurrentAnimation->getFrame(m_uiCurrentFrame, frame);
+            m_PixmapPos = QPoint(frame.getOffset().x, frame.getOffset().y);
             m_PixmapIdentify = "Animation" + QString::number(m_pCurrentAnimation->getID()) + "/" + QString::number(m_uiCurrentFrame);
+        }
         else
             m_PixmapIdentify.clear();
     }
     setPos(m_pWorldObject->getPosition().x, m_pWorldObject->getPosition().y);
-    setZValue(pos().y()+m_BoundingRect.y()+m_BoundingRect.height());
+    setZValue(pos().y()+m_BoundingRect.height());
 }
 
 /*#####

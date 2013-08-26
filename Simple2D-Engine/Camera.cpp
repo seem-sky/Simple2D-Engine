@@ -34,8 +34,7 @@ void Camera::stopMoving()
 # MapCamera
 #####*/
 MapCamera::MapCamera(PLAYER::GamePlayer *pOwner) : Camera(), m_pOwner(pOwner), m_CameraSettings(FREE)
-{
-}
+{}
 
 void MapCamera::centerOnPlayer()
 {

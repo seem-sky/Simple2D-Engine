@@ -23,7 +23,6 @@
     <ClCompile Include="AutoTile.cpp" />
     <ClCompile Include="AutoTileCache.cpp" />
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="DatabaseIO.cpp" />
     <ClCompile Include="DynamicObject.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="GameScene.cpp" />
@@ -64,7 +63,6 @@
     <ClInclude Include="AutoTile.h" />
     <ClInclude Include="AutoTileCache.h" />
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="DatabaseIO.h" />
     <ClInclude Include="DatabaseIOTemplates.h" />
     <ClInclude Include="Database_IO.h" />
     <ClInclude Include="DynamicObject.h" />
@@ -89,6 +87,9 @@
     <ClInclude Include="TileCache.h" />
     <ClInclude Include="TransformationHolder.h" />
     <ClInclude Include="XML_IO.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{37D8C7EC-10AA-433F-82C0-DBE8EF36ABCC}</ProjectGuid>

@@ -195,4 +195,15 @@
             <sprite ID="31" x="22" y="7" scale="100" rotation="0" opacity="100"/>
         </frame>
     </p>
+    <p ID="5" name="hero 2">
+        <frame time="100">
+            <sprite ID="28" x="72" y="56" scale="100" rotation="0" opacity="100"/>
+        </frame>
+        <frame time="100">
+            <sprite ID="29" x="72" y="56" scale="100" rotation="0" opacity="100"/>
+        </frame>
+        <frame time="100">
+            <sprite ID="30" x="72" y="56" scale="100" rotation="0" opacity="100"/>
+        </frame>
+    </p>
 </DB>

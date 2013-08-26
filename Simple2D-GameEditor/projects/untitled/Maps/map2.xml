@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Map>
-  <LayerBackground>
+    <LayerBackground>
         <Layer>
             <MapTiles Tiles="0:0,0:0,1:0,1:0,1:0,1:0,1:0,1:0,1:0,0:0,0:0,0:0,0:0,0:0,0:0,0:0,0:0,0:0,0:0,0:0,"/>
             <MapTiles Tiles="1:0,0:0,1:0,1:0,0:0,0:0,0:0,0:0,1:0,1:0,0:0,0:0,0:0,0:0,0:0,0:0,0:0,0:0,0:0,0:0,"/>
@@ -24,4 +24,10 @@
             <MapTiles Tiles="0:0,0:0,0:0,0:0,0:0,0:0,0:0,0:0,0:0,0:0,0:0,0:0,0:0,0:0,0:0,0:0,0:0,0:0,0:0,0:0,"/>
         </Layer>
     </LayerBackground>
+    <LayerForeground/>
+    <ObjectData>
+        <Object ID="2" Type="0" GUID="1" XPos="185" YPos="145" Direction="2" Layer="1"/>
+        <Object ID="2" Type="0" GUID="2" XPos="254" YPos="39" Direction="2" Layer="1"/>
+        <Object ID="5" Type="0" GUID="3" XPos="280" YPos="232" Direction="2" Layer="1"/>
+    </ObjectData>
 </Map>

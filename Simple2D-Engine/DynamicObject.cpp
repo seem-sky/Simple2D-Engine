@@ -3,7 +3,8 @@
 using namespace MAP;
 using namespace OBJECT;
 
-DynamicObject::DynamicObject(uint32 GUID, DATABASE::ConstDynamicObjectPrototypePtr pDynamicObject) : WorldObject(GUID, pDynamicObject)
+DynamicObject::DynamicObject(DATABASE::ConstDatabaseMgrPtr pDBMgr, uint32 GUID, DATABASE::ConstDynamicObjectPrototypePtr pDynamicObject) :
+    WorldObject(pDBMgr, GUID, pDynamicObject)
 {
 }
 

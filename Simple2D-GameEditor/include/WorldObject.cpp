@@ -3,7 +3,8 @@
 using namespace MAP;
 using namespace OBJECT;
 
-WorldObject::WorldObject(uint32 GUID, DATABASE::ConstWorldObjectPrototypePtr pWorldObject) : Object(GUID), m_Direction(DATABASE::MAP_STRUCTURE::DIRECTION_DOWN)
+WorldObject::WorldObject(DATABASE::ConstDatabaseMgrPtr pDBMgr, uint32 GUID, DATABASE::ConstWorldObjectPrototypePtr pWorldObject) :
+    Object(GUID), m_Direction(DATABASE::MAP_STRUCTURE::DIRECTION_DOWN), m_pDBMgr(pDBMgr)
 {
     _setupFromPrototype(pWorldObject);
 }
@@ -27,6 +28,8 @@ void WorldObject::_setupFromPrototype(DATABASE::ConstWorldObjectPrototypePtr pWo
 
 void WorldObject::_setCurrentAnimation(uint32 pose)
 {
+    if (getGUID() == 17)
+        int x = 0;
     if (!m_pDBMgr)
         return;
 

@@ -9,7 +9,6 @@ Map::Map(uint32 GUID, uint32 ID, MapLayer &layer, const DATABASE::MAP_STRUCTURE:
          const std::string &name, const std::string &script) :
     m_Layer(std::move(layer)), m_pDBMgr(pDBMgr), Entity(GUID, ID, name, script)
 {
-    //move(Int32Point(0, 400), 5*IN_MILLISECOND);
     _setupObjects(objects);
 }
 
@@ -19,7 +18,7 @@ void Map::update(uint32 uiDiff)
     //ENTITY::Object::update(uiDiff);
 
     // update objects
-    for (uint32 i = 1; i < m_Grid.getObjects().getSize(); ++i)
+    for (uint32 i = 1; i <= m_Grid.getObjects().getSize(); ++i)
     {
         OBJECT::WorldObjectPtr pObject;
         if (m_Grid.getObjects().getItem(i, pObject))
@@ -29,7 +28,7 @@ void Map::update(uint32 uiDiff)
 
 void Map::_setupObjects(const DATABASE::MAP_STRUCTURE::MapObjectContainer &objects)
 {
-    for (uint32 i = 1; i < objects.getSize(); ++i)
+    for (uint32 i = 1; i <= objects.getSize(); ++i)
     {
         DATABASE::MAP_STRUCTURE::ConstMapObjectPtr obj;
         if (objects.getItem(i, obj))
@@ -42,7 +41,7 @@ void Map::_setupObjects(const DATABASE::MAP_STRUCTURE::MapObjectContainer &objec
                     DATABASE::ConstWorldObjectPrototypePtr pWObj;
                     if (!m_pDBMgr->getWorldObjectDatabase()->getItem(obj->m_ObjectID, pWObj))
                         continue;
-                    pWorldObject = OBJECT::WorldObjectPtr(new OBJECT::WorldObject(i, pWObj));
+                    pWorldObject = OBJECT::WorldObjectPtr(new OBJECT::WorldObject(m_pDBMgr, i, pWObj));
                     pWorldObject->setPosition(obj->m_Position);
                     pWorldObject->setDirection(obj->m_Direction);
                     break;
@@ -65,7 +64,6 @@ void Map::addWorldObject(OBJECT::WorldObjectPtr pWorldObject)
         pWorldObject->setMap(this);
         m_Grid.addObject(pWorldObject);
         m_NewObjects.insert(pWorldObject);
-        pWorldObject->setDBMgr(m_pDBMgr);
     }
 }
 

@@ -12,6 +12,6 @@
     <LayerForeground/>
     <ObjectData>
         <Object ID="1" Type="0" GUID="1" XPos="65" YPos="46" Direction="2" Layer="1"/>
-        <Object ID="2" Type="0" GUID="2" XPos="80" YPos="112" Direction="2" Layer="1"/>
+        <Object ID="2" Type="0" GUID="2" XPos="64" YPos="32" Direction="2" Layer="1"/>
     </ObjectData>
 </Map>

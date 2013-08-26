@@ -3,6 +3,7 @@
 #include <QtGui/QBitmap>
 #include "Config.h"
 #include "AnimationViewWidget.h"
+#include "ObjectAnimationWidget.h"
 
 using namespace DATABASE;
 using namespace DATABASE::MAP_STRUCTURE;
@@ -386,23 +387,29 @@ QPixmap MapObjectBrush::getObjectPixmap(uint32 uiObjectID, DATABASE::MAP_OBJECT:
         return false;
     // create frame
     MAP_OBJECT::AnimationInfo animationInfo = objectProto->getAnimationInfo(direction);
-    AnimationViewDB aniViewer;
-    aniViewer.setAttribute(Qt::WA_TranslucentBackground);
-    aniViewer.setWindowFlags(Qt::FramelessWindowHint);
-    aniViewer.setStyleSheet("background:transparent");
-    aniViewer.setFrameShape(QFrame::NoFrame);
-    aniViewer.setAnimationDB(pAnimationDB);
-    aniViewer.setSpriteDB(pSpriteDB);
-    aniViewer.setGridDraw(false);
-    aniViewer.setPreviousFrameDraw(false);
-    aniViewer.setCurrentAnimation(animationInfo.m_uiAnimationID);
-    // resize viewer
-    AnimationViewScene *pAniScene = dynamic_cast<AnimationViewScene*>(aniViewer.scene());
-    if (!pAniScene)
-        return false;
-    boundingRect = pAniScene->itemsBoundingRect().toRect();
-    aniViewer.resize(boundingRect.width(), boundingRect.height());
-    aniViewer.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    aniViewer.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    return aniViewer.grab();
+    ConstAnimationPrototypePtr pAnimation;
+    if (!pAnimationDB->getItem(animationInfo.m_uiAnimationID, pAnimation))
+        QPixmap();
+    ObjectAnimationWidget viewer(pAnimation, pSpriteDB, 0);
+    boundingRect = viewer.scene()->itemsBoundingRect().toRect();
+    viewer.resize(boundingRect.width(), boundingRect.height());
+    //AnimationViewDB aniViewer;
+    //aniViewer.setAttribute(Qt::WA_TranslucentBackground);
+    //aniViewer.setWindowFlags(Qt::FramelessWindowHint);
+    //aniViewer.setStyleSheet("background:transparent");
+    //aniViewer.setFrameShape(QFrame::NoFrame);
+    //aniViewer.setAnimationDB(pAnimationDB);
+    //aniViewer.setSpriteDB(pSpriteDB);
+    //aniViewer.setGridDraw(false);
+    //aniViewer.setPreviousFrameDraw(false);
+    //aniViewer.setCurrentAnimation(animationInfo.m_uiAnimationID);
+    //// resize viewer
+    //AnimationViewScene *pAniScene = dynamic_cast<AnimationViewScene*>(aniViewer.scene());
+    //if (!pAniScene)
+    //    return false;
+    //boundingRect = pAniScene->itemsBoundingRect().toRect();
+    //aniViewer.resize(boundingRect.width(), boundingRect.height());
+    //aniViewer.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    //aniViewer.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    return viewer.grab();
 }

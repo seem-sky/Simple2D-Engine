@@ -131,7 +131,7 @@ void AnimationDatabaseWidget::_onFrameChange(int value)
 
 void AnimationDatabaseWidget::_onFrameChange(uint32 uiFrame, const DATABASE::AnimationPrototype::Frame &curFrame)
 {
-    m_pFrameTime->setValue(curFrame.m_uiMsecTime);
+    m_pFrameTime->setValue(curFrame.getTimeInMsec());
     if (m_pCurrentFrame->value() != uiFrame)
         _setCurrentFrameValue(0);
 }
@@ -150,11 +150,10 @@ bool AnimationDatabaseWidget::getItemFromWidgets(AnimationPrototypePtr &proto)
 
     // store only current frame, get the other from db changer
     AnimationPrototype::Frame frame;
-    frame.m_uiMsecTime = m_pFrameTime->value();
-    QList<QGraphicsItem*> itemList = m_pAniViewer->scene()->items(Qt::AscendingOrder);
-    for (QList<QGraphicsItem*>::const_iterator itr = itemList.begin(); itr != itemList.end(); ++itr)
+    frame.setTimeInMsec(m_pFrameTime->value());
+    for (const auto item : m_pAniViewer->scene()->items(Qt::AscendingOrder))
     {
-        if (AnimationViewItem *pItem = dynamic_cast<AnimationViewItem*>(*itr))
+        if (AnimationViewItem *pItem = dynamic_cast<AnimationViewItem*>(item))
         {
             AnimationPrototype::Sprite sprite;
             sprite.m_Pos = Int32Point(pItem->pos().x(), pItem->pos().y());
@@ -162,7 +161,7 @@ bool AnimationDatabaseWidget::getItemFromWidgets(AnimationPrototypePtr &proto)
             sprite.m_uiScale = round(pItem->scale()*100);
             sprite.m_uiRotation = pItem->rotation();
             sprite.m_uiOpacity = round(pItem->opacity()*100);
-            frame.m_Sprites.push_back(sprite);
+            frame.addSprite(sprite);
         }
     }
     proto->setFrame(m_pCurrentFrame->value(), frame);
