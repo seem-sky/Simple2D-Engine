@@ -213,5 +213,6 @@
         <Object ID="1" Type="0" GUID="14" XPos="482" YPos="669" Direction="2" Layer="1"/>
         <Object ID="3" Type="0" GUID="15" XPos="808" YPos="752" Direction="2" Layer="1"/>
         <Object ID="3" Type="0" GUID="16" XPos="818" YPos="281" Direction="2" Layer="1"/>
+        <Object ID="2" Type="0" GUID="17" XPos="208" YPos="272" Direction="2" Layer="1"/>
     </ObjectData>
 </Map>

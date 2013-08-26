@@ -39,6 +39,7 @@ namespace GAME_LOGIC
             uint32 m_uiCurrentFrame;
             QString m_PixmapIdentify;
             QRect m_BoundingRect;
+            QPoint m_PixmapPos;
         };
 
         /*#####

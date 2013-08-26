@@ -96,18 +96,20 @@ void MapItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, Q
     if (!QPixmapCache::find(m_PixmapIdentify, pixmap))
     {
         // generate new pixmap
-        // ToDo: store bounding rect for pixmap, they should not be shown at 0/0!
         if (m_pCurrentAnimation)
         {
+            if (m_pCurrentAnimation->getID() == 2)
+                int x = 0;
             ObjectAnimationWidget widget(m_pCurrentAnimation, m_pSpriteDB, m_uiCurrentFrame);
             QRect boundingRect = widget.scene()->itemsBoundingRect().toRect();
             widget.resize(boundingRect.width(), boundingRect.height());
             widget.setSceneRect(boundingRect);
             pixmap = widget.grab();
+            m_PixmapPos = boundingRect.topLeft();
             QPixmapCache::insert(m_PixmapIdentify, pixmap);
         }
     }
-    painter->drawPixmap(0, 0, pixmap);
+    painter->drawPixmap(m_PixmapPos, pixmap);
 }
 
 void MapItem::syncWithWorldObject()

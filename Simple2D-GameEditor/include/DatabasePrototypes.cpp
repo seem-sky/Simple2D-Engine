@@ -414,40 +414,64 @@ namespace DATABASE
 
         uint32 MapPrototype::getTile(UInt32Point3D at, Layer layer) const
         {
-            if (hasMapDataStored())
-                return m_Layer.getMapTile(at, layer).m_uiTileID;
+            try
+            {
+                if (hasMapDataStored())
+                    return m_Layer.getMapTile(at, layer).m_uiTileID;
+            }
+            catch (std::out_of_range&) {}
             return MAX_UINT32;
         }
 
         void MapPrototype::setTile(UInt32Point3D at, uint32 uiID, Layer layer)
         {
-            if (hasMapDataStored())
-                m_Layer.getMapTile(at, layer).m_uiTileID = uiID;
+            try
+            {
+                if (hasMapDataStored())
+                    m_Layer.getMapTile(at, layer).m_uiTileID = uiID;
+            }
+            catch (std::out_of_range&) {}
         }
 
         uint32 MapPrototype::getAutoTile(UInt32Point3D at, Layer layer) const
         {
-            if (hasMapDataStored())
-                return m_Layer.getMapTile(at, layer).m_uiAutoTileSetID;
+            try
+            {
+                if (hasMapDataStored())
+                    return m_Layer.getMapTile(at, layer).m_uiAutoTileSetID;
+            }
+            catch (std::out_of_range&) {}
             return MAX_UINT32;
         }
 
         void MapPrototype::setAutoTile(UInt32Point3D at, uint32 uiID, Layer layer)
         {
-            if (hasMapDataStored())
-                m_Layer.getMapTile(at, layer).m_uiAutoTileSetID = uiID;
+            try
+            {
+                if (hasMapDataStored())
+                    m_Layer.getMapTile(at, layer).m_uiAutoTileSetID = uiID;
+            }
+            catch (std::out_of_range&) {}
         }
 
         void MapPrototype::setMapTile(UInt32Point3D at, MapTile mapTile, Layer layer)
         {
-            if (hasMapDataStored())
-                m_Layer.getMapTile(at, layer) = mapTile;
+            try
+            {
+                if (hasMapDataStored())
+                    m_Layer.getMapTile(at, layer) = mapTile;
+            }
+            catch (std::out_of_range&) {}
         }
 
         MapTile MapPrototype::getMapTile(UInt32Point3D at, Layer layer) const
         {
-            if (hasMapDataStored())
-                return m_Layer.getMapTile(at, layer);
+            try
+            {
+                if (hasMapDataStored())
+                    return m_Layer.getMapTile(at, layer);
+            }
+            catch (std::out_of_range&) {}
             return MapTile(MAX_UINT32, MAX_UINT32);
         }
     }

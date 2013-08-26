@@ -45,8 +45,10 @@ void MapObjectItem::updateItemPixmap()
         if (ConstSharedMapEditorDataPtr pSharedData = pScene->getSharedData())
         {
             // get new pixmap
+            QRect boundingRect;
             setPixmap(BRUSH::MapObjectBrush::getObjectPixmap(m_pMapObject->m_ObjectID, m_pMapObject->m_Type, m_pMapObject->m_Direction, pSharedData->getWorldObjectDatabase(),
-                pSharedData->getAnimationDatabase(), pSharedData->getSpriteDatabase(), QRect()));
+                pSharedData->getAnimationDatabase(), pSharedData->getSpriteDatabase(), boundingRect));
+            setOffset(boundingRect.topLeft());
             setZValue(this->y() + pixmap().height());
         }
     }
@@ -236,12 +238,13 @@ void MapViewer::_placeMapObjects()
         if (m_pMap->getMapObject(i, obj))
         {
             MapObjectItem *pItem = new MapObjectItem(obj);
-            QRect boundingRect;
-            pItem->setPixmap(BRUSH::MapObjectBrush::getObjectPixmap(obj->m_ObjectID, obj->m_Type, obj->m_Direction,
-                m_pSharedData->getWorldObjectDatabase(), m_pSharedData->getAnimationDatabase(),
-                m_pSharedData->getSpriteDatabase(), boundingRect));
-            pItem->move(boundingRect.x() + obj->m_Position.x, boundingRect.y() + obj->m_Position.y);
+            //QRect boundingRect;
+            //pItem->setPixmap(BRUSH::MapObjectBrush::getObjectPixmap(obj->m_ObjectID, obj->m_Type, obj->m_Direction,
+            //    m_pSharedData->getWorldObjectDatabase(), m_pSharedData->getAnimationDatabase(),
+            //    m_pSharedData->getSpriteDatabase(), boundingRect));
+            pItem->move(obj->m_Position.x, obj->m_Position.y);
             scene()->addItem(pItem);
+            pItem->updateItemPixmap();
         }
     }
 }

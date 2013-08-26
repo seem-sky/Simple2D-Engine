@@ -404,6 +404,5 @@ QPixmap MapObjectBrush::getObjectPixmap(uint32 uiObjectID, DATABASE::MAP_OBJECT:
     aniViewer.resize(boundingRect.width(), boundingRect.height());
     aniViewer.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     aniViewer.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    aniViewer.setSceneRect(boundingRect);
     return aniViewer.grab();
 }
