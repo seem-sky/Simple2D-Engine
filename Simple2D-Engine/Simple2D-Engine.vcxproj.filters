@@ -40,6 +40,9 @@
     <Filter Include="Game\Scene\ObjectAnimation">
       <UniqueIdentifier>{cb9f51f7-c22c-4f96-bd26-22878a5d4201}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Map\IO">
+      <UniqueIdentifier>{62360327-8a3b-4849-b41c-355c258ba063}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Simple2D-GameEditor\include\Game.cpp">
@@ -133,7 +136,10 @@
       <Filter>Database\IO</Filter>
     </ClCompile>
     <ClCompile Include="MapIO.cpp">
-      <Filter>Map</Filter>
+      <Filter>Map\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="MapBinaryIO.cpp">
+      <Filter>Map\IO</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -261,7 +267,10 @@
       <Filter>Database\IO</Filter>
     </ClInclude>
     <ClInclude Include="MapIO.h">
-      <Filter>Map</Filter>
+      <Filter>Map\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="MapBinaryIO.h">
+      <Filter>Map\IO</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

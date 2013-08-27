@@ -214,4 +214,4 @@ inline bool operator >=(Point3D<T> const& lhs, Point3D<T> const& rhs)
 {
     return !(lhs < rhs);
 }
-#endif;
+#endif

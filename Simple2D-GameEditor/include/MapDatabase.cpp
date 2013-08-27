@@ -1,5 +1,5 @@
 #include "MapDatabase.h"
-#include "MapIO.h"
+#include "MapBinaryIO.h"
 
 using namespace DATABASE;
 using namespace DATABASE::MAP_STRUCTURE;
@@ -40,14 +40,15 @@ bool MapDatabase::loadMapFile(uint32 uiMapID, const QString &path)
     if (map->m_DataLoaded)
         return true;
 
-    // if success, return
-    MapReader mapLoader(map);
-    if (mapLoader.readFile(path + "/Maps/" + map->getFileName(), "Map") != XML_IO::DONE)
+    map->m_DataLoaded = true;
+    map->setSize(map->getSize(), map->getLayerSize(MAP::LAYER_FOREGROUND), map->getLayerSize(MAP::LAYER_BACKGROUND));
+
+    try
     {
-        // if no success, init with stored size
-        map->m_DataLoaded = true;
-        map->setSize(map->getSize(), map->getLayerSize(MAP::LAYER_FOREGROUND), map->getLayerSize(MAP::LAYER_BACKGROUND));
+        INPUT::MapBinaryReader reader;
+        reader.readFile(path + MAP_FOLDER, map);
     }
+    catch (const std::ios::failure&) {}
     return true;
 }
 
@@ -61,12 +62,8 @@ void MapDatabase::unloadMapFile(uint32 uiMapID)
     map->m_Objects.clear();
 }
 
-bool MapDatabase::getFilePath(const MapPrototypePtr &map, QString &result, const QString path)
+void DATABASE::MAP_STRUCTURE::saveMapFile(ConstMapPrototypePtr pMap, const QString &path)
 {
-    result = "";
-    if (!map)
-        return false;
-
-    result = path + "/Maps/" + map->m_FileName;
-    return true;
+    OUTPUT::MapBinaryWriter writer;
+    writer.writeFile(path+MAP_FOLDER, pMap);
 }

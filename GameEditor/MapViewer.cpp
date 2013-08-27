@@ -3,9 +3,9 @@
 #include "moc_MapViewer.h"
 #include <QtWidgets/QGraphicsSceneMouseEvent>
 #include "MapObjectDialog.h"
-#include "MapIO.h"
 #include "MapBrush.h"
 #include "Config.h"
+#include "MapBinaryIO.h"
 
 using namespace DATABASE::MAP_STRUCTURE;
 
@@ -298,22 +298,18 @@ void MapViewer::saveCurrentMap()
     if (!m_pMap)
         return;
 
-    Config *pConfig = Config::get();
-    if (!pConfig)
-        return;
-
-    MapWriter writer(m_pMap);
-    QString filePath;
-    if (MapDatabase::getFilePath(m_pMap, filePath, Config::get()->getProjectDirectory()))
+    try
     {
-        writer.writeFile(filePath, "Map");
-        if (writer.getXMLResult() == XML_IO::DONE)
-        {
-            m_hasChanges = false;
-            updateText();
-            m_Actions.clear();
-        }
+        DATABASE::MAP_STRUCTURE::saveMapFile(m_pMap, Config::get()->getProjectDirectory());
     }
+    catch (const std::ios::failure&)
+    {
+        return;
+    }
+
+    m_hasChanges = false;
+    updateText();
+    m_Actions.clear();
 }
 
 void MapViewer::updateText()

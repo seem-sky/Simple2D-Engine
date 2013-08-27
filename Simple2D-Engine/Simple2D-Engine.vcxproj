@@ -29,6 +29,7 @@
     <ClCompile Include="GameWindow.cpp" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="MapBinaryIO.cpp" />
     <ClCompile Include="MapIO.cpp" />
     <ClCompile Include="MapLayer.cpp" />
     <ClCompile Include="MapMgr.cpp" />
@@ -70,6 +71,7 @@
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Manager.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="MapBinaryIO.h" />
     <ClInclude Include="MapLayer.h" />
     <ClInclude Include="MapMgr.h" />
     <ClInclude Include="Object.h" />

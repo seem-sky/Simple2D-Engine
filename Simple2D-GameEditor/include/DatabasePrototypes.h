@@ -547,6 +547,9 @@ namespace DATABASE
         struct MapObject
         {
             MapObject() : m_Type(DATABASE::MAP_OBJECT::TYPE_WORLDOBJECT), m_ObjectID(0), m_GUID(0), m_Direction(DIRECTION_DOWN), m_Layer(LAYER_MIDDLE) {}
+
+            bool isEmpty() const { return !m_GUID && !m_ObjectID; }
+
             DATABASE::MAP_OBJECT::ObjectType m_Type;
             uint32 m_ObjectID;
             uint32 m_GUID;
