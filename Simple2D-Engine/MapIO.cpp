@@ -122,7 +122,8 @@ void MapReader::_loadObjects(const QDomNode &parentNode, bool &result)
             else if (attribute.nodeName() == "Layer")
                 newObject->m_Layer = static_cast<MAP_STRUCTURE::MapObjectLayer>(attribute.nodeValue().toUInt());
         }
-        m_pMap->addMapObject(newObject);
+        if (newObject->m_ObjectID)
+            m_pMap->addMapObject(newObject);
     }
     BASIC_LOG("Added " + QString::number(m_pMap->getMapObjectCount()) + " objects to map.");
 }
@@ -178,7 +179,10 @@ void MapWriter::_storeObjects(QXmlStreamWriter &writer)
     {
         ConstMapObjectPtr obj;
         if (m_pMap->getMapObject(i, obj))
-            _getXMLDataFromObject(obj, writer);
+        {
+            if (obj->m_GUID && obj->m_ObjectID)
+                _getXMLDataFromObject(obj, writer);
+        }
     }
     writer.writeEndElement();
 }

@@ -42,9 +42,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="MapIO.cpp">
-      <Filter>Database\Map</Filter>
-    </ClCompile>
     <ClCompile Include="..\Simple2D-GameEditor\include\Game.cpp">
       <Filter>Game</Filter>
     </ClCompile>
@@ -135,16 +132,13 @@
     <ClCompile Include="PrototypeParser.cpp">
       <Filter>Database\IO</Filter>
     </ClCompile>
+    <ClCompile Include="MapIO.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Singleton.h">
       <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="MapIO.h">
-      <Filter>Database\Map</Filter>
-    </ClInclude>
-    <ClInclude Include="DatabaseIOTemplates.h">
-      <Filter>Database\IO</Filter>
     </ClInclude>
     <ClInclude Include="..\Simple2D-GameEditor\include\Application.h">
       <Filter>Game</Filter>
@@ -265,6 +259,9 @@
     </ClInclude>
     <ClInclude Include="Database_IO.h">
       <Filter>Database\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="MapIO.h">
+      <Filter>Map</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
