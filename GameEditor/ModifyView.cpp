@@ -27,8 +27,10 @@ void ModifyItem::keyPressEvent(QKeyEvent *pEvent)
     case Qt::Key_Delete:
         if (QGraphicsScene *pScene = scene())
         {
-            sendUpdate();
+            ModifyView *pWidget = dynamic_cast<ModifyView*>(scene()->parent());
             pScene->removeItem(this);
+            if (pWidget)
+                pWidget->itemRemoved(this);
         }
         delete this;
     default: return;

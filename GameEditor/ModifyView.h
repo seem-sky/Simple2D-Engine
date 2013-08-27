@@ -26,6 +26,7 @@ public:
     ModifyView(QWidget *pParent = NULL) : QGraphicsView(pParent) {}
 
     void itemChanged(ModifyItem *pItem);
+    virtual void itemRemoved(ModifyItem *pItem) {}
 
 signals:
     void onItemChange(ModifyItem *pItem);

@@ -1,6 +1,5 @@
 #include "DatabaseMgr.h"
 #include <QtCore/QDir>
-#include "DatabaseIO.h"
 #include <boost/thread.hpp>
 #include <QtGui/QPixmap>
 #include <QtGui/QPainter>

@@ -26,7 +26,7 @@ MapPtr MapMgr::loadMap(uint32 uiID)
 
 void MapMgr::updateMaps(uint32 uiDiff)
 {
-    for (auto x : m_Maps)
+    for (auto &x : m_Maps)
     {
         if (x)
             x->update(uiDiff);

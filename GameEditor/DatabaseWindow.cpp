@@ -5,12 +5,10 @@
 #include <QtGui/QPainter>
 #include <QtWidgets/QGraphicsPixmapItem>
 #include "Config.h"
-#include "DatabaseIO.h"
 
 using namespace DATABASE;
 
-DatabaseWindow::DatabaseWindow(DatabaseMgrPtr pDBMgr, QWidget *p_pParent) : QDialog(p_pParent), Ui_Database(),
-m_pDBMgr(pDBMgr)
+DatabaseWindow::DatabaseWindow(DatabaseMgrPtr pDBMgr, QWidget *p_pParent) : QDialog(p_pParent), Ui_Database(), m_pDBMgr(pDBMgr)
 {
     setupUi(this);
     setWindowFlags(Qt::Window);

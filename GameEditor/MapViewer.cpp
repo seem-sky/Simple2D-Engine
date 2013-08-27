@@ -238,13 +238,10 @@ void MapViewer::_placeMapObjects()
         if (m_pMap->getMapObject(i, obj))
         {
             MapObjectItem *pItem = new MapObjectItem(obj);
-            //QRect boundingRect;
-            //pItem->setPixmap(BRUSH::MapObjectBrush::getObjectPixmap(obj->m_ObjectID, obj->m_Type, obj->m_Direction,
-            //    m_pSharedData->getWorldObjectDatabase(), m_pSharedData->getAnimationDatabase(),
-            //    m_pSharedData->getSpriteDatabase(), boundingRect));
             pItem->move(obj->m_Position.x, obj->m_Position.y);
             scene()->addItem(pItem);
             pItem->updateItemPixmap();
+            setObjectEditable(pItem, m_pSharedData->getMappingMode() != MODE_TILE);
         }
     }
 }
@@ -260,11 +257,10 @@ void MapViewer::updateObject()
 {
     redrawViewport();
     // update object pixmaps
-    QList<QGraphicsItem*> itemList = scene()->items();
-    for (QList<QGraphicsItem*>::const_iterator itr = itemList.begin(); itr != itemList.end(); ++itr)
+    for (auto pItem : scene()->items())
     {
-        if (MapObjectItem *pItem = dynamic_cast<MapObjectItem*>(*itr))
-            pItem->updateItemPixmap();
+        if (MapObjectItem *pMapItem = dynamic_cast<MapObjectItem*>(pItem))
+            pMapItem->updateItemPixmap();
     }
 }
 
@@ -341,15 +337,24 @@ void MapViewer::changedMap()
 
 void MapViewer::setObjectsEditable(bool editable)
 {
-    QList<QGraphicsItem*> itemList = scene()->items();
     scene()->clearSelection();
-    for (QList<QGraphicsItem*>::const_iterator itr = itemList.begin(); itr != itemList.end(); ++itr)
+    for (auto pItem : scene()->items())
+        setObjectEditable(pItem, editable);
+}
+
+void MapViewer::setObjectEditable(QGraphicsItem *pItem, bool editable)
+{
+    if (pItem)
     {
-        if (QGraphicsItem *pItem = *itr)
-        {
-            pItem->setFlag(QGraphicsItem::ItemIsMovable, editable);
-            pItem->setFlag(QGraphicsItem::ItemIsSelectable, editable);
-            pItem->setFlag(QGraphicsItem::ItemIsFocusable, editable);
-        }
+        pItem->setFlag(QGraphicsItem::ItemIsMovable, editable);
+        pItem->setFlag(QGraphicsItem::ItemIsSelectable, editable);
+        pItem->setFlag(QGraphicsItem::ItemIsFocusable, editable);
     }
+}
+
+void MapViewer::itemRemoved(ModifyItem *pItem)
+{
+    MapObjectItem *pMapItem = dynamic_cast<MapObjectItem*>(pItem);
+    if (m_pMap && pMapItem)
+        m_pMap->removeMapObject(pMapItem->getGUID());
 }

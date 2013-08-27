@@ -22,6 +22,8 @@ public:
 
     void updateItemPixmap();
 
+    inline uint32 getGUID() const { return m_pMapObject->m_GUID; }
+
 private:
     DATABASE::MAP_STRUCTURE::MapObjectPtr m_pMapObject;
 };
@@ -104,6 +106,9 @@ public:
     inline bool getShowGrid() const { return m_showGrid; }
 
     void setObjectsEditable(bool editable = true);
+    void setObjectEditable(QGraphicsItem *pItem, bool editable = true);
+
+    void itemRemoved(ModifyItem *pItem);
 
 private slots:
     void _onItemChange(MapObjectItem *pItem);
@@ -112,7 +117,7 @@ signals:
     void textUpdated(MapViewer *pWidget, const QString &sTabName);
 
 private:
-    uint32 m_uiCurrentLayer[2];
+    std::array<uint32, 2> m_uiCurrentLayer;
     DATABASE::MAP_STRUCTURE::Layer m_Layer;
     int m_CurZoom;
     bool m_showGrid;

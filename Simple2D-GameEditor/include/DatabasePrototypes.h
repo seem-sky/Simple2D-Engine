@@ -608,6 +608,7 @@ namespace DATABASE
             inline uint32 getMapObjectCount() const { return m_Objects.getSize(); }
             inline bool getMapObject(uint32 GUID, ConstMapObjectPtr &pResult) const { return m_Objects.getItem(GUID, pResult); }
             inline bool getMapObject(uint32 GUID, MapObjectPtr &pResult)  { return m_Objects.getItem(GUID, pResult); }
+            void removeMapObject(uint32 GUID);
             inline const MapObjectContainer& getMapObjects() const { return m_Objects; }
 
             enum RESULT_FLAG

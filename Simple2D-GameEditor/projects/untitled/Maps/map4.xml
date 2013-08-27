@@ -67,23 +67,9 @@
         <Object ID="3" Type="0" GUID="1" XPos="358" YPos="224" Direction="2" Layer="1"/>
         <Object ID="3" Type="0" GUID="2" XPos="118" YPos="176" Direction="2" Layer="1"/>
         <Object ID="3" Type="0" GUID="3" XPos="4" YPos="4" Direction="2" Layer="1"/>
-        <Object ID="3" Type="0" GUID="4" XPos="684" YPos="214" Direction="2" Layer="1"/>
-        <Object ID="3" Type="0" GUID="5" XPos="614" YPos="570" Direction="2" Layer="1"/>
-        <Object ID="3" Type="0" GUID="6" XPos="346" YPos="766" Direction="2" Layer="1"/>
-        <Object ID="3" Type="0" GUID="7" XPos="324" YPos="610" Direction="2" Layer="1"/>
-        <Object ID="3" Type="0" GUID="8" XPos="478" YPos="494" Direction="2" Layer="1"/>
-        <Object ID="3" Type="0" GUID="9" XPos="834" YPos="472" Direction="2" Layer="1"/>
-        <Object ID="3" Type="0" GUID="10" XPos="914" YPos="258" Direction="2" Layer="1"/>
-        <Object ID="3" Type="0" GUID="11" XPos="816" YPos="130" Direction="2" Layer="1"/>
-        <Object ID="3" Type="0" GUID="12" XPos="582" YPos="130" Direction="2" Layer="1"/>
         <Object ID="3" Type="0" GUID="13" XPos="354" YPos="118" Direction="2" Layer="1"/>
         <Object ID="3" Type="0" GUID="14" XPos="254" YPos="152" Direction="2" Layer="1"/>
-        <Object ID="3" Type="0" GUID="15" XPos="266" YPos="536" Direction="2" Layer="1"/>
-        <Object ID="3" Type="0" GUID="16" XPos="72" YPos="486" Direction="2" Layer="1"/>
         <Object ID="3" Type="0" GUID="17" XPos="58" YPos="312" Direction="2" Layer="1"/>
         <Object ID="3" Type="0" GUID="18" XPos="266" YPos="84" Direction="2" Layer="1"/>
-        <Object ID="3" Type="0" GUID="19" XPos="590" YPos="42" Direction="2" Layer="1"/>
-        <Object ID="3" Type="0" GUID="20" XPos="760" YPos="40" Direction="2" Layer="1"/>
-        <Object ID="2" Type="0" GUID="21" XPos="152" YPos="59" Direction="2" Layer="1"/>
     </ObjectData>
 </Map>

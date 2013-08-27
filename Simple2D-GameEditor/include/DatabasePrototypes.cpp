@@ -324,6 +324,12 @@ namespace DATABASE
                 m_Objects.setItem(pObject->m_GUID, pObject);
         }
 
+        void MapPrototype::removeMapObject(uint32 GUID)
+        {
+            if (GUID <= getMapObjectCount())
+                m_Objects.setItem(GUID, MapObjectPtr(new MapObject()));
+        }
+
         MapObjectPtr MapPrototype::addMapObject(DATABASE::MAP_OBJECT::ObjectType type, uint32 uiID, Int32Point pos)
         {
             MapObjectPtr newObject(new MapObject());
