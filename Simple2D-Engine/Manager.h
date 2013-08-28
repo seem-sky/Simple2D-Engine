@@ -1,7 +1,7 @@
 #ifndef MANAGER_H
 #define MANAGER_H
 
-#include "Global.h"
+#include <Global.h>
 
 template <class T>
 class Manager

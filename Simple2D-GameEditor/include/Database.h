@@ -11,13 +11,13 @@ namespace DATABASE
     /*#####
     # Database
     #####*/
-    template <class T>
+    template <class T, typename TIndex>
     class DatabaseChanger;
-    template <class T>
-    class Database : public Container<T>
+    template <class T, typename TIndex = uint32>
+    class Database : public Container<T, TIndex>
     {
         friend class DatabaseMgr;
-        friend class DatabaseChanger<T>;
+        friend class DatabaseChanger<T, TIndex>;
 
     public:
         void getItemShortInfos(UInt32StringMap &result) const
@@ -29,15 +29,15 @@ namespace DATABASE
             }
         }
 
-        void resize(uint32 uiSize, bool fillNew = true)
+        void resize(TIndex uiSize, bool fillNew = true)
         {
-            uint32 uiOldSize = getSize();
+            TIndex uiOldSize = getSize();
             m_Items.resize(uiSize);
             BASIC_LOG("Resize database to " + QString::number(uiSize));
             if (fillNew && uiSize > uiOldSize)
             {
                 BASIC_LOG("Fill database entrys from " + QString::number(uiOldSize) + " to " + QString::number(uiSize) + " with data.");
-                for (uint32 i = uiOldSize; i < uiSize; ++i)                 // first ID == 1, so use i+1 for ID at position i
+                for (TIndex i = uiOldSize; i < uiSize; ++i)                 // first ID == 1, so use i+1 for ID at position i
                     m_Items.at(i) = std::shared_ptr<T>(new T(i+1));
             }
             else if (uiSize < uiOldSize)
@@ -48,7 +48,7 @@ namespace DATABASE
     /*#####
     # Special Databases
     #####*/
-    class ObjectAnimationTypeDatabase : public Database<ObjectAnimationTypePrototype>
+    class ObjectAnimationTypeDatabase : public Database<ObjectAnimationTypePrototype, ANIMATION_TYPE_INDEX>
     {
     public:
         ObjectAnimationTypeDatabase() : Database()
@@ -83,35 +83,35 @@ namespace DATABASE
     # DatabaseMgr
     #####*/
     // tile database typedefs
-    typedef Database<TilePrototype> TileDatabase;
+    typedef Database<TilePrototype, TILE_INDEX> TileDatabase;
     typedef std::shared_ptr<TileDatabase> TileDatabasePtr;
     typedef std::shared_ptr<const TileDatabase> ConstTileDatabasePtr;
     // tileset database typedefs
-    typedef Database<TILE_SET::TileSetPrototype> TileSetDatabase;
+    typedef Database<TILE_SET::TileSetPrototype, TILE_SET_INDEX> TileSetDatabase;
     typedef std::shared_ptr<TileSetDatabase> TileSetDatabasePtr;
     typedef std::shared_ptr<const TileSetDatabase> ConstTileSetDatabasePtr;
     // autotile database typedefs
-    typedef Database<AUTO_TILE::AutoTilePrototype> AutoTileDatabase;
+    typedef Database<AUTO_TILE::AutoTilePrototype, AUTO_TILE_INDEX> AutoTileDatabase;
     typedef std::shared_ptr<AutoTileDatabase> AutoTileDatabasePtr;
     typedef std::shared_ptr<const AutoTileDatabase> ConstAutoTileDatabasePtr;
     // sprite database typedefs
-    typedef Database<SpritePrototype> SpriteDatabase;
+    typedef Database<SpritePrototype, SPRITE_INDEX> SpriteDatabase;
     typedef std::shared_ptr<SpriteDatabase> SpriteDatabasePtr;
     typedef std::shared_ptr<const SpriteDatabase> ConstSpriteDatabasePtr;
     // animation database typedefs
-    typedef Database<AnimationPrototype> AnimationDatabase;
+    typedef Database<AnimationPrototype, ANIMATION_INDEX> AnimationDatabase;
     typedef std::shared_ptr<AnimationDatabase> AnimationDatabasePtr;
     typedef std::shared_ptr<const AnimationDatabase> ConstAnimationDatabasePtr;
     // world object database typedefs
-    typedef Database<MAP_OBJECT::WorldObjectPrototype> WorldObjectDatabase;
+    typedef Database<MAP_OBJECT::WorldObjectPrototype, WORLD_OBJECT_INDEX> WorldObjectDatabase;
     typedef std::shared_ptr<WorldObjectDatabase> WorldObjectDatabasePtr;
     typedef std::shared_ptr<const WorldObjectDatabase> ConstWorldObjectDatabasePtr;
     // dynamic object database typedefs
-    typedef Database<MAP_OBJECT::DynamicObjectPrototype> DynamicObjectDatabase;
+    typedef Database<MAP_OBJECT::DynamicObjectPrototype, WORLD_OBJECT_INDEX> DynamicObjectDatabase;
     typedef std::shared_ptr<DynamicObjectDatabase> DynamicObjectDatabasePtr;
     typedef std::shared_ptr<const DynamicObjectDatabase> ConstDynamicObjectDatabasePtr;
     // text database typedefs
-    typedef Database<LocalisationPrototype> LocalsDatabase;
+    typedef Database<LocalisationPrototype, LOCALISATION_INDEX> LocalsDatabase;
     typedef std::shared_ptr<LocalsDatabase> LocalsDatabasePtr;
     typedef std::shared_ptr<const LocalsDatabase> ConstLocalsDatabasePtr;
     // map database typedefs

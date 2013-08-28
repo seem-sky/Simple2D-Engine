@@ -4,7 +4,7 @@
 #include <QtWidgets/QWidget>
 #include <QtGui/QResizeEvent>
 #include <map>
-#include "Global.h"
+#include <Global.h>
 
 enum ModifyDirectionFlag
 {

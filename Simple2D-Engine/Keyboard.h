@@ -1,7 +1,7 @@
 #ifndef KEYBOARD_H
 #define KEYBOARD_H
 
-#include "Global.h"
+#include <Global.h>
 #include "GameWindow.h"
 #include "Singleton.h"
 #include <bitset>

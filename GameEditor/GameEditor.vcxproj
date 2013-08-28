@@ -73,7 +73,7 @@
     <PreBuildEventUseInBuild>false</PreBuildEventUseInBuild>
     <TargetName>$(ProjectName)_d</TargetName>
     <LibraryPath>$(QtDir)\lib;$(BoostBin);$(SolutionDir);$(SolutionDir)\Simple2D-GameEditor\lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(QtDir)\include;$(BoostDir);$(SolutionDir)\Core;$(SolutionDir)\Simple2D-Engine;$(IncludePath);$(SolutionDir)\Simple2D-GameEditor\include</IncludePath>
+    <IncludePath>$(SimpleLib)\include;$(QtDir)\include;$(BoostDir);$(SolutionDir)\Core;$(SolutionDir)\Simple2D-Engine;$(IncludePath);$(SolutionDir)\Simple2D-GameEditor\include</IncludePath>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

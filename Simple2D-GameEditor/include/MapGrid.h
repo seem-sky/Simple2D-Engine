@@ -1,7 +1,7 @@
 #ifndef MAP_GRID_H
 #define MAP_GRID_H
 
-#include "Global.h"
+#include <Global.h>
 #include "DynamicObject.h"
 #include <boost/multi_array.hpp>
 #include <unordered_set>

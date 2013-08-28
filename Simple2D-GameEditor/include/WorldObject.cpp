@@ -28,8 +28,6 @@ void WorldObject::_setupFromPrototype(DATABASE::ConstWorldObjectPrototypePtr pWo
 
 void WorldObject::_setCurrentAnimation(uint32 pose)
 {
-    if (getGUID() == 17)
-        int x = 0;
     if (!m_pDBMgr)
         return;
 

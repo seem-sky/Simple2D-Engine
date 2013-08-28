@@ -44,23 +44,23 @@ bool DatabaseMgr::loadDatabase(const QString &projectPath, uint32 databases)
         return false;
 
     if (databases & TILE_DATABASE)
-        IO::DatabaseReader<TilePrototype>(getTileDatabase()).read(projectPath + TILE_DATABASE_PATH);
+        IO::DatabaseReader<TilePrototype, TILE_INDEX>(getTileDatabase()).read(projectPath + TILE_DATABASE_PATH);
     if (databases & TILE_SET_DATABASE)
-        IO::DatabaseReader<TILE_SET::TileSetPrototype>(getTileSetDatabase()).read(projectPath + TILE_SET_DATABASE_PATH);
+        IO::DatabaseReader<TILE_SET::TileSetPrototype, TILE_SET_INDEX>(getTileSetDatabase()).read(projectPath + TILE_SET_DATABASE_PATH);
     if (databases & AUTO_TILE_DATABASE)
-        IO::DatabaseReader<AUTO_TILE::AutoTilePrototype>(getAutoTileDatabase()).read(projectPath + AUTO_TILE_DATABASE_PATH);
+        IO::DatabaseReader<AUTO_TILE::AutoTilePrototype, AUTO_TILE_INDEX>(getAutoTileDatabase()).read(projectPath + AUTO_TILE_DATABASE_PATH);
     if (databases & SPRITE_DATABASE)
-        IO::DatabaseReader<SpritePrototype>(getSpriteDatabase()).read(projectPath + SPRITE_DATABASE_PATH);
+        IO::DatabaseReader<SpritePrototype, SPRITE_INDEX>(getSpriteDatabase()).read(projectPath + SPRITE_DATABASE_PATH);
     if (databases & ANIMATION_DATABASE)
-        IO::DatabaseReader<AnimationPrototype>(getAnimationDatabase()).read(projectPath + ANIMATION_DATABASE_PATH);
+        IO::DatabaseReader<AnimationPrototype, ANIMATION_INDEX>(getAnimationDatabase()).read(projectPath + ANIMATION_DATABASE_PATH);
     if (databases & OBJECT_ANIMATION_TYPE_DATABASE)
-        IO::DatabaseReader<ObjectAnimationTypePrototype>(getObjectAnimationTypeDatabase()).read(projectPath + OBJECT_ANIMATION_TYPE_DATABASE_PATH);
+        IO::DatabaseReader<ObjectAnimationTypePrototype, ANIMATION_TYPE_INDEX>(getObjectAnimationTypeDatabase()).read(projectPath + OBJECT_ANIMATION_TYPE_DATABASE_PATH);
     if (databases & MAP_DATABASE)
-        IO::DatabaseReader<MAP_STRUCTURE::MapPrototype>(getMapDatabase()).read(projectPath + MAP_DATABASE_PATH);
+        IO::DatabaseReader<MAP_STRUCTURE::MapPrototype, MAP_INDEX>(getMapDatabase()).read(projectPath + MAP_DATABASE_PATH);
     if (databases & LOCALS_DATABASE)
-        IO::DatabaseReader<LocalisationPrototype>(getLocalsDatabase()).read(projectPath + LOCALS_DATABASE_PATH);
+        IO::DatabaseReader<LocalisationPrototype, LOCALISATION_INDEX>(getLocalsDatabase()).read(projectPath + LOCALS_DATABASE_PATH);
     if (databases & WORLD_OBJECT_DATABASE)
-        IO::DatabaseReader<MAP_OBJECT::WorldObjectPrototype>(getWorldObjectDatabase()).read(projectPath + WORLD_OBJECT_DATABASE_PATH);
+        IO::DatabaseReader<MAP_OBJECT::WorldObjectPrototype, WORLD_OBJECT_INDEX>(getWorldObjectDatabase()).read(projectPath + WORLD_OBJECT_DATABASE_PATH);
 
     //// tile database
     //TileDatabaseXMLReader tileReader(getTileDatabase());
@@ -136,23 +136,23 @@ bool DatabaseMgr::saveDatabase(const QString &projectPath, uint32 databases)
         return false;
 
     if (databases & TILE_DATABASE)
-        IO::DatabaseWriter<TilePrototype>(getTileDatabase()).write(projectPath + TILE_DATABASE_PATH);
+        IO::DatabaseWriter<TilePrototype, TILE_INDEX>(getTileDatabase()).write(projectPath + TILE_DATABASE_PATH);
     if (databases & TILE_SET_DATABASE)
-        IO::DatabaseWriter<TILE_SET::TileSetPrototype>(getTileSetDatabase()).write(projectPath + TILE_SET_DATABASE_PATH);
+        IO::DatabaseWriter<TILE_SET::TileSetPrototype, TILE_SET_INDEX>(getTileSetDatabase()).write(projectPath + TILE_SET_DATABASE_PATH);
     if (databases & AUTO_TILE_DATABASE)
-        IO::DatabaseWriter<AUTO_TILE::AutoTilePrototype>(getAutoTileDatabase()).write(projectPath + AUTO_TILE_DATABASE_PATH);
+        IO::DatabaseWriter<AUTO_TILE::AutoTilePrototype, AUTO_TILE_INDEX>(getAutoTileDatabase()).write(projectPath + AUTO_TILE_DATABASE_PATH);
     if (databases & SPRITE_DATABASE)
-        IO::DatabaseWriter<SpritePrototype>(getSpriteDatabase()).write(projectPath + SPRITE_DATABASE_PATH);
+        IO::DatabaseWriter<SpritePrototype, SPRITE_INDEX>(getSpriteDatabase()).write(projectPath + SPRITE_DATABASE_PATH);
     if (databases & ANIMATION_DATABASE)
-        IO::DatabaseWriter<AnimationPrototype>(getAnimationDatabase()).write(projectPath + ANIMATION_DATABASE_PATH);
+        IO::DatabaseWriter<AnimationPrototype, ANIMATION_INDEX>(getAnimationDatabase()).write(projectPath + ANIMATION_DATABASE_PATH);
     if (databases & OBJECT_ANIMATION_TYPE_DATABASE)
-        IO::DatabaseWriter<ObjectAnimationTypePrototype>(getObjectAnimationTypeDatabase()).write(projectPath + OBJECT_ANIMATION_TYPE_DATABASE_PATH);
+        IO::DatabaseWriter<ObjectAnimationTypePrototype, ANIMATION_TYPE_INDEX>(getObjectAnimationTypeDatabase()).write(projectPath + OBJECT_ANIMATION_TYPE_DATABASE_PATH);
     if (databases & MAP_DATABASE)
-        IO::DatabaseWriter<MAP_STRUCTURE::MapPrototype>(getMapDatabase()).write(projectPath + MAP_DATABASE_PATH);
+        IO::DatabaseWriter<MAP_STRUCTURE::MapPrototype, MAP_INDEX>(getMapDatabase()).write(projectPath + MAP_DATABASE_PATH);
     if (databases & LOCALS_DATABASE)
-        IO::DatabaseWriter<LocalisationPrototype>(getLocalsDatabase()).write(projectPath + LOCALS_DATABASE_PATH);
+        IO::DatabaseWriter<LocalisationPrototype, LOCALISATION_INDEX>(getLocalsDatabase()).write(projectPath + LOCALS_DATABASE_PATH);
     if (databases & WORLD_OBJECT_DATABASE)
-        IO::DatabaseWriter<MAP_OBJECT::WorldObjectPrototype>(getWorldObjectDatabase()).write(projectPath + WORLD_OBJECT_DATABASE_PATH);
+        IO::DatabaseWriter<MAP_OBJECT::WorldObjectPrototype, WORLD_OBJECT_INDEX>(getWorldObjectDatabase()).write(projectPath + WORLD_OBJECT_DATABASE_PATH);
 
     //// TileDB
     //TileDatabaseXMLWriter tileDBWriter(getTileDatabase());

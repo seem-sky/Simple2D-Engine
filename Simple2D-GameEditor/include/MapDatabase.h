@@ -1,7 +1,7 @@
 #ifndef MAP_DATABASE_H
 #define MAP_DATABASE_H
 
-#include "Global.h"
+#include <Global.h>
 #include "Database.h"
 
 namespace DATABASE
@@ -12,7 +12,7 @@ namespace DATABASE
         const char MAP_FILE_ENDING[] = ".map";
         const char MAP_FOLDER[] = "/Maps/";
 
-        class MapDatabase : public DATABASE::Database<MapPrototype>
+        class MapDatabase : public DATABASE::Database<MapPrototype, MAP_INDEX>
         {
         public:
             MapDatabase(void);

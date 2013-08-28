@@ -5,7 +5,7 @@
 
 namespace DATABASE
 {
-    template <class T>
+    template <class T, typename TIndex>
     class DatabaseChanger
     {
     private:
@@ -17,12 +17,12 @@ namespace DATABASE
         }
 
     public:
-        DatabaseChanger(std::shared_ptr<Database<T>> pDB) : m_pNewDB(new Database<T>())
+        DatabaseChanger(std::shared_ptr<Database<T, TIndex>> pDB) : m_pNewDB(new Database<T, TIndex>())
         {
             setDB(pDB);
         }
-        DatabaseChanger() : m_pNewDB(new Database<T>()) {}
-        virtual void setDB(std::shared_ptr<Database<T>> pDB)
+        DatabaseChanger() : m_pNewDB(new Database<T, TIndex>()) {}
+        virtual void setDB(std::shared_ptr<Database<T, TIndex>> pDB)
         {
             m_pTargetDB = pDB;
             _setNewDBSize();
@@ -45,7 +45,7 @@ namespace DATABASE
         inline bool getItem(uint32 uiID, std::shared_ptr<T> &result)
         {
             std::shared_ptr<const T> temp;
-            if (const_cast<const DatabaseChanger<T>&>(*this).getItem(uiID, temp))
+            if (const_cast<const DatabaseChanger<T, TIndex>&>(*this).getItem(uiID, temp))
             {
                 result = std::const_pointer_cast<T>(temp);
                 return true;
@@ -95,16 +95,15 @@ namespace DATABASE
         }
 
     protected:
-        std::shared_ptr<Database<T>> m_pTargetDB;
-        std::shared_ptr<Database<T>> m_pNewDB;
+        std::shared_ptr<Database<T, TIndex>> m_pTargetDB;
+        std::shared_ptr<Database<T, TIndex>> m_pNewDB;
     };
 
-    typedef std::shared_ptr<const DatabaseChanger<TexturePrototype>> ConstTextureDatabaseChangerPtr;
-    typedef std::shared_ptr<const DatabaseChanger<TilePrototype>> ConstTileDatabaseChangerPtr;
-    typedef std::shared_ptr<const DatabaseChanger<SpritePrototype>> ConstSpriteDatabaseChangerPtr;
-    typedef std::shared_ptr<DatabaseChanger<MAP_OBJECT::WorldObjectPrototype>> WorldObjectDatabaseChangerPtr;
-    typedef std::shared_ptr<DatabaseChanger<AnimationPrototype>> AnimationDatabaseChangerPtr;
-    typedef std::shared_ptr<const DatabaseChanger<AnimationPrototype>> ConstAnimationDatabaseChangerPtr;
-    typedef std::shared_ptr<const DatabaseChanger<ObjectAnimationTypePrototype>> ConstObjectAnimationTypeDatabaseChangerPtr;
+    typedef std::shared_ptr<const DatabaseChanger<TilePrototype, TILE_INDEX>> ConstTileDatabaseChangerPtr;
+    typedef std::shared_ptr<const DatabaseChanger<SpritePrototype, SPRITE_INDEX>> ConstSpriteDatabaseChangerPtr;
+    typedef std::shared_ptr<DatabaseChanger<MAP_OBJECT::WorldObjectPrototype, WORLD_OBJECT_INDEX>> WorldObjectDatabaseChangerPtr;
+    typedef std::shared_ptr<DatabaseChanger<AnimationPrototype, ANIMATION_INDEX>> AnimationDatabaseChangerPtr;
+    typedef std::shared_ptr<const DatabaseChanger<AnimationPrototype, ANIMATION_INDEX>> ConstAnimationDatabaseChangerPtr;
+    typedef std::shared_ptr<const DatabaseChanger<ObjectAnimationTypePrototype, ANIMATION_TYPE_INDEX>> ConstObjectAnimationTypeDatabaseChangerPtr;
 }
 #endif

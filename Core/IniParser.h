@@ -1,7 +1,7 @@
 #ifndef INI_PARSER_H
 #define INI_PARSER_H
 
-#include "Global.h"
+#include <Global.h>
 #include <QtCore/QString>
 
 typedef std::multimap<QString, QString> DataMultimap;

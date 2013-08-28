@@ -15,8 +15,8 @@ void AutoTile::_createPixmaps(ConstTileCachePtr pTileCache)
     for (uint32 i = 0; i < AUTO_TILE_SET_COUNT; ++i)
     {
         ConstQPixmapPtr pNewPixmap;
-        if (pTileCache->getItem(m_pProto->getTileID(static_cast<AUTO_TILE_INDEX>(i)), pNewPixmap))
-            _setPixmap(static_cast<AUTO_TILE_INDEX>(i), pNewPixmap);
+        if (pTileCache->getItem(m_pProto->getTileID(static_cast<AUTO_TILE::AUTO_TILE_INDEX>(i)), pNewPixmap))
+            _setPixmap(static_cast<AUTO_TILE::AUTO_TILE_INDEX>(i), pNewPixmap);
     }
 
     // inner edges
@@ -57,7 +57,7 @@ void AutoTile::_createPixmaps(ConstTileCachePtr pTileCache)
             pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, TILE_SIZE/2, TILE_SIZE/2);
             break;
         }
-        _setPixmap(static_cast<AUTO_TILE_INDEX>(i), pNewPixmap);
+        _setPixmap(static_cast<AUTO_TILE::AUTO_TILE_INDEX>(i), pNewPixmap);
     }
 
     // multi inner edges
@@ -115,14 +115,14 @@ void AutoTile::_createPixmaps(ConstTileCachePtr pTileCache)
             pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, TILE_SIZE/2, TILE_SIZE/2);
             break;
         }
-        _setPixmap(static_cast<AUTO_TILE_INDEX>(i), pNewPixmap);
+        _setPixmap(static_cast<AUTO_TILE::AUTO_TILE_INDEX>(i), pNewPixmap);
     }
 
     // double sides
     for (uint32 i = INDEX_SIDE_VERTICAL; i <= INDEX_SIDE_HORIZONTAL; ++i)
     {
         QSize size(TILE_SIZE, TILE_SIZE);
-        AUTO_TILE_INDEX uiIndex[2];
+        std::array<AUTO_TILE::AUTO_TILE_INDEX, 2> uiIndex;
         switch (i)
         {
         case INDEX_SIDE_VERTICAL:
@@ -146,13 +146,13 @@ void AutoTile::_createPixmaps(ConstTileCachePtr pTileCache)
         pixmapPainter.drawTiledPixmap(size.width() % TILE_SIZE, size.height() % TILE_SIZE, size.width(), size.height(), *pSide[0],
             size.width() % TILE_SIZE, size.height() % TILE_SIZE);
         pixmapPainter.drawTiledPixmap(0, 0, size.width(), size.height(), *pSide[1], 0, 0);
-        _setPixmap(static_cast<AUTO_TILE_INDEX>(i), pNewPixmap);
+        _setPixmap(static_cast<AUTO_TILE::AUTO_TILE_INDEX>(i), pNewPixmap);
     }
 
     // T tiles
     for (uint32 i = INDEX_T_TOP; i <= INDEX_T_RIGHT; ++i)
     {
-        AUTO_TILE_INDEX uiIndex;
+        AUTO_TILE::AUTO_TILE_INDEX uiIndex;
         switch (i)
         {
         case INDEX_T_TOP: uiIndex = INDEX_TOP; break;
@@ -187,13 +187,13 @@ void AutoTile::_createPixmaps(ConstTileCachePtr pTileCache)
             pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE, *pSide, TILE_SIZE/2, 0);
             break;
         }
-        _setPixmap(static_cast<AUTO_TILE_INDEX>(i), pNewPixmap);
+        _setPixmap(static_cast<AUTO_TILE::AUTO_TILE_INDEX>(i), pNewPixmap);
     }
 
     // Y tiles
     for (uint32 i = INDEX_Y_TOP_BOTTOM_LEFT; i <= INDEX_Y_RIGHT_BOTTOM_LEFT; ++i)
     {
-        AUTO_TILE_INDEX uiIndex;
+        AUTO_TILE::AUTO_TILE_INDEX uiIndex;
         QPoint pos(0,0);
         switch (i)
         {
@@ -269,13 +269,13 @@ void AutoTile::_createPixmaps(ConstTileCachePtr pTileCache)
             pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pSide, TILE_SIZE/2, TILE_SIZE/2);
             break;
         }
-        _setPixmap(static_cast<AUTO_TILE_INDEX>(i), pNewPixmap);
+        _setPixmap(static_cast<AUTO_TILE::AUTO_TILE_INDEX>(i), pNewPixmap);
     }
 
     // curves
     for (uint32 i = INDEX_CURVE_TOP_LEFT; i <= INDEX_CURVE_BOTTOM_RIGHT; ++i)
     {
-        AUTO_TILE_INDEX uiIndex;
+        AUTO_TILE::AUTO_TILE_INDEX uiIndex;
         switch (i)
         {
         case INDEX_CURVE_TOP_LEFT: uiIndex = INDEX_TOP_LEFT; break;
@@ -319,7 +319,7 @@ void AutoTile::_createPixmaps(ConstTileCachePtr pTileCache)
             pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pEdge, TILE_SIZE/2, TILE_SIZE/2);
             break;
         }
-        _setPixmap(static_cast<AUTO_TILE_INDEX>(i), pNewPixmap);
+        _setPixmap(static_cast<AUTO_TILE::AUTO_TILE_INDEX>(i), pNewPixmap);
     }
 
     // triple inner edges
@@ -360,14 +360,14 @@ void AutoTile::_createPixmaps(ConstTileCachePtr pTileCache)
             pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, TILE_SIZE/2, TILE_SIZE/2);
             break;
         }
-        _setPixmap(static_cast<AUTO_TILE_INDEX>(i), pNewPixmap);
+        _setPixmap(static_cast<AUTO_TILE::AUTO_TILE_INDEX>(i), pNewPixmap);
     }
 
     // side ends
     for (uint32 i = INDEX_SIDE_END_TOP; i <= INDEX_SIDE_END_RIGHT; ++i)
     {
         QSize size(TILE_SIZE, TILE_SIZE);
-        AUTO_TILE_INDEX uiIndex[2];
+        std::array<AUTO_TILE::AUTO_TILE_INDEX, 2> uiIndex;
         switch (i)
         {
         case INDEX_SIDE_END_TOP:
@@ -401,11 +401,11 @@ void AutoTile::_createPixmaps(ConstTileCachePtr pTileCache)
         pixmapPainter.drawTiledPixmap(size.width() % TILE_SIZE, size.height() % TILE_SIZE, size.width(), size.height(), *pSide[0],
             size.width() % TILE_SIZE, size.height() % TILE_SIZE);
         pixmapPainter.drawTiledPixmap(0, 0, size.width(), size.height(), *pSide[1], 0, 0);
-        _setPixmap(static_cast<AUTO_TILE_INDEX>(i), pNewPixmap);
+        _setPixmap(static_cast<AUTO_TILE::AUTO_TILE_INDEX>(i), pNewPixmap);
     }
 
     // circle
-    ConstQPixmapPtr pSide[4];
+    std::array<ConstQPixmapPtr, 4> pSide;
     if (!pTileCache->getItem(m_pProto->getTileID(INDEX_TOP_LEFT), pSide[0]) ||
         !pTileCache->getItem(m_pProto->getTileID(INDEX_TOP_RIGHT), pSide[1]) ||
         !pTileCache->getItem(m_pProto->getTileID(INDEX_BOTTOM_LEFT), pSide[2]) ||

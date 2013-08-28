@@ -14,32 +14,44 @@ namespace MAP
 
 namespace DATABASE
 {
+    // index typedefs
+    typedef uint16 TILE_INDEX;
+    typedef uint8 TILE_SET_INDEX;
+    typedef uint8 AUTO_TILE_INDEX;
+    typedef uint16 SPRITE_INDEX;
+    typedef uint16 ANIMATION_INDEX;
+    typedef uint8 ANIMATION_TYPE_INDEX;
+    typedef uint16 MAP_INDEX;
+    typedef uint16 WORLD_OBJECT_INDEX;
+    typedef uint32 LOCALISATION_INDEX;
+
     /*#####
     # Prototype superclass
     #####*/
+    template <typename TIndex = uint32>
     class Prototype
     {
     public:
-        Prototype(uint32 uiID) : m_uiID(uiID) {}
+        Prototype(TIndex ID) : m_ID(ID) {}
 
         inline void setName(const QString &sName) { m_sName = sName; }
         inline QString getName() const { return m_sName; }
-        inline uint32 getID() const { return m_uiID; }
-        inline void setID(uint32 uiID) { m_uiID = uiID; }
+        inline TIndex getID() const { return m_ID; }
+        inline void setID(TIndex ID) { m_ID = ID; }
 
     private:
-        uint32 m_uiID;
+        TIndex m_ID;
         QString m_sName;
     };
-    typedef std::shared_ptr<Prototype> PrototypePtr;
 
     /*#####
     # TexturePrototype
     #####*/
-    class TexturePrototype : public Prototype
+    template <typename TIndex = uint32>
+    class TexturePrototype : public Prototype<TIndex>
     {
     public:
-        TexturePrototype(uint32 uiID = 0) : Prototype(uiID) {}
+        TexturePrototype(TIndex ID = 0) : Prototype(ID) {}
         inline void setFileName(const QString &sFileName) { m_sFileName = sFileName; }
         inline QString getFileName() const { return m_sFileName; }
         inline void setPath(const QString &sPath) { m_sPath = sPath; }
@@ -54,16 +66,16 @@ namespace DATABASE
         QString m_sPath;        // path from ~/textures
         QString m_sFileName;    // filename
     };
-    typedef std::shared_ptr<TexturePrototype> TexturePrototypePtr;
-    typedef std::shared_ptr<const TexturePrototype> ConstTexturePrototypePtr;
+    typedef std::shared_ptr<TexturePrototype<uint16>> TexturePrototypePtr;
+    typedef std::shared_ptr<const TexturePrototype<uint16>> ConstTexturePrototypePtr;
 
     /*#####
     # TilePrototype
     #####*/
-    class TilePrototype : public TexturePrototype
+    class TilePrototype : public TexturePrototype<TILE_INDEX>
     {
     public:
-        TilePrototype(uint32 uiID = 0) : TexturePrototype(uiID), m_uiPassable(0), m_uiTerrainType(0) {}
+        TilePrototype(uint32 ID = 0) : TexturePrototype(ID), m_uiPassable(0), m_uiTerrainType(0) {}
 
         // passability flag, if nothing set, its unpassable
         enum PassabilityFlag
@@ -94,20 +106,20 @@ namespace DATABASE
     typedef std::vector<ConstTilePrototypePtr> ConstTilePrototypePtrVector;
 
     /*#####
-    # TilePrototype
+    # TileSetPrototype
     #####*/
     namespace TILE_SET
     {
         typedef boost::multi_array<uint32, 2> UInt32Multiarray2D;
         const uint32 DEFAULT_COLUMN_COUNT = 2;
         const uint32 DEFAULT_ROW_COUNT = 2;
-        class TileSetPrototype : public Prototype
+        class TileSetPrototype : public Prototype<TILE_SET_INDEX>
         {
         private:
             void _resizeIfNeeded(UInt32Point size);
 
         public:
-            TileSetPrototype(uint32 uiID = 0);
+            TileSetPrototype(uint32 ID = 0);
 
             void resizeTiles(UInt32Point size);
             inline UInt32Point getTileCount() const { return m_Size; }
@@ -282,19 +294,16 @@ namespace DATABASE
 
         const uint32 MAX_AUTO_TILE_COLUMNS      = 3;
         const uint32 AUTO_TILE_SET_COUNT        = 10;
-        class AutoTilePrototype : public Prototype
+        class AutoTilePrototype : public Prototype<DATABASE::AUTO_TILE_INDEX>
         {
         public:
-            AutoTilePrototype(uint32 uiID = 0) : Prototype(uiID)
-            {
-                memset(&m_uiTileID, NULL, sizeof(m_uiTileID));
-            }
+            AutoTilePrototype(DATABASE::AUTO_TILE_INDEX ID = 0) : Prototype(ID) {}
 
-            inline void setTileID(AUTO_TILE_INDEX index, uint32 uiID) { m_uiTileID[index] = uiID; }
-            inline uint32 getTileID(AUTO_TILE_INDEX index) const { return m_uiTileID[index]; }
+            inline void setTileID(AUTO_TILE_INDEX index, uint32 ID) { m_uiTileID.at(index) = ID; }
+            inline uint32 getTileID(AUTO_TILE_INDEX index) const { return m_uiTileID.at(index); }
 
         private:
-            uint32 m_uiTileID[AUTO_TILE_SET_COUNT];
+            std::array<TILE_INDEX, AUTO_TILE_SET_COUNT> m_uiTileID;
         };
 
         AUTO_TILE_INDEX getAutoTileIndexForTileCheck(uint32 uiTileCheck);
@@ -308,10 +317,10 @@ namespace DATABASE
     /*#####
     # SpritePrototype
     #####*/
-    class SpritePrototype : public TexturePrototype
+    class SpritePrototype : public TexturePrototype<SPRITE_INDEX>
     {
     public:
-        SpritePrototype(uint32 uiID = 0) : TexturePrototype(uiID) {}
+        SpritePrototype(SPRITE_INDEX ID = 0) : TexturePrototype(ID) {}
     };
     typedef std::shared_ptr<SpritePrototype> SpritePrototypePtr;
     typedef std::shared_ptr<const SpritePrototype> ConstSpritePrototypePtr;
@@ -320,7 +329,7 @@ namespace DATABASE
     /*#####
     # AnimationPrototype
     #####*/
-    class AnimationPrototype : public Prototype
+    class AnimationPrototype : public Prototype<ANIMATION_INDEX>
     {
     public:
         class Sprite
@@ -328,7 +337,7 @@ namespace DATABASE
         public:
             Sprite() : m_uiSpriteID(0), m_uiRotation(0), m_uiScale(100), m_uiOpacity(100) {}
             Int32Point m_Pos;
-            uint32 m_uiSpriteID;
+            SPRITE_INDEX m_uiSpriteID;
             uint16 m_uiRotation;
             uint32 m_uiScale;
             uint8 m_uiOpacity;
@@ -368,7 +377,7 @@ namespace DATABASE
         typedef std::vector<Frame> FrameVector;
 
     public:
-        AnimationPrototype(uint32 uiID = 0) : Prototype(uiID) {}
+        AnimationPrototype(ANIMATION_INDEX ID = 0) : Prototype(ID) {}
 
         bool getFrame(uint32 uiIndex, Frame &frame) const;
         void setFrame(uint32 uiIndex, Frame frame);
@@ -394,7 +403,7 @@ namespace DATABASE
         };
 
         // animation stuff
-        const uint32 MIN_WORLD_OBJECT_POSE = 4;
+        const uint8 MIN_WORLD_OBJECT_POSE = 4;
         struct AnimationInfo
         {
             AnimationInfo(uint32 uiAnimationID = 0, uint32 uiAnimationTypeID = 0) : m_uiAnimationID(uiAnimationID), m_uiObjectAnimationTypeID(uiAnimationTypeID)
@@ -407,10 +416,10 @@ namespace DATABASE
         typedef std::shared_ptr<const AnimationInfo> ConstAnimationInfoPtr;
         typedef Container<AnimationInfo> AnimationInfoContainer;
 
-        class WorldObjectPrototype : public Prototype
+        class WorldObjectPrototype : public Prototype<WORLD_OBJECT_INDEX>
         {
         public:
-            WorldObjectPrototype(uint32 uiID = 0);
+            WorldObjectPrototype(WORLD_OBJECT_INDEX ID = 0);
 
             inline int32 getBoundingX() const { return m_BoundingRect.getPositionX(); }
             inline void setBoundingX(int32 x) { m_BoundingRect.setPositionX(x); }
@@ -435,7 +444,7 @@ namespace DATABASE
             inline uint32 getAnimationCount() const { return m_AnimationInfos.getSize(); }
             void setAnimationCount(uint32 uiCount);
 
-            virtual uint32 getMinimumAnimationCount() const { return MIN_WORLD_OBJECT_POSE; }
+            virtual uint8 getMinimumAnimationCount() const { return MIN_WORLD_OBJECT_POSE; }
 
         private:
             Int32Rect m_BoundingRect;
@@ -447,16 +456,16 @@ namespace DATABASE
         /*#####
         # DynamicObjectPrototype
         #####*/
-        const uint32 MIN_DYNAMIC_OBJECT_POSE = 8;
+        const uint8 MIN_DYNAMIC_OBJECT_POSE = 8;
         class DynamicObjectPrototype : public WorldObjectPrototype
         {
         public:
-            DynamicObjectPrototype(uint32 uiID = 0) : WorldObjectPrototype(uiID), m_uiMovementSpeed(0) {}
+            DynamicObjectPrototype(WORLD_OBJECT_INDEX ID = 0) : WorldObjectPrototype(ID), m_uiMovementSpeed(0) {}
 
             inline void setMovementSpeed(uint16 uiSpeed) { m_uiMovementSpeed = uiSpeed; }
             inline uint16 getMovementSpeed() const { return m_uiMovementSpeed; }
 
-            uint32 getMinimumAnimationCount() const { return MIN_DYNAMIC_OBJECT_POSE; }
+            uint8 getMinimumAnimationCount() const { return MIN_DYNAMIC_OBJECT_POSE; }
 
         private:
             uint16 m_uiMovementSpeed;
@@ -473,12 +482,12 @@ namespace DATABASE
     typedef std::vector<ConstDynamicObjectPrototypePtr> ConstDynamicObjectPrototypePtrVector;
 
     /*#####
-    # ObjectAnimationPrototype
+    # ObjectAnimationTypePrototype
     #####*/
-    class ObjectAnimationTypePrototype : public Prototype
+    class ObjectAnimationTypePrototype : public Prototype<ANIMATION_TYPE_INDEX>
     {
     public:
-        ObjectAnimationTypePrototype(uint32 uiID = 0, QString sName = "") : Prototype(uiID)
+        ObjectAnimationTypePrototype(ANIMATION_TYPE_INDEX ID = 0, QString sName = "") : Prototype(ID)
         {
             setName(sName);
         }
@@ -491,10 +500,10 @@ namespace DATABASE
     # LocalisationPrototype
     #####*/
     typedef std::vector<QString> StringVector;
-    class LocalisationPrototype : public Prototype
+    class LocalisationPrototype : public Prototype<LOCALISATION_INDEX>
     {
     public:
-        LocalisationPrototype(uint32 uiID = 0, uint32 uiLocalCount = 1) : Prototype(uiID)
+        LocalisationPrototype(LOCALISATION_INDEX ID = 0, uint32 uiLocalCount = 1) : Prototype(ID)
         {
             setLocalsCount(uiLocalCount);
         }
@@ -566,10 +575,8 @@ namespace DATABASE
         // map infos
         typedef MAP::MapTile MapTile;
         typedef MAP::Layer Layer;
-        class MapPrototype : public DATABASE::Prototype
+        class MapPrototype : public Prototype<MAP_INDEX>
         {
-            friend class MapReader;
-            friend class MapWriter;
             friend class MapDatabase;
             friend class MAP::MapMgr;
             friend class MapDatabaseXMLReader;
@@ -578,7 +585,8 @@ namespace DATABASE
             void _clearTiles();
 
         public:
-            MapPrototype(uint32 uiID = 0, const QString &sFileName = "");
+            MapPrototype(MAP_INDEX ID = 0, const QString &fileName = "") : Prototype(ID), m_FileName(fileName), m_uiParentID(0), m_DataLoaded(false)
+            {}
 
             inline bool hasMapDataStored() const { return m_DataLoaded; }
 
@@ -598,16 +606,16 @@ namespace DATABASE
             inline void setParentID(uint32 uiParentID) { m_uiParentID = uiParentID; }
 
             uint32 getTile(UInt32Point3D at, Layer layer) const;
-            void setTile(UInt32Point3D at, uint32 uiID, Layer layer);
+            void setTile(UInt32Point3D at, uint32 ID, Layer layer);
 
             uint32 getAutoTile(UInt32Point3D at, Layer layer) const;
-            void setAutoTile(UInt32Point3D at, uint32 uiID, Layer layer);
+            void setAutoTile(UInt32Point3D at, uint32 ID, Layer layer);
 
             void setMapTile(UInt32Point3D at, MapTile mapTile, Layer layer);
             MapTile getMapTile(UInt32Point3D at, Layer layer) const;
 
             void addMapObject(MapObjectPtr pObject);
-            MapObjectPtr addMapObject(DATABASE::MAP_OBJECT::ObjectType type, uint32 uiID, Int32Point pos);
+            MapObjectPtr addMapObject(DATABASE::MAP_OBJECT::ObjectType type, uint32 ID, Int32Point pos);
             inline uint32 getMapObjectCount() const { return m_Objects.getSize(); }
             inline bool getMapObject(uint32 GUID, ConstMapObjectPtr &pResult) const { return m_Objects.getItem(GUID, pResult); }
             inline bool getMapObject(uint32 GUID, MapObjectPtr &pResult)  { return m_Objects.getItem(GUID, pResult); }
@@ -621,12 +629,12 @@ namespace DATABASE
                 FLAG_OTHER      = 0x2,
                 FLAG_ALL        = FLAG_SAME | FLAG_OTHER
             };
-            uint32 checkAutoTiles(const uint32 &uiID, const UInt32Point3D &pos, UInt32PointSet &result, Layer layer, uint32 resultFlag = FLAG_ALL);
+            uint32 checkAutoTiles(const uint32 &ID, const UInt32Point3D &pos, UInt32PointSet &result, Layer layer, uint32 resultFlag = FLAG_ALL);
 
         private:
             bool m_DataLoaded;
 
-            uint32 m_uiParentID;
+            MAP_INDEX m_uiParentID;
             QString m_FileName;
             QString m_ScriptName;
 

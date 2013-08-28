@@ -30,7 +30,6 @@
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MapBinaryIO.cpp" />
-    <ClCompile Include="MapIO.cpp" />
     <ClCompile Include="MapLayer.cpp" />
     <ClCompile Include="MapMgr.cpp" />
     <ClCompile Include="Object.cpp" />
@@ -47,18 +46,14 @@
   <ItemGroup>
     <ClInclude Include="..\Simple2D-GameEditor\include\Application.h" />
     <ClInclude Include="..\Simple2D-GameEditor\include\Color.h" />
-    <ClInclude Include="..\Simple2D-GameEditor\include\Container.h" />
     <ClInclude Include="..\Simple2D-GameEditor\include\Database.h" />
     <ClInclude Include="..\Simple2D-GameEditor\include\DatabaseMgr.h" />
     <ClInclude Include="..\Simple2D-GameEditor\include\DatabasePrototypes.h" />
     <ClInclude Include="..\Simple2D-GameEditor\include\Game.h" />
-    <ClInclude Include="..\Simple2D-GameEditor\include\Global.h" />
     <ClInclude Include="..\Simple2D-GameEditor\include\Logfile.h" />
     <ClInclude Include="..\Simple2D-GameEditor\include\MapDatabase.h" />
     <ClInclude Include="..\Simple2D-GameEditor\include\MapGrid.h" />
     <ClInclude Include="..\Simple2D-GameEditor\include\math_extensions.h" />
-    <ClInclude Include="..\Simple2D-GameEditor\include\Point.h" />
-    <ClInclude Include="..\Simple2D-GameEditor\include\Rect.h" />
     <ClInclude Include="..\Simple2D-GameEditor\include\WorldObject.h" />
     <ClInclude Include="AnimationHolder.h" />
     <ClInclude Include="AutoTile.h" />
@@ -81,7 +76,6 @@
     <ClInclude Include="PrototypeParser.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="GameWindow.h" />
-    <ClInclude Include="MapIO.h" />
     <ClInclude Include="QtGlobal.h" />
     <ClInclude Include="SceneMgr.h" />
     <ClInclude Include="Singleton.h" />
@@ -123,12 +117,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)\Simple2D-GameEditor\lib\</OutDir>
     <TargetName>$(ProjectName)_d</TargetName>
-    <IncludePath>$(QtDir)\include;$(BoostDir);$(SolutionDir)\Simple2D-GameEditor\include;$(SolutionDir)\Simple2D-Engine;$(IncludePath)</IncludePath>
+    <IncludePath>$(SimpleLib)\include;$(QtDir)\include;$(BoostDir);$(SolutionDir)\Simple2D-GameEditor\include;$(SolutionDir)\Simple2D-Engine;$(IncludePath)</IncludePath>
     <LibraryPath>$(QtDir)\lib;$(SolutionDir);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)\Simple2D-GameEditor\lib\</OutDir>
-    <IncludePath>$(QtDir)\include;$(BoostDir);$(SolutionDir)\Simple2D-GameEditor\include;$(SolutionDir)\Simple2D-Engine;$(IncludePath)</IncludePath>
+    <IncludePath>$(SimpleLib)\include;$(QtDir)\include;$(BoostDir);$(SolutionDir)\Simple2D-GameEditor\include;$(SolutionDir)\Simple2D-Engine;$(IncludePath)</IncludePath>
     <LibraryPath>$(QtDir)\lib;$(SolutionDir);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

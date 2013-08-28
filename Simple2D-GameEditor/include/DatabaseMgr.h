@@ -1,7 +1,6 @@
 #ifndef DATABASE_MGR_H
 #define DATABASE_MGR_H
 
-#include "Database.h"
 #include "MapDatabase.h"
 
 namespace DATABASE

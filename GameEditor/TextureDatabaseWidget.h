@@ -19,8 +19,8 @@
     void _changeTransparencyColor() { transparencyColorChanged(); }\
     DATABASE_WIDGET_SLOTS
 
-template <class T>
-class TextureDatabaseWidget : public DatabaseWidget<T>, protected Ui_TextureDatabaseWidget
+template <class T, typename TIndex>
+class TextureDatabaseWidget : public DatabaseWidget<T, TIndex>, protected Ui_TextureDatabaseWidget
 {
 private:
     void import(const QString fileName, uint32 uiID)

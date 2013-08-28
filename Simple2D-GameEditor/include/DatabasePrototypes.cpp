@@ -260,7 +260,7 @@ namespace DATABASE
     #####*/
     namespace MAP_OBJECT
     {
-        WorldObjectPrototype::WorldObjectPrototype(uint32 uiID) : Prototype(uiID), m_uiAnimationSpeed(100)
+        WorldObjectPrototype::WorldObjectPrototype(WORLD_OBJECT_INDEX uiID) : Prototype(uiID), m_uiAnimationSpeed(100)
         {
             // set minimum poses, so we have stand pose for all directions
             m_AnimationInfos.resize(getMinimumAnimationCount());
@@ -314,10 +314,6 @@ namespace DATABASE
     #####*/
     namespace MAP_STRUCTURE
     {
-        MapPrototype::MapPrototype(uint32 uiID, const QString &fileName) : DATABASE::Prototype(uiID), m_FileName(fileName), m_uiParentID(0),
-            m_DataLoaded(false)
-        {}
-
         void MapPrototype::addMapObject(MapObjectPtr pObject)
         {
             if (pObject)

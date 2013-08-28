@@ -1,7 +1,7 @@
 #ifndef MAP_LAYER_H
 #define MAP_LAYER_H
 
-#include "Global.h"
+#include <Global.h>
 #include <boost/multi_array.hpp>
 #include <boost/dynamic_bitset.hpp>
 

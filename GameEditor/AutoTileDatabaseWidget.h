@@ -5,7 +5,7 @@
 #include "UI/UI_AutoTileDatabaseWidget.h"
 #include <array>
 
-class AutoTileDatabaseWidget : public DatabaseWidget<DATABASE::AUTO_TILE::AutoTilePrototype>, Ui_AutoTileDatabaseWidget
+class AutoTileDatabaseWidget : public DatabaseWidget<DATABASE::AUTO_TILE::AutoTilePrototype, DATABASE::AUTO_TILE_INDEX>, Ui_AutoTileDatabaseWidget
 {
     Q_OBJECT
 private:

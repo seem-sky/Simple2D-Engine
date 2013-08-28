@@ -2,7 +2,7 @@
 #define DATABASE_WIDGET_H
 
 #include "UI/UI_DatabaseWidget.h"
-#include "Global.h"
+#include <Global.h>
 #include "DatabaseChanger.h"
 #include <QtWidgets/QMessageBox>
 #include "QtGlobal.h"
@@ -20,7 +20,7 @@ public:
     virtual void setFocus() {}      // this method is called when widget is selected (use e.g. to update some widgets)
 };
 
-template <class T>
+template <class T, typename TIndex>
 class DatabaseWidget : public DatabaseWidgetObject, protected Ui_DatabaseWidget
 {
 private:
@@ -144,7 +144,7 @@ protected:
 
 public:
     DatabaseWidget(QWidget *pParent) : DatabaseWidgetObject(pParent), Ui_DatabaseWidget(), m_Changes(false),
-        m_pDBChanger(new DATABASE::DatabaseChanger<T>())
+        m_pDBChanger(new DATABASE::DatabaseChanger<T, TIndex>())
     {
         setupUi(this);
         m_pList->sortByColumn(0, Qt::AscendingOrder);
@@ -160,7 +160,13 @@ public:
 
     inline uint32 getCurrentID() const { return m_pID->value(); }
     inline bool hasChanged() const { return m_Changes; }
-    virtual void setDB(const std::shared_ptr<DATABASE::Database<T>> &pDB) { m_pDBChanger->setDB(pDB); _updateWidget(); }
+    virtual void setDB(const std::shared_ptr<DATABASE::Database<T, TIndex>> &pDB)
+    {
+        m_pDBChanger->setDB(pDB);
+        _updateWidget();
+        m_pListCount->setMaximum(pDB->getMaximumSize());
+    }
+
     inline uint32 getListCountValue() const { return m_pListCount->value(); }
     void updateName(QTreeWidgetItem *pItem, const QString &sName)
     {
@@ -169,13 +175,13 @@ public:
         updateItem();
     }
 
-    inline std::shared_ptr<DATABASE::DatabaseChanger<T>> getDBChanger()
+    inline std::shared_ptr<DATABASE::DatabaseChanger<T, TIndex>> getDBChanger()
     {
         return m_pDBChanger;
     }
 
 protected:
-    std::shared_ptr<DATABASE::DatabaseChanger<T>> m_pDBChanger;
+    std::shared_ptr<DATABASE::DatabaseChanger<T, TIndex>> m_pDBChanger;
     ModifyObject m_ModObj;
 
 private:

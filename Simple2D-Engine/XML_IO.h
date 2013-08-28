@@ -1,7 +1,7 @@
 #ifndef XML_IO_H
 #define XML_IO_H
 
-#include "Global.h"
+#include <Global.h>
 #include "Logfile.h"
 #include <QtXml/QtXml>
 #include <QtCore/QStringList>

@@ -4,7 +4,7 @@
 #include "DatabaseWidget.h"
 #include "ui/UI_TextDatabaseWidget.h"
 
-class TextDatabaseWidget : public DatabaseWidget<DATABASE::LocalisationPrototype>, Ui_TextDatabaseWidget
+class TextDatabaseWidget : public DatabaseWidget<DATABASE::LocalisationPrototype, DATABASE::LOCALISATION_INDEX>, Ui_TextDatabaseWidget
 {
     Q_OBJECT
 private:

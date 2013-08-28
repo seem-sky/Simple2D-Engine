@@ -20,7 +20,7 @@ AutoTileDatabaseWidget::AutoTileDatabaseWidget(QWidget *pParent) : DatabaseWidge
     // connect auto tile labels
     for (uint32 i = 0; i < AUTO_TILE_SET_COUNT; ++i)
     {
-        if (TileDropLabel *pLabel = _getLabelForIndex(static_cast<AUTO_TILE_INDEX>(i)))
+        if (TileDropLabel *pLabel = _getLabelForIndex(static_cast<AUTO_TILE::AUTO_TILE_INDEX>(i)))
         {
             connect(pLabel, SIGNAL(onDrop(uint32, const Int32Point&)), this, SLOT(_onTileDrop(uint32, const Int32Point&)));
             pLabel->resize(TILE_SIZE, TILE_SIZE);
@@ -46,14 +46,14 @@ TileDropLabel* AutoTileDatabaseWidget::_getLabelForIndex(AUTO_TILE::AUTO_TILE_IN
     return NULL;
 }
 
-AUTO_TILE_INDEX AutoTileDatabaseWidget::_getIndexForLabel(TileDropLabel *pLabel)
+AUTO_TILE::AUTO_TILE_INDEX AutoTileDatabaseWidget::_getIndexForLabel(TileDropLabel *pLabel)
 {
     if (pLabel)
     {
         for (uint32 i = 0; i < INDEX_NONE; ++i)
         {
-            if (pLabel == _getLabelForIndex(static_cast<AUTO_TILE_INDEX>(i)))
-                return static_cast<AUTO_TILE_INDEX>(i);
+            if (pLabel == _getLabelForIndex(static_cast<AUTO_TILE::AUTO_TILE_INDEX>(i)))
+                return static_cast<AUTO_TILE::AUTO_TILE_INDEX>(i);
         }
     }
     return INDEX_NONE;
@@ -65,7 +65,7 @@ void AutoTileDatabaseWidget::clearWidgets()
     // clear labels
     for (uint32 i = 0; i < AUTO_TILE_SET_COUNT; ++i)
     {
-        if (TileDropLabel *pLabel = _getLabelForIndex(static_cast<AUTO_TILE_INDEX>(i)))
+        if (TileDropLabel *pLabel = _getLabelForIndex(static_cast<AUTO_TILE::AUTO_TILE_INDEX>(i)))
             pLabel->clear();
     }
 }
@@ -76,7 +76,7 @@ void AutoTileDatabaseWidget::setTileDB(const ConstTileDatabaseChangerPtr &pDB)
     m_pTileList->setDB(m_pTileDB);
     for (uint32 i = 0; i < AUTO_TILE_SET_COUNT; ++i)
     {
-        if (TileDropLabel *pLabel = _getLabelForIndex(static_cast<AUTO_TILE_INDEX>(i)))
+        if (TileDropLabel *pLabel = _getLabelForIndex(static_cast<AUTO_TILE::AUTO_TILE_INDEX>(i)))
             pLabel->setTileDB(pDB);
     }
 }
@@ -86,7 +86,7 @@ void AutoTileDatabaseWidget::setFocus()
     m_pTileList->fillWithPrototypes();
     for (uint32 i = 0; i < AUTO_TILE_SET_COUNT; ++i)
     {
-        if (TileDropLabel *pLabel = _getLabelForIndex(static_cast<AUTO_TILE_INDEX>(i)))
+        if (TileDropLabel *pLabel = _getLabelForIndex(static_cast<AUTO_TILE::AUTO_TILE_INDEX>(i)))
             pLabel->drawCurrentTile();
     }
 }
@@ -98,8 +98,8 @@ bool AutoTileDatabaseWidget::setWidgetsFromPrototype(const AutoTilePrototypePtr 
 
     for (uint32 i = 0; i < AUTO_TILE_SET_COUNT; ++i)
     {
-        if (TileDropLabel *pLabel = _getLabelForIndex(static_cast<AUTO_TILE_INDEX>(i)))
-            pLabel->setCurrentTileID(proto->getTileID(static_cast<AUTO_TILE_INDEX>(i)));
+        if (TileDropLabel *pLabel = _getLabelForIndex(static_cast<AUTO_TILE::AUTO_TILE_INDEX>(i)))
+            pLabel->setCurrentTileID(proto->getTileID(static_cast<AUTO_TILE::AUTO_TILE_INDEX>(i)));
     }
     return true;
 }
@@ -111,8 +111,8 @@ bool AutoTileDatabaseWidget::getItemFromWidgets(AutoTilePrototypePtr &proto)
 
     for (uint32 i = 0; i < AUTO_TILE_SET_COUNT; ++i)
     {
-        if (TileDropLabel *pLabel = _getLabelForIndex(static_cast<AUTO_TILE_INDEX>(i)))
-            proto->setTileID(static_cast<AUTO_TILE_INDEX>(i), pLabel->getCurrentTileID());
+        if (TileDropLabel *pLabel = _getLabelForIndex(static_cast<AUTO_TILE::AUTO_TILE_INDEX>(i)))
+            proto->setTileID(static_cast<AUTO_TILE::AUTO_TILE_INDEX>(i), pLabel->getCurrentTileID());
     }
     return true;
 }

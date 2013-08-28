@@ -1,7 +1,7 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-#include "Global.h"
+#include <Global.h>
 
 namespace ENTITY
 {

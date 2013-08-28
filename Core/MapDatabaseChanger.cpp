@@ -5,16 +5,6 @@
 using namespace DATABASE;
 using namespace DATABASE::MAP_STRUCTURE;
 
-MapDatabaseChanger::MapDatabaseChanger(MapDatabasePtr pMapDB) : DatabaseChanger(pMapDB)
-{
-    m_pNewDB = MapDatabasePtr(new MapDatabase());
-}
-
-MapDatabaseChanger::MapDatabaseChanger() : DatabaseChanger()
-{
-    m_pNewDB = MapDatabasePtr(new MapDatabase());
-}
-
 void MapDatabaseChanger::undoChanges(uint32 uiID)
 {
     // unload map data and reset size
@@ -35,7 +25,7 @@ void MapDatabaseChanger::storeChanges()
         _getTargetDB()->removeMap(itr->first);
         if (itr->second)
         {
-            QFile file(Config::get()->getProjectDirectory() + "/Maps/" + itr->second->getFileName());
+            QFile file(Config::get()->getProjectDirectory() + MAP_FOLDER + itr->second->getFileName());
             file.remove();
         }
     }
@@ -69,7 +59,7 @@ MapPrototypePtr MapDatabaseChanger::getNewMap()
         }
     }
     // add new map
-    MapPrototypePtr pMap(new MapPrototype(i, "map" + QString::number(i) + ".xml"));
+    MapPrototypePtr pMap(new MapPrototype(i, "map" + QString::number(i) + MAP_FILE_ENDING));
     setItem(i, pMap);
     return pMap;
 }

@@ -6,31 +6,11 @@ using namespace DATABASE;
 /*#####
 # writing
 #####*/
-void PrototypeParser::parseToXML(PrototypePtr pProto, QXmlStreamWriter &writer)
-{
-    if (!pProto)
-        return;
-
-    writer.writeAttribute("ID", QString::number(pProto->getID()));
-    writer.writeAttribute("name", pProto->getName());
-}
-
-void PrototypeParser::parseToXML(TexturePrototypePtr pProto, QXmlStreamWriter &writer)
-{
-    if (!pProto)
-        return;
-    parseToXML(std::static_pointer_cast<Prototype>(pProto), writer);
-
-    writer.writeAttribute("file", pProto->getFileName());
-    writer.writeAttribute("path", pProto->getPath());
-    writer.writeAttribute("transparency_color", QString::fromStdString(pProto->getTransparencyColor().getColorString()));
-}
-
 void PrototypeParser::parseToXML(TilePrototypePtr pProto, QXmlStreamWriter &writer)
 {
     if (!pProto)
         return;
-    parseToXML(std::static_pointer_cast<TexturePrototype>(pProto), writer);
+    parseToXML<TILE_INDEX>(std::static_pointer_cast<TexturePrototype<TILE_INDEX>>(pProto), writer);
 
     writer.writeAttribute("terraintype", QString::number(pProto->getTerrainType()));
     writer.writeAttribute("passability", QString::number(pProto->getPassability()));;
@@ -40,7 +20,7 @@ void PrototypeParser::parseToXML(TileSetPrototypePtr pProto, QXmlStreamWriter &w
 {
     if (!pProto)
         return;
-    parseToXML(std::static_pointer_cast<Prototype>(pProto), writer);
+    parseToXML<TILE_SET_INDEX>(std::static_pointer_cast<Prototype<TILE_SET_INDEX>>(pProto), writer);
 
     writer.writeAttribute("columns", QString::number(pProto->getTileCount().x));
     writer.writeAttribute("rows", QString::number(pProto->getTileCount().y));
@@ -63,7 +43,7 @@ void PrototypeParser::parseToXML(AutoTilePrototypePtr pProto, QXmlStreamWriter &
 {
     if (!pProto)
         return;
-    parseToXML(std::static_pointer_cast<Prototype>(pProto), writer);
+    parseToXML<AUTO_TILE_INDEX>(std::static_pointer_cast<Prototype<AUTO_TILE_INDEX>>(pProto), writer);
 
     QString tiles;
     for (uint32 i = 0; i < AUTO_TILE::AUTO_TILE_SET_COUNT; ++i)
@@ -80,7 +60,7 @@ void PrototypeParser::parseToXML(AnimationPrototypePtr pProto, QXmlStreamWriter 
 {
     if (!pProto)
         return;
-    parseToXML(std::static_pointer_cast<Prototype>(pProto), writer);
+    parseToXML<ANIMATION_INDEX>(std::static_pointer_cast<Prototype<ANIMATION_INDEX>>(pProto), writer);
 
     // remove all empty frames from the end
     while (pProto->getFrameCount() > 0)
@@ -120,7 +100,7 @@ void PrototypeParser::parseToXML(MAP_STRUCTURE::MapPrototypePtr pProto, QXmlStre
 {
     if (!pProto)
         return;
-    parseToXML(std::static_pointer_cast<Prototype>(pProto), writer);
+    parseToXML<MAP_INDEX>(std::static_pointer_cast<Prototype<MAP_INDEX>>(pProto), writer);
 
     writer.writeAttribute("sizeX", QString::number(pProto->getSize().x));
     writer.writeAttribute("sizeY", QString::number(pProto->getSize().y));
@@ -135,7 +115,7 @@ void PrototypeParser::parseToXML(LocalisationPrototypePtr pProto, QXmlStreamWrit
 {
     if (!pProto)
         return;
-    parseToXML(std::static_pointer_cast<Prototype>(pProto), writer);
+    parseToXML<LOCALISATION_INDEX>(std::static_pointer_cast<Prototype<LOCALISATION_INDEX>>(pProto), writer);
 
     for (uint32 i = 0; i < pProto->getLocalsCount(); ++i)
     {
@@ -149,7 +129,7 @@ void PrototypeParser::parseToXML(WorldObjectPrototypePtr pProto, QXmlStreamWrite
 {
     if (!pProto)
         return;
-    parseToXML(std::static_pointer_cast<Prototype>(pProto), writer);
+    parseToXML<WORLD_OBJECT_INDEX>(std::static_pointer_cast<Prototype<WORLD_OBJECT_INDEX>>(pProto), writer);
 
     writer.writeAttribute("boundingX", QString::number(pProto->getBoundingX()));
     writer.writeAttribute("boundingY", QString::number(pProto->getBoundingY()));
@@ -183,29 +163,14 @@ void PrototypeParser::parseToXML(DynamicObjectPrototypePtr pProto, QXmlStreamWri
 /*#####
 # reading: attributes
 #####*/
-void PrototypeParser::parseAttributesFromXML(PrototypePtr pProto, QXmlStreamAttributes &attributes)
-{
-    pProto->setID(attributes.value("ID").toUInt());
-    pProto->setName(attributes.value("name").toString());
-}
-
 void PrototypeParser::parseAttributesFromXML(SpritePrototypePtr pProto, QXmlStreamAttributes &attributes)
 {
-    parseAttributesFromXML(std::static_pointer_cast<TexturePrototype>(pProto), attributes);
-}
-
-void PrototypeParser::parseAttributesFromXML(TexturePrototypePtr pProto, QXmlStreamAttributes &attributes)
-{
-    parseAttributesFromXML(std::static_pointer_cast<Prototype>(pProto), attributes);
-
-    pProto->setFileName(attributes.value("file").toString());
-    pProto->setPath(attributes.value("path").toString());
-    pProto->setTransparencyColor(Color(attributes.value("transparency_color").toString().toStdString()));
+    parseAttributesFromXML(std::static_pointer_cast<TexturePrototype<SPRITE_INDEX>>(pProto), attributes);
 }
 
 void PrototypeParser::parseAttributesFromXML(TilePrototypePtr pProto, QXmlStreamAttributes &attributes)
 {
-    parseAttributesFromXML(std::static_pointer_cast<TexturePrototype>(pProto), attributes);
+    parseAttributesFromXML(std::static_pointer_cast<TexturePrototype<TILE_INDEX>>(pProto), attributes);
 
     pProto->setTerrainType(attributes.value("terraintype").toUInt());
     pProto->addPassabilityFlag(attributes.value("passability").toUInt());
@@ -213,7 +178,7 @@ void PrototypeParser::parseAttributesFromXML(TilePrototypePtr pProto, QXmlStream
 
 void PrototypeParser::parseAttributesFromXML(TileSetPrototypePtr pProto, QXmlStreamAttributes &attributes)
 {
-    parseAttributesFromXML(std::static_pointer_cast<Prototype>(pProto), attributes);
+    parseAttributesFromXML(std::static_pointer_cast<Prototype<TILE_SET_INDEX>>(pProto), attributes);
 
     UInt32Point size(attributes.value("columns").toUInt(), attributes.value("rows").toUInt());
     pProto->resizeTiles(size);
@@ -227,7 +192,7 @@ void PrototypeParser::parseAttributesFromXML(TileSetPrototypePtr pProto, QXmlStr
 
 void PrototypeParser::parseAttributesFromXML(AutoTilePrototypePtr pProto, QXmlStreamAttributes &attributes)
 {
-    parseAttributesFromXML(std::static_pointer_cast<Prototype>(pProto), attributes);
+    parseAttributesFromXML(std::static_pointer_cast<Prototype<AUTO_TILE_INDEX>>(pProto), attributes);
 
     if (attributes.hasAttribute("tiles"))
     {
@@ -239,7 +204,7 @@ void PrototypeParser::parseAttributesFromXML(AutoTilePrototypePtr pProto, QXmlSt
 
 void PrototypeParser::parseAttributesFromXML(MAP_STRUCTURE::MapPrototypePtr pProto, QXmlStreamAttributes &attributes)
 {
-    parseAttributesFromXML(std::static_pointer_cast<Prototype>(pProto), attributes);
+    parseAttributesFromXML(std::static_pointer_cast<Prototype<MAP_INDEX>>(pProto), attributes);
 
     // setup map size
     pProto->setSize(UInt32Point(attributes.value("sizeX").toUInt(), attributes.value("sizeY").toUInt()),
@@ -252,7 +217,7 @@ void PrototypeParser::parseAttributesFromXML(MAP_STRUCTURE::MapPrototypePtr pPro
 
 void PrototypeParser::parseAttributesFromXML(WorldObjectPrototypePtr pProto, QXmlStreamAttributes &attributes)
 {
-    parseAttributesFromXML(std::static_pointer_cast<Prototype>(pProto), attributes);
+    parseAttributesFromXML(std::static_pointer_cast<Prototype<WORLD_OBJECT_INDEX>>(pProto), attributes);
 
     // bounding rect
     pProto->setBoundingX(attributes.value("boundingX").toInt());
@@ -303,8 +268,6 @@ void PrototypeParser::parseChildrenFromXML(AnimationPrototypePtr pProto, const Q
             pProto->setFrame(pProto->getFrameCount()-1, lastFrame);
         }
     }
-    else
-        parseChildrenFromXML(std::static_pointer_cast<Prototype>(pProto), reader);
 }
 
 void PrototypeParser::parseChildrenFromXML(LocalisationPrototypePtr pProto, const QXmlStreamReader &reader)
@@ -317,8 +280,6 @@ void PrototypeParser::parseChildrenFromXML(LocalisationPrototypePtr pProto, cons
 
         pProto->setLocalisation(attributes.value("entry").toUInt(), attributes.value("text").toString());
     }
-    else
-        parseChildrenFromXML(std::static_pointer_cast<Prototype>(pProto), reader);
 }
 
 void PrototypeParser::parseChildrenFromXML(WorldObjectPrototypePtr pProto, const QXmlStreamReader &reader)
@@ -332,6 +293,4 @@ void PrototypeParser::parseChildrenFromXML(WorldObjectPrototypePtr pProto, const
         pProto->setAnimationInfo(attributes.value("entry").toUInt(),
             MAP_OBJECT::AnimationInfo(attributes.value("ID").toUInt(), attributes.value("typeID").toUInt()));
     }
-    else
-        parseChildrenFromXML(std::static_pointer_cast<Prototype>(pProto), reader);
 }

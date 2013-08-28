@@ -4,7 +4,7 @@
 #include "DatabaseWidget.h"
 #include "Ui/UI_AnimationWidget.h"
 
-class AnimationDatabaseWidget : public DatabaseWidget<DATABASE::AnimationPrototype>, Ui_AnimationWidget
+class AnimationDatabaseWidget : public DatabaseWidget<DATABASE::AnimationPrototype, DATABASE::ANIMATION_INDEX>, Ui_AnimationWidget
 {
     Q_OBJECT
 private:

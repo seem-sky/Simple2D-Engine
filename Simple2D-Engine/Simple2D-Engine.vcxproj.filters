@@ -135,9 +135,6 @@
     <ClCompile Include="PrototypeParser.cpp">
       <Filter>Database\IO</Filter>
     </ClCompile>
-    <ClCompile Include="MapIO.cpp">
-      <Filter>Map\IO</Filter>
-    </ClCompile>
     <ClCompile Include="MapBinaryIO.cpp">
       <Filter>Map\IO</Filter>
     </ClCompile>
@@ -155,17 +152,11 @@
     <ClInclude Include="..\Simple2D-GameEditor\include\Color.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\Simple2D-GameEditor\include\Container.h">
-      <Filter>Core</Filter>
-    </ClInclude>
     <ClInclude Include="..\Simple2D-GameEditor\include\Database.h">
       <Filter>Database</Filter>
     </ClInclude>
     <ClInclude Include="..\Simple2D-GameEditor\include\DatabasePrototypes.h">
       <Filter>Database</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Simple2D-GameEditor\include\Global.h">
-      <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="..\Simple2D-GameEditor\include\Logfile.h">
       <Filter>Core</Filter>
@@ -177,12 +168,6 @@
       <Filter>Map</Filter>
     </ClInclude>
     <ClInclude Include="..\Simple2D-GameEditor\include\math_extensions.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Simple2D-GameEditor\include\Point.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Simple2D-GameEditor\include\Rect.h">
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="..\Simple2D-GameEditor\include\WorldObject.h">
@@ -265,9 +250,6 @@
     </ClInclude>
     <ClInclude Include="Database_IO.h">
       <Filter>Database\IO</Filter>
-    </ClInclude>
-    <ClInclude Include="MapIO.h">
-      <Filter>Map\IO</Filter>
     </ClInclude>
     <ClInclude Include="MapBinaryIO.h">
       <Filter>Map\IO</Filter>

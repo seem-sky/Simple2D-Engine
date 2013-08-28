@@ -1,7 +1,7 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
-#include "Global.h"
+#include <Global.h>
 #include <QtWidgets/QWidget>
 
 typedef std::unique_ptr<QWidget> QWidgetPtr;

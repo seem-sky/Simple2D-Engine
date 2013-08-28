@@ -1,7 +1,7 @@
 #ifndef MAP_BRUSH_H
 #define MAP_BRUSH_H
 
-#include "Global.h"
+#include <Global.h>
 #include "MapView.h"
 #include <boost/dynamic_bitset.hpp>
 

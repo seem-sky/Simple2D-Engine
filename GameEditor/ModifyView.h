@@ -3,7 +3,7 @@
 
 #include <QtWidgets/QGraphicsView>
 #include <QtWidgets/QGraphicsPixmapItem>
-#include "Global.h"
+#include <Global.h>
 
 class ModifyItem : public QGraphicsPixmapItem
 {

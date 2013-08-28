@@ -6,7 +6,6 @@
 #include <QtWidgets/QMessageBox>
 #include <algorithm>
 #include "Config.h"
-#include "MapIO.h"
 
 using namespace DATABASE::MAP_STRUCTURE;
 using namespace DATABASE;

@@ -1,7 +1,7 @@
 #ifndef VARIABLE_HOLDER_H
 #define VARIABLE_HOLDER_H
 
-#include "Global.h"
+#include <Global.h>
 #include "Container.h"
 
 namespace VARIABLE

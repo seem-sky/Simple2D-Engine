@@ -3,7 +3,7 @@
 
 #include <QtWidgets/QDialog>
 #include "ui/UI_IndexDialog.h"
-#include "Global.h"
+#include <Global.h>
 
 class IndexDialog : public QDialog, Ui_IndexDialog
 {

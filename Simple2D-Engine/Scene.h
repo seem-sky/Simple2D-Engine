@@ -3,7 +3,7 @@
 
 #include <QtWidgets/QGraphicsScene>
 #include <QtCore/QTime>
-#include "Global.h"
+#include <Global.h>
 
 namespace GAME_LOGIC
 {

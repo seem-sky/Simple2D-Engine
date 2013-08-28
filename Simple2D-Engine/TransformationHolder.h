@@ -1,7 +1,7 @@
 #ifndef TRANSFORMATION_HOLDER_H
 #define TRANSFORMATION_HOLDER_H
 
-#include "Global.h"
+#include <Global.h>
 
 namespace TRANSFORMATION
 {
