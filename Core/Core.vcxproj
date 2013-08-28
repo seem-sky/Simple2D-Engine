@@ -71,7 +71,7 @@
     <LibraryPath>$(QtDir)\lib;$(SolutionDir);$(LibraryPath)</LibraryPath>
     <ReferencePath>
     </ReferencePath>
-    <IncludePath>$(QtDir)\include;$(BoostDir);$(SolutionDir)\Simple2D-Engine;$(SolutionDir)\Simple2D-GameEditor\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SimpleLib)\include;$(QtDir)\include;$(BoostDir);$(SolutionDir)\Simple2D-Engine;$(SolutionDir)\Simple2D-GameEditor\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <TargetName>$(ProjectName)d</TargetName>
@@ -83,7 +83,7 @@
     <OutDir>$(SolutionDir)\</OutDir>
     <IntDir>$(Configuration)\</IntDir>
     <LibraryPath>$(QtDir)\lib;$(SolutionDir);$(LibraryPath)</LibraryPath>
-    <IncludePath>$(QtDir)\include;$(BoostDir);$(SolutionDir)\Simple2D-Engine;$(SolutionDir)\Simple2D-GameEditor\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SimpleLib)\include;$(QtDir)\include;$(BoostDir);$(SolutionDir)\Simple2D-Engine;$(SolutionDir)\Simple2D-GameEditor\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LibraryPath>C:\Users\anti-freak\Documents\SDKs\qt-everywhere-opensource-src-4.8.1\lib;$(LibraryPath)</LibraryPath>
@@ -187,6 +187,7 @@
     <ClInclude Include="MapDatabaseChanger.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Performance1.psess" />
     <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
