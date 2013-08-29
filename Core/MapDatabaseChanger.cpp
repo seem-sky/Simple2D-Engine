@@ -48,13 +48,12 @@ bool MapDatabaseChanger::removeMap(uint32 uiID)
 MapPrototypePtr MapDatabaseChanger::getNewMap()
 {
     uint32 i = 1;
-    for (; i < MAX_UINT32; ++i)
+    for (; i < m_pNewDB->getMaximumSize(); ++i)
     {
         if (!m_pNewDB->getItem(i, MapPrototypePtr()) && !m_pTargetDB->getItem(i, MapPrototypePtr()))
         {
             // if not in m_removedMaps
-            UInt32MapPrototypeMap::iterator itr = m_removedMaps.find(i);
-            if (itr == m_removedMaps.end())
+            if (m_removedMaps.find(i) == m_removedMaps.end())
                 break;
         }
     }

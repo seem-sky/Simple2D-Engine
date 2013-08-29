@@ -82,8 +82,8 @@ void AnimationDatabaseWidget::_updateSelectedSprite()
             m_pSpritePosX->setValue(pItem->scenePos().x());
             m_pSpritePosY->setValue(pItem->scenePos().y());
             m_pSpriteSpriteID->setValue(pItem->getSpriteID());
-            m_pSpriteScale->setValue(round(pItem->scale()*100));
-            m_pSpriteOpacity->setValue(round(pItem->opacity()*100));
+            m_pSpriteScale->setValue(MATH::round(pItem->scale()*100));
+            m_pSpriteOpacity->setValue(MATH::round(pItem->opacity()*100));
             m_pSpriteRotation->setValue(pItem->rotation());
             connect(m_pSpritePosX, SIGNAL(valueChanged(int)), this, SLOT(_currentSpriteModifyed(int)));
             connect(m_pSpritePosY, SIGNAL(valueChanged(int)), this, SLOT(_currentSpriteModifyed(int)));
@@ -158,9 +158,9 @@ bool AnimationDatabaseWidget::getItemFromWidgets(AnimationPrototypePtr &proto)
             AnimationPrototype::Sprite sprite;
             sprite.m_Pos = Int32Point(pItem->pos().x(), pItem->pos().y());
             sprite.m_uiSpriteID = pItem->getSpriteID();
-            sprite.m_uiScale = round(pItem->scale()*100);
+            sprite.m_uiScale = MATH::round(pItem->scale()*100);
             sprite.m_uiRotation = pItem->rotation();
-            sprite.m_uiOpacity = round(pItem->opacity()*100);
+            sprite.m_uiOpacity = MATH::round(pItem->opacity()*100);
             frame.addSprite(sprite);
         }
     }
@@ -182,10 +182,7 @@ bool AnimationDatabaseWidget::setWidgetsFromPrototype(const AnimationPrototypePt
 
 void AnimationDatabaseWidget::_onAnimationPlayerClicked()
 {
-    if (m_pAniViewer->hasActiveAnimation())
-        m_pAniViewer->stopCurrentAnimation();
-    else
-        m_pAniViewer->playCurrentAnimation();
+    m_pAniViewer->hasActiveAnimation() ? m_pAniViewer->stopCurrentAnimation() : m_pAniViewer->playCurrentAnimation();        
 }
 
 void AnimationDatabaseWidget::_currentSpriteModifyed(int value)

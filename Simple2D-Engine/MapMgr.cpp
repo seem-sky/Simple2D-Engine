@@ -2,7 +2,7 @@
 
 using namespace MAP;
 
-MapMgr::MapMgr() : SpaceContainer()
+MapMgr::MapMgr() : GapsContainer()
 {}
 
 void MapMgr::setDatabaseMgr(DATABASE::ConstDatabaseMgrPtr pDBMgr)

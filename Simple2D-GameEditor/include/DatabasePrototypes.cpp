@@ -260,7 +260,7 @@ namespace DATABASE
     #####*/
     namespace MAP_OBJECT
     {
-        WorldObjectPrototype::WorldObjectPrototype(WORLD_OBJECT_INDEX uiID) : Prototype(uiID), m_uiAnimationSpeed(100)
+        WorldObjectPrototype::WorldObjectPrototype(uint32 uiID) : Prototype(uiID), m_uiAnimationSpeed(100)
         {
             // set minimum poses, so we have stand pose for all directions
             m_AnimationInfos.resize(getMinimumAnimationCount());
@@ -299,13 +299,12 @@ namespace DATABASE
         #####*/
         QString getTypeString(ObjectType type)
         {
-            QString result;
             switch (type)
             {
-            case TYPE_WORLDOBJECT: result = "WorldObject";
-            case TYPE_DYNAMIC_OBJECT: result ="DynamicObject";
+            case TYPE_WORLDOBJECT: return "WorldObject";
+            case TYPE_DYNAMIC_OBJECT: return "DynamicObject";
             }
-            return std::move(result);
+            return "Unknown";
         }
     }
 
@@ -337,7 +336,7 @@ namespace DATABASE
             return newObject;
         }
 
-        uint32 MapPrototype::checkAutoTiles(const uint32 &uiID, const UInt32Point3D &pos, UInt32PointSet &result, Layer layer, uint32 resultFlag)
+        uint32 MapPrototype::checkAutoTiles(uint32 uiID, UInt32Point3D pos, UInt32PointSet &result, Layer layer, uint32 resultFlag)
         {
             uint32 uiBorderCheck = 0;
             MapTile centerTile = getMapTile(pos, layer);
@@ -410,7 +409,7 @@ namespace DATABASE
                 }
                 MapTile mapTile = getMapTile(checkPos, layer);
                 // if bad object, continue
-                if (mapTile.m_uiAutoTileSetID == MAX_UINT32 || mapTile.m_uiTileID == MAX_UINT32)
+                if (!mapTile.isValid())
                     continue;
 
                 // if not same
@@ -443,20 +442,20 @@ namespace DATABASE
             setSize(UInt32Point(getSize().x, y), getLayerSize(MAP::LAYER_FOREGROUND), getLayerSize(MAP::LAYER_BACKGROUND));
         }
 
-        void MapPrototype::setLayerSize(uint32 size, Layer layer)
+        void MapPrototype::setLayerSize(uint8 size, Layer layer)
         {
             setSize(getSize(), layer == MAP::LAYER_FOREGROUND ? size : getLayerSize(MAP::LAYER_FOREGROUND),
                 layer == MAP::LAYER_BACKGROUND ? size : getLayerSize(MAP::LAYER_BACKGROUND));
         }
 
-        void MapPrototype::setSize(UInt32Point size, uint32 uiForegroundLayerSize, uint32 uiBackgroundLayerSize)
+        void MapPrototype::setSize(UInt32Point size, uint8 uiForegroundLayerSize, uint8 uiBackgroundLayerSize)
         {
             m_Layer.setSize(size, uiForegroundLayerSize, uiBackgroundLayerSize);
             if (hasMapDataStored())
                 m_Layer.resizeMap(size, uiForegroundLayerSize, uiBackgroundLayerSize);
         }
 
-        uint32 MapPrototype::getTile(UInt32Point3D at, Layer layer) const
+        TILE_INDEX MapPrototype::getTile(UInt32Point3D at, Layer layer) const
         {
             try
             {
@@ -464,10 +463,10 @@ namespace DATABASE
                     return m_Layer.getMapTile(at, layer).m_uiTileID;
             }
             catch (std::out_of_range&) {}
-            return MAX_UINT32;
+            return MATH::maximum<uint32>();
         }
 
-        void MapPrototype::setTile(UInt32Point3D at, uint32 uiID, Layer layer)
+        void MapPrototype::setTile(UInt32Point3D at, TILE_INDEX uiID, Layer layer)
         {
             try
             {
@@ -477,7 +476,7 @@ namespace DATABASE
             catch (std::out_of_range&) {}
         }
 
-        uint32 MapPrototype::getAutoTile(UInt32Point3D at, Layer layer) const
+        AUTO_TILE_INDEX MapPrototype::getAutoTile(UInt32Point3D at, Layer layer) const
         {
             try
             {
@@ -485,10 +484,10 @@ namespace DATABASE
                     return m_Layer.getMapTile(at, layer).m_uiAutoTileSetID;
             }
             catch (std::out_of_range&) {}
-            return MAX_UINT32;
+            return MATH::maximum<uint32>();
         }
 
-        void MapPrototype::setAutoTile(UInt32Point3D at, uint32 uiID, Layer layer)
+        void MapPrototype::setAutoTile(UInt32Point3D at, AUTO_TILE_INDEX uiID, Layer layer)
         {
             try
             {
@@ -516,7 +515,7 @@ namespace DATABASE
                     return m_Layer.getMapTile(at, layer);
             }
             catch (std::out_of_range&) {}
-            return MapTile(MAX_UINT32, MAX_UINT32);
+            return MapTile(MATH::maximum<uint32>(), MATH::maximum<uint32>());
         }
     }
 }

@@ -4,7 +4,7 @@
 #include "TextureDatabaseWidget.h"
 #include "UI/UI_SpriteDatabaseWidget.h"
 
-class SpriteDatabaseWidget : public TextureDatabaseWidget<DATABASE::SpritePrototype, DATABASE::SPRITE_INDEX>, Ui_SpriteDatabaseWidget
+class SpriteDatabaseWidget : public TextureDatabaseWidget<DATABASE::SpritePrototype>, Ui_SpriteDatabaseWidget
 {
     Q_OBJECT
 private:

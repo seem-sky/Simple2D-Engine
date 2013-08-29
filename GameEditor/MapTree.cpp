@@ -40,7 +40,6 @@ void MapTreeWidget::_openMapSettingsDialog()
 {
     if (MapTreeItem *pItem = dynamic_cast<MapTreeItem*>(currentItem()))
     {
-        UInt32Point3D oldSize = pItem->getMap()->getSize();
         MapSettings dialog(pItem->getMap(), this);
         if (dialog.exec())
         {

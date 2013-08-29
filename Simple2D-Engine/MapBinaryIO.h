@@ -20,6 +20,7 @@ namespace DATABASE
 
                 // different versions
                 void _readLayerV1(QDataStream &in, MapPrototypePtr pMap, MAP::Layer layer);
+                void _readLayerV2(QDataStream &in, MapPrototypePtr pMap, MAP::Layer layer);
                 void _readObjectsV1(QDataStream &in, MapPrototypePtr pMap);
                 void _readInfoV1(QDataStream &in, MapPrototypePtr pMap);
 

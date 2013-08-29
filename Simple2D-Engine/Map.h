@@ -32,7 +32,7 @@ namespace MAP
         inline uint32 getWidth() const { return getSize().x; }
         inline uint32 getHeight() const { return getSize().y; }
         inline UInt32Point getSize() const { return m_Layer.getSize(); }
-        inline uint32 getLayerSize(Layer layer) const { return m_Layer.getLayerSize(layer); }
+        inline uint8 getLayerSize(Layer layer) const { return m_Layer.getLayerSize(layer); }
 
         inline MapTile getMapTile(UInt32Point3D pos, Layer layer) const { return m_Layer.getMapTile(pos, layer); }
 

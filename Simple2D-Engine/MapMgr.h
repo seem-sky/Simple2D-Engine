@@ -7,7 +7,7 @@
 
 namespace MAP
 {
-    class MapMgr : public SpaceContainer<Map>
+    class MapMgr : public GapsContainer<Map>
     {
     public:
         MapMgr();

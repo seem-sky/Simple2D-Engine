@@ -140,9 +140,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Singleton.h">
-      <Filter>Core</Filter>
-    </ClInclude>
     <ClInclude Include="..\Simple2D-GameEditor\include\Application.h">
       <Filter>Game</Filter>
     </ClInclude>
@@ -166,9 +163,6 @@
     </ClInclude>
     <ClInclude Include="..\Simple2D-GameEditor\include\MapGrid.h">
       <Filter>Map</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Simple2D-GameEditor\include\math_extensions.h">
-      <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="..\Simple2D-GameEditor\include\WorldObject.h">
       <Filter>Map\MapObjects</Filter>

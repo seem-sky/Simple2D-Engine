@@ -175,7 +175,7 @@ void GameSceneView::drawTiles(QPainter *painter, const QRectF &rect, MAP::Layer 
             for (uint32 y = startTile.y; y < endTile.y; ++y)
             {
                 MAP::MapTile tileObj = pMap->getMapTile(UInt32Point3D(x, y, layer), layerType);
-                if (tileObj.isEmpty() || !tileObj.isValid())
+                if (tileObj.isEmpty())
                     continue;
                 if (!tileObj.isAutoTile())
                 {

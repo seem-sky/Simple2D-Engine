@@ -8,11 +8,11 @@ namespace DATABASE
 {
     namespace IO
     {
-        template <class T, typename TIndex>
+        template <class T>
         class DatabaseReader
         {
         public:
-            DatabaseReader(std::shared_ptr<Database<T, TIndex>> pDB) : m_pDB(pDB)
+            DatabaseReader(std::shared_ptr<Database<T>> pDB) : m_pDB(pDB)
             {}
 
             void read(QString filePath)
@@ -42,14 +42,14 @@ namespace DATABASE
             }
 
         private:
-            std::shared_ptr<Database<T, TIndex>> m_pDB;
+            std::shared_ptr<Database<T>> m_pDB;
         };
 
-        template <class T, typename TIndex>
+        template <class T>
         class DatabaseWriter
         {
         public:
-            DatabaseWriter(std::shared_ptr<Database<T, TIndex>> pDB) : m_pDB(pDB)
+            DatabaseWriter(std::shared_ptr<Database<T>> pDB) : m_pDB(pDB)
             {}
 
             void write(QString filePath)
@@ -78,7 +78,7 @@ namespace DATABASE
             }
 
         private:
-            std::shared_ptr<Database<T, TIndex>> m_pDB;
+            std::shared_ptr<Database<T>> m_pDB;
         };
     }
 }

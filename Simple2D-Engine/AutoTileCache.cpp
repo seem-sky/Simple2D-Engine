@@ -1,10 +1,10 @@
 #include "AutoTileCache.h"
 
-AutoTileCache::AutoTileCache(ConstTileCachePtr pTileCache) : SpaceContainer(), m_pTileCache(pTileCache) {}
+AutoTileCache::AutoTileCache(ConstTileCachePtr pTileCache) : GapsContainer(), m_pTileCache(pTileCache) {}
 
 bool AutoTileCache::getItem(uint32 uiID, ConstAutoTilePtr &result) const
 {
-    if (SpaceContainer::getItem(uiID, result) || const_cast<AutoTileCache&>(*this)._createAutoTile(uiID, result))
+    if (GapsContainer::getItem(uiID, result) || const_cast<AutoTileCache&>(*this)._createAutoTile(uiID, result))
         return true;
     return false;
 }

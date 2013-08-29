@@ -7,13 +7,13 @@ MapLayer::MapLayer()
     m_uiLayer.fill(0);
 }
 
-void MapLayer::resizeMap(UInt32Point size, uint32 uiForegroundLayerSize, uint32 uiBackgroundLayerSize)
+void MapLayer::resizeMap(UInt32Point size, uint8 uiForegroundLayerSize, uint8 uiBackgroundLayerSize)
 {
     m_BackgroundTiles.resize(boost::extents[size.x][size.y][uiBackgroundLayerSize]);
     m_ForegroundTiles.resize(boost::extents[size.x][size.y][uiForegroundLayerSize]);
 }
 
-void MapLayer::setSize(UInt32Point size, uint32 uiForegroundLayerSize, uint32 uiBackgroundLayerSize)
+void MapLayer::setSize(UInt32Point size, uint8 uiForegroundLayerSize, uint8 uiBackgroundLayerSize)
 {
     m_Size = size;
     m_uiLayer.at(LAYER_FOREGROUND) = uiForegroundLayerSize;

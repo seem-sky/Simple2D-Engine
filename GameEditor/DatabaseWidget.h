@@ -20,7 +20,7 @@ public:
     virtual void setFocus() {}      // this method is called when widget is selected (use e.g. to update some widgets)
 };
 
-template <class T, typename TIndex>
+template <class T>
 class DatabaseWidget : public DatabaseWidgetObject, protected Ui_DatabaseWidget
 {
 private:
@@ -143,8 +143,7 @@ protected:
     inline void change() { m_Changes = true; }
 
 public:
-    DatabaseWidget(QWidget *pParent) : DatabaseWidgetObject(pParent), Ui_DatabaseWidget(), m_Changes(false),
-        m_pDBChanger(new DATABASE::DatabaseChanger<T, TIndex>())
+    DatabaseWidget(QWidget *pParent) : DatabaseWidgetObject(pParent), Ui_DatabaseWidget(), m_Changes(false), m_pDBChanger(new DATABASE::DatabaseChanger<T>())
     {
         setupUi(this);
         m_pList->sortByColumn(0, Qt::AscendingOrder);
@@ -160,11 +159,12 @@ public:
 
     inline uint32 getCurrentID() const { return m_pID->value(); }
     inline bool hasChanged() const { return m_Changes; }
-    virtual void setDB(const std::shared_ptr<DATABASE::Database<T, TIndex>> &pDB)
+    virtual void setDB(const std::shared_ptr<DATABASE::Database<T>> &pDB)
     {
         m_pDBChanger->setDB(pDB);
         _updateWidget();
-        m_pListCount->setMaximum(pDB->getMaximumSize());
+        uint32 size = pDB->getMaximumSize();
+        m_pListCount->setMaximum(size);
     }
 
     inline uint32 getListCountValue() const { return m_pListCount->value(); }
@@ -175,13 +175,13 @@ public:
         updateItem();
     }
 
-    inline std::shared_ptr<DATABASE::DatabaseChanger<T, TIndex>> getDBChanger()
+    inline std::shared_ptr<DATABASE::DatabaseChanger<T>> getDBChanger()
     {
         return m_pDBChanger;
     }
 
 protected:
-    std::shared_ptr<DATABASE::DatabaseChanger<T, TIndex>> m_pDBChanger;
+    std::shared_ptr<DATABASE::DatabaseChanger<T>> m_pDBChanger;
     ModifyObject m_ModObj;
 
 private:

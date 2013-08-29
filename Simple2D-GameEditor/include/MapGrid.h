@@ -11,7 +11,7 @@ const uint32 GRID_SIZE = 10; // in tiles
 namespace MAP
 {
     typedef std::unordered_set<OBJECT::WorldObjectPtr> WorldObjectPtrUSet;
-    typedef SpaceContainer<OBJECT::WorldObject> WorldObjectContainer;
+    typedef GapsContainer<OBJECT::WorldObject> WorldObjectContainer;
     namespace GRID
     {
         class MapGrid

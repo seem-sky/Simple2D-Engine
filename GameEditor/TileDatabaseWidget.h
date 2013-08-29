@@ -4,7 +4,7 @@
 #include "UI/UI_TileDatabaseWidget.h"
 #include "TextureDatabaseWidget.h"
 
-class TileDatabaseWidget : public TextureDatabaseWidget<DATABASE::TilePrototype, DATABASE::TILE_INDEX>, Ui_TileDatabaseWidget
+class TileDatabaseWidget : public TextureDatabaseWidget<DATABASE::TilePrototype>, Ui_TileDatabaseWidget
 {
     Q_OBJECT
 private:

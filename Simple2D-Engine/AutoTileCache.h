@@ -3,7 +3,7 @@
 
 #include "AutoTile.h"
 
-class AutoTileCache : public SpaceContainer<AutoTile>
+class AutoTileCache : public GapsContainer<AutoTile>
 {
 private:
     bool _createAutoTile(uint32 uiID, ConstAutoTilePtr &result);

@@ -4,7 +4,7 @@
 #include "UI/UI_TileSetDatabaseWidget.h"
 #include "DatabaseWidget.h"
 
-class TileSetDatabaseWidget : public DatabaseWidget<DATABASE::TILE_SET::TileSetPrototype, DATABASE::TILE_SET_INDEX>, Ui_TileSetDatabaseWidget
+class TileSetDatabaseWidget : public DatabaseWidget<DATABASE::TILE_SET::TileSetPrototype>, Ui_TileSetDatabaseWidget
 {
     Q_OBJECT
 private:

@@ -2,7 +2,7 @@
 
 using namespace DATABASE::MAP_STRUCTURE;
 
-const uint16 CURRENT_VERSION = 1;
+const uint16 CURRENT_VERSION = 2;
 
 /*#####
 # MapBinaryReader
@@ -13,7 +13,9 @@ void INPUT::MapBinaryReader::readFile(const QString &path, MapPrototypePtr pMap)
         throw std::invalid_argument("");
 
     QFile file(path+pMap->getFileName());
-    if (!file.open(QIODevice::ReadOnly))
+    if (file.fileName().indexOf(MAP_FILE_ENDING) >= file.fileName().length())
+        throw std::ios::failure("Invalid file type: " + (path+pMap->getFileName()).toStdString());
+    else if (!file.open(QIODevice::ReadOnly))
         throw std::ios::failure("Unable to open file " + (path+pMap->getFileName()).toStdString());
 
     QDataStream in(&file);
@@ -34,6 +36,7 @@ void INPUT::MapBinaryReader::_readLayer(QDataStream &in, MapPrototypePtr pMap, M
     switch(version)
     {
     case 1: _readLayerV1(in, pMap, layer); break;
+    case 2: _readLayerV2(in, pMap, layer); break;
     default: throw std::ios::failure("No valid file version."); break;
     }
 }
@@ -42,12 +45,35 @@ void INPUT::MapBinaryReader::_readObjects(QDataStream &in, MapPrototypePtr pMap,
 {
     switch(version)
     {
-    case 1: _readObjectsV1(in, pMap); break;
+    case 1:
+    case 2:
+        _readObjectsV1(in, pMap);
+        break;
     default: throw std::ios::failure("No valid file version."); break;
     }
 }
 
+// Tile = uint32; AutoTile = uint32
 void INPUT::MapBinaryReader::_readLayerV1(QDataStream &in, MapPrototypePtr pMap, MAP::Layer layer)
+{
+    UInt32Point3D pos;
+    for (pos.z = 0; pos.z < pMap->getLayerSize(layer); ++pos.z)
+    {
+        for (pos.y = 0; pos.y < pMap->getSize().y; ++pos.y)
+        {
+            for (pos.x = 0; pos.x < pMap->getSize().x; ++pos.x)
+            {
+                uint32 uiTile, uiAutoTile;
+                in >> uiTile >> uiAutoTile;
+                MapTile tile(uiTile, uiAutoTile);
+                pMap->setMapTile(pos, tile, layer);
+            }
+        }
+    }
+}
+
+// Tile = uint16; AutoTile = uint8
+void INPUT::MapBinaryReader::_readLayerV2(QDataStream &in, MapPrototypePtr pMap, MAP::Layer layer)
 {
     UInt32Point3D pos;
     for (pos.z = 0; pos.z < pMap->getLayerSize(layer); ++pos.z)
@@ -88,9 +114,7 @@ void OUTPUT::MapBinaryWriter::writeFile(const QString &path, ConstMapPrototypePt
         throw std::invalid_argument("");
 
     QFile file(path+pMap->getFileName());
-    if (file.fileName().indexOf(MAP_FILE_ENDING))
-        throw std::ios::failure("Invalid file type: " + (path+pMap->getFileName()).toStdString());
-    else if (!file.open(QIODevice::WriteOnly))
+    if (!file.open(QIODevice::WriteOnly))
         throw std::ios::failure("Unable to open file: " + (path+pMap->getFileName()).toStdString());
 
     QDataStream out(&file);

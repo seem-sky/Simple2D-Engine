@@ -4,7 +4,7 @@
 #include "QtGlobal.h"
 #include "DatabaseMgr.h"
 
-class TileCache : public SpaceContainer<QPixmap>
+class TileCache : public GapsContainer<QPixmap>
 {
 private:
     bool _createPixmap(uint32 uiID, ConstQPixmapPtr &result);

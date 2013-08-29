@@ -3,7 +3,7 @@
 
 #include "DatabaseWidget.h"
 
-class ObjectAnimationTypeDatabaseWidget : public DatabaseWidget<DATABASE::ObjectAnimationTypePrototype, DATABASE::ANIMATION_TYPE_INDEX>
+class ObjectAnimationTypeDatabaseWidget : public DatabaseWidget<DATABASE::ObjectAnimationTypePrototype>
 {
     Q_OBJECT
 protected:

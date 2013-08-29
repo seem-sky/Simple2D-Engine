@@ -5,6 +5,13 @@
 #include <boost/multi_array.hpp>
 #include <boost/dynamic_bitset.hpp>
 
+namespace DATABASE
+{
+    // index typedefs
+    typedef uint16 TILE_INDEX;
+    typedef uint8 AUTO_TILE_INDEX;
+}
+
 namespace MAP
 {
     enum Layer
@@ -16,13 +23,14 @@ namespace MAP
     class MapTile
     {
     public:
-        MapTile(uint32 uiTileID = 0, uint32 uiAutoTileSetID = 0) : m_uiAutoTileSetID(uiAutoTileSetID), m_uiTileID(uiTileID) {}
-        uint32 m_uiTileID;
-        uint32 m_uiAutoTileSetID;
+        MapTile(DATABASE::TILE_INDEX uiTileID = 0, DATABASE::AUTO_TILE_INDEX uiAutoTileSetID = 0) : m_uiAutoTileSetID(uiAutoTileSetID), m_uiTileID(uiTileID) {}
+        DATABASE::TILE_INDEX m_uiTileID;
+        DATABASE::AUTO_TILE_INDEX m_uiAutoTileSetID;
 
         inline bool isAutoTile() const { return m_uiAutoTileSetID != 0; }
         inline bool isEmpty() const { return !m_uiTileID && !m_uiAutoTileSetID; }
-        inline bool isValid() const { return m_uiTileID != MAX_UINT32 && m_uiAutoTileSetID != MAX_UINT32; }
+        inline bool isValid() const { return m_uiTileID != MATH::maximum<DATABASE::TILE_INDEX>() &&
+            m_uiAutoTileSetID != MATH::maximum<DATABASE::AUTO_TILE_INDEX>(); }
     };
 
     typedef boost::multi_array<MapTile, 3> TileDataMultiarray3D;
@@ -32,10 +40,10 @@ namespace MAP
     public:
         MapLayer();
 
-        void resizeMap(UInt32Point size, uint32 uiForegroundLayerSize, uint32 uiBackgroundLayerSize);
-        void setSize(UInt32Point size, uint32 uiForegroundLayerSize, uint32 uiBackgroundLayerSize);
+        void resizeMap(UInt32Point size, uint8 uiForegroundLayerSize, uint8 uiBackgroundLayerSize);
+        void setSize(UInt32Point size, uint8 uiForegroundLayerSize, uint8 uiBackgroundLayerSize);
         inline UInt32Point getSize() const { return m_Size; }
-        inline uint32 getLayerSize(Layer layer) const { return m_uiLayer.at(layer); };
+        inline uint8 getLayerSize(Layer layer) const { return m_uiLayer.at(layer); };
 
         MapTile& getMapTile(UInt32Point3D at, Layer layer);
         const MapTile& getMapTile(UInt32Point3D at, Layer layer) const;
@@ -47,7 +55,7 @@ namespace MAP
         TileDataMultiarray3D m_ForegroundTiles;
 
         UInt32Point m_Size;
-        std::array<uint32, 2> m_uiLayer;
+        std::array<uint8, 2> m_uiLayer;
     };
 }
 #endif

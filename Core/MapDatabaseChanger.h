@@ -8,11 +8,12 @@ namespace DATABASE
     namespace MAP_STRUCTURE
     {
         typedef std::map<uint32, MapPrototypePtr> UInt32MapPrototypeMap;
-        class MapDatabaseChanger : public DATABASE::DatabaseChanger<MapPrototype, MAP_INDEX>
+        class MapDatabaseChanger : public DATABASE::DatabaseChanger<MapPrototype>
         {
         private:
             inline DATABASE::MapDatabasePtr _getTargetDB() { return std::dynamic_pointer_cast<MapDatabase>(m_pTargetDB); }
             inline DATABASE::MapDatabasePtr _getNewDB() { return std::dynamic_pointer_cast<MapDatabase>(m_pNewDB); }
+
         public:
             MapDatabaseChanger(MapDatabasePtr pMapDB = MapDatabasePtr()) : DatabaseChanger(pMapDB)
             {

@@ -29,12 +29,12 @@ using namespace GRID;
 //
 void MapGrid::addObject(OBJECT::WorldObjectPtr pObject)
 {
-    if (pObject && !m_WorldObjects.getItem(pObject->getGUID(), OBJECT::WorldObjectPtr()))
+    if (pObject && !m_WorldObjects.hasValidItem(pObject->getGUID()))
         m_WorldObjects.setItem(pObject->getGUID(), pObject);
 }
 
 void MapGrid::removeObject(OBJECT::WorldObjectPtr pObject)
 {
     if (pObject)
-        m_WorldObjects.setItem(pObject->getGUID(), pObject, false);
+        m_WorldObjects.setItem(pObject->getGUID(), pObject);
 }

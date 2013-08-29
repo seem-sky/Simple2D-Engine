@@ -53,7 +53,6 @@
     <ClInclude Include="..\Simple2D-GameEditor\include\Logfile.h" />
     <ClInclude Include="..\Simple2D-GameEditor\include\MapDatabase.h" />
     <ClInclude Include="..\Simple2D-GameEditor\include\MapGrid.h" />
-    <ClInclude Include="..\Simple2D-GameEditor\include\math_extensions.h" />
     <ClInclude Include="..\Simple2D-GameEditor\include\WorldObject.h" />
     <ClInclude Include="AnimationHolder.h" />
     <ClInclude Include="AutoTile.h" />
@@ -78,7 +77,6 @@
     <ClInclude Include="GameWindow.h" />
     <ClInclude Include="QtGlobal.h" />
     <ClInclude Include="SceneMgr.h" />
-    <ClInclude Include="Singleton.h" />
     <ClInclude Include="TileCache.h" />
     <ClInclude Include="TransformationHolder.h" />
     <ClInclude Include="XML_IO.h" />

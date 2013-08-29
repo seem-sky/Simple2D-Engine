@@ -5,12 +5,12 @@
 
 using namespace DATABASE;
 
-TileCache::TileCache() : SpaceContainer()
+TileCache::TileCache() : GapsContainer()
 {}
 
 bool TileCache::getItem(uint32 uiID, ConstQPixmapPtr &result) const
 {
-    if (SpaceContainer::getItem(uiID, result) || const_cast<TileCache&>(*this)._createPixmap(uiID, result))
+    if (GapsContainer::getItem(uiID, result) || const_cast<TileCache&>(*this)._createPixmap(uiID, result))
         return true;
     return false;
 }

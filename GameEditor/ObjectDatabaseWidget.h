@@ -14,7 +14,7 @@
     DATABASE_WIDGET_SLOTS
 
 template <class T>
-class ObjectDatabaseWidget : public DatabaseWidget<T, DATABASE::WORLD_OBJECT_INDEX>, public Ui_WorldObjectDatabaseWidget
+class ObjectDatabaseWidget : public DatabaseWidget<T>, public Ui_WorldObjectDatabaseWidget
 {
 protected:
     void setupAnimationViewer(AnimationView* pViewer, uint32 uiAnimationID)

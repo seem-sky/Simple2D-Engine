@@ -82,7 +82,7 @@ void TileBrush::calculateFillArea(MapViewer *pWidget, const UInt32Point3D &cente
         return;
 
     MAP::MapTile startTile(map->getMapTile(center, m_Layer));
-    if (startTile.m_uiAutoTileSetID == MAX_UINT32 || startTile.m_uiTileID == MAX_UINT32)
+    if (!startTile.isValid())
         return;
 
     // new action
@@ -137,7 +137,7 @@ void MapTileBrush::_drawPen(MapViewer *pWidget, const UInt32Point3D &center)
     MapTile mapTile = map->getMapTile(center, getLayer());
     if (!mapTile.m_uiAutoTileSetID && mapTile.m_uiTileID == getTile())
         return;
-    if (mapTile.m_uiTileID != MAX_UINT32)
+    if (mapTile.m_uiTileID != MATH::maximum<DATABASE::TILE_INDEX>())
     {
         pWidget->addAction(MapActionPtr(new TileMapAction(center, mapTile, getLayer(), pWidget->getMap())));
         map->setMapTile(center, MapTile(getTile(), 0), getLayer());
@@ -276,8 +276,8 @@ void MapAutoTileBrush::_drawPen(MapViewer *pWidget, const UInt32Point3D &center)
     if (!pWidget || !pWidget->getMap() || !pWidget->getScene() || !m_pAutoTileDB || !m_pAutoTileDB->getItem(getTile(), proto) || !proto)
         return;
 
-    uint32 uiOldTile = pWidget->getMap()->getAutoTile(center, getLayer());
-    if (uiOldTile != MAX_UINT32 && getTile() != uiOldTile)
+    DATABASE::AUTO_TILE_INDEX uiOldTile = pWidget->getMap()->getAutoTile(center, getLayer());
+    if (uiOldTile != MATH::maximum<DATABASE::AUTO_TILE_INDEX>() && getTile() != uiOldTile)
     {
         pWidget->addAction(MapActionPtr(new TileMapAction(center, pWidget->getMap()->getMapTile(center, getLayer()), getLayer(), pWidget->getMap())));
         _setAutoTile(pWidget->getMap(), center, proto);

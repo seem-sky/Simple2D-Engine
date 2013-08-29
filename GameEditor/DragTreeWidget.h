@@ -59,7 +59,7 @@ private:
 /*#####
 # PrototypeTreeWidget
 #####*/
-template <class T, typename TIndex>
+template <class T>
 class PrototypeTreeWidget : public PixmapTooltipTreeWidget
 {
 public:
@@ -121,13 +121,12 @@ private:
 protected:
     std::shared_ptr<const T> m_pDB;
 };
-typedef PrototypeTreeWidget<DATABASE::DatabaseChanger<DATABASE::ObjectAnimationTypePrototype, DATABASE::ANIMATION_TYPE_INDEX>, DATABASE::ANIMATION_TYPE_INDEX> ObjectAnimationTypeTreeWidget;
+typedef PrototypeTreeWidget<DATABASE::DatabaseChanger<DATABASE::ObjectAnimationTypePrototype>> ObjectAnimationTypeTreeWidget;
 
 /*#####
 # AnimationPrototypeDragTreeWidget
 #####*/
-class AnimationPrototypeDragTreeWidget :
-    public PrototypeTreeWidget<DATABASE::DatabaseChanger<DATABASE::AnimationPrototype, DATABASE::ANIMATION_INDEX>, DATABASE::ANIMATION_TYPE_INDEX>
+class AnimationPrototypeDragTreeWidget : public PrototypeTreeWidget<DATABASE::DatabaseChanger<DATABASE::AnimationPrototype>>
 {
 protected:
     QWidget* setTooltipWidget(uint32 uiPrototypeID);
@@ -144,8 +143,8 @@ private:
 /*#####
 # TexturePrototypeDragTreeWidget
 #####*/
-template<class T, typename TIndex>
-class TexturePrototypeDragTreeWidget : public PrototypeTreeWidget<DATABASE::DatabaseChanger<T, TIndex>, TIndex>
+template<class T>
+class TexturePrototypeDragTreeWidget : public PrototypeTreeWidget<DATABASE::DatabaseChanger<T>>
 {
 protected:
     void startDrag(Qt::DropActions supportedActions)
@@ -195,8 +194,7 @@ public:
 /*#####
 # TileSetPrototypeDragTreeWidget
 #####*/
-class TileSetPrototypeDragTreeWidget :
-    public PrototypeTreeWidget<DATABASE::Database<DATABASE::TILE_SET::TileSetPrototype, DATABASE::TILE_SET_INDEX>, DATABASE::TILE_SET_INDEX>
+class TileSetPrototypeDragTreeWidget : public PrototypeTreeWidget<DATABASE::Database<DATABASE::TILE_SET::TileSetPrototype>>
 {
     Q_OBJECT
 protected:
@@ -221,8 +219,7 @@ private:
 /*#####
 # WorldObjectPrototypeDragTreeWidget
 #####*/
-class WorldObjectPrototypeDragTreeWidget :
-    public PrototypeTreeWidget<DATABASE::Database<DATABASE::MAP_OBJECT::WorldObjectPrototype, DATABASE::WORLD_OBJECT_INDEX>, DATABASE::WORLD_OBJECT_INDEX>
+class WorldObjectPrototypeDragTreeWidget : public PrototypeTreeWidget<DATABASE::Database<DATABASE::MAP_OBJECT::WorldObjectPrototype>>
 {
     Q_OBJECT
 protected:
@@ -271,6 +268,6 @@ private:
     DATABASE::ConstTileDatabaseChangerPtr m_pTileDB;
     uint32 m_uiCurrentTileID;
 };
-typedef TexturePrototypeDragTreeWidget<DATABASE::TilePrototype, DATABASE::TILE_INDEX> TilePrototypeDragTreeWidget;
-typedef TexturePrototypeDragTreeWidget<DATABASE::SpritePrototype,DATABASE::SPRITE_INDEX> SpritePrototypeDragTreeWidget;
+typedef TexturePrototypeDragTreeWidget<DATABASE::TilePrototype> TilePrototypeDragTreeWidget;
+typedef TexturePrototypeDragTreeWidget<DATABASE::SpritePrototype> SpritePrototypeDragTreeWidget;
 #endif

@@ -12,7 +12,7 @@ namespace DATABASE
         const char MAP_FILE_ENDING[] = ".map";
         const char MAP_FOLDER[] = "/Maps/";
 
-        class MapDatabase : public DATABASE::Database<MapPrototype, MAP_INDEX>
+        class MapDatabase : public DATABASE::Database<MapPrototype>
         {
         public:
             MapDatabase(void);
