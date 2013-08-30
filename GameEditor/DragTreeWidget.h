@@ -89,13 +89,13 @@ public:
             addTopLevelItem(new PrototypeTreeWidgetItem(stringList));
         }
 
-        UInt32StringMap spriteList;
+        UInt32StringPairVector spriteList;
         m_pDB->getItemShortInfos(spriteList);
-        for (UInt32StringMap::const_iterator itr = spriteList.begin(); itr != spriteList.end(); ++itr)
+        for (const auto &obj : spriteList)
         {
             QStringList stringList;
-            stringList.push_back(QString::number(itr->first));
-            stringList.push_back(itr->second);
+            stringList.push_back(QString::number(obj.first));
+            stringList.push_back(obj.second);
             addTopLevelItem(new PrototypeTreeWidgetItem(stringList));
         }
 

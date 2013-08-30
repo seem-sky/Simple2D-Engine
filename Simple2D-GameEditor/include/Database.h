@@ -33,7 +33,7 @@ namespace DATABASE
         void resize(uint32 uiSize, bool fillNew = true)
         {
             uint32 uiOldSize = getSize();
-            Container::resize(uiSize);
+            Container::resize(uiSize, fillNew);
             BASIC_LOG("Resize database to " + QString::number(uiSize));
             if (fillNew && uiSize > uiOldSize)
             {

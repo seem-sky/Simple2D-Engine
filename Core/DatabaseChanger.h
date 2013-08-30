@@ -53,13 +53,36 @@ namespace DATABASE
             return false;
         }
 
-        inline void getItemShortInfos(UInt32StringMap &result) const
+        inline void getItemShortInfos(UInt32StringPairVector &result) const
         {
             if (!m_pTargetDB)
                 return;
-            m_pNewDB->getItemShortInfos(result);
+            UInt32StringPairVector secondResult;
+            m_pNewDB->getItemShortInfos(secondResult);
             m_pTargetDB->getItemShortInfos(result);
-            UInt32StringMap::iterator itr = result.begin();
+            // compare results
+            for (auto &obj : secondResult)
+            {
+                bool success = false;
+                for (auto itr = result.begin(); itr != result.end(); ++itr)
+                {
+                    if (obj.first == itr->first)
+                    {
+                        std::swap(obj.second, itr->second);
+                        success = true;
+                        break;
+                    }
+                    else if (obj.first < itr->first)
+                    {
+                        result.insert(itr, std::move(obj));
+                        success = true;
+                        break;
+                    }
+                }
+                if (!success)
+                    result.push_back(std::move(obj));
+            }
+            auto itr = result.begin();
             std::advance(itr, m_pNewDB->getSize());
             result.erase(itr, result.end());
         }
@@ -76,7 +99,7 @@ namespace DATABASE
 
         inline void resize(uint32 newSize)
         {
-            m_pNewDB->resize(newSize);
+            m_pNewDB->resize(newSize, false);
         }
 
         virtual void storeChanges()

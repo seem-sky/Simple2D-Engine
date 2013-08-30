@@ -26,7 +26,7 @@ class DatabaseWidget : public DatabaseWidgetObject, protected Ui_DatabaseWidget
 private:
     void _updateWidget()
     {
-        UInt32StringMap protoInfo;
+        UInt32StringPairVector protoInfo;
         m_pDBChanger->getItemShortInfos(protoInfo);
         fillListWidget(protoInfo);
     }
@@ -122,16 +122,16 @@ protected:
         change();
     }
 
-    virtual void fillListWidget(const UInt32StringMap &sStrings)
+    virtual void fillListWidget(const UInt32StringPairVector &pairs)
     {
         m_pListCount->setValue(0);
         m_pList->clear();
-        m_pListCount->setValue(sStrings.size());
-        for (UInt32StringMap::const_iterator itr = sStrings.begin(); itr != sStrings.end(); ++itr)
+        m_pListCount->setValue(pairs.size());
+        for (const auto &obj : pairs)
         {
             QStringList stringList;
-            stringList.push_back(QString::number(itr->first));
-            stringList.push_back(itr->second);
+            stringList.push_back(QString::number(obj.first));
+            stringList.push_back(obj.second);
             m_pList->addTopLevelItem(new PrototypeTreeWidgetItem(stringList));
         }
 
@@ -163,15 +163,14 @@ public:
     {
         m_pDBChanger->setDB(pDB);
         _updateWidget();
-        uint32 size = pDB->getMaximumSize();
-        m_pListCount->setMaximum(size);
+        m_pListCount->setMaximum(pDB->getMaximumSize());
     }
 
     inline uint32 getListCountValue() const { return m_pListCount->value(); }
-    void updateName(QTreeWidgetItem *pItem, const QString &sName)
+    void updateName(QTreeWidgetItem *pItem, const QString &name)
     {
         if (pItem)
-            pItem->setText(1, sName);
+            pItem->setText(1, name);
         updateItem();
     }
 
