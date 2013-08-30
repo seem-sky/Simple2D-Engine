@@ -402,7 +402,7 @@ namespace DATABASE
         };
         typedef std::shared_ptr<AnimationInfo> AnimationInfoPtr;
         typedef std::shared_ptr<const AnimationInfo> ConstAnimationInfoPtr;
-        typedef Container<AnimationInfo> AnimationInfoContainer;
+        typedef GapsContainer<AnimationInfo> AnimationInfoContainer;
 
         class WorldObjectPrototype : public Prototype
         {
@@ -556,7 +556,7 @@ namespace DATABASE
         };
         typedef std::shared_ptr<MapObject> MapObjectPtr;
         typedef std::shared_ptr<const MapObject> ConstMapObjectPtr;
-        typedef Container<MapObject> MapObjectContainer;
+        typedef GapsContainer<MapObject> MapObjectContainer;
         typedef std::vector<MapObjectPtr> MapObjectPtrVector;
         typedef boost::multi_array<MapObjectPtrVector, 3> MapObjectPtrVectorMultiarray3D;
 

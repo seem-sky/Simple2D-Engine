@@ -1,5 +1,5 @@
-#ifndef DATABASE__IO_H
-#define DATABASE__IO_H
+#ifndef DATABASE_IO_H
+#define DATABASE_IO_H
 
 #include "Database.h"
 #include "PrototypeParser.h"

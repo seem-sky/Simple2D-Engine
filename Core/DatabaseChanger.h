@@ -82,14 +82,15 @@ namespace DATABASE
                 if (!success)
                     result.push_back(std::move(obj));
             }
-            auto itr = result.begin();
-            std::advance(itr, m_pNewDB->getSize());
-            result.erase(itr, result.end());
+            // resize result if greater than m_pNewDB
+            if (m_pNewDB->getSize() < result.size())
+                result.resize(m_pNewDB->getSize());
         }
 
         inline void setItem(uint32 uiID, std::shared_ptr<T> &prototype)
         {
             m_pNewDB->setItem(uiID, prototype);
+            m_ChangedIDs.insert(uiID);
         }
 
         inline uint32 getSize()
@@ -99,27 +100,31 @@ namespace DATABASE
 
         inline void resize(uint32 newSize)
         {
-            m_pNewDB->resize(newSize, false);
+            m_pNewDB->resize(newSize, true);
         }
 
         virtual void storeChanges()
         {
             if (!m_pTargetDB)
                 return;
-            for (uint32 i = 1; i <= m_pNewDB->getSize(); ++i)
+
+            // compare changed items
+            for (auto i : m_ChangedIDs)
             {
                 std::shared_ptr<T> proto;
                 if (m_pNewDB->getItem(i, proto))
                     m_pTargetDB->setItem(i, proto);
             }
+
             m_pTargetDB->resize(m_pNewDB->getSize());
-            m_pNewDB->clear();
             _setNewDBSize();
+            m_ChangedIDs.clear();
         }
 
     protected:
         std::shared_ptr<Database<T>> m_pTargetDB;
         std::shared_ptr<Database<T>> m_pNewDB;
+        UInt32UnorderedSet m_ChangedIDs;
     };
 
     typedef std::shared_ptr<const DatabaseChanger<TilePrototype>> ConstTileDatabaseChangerPtr;
