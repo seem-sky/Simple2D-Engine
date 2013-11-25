@@ -15,20 +15,17 @@ namespace MAP
         class WorldObject : public Object
         {
         private:
-            void _setupFromPrototype(DATABASE::ConstWorldObjectPrototypePtr pWorldObject);
+            void _setupFromPrototype(const DATABASE::MAP_OBJECT::WorldObjectPrototype *pWorldObject);
             void _setCurrentAnimation(uint32 pose);
 
         public:
-            WorldObject(DATABASE::ConstDatabaseMgrPtr pDBMgr, uint32 GUID = 0,
-                DATABASE::ConstWorldObjectPrototypePtr pWorldObject = DATABASE::ConstWorldObjectPrototypePtr());
+            WorldObject(const DATABASE::DatabaseMgr &pDBMgr, uint32 GUID = 0, uint32 ID = 0);
 
-            inline DATABASE::ConstAnimationPrototypePtr getCurrentAnimation() const { return m_AnimationHolder.getCurrentAnimation(); }
+            inline const DATABASE::ANIMATION::AnimationPrototype* getCurrentAnimation() const { return m_AnimationHolder.getCurrentAnimation(); }
             inline uint32 getCurrentFrame() const { return m_AnimationHolder.getCurrentFrame(); }
 
             inline void setDirection(MapDirection direction) { m_Direction = direction; }
             inline MapDirection getDirection() const { return m_Direction; }
-
-            inline void setDBMgr(DATABASE::ConstDatabaseMgrPtr pDBMgr) { m_pDBMgr = pDBMgr; _setCurrentAnimation(getDirection()); }
 
             virtual void update(uint32 uiDiff);
 
@@ -37,9 +34,8 @@ namespace MAP
             UInt32UInt32UMap m_Animations;
             DATABASE::MAP_STRUCTURE::MapDirection m_Direction;
             Int32Rect m_BoundingRect;
-            DATABASE::ConstDatabaseMgrPtr m_pDBMgr;
+            const DATABASE::DatabaseMgr &m_DBMgr;
         };
-        typedef std::shared_ptr<WorldObject> WorldObjectPtr;
     }
 }
 #endif

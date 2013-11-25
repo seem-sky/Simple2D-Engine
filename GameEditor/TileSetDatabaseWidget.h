@@ -1,8 +1,10 @@
-#ifndef TILE_SET_DATABASE_H
-#define TILE_SET_DATABASE_H
+#ifndef TILE_SET_DATABASE_WIDGET_H
+#define TILE_SET_DATABASE_WIDGET_H
 
-#include "UI/UI_TileSetDatabaseWidget.h"
 #include "DatabaseWidget.h"
+
+const uint32 MIN_COLUMN_COUNT = 1;
+const uint32 MIN_ROW_COUNT = 1;
 
 class TileSetDatabaseWidget : public DatabaseWidget<DATABASE::TILE_SET::TileSetPrototype>, Ui_TileSetDatabaseWidget
 {

@@ -33,7 +33,7 @@
     <string>animations:</string>
    </property>
   </widget>
-  <widget class="AnimationPrototypeDragTreeWidget" name="m_pAnimationList">
+  <widget class="QTreeWidget" name="m_pAnimationList">
    <property name="geometry">
     <rect>
      <x>630</x>
@@ -192,7 +192,7 @@
     <bool>false</bool>
    </property>
   </widget>
-  <widget class="AnimationViewerTableWidget" name="m_pAnimationTable">
+  <widget class="QTableWidget" name="m_pAnimationTable">
    <property name="geometry">
     <rect>
      <x>380</x>
@@ -424,18 +424,6 @@
    </widget>
   </widget>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>AnimationPrototypeDragTreeWidget</class>
-   <extends>QTreeWidget</extends>
-   <header>dragtreewidget.h</header>
-  </customwidget>
-  <customwidget>
-   <class>AnimationViewerTableWidget</class>
-   <extends>QTableWidget</extends>
-   <header>animationviewerwidget.h</header>
-  </customwidget>
- </customwidgets>
  <tabstops>
   <tabstop>m_pBoundingLeft</tabstop>
   <tabstop>m_pBoundingUp</tabstop>

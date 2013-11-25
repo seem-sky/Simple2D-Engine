@@ -4,28 +4,37 @@
 #include <QtGui/QPixmap>
 #include <QtGui/QBitmap>
 #include <QtCore/QString>
+#include <QtGui/QPixmapCache>
 #include "DatabasePrototypes.h"
 #include "Container.h"
 
-// QPixmap typedefs
-typedef Container<QPixmap> QPixmapCotainer;
-typedef std::shared_ptr<QPixmap> QPixmapPtr;
-typedef std::shared_ptr<const QPixmap> ConstQPixmapPtr;
-
-static bool createPixmapFromTexturePrototype(const QString &path, DATABASE::ConstTexturePrototypePtr proto, QPixmap &result)
+static bool createPixmap(const QString &path, const QString &fileNamePath, const Color &color, QPixmap &result)
 {
-    if (!proto)
-        return false;
-
-    QPixmap pixmap(path + "/Textures/" + proto->getPathName());
+    QPixmap pixmap(path + "/Textures/" + fileNamePath);
     if (!pixmap.isNull())
     {
         // set transparency color
-        if (proto->getTransparencyColor().hasValidColor())
-            pixmap.setMask(pixmap.createMaskFromColor(QColor(proto->getTransparencyColor().getRed(),
-            proto->getTransparencyColor().getGreen(), proto->getTransparencyColor().getBlue())));
+        if (color.hasValidColor())
+            pixmap.setMask(pixmap.createMaskFromColor(QColor(color.getRed(), color.getGreen(), color.getBlue())));
         result = pixmap;
         return true;
+    }
+    return false;
+}
+
+static bool createPixmapFromTexturePrototype(const QString &path, const DATABASE::TexturePrototype *pTexture, QPixmap &result)
+{
+    if (pTexture)
+    {
+        // use pixmap cache
+        QString pixmapKey = pTexture->getPathName() + QString::fromStdString(pTexture->getTransparencyColor().getColorString());
+        if (QPixmapCache::find(pixmapKey, &result))
+            return true;
+        else if (createPixmap(path, pTexture->getPathName(), pTexture->getTransparencyColor(), result))
+        {
+            QPixmapCache::insert(pixmapKey, result);
+            return true;
+        }
     }
     return false;
 }

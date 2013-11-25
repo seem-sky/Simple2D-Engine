@@ -3,7 +3,7 @@
 
 #include "DatabaseMgr.h"
 #include "AutoTileCache.h"
-#include "MapDatabaseChanger.h"
+//#include "MapDatabaseChanger.h"
 #include "MapDatabase.h"
 
 enum MappingMode
@@ -19,7 +19,7 @@ class SharedMapEditorData
 {
     friend MapEditorWidget;
 private:
-    void _setDatabaseMgr(DATABASE::DatabaseMgrPtr pDBMgr);
+    void _setDatabaseMgr(DATABASE::DatabaseMgr &DBMgr);
     void _updateData();
 
 public:
@@ -28,23 +28,24 @@ public:
     inline MappingMode getMappingMode() const { return m_MappingMode; }
     inline MAP::Layer getCurrentLayer() const { return m_CurrentLayer; }
 
-    DATABASE::ConstTileDatabasePtr getTileDatabase() const;
-    DATABASE::ConstTileSetDatabasePtr getTileSetDatabase() const;
-    DATABASE::ConstAutoTileDatabasePtr getAutoTileDatabase() const;
-    DATABASE::ConstSpriteDatabasePtr getSpriteDatabase() const;
-    DATABASE::ConstAnimationDatabasePtr getAnimationDatabase() const;
-    DATABASE::ConstWorldObjectDatabasePtr getWorldObjectDatabase() const;
+    const DATABASE::TileDatabase* getTileDatabase() const;
+    const DATABASE::TileSetDatabase* getTileSetDatabase() const;
+    const DATABASE::AutoTileDatabase* getAutoTileDatabase() const;
+    const DATABASE::SpriteDatabase* getSpriteDatabase() const;
+    const DATABASE::AnimationDatabase* getAnimationDatabase() const;
+    const DATABASE::WorldObjectDatabase* getWorldObjectDatabase() const;
+    const DATABASE::DynamicObjectDatabase* getDynamicObjectDatabase() const;
 
-    DATABASE::MAP_STRUCTURE::MapDatabaseChangerPtr getMapDatabase();
+    //DATABASE::MAP_STRUCTURE::MapDatabaseChangerPtr getMapDatabase();
 
-    inline ConstTileCachePtr getTileCache() const { return m_pTileCache; }
-    inline ConstAutoTileCachePtr getAutoTileCache() const { return m_pAutoTileCache; }
+    inline const TileCache& getTileCache() const { return m_TileCache; }
+    inline const AutoTileCache* getAutoTileCache() const { return m_pAutoTileCache; }
 
 private:
-    DATABASE::DatabaseMgrPtr m_pDatabaseMgr;
-    DATABASE::MAP_STRUCTURE::MapDatabaseChangerPtr m_pMapDBChanger;
-    TileCachePtr m_pTileCache;
-    AutoTileCachePtr m_pAutoTileCache;
+    DATABASE::DatabaseMgr &m_DatabaseMgr;
+    //DATABASE::MAP_STRUCTURE::MapDatabaseChangerPtr m_pMapDBChanger;
+    TileCache m_TileCache;
+    const AutoTileCache* m_pAutoTileCache;
 
     MappingMode m_MappingMode;
     MAP::Layer m_CurrentLayer;

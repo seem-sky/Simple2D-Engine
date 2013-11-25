@@ -154,14 +154,15 @@ public:
 
     void storeDBChanges()
     {
-        m_pDBChanger->storeChanges();
+        //m_pDBChanger->storeChanges();
     }
 
     inline uint32 getCurrentID() const { return m_pID->value(); }
     inline bool hasChanged() const { return m_Changes; }
-    virtual void setDB(const std::shared_ptr<DATABASE::Database<T>> &pDB)
+    virtual void setDB(const std::shared_ptr<DATABASE::Database> &pDB)
     {
-        m_pDBChanger->setDB(pDB);
+        // ToDo:
+        //m_pDBChanger->setDB(pDB);
         _updateWidget();
         m_pListCount->setMaximum(pDB->getMaximumSize());
     }
@@ -174,13 +175,13 @@ public:
         updateItem();
     }
 
-    inline std::shared_ptr<DATABASE::DatabaseChanger<T>> getDBChanger()
-    {
-        return m_pDBChanger;
-    }
+    //inline std::shared_ptr<DATABASE::DatabaseChanger<T>> getDBChanger()
+    //{
+    //    return m_pDBChanger;
+    //}
 
 protected:
-    std::shared_ptr<DATABASE::DatabaseChanger<T>> m_pDBChanger;
+    //std::shared_ptr<DATABASE::DatabaseChanger<T>> m_pDBChanger;
     ModifyObject m_ModObj;
 
 private:

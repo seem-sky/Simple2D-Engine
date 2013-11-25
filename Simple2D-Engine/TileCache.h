@@ -4,20 +4,19 @@
 #include "QtGlobal.h"
 #include "DatabaseMgr.h"
 
-class TileCache : public GapsContainer<QPixmap>
+class TileCache : public Container<QPixmap>
 {
 private:
-    bool _createPixmap(uint32 uiID, ConstQPixmapPtr &result);
+    QPixmap* _createPixmap(uint32 uiID);
 
 public:
-    TileCache();
+    TileCache(const DATABASE::DatabaseMgr &DBMgr);
 
-    void setTileDB(DATABASE::ConstTileDatabasePtr pTileDB);
-    bool getItem(uint32 uiID, ConstQPixmapPtr &result) const;
+    const QPixmap* getItem(uint32 uiID) const;
+
+    inline const DATABASE::DatabaseMgr& getDBMgr() const { return m_DBMgr; }
 
 private:
-    DATABASE::ConstTileDatabasePtr m_pTileDB;
+    const DATABASE::DatabaseMgr &m_DBMgr;
 };
-typedef std::shared_ptr<TileCache> TileCachePtr;
-typedef std::shared_ptr<const TileCache> ConstTileCachePtr;
 #endif

@@ -6,17 +6,15 @@
 
 namespace DATABASE
 {
-    class MapDatabaseXMLReader;
     namespace MAP_STRUCTURE
     {
         const char MAP_FILE_ENDING[] = ".map";
         const char MAP_FOLDER[] = "/Maps/";
 
-        class MapDatabase : public DATABASE::Database<MapPrototype>
+        typedef std::vector<std::unique_ptr<MapPrototype>> MapPrototypePtrVector;
+        class MapDatabase : public Database<MapPrototype>
         {
         public:
-            MapDatabase(void);
-
             bool removeMap(uint32 uiID);
 
             void clear();
@@ -25,11 +23,17 @@ namespace DATABASE
             bool loadMapFile(uint32 uiMapID, const QString &sPath = "");
             void unloadMapFile(uint32 uiMapID);
 
+            /*void setPrototype(MapPrototype *pItem);
+            const MapPrototype* getPrototype(uint32 ID) const;*/
+            //MapPrototype* getPrototype(uint32 ID);
+
+            //MapPrototype* getNewPrototype(uint32 ID = 0) const;
+
         private:
             MapPrototypePtrVector m_RemovedMaps;
         };
 
-        void saveMapFile(ConstMapPrototypePtr pMap, const QString &path);
+        void saveMapFile(const MapPrototype *pMap, const QString &path);
     }
 }
 #endif

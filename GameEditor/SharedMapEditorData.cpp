@@ -66,3 +66,10 @@ DATABASE::ConstWorldObjectDatabasePtr SharedMapEditorData::getWorldObjectDatabas
         return m_pDatabaseMgr->getWorldObjectDatabase();
     return DATABASE::ConstWorldObjectDatabasePtr();
 }
+
+DATABASE::ConstDynamicObjectDatabasePtr SharedMapEditorData::getDynamicObjectDatabase() const
+{
+    if (m_pDatabaseMgr)
+        return m_pDatabaseMgr->getDynamicObjectDatabase();
+    return DATABASE::ConstDynamicObjectDatabasePtr();
+}

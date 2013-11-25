@@ -58,7 +58,7 @@ namespace PLAYER
 
             // camera settings
             void centerOnPlayer();
-            void centerOn(MAP::OBJECT::WorldObjectPtr pWorldObj);
+            void centerOn(const MAP::OBJECT::WorldObject *pWorldObj);
 
         private:
             GamePlayer *m_pOwner;

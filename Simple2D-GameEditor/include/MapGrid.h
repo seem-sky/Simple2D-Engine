@@ -10,8 +10,8 @@ const uint32 GRID_SIZE = 10; // in tiles
 
 namespace MAP
 {
-    typedef std::unordered_set<OBJECT::WorldObjectPtr> WorldObjectPtrUSet;
-    typedef GapsContainer<OBJECT::WorldObject> WorldObjectContainer;
+    typedef std::unordered_set<OBJECT::WorldObject*> WorldObjectPtrUSet;
+    typedef Container<OBJECT::WorldObject> WorldObjectContainer;
     namespace GRID
     {
         class MapGrid
@@ -27,8 +27,8 @@ namespace MAP
             //void updateGridSize(UInt32Point3D mapSize);
             //inline void clearGrid() { _resizeGrid(UInt32Point3D()); }
 
-            void addObject(OBJECT::WorldObjectPtr pObject);
-            void removeObject(OBJECT::WorldObjectPtr pObject);
+            void addObject(OBJECT::WorldObject *pObject);
+            void removeObject(OBJECT::WorldObject *pObject);
 
             inline WorldObjectContainer& getObjects() { return m_WorldObjects; }
 

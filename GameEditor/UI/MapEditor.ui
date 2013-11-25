@@ -124,7 +124,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="m_pTileMapping">
     <attribute name="title">
@@ -143,9 +143,9 @@
       </rect>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
-     <widget class="TileView" name="m_pTiles">
+     <widget class="QWidget" name="m_pTiles">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
         <horstretch>0</horstretch>
@@ -156,12 +156,12 @@
        <string>Tiles</string>
       </attribute>
      </widget>
-     <widget class="TileSetPrototypeDragTreeWidget" name="m_pTileSets">
+     <widget class="QWidget" name="m_pTileSets">
       <attribute name="title">
        <string>TileSets</string>
       </attribute>
      </widget>
-     <widget class="AutoTileView" name="m_pAutoTiles">
+     <widget class="QWidget" name="m_pAutoTiles">
       <property name="enabled">
        <bool>true</bool>
       </property>
@@ -214,9 +214,9 @@
       </rect>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
-     <widget class="WorldObjectPrototypeDragTreeWidget" name="m_pWorldObjects">
+     <widget class="QWidget" name="m_pWorldObjects">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
         <horstretch>0</horstretch>
@@ -225,6 +225,11 @@
       </property>
       <attribute name="title">
        <string>WorldObjects</string>
+      </attribute>
+     </widget>
+     <widget class="QWidget" name="m_pDynamicObjects">
+      <attribute name="title">
+       <string>DynamicObjects</string>
       </attribute>
      </widget>
     </widget>
@@ -440,12 +445,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>TileView</class>
-   <extends>QWidget</extends>
-   <header>tileview.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>MapTreeWidget</class>
    <extends>QTreeWidget</extends>
    <header>maptree.h</header>
@@ -457,27 +456,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>WorldObjectPrototypeDragTreeWidget</class>
-   <extends>QWidget</extends>
-   <header>dragtreewidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>AutoTileView</class>
-   <extends>QWidget</extends>
-   <header>tileview.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>MapBrushWidget</class>
    <extends>QWidget</extends>
    <header>mapbrushwidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>TileSetPrototypeDragTreeWidget</class>
-   <extends>QWidget</extends>
-   <header>dragtreewidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -1,32 +1,26 @@
 #include "AutoTileCache.h"
 
-AutoTileCache::AutoTileCache(ConstTileCachePtr pTileCache) : GapsContainer(), m_pTileCache(pTileCache) {}
+AutoTileCache::AutoTileCache(const TileCache &tileCache) : Container(), m_TileCache(tileCache) {}
 
-bool AutoTileCache::getItem(uint32 uiID, ConstAutoTilePtr &result) const
+const AutoTile* AutoTileCache::getItem(uint32 uiID) const
 {
-    if (GapsContainer::getItem(uiID, result) || const_cast<AutoTileCache&>(*this)._createAutoTile(uiID, result))
-        return true;
-    return false;
+    if (auto pAutoTile = Container::getItem(uiID))
+        return pAutoTile;
+    else if (auto pAutoTile = const_cast<AutoTileCache&>(*this)._createAutoTile(uiID))
+        return pAutoTile;
+    return nullptr;
 }
 
-void AutoTileCache::setAutoTileDB(DATABASE::ConstAutoTileDatabasePtr pAutoTileDB)
+AutoTile* AutoTileCache::_createAutoTile(uint32 uiID)
 {
-    m_pAutoTileDB = pAutoTileDB;
-    clear();
-    if (m_pAutoTileDB)
-        resize(m_pAutoTileDB->getSize());
-}
-
-bool AutoTileCache::_createAutoTile(uint32 uiID, ConstAutoTilePtr &result)
-{
-    DATABASE::ConstAutoTilePrototypePtr proto;
-    if (m_pTileCache && m_pAutoTileDB && m_pAutoTileDB->getItem(uiID, proto))
+    if (!m_TileCache.getDBMgr().getAutoTileDatabase())
+        return nullptr;
+    if (auto pAutoTile = m_TileCache.getDBMgr().getAutoTileDatabase()->getOriginalPrototype(uiID))
     {
-        AutoTilePtr pNewAutoTile(new AutoTile());
-        pNewAutoTile->setAutoTilePrototype(proto, m_pTileCache);
+        auto pNewAutoTile(new AutoTile());
+        pNewAutoTile->setAutoTilePrototype(pAutoTile, m_TileCache);
         setItem(uiID, pNewAutoTile);
-        result = pNewAutoTile;
-        return true;
+        return pNewAutoTile;
     }
-    return false;
+    return nullptr;
 }

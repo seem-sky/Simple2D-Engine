@@ -36,9 +36,10 @@ public:
     MainWindow(QMainWindow *parent = 0);
     ~MainWindow(void);
 
-    inline MapEditorWidget* getMapEditorWidget() const { return m_pMapEditor; }
+    //inline MapEditorWidget* getMapEditorWidget() const { return m_pMapEditor; }
 
-    inline DATABASE::ConstDatabaseMgrPtr getDatabaseMgr() const { return m_project.getDatabaseMgr(); }
+    // ToDo:
+    inline const DATABASE::DatabaseMgr& getDatabaseMgr() const { return m_project.getDatabaseMgr(); }
 
 private:
     ModifyObject m_ModifyObj;

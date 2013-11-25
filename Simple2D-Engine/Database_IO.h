@@ -12,7 +12,7 @@ namespace DATABASE
         class DatabaseReader
         {
         public:
-            DatabaseReader(std::shared_ptr<Database<T>> pDB) : m_pDB(pDB)
+            DatabaseReader(T *pDB) : m_pDB(pDB)
             {}
 
             void read(QString filePath)
@@ -31,10 +31,28 @@ namespace DATABASE
                     case QXmlStreamReader::StartElement:
                         if (reader.name() == "p")
                         {
-                            std::shared_ptr<T> pProto(new T());
-                            PrototypeParser::parseFromXML(pProto, reader);
+                            std::unique_ptr<Prototype> pProto(m_pDB->getNewPrototype());
+                            pProto->fromXML(reader.attributes());
+                            // parse children
+                            uint32 uiStartCounter = 0;
+                            do
+                            {
+                                switch (reader.tokenType())
+                                {
+                                    case QXmlStreamReader::StartElement:
+                                        ++uiStartCounter;
+                                        pProto->insertChildren(reader);
+                                        break;
+                                    case QXmlStreamReader::EndElement:
+                                        --uiStartCounter;
+                                        break;
+                                }
+                                reader.readNext();
+                            } while (uiStartCounter && !reader.hasError() && !reader.atEnd());
+
+                            // store prototype
                             if (pProto->getID())
-                                m_pDB->setItem(pProto->getID(), pProto);
+                                m_pDB->setPrototype(pProto.release());
                         }
                         break;
                     }
@@ -42,14 +60,14 @@ namespace DATABASE
             }
 
         private:
-            std::shared_ptr<Database<T>> m_pDB;
+            T *m_pDB;
         };
 
         template <class T>
         class DatabaseWriter
         {
         public:
-            DatabaseWriter(std::shared_ptr<Database<T>> pDB) : m_pDB(pDB)
+            DatabaseWriter(const Database *pDB) : m_pDB(pDB)
             {}
 
             void write(QString filePath)
@@ -65,11 +83,10 @@ namespace DATABASE
                 uint32 uiElementCount = m_pDB->getSize();
                 for (uint32 i = 1; i <= uiElementCount; ++i)
                 {
-                    std::shared_ptr<T> pProto;
-                    if (m_pDB->getItem(i, pProto))
+                    if (auto pProto = m_pDB->getItem(i))
                     {
                         writer.writeStartElement("p");
-                        PrototypeParser::parseToXML(pProto, writer);
+                        //PrototypeParser::parseToXML(pProto, writer);
                         writer.writeEndElement();
                     }
                 }
@@ -78,7 +95,7 @@ namespace DATABASE
             }
 
         private:
-            std::shared_ptr<Database<T>> m_pDB;
+            const Database *m_pDB;
         };
     }
 }

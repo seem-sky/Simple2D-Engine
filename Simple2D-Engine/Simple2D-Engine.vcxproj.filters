@@ -66,9 +66,6 @@
     <ClCompile Include="..\Simple2D-GameEditor\include\WorldObject.cpp">
       <Filter>Map\MapObjects</Filter>
     </ClCompile>
-    <ClCompile Include="XML_IO.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
     <ClCompile Include="..\Simple2D-GameEditor\include\DatabaseMgr.cpp">
       <Filter>Database</Filter>
     </ClCompile>
@@ -138,6 +135,12 @@
     <ClCompile Include="MapBinaryIO.cpp">
       <Filter>Map\IO</Filter>
     </ClCompile>
+    <ClCompile Include="Database.cpp">
+      <Filter>Database</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabasePrototypesIO.cpp">
+      <Filter>Database\IO</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Simple2D-GameEditor\include\Application.h">
@@ -168,9 +171,6 @@
       <Filter>Map\MapObjects</Filter>
     </ClInclude>
     <ClInclude Include="QtGlobal.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="XML_IO.h">
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="..\Simple2D-GameEditor\include\DatabaseMgr.h">
@@ -247,6 +247,9 @@
     </ClInclude>
     <ClInclude Include="MapBinaryIO.h">
       <Filter>Map\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="DelayedDeleteObject.h">
+      <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

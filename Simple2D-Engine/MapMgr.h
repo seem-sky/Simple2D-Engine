@@ -7,12 +7,12 @@
 
 namespace MAP
 {
-    class MapMgr : public GapsContainer<Map>
+    class MapMgr : public Container<Map>
     {
     public:
         MapMgr();
 
-        void setDatabaseMgr(DATABASE::ConstDatabaseMgrPtr pDBMgr);
+        void setDatabaseMgr(DATABASE::DatabaseMgr pDBMgr);
 
         MapPtr loadMap(uint32 uiID);
         void unloadMap(MapPtr pMap);
@@ -21,7 +21,7 @@ namespace MAP
         void updateMaps(uint32 uiDiff);
 
     private:
-        DATABASE::ConstDatabaseMgrPtr m_pDBMgr;
+        DATABASE::DatabaseMgr m_pDBMgr;
         typedef std::list<MapPtr> MapList;
         MapList m_Maps;
     };

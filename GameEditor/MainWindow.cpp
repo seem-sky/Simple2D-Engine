@@ -49,7 +49,7 @@ void MainWindow::resizeEvent(QResizeEvent *pEvent)
 void MainWindow::_setDBs()
 {
     // share DBMgr pointer
-    m_pMapEditor->setDBMgr(m_project.getDatabaseMgr());
+    //m_pMapEditor->setDBMgr(m_project.getDatabaseMgr());
 }
 
 MainWindow::~MainWindow(void)
@@ -60,14 +60,14 @@ MainWindow::~MainWindow(void)
 
 void MainWindow::_mapScreenshot()
 {
-    m_pMapEditor->storeCurrentMapInClipboard();
+    //m_pMapEditor->storeCurrentMapInClipboard();
 }
 
 void MainWindow::_openDatabase()
 {
     DatabaseWindow pDB(m_project.getDatabaseMgr(), this);
     pDB.exec();
-    m_pMapEditor->updateMapEditor();
+    //m_pMapEditor->updateMapEditor();
 }
 
 void MainWindow::_saveProject()
@@ -114,7 +114,7 @@ bool MainWindow::_loadProject(const QString &dir)
         _setDBs();
         Config::get()->setProjectDirectory(dir);
         BASIC_LOG("Project load successfully ends after " + QString::number(time.elapsed()) + "msec.");
-        m_pMapEditor->updateMapEditor();
+        //m_pMapEditor->updateMapEditor();
         emit projectLoadDone();
         return true;
     }
@@ -130,7 +130,7 @@ void MainWindow::_closeProject()
     if (m_project.isOpenProject())
     {
         BASIC_LOG("Close project " + m_project.getProjectPath());
-        m_pMapEditor->clearWidgets();
+        //m_pMapEditor->clearWidgets();
         m_project.closeCurrentProject();
         Config::get()->clear();
     }

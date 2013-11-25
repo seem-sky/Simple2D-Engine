@@ -17,10 +17,10 @@ private:
     void clearWidgets();
 
 public:
-    DatabaseWindow(DATABASE::DatabaseMgrPtr pDBMgr, QWidget *parent);
+    DatabaseWindow(const DATABASE::DatabaseMgr &DBMgr, QWidget *parent);
 
     QString getCurrentDatabaseSection();
-    inline DATABASE::DatabaseMgrPtr getDBMgr() const { return m_pDBMgr; }
+    inline const DATABASE::DatabaseMgr& getDBMgr() const { return m_pDBMgr; }
 
 private slots:
     void clickButtonOK();
@@ -30,6 +30,6 @@ private slots:
 
 private:
     ModifyObject m_ModifyObj;
-    DATABASE::DatabaseMgrPtr m_pDBMgr;
+    const DATABASE::DatabaseMgr &m_pDBMgr;
 };
 #endif

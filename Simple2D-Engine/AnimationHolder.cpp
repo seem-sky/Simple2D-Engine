@@ -3,6 +3,7 @@
 using namespace MAP;
 using namespace OBJECT;
 using namespace ANIMATION;
+using namespace DATABASE::ANIMATION;
 
 void AnimationHolder::update(uint32 uiDiff)
 {
@@ -20,7 +21,7 @@ void AnimationHolder::update(uint32 uiDiff)
         m_uiTimer -= uiDiff;
 }
 
-void AnimationHolder::changeAnimation(DATABASE::ConstAnimationPrototypePtr pAnimation)
+void AnimationHolder::changeAnimation(const AnimationPrototype *pAnimation)
 {
     m_uiCurrentFrame = 0;
     m_pAnimation = pAnimation;
@@ -31,7 +32,7 @@ void AnimationHolder::_changeCurrentFrame(uint32 uiFrame)
 {
     if (!m_pAnimation)
         return;
-    DATABASE::AnimationPrototype::Frame frame;
+    Frame frame;
     if (m_pAnimation->getFrame(uiFrame, frame))
         m_uiTimer = static_cast<uint32>(static_cast<double>(frame.getTimeInMsec()*100)/m_uiAnimationSpeed);
     else

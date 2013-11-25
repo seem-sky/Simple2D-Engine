@@ -10,11 +10,10 @@ namespace MAP
         class DynamicObject : public WorldObject
         {
         public:
-            DynamicObject(DATABASE::ConstDatabaseMgrPtr pDBMgr, uint32 GUID, DATABASE::ConstDynamicObjectPrototypePtr pDynamicObject);
+            DynamicObject(const DATABASE::DatabaseMgr &pDBMgr, uint32 GUID, uint32 ID);
 
             void move(const Int32Point &range, uint32 time);
         };
-        typedef std::shared_ptr<DynamicObject> DynamicObjectPtr;
     }
 }
 #endif

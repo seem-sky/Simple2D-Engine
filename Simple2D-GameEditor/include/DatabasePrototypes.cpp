@@ -186,73 +186,76 @@ namespace DATABASE
     /*#####
     # AnimationPrototype
     #####*/
-    bool AnimationPrototype::getFrame(uint32 uiIndex, Frame &frame) const
+    namespace ANIMATION
     {
-        if (uiIndex < m_Frames.size())
+        bool AnimationPrototype::getFrame(uint32 uiIndex, Frame &frame) const
         {
-            frame = m_Frames.at(uiIndex);
-            return true;
+            if (uiIndex < m_Frames.size())
+            {
+                frame = m_Frames.at(uiIndex);
+                return true;
+            }
+            return false;
         }
-        return false;
-    }
 
-    void AnimationPrototype::setFrame(uint32 uiIndex, Frame frame)
-    {
-        if (uiIndex >= m_Frames.size())
-            m_Frames.resize(uiIndex+1);
-        m_Frames.at(uiIndex) = std::move(frame);
-    }
-
-    void AnimationPrototype::removeFrame(uint32 uiIndex)
-    {
-        if (uiIndex >= m_Frames.size())
-            return;
-        if (uiIndex == m_Frames.size()-1)
-            m_Frames.resize(uiIndex);
-        else
-            m_Frames.at(uiIndex) = Frame();
-    }
-
-    void AnimationPrototype::Frame::calculateOffset()
-    {
-        m_FrameOffset.x = 0;
-        m_FrameOffset.y = 0;
-        for (auto &sprite : m_Sprites)
+        void AnimationPrototype::setFrame(uint32 uiIndex, Frame frame)
         {
-            if (sprite.m_Pos.x < m_FrameOffset.x)
-                m_FrameOffset.x = sprite.m_Pos.x;
-            if (sprite.m_Pos.y < m_FrameOffset.y)
-                m_FrameOffset.y = sprite.m_Pos.y;
+            if (uiIndex >= m_Frames.size())
+                m_Frames.resize(uiIndex+1);
+            m_Frames.at(uiIndex) = std::move(frame);
         }
-    }
 
-    void AnimationPrototype::Frame::setSprite(uint32 index, Sprite sprite)
-    {
-        if (index >= m_Sprites.size())
-            m_Sprites.resize(index+1);
-        m_Sprites.at(index) = std::move(sprite);
-        calculateOffset();
-    }
+        void AnimationPrototype::removeFrame(uint32 uiIndex)
+        {
+            if (uiIndex >= m_Frames.size())
+                return;
+            if (uiIndex == m_Frames.size()-1)
+                m_Frames.resize(uiIndex);
+            else
+                m_Frames.at(uiIndex) = Frame();
+        }
 
-    AnimationPrototype::Sprite AnimationPrototype::Frame::getSprite(uint32 index) const
-    {
-        if (index < m_Sprites.size())
-            return m_Sprites.at(index);
-        return AnimationPrototype::Sprite();
-    }
+        void Frame::calculateOffset()
+        {
+            m_FrameOffset.x = 0;
+            m_FrameOffset.y = 0;
+            for (auto &sprite : m_Sprites)
+            {
+                if (sprite.m_Pos.x < m_FrameOffset.x)
+                    m_FrameOffset.x = sprite.m_Pos.x;
+                if (sprite.m_Pos.y < m_FrameOffset.y)
+                    m_FrameOffset.y = sprite.m_Pos.y;
+            }
+        }
 
-    void AnimationPrototype::Frame::addSprite(AnimationPrototype::Sprite sprite)
-    {
-        m_Sprites.push_back(std::move(sprite));
-        setOffsetIfNeeded(sprite.m_Pos);
-    }
+        void Frame::setSprite(uint32 index, Sprite sprite)
+        {
+            if (index >= m_Sprites.size())
+                m_Sprites.resize(index+1);
+            m_Sprites.at(index) = std::move(sprite);
+            calculateOffset();
+        }
 
-    void AnimationPrototype::Frame::setOffsetIfNeeded(const Int32Point &offset)
-    {
-        if (m_FrameOffset.x > offset.x)
-            m_FrameOffset.x = offset.x;
-        if (m_FrameOffset.y > offset.y)
-            m_FrameOffset.y = offset.y;
+        Sprite Frame::getSprite(uint32 index) const
+        {
+            if (index < m_Sprites.size())
+                return m_Sprites.at(index);
+            return Sprite();
+        }
+
+        void Frame::addSprite(Sprite sprite)
+        {
+            m_Sprites.push_back(std::move(sprite));
+            setOffsetIfNeeded(sprite.m_Pos);
+        }
+
+        void Frame::setOffsetIfNeeded(const Int32Point &offset)
+        {
+            if (m_FrameOffset.x > offset.x)
+                m_FrameOffset.x = offset.x;
+            if (m_FrameOffset.y > offset.y)
+                m_FrameOffset.y = offset.y;
+        }
     }
 
     /*#####
@@ -262,29 +265,24 @@ namespace DATABASE
     {
         WorldObjectPrototype::WorldObjectPrototype(uint32 uiID) : Prototype(uiID), m_uiAnimationSpeed(100)
         {
-            // set minimum poses, so we have stand pose for all directions
-            m_AnimationInfos.resize(getMinimumAnimationCount());
-            for (uint32 i = 1; i <= getMinimumAnimationCount(); ++i)
-                m_AnimationInfos.setItem(i, AnimationInfoPtr(new AnimationInfo(0, i)));
+            initAnimationPoses();
         }
 
-        AnimationInfo WorldObjectPrototype::getAnimationInfo(uint32 uiIndex) const
+        void WorldObjectPrototype::initAnimationPoses()
         {
-            ConstAnimationInfoPtr info;
-            if (m_AnimationInfos.getItem(uiIndex, info))
-                return *info;
-            return AnimationInfo();
+            // set minimum poses
+            m_AnimationInfos.resize(getMinimumAnimationCount());
+            for (uint32 i = 1; i <= getMinimumAnimationCount(); ++i)
+                m_AnimationInfos.at(i-1).m_uiAnimationTypeID = i;
         }
 
         void WorldObjectPrototype::setAnimationInfo(uint32 uiIndex, AnimationInfo animationInfo)
         {
-            AnimationInfoPtr info;
             // do not change animation type id if its an standard entry
             if (uiIndex <= getMinimumAnimationCount())
-                info = AnimationInfoPtr(new AnimationInfo(animationInfo.m_uiAnimationID, uiIndex));
+                m_AnimationInfos.at(uiIndex).m_uiAnimationID = animationInfo.m_uiAnimationID;
             else
-                AnimationInfoPtr(new AnimationInfo(animationInfo));
-            m_AnimationInfos.setItem(uiIndex, info);
+                m_AnimationInfos.at(uiIndex) = animationInfo;
         }
 
         void WorldObjectPrototype::setAnimationCount(uint32 uiCount)
@@ -293,6 +291,10 @@ namespace DATABASE
                 uiCount = getMinimumAnimationCount();
             m_AnimationInfos.resize(uiCount);
         }
+
+        /*#####
+        # DynamicObjectPrototype
+        #####*/
 
         /*#####
         # free functions
@@ -313,7 +315,7 @@ namespace DATABASE
     #####*/
     namespace MAP_STRUCTURE
     {
-        void MapPrototype::addMapObject(MapObjectPtr pObject)
+        void MapPrototype::addMapObject(MapObject *pObject)
         {
             if (pObject)
                 m_Objects.setItem(pObject->m_GUID, pObject);
@@ -322,12 +324,12 @@ namespace DATABASE
         void MapPrototype::removeMapObject(uint32 GUID)
         {
             if (GUID <= getMapObjectCount())
-                m_Objects.setItem(GUID, MapObjectPtr(new MapObject()));
+                m_Objects.setItem(GUID, nullptr);
         }
 
-        MapObjectPtr MapPrototype::addMapObject(DATABASE::MAP_OBJECT::ObjectType type, uint32 uiID, Int32Point pos)
+        MapObject* MapPrototype::addMapObject(DATABASE::MAP_OBJECT::ObjectType type, uint32 uiID, Int32Point pos)
         {
-            MapObjectPtr newObject(new MapObject());
+            auto newObject = new MapObject();
             newObject->m_ObjectID = uiID;
             newObject->m_Type = type;
             newObject->m_Position = pos;

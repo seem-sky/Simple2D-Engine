@@ -15,7 +15,7 @@ protected:
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *pEvent);
 
 public:
-    MapObjectItem(DATABASE::MAP_STRUCTURE::MapObjectPtr pMapObj) : ModifyItem(), m_pMapObject(pMapObj)
+    MapObjectItem(DATABASE::MAP_STRUCTURE::MapObject *pMapObj) : ModifyItem(), m_pMapObject(pMapObj)
     {}
 
     void move(int x, int y);
@@ -25,7 +25,7 @@ public:
     inline uint32 getGUID() const { return m_pMapObject->m_GUID; }
 
 private:
-    DATABASE::MAP_STRUCTURE::MapObjectPtr m_pMapObject;
+    DATABASE::MAP_STRUCTURE::MapObject *m_pMapObject;
 };
 
 /*#####
@@ -75,9 +75,9 @@ private:
     void _placeMapObjects();
 
 public:
-    MapViewer(const DATABASE::MAP_STRUCTURE::MapPrototypePtr &map, SharedMapEditorDataPtr pDBMgr, QWidget *pParent = NULL);
+    MapViewer(const DATABASE::MAP_STRUCTURE::MapPrototype *map, SharedMapEditorDataPtr pDBMgr, QWidget *pParent = NULL);
 
-    const DATABASE::MAP_STRUCTURE::MapPrototypePtr& getMap() const { return m_pMap; }
+    const DATABASE::MAP_STRUCTURE::MapPrototype* getMap() const { return m_pMap; }
     inline MapViewScene* getScene() { return dynamic_cast<MapViewScene*>(scene()); }
 
     inline uint32 getCurrentLayer(DATABASE::MAP_STRUCTURE::Layer layer) const { return m_uiCurrentLayer[layer]; }
@@ -121,7 +121,7 @@ private:
     DATABASE::MAP_STRUCTURE::Layer m_Layer;
     int m_CurZoom;
     bool m_showGrid;
-    DATABASE::MAP_STRUCTURE::MapPrototypePtr m_pMap;
+    DATABASE::MAP_STRUCTURE::MapPrototype *m_pMap;
     bool m_hasChanges;
     DATABASE::MAP_STRUCTURE::MapActionPtrVector m_Actions;
 };

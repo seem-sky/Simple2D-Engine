@@ -10,7 +10,7 @@
 class TileItem : public QGraphicsItem
 {
 protected:
-    void drawItem(QPainter *pPainter, ConstQPixmapPtr pPixmap);
+    void drawItem(QPainter *pPainter, const QPixmap* pPixmap);
 
 public:
     TileItem(ConstSharedMapEditorDataPtr pSharedData, uint32 uiID);

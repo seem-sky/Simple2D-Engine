@@ -206,39 +206,31 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="DynamicObjectDatabaseWidget.cpp" />
+    <ClCompile Include="AnimationViewer.cpp" />
+    <ClCompile Include="DatabaseDialogResize.cpp" />
+    <ClCompile Include="DatabaseModuleAnimation.cpp" />
+    <ClCompile Include="DatabaseModuleDragDrop.cpp" />
+    <ClCompile Include="DatabaseModuleList.cpp" />
+    <ClCompile Include="DatabaseModuleResource.cpp" />
+    <ClCompile Include="DatabaseModuleTexture.cpp" />
+    <ClCompile Include="DatabaseModuleTileSet.cpp" />
+    <ClCompile Include="DatabaseWidgetAnimation.cpp" />
+    <ClCompile Include="DatabaseWidgetAnimationType.cpp" />
+    <ClCompile Include="DatabaseWidgetLocalisation.cpp" />
+    <ClCompile Include="DatabaseWidgetBase.cpp" />
+    <ClCompile Include="DatabaseWidgetRessource.cpp" />
+    <ClCompile Include="DatabaseWidgetSprite.cpp" />
+    <ClCompile Include="DatabaseWidgetTexture.cpp" />
+    <ClCompile Include="DatabaseWidgetTile.cpp" />
+    <ClCompile Include="DatabaseWidgetTileSet.cpp" />
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="DatabaseWindow.cpp" />
-    <ClCompile Include="TileSetDatabaseWidget.cpp" />
-    <ClCompile Include="TransparencyWindow.cpp" />
-    <ClCompile Include="TileDatabaseWidget.cpp" />
-    <ClCompile Include="SpriteDatabaseWidget.cpp" />
-    <ClCompile Include="AutoTileDatabaseWidget.cpp" />
-    <ClCompile Include="AnimationDatabaseWidget.cpp" />
-    <ClCompile Include="WorldObjectDatabaseWidget.cpp" />
-    <ClCompile Include="ObjectAnimationTypeDatabaseWidget.cpp" />
-    <ClCompile Include="TextDatabaseWidget.cpp" />
-    <ClCompile Include="MapAction.cpp" />
-    <ClCompile Include="MapView.cpp" />
-    <ClCompile Include="MapViewer.cpp" />
-    <ClCompile Include="MapSettings.cpp" />
-    <ClCompile Include="MapTree.cpp" />
-    <ClCompile Include="TileTab.cpp" />
-    <ClCompile Include="TileView.cpp" />
-    <ClCompile Include="MapObjectDialog.cpp" />
-    <ClCompile Include="MapEditorWidget.cpp" />
-    <ClCompile Include="SharedMapEditorData.cpp" />
-    <ClCompile Include="MapBrush.cpp" />
-    <ClCompile Include="MapBrushWidget.cpp" />
     <ClCompile Include="ContextMenu.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ModifyObject.cpp" />
     <ClCompile Include="ModifyView.cpp" />
     <ClCompile Include="Project.cpp" />
     <ClCompile Include="IndexDialog.cpp" />
-    <ClCompile Include="DragTreeWidget.cpp" />
-    <ClCompile Include="AnimationViewerWidget.cpp" />
-    <ClCompile Include="AnimationViewWidget.cpp" />
   </ItemGroup>
   <ItemGroup>
     <moc_header Include="MainWindow.h">
@@ -262,74 +254,6 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">moc_%(Filename)%(Extension);%(Outputs)</Outputs>
     </moc_header>
     <moc_header Include="DatabaseWindow.h" />
-    <CustomBuild Include="TextureDatabaseWidget.h" />
-    <CustomBuild Include="TransparencyWindow.h">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </Command>
-    </CustomBuild>
-    <moc_header Include="TileDatabaseWidget.h" />
-    <moc_header Include="SpriteDatabaseWidget.h" />
-    <moc_header Include="AutoTileDatabaseWidget.h" />
-    <moc_header Include="AnimationDatabaseWidget.h" />
-    <moc_header Include="WorldObjectDatabaseWidget.h" />
-    <moc_header Include="ObjectAnimationTypeDatabaseWidget.h" />
-    <CustomBuild Include="DatabaseWidget.h" />
-    <moc_header Include="TextDatabaseWidget.h" />
-    <CustomBuild Include="MapAction.h" />
-    <moc_header Include="MapView.h">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">create moc_%(Filename)%(Extension)</Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">create moc_%(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">moc -o moc_%(Filename)%(Extension) %(Filename)%(Extension)
-</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">moc -o moc_%(Filename)%(Extension) %(Filename)%(Extension)
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">moc_%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">moc_%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">create moc_%(Filename)%(Extension)</Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">create moc_%(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">moc -o moc_%(Filename)%(Extension) %(Filename)%(Extension)
-</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">moc -o moc_%(Filename)%(Extension) %(Filename)%(Extension)
-</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">moc.exe;$(AdditionalInputs);%(AdditionalInputs)</AdditionalInputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">moc.exe;$(AdditionalInputs);%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">moc_%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">moc_%(Filename)%(Extension);%(Outputs)</Outputs>
-    </moc_header>
-    <moc_header Include="MapViewer.h" />
-    <moc_header Include="MapSettings.h" />
-    <moc_header Include="MapTree.h" />
-    <moc_header Include="TileTab.h" />
-    <moc_header Include="TileView.h" />
-    <moc_header Include="MapObjectDialog.h" />
-    <CustomBuild Include="MapEditorObject.h" />
-    <moc_header Include="MapEditorWidget.h">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">create moc_%(Filename)%(Extension)</Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">create moc_%(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">moc -o moc_%(Filename)%(Extension) %(Filename)%(Extension)
-</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">moc -o moc_%(Filename)%(Extension) %(Filename)%(Extension)
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">moc_%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">moc_%(Filename)%(Extension);%(Outputs)</Outputs>
-    </moc_header>
-    <CustomBuild Include="SharedMapEditorData.h" />
-    <CustomBuild Include="MapBrush.h" />
-    <moc_header Include="MapBrushWidget.h" />
     <CustomBuild Include="ContextMenu.h">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </Message>
@@ -352,282 +276,22 @@
     <moc_header Include="ModifyView.h" />
     <CustomBuild Include="Project.h" />
     <CustomBuild Include="IndexDialog.h" />
-    <moc_header Include="DragTreeWidget.h" />
-    <moc_header Include="AnimationViewerWidget.h" />
-    <moc_header Include="AnimationViewWidget.h" />
   </ItemGroup>
   <ItemGroup>
+    <compile_QT_Files Include="UI\DatabaseDialogResize.ui" />
+    <compile_QT_Files Include="UI\DatabaseModuleAnimation.ui" />
+    <compile_QT_Files Include="UI\DatabaseModuleList.ui" />
+    <compile_QT_Files Include="UI\DatabaseModuleLocalisation.ui" />
+    <compile_QT_Files Include="UI\DatabaseModuleResource.ui" />
+    <compile_QT_Files Include="UI\DatabaseModuleTexture.ui" />
+    <compile_QT_Files Include="UI\DatabaseModuleTileSet.ui" />
     <compile_QT_Files Include="UI\MainWindow.ui" />
     <compile_QT_Files Include="UI\Database.ui" />
-    <compile_QT_Files Include="UI\TextureDatabaseWidget.ui" />
-    <compile_QT_Files Include="UI\TileSetDatabaseWidget.ui" />
-    <compile_QT_Files Include="UI\TransparentColorDialog.ui" />
-    <compile_QT_Files Include="UI\TileDatabaseWidget.ui" />
-    <compile_QT_Files Include="UI\SpriteDatabaseWidget.ui" />
-    <compile_QT_Files Include="UI\AutoTileDatabaseWidget.ui" />
-    <compile_QT_Files Include="UI\AnimationWidget.ui" />
-    <compile_QT_Files Include="UI\WorldObjectDatabaseWidget.ui" />
-    <compile_QT_Files Include="UI\GlobalVariableDatabase.ui" />
-    <compile_QT_Files Include="UI\DatabaseWidget.ui" />
-    <compile_QT_Files Include="UI\TextDatabaseWidget.ui" />
-    <CustomBuild Include="EventEditor.ui">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </Command>
-    </CustomBuild>
-    <CustomBuild Include="UI\EventEditorDialog.ui">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </Command>
-    </CustomBuild>
-    <CustomBuild Include="UI\CommandChangeVariable.ui">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </Command>
-    </CustomBuild>
-    <CustomBuild Include="UI\CommandComment.ui">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </Command>
-    </CustomBuild>
-    <CustomBuild Include="UI\CommandDialog.ui">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </Command>
-    </CustomBuild>
-    <CustomBuild Include="UI\CommandIfCondition.ui">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </Command>
-    </CustomBuild>
-    <CustomBuild Include="UI\ConditionWidget.ui">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </Command>
-    </CustomBuild>
-    <CustomBuild Include="UI\LocalVariableDialog.ui">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </Command>
-    </CustomBuild>
     <compile_QT_Files Include="UI\MapSettings.ui" />
     <compile_QT_Files Include="UI\MapObjectDialog.ui" />
     <compile_QT_Files Include="UI\MapEditor.ui" />
     <compile_QT_Files Include="UI\MapBrushWidget.ui" />
     <compile_QT_Files Include="UI\IndexDialog.ui" />
-    <CustomBuild Include="UI\CustomVariablePageTemplate.ui">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </Command>
-    </CustomBuild>
-    <CustomBuild Include="UI\VariableCountDialog.ui">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </Command>
-    </CustomBuild>
-    <CustomBuild Include="UI\CustomVariableBoolPage.ui">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </Command>
-    </CustomBuild>
-    <CustomBuild Include="UI\CustomVariableIntPage.ui">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </Command>
-    </CustomBuild>
-    <CustomBuild Include="UI\CustomVariableStringPage.ui">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </Command>
-    </CustomBuild>
-    <CustomBuild Include="UI\CustomVariableFloatPage.ui">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </Command>
-    </CustomBuild>
-    <compile_QT_Files Include="UI\AnimationViewerWidget.ui" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.vcxproj">
@@ -636,12 +300,24 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <moc_header Include="TileSetDatabaseWidget.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <moc_header Include="DynamicObjectDatabaseWidget.h" />
-    <ClInclude Include="ObjectDatabaseWidget.h" />
-    <ClInclude Include="PrototypeTreeWidgetItem.h" />
+    <moc_header Include="DatabaseDialogResize.h" />
+    <moc_header Include="AnimationViewer.h" />
+    <ClInclude Include="DatabaseModel.h" />
+    <moc_header Include="DatabaseModuleList.h" />
+    <moc_header Include="DatabaseModuleDragDrop.h" />
+    <moc_header Include="DatabaseModuleAnimation.h" />
+    <ClInclude Include="DatabaseModuleResource.h" />
+    <moc_header Include="DatabaseModuleTexture.h" />
+    <moc_header Include="DatabaseModuleTileSet.h" />
+    <ClInclude Include="DatabaseWidgetAnimation.h" />
+    <ClInclude Include="DatabaseWidgetAnimationType.h" />
+    <ClInclude Include="DatabaseWidgetLocalisation.h" />
+    <moc_header Include="DatabaseWidgetBase.h" />
+    <moc_header Include="DatabaseWidgetRessource.h" />
+    <ClInclude Include="DatabaseWidgetSprite.h" />
+    <moc_header Include="DatabaseWidgetTexture.h" />
+    <moc_header Include="DatabaseWidgetTile.h" />
+    <ClInclude Include="DatabaseWidgetTileSet.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>

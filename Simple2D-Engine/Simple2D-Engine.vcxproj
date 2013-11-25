@@ -23,6 +23,8 @@
     <ClCompile Include="AutoTile.cpp" />
     <ClCompile Include="AutoTileCache.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Database.cpp" />
+    <ClCompile Include="DatabasePrototypesIO.cpp" />
     <ClCompile Include="DynamicObject.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="GameScene.cpp" />
@@ -41,7 +43,6 @@
     <ClCompile Include="SceneMgr.cpp" />
     <ClCompile Include="TileCache.cpp" />
     <ClCompile Include="TransformationHolder.cpp" />
-    <ClCompile Include="XML_IO.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Simple2D-GameEditor\include\Application.h" />
@@ -59,6 +60,7 @@
     <ClInclude Include="AutoTileCache.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Database_IO.h" />
+    <ClInclude Include="DelayedDeleteObject.h" />
     <ClInclude Include="DynamicObject.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="GameScene.h" />
@@ -79,7 +81,6 @@
     <ClInclude Include="SceneMgr.h" />
     <ClInclude Include="TileCache.h" />
     <ClInclude Include="TransformationHolder.h" />
-    <ClInclude Include="XML_IO.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

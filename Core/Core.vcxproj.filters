@@ -9,9 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Database">
-      <UniqueIdentifier>{354de32e-a891-4d6c-999f-3d11be1d1472}</UniqueIdentifier>
-    </Filter>
     <Filter Include="FileIO">
       <UniqueIdentifier>{65f49ae8-844d-4dd0-a1d7-9385a4d3ef02}</UniqueIdentifier>
     </Filter>
@@ -29,25 +26,10 @@
     <ClCompile Include="IniParser.cpp">
       <Filter>FileIO</Filter>
     </ClCompile>
-    <ClCompile Include="MapDatabaseChanger.cpp">
-      <Filter>Map</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="VariableHolder.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="WrapperFunctions.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="DatabaseChanger.h">
-      <Filter>Database</Filter>
-    </ClInclude>
     <ClInclude Include="IniParser.h">
       <Filter>FileIO</Filter>
-    </ClInclude>
-    <ClInclude Include="MapDatabaseChanger.h">
-      <Filter>Map</Filter>
     </ClInclude>
     <ClInclude Include="Config.h">
       <Filter>Headerdateien</Filter>

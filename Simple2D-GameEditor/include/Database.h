@@ -2,7 +2,6 @@
 #define DATABASE_H
 
 #include "DatabasePrototypes.h"
-#include "Logfile.h"
 
 typedef std::map<uint32, QString> UInt32StringMap;
 typedef std::vector<std::pair<uint32, QString>> UInt32StringPairVector;
@@ -12,127 +11,187 @@ namespace DATABASE
     /*#####
     # Database
     #####*/
-    template <class T>
-    class DatabaseChanger;
-    template <class T>
-    class Database : public Container<T>
+    class IDatabase
     {
-        friend class DatabaseMgr;
-        friend class DatabaseChanger<T>;
-
     public:
-        void getItemShortInfos(UInt32StringPairVector &result) const
+        virtual void clear() = 0;
+
+        virtual void setPrototype(Prototype *pPrototype) = 0;
+        virtual Prototype* getNewPrototype(uint32 ID = 0) const = 0;
+        virtual Prototype* getPrototype(uint32 ID) = 0;
+        virtual const Prototype* getPrototype(uint32 ID) const = 0;
+    };
+    typedef std::unique_ptr<IDatabase> IDatabasePtr;
+
+    template <class T>
+    class Database : public IDatabase, private Container<T>
+    {
+    public:
+        Database() : Container(), IDatabase() {}
+        // overwrite copy constructor
+        Database(const Database<T> &pOther)
         {
-            for (uint32 i = 0; i < getSize(); ++i)
+            m_uiMaxSize = pOther.getMaximumSize();
+            uint32 i = 0;
+            m_Items.resize(pOther.getSize());
+            for (auto &pItem : pOther.getItems())
             {
-                if (m_Items.at(i) && m_Items.at(i)->getID() != 0)
-                    result.push_back(std::make_pair(m_Items.at(i)->getID(), m_Items.at(i)->getName()));
+                if (pItem)
+                    m_Items.at(i) = std::unique_ptr<T>(new T(*pItem));
+                ++i;
             }
         }
 
-        void resize(uint32 uiSize, bool fillNew = true)
+        inline void clear() { Container::clear(); }
+
+        //void getPrototypeShortInfos(UInt32StringPairVector &result) const;
+        //UInt32StringPairVector Database::getPrototypeShortInfos() const;
+
+        void resize(uint32 uiSize)
         {
             uint32 uiOldSize = getSize();
-            Container::resize(uiSize, fillNew);
-            BASIC_LOG("Resize database to " + QString::number(uiSize));
-            if (fillNew && uiSize > uiOldSize)
+            Container::resize(uiSize);
+            // ToDo:
+            //BASIC_LOG("Resize database to " + QString::number(uiSize));
+            if (uiSize > uiOldSize)
             {
-                BASIC_LOG("Fill database entrys from " + QString::number(uiOldSize) + " to " + QString::number(uiSize) + " with data.");
+                //BASIC_LOG("Fill database entrys from " + QString::number(uiOldSize) + " to " + QString::number(uiSize) + " with data.");
                 for (uint32 i = uiOldSize; i < uiSize; ++i)                 // first ID == 1, so use i+1 for ID at position i
-                    m_Items.at(i) = std::shared_ptr<T>(new T(i+1));
+                    m_Items.at(i) = std::unique_ptr<T>(new T(i+1));
             }
-            else if (uiSize < uiOldSize)
-                BASIC_LOG("Erase database entrys from " + QString::number(uiOldSize) + " to " + QString::number(uiSize) + ".");
+            //else if (uiSize < uiOldSize)
+            //    BASIC_LOG("Erase database entrys from " + QString::number(uiOldSize) + " to " + QString::number(uiSize) + ".");
+        }
+
+        inline uint32 getSize() const { return Container::getSize(); }
+
+        inline void setMaximumSize(uint32 size) { Container::setMaximumSize(size); }
+        inline uint32 getMaximumSize() const { return Container::getMaximumSize(); }
+
+        inline Prototype* getNewPrototype(uint32 ID = 0) const { return new T(ID); }
+
+        inline Prototype* getPrototype(uint32 ID) { return Container::getItem(ID); }
+        inline const Prototype* getPrototype(uint32 ID) const  { return Container::getItem(ID); }
+        inline T* getOriginalPrototype(uint32 ID) { return Container::getItem(ID); }
+        inline const T* getOriginalPrototype(uint32 ID) const  { return Container::getItem(ID); }
+        inline void setPrototype(Prototype *pPrototype)
+        {
+            if (auto pCast = dynamic_cast<T*>(pPrototype))
+                Container::setItem(pCast->getID(), pCast);
+            else
+                throw std::bad_typeid("Invalid prototype type.");
+        }
+        virtual void setPrototype(T *pPrototype)
+        {
+            if (pPrototype)
+                Container::setItem(pPrototype->getID(), pPrototype);
         }
     };
 
     /*#####
     # Special Databases
     #####*/
-    // set maximum size of these databases
     class TileDatabase : public Database<TilePrototype>
     {
     public:
-        TileDatabase() : Database()
-        {
-            setMaximumSize(MATH::maximum<TILE_INDEX>()-1);
-        }
+        TileDatabase();
+
+        //void setPrototype(TilePrototype *pItem);
+        //const TilePrototype* getPrototype(uint32 ID) const;
+        //TilePrototype* getPrototype(uint32 ID);
+
+        //TilePrototype* getNewPrototype(uint32 uiID = 0) const;
+    };
+
+    class TileSetDatabase : public Database<TILE_SET::TileSetPrototype>
+    {
+    public:
+        //void setPrototype(TILE_SET::TileSetPrototype *pItem);
+        //const TILE_SET::TileSetPrototype* getPrototype(uint32 ID) const;
+        //TILE_SET::TileSetPrototype* getPrototype(uint32 ID);
+
+        //TILE_SET::TileSetPrototype* getNewPrototype(uint32 uiID = 0) const;
     };
 
     class AutoTileDatabase : public Database<AUTO_TILE::AutoTilePrototype>
     {
     public:
-        AutoTileDatabase() : Database()
-        {
-            setMaximumSize(MATH::maximum<AUTO_TILE_INDEX>()-1);
-        }
+        AutoTileDatabase();
+
+        //void setPrototype(AUTO_TILE::AutoTilePrototype *pItem);
+        //const AUTO_TILE::AutoTilePrototype* getPrototype(uint32 ID) const;
+        //AUTO_TILE::AutoTilePrototype* getPrototype(uint32 ID);
+
+        //AUTO_TILE::AutoTilePrototype* getNewPrototype(uint32 uiID = 0) const;
     };
 
-    // add standard entrys
-    class ObjectAnimationTypeDatabase : public Database<ObjectAnimationTypePrototype>
+    class SpriteDatabase : public Database<SpritePrototype>
     {
     public:
-        ObjectAnimationTypeDatabase() : Database()
-        {
-            clear();
-        }
+        //void setPrototype(SpritePrototype *pItem);
+        //const SpritePrototype* getPrototype(uint32 ID) const;
+        //SpritePrototype* getPrototype(uint32 ID);
 
-        void clear()
-        {
-            Database::clear();
-            Database::setItem(MAP_STRUCTURE::DIRECTION_UP+1, ObjectAnimationTypePrototypePtr(new ObjectAnimationTypePrototype(MAP_STRUCTURE::DIRECTION_UP+1, "STAND_UP")));
-            Database::setItem(MAP_STRUCTURE::DIRECTION_RIGHT+1, ObjectAnimationTypePrototypePtr(new ObjectAnimationTypePrototype(MAP_STRUCTURE::DIRECTION_RIGHT+1, "STAND_RIGHT")));
-            Database::setItem(MAP_STRUCTURE::DIRECTION_DOWN+1, ObjectAnimationTypePrototypePtr(new ObjectAnimationTypePrototype(MAP_STRUCTURE::DIRECTION_DOWN+1, "STAND_DOWN")));
-            Database::setItem(MAP_STRUCTURE::DIRECTION_LEFT+1, ObjectAnimationTypePrototypePtr(new ObjectAnimationTypePrototype(MAP_STRUCTURE::DIRECTION_LEFT+1, "STAND_LEFT")));
-            Database::setItem(5, ObjectAnimationTypePrototypePtr(new ObjectAnimationTypePrototype(5, "WALK_UP")));
-            Database::setItem(6, ObjectAnimationTypePrototypePtr(new ObjectAnimationTypePrototype(6, "WALK_RIGHT")));
-            Database::setItem(7, ObjectAnimationTypePrototypePtr(new ObjectAnimationTypePrototype(7, "WALK_DOWN")));
-            Database::setItem(8, ObjectAnimationTypePrototypePtr(new ObjectAnimationTypePrototype(8, "WALK_LEFT")));
-        }
-
-        void setItem(uint32 uiID, ObjectAnimationTypePrototypePtr &prototype)
-        {
-            if (uiID > MAP_OBJECT::MIN_DYNAMIC_OBJECT_POSE)
-                Database::setItem(uiID, prototype);
-        }
+        //SpritePrototype* getNewPrototype(uint32 uiID = 0) const;
     };
-    // object animation type database typedefs
-    typedef std::shared_ptr<ObjectAnimationTypeDatabase> ObjectAnimationTypeDatabasePtr;
-    typedef std::shared_ptr<const ObjectAnimationTypeDatabase> ConstObjectAnimationTypeDatabasePtr;
+
+    class AnimationDatabase : public Database<ANIMATION::AnimationPrototype>
+    {
+    public:
+        //void setPrototype(AnimationPrototype *pItem);
+        //const AnimationPrototype* getPrototype(uint32 ID) const;
+        //AnimationPrototype* getPrototype(uint32 ID);
+
+        //AnimationPrototype* getNewPrototype(uint32 uiID = 0) const;
+    };
+
+    class AnimationTypeDatabase : public Database<ANIMATION::AnimationTypePrototype>
+    {
+    public:
+        AnimationTypeDatabase();
+
+        void clear();
+
+        //void setPrototype(AnimationTypePrototype *pItem);
+        //const AnimationTypePrototype* getPrototype(uint32 ID) const;
+        //AnimationTypePrototype* getPrototype(uint32 ID);
+
+        //AnimationTypePrototype* getNewPrototype(uint32 uiID = 0) const;
+    };
+
+    class WorldObjectDatabase : public Database<MAP_OBJECT::WorldObjectPrototype>
+    {
+    public:
+        //virtual void setPrototype(MAP_OBJECT::WorldObjectPrototype *pItem);
+        //virtual const MAP_OBJECT::WorldObjectPrototype* getPrototype(uint32 ID) const;
+        //virtual MAP_OBJECT::WorldObjectPrototype* getPrototype(uint32 ID);
+
+        //virtual MAP_OBJECT::WorldObjectPrototype* getNewPrototype(uint32 uiID = 0) const;
+    };
+
+    class DynamicObjectDatabase : public Database<MAP_OBJECT::DynamicObjectPrototype>
+    {
+    public:
+        //void setPrototype(MAP_OBJECT::DynamicObjectPrototype *pItem);
+        //const MAP_OBJECT::DynamicObjectPrototype* getPrototype(uint32 ID) const;
+        //MAP_OBJECT::DynamicObjectPrototype* getPrototype(uint32 ID);
+
+        //MAP_OBJECT::DynamicObjectPrototype* getNewPrototype(uint32 uiID = 0) const;
+    };
+
+    class LocalisationDatabase : public Database<LocalisationPrototype>
+    {
+    public:
+        //void setPrototype(LocalisationPrototype *pItem);
+        //const LocalisationPrototype* getPrototype(uint32 ID) const;
+        //LocalisationPrototype* getPrototype(uint32 ID);
+
+        //LocalisationPrototype* getNewPrototype(uint32 uiID = 0) const;
+    };
 
     /*#####
     # DatabaseMgr
     #####*/
-    // tile database typedefs
-    typedef std::shared_ptr<TileDatabase> TileDatabasePtr;
-    typedef std::shared_ptr<const TileDatabase> ConstTileDatabasePtr;
-    // tileset database typedefs
-    typedef Database<TILE_SET::TileSetPrototype> TileSetDatabase;
-    typedef std::shared_ptr<TileSetDatabase> TileSetDatabasePtr;
-    typedef std::shared_ptr<const TileSetDatabase> ConstTileSetDatabasePtr;
-    // autotile database typedefs
-    typedef std::shared_ptr<AutoTileDatabase> AutoTileDatabasePtr;
-    typedef std::shared_ptr<const AutoTileDatabase> ConstAutoTileDatabasePtr;
-    // sprite database typedefs
-    typedef Database<SpritePrototype> SpriteDatabase;
-    typedef std::shared_ptr<SpriteDatabase> SpriteDatabasePtr;
-    typedef std::shared_ptr<const SpriteDatabase> ConstSpriteDatabasePtr;
-    // animation database typedefs
-    typedef Database<AnimationPrototype> AnimationDatabase;
-    typedef std::shared_ptr<AnimationDatabase> AnimationDatabasePtr;
-    typedef std::shared_ptr<const AnimationDatabase> ConstAnimationDatabasePtr;
-    // world object database typedefs
-    typedef Database<MAP_OBJECT::WorldObjectPrototype> WorldObjectDatabase;
-    typedef std::shared_ptr<WorldObjectDatabase> WorldObjectDatabasePtr;
-    typedef std::shared_ptr<const WorldObjectDatabase> ConstWorldObjectDatabasePtr;
-    // dynamic object database typedefs
-    typedef Database<MAP_OBJECT::DynamicObjectPrototype> DynamicObjectDatabase;
-    typedef std::shared_ptr<DynamicObjectDatabase> DynamicObjectDatabasePtr;
-    typedef std::shared_ptr<const DynamicObjectDatabase> ConstDynamicObjectDatabasePtr;
-    // text database typedefs
-    typedef Database<LocalisationPrototype> LocalsDatabase;
-    typedef std::shared_ptr<LocalsDatabase> LocalsDatabasePtr;
-    typedef std::shared_ptr<const LocalsDatabase> ConstLocalsDatabasePtr;
     // map database typedefs
     typedef std::shared_ptr<MAP_STRUCTURE::MapDatabase> MapDatabasePtr;
     typedef std::shared_ptr<const MAP_STRUCTURE::MapDatabase> ConstMapDatabasePtr;

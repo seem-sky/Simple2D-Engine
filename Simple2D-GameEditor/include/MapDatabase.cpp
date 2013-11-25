@@ -4,10 +4,6 @@
 using namespace DATABASE;
 using namespace DATABASE::MAP_STRUCTURE;
 
-MapDatabase::MapDatabase(void) : Database()
-{
-}
-
 void MapDatabase::clear()
 {
     Database::clear();
@@ -16,37 +12,36 @@ void MapDatabase::clear()
 
 bool MapDatabase::hasMapDataStored(uint32 uiIndex) const
 {
-    ConstMapPrototypePtr pMap;
-    if (getItem(uiIndex, pMap) && pMap && pMap->hasMapDataStored())
+    auto pMap = getOriginalPrototype(uiIndex);
+    if (pMap && pMap->hasMapDataStored())
         return true;
     return false;
 }
 
 bool MapDatabase::removeMap(uint32 uiID)
 {
-    MapPrototypePtr pMap;
-    if (!getItem(uiID, pMap))
+    if (!getOriginalPrototype(uiID))
         return false;
-    setItem(uiID, MapPrototypePtr());
+    // ToDo: setPrototype(uiID, nullptr);
     return true;
 }
 
 bool MapDatabase::loadMapFile(uint32 uiMapID, const QString &path)
 {
-    MapPrototypePtr map;
-    if (!getItem(uiMapID, map))
+    auto pMap = getOriginalPrototype(uiMapID);
+    if (!pMap)
         return false;
 
-    if (map->m_DataLoaded)
+    if (pMap->m_DataLoaded)
         return true;
 
-    map->m_DataLoaded = true;
-    map->setSize(map->getSize(), map->getLayerSize(MAP::LAYER_FOREGROUND), map->getLayerSize(MAP::LAYER_BACKGROUND));
+    pMap->m_DataLoaded = true;
+    pMap->setSize(pMap->getSize(), pMap->getLayerSize(MAP::LAYER_FOREGROUND), pMap->getLayerSize(MAP::LAYER_BACKGROUND));
 
     try
     {
         INPUT::MapBinaryReader reader;
-        reader.readFile(path + MAP_FOLDER, map);
+        reader.readFile(path + MAP_FOLDER, pMap);
     }
     catch (const std::ios::failure&) {}
     return true;
@@ -54,15 +49,35 @@ bool MapDatabase::loadMapFile(uint32 uiMapID, const QString &path)
 
 void MapDatabase::unloadMapFile(uint32 uiMapID)
 {
-    MapPrototypePtr map;
-    if (!getItem(uiMapID, map))
+    auto pMap = getOriginalPrototype(uiMapID);
+    if (!pMap)
         return;
 
-    map->_clearTiles();
-    map->m_Objects.clear();
+    pMap->_clearTiles();
+    pMap->m_Objects.clear();
 }
 
-void DATABASE::MAP_STRUCTURE::saveMapFile(ConstMapPrototypePtr pMap, const QString &path)
+//void MapDatabase::setPrototype(MapPrototype *pItem)
+//{
+//    Database::setPrototype(pItem);
+//}
+//
+//const MapPrototype* MapDatabase::getPrototype(uint32 ID) const
+//{
+//    return dynamic_cast<const MapPrototype*>(Database::getPrototype(ID));
+//}
+//
+//MapPrototype* MapDatabase::getPrototype(uint32 ID)
+//{
+//    return dynamic_cast<MapPrototype*>(Database::getPrototype(ID));
+//}
+//
+//MapPrototype* MapDatabase::getNewPrototype(uint32 ID) const
+//{
+//    return new MapPrototype(ID);
+//}
+
+void DATABASE::MAP_STRUCTURE::saveMapFile(const MapPrototype *pMap, const QString &path)
 {
     OUTPUT::MapBinaryWriter writer;
     writer.writeFile(path+MAP_FOLDER, pMap);

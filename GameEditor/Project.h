@@ -6,8 +6,6 @@
 class Project
 {
 public:
-    Project();
-
     bool createNewProject(const QString &path);
     bool loadProject(const QString &path);
     void closeCurrentProject();
@@ -15,14 +13,13 @@ public:
 
     inline bool isOpenProject() const { return !m_projectPath.isEmpty(); }
 
-    inline DATABASE::DatabaseMgrPtr getDatabaseMgr() { return m_pDBMgr; }
-    inline DATABASE::ConstDatabaseMgrPtr getDatabaseMgr() const { return m_pDBMgr; }
-
     inline QString getProjectPath() const { return m_projectPath; }
+
+    const DATABASE::DatabaseMgr& getDatabaseMgr() const { return m_DBMgr; }
 
 private:
     QString m_projectPath;
-    DATABASE::DatabaseMgrPtr m_pDBMgr;
+    DATABASE::DatabaseMgr m_DBMgr;
 };
 typedef std::shared_ptr<Project> ProjectPtr;
 #endif

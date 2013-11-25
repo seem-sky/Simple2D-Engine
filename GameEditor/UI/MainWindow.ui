@@ -26,7 +26,7 @@
    <string>GameEditor</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="MapEditorWidget" name="m_pMapEditor" native="true">
+   <widget class="QWidget" name="m_pMapEditor" native="true">
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -132,14 +132,6 @@
    </property>
   </action>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>MapEditorWidget</class>
-   <extends>QWidget</extends>
-   <header>mapeditorwidget.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

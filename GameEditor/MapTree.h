@@ -10,13 +10,13 @@
 class MapTreeItem : public PrototypeTreeWidgetItem
 {
 public:
-    MapTreeItem(const DATABASE::MAP_STRUCTURE::MapPrototypePtr &map);
+    MapTreeItem(const DATABASE::MAP_STRUCTURE::MapPrototype *map);
 
-    inline DATABASE::MAP_STRUCTURE::MapPrototypePtr getMap() const { return m_pMap; }
+    inline const DATABASE::MAP_STRUCTURE::MapPrototype* getMap() const { return m_pMap; }
     void updateMapText();
 
 private:
-    const DATABASE::MAP_STRUCTURE::MapPrototypePtr m_pMap;
+    const DATABASE::MAP_STRUCTURE::MapPrototype* m_pMap;
 };
 
 class MapTreeWidget : public QTreeWidget, public MapEditorObject
@@ -43,9 +43,9 @@ private slots:
     void _openMap();
 
 signals:
-    void mapOpened(DATABASE::MAP_STRUCTURE::MapPrototypePtr pMap);
-    void mapDeleted(DATABASE::MAP_STRUCTURE::MapPrototypePtr pMap);
-    void mapUpdated(DATABASE::MAP_STRUCTURE::MapPrototypePtr pMap);
+    void mapOpened(DATABASE::MAP_STRUCTURE::MapPrototype* pMap);
+    void mapDeleted(DATABASE::MAP_STRUCTURE::MapPrototype* pMap);
+    void mapUpdated(DATABASE::MAP_STRUCTURE::MapPrototype* pMap);
 };
 
 #endif

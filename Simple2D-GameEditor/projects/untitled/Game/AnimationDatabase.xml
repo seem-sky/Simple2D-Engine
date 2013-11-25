@@ -2,208 +2,208 @@
 <DB>
     <p ID="1" name="explosion">
         <frame time="50">
-            <sprite ID="3" x="0" y="0" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="3" x="0" y="0" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="50">
-            <sprite ID="4" x="0" y="0" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="4" x="0" y="0" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="50">
-            <sprite ID="5" x="0" y="0" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="5" x="0" y="0" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="50">
-            <sprite ID="6" x="0" y="0" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="6" x="0" y="0" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="50">
-            <sprite ID="7" x="0" y="0" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="7" x="0" y="0" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="50">
-            <sprite ID="8" x="0" y="0" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="8" x="0" y="0" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="50">
-            <sprite ID="9" x="0" y="0" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="9" x="0" y="0" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="50">
-            <sprite ID="10" x="0" y="0" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="10" x="0" y="0" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="50">
-            <sprite ID="11" x="0" y="0" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="11" x="0" y="0" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="50">
-            <sprite ID="12" x="0" y="0" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="12" x="0" y="0" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="50">
-            <sprite ID="13" x="0" y="0" scale="100" rotation="0" opacity="100"/>
-            <sprite ID="3" x="-96" y="-96" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="13" x="0" y="0" scale="1.00" rotation="0" opacity="1.00"/>
+            <sprite ID="3" x="-96" y="-96" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="50">
-            <sprite ID="14" x="0" y="0" scale="100" rotation="0" opacity="100"/>
-            <sprite ID="4" x="-96" y="-96" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="14" x="0" y="0" scale="1.00" rotation="0" opacity="1.00"/>
+            <sprite ID="4" x="-96" y="-96" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="50">
-            <sprite ID="15" x="0" y="0" scale="100" rotation="0" opacity="100"/>
-            <sprite ID="5" x="-96" y="-96" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="15" x="0" y="0" scale="1.00" rotation="0" opacity="1.00"/>
+            <sprite ID="5" x="-96" y="-96" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="50">
-            <sprite ID="16" x="0" y="0" scale="100" rotation="0" opacity="100"/>
-            <sprite ID="6" x="-96" y="-96" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="16" x="0" y="0" scale="1.00" rotation="0" opacity="1.00"/>
+            <sprite ID="6" x="-96" y="-96" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="50">
-            <sprite ID="17" x="0" y="0" scale="100" rotation="0" opacity="100"/>
-            <sprite ID="7" x="-96" y="-96" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="17" x="0" y="0" scale="1.00" rotation="0" opacity="1.00"/>
+            <sprite ID="7" x="-96" y="-96" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="50">
-            <sprite ID="18" x="0" y="0" scale="100" rotation="0" opacity="100"/>
-            <sprite ID="8" x="-96" y="-96" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="18" x="0" y="0" scale="1.00" rotation="0" opacity="1.00"/>
+            <sprite ID="8" x="-96" y="-96" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="50">
-            <sprite ID="19" x="0" y="0" scale="100" rotation="0" opacity="100"/>
-            <sprite ID="9" x="-96" y="-96" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="19" x="0" y="0" scale="1.00" rotation="0" opacity="1.00"/>
+            <sprite ID="9" x="-96" y="-96" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="50">
-            <sprite ID="20" x="0" y="0" scale="100" rotation="0" opacity="100"/>
-            <sprite ID="10" x="-96" y="-96" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="20" x="0" y="0" scale="1.00" rotation="0" opacity="1.00"/>
+            <sprite ID="10" x="-96" y="-96" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="51">
-            <sprite ID="21" x="0" y="0" scale="100" rotation="0" opacity="100"/>
-            <sprite ID="11" x="-96" y="-96" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="21" x="0" y="0" scale="1.00" rotation="0" opacity="1.00"/>
+            <sprite ID="11" x="-96" y="-96" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="50">
-            <sprite ID="22" x="0" y="0" scale="100" rotation="0" opacity="100"/>
-            <sprite ID="12" x="-96" y="-96" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="22" x="0" y="0" scale="1.00" rotation="0" opacity="1.00"/>
+            <sprite ID="12" x="-96" y="-96" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="50">
-            <sprite ID="23" x="0" y="0" scale="100" rotation="0" opacity="100"/>
-            <sprite ID="13" x="-96" y="-96" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="23" x="0" y="0" scale="1.00" rotation="0" opacity="1.00"/>
+            <sprite ID="13" x="-96" y="-96" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="50">
-            <sprite ID="24" x="0" y="0" scale="100" rotation="0" opacity="100"/>
-            <sprite ID="14" x="-96" y="-96" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="24" x="0" y="0" scale="1.00" rotation="0" opacity="1.00"/>
+            <sprite ID="14" x="-96" y="-96" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="50">
-            <sprite ID="25" x="0" y="0" scale="100" rotation="0" opacity="100"/>
-            <sprite ID="15" x="-96" y="-96" scale="100" rotation="0" opacity="100"/>
-            <sprite ID="3" x="-2" y="-94" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="25" x="0" y="0" scale="1.00" rotation="0" opacity="1.00"/>
+            <sprite ID="15" x="-96" y="-96" scale="1.00" rotation="0" opacity="1.00"/>
+            <sprite ID="3" x="-2" y="-94" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="50">
-            <sprite ID="26" x="0" y="0" scale="100" rotation="0" opacity="100"/>
-            <sprite ID="16" x="-96" y="-96" scale="100" rotation="0" opacity="100"/>
-            <sprite ID="4" x="-4" y="-92" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="26" x="0" y="0" scale="1.00" rotation="0" opacity="1.00"/>
+            <sprite ID="16" x="-96" y="-96" scale="1.00" rotation="0" opacity="1.00"/>
+            <sprite ID="4" x="-4" y="-92" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="50">
-            <sprite ID="27" x="0" y="0" scale="100" rotation="0" opacity="100"/>
-            <sprite ID="17" x="-96" y="-96" scale="100" rotation="0" opacity="100"/>
-            <sprite ID="5" x="-6" y="-90" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="27" x="0" y="0" scale="1.00" rotation="0" opacity="1.00"/>
+            <sprite ID="17" x="-96" y="-96" scale="1.00" rotation="0" opacity="1.00"/>
+            <sprite ID="5" x="-6" y="-90" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="50">
-            <sprite ID="18" x="-96" y="-96" scale="100" rotation="0" opacity="100"/>
-            <sprite ID="6" x="-8" y="-88" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="18" x="-96" y="-96" scale="1.00" rotation="0" opacity="1.00"/>
+            <sprite ID="6" x="-8" y="-88" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="50">
-            <sprite ID="19" x="-96" y="-96" scale="100" rotation="0" opacity="100"/>
-            <sprite ID="7" x="-11" y="-86" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="19" x="-96" y="-96" scale="1.00" rotation="0" opacity="1.00"/>
+            <sprite ID="7" x="-11" y="-86" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="50">
-            <sprite ID="20" x="-96" y="-96" scale="100" rotation="0" opacity="100"/>
-            <sprite ID="8" x="-14" y="-84" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="20" x="-96" y="-96" scale="1.00" rotation="0" opacity="1.00"/>
+            <sprite ID="8" x="-14" y="-84" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="50">
-            <sprite ID="21" x="-96" y="-96" scale="100" rotation="0" opacity="100"/>
-            <sprite ID="9" x="-15" y="-82" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="21" x="-96" y="-96" scale="1.00" rotation="0" opacity="1.00"/>
+            <sprite ID="9" x="-15" y="-82" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="50">
-            <sprite ID="22" x="-96" y="-96" scale="100" rotation="0" opacity="100"/>
-            <sprite ID="10" x="-16" y="-80" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="22" x="-96" y="-96" scale="1.00" rotation="0" opacity="1.00"/>
+            <sprite ID="10" x="-16" y="-80" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="50">
-            <sprite ID="23" x="-96" y="-96" scale="100" rotation="0" opacity="100"/>
-            <sprite ID="11" x="-18" y="-78" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="23" x="-96" y="-96" scale="1.00" rotation="0" opacity="1.00"/>
+            <sprite ID="11" x="-18" y="-78" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="50">
-            <sprite ID="24" x="-96" y="-96" scale="100" rotation="0" opacity="100"/>
-            <sprite ID="12" x="-20" y="-76" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="24" x="-96" y="-96" scale="1.00" rotation="0" opacity="1.00"/>
+            <sprite ID="12" x="-20" y="-76" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="50">
-            <sprite ID="25" x="-96" y="-96" scale="100" rotation="0" opacity="100"/>
-            <sprite ID="13" x="-22" y="-72" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="25" x="-96" y="-96" scale="1.00" rotation="0" opacity="1.00"/>
+            <sprite ID="13" x="-22" y="-72" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="50">
-            <sprite ID="26" x="-96" y="-96" scale="100" rotation="0" opacity="100"/>
-            <sprite ID="14" x="-24" y="-72" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="26" x="-96" y="-96" scale="1.00" rotation="0" opacity="1.00"/>
+            <sprite ID="14" x="-24" y="-72" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="50">
-            <sprite ID="27" x="-96" y="-96" scale="100" rotation="0" opacity="100"/>
-            <sprite ID="15" x="-26" y="-70" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="27" x="-96" y="-96" scale="1.00" rotation="0" opacity="1.00"/>
+            <sprite ID="15" x="-26" y="-70" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="50">
-            <sprite ID="16" x="-28" y="-68" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="16" x="-28" y="-68" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="50">
-            <sprite ID="17" x="-31" y="-66" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="17" x="-31" y="-66" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="50">
-            <sprite ID="18" x="-36" y="-62" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="18" x="-36" y="-62" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="50">
-            <sprite ID="19" x="-40" y="-56" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="19" x="-40" y="-56" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="50">
-            <sprite ID="20" x="-38" y="-61" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="20" x="-38" y="-61" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="50">
-            <sprite ID="21" x="-38" y="-58" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="21" x="-38" y="-58" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="50">
-            <sprite ID="22" x="-42" y="-55" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="22" x="-42" y="-55" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="50">
-            <sprite ID="23" x="-45" y="-53" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="23" x="-45" y="-53" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="50">
-            <sprite ID="24" x="-48" y="-51" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="24" x="-48" y="-51" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="50">
-            <sprite ID="25" x="-51" y="-50" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="25" x="-51" y="-50" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="50">
-            <sprite ID="26" x="-56" y="-53" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="26" x="-56" y="-53" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="0">
-            <sprite ID="27" x="-59" y="-50" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="27" x="-59" y="-50" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
     </p>
     <p ID="2" name="char1-right">
         <frame time="250">
-            <sprite ID="28" x="12" y="16" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="28" x="12" y="16" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="250">
-            <sprite ID="29" x="12" y="16" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="29" x="12" y="16" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="250">
-            <sprite ID="30" x="12" y="16" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="30" x="12" y="16" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="250">
-            <sprite ID="29" x="12" y="16" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="29" x="12" y="16" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
     </p>
     <p ID="3" name="Tree">
         <frame time="0">
-            <sprite ID="1" x="32" y="40" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="1" x="32" y="40" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
     </p>
     <p ID="4" name="fallen-tree">
         <frame time="0">
-            <sprite ID="31" x="22" y="7" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="31" x="22" y="7" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
     </p>
     <p ID="5" name="hero 2">
         <frame time="100">
-            <sprite ID="28" x="72" y="56" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="28" x="72" y="56" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="100">
-            <sprite ID="29" x="72" y="56" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="29" x="72" y="56" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
         <frame time="100">
-            <sprite ID="30" x="72" y="56" scale="100" rotation="0" opacity="100"/>
+            <sprite ID="30" x="72" y="56" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
     </p>
 </DB>

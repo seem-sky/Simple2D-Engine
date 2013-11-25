@@ -42,7 +42,7 @@ void MapCamera::centerOnPlayer()
     m_CameraSettings = CENTER_ON_PLAYER;
 }
 
-void MapCamera::centerOn(MAP::OBJECT::WorldObjectPtr pWorldObj)
+void MapCamera::centerOn(const MAP::OBJECT::WorldObject *pWorldObj)
 {
     stopMoving();
     m_CameraSettings = CENTER_ON_WORLD_OBJECT;
@@ -53,7 +53,7 @@ void MapCamera::update(uint32 uiDiff)
     switch (m_CameraSettings)
     {
     case CENTER_ON_PLAYER:
-        if (MAP::OBJECT::DynamicObjectPtr pObj = m_pOwner->getControledObject())
+        if (auto pObj = m_pOwner->getControledObject())
         {
             pObj->getPosition();
         }

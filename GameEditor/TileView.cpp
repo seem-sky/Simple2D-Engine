@@ -13,9 +13,7 @@ TileItem::TileItem(ConstSharedMapEditorDataPtr pSharedData, uint32 uiID) : m_pSh
 
 void TileItem::paint(QPainter *pPainter, const QStyleOptionGraphicsItem *pOption, QWidget *pWidget)
 {
-    ConstQPixmapPtr pPixmap;
-    m_pSharedData->getTileCache()->getItem(m_uiID, pPixmap);
-    drawItem(pPainter, pPixmap);
+    drawItem(pPainter, m_pSharedData->getTileCache().getItem(m_uiID));
 }
 
 QRectF TileItem::boundingRect() const

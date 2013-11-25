@@ -176,15 +176,10 @@
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="VariableHolder.cpp" />
     <ClCompile Include="IniParser.cpp" />
-    <ClCompile Include="MapDatabaseChanger.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Config.h" />
-    <ClInclude Include="VariableHolder.h" />
-    <ClInclude Include="WrapperFunctions.h" />
-    <ClInclude Include="DatabaseChanger.h" />
     <ClInclude Include="IniParser.h" />
-    <ClInclude Include="MapDatabaseChanger.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Performance1.psess" />

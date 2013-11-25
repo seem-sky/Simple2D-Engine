@@ -17,14 +17,14 @@
 
 namespace MAP
 {
-    typedef std::unordered_set<OBJECT::WorldObjectPtr> WorldObjectPtrUSet;
+    typedef std::unordered_set<OBJECT::WorldObject*> WorldObjectPtrUSet;
     class Map : public ENTITY::Entity
     {
     private:
         void _setupObjects(const DATABASE::MAP_STRUCTURE::MapObjectContainer &objects);
 
     public:
-        Map(uint32 GUID, uint32 ID, MapLayer &layer, const DATABASE::MAP_STRUCTURE::MapObjectContainer &objects, DATABASE::ConstDatabaseMgrPtr pDBMgr,
+        Map(uint32 GUID, uint32 ID, MapLayer &layer, const DATABASE::MAP_STRUCTURE::MapObjectContainer &objects, const DATABASE::DatabaseMgr &DBMgr,
             const std::string &name = "", const std::string &script = "");
 
         void update(uint32 uiDiff);
@@ -38,19 +38,19 @@ namespace MAP
 
         inline const WorldObjectPtrUSet& getNewWorldObjects() const { return m_NewObjects; }
 
-        void addWorldObject(OBJECT::WorldObjectPtr pWorldObject);
-        OBJECT::WorldObjectPtr getWorldObject(uint32 GUID);
+        void addWorldObject(OBJECT::WorldObject *pWorldObject);
+        inline OBJECT::WorldObject* getWorldObject(uint32 GUID) { return m_Grid.getObjects().getItem(GUID); }
 
     private:
         MapLayer m_Layer;
         GRID::MapGrid m_Grid;
-        DATABASE::ConstDatabaseMgrPtr m_pDBMgr;
+        const DATABASE::DatabaseMgr &m_DBMgr;
         WorldObjectPtrUSet m_NewObjects;
     };
     typedef std::shared_ptr<Map> MapPtr;
     typedef std::shared_ptr<const Map> ConstMapPtr;
 
-    bool isLayerPassable(DATABASE::ConstDatabaseMgrPtr pDBMgr, const MapLayer &mapLayer, UInt32Point pos, Layer layer);
-    BitsetVector generatePassabilityMap(DATABASE::ConstDatabaseMgrPtr pDBMgr, const MapLayer &mapLayer);
+    //bool isLayerPassable(DATABASE::ConstDatabaseMgrPtr pDBMgr, const MapLayer &mapLayer, UInt32Point pos, Layer layer);
+    //BitsetVector generatePassabilityMap(DATABASE::ConstDatabaseMgrPtr pDBMgr, const MapLayer &mapLayer);
 }
 #endif

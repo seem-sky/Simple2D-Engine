@@ -39,11 +39,11 @@ namespace DATABASE
             private:
                 virtual void _drawPen(MapViewer *pWidget, const UInt32Point3D &center) = 0;
                 virtual void _drawFill(MapViewer *pWidget, const UInt32Point3D &center) = 0;
-                virtual bool _checkFill(MapPrototypePtr map, MapTile centerTile, UInt32Point3D pos, BitsetVector &mapBitset, UInt32PointVector &openPoints) = 0;
+                virtual bool _checkFill(MapPrototype *pMap, MapTile centerTile, UInt32Point3D pos, BitsetVector &mapBitset, UInt32PointVector &openPoints) = 0;
 
             protected:
                 void calculateFillArea(MapViewer *pWidget, const UInt32Point3D &center, BitsetVector &mapBitset = BitsetVector());
-                void setupBitset(const MAP_STRUCTURE::MapPrototypePtr &map, BitsetVector &mapBitset);
+                void setupBitset(const MAP_STRUCTURE::MapPrototype *pMap, BitsetVector &mapBitset);
 
             public:
                 TileBrush();
@@ -79,7 +79,7 @@ namespace DATABASE
             private:
                 void _drawPen(MapViewer *pWidget, const UInt32Point3D &center);
                 void _drawFill(MapViewer *pWidget, const UInt32Point3D &center);
-                bool _checkFill(MapPrototypePtr map, MapTile centerTile, UInt32Point3D pos, BitsetVector &mapBitset, UInt32PointVector &openPoints);
+                bool _checkFill(MapPrototype *pMap, MapTile centerTile, UInt32Point3D pos, BitsetVector &mapBitset, UInt32PointVector &openPoints);
 
             public:
                 MapTileBrush() : TileBrush()
@@ -93,18 +93,18 @@ namespace DATABASE
             private:
                 void _drawPen(MapViewer *pWidget, const UInt32Point3D &center);
                 void _drawFill(MapViewer *pWidget, const UInt32Point3D &center);
-                bool _checkFill(MapPrototypePtr map, MapTile centerTile, UInt32Point3D pos, BitsetVector &mapBitset, UInt32PointVector &openPoints);
+                bool _checkFill(MapPrototype *pMap, MapTile centerTile, UInt32Point3D pos, BitsetVector &mapBitset, UInt32PointVector &openPoints);
 
             public:
-                MapTileSetBrush(DATABASE::ConstTileSetDatabasePtr pTileSetDB) : TileBrush(), m_pTileSetDB(pTileSetDB)
+                MapTileSetBrush(const DATABASE::TileSetDatabase *pTileSetDB) : TileBrush(), m_pTileSetDB(pTileSetDB)
                 {
                     m_BrushType = BRUSH_TILE_SET;
                 }
 
-                inline void setTileSetDB(DATABASE::ConstTileSetDatabasePtr pTileSetDB) { m_pTileSetDB = pTileSetDB; }
+                inline void setTileSetDB(const DATABASE::TileSetDatabase *pTileSetDB) { m_pTileSetDB = pTileSetDB; }
 
             private:
-                DATABASE::ConstTileSetDatabasePtr m_pTileSetDB;
+                const DATABASE::TileSetDatabase *m_pTileSetDB;
                 UInt32Point3D m_centerPos;
             };
 
@@ -113,22 +113,22 @@ namespace DATABASE
             private:
                 void _drawPen(MapViewer *pWidget, const UInt32Point3D &center);
                 void _drawFill(MapViewer *pWidget, const UInt32Point3D &center);
-                bool _checkFill(MapPrototypePtr map, MapTile centerTile, UInt32Point3D pos, BitsetVector &mapBitset, UInt32PointVector &openPoints);
+                bool _checkFill(MapPrototype *pMap, MapTile centerTile, UInt32Point3D pos, BitsetVector &mapBitset, UInt32PointVector &openPoints);
 
-                void _setAutoTile(MapPrototypePtr const &map, const UInt32Point3D &center, DATABASE::ConstAutoTilePrototypePtr proto);
+                void _setAutoTile(const MapPrototype *pMap, const UInt32Point3D &center, const DATABASE::AUTO_TILE::AutoTilePrototype *pAutoTile);
 
-                void _doAutoTileCheckForPosList(const MAP_STRUCTURE::MapPrototypePtr &map, const uint32 &uiLayer, const UInt32PointSet &posVector);
+                void _doAutoTileCheckForPosList(const MAP_STRUCTURE::MapPrototype *pMap, const uint32 uiLayer, const UInt32PointSet &posVector);
 
             public:
-                MapAutoTileBrush(DATABASE::ConstAutoTileDatabasePtr pDB) : TileBrush(), m_pAutoTileDB(pDB)
+                MapAutoTileBrush(const DATABASE::AutoTileDatabase *pDB) : TileBrush(), m_pAutoTileDB(pDB)
                 {
                     m_BrushType = BRUSH_AUTO_TILE;
                 }
 
-                inline void setAutoTileDB(DATABASE::ConstAutoTileDatabasePtr pAutoTileDB) { m_pAutoTileDB = pAutoTileDB; }
+                inline void setAutoTileDB(const DATABASE::AutoTileDatabase *pAutoTileDB) { m_pAutoTileDB = pAutoTileDB; }
 
             private:
-                DATABASE::ConstAutoTileDatabasePtr m_pAutoTileDB;
+                const DATABASE::AutoTileDatabase *m_pAutoTileDB;
                 UInt32PointSet m_BorderPosResult;
             };
 
@@ -152,7 +152,7 @@ namespace DATABASE
                 bool drawObject(MapViewer *pWidget, Int32Point pos);
 
                 static QPixmap getObjectPixmap(uint32 uiObjectID, DATABASE::MAP_OBJECT::ObjectType type, MAP_STRUCTURE::MapDirection direction,
-                    DATABASE::ConstWorldObjectDatabasePtr pWorldObjectDB, DATABASE::ConstAnimationDatabasePtr pAnimationDB, DATABASE::ConstSpriteDatabasePtr pSpriteDB,
+                    const DATABASE::WorldObjectDatabase *pWorldObjectDB, const DATABASE::AnimationDatabase *pAnimationDB, const DATABASE::SpriteDatabase *pSpriteDB,
                     QRect &boundingRect);
 
             private:

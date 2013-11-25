@@ -27,13 +27,13 @@ using namespace GRID;
 //    return UInt32Point3D(mapPos.x/GRID_SIZE, mapPos.y/GRID_SIZE, mapPos.z);
 //}
 //
-void MapGrid::addObject(OBJECT::WorldObjectPtr pObject)
+void MapGrid::addObject(OBJECT::WorldObject *pObject)
 {
     if (pObject && !m_WorldObjects.hasValidItem(pObject->getGUID()))
         m_WorldObjects.setItem(pObject->getGUID(), pObject);
 }
 
-void MapGrid::removeObject(OBJECT::WorldObjectPtr pObject)
+void MapGrid::removeObject(OBJECT::WorldObject *pObject)
 {
     if (pObject)
         m_WorldObjects.setItem(pObject->getGUID(), pObject);

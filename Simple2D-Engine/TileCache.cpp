@@ -5,39 +5,35 @@
 
 using namespace DATABASE;
 
-TileCache::TileCache() : GapsContainer()
+TileCache::TileCache(const DatabaseMgr &DBMgr) : m_DBMgr(DBMgr)
 {}
 
-bool TileCache::getItem(uint32 uiID, ConstQPixmapPtr &result) const
+const QPixmap* TileCache::getItem(uint32 uiID) const
 {
-    if (GapsContainer::getItem(uiID, result) || const_cast<TileCache&>(*this)._createPixmap(uiID, result))
-        return true;
-    return false;
+    if (auto pPixmap = Container::getItem(uiID))
+        return pPixmap;
+    else if (auto pPixmap = const_cast<TileCache&>(*this)._createPixmap(uiID))
+        return pPixmap;
+    return nullptr;
 }
 
-void TileCache::setTileDB(DATABASE::ConstTileDatabasePtr pTileDB)
+QPixmap* TileCache::_createPixmap(uint32 uiID)
 {
-    m_pTileDB = pTileDB;
-    clear();
-    if (m_pTileDB)
-        resize(m_pTileDB->getSize());
-}
+    if (!m_DBMgr.getTileDatabase())
+        return false;
 
-bool TileCache::_createPixmap(uint32 uiID, ConstQPixmapPtr &result)
-{
-    ConstTilePrototypePtr proto;
-    QPixmap newPixmap;
-    if (m_pTileDB && m_pTileDB->getItem(uiID, proto) &&
-#ifdef GAME_EDITOR
-        createPixmapFromTexturePrototype(Config::get()->getProjectDirectory(), proto, newPixmap))
-#else
-        createPixmapFromTexturePrototype("projects/untitled/", proto, newPixmap))
-#endif
+    if (auto pTile = m_DBMgr.getTileDatabase()->getOriginalPrototype(uiID))
     {
-        QPixmapPtr pPixmap = QPixmapPtr(new QPixmap(newPixmap));
-        setItem(uiID, pPixmap);
-        result = pPixmap;
-        return true;
+        QPixmap *pNewPixmap(nullptr);
+#ifdef GAME_EDITOR
+        if (createPixmapFromTexturePrototype(Config::get()->getProjectDirectory(), pTile, pNewPixmap))
+#else
+        if (createPixmapFromTexturePrototype("projects/untitled/", pTile, *pNewPixmap))
+#endif
+        {
+            setItem(uiID, pNewPixmap);
+            return pNewPixmap;
+        }
     }
-    return false;
+    return nullptr;
 }

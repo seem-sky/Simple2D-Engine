@@ -7,37 +7,33 @@
 class AutoTile
 {
 private:
-    inline void _setPixmap(DATABASE::AUTO_TILE::AUTO_TILE_INDEX index, ConstQPixmapPtr pixmap)
+    inline void _setPixmap(DATABASE::AUTO_TILE::AUTO_TILE_INDEX index, const QPixmap *pPixmap)
     {
         if (index < DATABASE::AUTO_TILE::INDEX_NONE)
-            m_pPixmaps[index] = pixmap;
+            m_pPixmaps.at(index) = pPixmap;
     }
 
-    void _createPixmaps(ConstTileCachePtr pTileCache);
+    void _createPixmaps(const TileCache &tileCache);
     void _clearPixmaps()
     {
-        for (uint32 i = 0; i < DATABASE::AUTO_TILE::INDEX_NONE; ++i)
-            m_pPixmaps[i] = QPixmapPtr();
+        for (auto &pPixmap : m_pPixmaps)
+            pPixmap = nullptr;
     }
 
 public:
-    inline bool getPixmap(DATABASE::AUTO_TILE::AUTO_TILE_INDEX index, ConstQPixmapPtr &result) const
+    inline bool getPixmap(DATABASE::AUTO_TILE::AUTO_TILE_INDEX index, const QPixmap *result) const
     {
-        if (index >= DATABASE::AUTO_TILE::INDEX_NONE || !m_pPixmaps[index])
-            return false;
-        result = m_pPixmaps[index];
+        // ToDo: Return pointer.
+        if (index >= DATABASE::AUTO_TILE::INDEX_NONE || !m_pPixmaps.at(index))
+            return nullptr;
+        result = m_pPixmaps.at(index);
         return true;
     }
 
-    inline void setAutoTilePrototype(DATABASE::ConstAutoTilePrototypePtr proto, ConstTileCachePtr pTileCache) { m_pProto = proto; _createPixmaps(pTileCache); }
+    inline void setAutoTilePrototype(const DATABASE::AUTO_TILE::AutoTilePrototype *proto, const TileCache &tileCache) { m_pProto = proto; _createPixmaps(tileCache); }
 
 private:
-    std::array<ConstQPixmapPtr, DATABASE::AUTO_TILE::INDEX_NONE> m_pPixmaps;
-    DATABASE::ConstAutoTilePrototypePtr m_pProto;
+    std::array<const QPixmap*, DATABASE::AUTO_TILE::INDEX_NONE> m_pPixmaps;
+    const DATABASE::AUTO_TILE::AutoTilePrototype *m_pProto;
 };
-typedef std::shared_ptr<AutoTile> AutoTilePtr;
-typedef std::shared_ptr<const AutoTile> ConstAutoTilePtr;
-typedef std::vector<AutoTilePtr> AutoTilePtrVector;
-typedef Container<AutoTile> AutoTileContainer;
-
 #endif

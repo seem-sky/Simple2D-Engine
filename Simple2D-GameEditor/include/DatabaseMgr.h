@@ -2,85 +2,111 @@
 #define DATABASE_MGR_H
 
 #include "MapDatabase.h"
+#include <QtGui/QPixmap>
 
 namespace DATABASE
 {
-    // database store path
-    const QString TILE_DATABASE_PATH = "/Game/TileDatabase.xml";
-    const QString TILE_SET_DATABASE_PATH = "/Game/TileSetDatabase.xml";
-    const QString AUTO_TILE_DATABASE_PATH = "/Game/AutoTileDatabase.xml";
-    const QString SPRITE_DATABASE_PATH = "/Game/SpriteDatabase.xml";
-    const QString ANIMATION_DATABASE_PATH = "/Game/AnimationDatabase.xml";
-    const QString WORLD_OBJECT_DATABASE_PATH = "/Game/WorldObjectDatabase.xml";
-    const QString DYNAMIC_OBJECT_DATABASE_PATH = "/Game/DynamicObjectDatabase.xml";
-    const QString OBJECT_ANIMATION_TYPE_DATABASE_PATH = "/Game/ObjectAnimationTypeDatabase.xml";
-    const QString MAP_DATABASE_PATH = "/Game/MapDatabase.xml";
-    const QString LOCALS_DATABASE_PATH = "/Game/LocalsDatabase.xml";
-
     enum DatabaseType
     {
-        TILE_DATABASE           = 0x0001,
-        TILE_SET_DATABASE       = 0x0002,
-        AUTO_TILE_DATABASE      = 0x0004,
-        SPRITE_DATABASE         = 0x0008,
-        ANIMATION_DATABASE      = 0x0010,
-        OBJECT_ANIMATION_TYPE_DATABASE  = 0x0020,
+        TILE_DATABASE,
+        TILE_SET_DATABASE,
+        AUTO_TILE_DATABASE,
 
-        WORLD_OBJECT_DATABASE   = 0x0040,
-        DYNAMIC_OBJECT_DATABASE = 0x0080,
+        SPRITE_DATABASE,
+        ANIMATION_DATABASE,
+        ANIMATION_TYPE_DATABASE,
 
-        MAP_DATABASE            = 0x0100,
+        WORLD_OBJECT_DATABASE,
+        DYNAMIC_OBJECT_DATABASE,
 
-        LOCALS_DATABASE         = 0x0200,
+        LOCALISATION_DATABASE,
 
-        ALL_DATABASES           = TILE_DATABASE | TILE_SET_DATABASE | AUTO_TILE_DATABASE | SPRITE_DATABASE | ANIMATION_DATABASE | OBJECT_ANIMATION_TYPE_DATABASE |
-                                    WORLD_OBJECT_DATABASE | DYNAMIC_OBJECT_DATABASE | MAP_DATABASE | LOCALS_DATABASE
+        MAP_DATABASE
+    };
+    const uint32 DATABASE_COUNT = 10;
+
+    // database store path
+    const std::array<const char*, DATABASE_COUNT> DATABASE_FILE =
+    {
+        "/Game/TileDatabase.xml",
+        "/Game/TileSetDatabase.xml",
+        "/Game/AutoTileDatabase.xml",
+        "/Game/SpriteDatabase.xml",
+        "/Game/AnimationDatabase.xml",
+        "/Game/ObjectAnimationTypeDatabase.xml",
+        "/Game/WorldObjectDatabase.xml",
+        "/Game/DynamicObjectDatabase.xml",
+        "/Game/LocalsDatabase.xml",
+        "/Game/MapDatabase.xml"
     };
 
     class DatabaseMgr
     {
     public:
+        enum DatabaseType
+        {
+            TILE_DATABASE           = 0x0001,
+            TILE_SET_DATABASE       = 0x0002,
+            AUTO_TILE_DATABASE      = 0x0004,
+            SPRITE_DATABASE         = 0x0008,
+            ANIMATION_DATABASE      = 0x0010,
+            ANIMATION_TYPE_DATABASE  = 0x0020,
+
+            WORLD_OBJECT_DATABASE   = 0x0040,
+            DYNAMIC_OBJECT_DATABASE = 0x0080,
+
+            MAP_DATABASE            = 0x0100,
+
+            LOCALS_DATABASE         = 0x0200,
+
+            ALL_DATABASES           = TILE_DATABASE | TILE_SET_DATABASE | AUTO_TILE_DATABASE | SPRITE_DATABASE | ANIMATION_DATABASE | ANIMATION_TYPE_DATABASE |
+            WORLD_OBJECT_DATABASE | DYNAMIC_OBJECT_DATABASE | MAP_DATABASE | LOCALS_DATABASE
+        };
+
+    private:
+        inline void setTileDatabase(TileDatabase *db) { m_Databases.at(DATABASE::TILE_DATABASE) = std::unique_ptr<IDatabase>(db); }
+        inline void setTileSetDatabase(TileSetDatabase *db) { m_Databases.at(DATABASE::TILE_SET_DATABASE) = std::unique_ptr<IDatabase>(db); }
+        inline void setAutoTileDatabase(AutoTileDatabase *db) { m_Databases.at(DATABASE::AUTO_TILE_DATABASE) = std::unique_ptr<IDatabase>(db); }
+        inline void setSpriteDatabase(SpriteDatabase *db) { m_Databases.at(DATABASE::SPRITE_DATABASE) = std::unique_ptr<IDatabase>(db); }
+        inline void setAnimationDatabase(AnimationDatabase *db) { m_Databases.at(DATABASE::ANIMATION_DATABASE) = std::unique_ptr<IDatabase>(db); }
+        inline void setAnimationTypeDatabase(AnimationTypeDatabase *db) { m_Databases.at(DATABASE::ANIMATION_TYPE_DATABASE) = std::unique_ptr<IDatabase>(db); }
+        inline void setWorldObjectDatabase(WorldObjectDatabase *db) { m_Databases.at(DATABASE::WORLD_OBJECT_DATABASE) = std::unique_ptr<IDatabase>(db); }
+        inline void setDynamicObjectDatabase(DynamicObjectDatabase *db) { m_Databases.at(DATABASE::DYNAMIC_OBJECT_DATABASE) = std::unique_ptr<IDatabase>(db); }
+        inline void setLocalisationDatabase(LocalisationDatabase *db) { m_Databases.at(DATABASE::LOCALISATION_DATABASE) = std::unique_ptr<IDatabase>(db); }
+        inline void setMapDatabase(MAP_STRUCTURE::MapDatabase *db) { m_Databases.at(DATABASE::MAP_DATABASE) = std::unique_ptr<IDatabase>(db); }
+
+    public:
         DatabaseMgr();
 
-        inline ConstTileDatabasePtr getTileDatabase() const { return m_pTileDatabase; }
-        inline TileDatabasePtr getTileDatabase() { return m_pTileDatabase; }
-        inline void setTileDatabase(const TileDatabasePtr &db) { *m_pTileDatabase = *db; }
+        inline const TileDatabase* getTileDatabase() const { return dynamic_cast<TileDatabase*>(m_Databases.at(DATABASE::TILE_DATABASE).get()); }
+        inline TileDatabase* getTileDatabase() { return dynamic_cast<TileDatabase*>(m_Databases.at(DATABASE::TILE_DATABASE).get()); }
 
-        inline ConstTileSetDatabasePtr getTileSetDatabase() const { return m_pTileSetDatabase; }
-        inline TileSetDatabasePtr getTileSetDatabase() { return m_pTileSetDatabase; }
-        inline void setTileSetDatabase(const TileSetDatabasePtr &db) { *m_pTileSetDatabase = *db; }
+        inline const TileSetDatabase* getTileSetDatabase() const { return dynamic_cast<TileSetDatabase*>(m_Databases.at(DATABASE::TILE_SET_DATABASE).get()); }
+        inline TileSetDatabase* getTileSetDatabase() { return dynamic_cast<TileSetDatabase*>(m_Databases.at(DATABASE::TILE_SET_DATABASE).get()); }
 
-        inline ConstAutoTileDatabasePtr getAutoTileDatabase() const { return m_pAutoTileDatabase; }
-        inline AutoTileDatabasePtr getAutoTileDatabase() { return m_pAutoTileDatabase; }
-        inline void setAutoTileDatabase(const AutoTileDatabasePtr &db) { *m_pAutoTileDatabase = *db; }
+        inline const AutoTileDatabase* getAutoTileDatabase() const { return dynamic_cast<AutoTileDatabase*>(m_Databases.at(DATABASE::AUTO_TILE_DATABASE).get()); }
+        inline AutoTileDatabase* getAutoTileDatabase() { return dynamic_cast<AutoTileDatabase*>(m_Databases.at(DATABASE::AUTO_TILE_DATABASE).get()); }
 
-        inline SpriteDatabasePtr getSpriteDatabase() { return m_pSpriteDatabase; }
-        inline ConstSpriteDatabasePtr getSpriteDatabase() const { return m_pSpriteDatabase; }
-        inline void setSpriteDatabase(const SpriteDatabasePtr &db) { *m_pSpriteDatabase = *db; }
+        inline const SpriteDatabase* getSpriteDatabase() const { return dynamic_cast<SpriteDatabase*>(m_Databases.at(DATABASE::SPRITE_DATABASE).get()); }
+        inline SpriteDatabase* getSpriteDatabase() { return dynamic_cast<SpriteDatabase*>(m_Databases.at(DATABASE::SPRITE_DATABASE).get()); }
 
-        inline AnimationDatabasePtr getAnimationDatabase() { return m_pAnimationDatabase; }
-        inline ConstAnimationDatabasePtr getAnimationDatabase() const { return m_pAnimationDatabase; }
-        inline void setAnimationDatabase(const AnimationDatabasePtr &db) { *m_pAnimationDatabase = *db; }
+        inline const AnimationDatabase* getAnimationDatabase() const { return dynamic_cast<AnimationDatabase*>(m_Databases.at(DATABASE::ANIMATION_DATABASE).get()); }
+        inline AnimationDatabase* getAnimationDatabase() { return dynamic_cast<AnimationDatabase*>(m_Databases.at(DATABASE::ANIMATION_DATABASE).get()); }
 
-        inline WorldObjectDatabasePtr getWorldObjectDatabase() { return m_pWorldObjectDatabase; }
-        inline ConstWorldObjectDatabasePtr getWorldObjectDatabase() const { return m_pWorldObjectDatabase; }
-        inline void setWorldObjectDatabase(const WorldObjectDatabasePtr &db) { *m_pWorldObjectDatabase = *db; }
+        inline const AnimationTypeDatabase* getAnimationTypeDatabase() const { return dynamic_cast<AnimationTypeDatabase*>(m_Databases.at(DATABASE::ANIMATION_TYPE_DATABASE).get()); }
+        inline AnimationTypeDatabase* getAnimationTypeDatabase() { return dynamic_cast<AnimationTypeDatabase*>(m_Databases.at(DATABASE::ANIMATION_TYPE_DATABASE).get()); }
 
-        inline DynamicObjectDatabasePtr getDynamicObjectDatabase() { return m_pDynamicObjectDatabase; }
-        inline ConstDynamicObjectDatabasePtr getDynamicObjectDatabase() const { return m_pDynamicObjectDatabase; }
-        inline void setDynamicObjectDatabase(const DynamicObjectDatabasePtr &db) { *m_pDynamicObjectDatabase = *db; }
+        inline const WorldObjectDatabase* getWorldObjectDatabase() const { return dynamic_cast<WorldObjectDatabase*>(m_Databases.at(DATABASE::WORLD_OBJECT_DATABASE).get()); }
+        inline WorldObjectDatabase* getWorldObjectDatabase() { return dynamic_cast<WorldObjectDatabase*>(m_Databases.at(DATABASE::WORLD_OBJECT_DATABASE).get()); }
 
-        inline ObjectAnimationTypeDatabasePtr getObjectAnimationTypeDatabase() { return m_pObjectAnimationTypeDatabase; }
-        inline ConstObjectAnimationTypeDatabasePtr getObjectAnimationTypeDatabase() const { return m_pObjectAnimationTypeDatabase; }
-        inline void setObjectAnimationTypeDatabase(const ObjectAnimationTypeDatabasePtr &db) { *m_pObjectAnimationTypeDatabase = *db; }
+        inline const DynamicObjectDatabase* getDynamicObjectDatabase() const { return dynamic_cast<DynamicObjectDatabase*>(m_Databases.at(DATABASE::DYNAMIC_OBJECT_DATABASE).get()); }
+        inline DynamicObjectDatabase* getDynamicObjectDatabase() { return dynamic_cast<DynamicObjectDatabase*>(m_Databases.at(DATABASE::DYNAMIC_OBJECT_DATABASE).get()); }
 
-        inline MapDatabasePtr getMapDatabase() { return m_pMapDatabase; }
-        inline ConstMapDatabasePtr getMapDatabase() const { return m_pMapDatabase; }
-        inline void setMapDatabase(const MapDatabasePtr &db) { *m_pMapDatabase = *db; }
-
-        inline LocalsDatabasePtr getLocalsDatabase() { return m_pLocalsDatabase; }
-        inline ConstLocalsDatabasePtr getLocalsDatabase() const { return m_pLocalsDatabase; }
-        inline void setTextDatabase(const LocalsDatabasePtr &db) { *m_pLocalsDatabase = *db; }
+        inline const LocalisationDatabase* getLocalisationDatabase() const { return dynamic_cast<LocalisationDatabase*>(m_Databases.at(DATABASE::LOCALISATION_DATABASE).get()); }
+        inline LocalisationDatabase* getLocalisationDatabase() { return dynamic_cast<LocalisationDatabase*>(m_Databases.at(DATABASE::LOCALISATION_DATABASE).get()); }
+        
+        inline const MAP_STRUCTURE::MapDatabase* getMapDatabase() const { return dynamic_cast<MAP_STRUCTURE::MapDatabase*>(m_Databases.at(DATABASE::MAP_DATABASE).get()); }
+        inline MAP_STRUCTURE::MapDatabase* getMapDatabase() { return dynamic_cast<MAP_STRUCTURE::MapDatabase*>(m_Databases.at(DATABASE::MAP_DATABASE).get()); }
 
         virtual void clear();
 
@@ -89,23 +115,12 @@ namespace DATABASE
         virtual bool saveDatabase(const QString &projectPath, uint32 databases = ALL_DATABASES);
 
     private:
-        TileDatabasePtr m_pTileDatabase;
-        TileSetDatabasePtr m_pTileSetDatabase;
-        AutoTileDatabasePtr m_pAutoTileDatabase;
-        SpriteDatabasePtr m_pSpriteDatabase;
-        AnimationDatabasePtr m_pAnimationDatabase;
-        WorldObjectDatabasePtr m_pWorldObjectDatabase;
-        DynamicObjectDatabasePtr m_pDynamicObjectDatabase;
-        ObjectAnimationTypeDatabasePtr m_pObjectAnimationTypeDatabase;
-        MapDatabasePtr m_pMapDatabase;
-        LocalsDatabasePtr m_pLocalsDatabase;
+        std::array<std::unique_ptr<IDatabase>, DATABASE_COUNT> m_Databases;
     };
-    typedef std::shared_ptr<DatabaseMgr> DatabaseMgrPtr;
-    typedef std::shared_ptr<const DatabaseMgr> ConstDatabaseMgrPtr;
 
     namespace TILE_SET
     {
-        QPixmap createTileSetPixmap(const QString &path, ConstTileSetPrototypePtr proto, ConstTileDatabasePtr tileDB);
+        QPixmap createTileSetPixmap(const QString &path, const TileSetPrototype *pSet, const TileDatabase* pTileDB);
     }
 }
 #endif

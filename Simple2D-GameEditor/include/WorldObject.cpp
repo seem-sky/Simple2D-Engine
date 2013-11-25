@@ -3,13 +3,11 @@
 using namespace MAP;
 using namespace OBJECT;
 
-WorldObject::WorldObject(DATABASE::ConstDatabaseMgrPtr pDBMgr, uint32 GUID, DATABASE::ConstWorldObjectPrototypePtr pWorldObject) :
-    Object(GUID), m_Direction(DATABASE::MAP_STRUCTURE::DIRECTION_DOWN), m_pDBMgr(pDBMgr)
+WorldObject::WorldObject(const DATABASE::DatabaseMgr &DBMgr, uint32 GUID, uint32 ID) : Object(GUID), m_Direction(DATABASE::MAP_STRUCTURE::DIRECTION_DOWN), m_DBMgr(DBMgr)
 {
-    _setupFromPrototype(pWorldObject);
 }
 
-void WorldObject::_setupFromPrototype(DATABASE::ConstWorldObjectPrototypePtr pWorldObject)
+void WorldObject::_setupFromPrototype(const DATABASE::MAP_OBJECT::WorldObjectPrototype *pWorldObject)
 {
     if (!pWorldObject)
         assert("No empty prototypes allowed!");
@@ -18,7 +16,7 @@ void WorldObject::_setupFromPrototype(DATABASE::ConstWorldObjectPrototypePtr pWo
     for (uint32 i = 0; i < pWorldObject->getAnimationCount(); ++i)
     {
         DATABASE::MAP_OBJECT::AnimationInfo info = pWorldObject->getAnimationInfo(i);
-        m_Animations.insert(std::make_pair(info.m_uiObjectAnimationTypeID, info.m_uiAnimationID));
+        m_Animations.insert(std::make_pair(info.m_uiAnimationTypeID, info.m_uiAnimationID));
     }
     _setCurrentAnimation(m_Direction);
 
@@ -28,14 +26,10 @@ void WorldObject::_setupFromPrototype(DATABASE::ConstWorldObjectPrototypePtr pWo
 
 void WorldObject::_setCurrentAnimation(uint32 pose)
 {
-    if (!m_pDBMgr)
-        return;
-
     auto itr = m_Animations.find(pose);
     if (itr == m_Animations.cend())
         return;
-    DATABASE::ConstAnimationPrototypePtr pAnimation;
-    if (m_pDBMgr->getAnimationDatabase()->getItem(itr->second, pAnimation))
+    if (auto pAnimation = m_DBMgr.getAnimationDatabase()->getOriginalPrototype(itr->second))
         m_AnimationHolder.changeAnimation(pAnimation);
 }
 

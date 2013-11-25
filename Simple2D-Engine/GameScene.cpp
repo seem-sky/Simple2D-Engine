@@ -13,11 +13,11 @@ using namespace SCENE;
 /*#####
 # GameScene
 #####*/
-GameScene::GameScene(Game &game) : Scene(game), m_pDatabaseMgr(new DATABASE::DatabaseMgr()), m_Player(m_MapMgr)
+GameScene::GameScene(Game &game) : Scene(game), m_Player(m_MapMgr)
 {
-    m_pSceneView = new GameSceneView(this, m_pDatabaseMgr);
-    m_pDatabaseMgr->loadDatabase("projects/untitled/", DATABASE::ALL_DATABASES^DATABASE::TILE_SET_DATABASE);
-    m_MapMgr.setDatabaseMgr(m_pDatabaseMgr);
+    m_pSceneView = new GameSceneView(this, m_DatabaseMgr);
+    m_DatabaseMgr.loadDatabase("projects/untitled/", DATABASE::DatabaseMgr::ALL_DATABASES^DATABASE::DatabaseMgr::TILE_SET_DATABASE);
+    //m_MapMgr.setDatabaseMgr(m_DatabaseMgr);
     playerChangesMap(m_MapMgr.loadMap(2));
     showFPS();
 
@@ -39,9 +39,9 @@ void GameScene::playerChangesMap(MAP::MapPtr pMap)
     }
 }
 
-MapItem* GameScene::createNewWorldObject(MAP::OBJECT::WorldObjectPtr pObject)
+MapItem* GameScene::createNewWorldObject(MAP::OBJECT::WorldObject *pObject)
 {
-    MapItem *pItem = new MapItem(pObject, m_pDatabaseMgr->getSpriteDatabase(), m_pDatabaseMgr->getAnimationDatabase());
+    MapItem *pItem = new MapItem(pObject, m_DatabaseMgr);
     pItem->setPos(pObject->getPosition().x, pObject->getPosition().y);
     return pItem;
 }
@@ -51,8 +51,7 @@ void GameScene::update(uint32 uiDiff)
     // update player
     m_Player.update(uiDiff);
     // get screen changes for current map
-    MAP::MapPtr pMap;
-    if (m_MapMgr.getItem(m_Player.getMapGUID(), pMap))
+    if (auto pMap = m_MapMgr.getItem(m_Player.getMapGUID()))
     {
         // add new world objects
         for (auto &obj : pMap->getNewWorldObjects())
@@ -62,7 +61,7 @@ void GameScene::update(uint32 uiDiff)
     // update maps
     m_MapMgr.updateMaps(uiDiff);
 
-    //// update camera position
+    // update camera position
     m_pSceneView->views().first()->centerOn(m_Player.getCamera().getPositionX(), m_Player.getCamera().getPositionY());
 
     // redraw scene
@@ -72,8 +71,7 @@ void GameScene::update(uint32 uiDiff)
 /*#####
 # MapItem
 #####*/
-MapItem::MapItem(MAP::OBJECT::WorldObjectPtr pWorldObject, DATABASE::ConstSpriteDatabasePtr pSpriteDB, DATABASE::ConstAnimationDatabasePtr pAnimationDB) :
-    QGraphicsItem(), m_pSpriteDB(pSpriteDB), m_pAnimationDB(pAnimationDB), m_pWorldObject(pWorldObject)
+MapItem::MapItem(const MAP::OBJECT::WorldObject *pWorldObject, const DATABASE::DatabaseMgr &DBMgr) : QGraphicsItem(), m_DBMgr(DBMgr), m_pWorldObject(pWorldObject)
 {}
 
 bool MapItem::_animationChanged()
@@ -96,9 +94,9 @@ void MapItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, Q
     if (!QPixmapCache::find(m_PixmapIdentify, pixmap))
     {
         // generate new pixmap
-        if (m_pCurrentAnimation)
+        if (m_pCurrentAnimation && m_DBMgr.getSpriteDatabase())
         {
-            ObjectAnimationWidget widget(m_pCurrentAnimation, m_pSpriteDB, m_uiCurrentFrame);
+            ObjectAnimationWidget widget(m_pCurrentAnimation, m_DBMgr.getSpriteDatabase(), m_uiCurrentFrame);
             QRect boundingRect = widget.scene()->itemsBoundingRect().toRect();
             widget.resize(boundingRect.width(), boundingRect.height());
             pixmap = widget.grab();
@@ -121,7 +119,7 @@ void MapItem::syncWithWorldObject()
         // store current animation infos
         if (m_pCurrentAnimation)
         {
-            DATABASE::AnimationPrototype::Frame frame;
+            DATABASE::ANIMATION::Frame frame;
             m_pCurrentAnimation->getFrame(m_uiCurrentFrame, frame);
             m_PixmapPos = QPoint(frame.getOffset().x, frame.getOffset().y);
             m_PixmapIdentify = "Animation" + QString::number(m_pCurrentAnimation->getID()) + "/" + QString::number(m_uiCurrentFrame);
@@ -136,12 +134,9 @@ void MapItem::syncWithWorldObject()
 /*#####
 # GameSceneView
 #####*/
-GameSceneView::GameSceneView(GameScene *pScene, DATABASE::ConstDatabaseMgrPtr pDBMgr) : SceneView(pScene), m_pDatabaseMgr(pDBMgr), m_pTileCache(new TileCache())
-{
-    m_pTileCache->setTileDB(m_pDatabaseMgr->getTileDatabase());
-    m_pAutoTileCache = AutoTileCachePtr(new AutoTileCache(m_pTileCache));
-    m_pAutoTileCache->setAutoTileDB(m_pDatabaseMgr->getAutoTileDatabase());
-}
+GameSceneView::GameSceneView(GameScene *pScene, const DATABASE::DatabaseMgr &DBMgr) : SceneView(pScene), m_DatabaseMgr(DBMgr),
+    m_TileCache(m_DatabaseMgr), m_AutoTileCache(m_TileCache)
+{}
 
 void GameSceneView::drawBackground(QPainter *pPainter, const QRectF &rect)
 {
@@ -162,7 +157,7 @@ void GameSceneView::drawTiles(QPainter *painter, const QRectF &rect, MAP::Layer 
         return;
 
     const PLAYER::GamePlayer &player = pScene->getPlayer();
-    MAP::ConstMapPtr pMap = player.getMap();
+    auto pMap = player.getMap();
     if (!pMap)
         return;
     const UInt32Point startTile(rect.x() <= 0 ? 0 : (uint32)rect.x() / TILE_SIZE, rect.y() <= 0 ? 0 : (uint32)rect.y() / TILE_SIZE);
@@ -179,16 +174,17 @@ void GameSceneView::drawTiles(QPainter *painter, const QRectF &rect, MAP::Layer 
                     continue;
                 if (!tileObj.isAutoTile())
                 {
-                    ConstQPixmapPtr pPixmap;
-                    if (m_pTileCache->getItem(tileObj.m_uiTileID, pPixmap))
+                    if (auto pPixmap = m_TileCache.getItem(tileObj.m_uiTileID))
                         painter->drawTiledPixmap(x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE, TILE_SIZE, *pPixmap);
                 }
                 else
                 {
-                    ConstQPixmapPtr pPixmap;
-                    ConstAutoTilePtr pAutoTile;
-                    if (m_pAutoTileCache->getItem(tileObj.m_uiAutoTileSetID, pAutoTile) && pAutoTile->getPixmap(static_cast<DATABASE::AUTO_TILE::AUTO_TILE_INDEX>(tileObj.m_uiTileID), pPixmap))
-                        painter->drawTiledPixmap(x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE, TILE_SIZE, *pPixmap);
+                    if (auto pAutoTile = m_AutoTileCache.getItem(tileObj.m_uiAutoTileSetID))
+                    {
+                        const QPixmap *pPixmap(nullptr);
+                        if (pAutoTile->getPixmap(static_cast<DATABASE::AUTO_TILE::AUTO_TILE_INDEX>(tileObj.m_uiTileID), pPixmap))
+                            painter->drawTiledPixmap(x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE, TILE_SIZE, *pPixmap);
+                    }
                 }
             }
         }

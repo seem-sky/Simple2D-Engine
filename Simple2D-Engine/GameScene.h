@@ -24,7 +24,7 @@ namespace GAME_LOGIC
             bool _animationChanged();
 
         public:
-            MapItem(MAP::OBJECT::WorldObjectPtr pWorldObject, DATABASE::ConstSpriteDatabasePtr pSpriteDB, DATABASE::ConstAnimationDatabasePtr pAnimationDB);
+            MapItem(const MAP::OBJECT::WorldObject *pWorldObject, const DATABASE::DatabaseMgr &DBMgr);
 
             void syncWithWorldObject();
 
@@ -32,10 +32,9 @@ namespace GAME_LOGIC
             void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
         private:
-            DATABASE::ConstSpriteDatabasePtr m_pSpriteDB;
-            DATABASE::ConstAnimationDatabasePtr m_pAnimationDB;
-            MAP::OBJECT::WorldObjectPtr m_pWorldObject;
-            DATABASE::ConstAnimationPrototypePtr m_pCurrentAnimation;
+            const DATABASE::DatabaseMgr &m_DBMgr;
+            const MAP::OBJECT::WorldObject *m_pWorldObject;
+            const DATABASE::ANIMATION::AnimationPrototype *m_pCurrentAnimation;
             uint32 m_uiCurrentFrame;
             QString m_PixmapIdentify;
             QRect m_BoundingRect;
@@ -47,7 +46,7 @@ namespace GAME_LOGIC
         #####*/
         class GameScene : public Scene
         {
-            MapItem* createNewWorldObject(MAP::OBJECT::WorldObjectPtr pObject);
+            MapItem* createNewWorldObject(MAP::OBJECT::WorldObject *pObject);
 
         public:
             GameScene(Game &game);
@@ -62,7 +61,7 @@ namespace GAME_LOGIC
         private:
             PLAYER::GamePlayer m_Player;
             MAP::MapMgr m_MapMgr;
-            DATABASE::DatabaseMgrPtr m_pDatabaseMgr;
+            DATABASE::DatabaseMgr m_DatabaseMgr;
         };
 
         /*#####
@@ -77,14 +76,14 @@ namespace GAME_LOGIC
             virtual void drawTiles(QPainter *painter, const QRectF &rect, MAP::Layer layer);
 
         public:
-            GameSceneView(GameScene *pScene, DATABASE::ConstDatabaseMgrPtr pDBMgr);
+            GameSceneView(GameScene *pScene, const DATABASE::DatabaseMgr &DBMgr);
 
             inline GameScene* getGameScene() { return dynamic_cast<GameScene*>(m_pScene); }
 
         private:
-            DATABASE::ConstDatabaseMgrPtr m_pDatabaseMgr;
-            AutoTileCachePtr m_pAutoTileCache;
-            TileCachePtr m_pTileCache;
+            const DATABASE::DatabaseMgr &m_DatabaseMgr;
+            AutoTileCache m_AutoTileCache;
+            TileCache m_TileCache;
         };
     }
 }

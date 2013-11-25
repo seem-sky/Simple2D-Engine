@@ -3,21 +3,17 @@
 
 #include "AutoTile.h"
 
-class AutoTileCache : public GapsContainer<AutoTile>
+class AutoTileCache : public Container<AutoTile>
 {
 private:
-    bool _createAutoTile(uint32 uiID, ConstAutoTilePtr &result);
+    AutoTile* _createAutoTile(uint32 uiID);
 
 public:
-    AutoTileCache(ConstTileCachePtr pTileCache);
+    AutoTileCache(const TileCache &tileCache);
 
-    void setAutoTileDB(DATABASE::ConstAutoTileDatabasePtr pAutoTileDB);
-    bool getItem(uint32 uiID, ConstAutoTilePtr &result) const;
+    const AutoTile* getItem(uint32 uiID) const;
 
 private:
-    ConstTileCachePtr m_pTileCache;
-    DATABASE::ConstAutoTileDatabasePtr m_pAutoTileDB;
+    const TileCache &m_TileCache;
 };
-typedef std::shared_ptr<AutoTileCache> AutoTileCachePtr;
-typedef std::shared_ptr<const AutoTileCache> ConstAutoTileCachePtr;
 #endif

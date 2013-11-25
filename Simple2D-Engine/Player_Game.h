@@ -13,8 +13,8 @@ namespace PLAYER
     public:
         GamePlayer(MAP::MapMgr &mapMgr);
 
-        void setControle(MAP::OBJECT::DynamicObjectPtr pObject);
-        MAP::OBJECT::DynamicObjectPtr getControledObject();
+        void setControle(const MAP::OBJECT::DynamicObject *pObject);
+        const MAP::OBJECT::DynamicObject* getControledObject();
         void releaseControle();
 
         // keybinds
@@ -28,7 +28,7 @@ namespace PLAYER
         inline uint32 getMapGUID() const { return m_MapGUID; }
         inline uint32 getMapGUID() { return m_MapGUID; }
         inline const MAP::MapMgr& getMapMgr() const { return m_MapMgr; }
-        MAP::ConstMapPtr getMap() const; 
+        const MAP::Map* getMap() const { return m_MapMgr.getItem(getMapGUID()); }
 
         // camera
         inline const CAMERA::Camera& getCamera() const { return m_Camera; }

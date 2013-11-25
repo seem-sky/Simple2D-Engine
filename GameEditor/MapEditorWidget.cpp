@@ -16,6 +16,7 @@ MapEditorWidget::MapEditorWidget(QWidget *pParent) : QWidget(pParent), Ui_MapEdi
 {
     setupUi(this);
     m_pWorldObjects->setToolTipPosition(PixmapTooltipTreeWidget::TOOLTIP_RIGHT);
+    m_pDynamicObjects->setToolTipPosition(PixmapTooltipTreeWidget::TOOLTIP_RIGHT);
     m_ModifyObj.setWidget(m_pMappingModeTab, MODIFY_RESIZE, QPoint(0, m_pMapTree->height() + 35), MODIFY_DIRECTION_HEIGHT);
     m_ModifyObj.setWidget(m_pTileTab, MODIFY_RESIZE, QPoint(0, m_pMapTree->height() + 75), MODIFY_DIRECTION_HEIGHT);
     m_ModifyObj.setWidget(m_pObjectTabs, MODIFY_RESIZE, QPoint(0, m_pMapTree->height() + 75), MODIFY_DIRECTION_HEIGHT);
@@ -39,9 +40,7 @@ MapEditorWidget::MapEditorWidget(QWidget *pParent) : QWidget(pParent), Ui_MapEdi
     connect(m_pMappingModeTab, SIGNAL(currentChanged(int)), this, SLOT(_MappingModeChanged(int)));
     connect(m_pObjectTabs, SIGNAL(currentChanged(int)), this, SLOT(_objectTabChanged(int)));
     connect(m_pWorldObjects, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)), this, SLOT(_currentObjectChanged(QTreeWidgetItem*, QTreeWidgetItem*)));
-    //connect(m_pDynamicObjects, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)), this, SLOT(_currentObjectChanged(QTreeWidgetItem*, QTreeWidgetItem*)));
-
-    connect(m_pWorldObjects, SIGNAL(newCursorSet(const QCursor&)), m_pMapEditor, SLOT(setCurrentCursor(const QCursor&)));
+    connect(m_pDynamicObjects, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)), this, SLOT(_currentObjectChanged(QTreeWidgetItem*, QTreeWidgetItem*)));
 
     // map widget connections
     connect(m_pZoom, SIGNAL(valueChanged(int)), this, SLOT(_zoomChanged(int)));
@@ -183,6 +182,8 @@ void MapEditorWidget::updateMapEditorWidgets()
     // object tabs
     m_pWorldObjects->setAdditionalDBs(m_pSharedData->getSpriteDatabase(), m_pSharedData->getAnimationDatabase());
     m_pWorldObjects->setDB(m_pSharedData->getWorldObjectDatabase());
+    m_pDynamicObjects->setAdditionalDBs(m_pSharedData->getSpriteDatabase(), m_pSharedData->getAnimationDatabase());
+    m_pDynamicObjects->setDB(m_pSharedData->getDynamicObjectDatabase());
 
     // brushes
     m_pLHBrush->updateObject();

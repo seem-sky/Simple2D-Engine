@@ -13,14 +13,14 @@ namespace DATABASE
         class MapAction
         {
         public:
-            MapAction(MapPrototypePtr map);
+            MapAction(MapPrototype *pMap);
 
             virtual void revertMapAction() = 0;
 
-            inline MapPrototypePtr getMap() const {return m_pMap; } 
+            inline MapPrototype* getMap() const {return m_pMap; } 
 
         private:
-            MapPrototypePtr m_pMap;
+            MapPrototype* m_pMap;
         };
         typedef std::shared_ptr<MapAction> MapActionPtr;
         typedef std::vector<MapActionPtr> MapActionPtrVector;
@@ -31,7 +31,7 @@ namespace DATABASE
         class TileMapAction : public MapAction
         {
         public:
-            TileMapAction(UInt32Point3D pos, MapTile uiTileID, Layer layer, MapPrototypePtr map);
+            TileMapAction(UInt32Point3D pos, MapTile uiTileID, Layer layer, MapPrototype *pMap);
 
             void revertMapAction();
 
@@ -44,7 +44,7 @@ namespace DATABASE
         class MultiPositionTileMapAction : public MapAction
         {
         public:
-            MultiPositionTileMapAction(MapTile mapTile, MapPrototypePtr map, uint32 uiLayer, Layer layer);
+            MultiPositionTileMapAction(MapTile mapTile, MapPrototype *pMap, uint32 uiLayer, Layer layer);
 
             void revertMapAction();
             void addPosition(UInt32Point pos);
@@ -65,7 +65,7 @@ namespace DATABASE
             void _revertAction(UInt32PointMapTilePair pair);
 
         public:
-            MultiPositionMultiTileMapAction(MapPrototypePtr map, uint32 uiLayer, Layer layer);
+            MultiPositionMultiTileMapAction(MapPrototype *pMap, uint32 uiLayer, Layer layer);
 
             void revertMapAction();
             void addPosition(UInt32Point pos, MapTile tile);
