@@ -209,6 +209,7 @@
     <ClCompile Include="AnimationViewer.cpp" />
     <ClCompile Include="DatabaseDialogResize.cpp" />
     <ClCompile Include="DatabaseModuleAnimation.cpp" />
+    <ClCompile Include="DatabaseModuleAutoTile.cpp" />
     <ClCompile Include="DatabaseModuleDragDrop.cpp" />
     <ClCompile Include="DatabaseModuleList.cpp" />
     <ClCompile Include="DatabaseModuleResource.cpp" />
@@ -216,6 +217,7 @@
     <ClCompile Include="DatabaseModuleTileSet.cpp" />
     <ClCompile Include="DatabaseWidgetAnimation.cpp" />
     <ClCompile Include="DatabaseWidgetAnimationType.cpp" />
+    <ClCompile Include="DatabaseWidgetAutoTile.cpp" />
     <ClCompile Include="DatabaseWidgetLocalisation.cpp" />
     <ClCompile Include="DatabaseWidgetBase.cpp" />
     <ClCompile Include="DatabaseWidgetRessource.cpp" />
@@ -227,8 +229,6 @@
     <ClCompile Include="DatabaseWindow.cpp" />
     <ClCompile Include="ContextMenu.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="ModifyObject.cpp" />
-    <ClCompile Include="ModifyView.cpp" />
     <ClCompile Include="Project.cpp" />
     <ClCompile Include="IndexDialog.cpp" />
   </ItemGroup>
@@ -272,14 +272,13 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </Command>
     </CustomBuild>
-    <CustomBuild Include="ModifyObject.h" />
-    <moc_header Include="ModifyView.h" />
     <CustomBuild Include="Project.h" />
     <CustomBuild Include="IndexDialog.h" />
   </ItemGroup>
   <ItemGroup>
     <compile_QT_Files Include="UI\DatabaseDialogResize.ui" />
     <compile_QT_Files Include="UI\DatabaseModuleAnimation.ui" />
+    <compile_QT_Files Include="UI\DatabaseModuleAutoTile.ui" />
     <compile_QT_Files Include="UI\DatabaseModuleList.ui" />
     <compile_QT_Files Include="UI\DatabaseModuleLocalisation.ui" />
     <compile_QT_Files Include="UI\DatabaseModuleResource.ui" />
@@ -306,11 +305,13 @@
     <moc_header Include="DatabaseModuleList.h" />
     <moc_header Include="DatabaseModuleDragDrop.h" />
     <moc_header Include="DatabaseModuleAnimation.h" />
+    <ClInclude Include="DatabaseModuleAutoTile.h" />
     <ClInclude Include="DatabaseModuleResource.h" />
     <moc_header Include="DatabaseModuleTexture.h" />
     <moc_header Include="DatabaseModuleTileSet.h" />
     <ClInclude Include="DatabaseWidgetAnimation.h" />
     <ClInclude Include="DatabaseWidgetAnimationType.h" />
+    <ClInclude Include="DatabaseWidgetAutoTile.h" />
     <ClInclude Include="DatabaseWidgetLocalisation.h" />
     <moc_header Include="DatabaseWidgetBase.h" />
     <moc_header Include="DatabaseWidgetRessource.h" />

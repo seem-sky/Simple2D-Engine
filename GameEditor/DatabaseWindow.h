@@ -2,16 +2,12 @@
 #define DATABASE_WINDOW_H
 
 #include "UI/UI_Database.h"
-#include "ModifyObject.h"
 #include <QtGui/QCloseEvent>
 #include "DatabaseMgr.h"
 
 class DatabaseWindow : public QDialog, Ui_Database
 {
     Q_OBJECT
-protected:
-    void resizeEvent(QResizeEvent *p_pEvent) { m_ModifyObj.resizeEvent(this); }
-
 private:
     void saveDatabase();
     void clearWidgets();
@@ -29,7 +25,6 @@ private slots:
     void _focusChanged(int index);
 
 private:
-    ModifyObject m_ModifyObj;
     const DATABASE::DatabaseMgr &m_pDBMgr;
 };
 #endif

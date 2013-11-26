@@ -77,7 +77,7 @@ public:
     TileDropLabel(QWidget *pParent = NULL);
 
     inline uint32 getCurrentTileID() const { return m_uiCurrentTileID; }
-    inline void setCurrentTileID(uint32 uiTileID) { m_uiCurrentTileID = uiTileID; }
+    inline void setCurrentTileID(uint32 uiTileID) { m_uiCurrentTileID = uiTileID; repaint(); }
 
     inline void setTileDatabase(const DATABASE::TileDatabase *pDB) { m_pTileDB = pDB; }
 

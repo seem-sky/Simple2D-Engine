@@ -94,6 +94,12 @@
     <Filter Include="Database\Modules\Animation\AnimationViewer">
       <UniqueIdentifier>{a70b866a-d8d7-468f-b3f9-49fb0838b1cc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Database\Widgets\AutoTile">
+      <UniqueIdentifier>{52eda0ea-dfe1-4763-95e4-96756363f84b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Modules\AutoTile">
+      <UniqueIdentifier>{f781df96-9b35-4439-9b88-d6fdf2f53eec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainWindow.cpp">
@@ -103,12 +109,6 @@
       <Filter>EditorCore</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
-      <Filter>EditorCore</Filter>
-    </ClCompile>
-    <ClCompile Include="ModifyObject.cpp">
-      <Filter>EditorCore</Filter>
-    </ClCompile>
-    <ClCompile Include="ModifyView.cpp">
       <Filter>EditorCore</Filter>
     </ClCompile>
     <ClCompile Include="Project.cpp">
@@ -171,6 +171,12 @@
     <ClCompile Include="AnimationViewer.cpp">
       <Filter>Database\Modules\Animation\AnimationViewer</Filter>
     </ClCompile>
+    <ClCompile Include="DatabaseWidgetAutoTile.cpp">
+      <Filter>Database\Widgets\AutoTile</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabaseModuleAutoTile.cpp">
+      <Filter>Database\Modules\AutoTile</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <compile_QT_Files Include="UI\MainWindow.ui">
@@ -215,12 +221,12 @@
     <compile_QT_Files Include="UI\DatabaseModuleAnimation.ui">
       <Filter>Database\Modules\Animation</Filter>
     </compile_QT_Files>
+    <compile_QT_Files Include="UI\DatabaseModuleAutoTile.ui">
+      <Filter>Database\Modules\AutoTile</Filter>
+    </compile_QT_Files>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="ContextMenu.h">
-      <Filter>EditorCore</Filter>
-    </CustomBuild>
-    <CustomBuild Include="ModifyObject.h">
       <Filter>EditorCore</Filter>
     </CustomBuild>
     <CustomBuild Include="Project.h">
@@ -231,9 +237,6 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <moc_header Include="ModifyView.h">
-      <Filter>EditorCore</Filter>
-    </moc_header>
     <moc_header Include="MainWindow.h">
       <Filter>MainWindow</Filter>
     </moc_header>
@@ -296,6 +299,12 @@
     </ClInclude>
     <ClInclude Include="DatabaseWidgetAnimation.h">
       <Filter>Database\Widgets\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="DatabaseWidgetAutoTile.h">
+      <Filter>Database\Widgets\AutoTile</Filter>
+    </ClInclude>
+    <ClInclude Include="DatabaseModuleAutoTile.h">
+      <Filter>Database\Modules\AutoTile</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

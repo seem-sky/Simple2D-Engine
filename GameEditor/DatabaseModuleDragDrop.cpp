@@ -179,14 +179,15 @@ void TileDropLabel::dropEvent(QDropEvent *pEvent)
 {
     if (uint32 ID = pEvent->mimeData()->text().toUInt())
     {
-        m_uiCurrentTileID = ID;
+        setCurrentTileID(ID);
         emit onDrop(getCurrentTileID(), Int32Point(pEvent->pos().x(), pEvent->pos().y()));
-        repaint();
     }
 }
 
 void TileDropLabel::paintEvent(QPaintEvent *pEvent)
 {
+    QLabel::paintEvent(pEvent);
+
     if (!m_pTileDB)
         return;
     if (auto pProto = m_pTileDB->getOriginalPrototype(m_uiCurrentTileID))

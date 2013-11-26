@@ -17,21 +17,19 @@ DatabaseWindow::DatabaseWindow(const DatabaseMgr &pDBMgr, QWidget *p_pParent) : 
     m_pTileSets->setDatabaseModel(new TileSetDatabaseModel(std::unique_ptr<TileSetDatabase>(new TileSetDatabase(*m_pDBMgr.getTileSetDatabase()))));
     m_pTileSets->setTileDatabaseModel(dynamic_cast<TileDatabaseModel*>(m_pTiles->getDatabaseModel()));
 
+    // 3 dbs for AutoTile widget
+    m_pAutoTiles->setDatabaseModel(new AutoTileDatabaseModel(std::unique_ptr<AutoTileDatabase>(new AutoTileDatabase(*m_pDBMgr.getAutoTileDatabase()))));
+    m_pAutoTiles->setTileDatabaseModel(dynamic_cast<TileDatabaseModel*>(m_pTiles->getDatabaseModel()));
+
     m_pSprites->setDatabaseModel(new SpriteDatabaseModel(std::unique_ptr<SpriteDatabase>(new SpriteDatabase(*m_pDBMgr.getSpriteDatabase()))));
 
-    // set 2dbs for animation widget
+    // set 2 dbs for animation widget
     m_pAnimations->setSpriteDatabaseModel(dynamic_cast<SpriteDatabaseModel*>(m_pSprites->getDatabaseModel()));
     m_pAnimations->setDatabaseModel(new AnimationDatabaseModel(std::unique_ptr<AnimationDatabase>(new AnimationDatabase(*m_pDBMgr.getAnimationDatabase()))));
 
     m_pAnimationTypes->setDatabaseModel(new AnimationTypeDatabaseModel(
         std::unique_ptr<AnimationTypeDatabase>(new AnimationTypeDatabase(*m_pDBMgr.getAnimationTypeDatabase()))));
-    // ToDo:
-    //// setup db for specific widgets
-    //// texture section
-    //// 2 dbs for AutoTile widget
-    //m_pAutoTiles->setTileDB(m_pTiles->getDBChanger());
-    //m_pAutoTiles->setDB(m_pDBMgr->getAutoTileDatabase());
-    
+
 
     //// object section
     //m_pObjectAnimationTypes->setDB(m_pDBMgr->getObjectAnimationTypeDatabase());

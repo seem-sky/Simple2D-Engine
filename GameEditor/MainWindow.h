@@ -2,11 +2,11 @@
 #define MAIN_WINDOW_H
 
 #include "UI/UI_MainWindow.h"
-#include "ModifyObject.h"
 #include "Point.h"
 #include "MapDatabase.h"
 #include "Config.h"
 #include "Project.h"
+#include <QtGui/QMoveEvent>
 
 class MainWindow : public QMainWindow, public Ui_MainWindow
 {
@@ -29,7 +29,6 @@ private:
     void _setDBs();
 
 protected:
-    void resizeEvent(QResizeEvent *pEvent);
     void moveEvent(QMoveEvent *pEvent) { Config::get()->setMainWindowPos(UInt32Point(pEvent->pos().x(), pEvent->pos().y())); }
 
 public:
@@ -42,7 +41,6 @@ public:
     inline const DATABASE::DatabaseMgr& getDatabaseMgr() const { return m_project.getDatabaseMgr(); }
 
 private:
-    ModifyObject m_ModifyObj;
     Project m_project;
 };
 #endif

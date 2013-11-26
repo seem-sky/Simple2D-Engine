@@ -308,6 +308,8 @@ namespace DATABASE
 
         const uint32 MAX_AUTO_TILE_COLUMNS      = 3;
         const uint32 AUTO_TILE_SET_COUNT        = 10;
+
+        typedef std::array<TILE_INDEX, AUTO_TILE_SET_COUNT> TileArray;
         class AutoTilePrototype : public Prototype
         {
         public:
@@ -316,12 +318,15 @@ namespace DATABASE
             inline void setTileID(AUTO_TILE_INDEX index, uint32 ID) { m_uiTileID.at(index) = ID; }
             inline uint32 getTileID(AUTO_TILE_INDEX index) const { return m_uiTileID.at(index); }
 
+            inline void setTiles(const TileArray &tiles) { m_uiTileID = tiles; }
+            inline const TileArray& getTiles() const { return m_uiTileID; }
+
             // IO
             virtual void toXML(QXmlStreamWriter &writer) const;
             virtual void fromXML(const QXmlStreamAttributes &attributes);
 
         private:
-            std::array<TILE_INDEX, AUTO_TILE_SET_COUNT> m_uiTileID;
+            TileArray m_uiTileID;
         };
 
         AUTO_TILE_INDEX getAutoTileIndexForTileCheck(uint32 uiTileCheck);
