@@ -13,7 +13,7 @@ private:
     void clearWidgets();
 
 public:
-    DatabaseWindow(const DATABASE::DatabaseMgr &DBMgr, QWidget *parent);
+    DatabaseWindow(DATABASE::DatabaseMgr &DBMgr, QWidget *parent);
 
     QString getCurrentDatabaseSection();
     inline const DATABASE::DatabaseMgr& getDBMgr() const { return m_pDBMgr; }
@@ -22,9 +22,11 @@ private slots:
     void clickButtonOK();
     void clickButtonApply();
     void clickButtonCancel();
-    void _focusChanged(int index);
+
+signals:
+    void storeChanges();
 
 private:
-    const DATABASE::DatabaseMgr &m_pDBMgr;
+    DATABASE::DatabaseMgr &m_pDBMgr;
 };
 #endif

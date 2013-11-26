@@ -15,7 +15,7 @@ public:
 
     inline QString getProjectPath() const { return m_projectPath; }
 
-    const DATABASE::DatabaseMgr& getDatabaseMgr() const { return m_DBMgr; }
+    DATABASE::DatabaseMgr& getDatabaseMgr() { return m_DBMgr; }
 
 private:
     QString m_projectPath;

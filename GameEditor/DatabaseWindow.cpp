@@ -8,7 +8,7 @@
 
 using namespace DATABASE;
 
-DatabaseWindow::DatabaseWindow(const DatabaseMgr &pDBMgr, QWidget *p_pParent) : QDialog(p_pParent), Ui_Database(), m_pDBMgr(pDBMgr)
+DatabaseWindow::DatabaseWindow(DatabaseMgr &pDBMgr, QWidget *p_pParent) : QDialog(p_pParent), Ui_Database(), m_pDBMgr(pDBMgr)
 {
     setupUi(this);
     setWindowFlags(Qt::Window);
@@ -42,80 +42,32 @@ DatabaseWindow::DatabaseWindow(const DatabaseMgr &pDBMgr, QWidget *p_pParent) : 
     // text section
     m_pLocalisation->setDatabaseModel(new LocalisationDatabaseModel(std::unique_ptr<LocalisationDatabase>(new LocalisationDatabase(*m_pDBMgr.getLocalisationDatabase()))));
 
-    // setup move and resize widgets
-    //m_ModifyObj.setWidget(m_pSections, MODIFY_RESIZE, QPoint(10, ButtonCancel->height()+15));
-    //m_ModifyObj.setWidget(m_pTextureTabs, MODIFY_RESIZE, QPoint(50, ButtonCancel->height()+60));
-    //m_ModifyObj.setWidget(m_pTextTabs, MODIFY_RESIZE, QPoint(50, ButtonCancel->height()+60));
-    //m_ModifyObj.setWidget(m_pObjectTabs, MODIFY_RESIZE, QPoint(50, ButtonCancel->height()+60));
-    //m_ModifyObj.setWidget(ButtonApply, MODIFY_MOVE, QPoint(10, 10));
-    //m_ModifyObj.setWidget(ButtonCancel, MODIFY_MOVE, QPoint(ButtonApply->width()+10, 10));
-    //m_ModifyObj.setWidget(ButtonOK, MODIFY_MOVE, QPoint(ButtonApply->width()+ButtonOK->width()+10, 10));
-
     connect(ButtonOK, SIGNAL(clicked()), this, SLOT(clickButtonOK()));
     connect(ButtonApply, SIGNAL(clicked()), this, SLOT(clickButtonApply()));
     connect(ButtonCancel, SIGNAL(clicked()), this, SLOT(clickButtonCancel()));
 
-    /* ####focus connections####*/
-    connect(m_pSections, SIGNAL(currentChanged (int)), this, SLOT(_focusChanged(int)));
-    connect(m_pTextureTabs, SIGNAL(currentChanged (int)), this, SLOT(_focusChanged(int)));
-    connect(m_pObjectTabs, SIGNAL(currentChanged (int)), this, SLOT(_focusChanged(int)));
-    connect(m_pTextTabs, SIGNAL(currentChanged (int)), this, SLOT(_focusChanged(int)));
-}
-
-void DatabaseWindow::_focusChanged(int index)
-{
-    //QString parentTabName = m_pSections->tabText(m_pSections->currentIndex());
-    //QTabWidget *pTabWidget = NULL;
-    //if (parentTabName == "Textures")
-    //    pTabWidget = m_pTextureTabs;
-    //else if (parentTabName == "Objects")
-    //    pTabWidget = m_pObjectTabs;
-    //else if (parentTabName == "Texts")
-    //    pTabWidget = m_pTextTabs;
-    //else
-    //    return;
-
-    //if (DatabaseBase *pTab = dynamic_cast<DatabaseBase*>(pTabWidget->currentWidget()))
-    //    pTab->setFocus();
+    /* #### save connections ####*/
+    connect(this, SIGNAL(storeChanges()), m_pTiles, SLOT(saveCurrent()));
+    connect(this, SIGNAL(storeChanges()), m_pTileSets, SLOT(saveCurrent()));
+    connect(this, SIGNAL(storeChanges()), m_pAutoTiles, SLOT(saveCurrent()));
+    connect(this, SIGNAL(storeChanges()), m_pSprites, SLOT(saveCurrent()));
+    connect(this, SIGNAL(storeChanges()), m_pAnimations, SLOT(saveCurrent()));
+    connect(this, SIGNAL(storeChanges()), m_pAnimationTypes, SLOT(saveCurrent()));
+    connect(this, SIGNAL(storeChanges()), m_pLocalisation, SLOT(saveCurrent()));
 }
 
 void DatabaseWindow::saveDatabase()
 {
-    //// TileDB
-    //if (m_pTiles->hasChanged())
-    //    m_pTiles->storeDBChanges();
+    // request store of current prototype
+    emit storeChanges();
 
-    //// TileSetDB
-    //if (m_pTileSets->hasChanged())
-    //    m_pTileSets->storeDBChanges();
-
-    //// AutoTileDB
-    //if (m_pAutoTiles->hasChanged())
-    //    m_pAutoTiles->storeDBChanges();
-
-    //// SpriteDB
-    //if (m_pSprites->hasChanged())
-    //    m_pSprites->storeDBChanges();
-
-    //// AnimationDB
-    //if (m_pAnimations->hasChanged())
-    //    m_pAnimations->storeDBChanges();
-
-    //// TextDB
-    //if (m_pTexts->hasChanged())
-    //    m_pTexts->storeDBChanges();
-
-    //// WorldObjectDB
-    //if (m_pWorldObjects->hasChanged())
-    //    m_pWorldObjects->storeDBChanges();
-
-    //// DynamicObjectDB
-    //if (m_pDynamicObjects->hasChanged())
-    //    m_pDynamicObjects->storeDBChanges();
-
-    //// ObjectAnimationDB
-    //if (m_pObjectAnimationTypes->hasChanged())
-    //    m_pObjectAnimationTypes->storeDBChanges();
+    m_pDBMgr.setTileDatabase(dynamic_cast<TileDatabase*>(m_pTiles->takeDatabase()));
+    m_pDBMgr.setTileSetDatabase(dynamic_cast<TileSetDatabase*>(m_pTileSets->takeDatabase()));
+    m_pDBMgr.setAutoTileDatabase(dynamic_cast<AutoTileDatabase*>(m_pAutoTiles->takeDatabase()));
+    m_pDBMgr.setSpriteDatabase(dynamic_cast<SpriteDatabase*>(m_pSprites->takeDatabase()));
+    m_pDBMgr.setAnimationDatabase(dynamic_cast<AnimationDatabase*>(m_pAnimations->takeDatabase()));
+    m_pDBMgr.setAnimationTypeDatabase(dynamic_cast<AnimationTypeDatabase*>(m_pAnimationTypes->takeDatabase()));
+    m_pDBMgr.setLocalisationDatabase(dynamic_cast<LocalisationDatabase*>(m_pLocalisation->takeDatabase()));
 }
 
 void DatabaseWindow::clickButtonApply()

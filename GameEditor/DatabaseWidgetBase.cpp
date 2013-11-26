@@ -3,6 +3,8 @@
 
 DatabaseWidgetBase::DatabaseWidgetBase(QWidget *pParent) : QWidget(pParent), m_pModuleList(new DatabaseModuleList(this))
 {
+    setFocusPolicy(Qt::StrongFocus);
+
     // setup layout
     QGridLayout *pLayout(new QGridLayout(this));
     setLayout(pLayout);
@@ -20,15 +22,7 @@ DatabaseWidgetBase::DatabaseWidgetBase(QWidget *pParent) : QWidget(pParent), m_p
 void DatabaseWidgetBase::_onItemSelected()
 {
     // save previous prototype first
-    if (m_pModuleList->getDataID())
-    {
-        if (auto pDB = getDatabase())
-        {
-            auto pPrototype = pDB->getNewPrototype();
-            setupPrototypeFromWidgets(pPrototype);
-            pDB->setPrototype(pPrototype);
-        }
-    }
+    saveCurrent();
     //clear widgets
     clear();
     // load widgets from prototype
@@ -52,4 +46,22 @@ void DatabaseWidgetBase::clear()
 {
     m_pModuleList->setDataID(0);
     m_pModuleList->setDataName("");
+}
+
+void DatabaseWidgetBase::saveCurrent()
+{
+    if (m_pModuleList->getDataID())
+    {
+        if (auto pDB = getDatabase())
+        {
+            auto pPrototype = pDB->getNewPrototype();
+            setupPrototypeFromWidgets(pPrototype);
+            pDB->setPrototype(pPrototype);
+        }
+    }
+}
+
+void DatabaseWidgetBase::hideEvent(QHideEvent *pEvent)
+{
+    saveCurrent();
 }

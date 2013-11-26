@@ -20,7 +20,7 @@ public:
     virtual uint32 getSize() const = 0;
     virtual uint32 getMaximumSize() const = 0;
 
-    virtual DATABASE::IDatabasePtr takeDatabase() = 0;
+    virtual DATABASE::IDatabase *takeDatabase() = 0;
     virtual DATABASE::IDatabase* getDatabase() = 0;
 };
 
@@ -131,9 +131,9 @@ public:
         return m_pDatabase.get();
     }
 
-    DATABASE::IDatabasePtr takeDatabase()
+    DATABASE::IDatabase* takeDatabase()
     {
-        return std::move(m_pDatabase);
+        return m_pDatabase.release();
     }
 
 private:

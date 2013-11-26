@@ -62,19 +62,6 @@ namespace DATABASE
             ALL_DATABASES           = TILE_DATABASE | TILE_SET_DATABASE | AUTO_TILE_DATABASE | SPRITE_DATABASE | ANIMATION_DATABASE | ANIMATION_TYPE_DATABASE |
             WORLD_OBJECT_DATABASE | DYNAMIC_OBJECT_DATABASE | MAP_DATABASE | LOCALS_DATABASE
         };
-
-    private:
-        inline void setTileDatabase(TileDatabase *db) { m_Databases.at(DATABASE::TILE_DATABASE) = std::unique_ptr<IDatabase>(db); }
-        inline void setTileSetDatabase(TileSetDatabase *db) { m_Databases.at(DATABASE::TILE_SET_DATABASE) = std::unique_ptr<IDatabase>(db); }
-        inline void setAutoTileDatabase(AutoTileDatabase *db) { m_Databases.at(DATABASE::AUTO_TILE_DATABASE) = std::unique_ptr<IDatabase>(db); }
-        inline void setSpriteDatabase(SpriteDatabase *db) { m_Databases.at(DATABASE::SPRITE_DATABASE) = std::unique_ptr<IDatabase>(db); }
-        inline void setAnimationDatabase(AnimationDatabase *db) { m_Databases.at(DATABASE::ANIMATION_DATABASE) = std::unique_ptr<IDatabase>(db); }
-        inline void setAnimationTypeDatabase(AnimationTypeDatabase *db) { m_Databases.at(DATABASE::ANIMATION_TYPE_DATABASE) = std::unique_ptr<IDatabase>(db); }
-        inline void setWorldObjectDatabase(WorldObjectDatabase *db) { m_Databases.at(DATABASE::WORLD_OBJECT_DATABASE) = std::unique_ptr<IDatabase>(db); }
-        inline void setDynamicObjectDatabase(DynamicObjectDatabase *db) { m_Databases.at(DATABASE::DYNAMIC_OBJECT_DATABASE) = std::unique_ptr<IDatabase>(db); }
-        inline void setLocalisationDatabase(LocalisationDatabase *db) { m_Databases.at(DATABASE::LOCALISATION_DATABASE) = std::unique_ptr<IDatabase>(db); }
-        inline void setMapDatabase(MAP_STRUCTURE::MapDatabase *db) { m_Databases.at(DATABASE::MAP_DATABASE) = std::unique_ptr<IDatabase>(db); }
-
     public:
         DatabaseMgr();
 
@@ -107,6 +94,17 @@ namespace DATABASE
         
         inline const MAP_STRUCTURE::MapDatabase* getMapDatabase() const { return dynamic_cast<MAP_STRUCTURE::MapDatabase*>(m_Databases.at(DATABASE::MAP_DATABASE).get()); }
         inline MAP_STRUCTURE::MapDatabase* getMapDatabase() { return dynamic_cast<MAP_STRUCTURE::MapDatabase*>(m_Databases.at(DATABASE::MAP_DATABASE).get()); }
+
+        inline void setTileDatabase(TileDatabase *db) { m_Databases.at(DATABASE::TILE_DATABASE) = std::unique_ptr<IDatabase>(db); }
+        inline void setTileSetDatabase(TileSetDatabase *db) { m_Databases.at(DATABASE::TILE_SET_DATABASE) = std::unique_ptr<IDatabase>(db); }
+        inline void setAutoTileDatabase(AutoTileDatabase *db) { m_Databases.at(DATABASE::AUTO_TILE_DATABASE) = std::unique_ptr<IDatabase>(db); }
+        inline void setSpriteDatabase(SpriteDatabase *db) { m_Databases.at(DATABASE::SPRITE_DATABASE) = std::unique_ptr<IDatabase>(db); }
+        inline void setAnimationDatabase(AnimationDatabase *db) { m_Databases.at(DATABASE::ANIMATION_DATABASE) = std::unique_ptr<IDatabase>(db); }
+        inline void setAnimationTypeDatabase(AnimationTypeDatabase *db) { m_Databases.at(DATABASE::ANIMATION_TYPE_DATABASE) = std::unique_ptr<IDatabase>(db); }
+        inline void setWorldObjectDatabase(WorldObjectDatabase *db) { m_Databases.at(DATABASE::WORLD_OBJECT_DATABASE) = std::unique_ptr<IDatabase>(db); }
+        inline void setDynamicObjectDatabase(DynamicObjectDatabase *db) { m_Databases.at(DATABASE::DYNAMIC_OBJECT_DATABASE) = std::unique_ptr<IDatabase>(db); }
+        inline void setLocalisationDatabase(LocalisationDatabase *db) { m_Databases.at(DATABASE::LOCALISATION_DATABASE) = std::unique_ptr<IDatabase>(db); }
+        inline void setMapDatabase(MAP_STRUCTURE::MapDatabase *db) { m_Databases.at(DATABASE::MAP_DATABASE) = std::unique_ptr<IDatabase>(db); }
 
         virtual void clear();
 

@@ -13,6 +13,8 @@ protected:
     virtual void setupPrototypeFromWidgets(DATABASE::Prototype *pPrototype);
     virtual void clear();
 
+    void hideEvent(QHideEvent *pEvent);
+
 public:
     DatabaseWidgetBase(QWidget *pParent = nullptr);
 
@@ -20,10 +22,15 @@ public:
     inline IDatabaseModel* getDatabaseModel() const { return m_pModuleList->getDatabaseModel(); }
     inline void setDatabaseModel(IDatabaseModel *pModel) { m_pModuleList->setDatabaseModel(pModel); }
 
-    inline DATABASE::IDatabasePtr takeDatabase() { return m_pModuleList->getDatabaseModel()->takeDatabase(); }
+    inline DATABASE::IDatabase* takeDatabase() { return m_pModuleList->getDatabaseModel()->takeDatabase(); }
+
+    
 
 private slots:
     void _onItemSelected();
+
+public slots:
+    void saveCurrent();
 
 protected:
     DatabaseModuleList *m_pModuleList;
