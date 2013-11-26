@@ -34,9 +34,6 @@
     <Filter Include="EditorCore">
       <UniqueIdentifier>{b46099a1-d6ec-435a-8490-084e174b952f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="EditorCore\IndexDialog">
-      <UniqueIdentifier>{8b111eda-301d-4bfb-8234-618dc9c25e6e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Database\Modules">
       <UniqueIdentifier>{e69411a4-dfd2-429e-951e-74e64e56fec9}</UniqueIdentifier>
     </Filter>
@@ -116,9 +113,6 @@
     </ClCompile>
     <ClCompile Include="Project.cpp">
       <Filter>EditorCore</Filter>
-    </ClCompile>
-    <ClCompile Include="IndexDialog.cpp">
-      <Filter>EditorCore\IndexDialog</Filter>
     </ClCompile>
     <ClCompile Include="DatabaseWidgetLocalisation.cpp">
       <Filter>Database\Widgets\Localisation</Filter>
@@ -200,9 +194,6 @@
     <compile_QT_Files Include="UI\MapBrushWidget.ui">
       <Filter>MapEditor\MapBrush</Filter>
     </compile_QT_Files>
-    <compile_QT_Files Include="UI\IndexDialog.ui">
-      <Filter>EditorCore\IndexDialog</Filter>
-    </compile_QT_Files>
     <compile_QT_Files Include="UI\DatabaseModuleTileSet.ui">
       <Filter>Database\Widgets\TileSet</Filter>
     </compile_QT_Files>
@@ -237,9 +228,6 @@
     </CustomBuild>
     <CustomBuild Include="Project.h">
       <Filter>EditorCore</Filter>
-    </CustomBuild>
-    <CustomBuild Include="IndexDialog.h">
-      <Filter>EditorCore\IndexDialog</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>

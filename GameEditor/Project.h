@@ -6,14 +6,14 @@
 class Project
 {
 public:
-    bool createNewProject(const QString &path);
-    bool loadProject(const QString &path);
-    void closeCurrentProject();
-    bool saveCurrentProject();
+    bool createNew(const QString &path);
+    bool load(const QString &path);
+    void close();
+    bool save();
 
-    inline bool isOpenProject() const { return !m_projectPath.isEmpty(); }
+    inline bool isOpen() const { return !m_projectPath.isEmpty(); }
 
-    inline QString getProjectPath() const { return m_projectPath; }
+    inline QString getPath() const { return m_projectPath; }
 
     DATABASE::DatabaseMgr& getDatabaseMgr() { return m_DBMgr; }
 

@@ -1,10 +1,10 @@
 #include "Project.h"
 #include <QtCore/QDir>
 
-bool Project::loadProject(const QString &path)
+bool Project::load(const QString &path)
 {
-    if (isOpenProject())
-        closeCurrentProject();
+    if (isOpen())
+        close();
 
     if (m_DBMgr.loadDatabase(path))
     {
@@ -14,18 +14,18 @@ bool Project::loadProject(const QString &path)
     return false;
 }
 
-void Project::closeCurrentProject()
+void Project::close()
 {
     m_projectPath.clear();
     m_DBMgr.clear();
 }
 
-bool Project::saveCurrentProject()
+bool Project::save()
 {
     return m_DBMgr.saveDatabase(m_projectPath);
 }
 
-bool Project::createNewProject(const QString &path)
+bool Project::createNew(const QString &path)
 {
     QDir dir(path);
     dir.mkpath(path);

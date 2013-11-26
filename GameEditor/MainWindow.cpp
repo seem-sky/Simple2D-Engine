@@ -10,7 +10,7 @@
 
 using namespace DATABASE;
 
-MainWindow::MainWindow(QMainWindow *pParent) : QMainWindow(pParent)
+MainWindow::MainWindow(QMainWindow *pParent) : QMainWindow(pParent), Ui_MainWindow()
 {
     Logfile::get();
     setupUi(this);
@@ -64,7 +64,7 @@ void MainWindow::_openDatabase()
 void MainWindow::_saveProject()
 {
     emit saveProject();
-    m_project.saveCurrentProject();
+    m_project.save();
 }
 
 void MainWindow::_newProject()
@@ -73,7 +73,7 @@ void MainWindow::_newProject()
     QDir fileDir(dir);
     if (!fileDir.exists())
     {
-        if (m_project.createNewProject(dir))
+        if (m_project.createNew(dir))
         {
             BASIC_LOG("Successfully create project at " + dir);
             _loadProject(dir);
@@ -100,7 +100,7 @@ bool MainWindow::_loadProject(const QString &dir)
     QTime time;
     time.start();
     BASIC_LOG("Begin project load: " + dir);
-    if (m_project.loadProject(dir))
+    if (m_project.load(dir))
     {
         _setDBs();
         Config::get()->setProjectDirectory(dir);
@@ -118,11 +118,11 @@ bool MainWindow::_loadProject(const QString &dir)
 
 void MainWindow::_closeProject()
 {
-    if (m_project.isOpenProject())
+    if (m_project.isOpen())
     {
-        BASIC_LOG("Close project " + m_project.getProjectPath());
+        BASIC_LOG("Close project " + m_project.getPath());
         //m_pMapEditor->clearWidgets();
-        m_project.closeCurrentProject();
+        m_project.close();
         Config::get()->clear();
     }
 }

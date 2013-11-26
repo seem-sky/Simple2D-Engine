@@ -231,7 +231,6 @@
     <ClCompile Include="ContextMenu.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Project.cpp" />
-    <ClCompile Include="IndexDialog.cpp" />
   </ItemGroup>
   <ItemGroup>
     <moc_header Include="MainWindow.h">
@@ -274,7 +273,6 @@
       </Command>
     </CustomBuild>
     <CustomBuild Include="Project.h" />
-    <CustomBuild Include="IndexDialog.h" />
   </ItemGroup>
   <ItemGroup>
     <compile_QT_Files Include="UI\DatabaseDialogResize.ui" />
@@ -291,7 +289,6 @@
     <compile_QT_Files Include="UI\MapObjectDialog.ui" />
     <compile_QT_Files Include="UI\MapEditor.ui" />
     <compile_QT_Files Include="UI\MapBrushWidget.ui" />
-    <compile_QT_Files Include="UI\IndexDialog.ui" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.vcxproj">
