@@ -205,27 +205,27 @@ void ANIMATION::AnimationPrototype::insertChildren(const QXmlStreamReader &reade
 /*#####
 # LocalisationPrototype
 #####*/
-void LocalisationPrototype::toXML(QXmlStreamWriter &writer) const
+void LOCALISATION::LocalisationPrototype::toXML(QXmlStreamWriter &writer) const
 {
     Prototype::toXML(writer);
 
     for (uint32 i = 0; i < getLocalsCount(); ++i)
     {
         writer.writeEmptyElement("local");
-        writer.writeAttribute("entry", QString::number(i));
+        writer.writeAttribute("index", QString::number(i));
         writer.writeAttribute("text", getLocalisation(i));
     }
 }
 
-void LocalisationPrototype::insertChildren(const QXmlStreamReader &reader)
+void LOCALISATION::LocalisationPrototype::insertChildren(const QXmlStreamReader &reader)
 {
     if (reader.name() == "local")
     {
         QXmlStreamAttributes attributes = reader.attributes();
-        if (!attributes.hasAttribute("entry"))
+        if (!attributes.hasAttribute("index"))
             return;
                         
-        setLocalisation(attributes.value("entry").toUInt(), attributes.value("text").toString());
+        setLocalisation(attributes.value("index").toUInt(), attributes.value("text").toString());
     }
     else
         Prototype::insertChildren(reader);

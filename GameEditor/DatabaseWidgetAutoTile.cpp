@@ -6,7 +6,23 @@ DatabaseWidgetAutoTile::DatabaseWidgetAutoTile(QWidget *pParent) : DatabaseWidge
     if (auto pLayout = dynamic_cast<QGridLayout*>(layout()))
     {
         pLayout->addWidget(m_pModuleAutoTile, 0, 1);
-        pLayout->addWidget(m_pModuleTileList, 0, 2, -1, 1);
+
+        // add tile list module
+        QVBoxLayout *pBoxLayout(new QVBoxLayout());
+        pBoxLayout->setSpacing(6);
+
+        // setup "tiles:" label
+        QLabel *pLabel(new QLabel("tiles:"));
+        QFont font;
+        font.setPointSize(8);
+        font.setBold(true);
+        font.setWeight(75);
+        pLabel->setFont(font);
+        pBoxLayout->addWidget(pLabel);
+
+        pBoxLayout->addWidget(m_pModuleTileList);
+        pLayout->addLayout(pBoxLayout, 0, 2, -1, 1);
+
         pLayout->setColumnStretch(1, 0);
         pLayout->setColumnStretch(2, 0);
         pLayout->setColumnStretch(3, 1);

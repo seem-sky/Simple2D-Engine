@@ -106,7 +106,7 @@
       </size>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="widget">
       <attribute name="title">
@@ -192,7 +192,7 @@
          <property name="currentIndex">
           <number>0</number>
          </property>
-         <widget class="DatabaseWidgetLocalisation" name="m_pTexts">
+         <widget class="DatabaseWidgetLocalisation" name="m_pLocalisation">
           <attribute name="title">
            <string>Localisations</string>
           </attribute>

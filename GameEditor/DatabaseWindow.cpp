@@ -40,7 +40,7 @@ DatabaseWindow::DatabaseWindow(const DatabaseMgr &pDBMgr, QWidget *p_pParent) : 
     //m_pDynamicObjects->setDB(m_pDBMgr->getDynamicObjectDatabase());
 
     // text section
-    m_pTexts->setDatabaseModel(new LocalisationDatabaseModel(std::unique_ptr<LocalisationDatabase>(new LocalisationDatabase(*m_pDBMgr.getLocalisationDatabase()))));
+    m_pLocalisation->setDatabaseModel(new LocalisationDatabaseModel(std::unique_ptr<LocalisationDatabase>(new LocalisationDatabase(*m_pDBMgr.getLocalisationDatabase()))));
 
     // setup move and resize widgets
     //m_ModifyObj.setWidget(m_pSections, MODIFY_RESIZE, QPoint(10, ButtonCancel->height()+15));

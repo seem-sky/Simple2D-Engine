@@ -179,7 +179,7 @@ namespace DATABASE
         //MAP_OBJECT::DynamicObjectPrototype* getNewPrototype(uint32 uiID = 0) const;
     };
 
-    class LocalisationDatabase : public Database<LocalisationPrototype>
+    class LocalisationDatabase : public Database<LOCALISATION::LocalisationPrototype>
     {
     public:
         //void setPrototype(LocalisationPrototype *pItem);

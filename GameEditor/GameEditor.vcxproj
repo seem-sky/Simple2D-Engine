@@ -212,6 +212,7 @@
     <ClCompile Include="DatabaseModuleAutoTile.cpp" />
     <ClCompile Include="DatabaseModuleDragDrop.cpp" />
     <ClCompile Include="DatabaseModuleList.cpp" />
+    <ClCompile Include="DatabaseModuleLocalisation.cpp" />
     <ClCompile Include="DatabaseModuleResource.cpp" />
     <ClCompile Include="DatabaseModuleTexture.cpp" />
     <ClCompile Include="DatabaseModuleTileSet.cpp" />
@@ -306,6 +307,7 @@
     <moc_header Include="DatabaseModuleDragDrop.h" />
     <moc_header Include="DatabaseModuleAnimation.h" />
     <ClInclude Include="DatabaseModuleAutoTile.h" />
+    <ClInclude Include="DatabaseModuleLocalisation.h" />
     <ClInclude Include="DatabaseModuleResource.h" />
     <moc_header Include="DatabaseModuleTexture.h" />
     <moc_header Include="DatabaseModuleTileSet.h" />

@@ -6,7 +6,22 @@ DatabaseWidgetAnimation::DatabaseWidgetAnimation(QWidget *pParent) : DatabaseWid
     if (auto pLayout = dynamic_cast<QGridLayout*>(layout()))
     {
         pLayout->addWidget(m_pModuleAnimation, 0, 1);
-        pLayout->addWidget(m_pModuleSpriteList, 0, 2, -1, 1);
+
+        // add tile list module
+        QVBoxLayout *pBoxLayout(new QVBoxLayout());
+        pBoxLayout->setSpacing(6);
+
+        // setup "tiles:" label
+        QLabel *pLabel(new QLabel("sprites:"));
+        QFont font;
+        font.setPointSize(8);
+        font.setBold(true);
+        font.setWeight(75);
+        pLabel->setFont(font);
+        pBoxLayout->addWidget(pLabel);
+
+        pBoxLayout->addWidget(m_pModuleSpriteList);
+        pLayout->addLayout(pBoxLayout, 0, 2, -1, 1);
     }
 }
 

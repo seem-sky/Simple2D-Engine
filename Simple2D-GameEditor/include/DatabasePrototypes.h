@@ -521,37 +521,41 @@ namespace DATABASE
     # LocalisationPrototype
     #####*/
     typedef std::vector<QString> StringVector;
-    class LocalisationPrototype : public Prototype
+    namespace LOCALISATION
     {
-    public:
-        LocalisationPrototype(uint32 ID = 0, uint32 uiLocalCount = 1) : Prototype(ID)
+        const uint32 LOCALISATION_COUNT = 2;
+        class LocalisationPrototype : public Prototype
         {
-            setLocalsCount(uiLocalCount);
-        }
+        public:
+            LocalisationPrototype(uint32 ID = 0, uint32 uiLocalCount = 1) : Prototype(ID)
+            {
+                setLocalsCount(uiLocalCount);
+            }
 
-        inline void setLocalsCount(uint32 uiCount) { m_Locals.resize(uiCount); }
-        inline uint32 getLocalsCount() const { return m_Locals.size(); }
-        inline void setLocalisation(uint32 uiIndex, const QString &sLocal)
-        {
-            if (uiIndex >= getLocalsCount())
-                setLocalsCount(uiIndex+1);
-            m_Locals.at(uiIndex) = sLocal;
-        }
+            inline void setLocalsCount(uint32 uiCount) { m_Locals.resize(uiCount); }
+            inline uint32 getLocalsCount() const { return m_Locals.size(); }
+            inline void setLocalisation(uint32 uiIndex, const QString &sLocal)
+            {
+                if (uiIndex >= getLocalsCount())
+                    setLocalsCount(uiIndex+1);
+                m_Locals.at(uiIndex) = sLocal;
+            }
 
-        inline QString getLocalisation(uint32 uiIndex) const
-        {
-            if (uiIndex < getLocalsCount())
-                return m_Locals.at(uiIndex);
-            return "";
-        }
+            inline QString getLocalisation(uint32 uiIndex) const
+            {
+                if (uiIndex < getLocalsCount())
+                    return m_Locals.at(uiIndex);
+                return "";
+            }
 
-        // IO
-        void toXML(QXmlStreamWriter &writer) const;
-        void insertChildren(const QXmlStreamReader &reader);
+            // IO
+            void toXML(QXmlStreamWriter &writer) const;
+            void insertChildren(const QXmlStreamReader &reader);
 
-    private:
-        StringVector m_Locals;
-    };
+        private:
+            StringVector m_Locals;
+        };
+    }
 
     /*#####
     # MapPrototype
