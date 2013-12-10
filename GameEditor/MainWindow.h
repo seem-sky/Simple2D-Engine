@@ -7,6 +7,7 @@
 #include "Config.h"
 #include "Project.h"
 #include <QtGui/QMoveEvent>
+#include "MapEditorWidgetEditor.h"
 
 class MainWindow : public QMainWindow, public Ui_MainWindow
 {
@@ -42,5 +43,6 @@ public:
 
 private:
     Project m_project;
+    MapEditorWidgetEditor *m_pMapEditor;
 };
 #endif

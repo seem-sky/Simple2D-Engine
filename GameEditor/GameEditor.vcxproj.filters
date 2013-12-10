@@ -100,6 +100,15 @@
     <Filter Include="Database\Modules\Localisation">
       <UniqueIdentifier>{ac4c61ea-7028-49bc-83f6-64fc7b497b1b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="New Map Editor">
+      <UniqueIdentifier>{11e42f6e-fc88-4336-aabe-5b95f90ce14e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="New Map Editor\Modules">
+      <UniqueIdentifier>{79f2339d-1af3-4676-bcc8-735828510f43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="New Map Editor\Modules\Tiles">
+      <UniqueIdentifier>{03aa08c8-2b2f-4fbb-bccb-b1acd26492bf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainWindow.cpp">
@@ -176,6 +185,15 @@
     </ClCompile>
     <ClCompile Include="DatabaseModuleLocalisation.cpp">
       <Filter>Database\Modules\Localisation</Filter>
+    </ClCompile>
+    <ClCompile Include="MapEditorModuleTiles.cpp">
+      <Filter>New Map Editor\Modules\Tiles</Filter>
+    </ClCompile>
+    <ClCompile Include="MapEditorWidgetEditor.cpp">
+      <Filter>New Map Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="TexturePrototypeFrame.cpp">
+      <Filter>EditorCore</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -270,6 +288,12 @@
     <moc_header Include="AnimationViewer.h">
       <Filter>Database\Modules\Animation\AnimationViewer</Filter>
     </moc_header>
+    <moc_header Include="MapEditorWidgetEditor.h">
+      <Filter>New Map Editor</Filter>
+    </moc_header>
+    <moc_header Include="MapEditorModuleTiles.h">
+      <Filter>New Map Editor\Modules\Tiles</Filter>
+    </moc_header>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -302,6 +326,9 @@
     </ClInclude>
     <ClInclude Include="DatabaseModuleLocalisation.h">
       <Filter>Database\Modules\Localisation</Filter>
+    </ClInclude>
+    <ClInclude Include="TexturePrototypeFrame.h">
+      <Filter>EditorCore</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

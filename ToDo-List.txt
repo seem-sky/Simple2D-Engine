@@ -3,3 +3,5 @@
 - redesign world_objects and dynamic_objects (module system (think about it :P )
 - animation revert actions
 - animation type standard entrys (read only)
+
+- improve TileDropLabel

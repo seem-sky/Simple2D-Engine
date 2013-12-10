@@ -106,11 +106,11 @@ namespace DATABASE
         inline void setLocalisationDatabase(LocalisationDatabase *db) { m_Databases.at(DATABASE::LOCALISATION_DATABASE) = std::unique_ptr<IDatabase>(db); }
         inline void setMapDatabase(MAP_STRUCTURE::MapDatabase *db) { m_Databases.at(DATABASE::MAP_DATABASE) = std::unique_ptr<IDatabase>(db); }
 
-        virtual void clear();
+        void clear();
 
         // in/output
-        virtual bool loadDatabase(const QString &projectPath, uint32 databases = ALL_DATABASES);
-        virtual bool saveDatabase(const QString &projectPath, uint32 databases = ALL_DATABASES);
+        bool loadDatabase(const QString &projectPath, uint32 databases = ALL_DATABASES);
+        bool saveDatabase(const QString &projectPath, uint32 databases = ALL_DATABASES);
 
     private:
         std::array<std::unique_ptr<IDatabase>, DATABASE_COUNT> m_Databases;

@@ -230,7 +230,10 @@
     <ClCompile Include="DatabaseWindow.cpp" />
     <ClCompile Include="ContextMenu.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MapEditorModuleTiles.cpp" />
+    <ClCompile Include="MapEditorWidgetEditor.cpp" />
     <ClCompile Include="Project.cpp" />
+    <ClCompile Include="TexturePrototypeFrame.cpp" />
   </ItemGroup>
   <ItemGroup>
     <moc_header Include="MainWindow.h">
@@ -297,6 +300,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="TexturePrototypeFrame.h" />
     <moc_header Include="DatabaseDialogResize.h" />
     <moc_header Include="AnimationViewer.h" />
     <ClInclude Include="DatabaseModel.h" />
@@ -318,6 +322,8 @@
     <moc_header Include="DatabaseWidgetTexture.h" />
     <moc_header Include="DatabaseWidgetTile.h" />
     <ClInclude Include="DatabaseWidgetTileSet.h" />
+    <moc_header Include="MapEditorModuleTiles.h" />
+    <moc_header Include="MapEditorWidgetEditor.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>

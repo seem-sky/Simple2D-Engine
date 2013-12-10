@@ -10,10 +10,15 @@
 
 using namespace DATABASE;
 
-MainWindow::MainWindow(QMainWindow *pParent) : QMainWindow(pParent), Ui_MainWindow()
+MainWindow::MainWindow(QMainWindow *pParent) : QMainWindow(pParent), Ui_MainWindow(), m_pMapEditor(new MapEditorWidgetEditor(m_project.getDatabaseMgr(), this))
 {
     Logfile::get();
     setupUi(this);
+
+    // setup map editor widget
+    auto pLayout = new QGridLayout(this);
+    centralwidget->setLayout(pLayout);
+    pLayout->addWidget(m_pMapEditor, 0, 0, -1, -1);
 
     connect(this, SIGNAL(projectLoadDone()), m_pMapEditor, SLOT(_projectOpened()));
     connect(openDatabase, SIGNAL(triggered()), this, SLOT(_openDatabase()));
@@ -106,6 +111,7 @@ bool MainWindow::_loadProject(const QString &dir)
         Config::get()->setProjectDirectory(dir);
         BASIC_LOG("Project load successfully ends after " + QString::number(time.elapsed()) + "msec.");
         //m_pMapEditor->updateMapEditor();
+        m_pMapEditor->setup();
         emit projectLoadDone();
         return true;
     }

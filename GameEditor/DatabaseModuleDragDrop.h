@@ -74,7 +74,7 @@ protected:
     void paintEvent(QPaintEvent *pEvent);
 
 public:
-    TileDropLabel(QWidget *pParent = NULL);
+    TileDropLabel(QWidget *pParent = nullptr);
 
     inline uint32 getCurrentTileID() const { return m_uiCurrentTileID; }
     inline void setCurrentTileID(uint32 uiTileID) { m_uiCurrentTileID = uiTileID; repaint(); }
