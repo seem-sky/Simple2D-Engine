@@ -3,18 +3,30 @@
 #include "Config.h"
 #include "QtGlobal.h"
 
-TexturePrototypeFrame::TexturePrototypeFrame(QWidget *pParent) : QFrame(pParent)
+TexturePrototypeFrame::TexturePrototypeFrame(QWidget *pParent) : QFrame(pParent), m_pPrototype(nullptr)
 {}
 
 void TexturePrototypeFrame::paintEvent(QPaintEvent *pEvent)
 {
     QFrame::paintEvent(pEvent);
 
-    if (auto pProtoype = getTexturePrototype())
+    QPixmap pixmap;
+    if (createPixmapFromTexturePrototype(Config::get()->getProjectDirectory(), m_pPrototype, pixmap))
     {
         QPainter painter(this);
-        QPixmap pixmap;
-        createPixmapFromTexturePrototype(Config::get()->getProjectDirectory(), pProtoype, pixmap);
         painter.drawPixmap(0, 0, pixmap);
     }
+}
+
+void TexturePrototypeFrame::setPrototype(const DATABASE::TexturePrototype *pPrototype)
+{
+    m_pPrototype = pPrototype;
+    repaint();
+}
+
+uint32 TexturePrototypeFrame::getID() const
+{
+    if (m_pPrototype)
+        return m_pPrototype->getID();
+    return 0;
 }

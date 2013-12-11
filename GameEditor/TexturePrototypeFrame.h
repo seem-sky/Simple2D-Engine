@@ -12,7 +12,11 @@ protected:
 public:
     TexturePrototypeFrame(QWidget *pParent = nullptr);
 
-    virtual const DATABASE::TexturePrototype* getTexturePrototype() const = 0;
+    void setPrototype(const DATABASE::TexturePrototype *pPrototype);
+    uint32 getID() const;
+
+private:
+    const DATABASE::TexturePrototype *m_pPrototype;
 };
 
 #endif

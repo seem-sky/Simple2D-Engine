@@ -20,6 +20,8 @@ namespace DATABASE
         virtual Prototype* getNewPrototype(uint32 ID = 0) const = 0;
         virtual Prototype* getPrototype(uint32 ID) = 0;
         virtual const Prototype* getPrototype(uint32 ID) const = 0;
+
+        virtual uint32 getSize() const = 0;
     };
     typedef std::unique_ptr<IDatabase> IDatabasePtr;
 

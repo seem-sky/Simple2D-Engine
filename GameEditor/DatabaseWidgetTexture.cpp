@@ -62,7 +62,6 @@ QPixmap DatabaseWidgetTexture::_createPrototypePixmap(uint32 uiID) const
     QPixmap pixmap;
     if (auto pProto = dynamic_cast<const DATABASE::TexturePrototype*>(getDatabase()->getPrototype(uiID)))
         createPixmapFromTexturePrototype(Config::get()->getProjectDirectory(), pProto, pixmap);
-
     return pixmap;
 }
 

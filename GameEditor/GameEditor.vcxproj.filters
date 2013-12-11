@@ -106,7 +106,10 @@
     <Filter Include="New Map Editor\Modules">
       <UniqueIdentifier>{79f2339d-1af3-4676-bcc8-735828510f43}</UniqueIdentifier>
     </Filter>
-    <Filter Include="New Map Editor\Modules\Tiles">
+    <Filter Include="New Map Editor\Modules\TileTables">
+      <UniqueIdentifier>{bad4bb08-2a1d-4fee-ab55-9f24e987469a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="New Map Editor\Modules\TileTables\Tiles">
       <UniqueIdentifier>{03aa08c8-2b2f-4fbb-bccb-b1acd26492bf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -187,13 +190,16 @@
       <Filter>Database\Modules\Localisation</Filter>
     </ClCompile>
     <ClCompile Include="MapEditorModuleTiles.cpp">
-      <Filter>New Map Editor\Modules\Tiles</Filter>
+      <Filter>New Map Editor\Modules\TileTables\Tiles</Filter>
     </ClCompile>
     <ClCompile Include="MapEditorWidgetEditor.cpp">
       <Filter>New Map Editor</Filter>
     </ClCompile>
     <ClCompile Include="TexturePrototypeFrame.cpp">
       <Filter>EditorCore</Filter>
+    </ClCompile>
+    <ClCompile Include="AbstractPrototypeTable.cpp">
+      <Filter>New Map Editor\Modules\TileTables</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -238,6 +244,9 @@
     </compile_QT_Files>
     <compile_QT_Files Include="UI\DatabaseModuleLocalisation.ui">
       <Filter>Database\Modules\Localisation</Filter>
+    </compile_QT_Files>
+    <compile_QT_Files Include="UI\MapEditorWidget.ui">
+      <Filter>New Map Editor</Filter>
     </compile_QT_Files>
   </ItemGroup>
   <ItemGroup>
@@ -291,8 +300,8 @@
     <moc_header Include="MapEditorWidgetEditor.h">
       <Filter>New Map Editor</Filter>
     </moc_header>
-    <moc_header Include="MapEditorModuleTiles.h">
-      <Filter>New Map Editor\Modules\Tiles</Filter>
+    <moc_header Include="AbstractPrototypeTable.h">
+      <Filter>New Map Editor\Modules\TileTables</Filter>
     </moc_header>
   </ItemGroup>
   <ItemGroup>
@@ -329,6 +338,9 @@
     </ClInclude>
     <ClInclude Include="TexturePrototypeFrame.h">
       <Filter>EditorCore</Filter>
+    </ClInclude>
+    <ClInclude Include="MapEditorModuleTiles.h">
+      <Filter>New Map Editor\Modules\TileTables\Tiles</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

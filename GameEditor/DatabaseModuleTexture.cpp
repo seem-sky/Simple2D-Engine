@@ -9,10 +9,12 @@ DatabaseModuleTexture::DatabaseModuleTexture(QWidget *pParent) : QWidget(pParent
     connect(m_pColorBlue, SIGNAL(valueChanged(int)), this, SLOT(_onTransparencyColorChanged(int)));
 }
 
-void DatabaseModuleTexture::setPixmap(const QPixmap &pixmap)
+void DatabaseModuleTexture::setPixmap(const QPixmap &pPixmap)
 {
+    if (!pPixmap)
+        return;
     m_pView->setScene(new QGraphicsScene());
-    m_pView->scene()->addPixmap(pixmap);
+    m_pView->scene()->addPixmap(pPixmap);
 }
 
 void DatabaseModuleTexture::_onTransparencyColorChanged(int value)

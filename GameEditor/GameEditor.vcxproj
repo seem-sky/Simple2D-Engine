@@ -206,6 +206,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AbstractPrototypeTable.cpp" />
     <ClCompile Include="AnimationViewer.cpp" />
     <ClCompile Include="DatabaseDialogResize.cpp" />
     <ClCompile Include="DatabaseModuleAnimation.cpp" />
@@ -288,6 +289,7 @@
     <compile_QT_Files Include="UI\DatabaseModuleTileSet.ui" />
     <compile_QT_Files Include="UI\MainWindow.ui" />
     <compile_QT_Files Include="UI\Database.ui" />
+    <compile_QT_Files Include="UI\MapEditorWidget.ui" />
     <compile_QT_Files Include="UI\MapSettings.ui" />
     <compile_QT_Files Include="UI\MapObjectDialog.ui" />
     <compile_QT_Files Include="UI\MapEditor.ui" />
@@ -300,6 +302,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <moc_header Include="AbstractPrototypeTable.h" />
     <ClInclude Include="TexturePrototypeFrame.h" />
     <moc_header Include="DatabaseDialogResize.h" />
     <moc_header Include="AnimationViewer.h" />
@@ -322,7 +325,7 @@
     <moc_header Include="DatabaseWidgetTexture.h" />
     <moc_header Include="DatabaseWidgetTile.h" />
     <ClInclude Include="DatabaseWidgetTileSet.h" />
-    <moc_header Include="MapEditorModuleTiles.h" />
+    <ClInclude Include="MapEditorModuleTiles.h" />
     <moc_header Include="MapEditorWidgetEditor.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>

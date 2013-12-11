@@ -7,16 +7,16 @@
 #include <QtGui/QPixmapCache>
 #include "DatabasePrototypes.h"
 #include "Container.h"
+#include <QtCore/QDebug>
 
 static bool createPixmap(const QString &path, const QString &fileNamePath, const Color &color, QPixmap &result)
 {
-    QPixmap pixmap(path + "/Textures/" + fileNamePath);
-    if (!pixmap.isNull())
+    result = QPixmap(path + "/Textures/" + fileNamePath);
+    if (!result.isNull())
     {
         // set transparency color
         if (color.hasValidColor())
-            pixmap.setMask(pixmap.createMaskFromColor(QColor(color.getRed(), color.getGreen(), color.getBlue())));
-        result = pixmap;
+            result.setMask(result.createMaskFromColor(QColor(color.getRed(), color.getGreen(), color.getBlue())));
         return true;
     }
     return false;
@@ -28,7 +28,7 @@ static bool createPixmapFromTexturePrototype(const QString &path, const DATABASE
     {
         // use pixmap cache
         QString pixmapKey = pTexture->getPathName() + QString::fromStdString(pTexture->getTransparencyColor().getColorString());
-        if (QPixmapCache::find(pixmapKey, &result))
+        if (QPixmapCache::find(pixmapKey, result))
             return true;
         else if (createPixmap(path, pTexture->getPathName(), pTexture->getTransparencyColor(), result))
         {

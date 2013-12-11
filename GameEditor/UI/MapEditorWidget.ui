@@ -6,14 +6,87 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>349</width>
-    <height>313</height>
+    <width>665</width>
+    <height>470</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item row="0" column="0">
+    <widget class="QTabWidget" name="m_pSelection">
+     <property name="maximumSize">
+      <size>
+       <width>200</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="MapEditorModuleTiles" name="m_pModuleTiles">
+      <attribute name="title">
+       <string>Tiles</string>
+      </attribute>
+     </widget>
+     <widget class="MapEditorModuleAutoTiles" name="m_pModuleAutoTiles">
+      <attribute name="title">
+       <string>AutoTiles</string>
+      </attribute>
+     </widget>
+     <widget class="QWidget" name="m_pModuleTileSets">
+      <attribute name="title">
+       <string>TileSets</string>
+      </attribute>
+     </widget>
+    </widget>
+   </item>
+   <item row="0" column="1" rowspan="2">
+    <widget class="QGraphicsView" name="graphicsView">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QWidget" name="widget" native="true">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>150</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+  </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>MapEditorModuleTiles</class>
+   <extends>QWidget</extends>
+   <header>mapeditormoduletiles.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>MapEditorModuleAutoTiles</class>
+   <extends>QWidget</extends>
+   <header>mapeditormoduletiles.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

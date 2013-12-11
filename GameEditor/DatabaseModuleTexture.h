@@ -21,7 +21,7 @@ public:
 
     // widgets
     inline QGraphicsView* getTextureView() { return m_pView; }
-    void setPixmap(const QPixmap &pixmap);
+    void setPixmap(const QPixmap &pPixmap);
 
 private slots:
     void _onTransparencyColorChanged(int value);

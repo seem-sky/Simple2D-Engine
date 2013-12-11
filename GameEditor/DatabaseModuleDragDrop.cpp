@@ -194,7 +194,7 @@ void TileDropLabel::paintEvent(QPaintEvent *pEvent)
     {
         QPainter painter(this);
         QPixmap pixmap;
-        createPixmapFromTexturePrototype(Config::get()->getProjectDirectory(), pProto, pixmap);
-        painter.drawPixmap(0, 0, pixmap);
+        if (createPixmapFromTexturePrototype(Config::get()->getProjectDirectory(), pProto, pixmap))
+            painter.drawPixmap(0, 0, pixmap);
     }
 }
