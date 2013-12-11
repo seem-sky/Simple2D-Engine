@@ -63,6 +63,7 @@ void MainWindow::_openDatabase()
 {
     DatabaseWindow pDB(m_project.getDatabaseMgr(), this);
     pDB.exec();
+    m_pMapEditor->setup();
     //m_pMapEditor->updateMapEditor();
 }
 

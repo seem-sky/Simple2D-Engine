@@ -47,7 +47,7 @@
        <string>AutoTiles</string>
       </attribute>
      </widget>
-     <widget class="QWidget" name="m_pModuleTileSets">
+     <widget class="MapEditorModuleTileSets" name="m_pModuleTileSets">
       <attribute name="title">
        <string>TileSets</string>
       </attribute>
@@ -84,6 +84,12 @@
    <class>MapEditorModuleAutoTiles</class>
    <extends>QWidget</extends>
    <header>mapeditormoduletiles.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>MapEditorModuleTileSets</class>
+   <extends>QWidget</extends>
+   <header>mapeditormoduletilesets.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

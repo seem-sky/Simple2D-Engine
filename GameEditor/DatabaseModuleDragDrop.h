@@ -20,7 +20,7 @@ protected:
 public:
     DatabaseModuleDragList(QWidget *pParent = nullptr);
 
-    void setModel(IDatabaseModel *pModel);
+    virtual void setModel(IDatabaseModel *pModel);
 
     // tooltip
     inline void setMaximumTooltipSize(const QSize &size) { m_MaximumTooltipSize = size; }

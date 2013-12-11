@@ -232,6 +232,7 @@
     <ClCompile Include="ContextMenu.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapEditorModuleTiles.cpp" />
+    <ClCompile Include="MapEditorModuleTileSets.cpp" />
     <ClCompile Include="MapEditorWidgetEditor.cpp" />
     <ClCompile Include="Project.cpp" />
     <ClCompile Include="TexturePrototypeFrame.cpp" />
@@ -303,6 +304,7 @@
   </ItemGroup>
   <ItemGroup>
     <moc_header Include="AbstractPrototypeTable.h" />
+    <ClInclude Include="MapEditorModuleTileSets.h" />
     <ClInclude Include="TexturePrototypeFrame.h" />
     <moc_header Include="DatabaseDialogResize.h" />
     <moc_header Include="AnimationViewer.h" />

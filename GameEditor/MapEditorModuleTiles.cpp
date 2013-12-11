@@ -14,9 +14,9 @@ void MapEditorModuleTiles::_setup()
 
     const uint32 tilesPerRow = width()/(TILE_SIZE+2);
     setColumnCount(tilesPerRow);
-    setRowCount(std::ceil(double(pTileDB->getSize())/tilesPerRow));
+    setRowCount(std::ceil(double(pTileDB->getSize()+1)/tilesPerRow));
 
-    for (uint32 i = 1; i < pTileDB->getSize(); ++i)
+    for (uint32 i = 0; i <= pTileDB->getSize(); ++i)
     {
         auto pTileFrame = new TexturePrototypeFrameEx(this);
         if (auto pPrototype = pTileDB->getOriginalPrototype(i))
@@ -39,7 +39,7 @@ void MapEditorModuleAutoTiles::_setup()
     const uint32 tilesPerRow = width()/(TILE_SIZE+2);
     setColumnCount(tilesPerRow);
     setRowCount(std::ceil(double(pAutoTileDB->getSize())/tilesPerRow));
-    for (uint32 i = 0; i+1 < pAutoTileDB->getSize(); ++i)
+    for (uint32 i = 0; i < pAutoTileDB->getSize(); ++i)
     {
         auto pTileFrame = new TexturePrototypeFrameEx(this);
         if (auto pAutoTilePrototype = pAutoTileDB->getOriginalPrototype(i+1))

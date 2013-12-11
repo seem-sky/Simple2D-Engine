@@ -94,11 +94,11 @@ AbstractPrototypeTable::AbstractPrototypeTable(QWidget *pParent) : QTableWidget(
     vHeader->setSectionResizeMode(QHeaderView::Fixed);
     vHeader->setVisible(false);
 
-    // selection
+    // table widget
     setSelectionMode(QAbstractItemView::NoSelection);
-
+    setEditTriggers(QAbstractItemView::NoEditTriggers);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-
+    setTabKeyNavigation(false);
     setFrameShape(QFrame::NoFrame);
 }
 

@@ -13,6 +13,9 @@ void MapEditorWidgetEditor::_setupTileModules()
 
     m_pModuleAutoTiles->setDBMgr(&m_DatabaseMgr);
     m_pModuleAutoTiles->setup();
+
+    m_pModuleTileSets->setModel(new TileSetDatabaseModel(std::unique_ptr<DATABASE::TileSetDatabase>(m_DatabaseMgr.getTileSetDatabase())));
+    m_pModuleTileSets->setTileDatabase(m_DatabaseMgr.getTileDatabase());
 }
 
 void MapEditorWidgetEditor::setup()
