@@ -167,8 +167,8 @@
         <frame time="50">
             <sprite ID="26" x="-56" y="-53" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
-        <frame time="0">
-            <sprite ID="27" x="-59" y="-50" scale="5.00" rotation="0" opacity="1.00"/>
+        <frame time="50">
+            <sprite ID="27" x="-59" y="-50" scale="1.00" rotation="0" opacity="1.00"/>
         </frame>
     </p>
     <p ID="2" name="char1-right">

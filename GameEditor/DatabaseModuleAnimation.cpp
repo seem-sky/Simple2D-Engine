@@ -142,8 +142,9 @@ void DatabaseModuleAnimation::_setupFrame(uint32 index)
     // clear actions
     m_LastActions.clear();
 
+    if (index >= m_Animation.size())
+        m_Animation.resize(index+1);
     m_pAniViewer->showFrame(index);
-    m_pCurrentFrame->setValue(m_pAniViewer->getCurrentFrame());
     if (m_pAniViewer->getCurrentFrame() < m_Animation.size())
         m_pFrameTime->setValue(m_Animation.at(m_pAniViewer->getCurrentFrame()).getTimeInMsec());
     else

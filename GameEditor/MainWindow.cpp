@@ -38,8 +38,8 @@ MainWindow::MainWindow(QMainWindow *pParent) : QMainWindow(pParent), Ui_MainWind
     //QSize newSize = QSize(Config::get()->getMainWindowSize().x, Config::get()->getMainWindowSize().y);
     //if (newSize.width() >= minimumWidth() && newSize.height() >= minimumHeight())
     //    resize(newSize);
-    //if (!Config::get()->getProjectDirectory().isEmpty())
-    //    _loadProject(Config::get()->getProjectDirectory());
+    if (!Config::get()->getProjectDirectory().isEmpty())
+        _loadProject(Config::get()->getProjectDirectory());
 }
 
 void MainWindow::_setDBs()
