@@ -613,6 +613,8 @@ namespace DATABASE
 
             inline bool hasMapDataStored() const { return m_DataLoaded; }
 
+            bool isValid();
+
             inline QString getFileName() const { return m_FileName; }
             inline void setFileName(const QString &sFileName) { m_FileName = sFileName; }
             inline void setScriptName(const QString &sScriptName) { m_ScriptName = sScriptName; }

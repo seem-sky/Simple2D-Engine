@@ -72,6 +72,7 @@ namespace DATABASE
 
         inline Prototype* getNewPrototype(uint32 ID = 0) const { return new T(ID); }
 
+        const std::vector<std::unique_ptr<T>>& getPrototypes() const { return getItems(); }
         inline Prototype* getPrototype(uint32 ID) { return Container::getItem(ID); }
         inline const Prototype* getPrototype(uint32 ID) const  { return Container::getItem(ID); }
         inline T* getOriginalPrototype(uint32 ID) { return Container::getItem(ID); }

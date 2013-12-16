@@ -428,6 +428,11 @@ namespace DATABASE
             return uiBorderCheck;
         }
 
+        bool MapPrototype::isValid()
+        {
+            return !m_FileName.isEmpty();
+        }
+
         void MapPrototype::_clearTiles()
         {
             m_DataLoaded = false;

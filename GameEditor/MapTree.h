@@ -21,10 +21,12 @@ private slots:
     void onActionOpen();
     void onActionEdit();
     void onActionNew();
-    void onActionRemove();
+    void onActionDelete();
+    void onProjectSave();
 
 private:
     DATABASE::MAP_STRUCTURE::MapDatabase *m_pMapDatabase;
+    UInt32List m_DeletedMaps;
 };
 
 #endif

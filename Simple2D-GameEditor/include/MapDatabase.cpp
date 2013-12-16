@@ -57,6 +57,18 @@ void MapDatabase::unloadMapFile(uint32 uiMapID)
     pMap->m_Objects.clear();
 }
 
+MapPrototypePtr MapDatabase::getNewPrototype()
+{
+    // search for unvalid prototypes
+    for (auto &pPrototype : getPrototypes())
+    {
+        if (!pPrototype->isValid())
+            return MapPrototypePtr(new MapPrototype(*pPrototype));
+    }
+
+    return MapPrototypePtr(new MapPrototype(getSize()+1));
+}
+
 //void MapDatabase::setPrototype(MapPrototype *pItem)
 //{
 //    Database::setPrototype(pItem);

@@ -97,6 +97,39 @@
        </property>
       </widget>
      </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="m_pMapTreeLabel_2">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>name:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLineEdit" name="m_pName">
+       <property name="mouseTracking">
+        <bool>true</bool>
+       </property>
+       <property name="acceptDrops">
+        <bool>true</bool>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="maxLength">
+        <number>25</number>
+       </property>
+       <property name="frame">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
      <item row="3" column="0">
       <widget class="QLabel" name="m_pMapTreeLabel_3">
        <property name="font">
@@ -127,13 +160,6 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="0">
-      <widget class="Line" name="line">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
      <item row="5" column="0">
       <widget class="QLabel" name="m_pMapTreeLabel_4">
        <property name="font">
@@ -151,7 +177,7 @@
      <item row="5" column="1">
       <widget class="QSpinBox" name="m_pSizeX">
        <property name="minimum">
-        <number>1</number>
+        <number>5</number>
        </property>
        <property name="maximum">
         <number>1000</number>
@@ -178,7 +204,7 @@
      <item row="6" column="1">
       <widget class="QSpinBox" name="m_pSizeY">
        <property name="minimum">
-        <number>1</number>
+        <number>5</number>
        </property>
        <property name="maximum">
         <number>1000</number>
@@ -242,38 +268,18 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
-      <widget class="QLineEdit" name="m_pName">
-       <property name="mouseTracking">
-        <bool>true</bool>
+     <item row="4" column="1">
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
        </property>
-       <property name="acceptDrops">
-        <bool>true</bool>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
        </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="maxLength">
-        <number>25</number>
-       </property>
-       <property name="frame">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="m_pMapTreeLabel_2">
-       <property name="font">
-        <font>
-         <pointsize>12</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>name:</string>
-       </property>
-      </widget>
+      </spacer>
      </item>
     </layout>
    </item>

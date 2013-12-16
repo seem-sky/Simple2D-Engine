@@ -1,6 +1,10 @@
 #include "MapTree.h"
 #include "moc_MapTree.h"
 #include "MapEditorDialogMapSettings.h"
+#include <QtWidgets/QMessageBox>
+#include "DelayedDeleteObject.h"
+#include <QtCore/QFile>
+#include "Config.h"
 
 /*#####
 # MapTree
@@ -30,7 +34,7 @@ void MapTree::_reload()
     for (uint32 i = 1; i <= size; ++i)
     {
         auto pMap = m_pMapDatabase->getOriginalPrototype(i);
-        if (pMap->getFileName().isEmpty())
+        if (!pMap->isValid())
             continue;
 
         // create new QTreeWidgetItem
@@ -82,8 +86,10 @@ void MapTree::onContextMenuRequested(const QPoint &pos)
         setCurrentItem(pItem);
         connect(pMenu->addAction("open"), SIGNAL(triggered()), this, SLOT(onActionOpen()));
         connect(pMenu->addAction("edit"), SIGNAL(triggered()), this, SLOT(onActionEdit()));
-        connect(pMenu->addAction("remove"), SIGNAL(triggered()), this, SLOT(onActionRemove()));
+        connect(pMenu->addAction("delete"), SIGNAL(triggered()), this, SLOT(onActionDelete()));
     }
+    else
+        setCurrentItem(nullptr);
     connect(pMenu->addAction("new"), SIGNAL(triggered()), this, SLOT(onActionNew()));
     pMenu->popup(mapToGlobal(pos));
 }
@@ -102,12 +108,74 @@ void MapTree::onActionEdit()
 
 void MapTree::onActionNew()
 {
+    if (auto pPrototype = m_pMapDatabase->getNewPrototype())
+    {
+        pPrototype->setFileName("map" + QString::number(pPrototype->getID()) + ".map");
+        MapEditorDialogMapSettings dialog(pPrototype.get(), this);
+        if (dialog.exec())
+        {
+            QStringList strings;
+            strings.push_back(QString::number(pPrototype->getID()));
+            strings.push_back(pPrototype->getName());
+            auto pItem = new QTreeWidgetItem(strings);
+            if (auto pParent = currentItem())
+                pParent->addChild(pItem);
+            else
+                addTopLevelItem(pItem);
+            m_pMapDatabase->setPrototype(pPrototype.release());
+        }
+    }
 }
 
 void MapTree::onActionOpen()
 {
 }
 
-void MapTree::onActionRemove()
+void MapTree::onActionDelete()
 {
+    if (auto pItem = currentItem())
+    {
+        if (auto pPrototype = m_pMapDatabase->getOriginalPrototype(pItem->data(0, 0).toUInt()))
+        {
+            if (QMessageBox::Yes == QMessageBox::question(this, "Delete map",
+                "Do you realy want to delete map\n"
+                "ID: " + QString::number(pPrototype->getID()) + "\n" + 
+                "name: " + pPrototype->getName() + "?",
+                QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes))
+            {
+                pPrototype->setFileName("");
+
+                // add children to parent item
+                auto children = pItem->takeChildren();
+                if (auto pParent = pItem->parent())
+                {
+                    pParent->removeChild(pItem);
+                    pParent->addChildren(children);
+                }
+                else
+                {
+                    addTopLevelItems(children);
+                    takeTopLevelItem(indexOfTopLevelItem(pItem));
+                }
+                auto pDelayedObject = new DelayedDeleteObject<QTreeWidgetItem>(pItem);
+                pDelayedObject->deleteLater();
+
+                m_DeletedMaps.push_back(pPrototype->getID());
+            }
+        }
+    }
+}
+
+void MapTree::onProjectSave()
+{
+    // delete maps
+    for (auto ID : m_DeletedMaps)
+    {
+        if (auto pMap = m_pMapDatabase->getOriginalPrototype(ID))
+        {
+            QFile::remove(Config::get()->getProjectDirectory()+"/maps/"+pMap->getFileName());
+            pMap->setFileName("");
+        }
+    }
+    m_DeletedMaps.clear();
 }

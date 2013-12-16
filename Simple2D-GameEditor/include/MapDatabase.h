@@ -11,6 +11,7 @@ namespace DATABASE
         const char MAP_FILE_ENDING[] = ".map";
         const char MAP_FOLDER[] = "/Maps/";
 
+        typedef std::unique_ptr<MapPrototype> MapPrototypePtr;
         typedef std::vector<std::unique_ptr<MapPrototype>> MapPrototypePtrVector;
         class MapDatabase : public Database<MapPrototype>
         {
@@ -22,6 +23,8 @@ namespace DATABASE
             bool hasMapDataStored(uint32 uiIndex) const;
             bool loadMapFile(uint32 uiMapID, const QString &sPath = "");
             void unloadMapFile(uint32 uiMapID);
+
+            MapPrototypePtr getNewPrototype();
 
             /*void setPrototype(MapPrototype *pItem);
             const MapPrototype* getPrototype(uint32 ID) const;*/
