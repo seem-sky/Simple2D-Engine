@@ -229,13 +229,13 @@
     <ClCompile Include="DatabaseWidgetTileSet.cpp" />
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="DatabaseWindow.cpp" />
-    <ClCompile Include="ContextMenu.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapEditorDialogMapSettings.cpp" />
+    <ClCompile Include="MapEditorModuleContent.cpp" />
+    <ClCompile Include="MapEditorModuleMapTree.cpp" />
     <ClCompile Include="MapEditorModuleTiles.cpp" />
     <ClCompile Include="MapEditorModuleTileSets.cpp" />
     <ClCompile Include="MapEditorWidgetEditor.cpp" />
-    <ClCompile Include="MapTree.cpp" />
     <ClCompile Include="Project.cpp" />
     <ClCompile Include="TexturePrototypeFrame.cpp" />
   </ItemGroup>
@@ -261,24 +261,6 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">moc_%(Filename)%(Extension);%(Outputs)</Outputs>
     </moc_header>
     <moc_header Include="DatabaseWindow.h" />
-    <CustomBuild Include="ContextMenu.h">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </Command>
-    </CustomBuild>
     <CustomBuild Include="Project.h" />
   </ItemGroup>
   <ItemGroup>
@@ -293,6 +275,7 @@
     <compile_QT_Files Include="UI\MainWindow.ui" />
     <compile_QT_Files Include="UI\Database.ui" />
     <compile_QT_Files Include="UI\MapEditorDialogMapSettings.ui" />
+    <compile_QT_Files Include="UI\MapEditorModuleContent.ui" />
     <compile_QT_Files Include="UI\MapEditorWidget.ui" />
     <compile_QT_Files Include="UI\MapSettings.ui" />
     <compile_QT_Files Include="UI\MapObjectDialog.ui" />
@@ -308,8 +291,9 @@
   <ItemGroup>
     <moc_header Include="AbstractPrototypeTable.h" />
     <moc_header Include="MapEditorDialogMapSettings.h" />
+    <moc_header Include="MapEditorModuleContent.h" />
+    <moc_header Include="MapEditorModuleMapTree.h" />
     <ClInclude Include="MapEditorModuleTileSets.h" />
-    <moc_header Include="MapTree.h" />
     <ClInclude Include="TexturePrototypeFrame.h" />
     <moc_header Include="DatabaseDialogResize.h" />
     <moc_header Include="AnimationViewer.h" />

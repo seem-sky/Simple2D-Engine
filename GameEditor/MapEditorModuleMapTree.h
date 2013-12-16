@@ -5,14 +5,14 @@
 #include "MapDatabase.h"
 #include <QtWidgets/QMenu>
 
-class MapTree : public QTreeWidget
+class MapEditorModuleMapTree : public QTreeWidget
 {
     Q_OBJECT
 private:
     void _reload();
 
 public:
-    MapTree(QWidget *pParent = nullptr);
+    MapEditorModuleMapTree(QWidget *pParent = nullptr);
 
     void setDatabase(DATABASE::MAP_STRUCTURE::MapDatabase *pMapDatabase);
 

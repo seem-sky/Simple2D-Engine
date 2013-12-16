@@ -1,5 +1,5 @@
-#include "MapTree.h"
-#include "moc_MapTree.h"
+#include "MapEditorModuleMapTree.h"
+#include "moc_MapEditorModuleMapTree.h"
 #include "MapEditorDialogMapSettings.h"
 #include <QtWidgets/QMessageBox>
 #include "DelayedDeleteObject.h"
@@ -9,19 +9,19 @@
 /*#####
 # MapTree
 #####*/
-MapTree::MapTree(QWidget *pParent) : QTreeWidget(pParent), m_pMapDatabase(nullptr)
+MapEditorModuleMapTree::MapEditorModuleMapTree(QWidget *pParent) : QTreeWidget(pParent), m_pMapDatabase(nullptr)
 {
     setContextMenuPolicy(Qt::CustomContextMenu);
     connect(this, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(onContextMenuRequested(const QPoint&)));
 }
 
-void MapTree::setDatabase(DATABASE::MAP_STRUCTURE::MapDatabase *pMapDatabase)
+void MapEditorModuleMapTree::setDatabase(DATABASE::MAP_STRUCTURE::MapDatabase *pMapDatabase)
 {
     m_pMapDatabase = pMapDatabase;
     _reload();
 }
 
-void MapTree::_reload()
+void MapEditorModuleMapTree::_reload()
 {
     clear();
     if (!m_pMapDatabase)
@@ -77,7 +77,7 @@ void MapTree::_reload()
     }
 }
 
-void MapTree::onContextMenuRequested(const QPoint &pos)
+void MapEditorModuleMapTree::onContextMenuRequested(const QPoint &pos)
 {
     // setup context menu
     auto pMenu = new QMenu(this);
@@ -94,7 +94,7 @@ void MapTree::onContextMenuRequested(const QPoint &pos)
     pMenu->popup(mapToGlobal(pos));
 }
 
-void MapTree::onActionEdit()
+void MapEditorModuleMapTree::onActionEdit()
 {
     if (auto pItem = currentItem())
     {
@@ -106,7 +106,7 @@ void MapTree::onActionEdit()
     }
 }
 
-void MapTree::onActionNew()
+void MapEditorModuleMapTree::onActionNew()
 {
     if (auto pPrototype = m_pMapDatabase->getNewPrototype())
     {
@@ -127,11 +127,11 @@ void MapTree::onActionNew()
     }
 }
 
-void MapTree::onActionOpen()
+void MapEditorModuleMapTree::onActionOpen()
 {
 }
 
-void MapTree::onActionDelete()
+void MapEditorModuleMapTree::onActionDelete()
 {
     if (auto pItem = currentItem())
     {
@@ -166,7 +166,7 @@ void MapTree::onActionDelete()
     }
 }
 
-void MapTree::onProjectSave()
+void MapEditorModuleMapTree::onProjectSave()
 {
     // delete maps
     for (auto ID : m_DeletedMaps)

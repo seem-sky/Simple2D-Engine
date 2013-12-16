@@ -121,13 +121,13 @@
     <Filter Include="New Map Editor\Dialogs\MapEditorDialogMapSettings">
       <UniqueIdentifier>{5f85fa1e-3c62-42e0-92b4-8f2f9bdaa427}</UniqueIdentifier>
     </Filter>
+    <Filter Include="New Map Editor\Modules\Content">
+      <UniqueIdentifier>{ce08afaa-fce3-4c3a-a217-3413bbc55b18}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainWindow.cpp">
       <Filter>MainWindow</Filter>
-    </ClCompile>
-    <ClCompile Include="ContextMenu.cpp">
-      <Filter>EditorCore</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>EditorCore</Filter>
@@ -213,11 +213,14 @@
     <ClCompile Include="MapEditorModuleTileSets.cpp">
       <Filter>New Map Editor\Modules\TileTabs</Filter>
     </ClCompile>
-    <ClCompile Include="MapTree.cpp">
-      <Filter>New Map Editor\Modules\MapTree</Filter>
-    </ClCompile>
     <ClCompile Include="MapEditorDialogMapSettings.cpp">
       <Filter>New Map Editor\Dialogs\MapEditorDialogMapSettings</Filter>
+    </ClCompile>
+    <ClCompile Include="MapEditorModuleContent.cpp">
+      <Filter>New Map Editor\Modules\Content</Filter>
+    </ClCompile>
+    <ClCompile Include="MapEditorModuleMapTree.cpp">
+      <Filter>New Map Editor\Modules\MapTree</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -269,11 +272,11 @@
     <compile_QT_Files Include="UI\MapEditorDialogMapSettings.ui">
       <Filter>New Map Editor\Dialogs\MapEditorDialogMapSettings</Filter>
     </compile_QT_Files>
+    <compile_QT_Files Include="UI\MapEditorModuleContent.ui">
+      <Filter>New Map Editor\Modules\Content</Filter>
+    </compile_QT_Files>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="ContextMenu.h">
-      <Filter>EditorCore</Filter>
-    </CustomBuild>
     <CustomBuild Include="Project.h">
       <Filter>EditorCore</Filter>
     </CustomBuild>
@@ -324,11 +327,14 @@
     <moc_header Include="AbstractPrototypeTable.h">
       <Filter>New Map Editor\Modules\TileTabs</Filter>
     </moc_header>
-    <moc_header Include="MapTree.h">
-      <Filter>New Map Editor\Modules\MapTree</Filter>
-    </moc_header>
     <moc_header Include="MapEditorDialogMapSettings.h">
       <Filter>New Map Editor\Dialogs\MapEditorDialogMapSettings</Filter>
+    </moc_header>
+    <moc_header Include="MapEditorModuleContent.h">
+      <Filter>New Map Editor\Modules\Content</Filter>
+    </moc_header>
+    <moc_header Include="MapEditorModuleMapTree.h">
+      <Filter>New Map Editor\Modules\MapTree</Filter>
     </moc_header>
   </ItemGroup>
   <ItemGroup>

@@ -54,8 +54,8 @@
      </widget>
     </widget>
    </item>
-   <item row="1" column="0">
-    <widget class="MapTree" name="m_pMapTree">
+   <item row="1" column="0" colspan="2">
+    <widget class="MapEditorModuleMapTree" name="m_pMapTree">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
        <horstretch>0</horstretch>
@@ -104,8 +104,8 @@
      </column>
     </widget>
    </item>
-   <item row="0" column="1" rowspan="2">
-    <widget class="QWidget" name="widget_2" native="true">
+   <item row="0" column="2" rowspan="2">
+    <widget class="MapEditorModuleContent" name="widget_2" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
        <horstretch>0</horstretch>
@@ -136,9 +136,15 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>MapTree</class>
+   <class>MapEditorModuleContent</class>
+   <extends>QWidget</extends>
+   <header>mapeditormodulecontent.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>MapEditorModuleMapTree</class>
    <extends>QTreeWidget</extends>
-   <header>maptree.h</header>
+   <header>mapeditormodulemaptree.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
