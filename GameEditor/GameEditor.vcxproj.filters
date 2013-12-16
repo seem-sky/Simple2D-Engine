@@ -112,6 +112,15 @@
     <Filter Include="New Map Editor\Modules\TileTabs\Tiles">
       <UniqueIdentifier>{03aa08c8-2b2f-4fbb-bccb-b1acd26492bf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="New Map Editor\Modules\MapTree">
+      <UniqueIdentifier>{30ee0638-634d-445b-951b-7f2f330bd35e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="New Map Editor\Dialogs">
+      <UniqueIdentifier>{8b227f75-d351-4d7c-ba05-8753a9a480dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="New Map Editor\Dialogs\MapEditorDialogMapSettings">
+      <UniqueIdentifier>{5f85fa1e-3c62-42e0-92b4-8f2f9bdaa427}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainWindow.cpp">
@@ -204,6 +213,12 @@
     <ClCompile Include="MapEditorModuleTileSets.cpp">
       <Filter>New Map Editor\Modules\TileTabs</Filter>
     </ClCompile>
+    <ClCompile Include="MapTree.cpp">
+      <Filter>New Map Editor\Modules\MapTree</Filter>
+    </ClCompile>
+    <ClCompile Include="MapEditorDialogMapSettings.cpp">
+      <Filter>New Map Editor\Dialogs\MapEditorDialogMapSettings</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <compile_QT_Files Include="UI\MainWindow.ui">
@@ -250,6 +265,9 @@
     </compile_QT_Files>
     <compile_QT_Files Include="UI\MapEditorWidget.ui">
       <Filter>New Map Editor</Filter>
+    </compile_QT_Files>
+    <compile_QT_Files Include="UI\MapEditorDialogMapSettings.ui">
+      <Filter>New Map Editor\Dialogs\MapEditorDialogMapSettings</Filter>
     </compile_QT_Files>
   </ItemGroup>
   <ItemGroup>
@@ -305,6 +323,12 @@
     </moc_header>
     <moc_header Include="AbstractPrototypeTable.h">
       <Filter>New Map Editor\Modules\TileTabs</Filter>
+    </moc_header>
+    <moc_header Include="MapTree.h">
+      <Filter>New Map Editor\Modules\MapTree</Filter>
+    </moc_header>
+    <moc_header Include="MapEditorDialogMapSettings.h">
+      <Filter>New Map Editor\Dialogs\MapEditorDialogMapSettings</Filter>
     </moc_header>
   </ItemGroup>
   <ItemGroup>

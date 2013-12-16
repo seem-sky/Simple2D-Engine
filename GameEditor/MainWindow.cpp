@@ -111,8 +111,7 @@ bool MainWindow::_loadProject(const QString &dir)
         _setDBs();
         Config::get()->setProjectDirectory(dir);
         BASIC_LOG("Project load successfully ends after " + QString::number(time.elapsed()) + "msec.");
-        //m_pMapEditor->updateMapEditor();
-        m_pMapEditor->setup();
+        m_pMapEditor->projectOpened();
         emit projectLoadDone();
         return true;
     }

@@ -1,223 +1,113 @@
 #include "MapTree.h"
 #include "moc_MapTree.h"
-#include <QtWidgets/QMenu>
-#include <QtGui/QtEvents>
-#include "ContextMenu.h"
-#include "MapSettings.h"
-#include "Config.h"
-#include <QtWidgets/QMessageBox>
-
-using namespace DATABASE::MAP_STRUCTURE;
-using namespace DATABASE;
-
-/*#####
-# MapTreeItem
-#####*/
-MapTreeItem::MapTreeItem(const MapPrototypePtr &map) : m_pMap(map), PrototypeTreeWidgetItem(QStringList())
-{
-    updateMapText();
-}
-
-void MapTreeItem::updateMapText()
-{
-    if (!m_pMap)
-        return;
-
-    setText(0, QString::number(m_pMap->getID()));
-    setText(1, m_pMap->getName());
-}
+#include "MapEditorDialogMapSettings.h"
 
 /*#####
 # MapTree
 #####*/
-MapTreeWidget::MapTreeWidget(QWidget *pParent) : QTreeWidget(pParent)
+MapTree::MapTree(QWidget *pParent) : QTreeWidget(pParent), m_pMapDatabase(nullptr)
 {
-    viewport()->installEventFilter(this);
-    setIndentation(10);
+    setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(this, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(onContextMenuRequested(const QPoint&)));
 }
 
-void MapTreeWidget::_openMapSettingsDialog()
+void MapTree::setDatabase(DATABASE::MAP_STRUCTURE::MapDatabase *pMapDatabase)
 {
-    if (MapTreeItem *pItem = dynamic_cast<MapTreeItem*>(currentItem()))
-    {
-        MapSettings dialog(pItem->getMap(), this);
-        if (dialog.exec())
-        {
-            emit mapUpdated(pItem->getMap());
-            pItem->updateMapText();
-            // add map to changer
-            if (m_pSharedData && m_pSharedData->getMapDatabase())
-                m_pSharedData->getMapDatabase()->setItem(pItem->getMap()->getID(), pItem->getMap());
-        }
-    }
+    m_pMapDatabase = pMapDatabase;
+    _reload();
 }
 
-void MapTreeWidget::_newMap()
-{
-    if (!m_pSharedData)
-        return;
-
-    if (MapDatabaseChangerPtr pMapDB = m_pSharedData->getMapDatabase())
-    {
-        MapPrototypePtr newMap = pMapDB->getNewMap();
-        MapSettings dialog(newMap, this);
-        if (dialog.exec())
-        {
-            pMapDB->setItem(newMap->getID(), newMap);
-            addTopLevelItem(new MapTreeItem(newMap));
-        }
-    }
-}
-
-void MapTreeWidget::_deleteMap()
-{
-    if (MapTreeItem *pItem = dynamic_cast<MapTreeItem*>(currentItem()))
-    {
-        if (QMessageBox::Ok == QMessageBox::question(0, "delete " + pItem->getMap()->getFileName(),
-            "Do you really want to delete " + pItem->getMap()->getFileName() + " and all of its children?", QMessageBox::Ok | QMessageBox::Cancel))
-        {
-            emit mapDeleted(pItem->getMap());
-            _removeItem(pItem);
-        }
-    } 
-}
-
-void MapTreeWidget::_openMap()
-{
-    if (MapTreeItem *pItem = dynamic_cast<MapTreeItem*>(currentItem()))
-    {
-        // add map to changer
-        if (m_pSharedData && m_pSharedData->getMapDatabase())
-            m_pSharedData->getMapDatabase()->setItem(pItem->getMap()->getID(), pItem->getMap());
-        emit mapOpened(pItem->getMap());
-    }
-}
-
-void MapTreeWidget::_removeItem(MapTreeItem *pItem)
-{
-    if (!pItem || !m_pSharedData)
-        return;
-
-    if (MapDatabaseChangerPtr pMapDB = m_pSharedData->getMapDatabase())
-    {
-        while (pItem->childCount())
-            _removeItem((MapTreeItem*)pItem->child(0));
-
-        if (pMapDB)
-            pMapDB->removeMap(pItem->getMap()->getID());
-
-        if (pItem->parent())
-            pItem->parent()->removeChild(pItem);
-        else
-            takeTopLevelItem(indexOfTopLevelItem(pItem));
-
-        delete pItem;
-    }
-}
-
-void MapTreeWidget::_openItemContextMenu(const QPoint &pos)
-{
-    CONTEXT_MENU::MapItemContextMenu *pMenu = new CONTEXT_MENU::MapItemContextMenu(this);
-    pMenu->popup(pos);
-}
-
-void MapTreeWidget::_openWidgetContextMenu(const QPoint &pos)
-{
-    CONTEXT_MENU::MapTreeContextMenu *pMenu = new CONTEXT_MENU::MapTreeContextMenu(this);
-    pMenu->popup(pos);
-}
-
-void MapTreeWidget::updateObject()
+void MapTree::_reload()
 {
     clear();
-    if (!m_pSharedData)
+    if (!m_pMapDatabase)
         return;
 
-    if (MapDatabaseChangerPtr pMapDB = m_pSharedData->getMapDatabase())
-    {
-        typedef std::map<uint32, MapTreeItem*> MapItemMap;
-        typedef std::vector<MapTreeItem*> MapItemVector;
-        MapItemMap mapItems;
-        MapItemVector notSortedMaps;
-        MapPrototypePtr pMap;
-        for (uint32 i = 1; i < pMapDB->getSize()+1; ++i)
-        {
-            if (!pMapDB->getItem(i, pMap) || !pMap)
-                continue;
-            MapTreeItem *newItem = new MapTreeItem(pMap);
-            mapItems.insert(std::make_pair(pMap->getID(), newItem));
-            if (pMap->getParentID() != 0)
-            {
-                MapItemMap::iterator mapItr = mapItems.find(pMap->getParentID());
-                if (mapItr != mapItems.end())
-                    mapItr->second->addChild(newItem);
-                else
-                    notSortedMaps.push_back(newItem);
-            }
-            else
-                insertTopLevelItem(topLevelItemCount(), newItem);
-        }
+    uint32 size = m_pMapDatabase->getSize();
+    std::list<const DATABASE::MAP_STRUCTURE::MapPrototype*> unsortedMaps;
+    std::vector<QTreeWidgetItem*> items(size, nullptr);
 
-        while (!notSortedMaps.empty())
+    for (uint32 i = 1; i <= size; ++i)
+    {
+        auto pMap = m_pMapDatabase->getOriginalPrototype(i);
+        if (pMap->getFileName().isEmpty())
+            continue;
+
+        // create new QTreeWidgetItem
+        QStringList strings;
+        strings.push_back(QString::number(pMap->getID()));
+        strings.push_back(pMap->getName());
+        auto pItem = new QTreeWidgetItem(strings);
+        items.at(pMap->getID()-1) = pItem;
+        if (!pMap->getParentID())
+            addTopLevelItem(pItem);
+        else if (auto pParent = items.at(pMap->getParentID()-1))
+            pParent->addChild(pItem);
+        else
+            unsortedMaps.push_back(pMap);
+    }
+
+    // insert unsorted items
+    const DATABASE::MAP_STRUCTURE::MapPrototype* pFirstUnsortedMap = nullptr;
+    while (!unsortedMaps.empty())
+    {
+        auto pMap = *unsortedMaps.begin();
+        unsortedMaps.pop_front();
+        if (auto pParent = items.at(pMap->getParentID()-1))
         {
-            bool erase = false;
-            for (MapItemVector::iterator itr = notSortedMaps.begin(); itr < notSortedMaps.end(); ++itr)
+            pParent->addChild(items.at(pMap->getID()-1));
+            pFirstUnsortedMap = nullptr;
+        }
+        else
+        {
+            unsortedMaps.push_back(pMap);
+            // insert maps as topLevelItems
+            if (pFirstUnsortedMap == pMap)
             {
-                if (erase && itr != notSortedMaps.begin())
-                {
-                    --itr;
-                    erase = false;
-                }
-                MapItemMap::iterator mapItr = mapItems.find((*itr)->getMap()->getParentID());
-                if (mapItr != mapItems.end())
-                {
-                    mapItr->second->addChild(*itr);
-                    notSortedMaps.erase(itr);
-                    erase = true;
-                    if (notSortedMaps.empty())
-                        break;
-                }
+                for (auto pInsertMap : unsortedMaps)
+                    addTopLevelItem(items.at(pInsertMap->getID()-1));
+                break;
             }
+            pFirstUnsortedMap = pMap;
         }
     }
 }
 
-bool MapTreeWidget::eventFilter(QObject *pObj, QEvent *pEvent)
+void MapTree::onContextMenuRequested(const QPoint &pos)
 {
-    if (!pObj || !pEvent)
-        return false;
-
-    // open map file
-    if (pEvent->type() == QEvent::MouseButtonDblClick && ((QMouseEvent*)pEvent)->button() == Qt::LeftButton)
+    // setup context menu
+    auto pMenu = new QMenu(this);
+    if (auto pItem = itemAt(pos))
     {
-        _openMap();
-        return true;
+        setCurrentItem(pItem);
+        connect(pMenu->addAction("open"), SIGNAL(triggered()), this, SLOT(onActionOpen()));
+        connect(pMenu->addAction("edit"), SIGNAL(triggered()), this, SLOT(onActionEdit()));
+        connect(pMenu->addAction("remove"), SIGNAL(triggered()), this, SLOT(onActionRemove()));
     }
-    // show context menu
-    else if (pEvent->type() == QEvent::MouseButtonRelease && ((QMouseEvent*)pEvent)->button() == Qt::RightButton)
-    {
-        if (currentItem() && currentItem() != headerItem())
-            _openItemContextMenu(mapToGlobal(((QMouseEvent*)pEvent)->pos()));
-        else
-            _openWidgetContextMenu(mapToGlobal(((QMouseEvent*)pEvent)->pos()));
-
-        return true;
-    }
-    else
-        return QTreeWidget::eventFilter(pObj, pEvent);
-
-    return false;
+    connect(pMenu->addAction("new"), SIGNAL(triggered()), this, SLOT(onActionNew()));
+    pMenu->popup(mapToGlobal(pos));
 }
 
-void MapTreeWidget::dropEvent(QDropEvent *pEvent)
+void MapTree::onActionEdit()
 {
-    // update parent ID
-    QTreeWidget::dropEvent(pEvent);
-    if (MapTreeItem *pItem = dynamic_cast<MapTreeItem*>(currentItem()))
+    if (auto pItem = currentItem())
     {
-        if (!pItem->parent())
-            pItem->getMap()->setParentID(0);
-        else
-            pItem->getMap()->setParentID(((MapTreeItem*)pItem->parent())->getMap()->getID());
+        if (auto pPrototype = m_pMapDatabase->getOriginalPrototype(pItem->data(0, 0).toUInt()))
+        {
+            MapEditorDialogMapSettings dialog(pPrototype, this);
+            dialog.exec();
+        }
     }
+}
+
+void MapTree::onActionNew()
+{
+}
+
+void MapTree::onActionOpen()
+{
+}
+
+void MapTree::onActionRemove()
+{
 }

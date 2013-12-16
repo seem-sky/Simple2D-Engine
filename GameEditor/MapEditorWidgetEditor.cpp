@@ -23,3 +23,8 @@ void MapEditorWidgetEditor::setup()
     _setupTileModules();
 }
 
+void MapEditorWidgetEditor::projectOpened()
+{
+    setup();
+    m_pMapTree->setDatabase(m_DatabaseMgr.getMapDatabase());
+}

@@ -14,6 +14,7 @@ public:
     MapEditorWidgetEditor(DATABASE::DatabaseMgr &databaseMgr, QWidget *pParent = nullptr);
 
     void setup();
+    void projectOpened();
 
 private:
     DATABASE::DatabaseMgr &m_DatabaseMgr;

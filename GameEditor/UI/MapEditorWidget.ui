@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>665</width>
-    <height>470</height>
+    <width>703</width>
+    <height>493</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -54,20 +54,54 @@
      </widget>
     </widget>
    </item>
-   <item row="0" column="1" rowspan="2">
-    <widget class="QGraphicsView" name="graphicsView">
-     <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
+   <item row="1" column="0">
+    <widget class="MapTree" name="m_pMapTree">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
      </property>
+     <property name="maximumSize">
+      <size>
+       <width>200</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="indentation">
+      <number>5</number>
+     </property>
+     <property name="sortingEnabled">
+      <bool>true</bool>
+     </property>
+     <attribute name="headerDefaultSectionSize">
+      <number>50</number>
+     </attribute>
+     <attribute name="headerHighlightSections">
+      <bool>false</bool>
+     </attribute>
+     <attribute name="headerShowSortIndicator" stdset="0">
+      <bool>true</bool>
+     </attribute>
+     <column>
+      <property name="text">
+       <string>ID</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>name</string>
+      </property>
+     </column>
     </widget>
    </item>
-   <item row="1" column="0">
-    <widget class="QWidget" name="widget" native="true">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>150</height>
-      </size>
+   <item row="0" column="1" rowspan="2">
+    <widget class="QWidget" name="widget_2" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
      </property>
     </widget>
    </item>
@@ -91,6 +125,11 @@
    <extends>QWidget</extends>
    <header>mapeditormoduletilesets.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>MapTree</class>
+   <extends>QTreeWidget</extends>
+   <header>maptree.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

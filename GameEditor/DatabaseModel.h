@@ -52,15 +52,20 @@ public:
 
     QVariant data(const QModelIndex &index, int role) const
     {
-        if(m_pDatabase && index.isValid() && (role == Qt::DisplayRole))
+        if(m_pDatabase && index.isValid())
         {
-            if (auto pProto = m_pDatabase->getPrototype(index.row()+1))
+            switch (role)
             {
-                switch(index.column())
+            case Qt::DisplayRole:
+                if (auto pProto = m_pDatabase->getPrototype(index.row()+1))
                 {
-                case COLUMN_ID: return pProto->getID();
-                case COLUMN_NAME: return pProto->getName();
+                    switch(index.column())
+                    {
+                    case COLUMN_ID: return pProto->getID();
+                    case COLUMN_NAME: return pProto->getName();
+                    }
                 }
+                break;
             }
         }
         return QVariant();
