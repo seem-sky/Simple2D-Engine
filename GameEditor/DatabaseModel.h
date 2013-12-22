@@ -20,7 +20,7 @@ public:
     virtual uint32 getSize() const = 0;
     virtual uint32 getMaximumSize() const = 0;
 
-    virtual DATABASE::IDatabase *takeDatabase() = 0;
+    virtual DATABASE::IDatabase* takeDatabase() = 0;
     virtual DATABASE::IDatabase* getDatabase() = 0;
 };
 

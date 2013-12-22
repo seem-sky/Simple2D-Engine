@@ -277,10 +277,6 @@
     <compile_QT_Files Include="UI\MapEditorDialogMapSettings.ui" />
     <compile_QT_Files Include="UI\MapEditorModuleContent.ui" />
     <compile_QT_Files Include="UI\MapEditorWidget.ui" />
-    <compile_QT_Files Include="UI\MapSettings.ui" />
-    <compile_QT_Files Include="UI\MapObjectDialog.ui" />
-    <compile_QT_Files Include="UI\MapEditor.ui" />
-    <compile_QT_Files Include="UI\MapBrushWidget.ui" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.vcxproj">

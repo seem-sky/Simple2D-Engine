@@ -9,6 +9,12 @@ class MapEditorModuleContent : public QWidget, Ui_MapEditorModuleContent
     Q_OBJECT
 public:
     MapEditorModuleContent(QWidget *pWidget = nullptr);
+
+private slots:
+    void _onCurrentChanged(int index);
+    void _onLayerChanged(int value);
+    void _onLayerTypeChanged();
+    void _onZoomChanged(int value);
 };
 
 #endif

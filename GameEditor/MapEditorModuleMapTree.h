@@ -5,11 +5,23 @@
 #include "MapDatabase.h"
 #include <QtWidgets/QMenu>
 
+class MapTreeItem : public QTreeWidgetItem
+{
+public:
+    MapTreeItem(const DATABASE::MAP_STRUCTURE::MapPrototype &map);
+    bool operator <(const QTreeWidgetItem &other) const;
+
+    void setup(const DATABASE::MAP_STRUCTURE::MapPrototype &map);
+};
+
 class MapEditorModuleMapTree : public QTreeWidget
 {
     Q_OBJECT
 private:
     void _reload();
+
+protected:
+    void dropEvent(QDropEvent *pEvent);
 
 public:
     MapEditorModuleMapTree(QWidget *pParent = nullptr);

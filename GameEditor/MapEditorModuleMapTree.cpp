@@ -4,7 +4,31 @@
 #include <QtWidgets/QMessageBox>
 #include "DelayedDeleteObject.h"
 #include <QtCore/QFile>
+#include <QtGui/QDropEvent>
 #include "Config.h"
+
+/*#####
+# MapTreeItem
+#####*/
+MapTreeItem::MapTreeItem(const DATABASE::MAP_STRUCTURE::MapPrototype &map) : QTreeWidgetItem()
+{
+    setup(map);
+}
+
+void MapTreeItem::setup(const DATABASE::MAP_STRUCTURE::MapPrototype &map)
+{
+    setData(0, 0, map.getID());
+    setData(1, 0, map.getName());
+}
+
+bool MapTreeItem::operator <(const QTreeWidgetItem &other) const
+{
+    switch (treeWidget()->sortColumn())
+    {
+    case 0: return text(0).toUInt() < other.text(0).toUInt();
+    default: return QTreeWidgetItem::operator <(other);
+    }
+}
 
 /*#####
 # MapTree
@@ -38,10 +62,7 @@ void MapEditorModuleMapTree::_reload()
             continue;
 
         // create new QTreeWidgetItem
-        QStringList strings;
-        strings.push_back(QString::number(pMap->getID()));
-        strings.push_back(pMap->getName());
-        auto pItem = new QTreeWidgetItem(strings);
+        auto pItem = new MapTreeItem(*pMap);
         items.at(pMap->getID()-1) = pItem;
         if (!pMap->getParentID())
             addTopLevelItem(pItem);
@@ -96,12 +117,13 @@ void MapEditorModuleMapTree::onContextMenuRequested(const QPoint &pos)
 
 void MapEditorModuleMapTree::onActionEdit()
 {
-    if (auto pItem = currentItem())
+    if (auto pItem = dynamic_cast<MapTreeItem*>(currentItem()))
     {
         if (auto pPrototype = m_pMapDatabase->getOriginalPrototype(pItem->data(0, 0).toUInt()))
         {
             MapEditorDialogMapSettings dialog(pPrototype, this);
-            dialog.exec();
+            if (dialog.exec())
+                pItem->setup(*pPrototype);
         }
     }
 }
@@ -114,10 +136,7 @@ void MapEditorModuleMapTree::onActionNew()
         MapEditorDialogMapSettings dialog(pPrototype.get(), this);
         if (dialog.exec())
         {
-            QStringList strings;
-            strings.push_back(QString::number(pPrototype->getID()));
-            strings.push_back(pPrototype->getName());
-            auto pItem = new QTreeWidgetItem(strings);
+            auto pItem = new MapTreeItem(*pPrototype);
             if (auto pParent = currentItem())
                 pParent->addChild(pItem);
             else
@@ -178,4 +197,26 @@ void MapEditorModuleMapTree::onProjectSave()
         }
     }
     m_DeletedMaps.clear();
+}
+
+void MapEditorModuleMapTree::dropEvent(QDropEvent *pEvent)
+{
+    auto items = selectedItems();
+    MapTreeItem *pItem = nullptr;
+    if (!items.isEmpty())
+        pItem = dynamic_cast<MapTreeItem*>(items.first());
+    
+    QTreeWidget::dropEvent(pEvent);
+
+    // update parent ID
+    if (pItem)
+    {
+        if (auto pMap = m_pMapDatabase->getOriginalPrototype(pItem->data(0, 0).toUInt()))
+        {
+            uint32 parentID = 0;
+            if (pItem->parent())
+                parentID = pItem->parent()->data(0, 0).toUInt();
+            pMap->setParentID(parentID);
+        }
+    }
 }

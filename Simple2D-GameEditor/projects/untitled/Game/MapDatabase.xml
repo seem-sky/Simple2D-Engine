@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <DB>
     <p sizeX="500" sizeY="500" backLayer="1" foreLayer="0" parentID="0" script="" file="map1.map" ID="1" name="500er maker vergleich"/>
-    <p sizeX="20" sizeY="20" backLayer="1" foreLayer="0" parentID="5" script="" file="map2.map" ID="2" name=""/>
+    <p sizeX="20" sizeY="20" backLayer="1" foreLayer="0" parentID="0" script="" file="map2.map" ID="2" name=""/>
     <p sizeX="30" sizeY="30" backLayer="3" foreLayer="3" parentID="0" script="" file="map3.map" ID="3" name="atelier-testmap"/>
     <p sizeX="18" sizeY="18" backLayer="3" foreLayer="0" parentID="0" script="" file="map4.map" ID="4" name="test2"/>
     <p sizeX="1000" sizeY="1000" backLayer="10" foreLayer="10" parentID="2" script="" file="map20.map" ID="20" name="blubb"/>

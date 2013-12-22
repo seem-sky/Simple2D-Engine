@@ -7,30 +7,6 @@
     <Filter Include="Database">
       <UniqueIdentifier>{1ab761ae-7a2a-4e47-9937-134847639fd2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MapEditor">
-      <UniqueIdentifier>{14c792e8-7617-4d06-a7ed-eb7c98e6bf29}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MapEditor\MapView">
-      <UniqueIdentifier>{41fb85e0-5308-4695-bc6b-57945bd2bbfd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MapEditor\MapTree">
-      <UniqueIdentifier>{392ffa6e-1328-425e-9686-1bedd4d8c258}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MapEditor\MappingMode">
-      <UniqueIdentifier>{65ffd5f0-9325-4211-9a8a-c22b592bee4f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MapEditor\MappingMode\TileView">
-      <UniqueIdentifier>{f23e5f92-0398-410c-94a0-05ac6ad69f57}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MapEditor\MapObjectDialog">
-      <UniqueIdentifier>{d31af8ee-261e-464f-b0ea-8df1eb8ce568}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MapEditor\MapEditor">
-      <UniqueIdentifier>{29ce8c74-d71e-4c5e-9fe6-be5be8d67443}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MapEditor\MapBrush">
-      <UniqueIdentifier>{9750222b-3d1a-4f7f-965b-74b968403c95}</UniqueIdentifier>
-    </Filter>
     <Filter Include="EditorCore">
       <UniqueIdentifier>{b46099a1-d6ec-435a-8490-084e174b952f}</UniqueIdentifier>
     </Filter>
@@ -100,29 +76,29 @@
     <Filter Include="Database\Modules\Localisation">
       <UniqueIdentifier>{ac4c61ea-7028-49bc-83f6-64fc7b497b1b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="New Map Editor">
+    <Filter Include="Map Editor">
       <UniqueIdentifier>{11e42f6e-fc88-4336-aabe-5b95f90ce14e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="New Map Editor\Modules">
+    <Filter Include="Map Editor\Modules">
       <UniqueIdentifier>{79f2339d-1af3-4676-bcc8-735828510f43}</UniqueIdentifier>
     </Filter>
-    <Filter Include="New Map Editor\Modules\TileTabs">
+    <Filter Include="Map Editor\Modules\TileTabs">
       <UniqueIdentifier>{bad4bb08-2a1d-4fee-ab55-9f24e987469a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="New Map Editor\Modules\TileTabs\Tiles">
+    <Filter Include="Map Editor\Modules\TileTabs\Tiles">
       <UniqueIdentifier>{03aa08c8-2b2f-4fbb-bccb-b1acd26492bf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="New Map Editor\Modules\MapTree">
+    <Filter Include="Map Editor\Modules\MapTree">
       <UniqueIdentifier>{30ee0638-634d-445b-951b-7f2f330bd35e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="New Map Editor\Dialogs">
+    <Filter Include="Map Editor\Modules\Content">
+      <UniqueIdentifier>{ce08afaa-fce3-4c3a-a217-3413bbc55b18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map Editor\Dialogs">
       <UniqueIdentifier>{8b227f75-d351-4d7c-ba05-8753a9a480dd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="New Map Editor\Dialogs\MapEditorDialogMapSettings">
+    <Filter Include="Map Editor\Dialogs\MapEditorDialogMapSettings">
       <UniqueIdentifier>{5f85fa1e-3c62-42e0-92b4-8f2f9bdaa427}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="New Map Editor\Modules\Content">
-      <UniqueIdentifier>{ce08afaa-fce3-4c3a-a217-3413bbc55b18}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -199,45 +175,33 @@
       <Filter>Database\Modules\Localisation</Filter>
     </ClCompile>
     <ClCompile Include="MapEditorModuleTiles.cpp">
-      <Filter>New Map Editor\Modules\TileTabs\Tiles</Filter>
+      <Filter>Map Editor\Modules\TileTabs\Tiles</Filter>
     </ClCompile>
     <ClCompile Include="MapEditorWidgetEditor.cpp">
-      <Filter>New Map Editor</Filter>
+      <Filter>Map Editor</Filter>
     </ClCompile>
     <ClCompile Include="TexturePrototypeFrame.cpp">
       <Filter>EditorCore</Filter>
     </ClCompile>
     <ClCompile Include="AbstractPrototypeTable.cpp">
-      <Filter>New Map Editor\Modules\TileTabs</Filter>
+      <Filter>Map Editor\Modules\TileTabs</Filter>
     </ClCompile>
     <ClCompile Include="MapEditorModuleTileSets.cpp">
-      <Filter>New Map Editor\Modules\TileTabs</Filter>
+      <Filter>Map Editor\Modules\TileTabs</Filter>
     </ClCompile>
     <ClCompile Include="MapEditorDialogMapSettings.cpp">
-      <Filter>New Map Editor\Dialogs\MapEditorDialogMapSettings</Filter>
+      <Filter>Map Editor\Dialogs\MapEditorDialogMapSettings</Filter>
     </ClCompile>
     <ClCompile Include="MapEditorModuleContent.cpp">
-      <Filter>New Map Editor\Modules\Content</Filter>
+      <Filter>Map Editor\Modules\Content</Filter>
     </ClCompile>
     <ClCompile Include="MapEditorModuleMapTree.cpp">
-      <Filter>New Map Editor\Modules\MapTree</Filter>
+      <Filter>Map Editor\Modules\MapTree</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <compile_QT_Files Include="UI\MainWindow.ui">
       <Filter>MainWindow</Filter>
-    </compile_QT_Files>
-    <compile_QT_Files Include="UI\MapSettings.ui">
-      <Filter>MapEditor\MapTree</Filter>
-    </compile_QT_Files>
-    <compile_QT_Files Include="UI\MapObjectDialog.ui">
-      <Filter>MapEditor\MapObjectDialog</Filter>
-    </compile_QT_Files>
-    <compile_QT_Files Include="UI\MapEditor.ui">
-      <Filter>MapEditor\MapEditor</Filter>
-    </compile_QT_Files>
-    <compile_QT_Files Include="UI\MapBrushWidget.ui">
-      <Filter>MapEditor\MapBrush</Filter>
     </compile_QT_Files>
     <compile_QT_Files Include="UI\DatabaseModuleTileSet.ui">
       <Filter>Database\Widgets\TileSet</Filter>
@@ -267,13 +231,13 @@
       <Filter>Database\Modules\Localisation</Filter>
     </compile_QT_Files>
     <compile_QT_Files Include="UI\MapEditorWidget.ui">
-      <Filter>New Map Editor</Filter>
+      <Filter>Map Editor</Filter>
     </compile_QT_Files>
     <compile_QT_Files Include="UI\MapEditorDialogMapSettings.ui">
-      <Filter>New Map Editor\Dialogs\MapEditorDialogMapSettings</Filter>
+      <Filter>Map Editor\Dialogs\MapEditorDialogMapSettings</Filter>
     </compile_QT_Files>
     <compile_QT_Files Include="UI\MapEditorModuleContent.ui">
-      <Filter>New Map Editor\Modules\Content</Filter>
+      <Filter>Map Editor\Modules\Content</Filter>
     </compile_QT_Files>
   </ItemGroup>
   <ItemGroup>
@@ -322,19 +286,19 @@
       <Filter>Database\Modules\Animation\AnimationViewer</Filter>
     </moc_header>
     <moc_header Include="MapEditorWidgetEditor.h">
-      <Filter>New Map Editor</Filter>
+      <Filter>Map Editor</Filter>
     </moc_header>
     <moc_header Include="AbstractPrototypeTable.h">
-      <Filter>New Map Editor\Modules\TileTabs</Filter>
+      <Filter>Map Editor\Modules\TileTabs</Filter>
     </moc_header>
     <moc_header Include="MapEditorDialogMapSettings.h">
-      <Filter>New Map Editor\Dialogs\MapEditorDialogMapSettings</Filter>
+      <Filter>Map Editor\Dialogs\MapEditorDialogMapSettings</Filter>
     </moc_header>
     <moc_header Include="MapEditorModuleContent.h">
-      <Filter>New Map Editor\Modules\Content</Filter>
+      <Filter>Map Editor\Modules\Content</Filter>
     </moc_header>
     <moc_header Include="MapEditorModuleMapTree.h">
-      <Filter>New Map Editor\Modules\MapTree</Filter>
+      <Filter>Map Editor\Modules\MapTree</Filter>
     </moc_header>
   </ItemGroup>
   <ItemGroup>
@@ -373,10 +337,10 @@
       <Filter>EditorCore</Filter>
     </ClInclude>
     <ClInclude Include="MapEditorModuleTiles.h">
-      <Filter>New Map Editor\Modules\TileTabs\Tiles</Filter>
+      <Filter>Map Editor\Modules\TileTabs\Tiles</Filter>
     </ClInclude>
     <ClInclude Include="MapEditorModuleTileSets.h">
-      <Filter>New Map Editor\Modules\TileTabs</Filter>
+      <Filter>Map Editor\Modules\TileTabs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
