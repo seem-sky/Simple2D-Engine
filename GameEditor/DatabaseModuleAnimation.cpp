@@ -8,7 +8,7 @@
 /*#####
 # AnimationActions
 #####*/
-AnimationAction::AnimationAction(GraphicsSpriteItem *pItem, AnimationViewerScene *pScene) : m_pScene(pScene), m_pItem(pItem)
+AnimationAction::AnimationAction(AnimationSpriteItem *pItem, AnimationViewerScene *pScene) : m_pScene(pScene), m_pItem(pItem)
 {}
 
 void AnimationActionInsert::revert()
@@ -17,7 +17,7 @@ void AnimationActionInsert::revert()
         return;
     // remove and delete later
     m_pScene->removeItem(m_pItem);
-    new DelayedDeleteObject<GraphicsSpriteItem>(m_pItem);
+    new DelayedDeleteObject<GraphicsTextureItem>(m_pItem);
 }
 
 void AnimationActionRemove::revert()
@@ -32,10 +32,10 @@ void AnimationActionRemove::revert()
 AnimationActionRemove::~AnimationActionRemove()
 {
     if (m_pItem)
-        new DelayedDeleteObject<GraphicsSpriteItem>(m_pItem);
+        new DelayedDeleteObject<AnimationSpriteItem>(m_pItem);
 }
 
-AnimationActionModify::AnimationActionModify(QGraphicsItem::GraphicsItemChange change, const QVariant &value, GraphicsSpriteItem *pItem, AnimationViewerScene *pScene)
+AnimationActionModify::AnimationActionModify(QGraphicsItem::GraphicsItemChange change, const QVariant &value, AnimationSpriteItem *pItem, AnimationViewerScene *pScene)
     : AnimationAction(pItem, pScene), m_Value(value), m_ItemChange(change)
 {
 }
@@ -76,8 +76,8 @@ DatabaseModuleAnimation::DatabaseModuleAnimation(QWidget *pParent) : QWidget(pPa
     connect(m_pCurrentFrame, SIGNAL(valueChanged(int)), this, SLOT(_onFrameChanged(int)));
     connect(m_pAniPlayerButton, SIGNAL(clicked()), this, SLOT(_onPlayStopButtonClicked()));
     connect(m_pAniViewer->scene(), SIGNAL(selectionChanged()), this, SLOT(_onSelectionChanged()));
-    connect(m_pAniViewer->scene(), SIGNAL(itemChanged(GraphicsSpriteItem*, QGraphicsItem::GraphicsItemChange, const QVariant&)),
-        this, SLOT(_onItemChanged(GraphicsSpriteItem*, QGraphicsItem::GraphicsItemChange, const QVariant&)));
+    connect(m_pAniViewer->scene(), SIGNAL(itemChanged(AnimationSpriteItem*, QGraphicsItem::GraphicsItemChange, const QVariant&)),
+        this, SLOT(_onItemChanged(AnimationSpriteItem*, QGraphicsItem::GraphicsItemChange, const QVariant&)));
     connect(m_pGridCheckbox, SIGNAL(clicked(bool)), this, SLOT(_onGridCheckboxClicked(bool)));
 
     connect(m_pSpritePosX, SIGNAL(valueChanged(int)), this, SLOT(_onXChanged(int)));
@@ -168,7 +168,7 @@ void DatabaseModuleAnimation::_onPlayStopButtonClicked()
     }
 }
 
-void DatabaseModuleAnimation::_setupSpriteFrame(GraphicsSpriteItem *pItem)
+void DatabaseModuleAnimation::_setupSpriteFrame(AnimationSpriteItem *pItem)
 {
     if (!pItem)
         return;
@@ -178,7 +178,7 @@ void DatabaseModuleAnimation::_setupSpriteFrame(GraphicsSpriteItem *pItem)
     m_pSpriteScale->setValue(pItem->scale());
     m_pSpriteRotation->setValue(pItem->rotation());
     m_pSpriteOpacity->setValue(pItem->opacity());
-    m_pSpriteSpriteID->setValue(pItem->getSpriteID());
+    m_pSpriteSpriteID->setValue(pItem->getID());
 }
 
 void DatabaseModuleAnimation::_saveCurrentFrame()
@@ -192,7 +192,7 @@ void DatabaseModuleAnimation::_saveCurrentFrame()
     auto itemList = m_pAniViewer->scene()->items(Qt::AscendingOrder);
     for (auto pItem : itemList)
     {
-        if (auto pSpriteItem = dynamic_cast<GraphicsSpriteItem*>(pItem))
+        if (auto pSpriteItem = dynamic_cast<AnimationSpriteItem*>(pItem))
         {
             auto sprite = pSpriteItem->toSprite();
             frame.addSprite(sprite);
@@ -209,7 +209,7 @@ void DatabaseModuleAnimation::_onSelectionChanged()
     m_pSpriteFrame->setEnabled(!items.empty());
     if (items.empty())
         return;
-    _setupSpriteFrame(dynamic_cast<GraphicsSpriteItem*>(items.first()));
+    _setupSpriteFrame(dynamic_cast<AnimationSpriteItem*>(items.first()));
 }
 
 void DatabaseModuleAnimation::_onXChanged(int value)
@@ -248,7 +248,7 @@ void DatabaseModuleAnimation::_onOpacityChanged(double value)
         pItem->setOpacity(value);
 }
 
-void DatabaseModuleAnimation::_onItemChanged(GraphicsSpriteItem *pItem, QGraphicsItem::GraphicsItemChange change, const QVariant &value)
+void DatabaseModuleAnimation::_onItemChanged(AnimationSpriteItem *pItem, QGraphicsItem::GraphicsItemChange change, const QVariant &value)
 {
     if (pItem == m_pAniViewer->getSelectedItem())
         _setupSpriteFrame(pItem);

@@ -39,10 +39,10 @@ public:
     //inline MapEditorWidget* getMapEditorWidget() const { return m_pMapEditor; }
 
     // ToDo:
-    inline DATABASE::DatabaseMgr& getDatabaseMgr() { return m_project.getDatabaseMgr(); }
+    inline DATABASE::DatabaseMgr& getDatabaseMgr() { return m_Project.getDatabaseMgr(); }
 
 private:
-    Project m_project;
+    Project m_Project;
     MapEditorWidgetEditor *m_pMapEditor;
 };
 #endif

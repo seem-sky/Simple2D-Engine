@@ -1,11 +1,9 @@
 #include "TileCache.h"
-#ifdef GAME_EDITOR
 #include "Config.h"
-#endif
 
 using namespace DATABASE;
 
-TileCache::TileCache(const DatabaseMgr &DBMgr) : m_DBMgr(DBMgr)
+TileCache::TileCache() : m_pDBMgr(nullptr)
 {}
 
 const QPixmap* TileCache::getItem(uint32 uiID) const
@@ -19,20 +17,17 @@ const QPixmap* TileCache::getItem(uint32 uiID) const
 
 QPixmap* TileCache::_createPixmap(uint32 uiID)
 {
-    if (!m_DBMgr.getTileDatabase())
-        return false;
+    if (!m_pDBMgr || !m_pDBMgr->getTileDatabase())
+        return nullptr;
 
-    if (auto pTile = m_DBMgr.getTileDatabase()->getOriginalPrototype(uiID))
+    if (auto pTile = m_pDBMgr->getTileDatabase()->getOriginalPrototype(uiID))
     {
-        QPixmap *pNewPixmap(nullptr);
-#ifdef GAME_EDITOR
-        if (createPixmapFromTexturePrototype(Config::get()->getProjectDirectory(), pTile, pNewPixmap))
-#else
-        if (createPixmapFromTexturePrototype("projects/untitled/", pTile, *pNewPixmap))
-#endif
+        std::unique_ptr<QPixmap> pixmapPtr(new QPixmap);
+        if (createPixmap(Config::get()->getProjectDirectory(), pTile->getPathName(), pTile->getTransparencyColor(), *pixmapPtr))
         {
-            setItem(uiID, pNewPixmap);
-            return pNewPixmap;
+            auto pPixmap = pixmapPtr.release();
+            setItem(uiID, pPixmap);
+            return pPixmap;
         }
     }
     return nullptr;

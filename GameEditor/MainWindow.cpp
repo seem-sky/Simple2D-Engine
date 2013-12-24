@@ -10,7 +10,7 @@
 
 using namespace DATABASE;
 
-MainWindow::MainWindow(QMainWindow *pParent) : QMainWindow(pParent), Ui_MainWindow(), m_pMapEditor(new MapEditorWidgetEditor(m_project.getDatabaseMgr(), this))
+MainWindow::MainWindow(QMainWindow *pParent) : QMainWindow(pParent), Ui_MainWindow(), m_pMapEditor(new MapEditorWidgetEditor(m_Project.getDatabaseMgr(), this))
 {
     Logfile::get();
     setupUi(this);
@@ -31,6 +31,10 @@ MainWindow::MainWindow(QMainWindow *pParent) : QMainWindow(pParent), Ui_MainWind
     actionSave->setShortcut(QKeySequence(tr("Ctrl+S", "File|Save")));
     actionLoad->setShortcut(QKeySequence(tr("Ctrl+O", "File|Open")));
     actionNew->setShortcut(QKeySequence(tr("Ctrl+N", "File|New")));
+
+    // setup caches
+    GTileCache::get()->setDBMgr(&m_Project.getDatabaseMgr());
+    GAutoTileCache::get()->setDBMgr(&m_Project.getDatabaseMgr());
 
     // load old config data and open last project
     Config::get()->loadConfig();
@@ -61,7 +65,7 @@ void MainWindow::_mapScreenshot()
 
 void MainWindow::_openDatabase()
 {
-    DatabaseWindow pDB(m_project.getDatabaseMgr(), this);
+    DatabaseWindow pDB(m_Project.getDatabaseMgr(), this);
     pDB.exec();
     m_pMapEditor->setup();
     //m_pMapEditor->updateMapEditor();
@@ -70,7 +74,7 @@ void MainWindow::_openDatabase()
 void MainWindow::_saveProject()
 {
     emit saveProject();
-    m_project.save();
+    m_Project.save();
 }
 
 void MainWindow::_newProject()
@@ -79,7 +83,7 @@ void MainWindow::_newProject()
     QDir fileDir(dir);
     if (!fileDir.exists())
     {
-        if (m_project.createNew(dir))
+        if (m_Project.createNew(dir))
         {
             BASIC_LOG("Successfully create project at " + dir);
             _loadProject(dir);
@@ -106,7 +110,7 @@ bool MainWindow::_loadProject(const QString &dir)
     QTime time;
     time.start();
     BASIC_LOG("Begin project load: " + dir);
-    if (m_project.load(dir))
+    if (m_Project.load(dir))
     {
         _setDBs();
         Config::get()->setProjectDirectory(dir);
@@ -124,11 +128,11 @@ bool MainWindow::_loadProject(const QString &dir)
 
 void MainWindow::_closeProject()
 {
-    if (m_project.isOpen())
+    if (m_Project.isOpen())
     {
-        BASIC_LOG("Close project " + m_project.getPath());
+        BASIC_LOG("Close project " + m_Project.getPath());
         //m_pMapEditor->clearWidgets();
-        m_project.close();
+        m_Project.close();
         Config::get()->clear();
     }
 }

@@ -27,7 +27,7 @@ static bool createPixmapFromTexturePrototype(const QString &path, const DATABASE
     if (pTexture)
     {
         // use pixmap cache
-        QString pixmapKey = pTexture->getPathName() + QString::fromStdString(pTexture->getTransparencyColor().getColorString());
+        QString pixmapKey = pTexture->getTextureString();
         if (QPixmapCache::find(pixmapKey, result))
             return true;
         else if (createPixmap(path, pTexture->getPathName(), pTexture->getTransparencyColor(), result))

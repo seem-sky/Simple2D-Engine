@@ -123,7 +123,10 @@ void MapEditorModuleMapTree::onActionEdit()
         {
             MapEditorDialogMapSettings dialog(pPrototype, this);
             if (dialog.exec())
+            {
                 pItem->setup(*pPrototype);
+                emit editMap(pPrototype->getID());
+            }
         }
     }
 }
@@ -148,6 +151,8 @@ void MapEditorModuleMapTree::onActionNew()
 
 void MapEditorModuleMapTree::onActionOpen()
 {
+    if (auto pItem = dynamic_cast<MapTreeItem*>(currentItem()))
+        emit openMap(pItem->data(0, 0).toUInt());
 }
 
 void MapEditorModuleMapTree::onActionDelete()
@@ -162,6 +167,7 @@ void MapEditorModuleMapTree::onActionDelete()
                 "name: " + pPrototype->getName() + "?",
                 QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes))
             {
+                emit closeMap(pPrototype->getID());
                 pPrototype->setFileName("");
 
                 // add children to parent item

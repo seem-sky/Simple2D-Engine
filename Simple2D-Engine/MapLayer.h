@@ -38,17 +38,18 @@ namespace MAP
     class MapLayer
     {
     public:
-        MapLayer();
+        void clear();
 
-        void resizeMap(UInt32Point size, uint8 uiForegroundLayerSize, uint8 uiBackgroundLayerSize);
-        void setSize(UInt32Point size, uint8 uiForegroundLayerSize, uint8 uiBackgroundLayerSize);
+        void resize(const UInt32Point &size, uint8 uiForegroundLayerSize, uint8 uiBackgroundLayerSize);
         inline UInt32Point getSize() const { return m_Size; }
         inline uint8 getLayerSize(Layer layer) const { return m_uiLayer.at(layer); };
 
-        MapTile& getMapTile(UInt32Point3D at, Layer layer);
-        const MapTile& getMapTile(UInt32Point3D at, Layer layer) const;
+        MapTile& getMapTile(const UInt32Point3D &at, Layer layer);
+        const MapTile& getMapTile(const UInt32Point3D &at, Layer layer) const;
 
-        inline bool isInMap(UInt32Point at) const { return at.x < getSize().x && at.y < getSize().y; }
+        void setMapTile(const UInt32Point3D &at, Layer layer, MapTile tile);
+
+        inline bool isInMap(const UInt32Point &at) const { return at.x < getSize().x && at.y < getSize().y; }
 
     private:
         TileDataMultiarray3D m_BackgroundTiles;

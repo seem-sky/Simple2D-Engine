@@ -26,7 +26,7 @@
    <property name="bottomMargin">
     <number>0</number>
    </property>
-   <item row="0" column="0">
+   <item row="0" column="0" alignment="Qt::AlignLeft">
     <widget class="QTabWidget" name="m_pSelection">
      <property name="maximumSize">
       <size>
@@ -54,7 +54,7 @@
      </widget>
     </widget>
    </item>
-   <item row="1" column="0" colspan="2">
+   <item row="1" column="0" colspan="2" alignment="Qt::AlignLeft">
     <widget class="MapEditorModuleMapTree" name="m_pMapTree">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
@@ -104,16 +104,6 @@
      </column>
     </widget>
    </item>
-   <item row="0" column="2" rowspan="2">
-    <widget class="MapEditorModuleContent" name="widget_2" native="true">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-    </widget>
-   </item>
   </layout>
  </widget>
  <customwidgets>
@@ -133,12 +123,6 @@
    <class>MapEditorModuleTileSets</class>
    <extends>QWidget</extends>
    <header>mapeditormoduletilesets.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>MapEditorModuleContent</class>
-   <extends>QWidget</extends>
-   <header>mapeditormodulecontent.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

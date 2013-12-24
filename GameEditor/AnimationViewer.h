@@ -2,34 +2,20 @@
 #define ANIMATION_VIEWER_H
 
 #include <QtWidgets/QGraphicsView>
-#include <QtWidgets/QGraphicsItem>
 #include <QtWidgets/QGraphicsScene>
 #include <QtCore/QTimer>
-#include "Database.h"
+#include "GraphicsTextureItem.h"
 
-class GraphicsSpriteItem : public QGraphicsItem
+class AnimationSpriteItem : public GraphicsTextureItem
 {
-private:
-    QPixmap _getPixmap() const;
-    void _hightlightSelection(QPainter *pPainter, const QStyleOptionGraphicsItem *pOption);
-
 protected:
     QVariant itemChange(GraphicsItemChange change, const QVariant &value);
     void keyPressEvent(QKeyEvent *pEvent);
 
 public:
-    GraphicsSpriteItem(const DATABASE::SpritePrototype *pSpritePrototype);
-
-    void paint(QPainter *pPainter, const QStyleOptionGraphicsItem *pOption, QWidget *pWidget = 0);
-
-    uint32 getSpriteID() const;
+    AnimationSpriteItem(const DATABASE::SpritePrototype *pPrototype);
 
     DATABASE::ANIMATION::Sprite toSprite() const;
-
-    QRectF boundingRect() const;
-
-private:
-    const DATABASE::SpritePrototype *m_pSpritePrototype;
 };
 
 class AnimationViewerScene : public QGraphicsScene
@@ -47,9 +33,9 @@ public:
     void showGrid(bool show);
 
 signals:
-    void itemChanged(GraphicsSpriteItem *pItem, QGraphicsItem::GraphicsItemChange change, const QVariant &value);
-    void itemAdded(GraphicsSpriteItem *pItem);
-    void itemRemoved(GraphicsSpriteItem *pItem);
+    void itemChanged(AnimationSpriteItem *pItem, QGraphicsItem::GraphicsItemChange change, const QVariant &value);
+    void itemAdded(AnimationSpriteItem *pItem);
+    void itemRemoved(AnimationSpriteItem *pItem);
 
 private:
     bool m_DrawGrid;
@@ -72,7 +58,7 @@ public:
 
     void clear();
 
-    void addGraphicsSpriteItem(GraphicsSpriteItem *pItem);
+    void addGraphicsSpriteItem(AnimationSpriteItem *pItem);
 
     void setSpriteDatabase(const DATABASE::SpriteDatabase *pSpriteDB);
     void setAnimation(const DATABASE::ANIMATION::FrameVector *pAnimation);
@@ -84,7 +70,7 @@ public:
     void stopAnimation();
     bool playAnimation() const;
 
-    GraphicsSpriteItem* getSelectedItem();
+    AnimationSpriteItem* getSelectedItem();
 
     enum Mode
     {

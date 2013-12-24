@@ -173,13 +173,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Config.cpp" />
     <ClCompile Include="VariableHolder.cpp" />
-    <ClCompile Include="IniParser.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Config.h" />
-    <ClInclude Include="IniParser.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Performance1.psess" />

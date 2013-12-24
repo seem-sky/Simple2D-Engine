@@ -21,5 +21,4 @@ private:
     QString m_projectPath;
     DATABASE::DatabaseMgr m_DBMgr;
 };
-typedef std::shared_ptr<Project> ProjectPtr;
 #endif

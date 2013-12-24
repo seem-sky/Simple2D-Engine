@@ -36,6 +36,11 @@ private slots:
     void onActionDelete();
     void onProjectSave();
 
+signals:
+    void openMap(uint32 mapID);
+    void closeMap(uint32 mapID);
+    void editMap(uint32 mapID);
+
 private:
     DATABASE::MAP_STRUCTURE::MapDatabase *m_pMapDatabase;
     UInt32List m_DeletedMaps;

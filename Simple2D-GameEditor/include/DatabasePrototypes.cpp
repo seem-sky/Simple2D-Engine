@@ -341,102 +341,96 @@ namespace DATABASE
         uint32 MapPrototype::checkAutoTiles(uint32 uiID, UInt32Point3D pos, UInt32PointSet &result, Layer layer, uint32 resultFlag)
         {
             uint32 uiBorderCheck = 0;
-            MapTile centerTile = getMapTile(pos, layer);
-            for (uint32 i = 0; i < 8; ++i)
-            {
-                DATABASE::AUTO_TILE::TILE_CHECK curTileCheck = DATABASE::AUTO_TILE::SAME_AROUND;
-                // set position check
-                UInt32Point3D checkPos = pos;
-                switch (i)
-                {
-                case 0: // top-left
-                    if (!checkPos.x || !checkPos.y)
-                        continue;
-                    --checkPos.x;
-                    --checkPos.y;
-                    curTileCheck = DATABASE::AUTO_TILE::OTHER_TOP_LEFT;
-                    break;
+            //MapTile centerTile = getMapTile(pos, layer);
+            //for (uint32 i = 0; i < 8; ++i)
+            //{
+            //    DATABASE::AUTO_TILE::TILE_CHECK curTileCheck = DATABASE::AUTO_TILE::SAME_AROUND;
+            //    // set position check
+            //    UInt32Point3D checkPos = pos;
+            //    switch (i)
+            //    {
+            //    case 0: // top-left
+            //        if (!checkPos.x || !checkPos.y)
+            //            continue;
+            //        --checkPos.x;
+            //        --checkPos.y;
+            //        curTileCheck = DATABASE::AUTO_TILE::OTHER_TOP_LEFT;
+            //        break;
 
-                case 1: // top
-                    if (!checkPos.y)
-                        continue;
-                    --checkPos.y;
-                    curTileCheck = DATABASE::AUTO_TILE::OTHER_TOP;
-                    break;
+            //    case 1: // top
+            //        if (!checkPos.y)
+            //            continue;
+            //        --checkPos.y;
+            //        curTileCheck = DATABASE::AUTO_TILE::OTHER_TOP;
+            //        break;
 
-                case 2: // top-right
-                    if (!checkPos.y || checkPos.x+1 >= getSize().x)
-                        continue;
-                    ++checkPos.x;
-                    --checkPos.y;
-                    curTileCheck = DATABASE::AUTO_TILE::OTHER_TOP_RIGHT;
-                    break;
+            //    case 2: // top-right
+            //        if (!checkPos.y || checkPos.x+1 >= getSize().x)
+            //            continue;
+            //        ++checkPos.x;
+            //        --checkPos.y;
+            //        curTileCheck = DATABASE::AUTO_TILE::OTHER_TOP_RIGHT;
+            //        break;
 
-                case 3: // left
-                    if (!checkPos.x)
-                        continue;
-                    --checkPos.x;
-                    curTileCheck = DATABASE::AUTO_TILE::OTHER_LEFT;
-                    break;
+            //    case 3: // left
+            //        if (!checkPos.x)
+            //            continue;
+            //        --checkPos.x;
+            //        curTileCheck = DATABASE::AUTO_TILE::OTHER_LEFT;
+            //        break;
 
-                case 4: // right
-                    if (checkPos.x+1 >= getSize().x)
-                        continue;
-                    ++checkPos.x;
-                    curTileCheck = DATABASE::AUTO_TILE::OTHER_RIGHT;
-                    break;
+            //    case 4: // right
+            //        if (checkPos.x+1 >= getSize().x)
+            //            continue;
+            //        ++checkPos.x;
+            //        curTileCheck = DATABASE::AUTO_TILE::OTHER_RIGHT;
+            //        break;
 
-                case 5: // bottom-left
-                    if (!checkPos.x || checkPos.y+1 >= getSize().y)
-                        continue;
-                    --checkPos.x;
-                    ++checkPos.y;
-                    curTileCheck = DATABASE::AUTO_TILE::OTHER_BOTTOM_LEFT;
-                    break;
+            //    case 5: // bottom-left
+            //        if (!checkPos.x || checkPos.y+1 >= getSize().y)
+            //            continue;
+            //        --checkPos.x;
+            //        ++checkPos.y;
+            //        curTileCheck = DATABASE::AUTO_TILE::OTHER_BOTTOM_LEFT;
+            //        break;
 
-                case 6: // bottom
-                    if (checkPos.y+1 >= getSize().y)
-                        continue;
-                    ++checkPos.y;
-                    curTileCheck = DATABASE::AUTO_TILE::OTHER_BOTTOM;
-                    break;
+            //    case 6: // bottom
+            //        if (checkPos.y+1 >= getSize().y)
+            //            continue;
+            //        ++checkPos.y;
+            //        curTileCheck = DATABASE::AUTO_TILE::OTHER_BOTTOM;
+            //        break;
 
-                case 7: // bottom-right
-                    if (checkPos.x+1 >= getSize().x || checkPos.y+1 >= getSize().y)
-                        continue;
-                    ++checkPos.x;
-                    ++checkPos.y;
-                    curTileCheck = DATABASE::AUTO_TILE::OTHER_BOTTOM_RIGHT;
-                    break;
-                }
-                MapTile mapTile = getMapTile(checkPos, layer);
-                // if bad object, continue
-                if (!mapTile.isValid())
-                    continue;
+            //    case 7: // bottom-right
+            //        if (checkPos.x+1 >= getSize().x || checkPos.y+1 >= getSize().y)
+            //            continue;
+            //        ++checkPos.x;
+            //        ++checkPos.y;
+            //        curTileCheck = DATABASE::AUTO_TILE::OTHER_BOTTOM_RIGHT;
+            //        break;
+            //    }
+            //    MapTile mapTile = getMapTile(checkPos, layer);
+            //    // if bad object, continue
+            //    if (!mapTile.isValid())
+            //        continue;
 
-                // if not same
-                if (mapTile.m_uiAutoTileSetID != uiID)
-                {
-                    uiBorderCheck += curTileCheck;
-                    if (resultFlag & FLAG_OTHER)
-                        result.insert(checkPos);
-                }
-                // if same
-                else if (resultFlag & FLAG_SAME)
-                    result.insert(checkPos);
-            }
+            //    // if not same
+            //    if (mapTile.m_uiAutoTileSetID != uiID)
+            //    {
+            //        uiBorderCheck += curTileCheck;
+            //        if (resultFlag & FLAG_OTHER)
+            //            result.insert(checkPos);
+            //    }
+            //    // if same
+            //    else if (resultFlag & FLAG_SAME)
+            //        result.insert(checkPos);
+            //}
             return uiBorderCheck;
         }
 
         bool MapPrototype::isValid()
         {
             return !m_FileName.isEmpty();
-        }
-
-        void MapPrototype::_clearTiles()
-        {
-            m_DataLoaded = false;
-            m_Layer.resizeMap(UInt32Point(0,0), 0, 0);
         }
 
         void MapPrototype::setSizeX(uint32 x)
@@ -455,74 +449,11 @@ namespace DATABASE
                 layer == MAP::LAYER_BACKGROUND ? size : getLayerSize(MAP::LAYER_BACKGROUND));
         }
 
-        void MapPrototype::setSize(UInt32Point size, uint8 uiForegroundLayerSize, uint8 uiBackgroundLayerSize)
+        void MapPrototype::setSize(const UInt32Point &size, uint8 uiForegroundLayerSize, uint8 uiBackgroundLayerSize)
         {
-            m_Layer.setSize(size, uiForegroundLayerSize, uiBackgroundLayerSize);
-            if (hasMapDataStored())
-                m_Layer.resizeMap(size, uiForegroundLayerSize, uiBackgroundLayerSize);
-        }
-
-        TILE_INDEX MapPrototype::getTile(UInt32Point3D at, Layer layer) const
-        {
-            try
-            {
-                if (hasMapDataStored())
-                    return m_Layer.getMapTile(at, layer).m_uiTileID;
-            }
-            catch (std::out_of_range&) {}
-            return MATH::maximum<uint32>();
-        }
-
-        void MapPrototype::setTile(UInt32Point3D at, TILE_INDEX uiID, Layer layer)
-        {
-            try
-            {
-                if (hasMapDataStored())
-                    m_Layer.getMapTile(at, layer).m_uiTileID = uiID;
-            }
-            catch (std::out_of_range&) {}
-        }
-
-        AUTO_TILE_INDEX MapPrototype::getAutoTile(UInt32Point3D at, Layer layer) const
-        {
-            try
-            {
-                if (hasMapDataStored())
-                    return m_Layer.getMapTile(at, layer).m_uiAutoTileSetID;
-            }
-            catch (std::out_of_range&) {}
-            return MATH::maximum<uint32>();
-        }
-
-        void MapPrototype::setAutoTile(UInt32Point3D at, AUTO_TILE_INDEX uiID, Layer layer)
-        {
-            try
-            {
-                if (hasMapDataStored())
-                    m_Layer.getMapTile(at, layer).m_uiAutoTileSetID = uiID;
-            }
-            catch (std::out_of_range&) {}
-        }
-
-        void MapPrototype::setMapTile(UInt32Point3D at, MapTile mapTile, Layer layer)
-        {
-            try
-            {
-                if (hasMapDataStored())
-                    m_Layer.getMapTile(at, layer) = mapTile;
-            }
-            catch (std::out_of_range&) {}
-        }
-
-        MapTile MapPrototype::getMapTile(UInt32Point3D at, Layer layer) const
-        {
-            try
-            {
-                if (hasMapDataStored())
-                    return m_Layer.getMapTile(at, layer);
-            }
-            catch (std::out_of_range&) {}
-            return MapTile(MATH::maximum<uint32>(), MATH::maximum<uint32>());
+            m_Size = size;
+            m_Layer.at(MAP::LAYER_BACKGROUND) = uiBackgroundLayerSize;
+            m_Layer.at(MAP::LAYER_FOREGROUND) = uiForegroundLayerSize;
         }
     }
 }

@@ -1,9 +1,23 @@
 #include "MapEditorWidgetEditor.h"
 #include "moc_MapEditorWidgetEditor.h"
 
-MapEditorWidgetEditor::MapEditorWidgetEditor(DATABASE::DatabaseMgr &databaseMgr, QWidget *pParent) : QWidget(pParent), Ui_MapEditorWidget(), m_DatabaseMgr(databaseMgr)
+
+MapEditorWidgetEditor::MapEditorWidgetEditor(DATABASE::DatabaseMgr &databaseMgr, QWidget *pParent) : QWidget(pParent), Ui_MapEditorWidget(), m_DatabaseMgr(databaseMgr),
+    m_pContent(nullptr)
 {
     setupUi(this);
+
+    // setup content
+    m_pContent = new MapEditorModuleContent(m_DatabaseMgr, this);
+    if (auto pLayout = dynamic_cast<QGridLayout*>(layout()))
+    {
+        pLayout->setColumnMinimumWidth(0, 200);
+        pLayout->setRowMinimumHeight(1, 200);
+        pLayout->addWidget(m_pContent, 0, 1, -1, -1);
+    }
+
+    connect(m_pMapTree, SIGNAL(openMap(uint32)), m_pContent, SLOT(onMapOpened(uint32)));
+    connect(m_pMapTree, SIGNAL(editMap(uint32)), m_pContent, SLOT(onMapEdited(uint32)));
 }
 
 void MapEditorWidgetEditor::_setupTileModules()

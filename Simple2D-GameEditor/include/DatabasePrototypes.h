@@ -77,6 +77,8 @@ namespace DATABASE
         virtual void toXML(QXmlStreamWriter &writer) const;
         virtual void fromXML(const QXmlStreamAttributes &attributes);
 
+        inline QString getTextureString() const { return getPathName() + QString::fromStdString(getTransparencyColor().getColorString()); }
+
     private:
         Color m_TransparencyColor;
     };
@@ -608,10 +610,8 @@ namespace DATABASE
             void _clearTiles();
 
         public:
-            MapPrototype(uint32 ID = 0, const QString &fileName = "") : Prototype(ID), m_FileName(fileName), m_uiParentID(0), m_DataLoaded(false)
+            MapPrototype(uint32 ID = 0, const QString &fileName = "") : Prototype(ID), m_FileName(fileName), m_uiParentID(0)
             {}
-
-            inline bool hasMapDataStored() const { return m_DataLoaded; }
 
             bool isValid();
 
@@ -623,22 +623,14 @@ namespace DATABASE
             void setSizeX(uint32 x);
             void setSizeY(uint32 y);
             void setLayerSize(uint8 size, Layer layer);
-            void setSize(UInt32Point size, uint8 uiForegroundLayerSize, uint8 uiBackgroundLayerSize);
-            inline UInt32Point getSize() const { return m_Layer.getSize(); }
-            inline uint8 getLayerSize(Layer layer) const { return m_Layer.getLayerSize(layer); };
+            void setSize(const UInt32Point &size, uint8 uiForegroundLayerSize, uint8 uiBackgroundLayerSize);
+            inline UInt32Point getSize() const { return m_Size; }
+            inline uint8 getLayerSize(Layer layer) const { return m_Layer.at(layer); };
 
             inline uint32 getParentID() const { return m_uiParentID; }
             inline void setParentID(uint32 uiParentID) { m_uiParentID = uiParentID; }
 
-            TILE_INDEX getTile(UInt32Point3D at, Layer layer) const;
-            void setTile(UInt32Point3D at, TILE_INDEX ID, Layer layer);
-
-            AUTO_TILE_INDEX getAutoTile(UInt32Point3D at, Layer layer) const;
-            void setAutoTile(UInt32Point3D at, AUTO_TILE_INDEX ID, Layer layer);
-
-            void setMapTile(UInt32Point3D at, MapTile mapTile, Layer layer);
-            MapTile getMapTile(UInt32Point3D at, Layer layer) const;
-
+            // ToDo: remove following
             void addMapObject(MapObject *pObject);
             MapObject* addMapObject(DATABASE::MAP_OBJECT::ObjectType type, uint32 ID, Int32Point pos);
             inline uint32 getMapObjectCount() const { return m_Objects.getSize(); }
@@ -656,7 +648,7 @@ namespace DATABASE
             };
             uint32 checkAutoTiles(uint32 ID, UInt32Point3D pos, UInt32PointSet &result, Layer layer, uint32 resultFlag = FLAG_ALL);
 
-            // IO
+            // XML IO
             void toXML(QXmlStreamWriter &writer) const;
             void fromXML(const QXmlStreamAttributes &attributes);
 
@@ -668,8 +660,11 @@ namespace DATABASE
             QString m_ScriptName;
 
             MapObjectContainer m_Objects;
-            MAP::MapLayer m_Layer;
+
+            UInt32Point m_Size;
+            std::array<uint8, 2> m_Layer;
         };
     }
 }
+
 #endif

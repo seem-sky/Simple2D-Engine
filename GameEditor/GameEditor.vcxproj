@@ -227,6 +227,7 @@
     <ClCompile Include="DatabaseWidgetTexture.cpp" />
     <ClCompile Include="DatabaseWidgetTile.cpp" />
     <ClCompile Include="DatabaseWidgetTileSet.cpp" />
+    <ClCompile Include="GraphicsTextureItem.cpp" />
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="DatabaseWindow.cpp" />
     <ClCompile Include="main.cpp" />
@@ -236,6 +237,7 @@
     <ClCompile Include="MapEditorModuleTiles.cpp" />
     <ClCompile Include="MapEditorModuleTileSets.cpp" />
     <ClCompile Include="MapEditorWidgetEditor.cpp" />
+    <ClCompile Include="MapViewer.cpp" />
     <ClCompile Include="Project.cpp" />
     <ClCompile Include="TexturePrototypeFrame.cpp" />
   </ItemGroup>
@@ -289,7 +291,9 @@
     <moc_header Include="MapEditorDialogMapSettings.h" />
     <moc_header Include="MapEditorModuleContent.h" />
     <moc_header Include="MapEditorModuleMapTree.h" />
+    <ClInclude Include="GraphicsTextureItem.h" />
     <ClInclude Include="MapEditorModuleTileSets.h" />
+    <ClInclude Include="MapViewer.h" />
     <ClInclude Include="TexturePrototypeFrame.h" />
     <moc_header Include="DatabaseDialogResize.h" />
     <moc_header Include="AnimationViewer.h" />

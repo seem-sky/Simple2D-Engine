@@ -134,8 +134,7 @@ void MapItem::syncWithWorldObject()
 /*#####
 # GameSceneView
 #####*/
-GameSceneView::GameSceneView(GameScene *pScene, const DATABASE::DatabaseMgr &DBMgr) : SceneView(pScene), m_DatabaseMgr(DBMgr),
-    m_TileCache(m_DatabaseMgr), m_AutoTileCache(m_TileCache)
+GameSceneView::GameSceneView(GameScene *pScene, const DATABASE::DatabaseMgr &DBMgr) : SceneView(pScene), m_DatabaseMgr(DBMgr)
 {}
 
 void GameSceneView::drawBackground(QPainter *pPainter, const QRectF &rect)
@@ -181,8 +180,7 @@ void GameSceneView::drawTiles(QPainter *painter, const QRectF &rect, MAP::Layer 
                 {
                     if (auto pAutoTile = m_AutoTileCache.getItem(tileObj.m_uiAutoTileSetID))
                     {
-                        const QPixmap *pPixmap(nullptr);
-                        if (pAutoTile->getPixmap(static_cast<DATABASE::AUTO_TILE::AUTO_TILE_INDEX>(tileObj.m_uiTileID), pPixmap))
+                        if (auto pPixmap = pAutoTile->getPixmap(static_cast<DATABASE::AUTO_TILE::AUTO_TILE_INDEX>(tileObj.m_uiTileID)))
                             painter->drawTiledPixmap(x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE, TILE_SIZE, *pPixmap);
                     }
                 }

@@ -100,6 +100,9 @@
     <Filter Include="Map Editor\Dialogs\MapEditorDialogMapSettings">
       <UniqueIdentifier>{5f85fa1e-3c62-42e0-92b4-8f2f9bdaa427}</UniqueIdentifier>
     </Filter>
+    <Filter Include="EditorCore\GraphicsSpriteItem">
+      <UniqueIdentifier>{fd3dee09-aa14-40a4-9620-dfa1fc68f21a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainWindow.cpp">
@@ -197,6 +200,12 @@
     </ClCompile>
     <ClCompile Include="MapEditorModuleMapTree.cpp">
       <Filter>Map Editor\Modules\MapTree</Filter>
+    </ClCompile>
+    <ClCompile Include="MapViewer.cpp">
+      <Filter>Map Editor\Modules\Content</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicsTextureItem.cpp">
+      <Filter>EditorCore\GraphicsSpriteItem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -341,6 +350,12 @@
     </ClInclude>
     <ClInclude Include="MapEditorModuleTileSets.h">
       <Filter>Map Editor\Modules\TileTabs</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsTextureItem.h">
+      <Filter>EditorCore\GraphicsSpriteItem</Filter>
+    </ClInclude>
+    <ClInclude Include="MapViewer.h">
+      <Filter>Map Editor\Modules\Content</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

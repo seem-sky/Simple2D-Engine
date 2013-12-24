@@ -1,6 +1,7 @@
 #include "AutoTileCache.h"
+#include "TileCache.h"
 
-AutoTileCache::AutoTileCache(const TileCache &tileCache) : Container(), m_TileCache(tileCache) {}
+AutoTileCache::AutoTileCache() : Container() {}
 
 const AutoTile* AutoTileCache::getItem(uint32 uiID) const
 {
@@ -13,12 +14,12 @@ const AutoTile* AutoTileCache::getItem(uint32 uiID) const
 
 AutoTile* AutoTileCache::_createAutoTile(uint32 uiID)
 {
-    if (!m_TileCache.getDBMgr().getAutoTileDatabase())
+    if (!m_pDBMgr || !m_pDBMgr->getAutoTileDatabase())
         return nullptr;
-    if (auto pAutoTile = m_TileCache.getDBMgr().getAutoTileDatabase()->getOriginalPrototype(uiID))
+    if (auto pAutoTile = m_pDBMgr->getAutoTileDatabase()->getOriginalPrototype(uiID))
     {
         auto pNewAutoTile(new AutoTile());
-        pNewAutoTile->setAutoTilePrototype(pAutoTile, m_TileCache);
+        pNewAutoTile->setAutoTilePrototype(pAutoTile);
         setItem(uiID, pNewAutoTile);
         return pNewAutoTile;
     }

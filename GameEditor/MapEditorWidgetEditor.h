@@ -3,6 +3,7 @@
 
 #include "MapEditorModuleTiles.h"
 #include "UI/UI_MapEditorWidget.h"
+#include "MapEditorModuleContent.h"
 
 class MapEditorWidgetEditor : public QWidget, Ui_MapEditorWidget
 {
@@ -18,6 +19,7 @@ public:
 
 private:
     DATABASE::DatabaseMgr &m_DatabaseMgr;
+    MapEditorModuleContent *m_pContent;
 };
 
 #endif

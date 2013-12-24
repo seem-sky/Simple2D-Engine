@@ -20,10 +20,6 @@ namespace DATABASE
 
             void clear();
 
-            bool hasMapDataStored(uint32 uiIndex) const;
-            bool loadMapFile(uint32 uiMapID, const QString &sPath = "");
-            void unloadMapFile(uint32 uiMapID);
-
             MapPrototypePtr getNewPrototype();
 
             /*void setPrototype(MapPrototype *pItem);
@@ -35,8 +31,6 @@ namespace DATABASE
         private:
             MapPrototypePtrVector m_RemovedMaps;
         };
-
-        void saveMapFile(const MapPrototype *pMap, const QString &path);
     }
 }
 #endif

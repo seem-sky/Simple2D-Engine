@@ -7,12 +7,12 @@
 class AnimationAction
 {
 public:
-    AnimationAction(GraphicsSpriteItem *pItem, AnimationViewerScene *pScene);
+    AnimationAction(AnimationSpriteItem *pItem, AnimationViewerScene *pScene);
     virtual void revert() = 0;
 
 protected:
     AnimationViewerScene *m_pScene;
-    GraphicsSpriteItem *m_pItem;
+    AnimationSpriteItem *m_pItem;
 };
 typedef std::vector<std::unique_ptr<AnimationAction>> AnimationActionPtrVector;
 
@@ -33,7 +33,7 @@ public:
 class AnimationActionModify : public AnimationAction
 {
 public:
-    AnimationActionModify(QGraphicsItem::GraphicsItemChange change, const QVariant &value, GraphicsSpriteItem *pItem, AnimationViewerScene *pScene);
+    AnimationActionModify(QGraphicsItem::GraphicsItemChange change, const QVariant &value, AnimationSpriteItem *pItem, AnimationViewerScene *pScene);
     void revert();
 
 private:
@@ -45,7 +45,7 @@ class DatabaseModuleAnimation : public QWidget, Ui_DatabaseModuleAnimation
 {
     Q_OBJECT
 private:
-    void _setupSpriteFrame(GraphicsSpriteItem *pItem);
+    void _setupSpriteFrame(AnimationSpriteItem *pItem);
 
     void _saveCurrentFrame();
     void _setupFrame(uint32 index);
@@ -65,7 +65,7 @@ private slots:
     void _onPlayStopButtonClicked();
     void _onFrameChanged(int index);
     void _onSelectionChanged();
-    void _onItemChanged(GraphicsSpriteItem *pItem, QGraphicsItem::GraphicsItemChange change, const QVariant &value);
+    void _onItemChanged(AnimationSpriteItem *pItem, QGraphicsItem::GraphicsItemChange change, const QVariant &value);
     //void _onActionRevert();
 
     // sprite slots

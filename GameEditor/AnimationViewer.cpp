@@ -1,28 +1,18 @@
 #include "AnimationViewer.h"
-#include "QtGlobal.h"
 #include "Config.h"
 #include "moc_AnimationViewer.h"
-#include <QtWidgets/QStyleOption>
-#include <QtGui/QKeyEvent>
 #include <QtCore/QMimeData>
+#include <QtGui/QKeyEvent>
 #include "DelayedDeleteObject.h"
 
-/*#####
-# GraphicsSpriteItem
-#####*/
-GraphicsSpriteItem::GraphicsSpriteItem(const DATABASE::SpritePrototype *pSpritePrototype) : QGraphicsItem(), m_pSpritePrototype(pSpritePrototype)
+AnimationSpriteItem::AnimationSpriteItem(const DATABASE::SpritePrototype *pPrototype) : GraphicsTextureItem(pPrototype)
 {
-    setFlag(QGraphicsItem::ItemSendsGeometryChanges);
 }
 
-void GraphicsSpriteItem::keyPressEvent(QKeyEvent *pEvent)
+void AnimationSpriteItem::keyPressEvent(QKeyEvent *pEvent)
 {
     switch(pEvent->key())
     {
-    case Qt::Key_Up: moveBy(0, -1); break;
-    case Qt::Key_Down: moveBy(0, 1); break;
-    case Qt::Key_Left: moveBy(-1, 0); break;
-    case Qt::Key_Right: moveBy(1, 0); break;
     case Qt::Key_Delete:
         if (scene())
         {
@@ -30,72 +20,13 @@ void GraphicsSpriteItem::keyPressEvent(QKeyEvent *pEvent)
             if (auto *pScene = dynamic_cast<AnimationViewerScene*>(scene()))
                 emit pScene->itemRemoved(this);
         }
-        new DelayedDeleteObject<GraphicsSpriteItem>(this);
-    default: return;
+        new DelayedDeleteObject<GraphicsTextureItem>(this);
+        break;
+    default: GraphicsTextureItem::keyPressEvent(pEvent);
     }
 }
 
-void GraphicsSpriteItem::paint(QPainter *pPainter, const QStyleOptionGraphicsItem *pOption, QWidget *pWidget)
-{
-    auto pixmap = _getPixmap();
-    pPainter->drawPixmap(0, 0, pixmap);
-    // draw selection box
-    if (isSelected())
-        _hightlightSelection(pPainter, pOption);
-}
-
-void GraphicsSpriteItem::_hightlightSelection(QPainter *pPainter, const QStyleOptionGraphicsItem *pOption)
-{
-    // from QGraphicsItem.cpp
-    const QRectF murect = pPainter->transform().mapRect(QRectF(0, 0, 1, 1));
-    if (qFuzzyCompare(qMax(murect.width(), murect.height()) + 1, 1))
-        return;
-
-    const QRectF mbrect = pPainter->transform().mapRect(boundingRect());
-    if (qMin(mbrect.width(), mbrect.height()) < qreal(1.0))
-        return;
-
-    qreal itemPenWidth = 1.0;
-    const qreal pad = itemPenWidth / 2;
-
-    const qreal penWidth = 0; // cosmetic pen
-
-    const QColor fgcolor = pOption->palette.windowText().color();
-    const QColor bgcolor( // ensure good contrast against fgcolor
-        fgcolor.red()   > 127 ? 0 : 255,
-        fgcolor.green() > 127 ? 0 : 255,
-        fgcolor.blue()  > 127 ? 0 : 255);
-
-    pPainter->setPen(QPen(bgcolor, penWidth, Qt::SolidLine));
-    pPainter->setBrush(Qt::NoBrush);
-    pPainter->drawRect(boundingRect().adjusted(pad, pad, -pad, -pad));
-
-    pPainter->setPen(QPen(pOption->palette.windowText(), 0, Qt::DashLine));
-    pPainter->setBrush(Qt::NoBrush);
-    pPainter->drawRect(boundingRect().adjusted(pad, pad, -pad, -pad));
-}
-
-QRectF GraphicsSpriteItem::boundingRect() const
-{
-    auto pixmap = _getPixmap();
-    return pixmap.rect();
-}
-
-QPixmap GraphicsSpriteItem::_getPixmap() const
-{
-    QPixmap pixmap;
-    createPixmapFromTexturePrototype(Config::get()->getProjectDirectory(), m_pSpritePrototype, pixmap);
-    return pixmap;
-}
-
-uint32 GraphicsSpriteItem::getSpriteID() const
-{
-    if (m_pSpritePrototype)
-        return m_pSpritePrototype->getID();
-    return 0;
-}
-
-QVariant GraphicsSpriteItem::itemChange(GraphicsItemChange change, const QVariant &value)
+QVariant AnimationSpriteItem::itemChange(GraphicsItemChange change, const QVariant &value)
 {
     auto pScene = dynamic_cast<AnimationViewerScene*>(scene());
     if (!pScene)
@@ -115,11 +46,11 @@ QVariant GraphicsSpriteItem::itemChange(GraphicsItemChange change, const QVarian
     return result;
 }
 
-DATABASE::ANIMATION::Sprite GraphicsSpriteItem::toSprite() const
+DATABASE::ANIMATION::Sprite AnimationSpriteItem::toSprite() const
 {
     DATABASE::ANIMATION::Sprite sprite;
     sprite.m_Pos = Int32Point(x(), y());
-    sprite.m_uiSpriteID = getSpriteID();
+    sprite.m_uiSpriteID = getID();
     sprite.m_uiRotation = rotation();
     sprite.m_Scale = scale();
     sprite.m_Opacity = opacity();
@@ -235,7 +166,7 @@ void AnimationViewer::_setupFrame(const DATABASE::ANIMATION::Frame &frame)
     {
         if (auto pPrototype = m_pSpriteDB->getOriginalPrototype(sprite.m_uiSpriteID))
         {
-            auto pItem = new GraphicsSpriteItem(pPrototype);
+            auto pItem = new AnimationSpriteItem(pPrototype);
 
             // set transformation
             pItem->setZValue(z);
@@ -250,7 +181,7 @@ void AnimationViewer::_setupFrame(const DATABASE::ANIMATION::Frame &frame)
     }
 }
 
-void AnimationViewer::addGraphicsSpriteItem(GraphicsSpriteItem *pItem)
+void AnimationViewer::addGraphicsSpriteItem(AnimationSpriteItem *pItem)
 {
     // set item flags
     pItem->setFlag(QGraphicsItem::ItemIsSelectable, m_Mode == MODE_MODIFY);
@@ -306,13 +237,13 @@ void AnimationViewer::setMode(Mode mode)
     }
 }
 
-GraphicsSpriteItem* AnimationViewer::getSelectedItem()
+AnimationSpriteItem* AnimationViewer::getSelectedItem()
 {
     auto items = scene()->selectedItems();
     if (items.empty())
         return nullptr;
 
-    return dynamic_cast<GraphicsSpriteItem*>(items.first());
+    return dynamic_cast<AnimationSpriteItem*>(items.first());
 }
 
 void AnimationViewer::dragMoveEvent(QDragMoveEvent *pEvent)
@@ -331,7 +262,7 @@ void AnimationViewer::dropEvent(QDropEvent *pEvent)
         return;
     if (auto pSprite = m_pSpriteDB->getOriginalPrototype(pEvent->mimeData()->text().toUInt()))
     {
-        auto pItem = new GraphicsSpriteItem(pSprite);
+        auto pItem = new AnimationSpriteItem(pSprite);
         pItem->setPos(mapToScene(pEvent->pos()).toPoint());
         addGraphicsSpriteItem(pItem);
         pItem->setSelected(true);

@@ -3,6 +3,7 @@
 
 #include "QtGlobal.h"
 #include "DatabaseMgr.h"
+#include <Singleton.h>
 
 class TileCache : public Container<QPixmap>
 {
@@ -10,13 +11,15 @@ private:
     QPixmap* _createPixmap(uint32 uiID);
 
 public:
-    TileCache(const DATABASE::DatabaseMgr &DBMgr);
+    TileCache();
 
     const QPixmap* getItem(uint32 uiID) const;
 
-    inline const DATABASE::DatabaseMgr& getDBMgr() const { return m_DBMgr; }
+    inline void setDBMgr(const DATABASE::DatabaseMgr* pDBMgr) { m_pDBMgr = pDBMgr; }
 
 private:
-    const DATABASE::DatabaseMgr &m_DBMgr;
+    const DATABASE::DatabaseMgr *m_pDBMgr;
 };
+typedef TSingleton<TileCache> GTileCache;
+
 #endif

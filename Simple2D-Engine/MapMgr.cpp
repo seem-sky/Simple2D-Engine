@@ -13,17 +13,17 @@ void MapMgr::setDatabaseMgr(DATABASE::DatabaseMgr pDBMgr)
 MapPtr MapMgr::loadMap(uint32 uiID)
 {
     DATABASE::MAP_STRUCTURE::MapDatabase* pMapDB = const_cast<DATABASE::MAP_STRUCTURE::MapDatabase*>(m_pDBMgr.getMapDatabase());
-    if (pMapDB && pMapDB->loadMapFile(uiID, "projects/untitled/"))
-    {
-        if (auto pMapProto = pMapDB->getOriginalPrototype(uiID))
-        {
-            // ToDo: Write proper implemenation for this.
-            //pMap = MapPtr(new Map(getSize()+1, pMapProto->getID(), pMapProto->m_Layer, pMapProto->getMapObjects(), m_pDBMgr, pMapProto->getName().toStdString(),
-            //    pMapProto->getScriptName().toStdString()));
-            //m_Maps.push_back(pMap);
-            //setItem(pMap->getGUID(), pMap);
-        }
-    }
+    //if (pMapDB && pMapDB->loadMapFile(uiID, "projects/untitled/"))
+    //{
+    //    if (auto pMapProto = pMapDB->getOriginalPrototype(uiID))
+    //    {
+    //        // ToDo: Write proper implemenation for this.
+    //        //pMap = MapPtr(new Map(getSize()+1, pMapProto->getID(), pMapProto->m_Layer, pMapProto->getMapObjects(), m_pDBMgr, pMapProto->getName().toStdString(),
+    //        //    pMapProto->getScriptName().toStdString()));
+    //        //m_Maps.push_back(pMap);
+    //        //setItem(pMap->getGUID(), pMap);
+    //    }
+    //}
     return MapPtr();
 }
 
