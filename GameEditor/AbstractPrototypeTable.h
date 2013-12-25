@@ -37,9 +37,7 @@ class AbstractPrototypeTable : public QTableWidget
 {
     Q_OBJECT
 private:
-    void _itemRightClicked(AbstractPixmapWidget *pItem);
-    void _itemLeftClicked(AbstractPixmapWidget *pItem);
-    virtual void _setup() = NULL;
+    virtual void _setup() = 0;
 
 protected:
     void showEvent(QShowEvent *pEvent);
@@ -51,19 +49,11 @@ public:
     void setup();
     void clear();
 
-    enum SelectionIndex
-    {
-        RIGHT,
-        LEFT
-    };
-
-    virtual BRUSH::SelectionType getType() const = 0;
+    virtual MAP::BRUSH::SelectionType getType() const = 0;
 
 signals:
-    void selectionChanged(BRUSH::BrushIndex brush, BRUSH::SelectionType selectioType, uint32 ID);
-
-private:
-    std::array<AbstractPixmapWidget*, 2> m_SelectedItems;
+    void selectionChanged(BRUSH::BrushIndex brush, MAP::BRUSH::SelectionType selectioType, uint32 ID);
+    void itemClicked(BRUSH::BrushIndex brush, AbstractPixmapWidget *pWidget);
 
 protected:
     const DATABASE::DatabaseMgr &m_DBMgr;

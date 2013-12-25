@@ -112,17 +112,21 @@ void AbstractPrototypeTable::clear()
 {
     setColumnCount(0);
     setRowCount(0);
-    m_SelectedItems.fill(nullptr);
 }
 
 void AbstractPrototypeTable::mousePressEvent(QMouseEvent *pEvent)
 {
     if (auto pWidget = dynamic_cast<AbstractPixmapWidget*>(cellWidget(rowAt(pEvent->y()), columnAt(pEvent->x()))))
     {
-        if (pEvent->button() == Qt::RightButton)
-            _itemRightClicked(pWidget);
-        else if (pEvent->button() == Qt::LeftButton)
-            _itemLeftClicked(pWidget);
+        if (pEvent->button() == Qt::RightButton || pEvent->button() == Qt::LeftButton)
+        {
+            auto brush = BRUSH::BrushIndex::BRUSH_LEFT;
+            if (pEvent->button() == Qt::RightButton)
+                brush = BRUSH::BrushIndex::BRUSH_RIGHT;
+
+            emit selectionChanged(brush, getType(), pWidget->getID());
+            emit itemClicked(brush, pWidget);
+        }
     }
     else
         QTableWidget::mousePressEvent(pEvent);
@@ -133,24 +137,6 @@ void AbstractPrototypeTable::showEvent(QShowEvent *pEvent)
     // if has no data, reload it
     if (!columnCount() && !rowCount())
         _setup();
-}
-
-void AbstractPrototypeTable::_itemLeftClicked(AbstractPixmapWidget *pItem)
-{
-    if (m_SelectedItems.at(LEFT))
-        m_SelectedItems.at(LEFT)->removeSelection(AbstractPixmapWidget::SELECTION_LEFT);
-    pItem->addSelection(AbstractPixmapWidget::SELECTION_LEFT);
-    m_SelectedItems.at(LEFT) = pItem;
-    emit selectionChanged(BRUSH::BrushIndex::BRUSH_LEFT, getType(), pItem->getID());
-}
-
-void AbstractPrototypeTable::_itemRightClicked(AbstractPixmapWidget *pItem)
-{
-    if (m_SelectedItems.at(RIGHT))
-        m_SelectedItems.at(RIGHT)->removeSelection(AbstractPixmapWidget::SELECTION_RIGHT);
-    pItem->addSelection(AbstractPixmapWidget::SELECTION_RIGHT);
-    m_SelectedItems.at(RIGHT) = pItem;
-    emit selectionChanged(BRUSH::BrushIndex::BRUSH_RIGHT, getType(), pItem->getID());
 }
 
 void AbstractPrototypeTable::setup()

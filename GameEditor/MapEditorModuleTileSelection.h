@@ -9,12 +9,17 @@
 
 class MapEditorModuleTileSelection : public QTabWidget
 {
+    Q_OBJECT
 public:
     MapEditorModuleTileSelection(const DATABASE::DatabaseMgr &databaseMgr, QWidget *pParent = nullptr);
 
     void setup();
 
+public slots:
+    void onItemClicked(BRUSH::BrushIndex brush, AbstractPixmapWidget *pWidget = nullptr);
+
 private:
+    std::array<AbstractPixmapWidget*, 2> m_SelectedItems;
     const DATABASE::DatabaseMgr &m_DatabaseMgr;
 
     // tabs

@@ -150,6 +150,7 @@
     <ClCompile Include="MapData.cpp">
       <Filter>Map\IO</Filter>
     </ClCompile>
+    <ClCompile Include="Brush.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Simple2D-GameEditor\include\Application.h">
@@ -269,6 +270,7 @@
     <ClInclude Include="MapData.h">
       <Filter>Map\IO</Filter>
     </ClInclude>
+    <ClInclude Include="Brush.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

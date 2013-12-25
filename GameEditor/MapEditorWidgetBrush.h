@@ -15,17 +15,19 @@ namespace BRUSH
     class MapEditorWidgetBrush : public QWidget
     {
         Q_OBJECT
+    private:
+        void _updateOpacity();
+
     protected:
         void changeEvent(QEvent *pEvent);
 
     public:
         MapEditorWidgetBrush(const DATABASE::DatabaseMgr &DBMgr, QWidget *pParent = nullptr);
 
-        BrushType getBrushType(BrushIndex brush) const;
-        void setBrushSelection(BrushIndex brush, SelectionType type, uint32 ID);
+        const MAP::BRUSH::BrushInfo& getBrushInfo(BrushIndex brush) const;
 
     public slots:
-        void _onSelectionChanged(BRUSH::BrushIndex brush, BRUSH::SelectionType selectioType, uint32 ID);
+        void _onSelectionChanged(BRUSH::BrushIndex brush, MAP::BRUSH::SelectionType selectioType, uint32 ID);
 
     private:
         std::array<MapEditorModuleBrush*, 2> m_pBrushes;

@@ -1,7 +1,9 @@
 #include "MapEditorModuleTileSets.h"
 #include "QtGlobal.h"
 #include "Config.h"
+#include <QtGui/QMouseEvent>
 #include <QtGui/QPainter>
+#include "moc_MapEditorModuleTileSets.h"
 
 MapEditorModuleTileSets::MapEditorModuleTileSets(QWidget *pParent) : DatabaseModuleDragList(pParent), m_pTileDB(nullptr)
 {
@@ -53,4 +55,21 @@ void MapEditorModuleTileSets::setModel(IDatabaseModel *pModel)
     if (auto pOldModel = dynamic_cast<IDatabaseModel*>(model()))
         pOldModel->takeDatabase();
     DatabaseModuleDragList::setModel(pModel);
+}
+
+void MapEditorModuleTileSets::mousePressEvent(QMouseEvent *pEvent)
+{
+    DatabaseModuleDragList::mousePressEvent(pEvent);
+
+    auto item = indexAt(pEvent->pos());
+    if (item.isValid() && (pEvent->button() == Qt::RightButton || pEvent->button() == Qt::LeftButton))
+    {
+        auto brush = BRUSH::BrushIndex::BRUSH_LEFT;
+        if (pEvent->button() == Qt::RightButton)
+            brush = BRUSH::BrushIndex::BRUSH_RIGHT;
+
+        // ToDo: hacky ID; better solution?
+        emit selectionChanged(brush, MAP::BRUSH::SelectionType::TILE_SETS, item.row()+1);
+        emit itemClicked(brush);
+    }
 }

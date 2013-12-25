@@ -4,38 +4,25 @@
 #include <QtWidgets/QWidget>
 #include "UI/UI_MapEditorModuleBrush.h"
 #include "DatabaseMgr.h"
+#include "Brush.h"
 
 namespace BRUSH
 {
-    enum class BrushType
-    {
-        PEN,
-        FILL
-    };
-
-    enum class SelectionType
-    {
-        TILES,
-        AUTO_TILES,
-        TILE_SETS
-    };
-
-
     class MapEditorModuleBrush : public QWidget, Ui_MapEditorModuleBrush
     {
+        void _update();
+
     public:
         MapEditorModuleBrush(const DATABASE::DatabaseMgr &DBMgr, QWidget *pParent = nullptr);
 
         void setText(const QString &text);
-        void setSelection(SelectionType type, uint32 ID);
 
-        inline BrushType getBrushType() const { return m_Type; }
+        void setBrushInfo(const MAP::BRUSH::BrushInfo& brushInfo);
+        inline const MAP::BRUSH::BrushInfo& getBrushInfo() const { return m_BrushInfo; }
 
     private:
         const DATABASE::DatabaseMgr &m_DBMgr;
-        BrushType m_Type;
-        SelectionType m_SelectionType;
-        uint32 m_ID;
+        MAP::BRUSH::BrushInfo m_BrushInfo;
     };
 }
 

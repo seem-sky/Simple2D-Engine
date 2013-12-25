@@ -5,11 +5,10 @@
 
 using namespace BRUSH;
 
-MapEditorModuleBrush::MapEditorModuleBrush(const DATABASE::DatabaseMgr &DBMgr, QWidget *pParent) : QWidget(), Ui_MapEditorModuleBrush(), m_DBMgr(DBMgr),
-    m_ID(0), m_Type(BrushType::PEN), m_SelectionType(SelectionType::AUTO_TILES)
+MapEditorModuleBrush::MapEditorModuleBrush(const DATABASE::DatabaseMgr &DBMgr, QWidget *pParent) : QWidget(), Ui_MapEditorModuleBrush(), m_DBMgr(DBMgr)
 {
     setupUi(this);
-    setSelection(SelectionType::TILES, 0);
+    _update();
 }
 
 void MapEditorModuleBrush::setText(const QString &text)
@@ -17,12 +16,8 @@ void MapEditorModuleBrush::setText(const QString &text)
     m_pText->setText(text);
 }
 
-void MapEditorModuleBrush::setSelection(SelectionType type, uint32 ID)
+void MapEditorModuleBrush::_update()
 {
-    // change ID
-    m_ID = ID;
-
-    m_SelectionType = type;
     auto labelSize = m_pCurrentTile->size();
     QPixmap newPixmap(labelSize);
     newPixmap.fill(Qt::transparent);
@@ -30,18 +25,18 @@ void MapEditorModuleBrush::setSelection(SelectionType type, uint32 ID)
 
     const QPixmap *pPixmap = nullptr;
     QString text;
-    switch (m_SelectionType)
+    switch (m_BrushInfo.m_SelectionType)
     {
-    case BRUSH::SelectionType::TILES:
+    case MAP::BRUSH::SelectionType::TILES:
         text = "tile";
-        pPixmap = GTileCache::get()->getItem(ID);
+        pPixmap = GTileCache::get()->getItem(m_BrushInfo.m_ID);
         break;
-    case BRUSH::SelectionType::AUTO_TILES:
+    case MAP::BRUSH::SelectionType::AUTO_TILES:
         text = "auto tile";
-        if (auto pAutoTile = GAutoTileCache::get()->getItem(ID))
+        if (auto pAutoTile = GAutoTileCache::get()->getItem(m_BrushInfo.m_ID))
             pPixmap = pAutoTile->getPixmap(DATABASE::AUTO_TILE::INDEX_INNER_CENTER);
         break;
-    case BRUSH::SelectionType::TILE_SETS:
+    case MAP::BRUSH::SelectionType::TILE_SETS:
         text = "tile set";
         //pPixmap = GTileCache::get()->getItem(ID);
         break;
@@ -50,7 +45,7 @@ void MapEditorModuleBrush::setSelection(SelectionType type, uint32 ID)
     // draw pixmap
     if (pPixmap)
         painter.drawPixmap((labelSize.width() - pPixmap->size().width()) / 2, (labelSize.height() - pPixmap->size().height()) / 2,
-            pPixmap->size().width(), pPixmap->size().height(), *pPixmap);
+        pPixmap->size().width(), pPixmap->size().height(), *pPixmap);
 
     // draw text
     QTextOption textOption(Qt::AlignHCenter | Qt::AlignVCenter);
@@ -61,6 +56,12 @@ void MapEditorModuleBrush::setSelection(SelectionType type, uint32 ID)
     painter.setPen(QPen(QColor(Qt::blue)));
     painter.setOpacity(0.7);
     painter.drawText(newPixmap.rect(), text, textOption);
-    
+
     m_pCurrentTile->setPixmap(newPixmap);
+}
+
+void MapEditorModuleBrush::setBrushInfo(const MAP::BRUSH::BrushInfo& brushInfo)
+{
+    m_BrushInfo = brushInfo;
+    _update();
 }

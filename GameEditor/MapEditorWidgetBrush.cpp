@@ -4,6 +4,7 @@
 #include "moc_MapEditorWidgetBrush.h"
 
 using namespace BRUSH;
+using namespace MAP::BRUSH;
 
 const qreal INACTIVE_OPACITY = 0.5;
 
@@ -26,25 +27,33 @@ MapEditorWidgetBrush::MapEditorWidgetBrush(const DATABASE::DatabaseMgr &DBMgr, Q
 
     m_pBrushes.at(static_cast<uint32>(BrushIndex::BRUSH_LEFT))->setText("left brush");
     m_pBrushes.at(static_cast<uint32>(BrushIndex::BRUSH_RIGHT))->setText("right brush");
+
+    update();
 }
 
 void MapEditorWidgetBrush::changeEvent(QEvent *pEvent)
 {
     if (pEvent->type() == QEvent::ActivationChange)
-        setWindowOpacity(isActiveWindow() ? 1 : INACTIVE_OPACITY); 
+        _updateOpacity();
 }
 
-void MapEditorWidgetBrush::setBrushSelection(BrushIndex brush, SelectionType type, uint32 ID)
+void MapEditorWidgetBrush::_updateOpacity()
 {
+    setWindowOpacity(isActiveWindow() ? 1 : INACTIVE_OPACITY); 
 }
 
-BrushType MapEditorWidgetBrush::getBrushType(BrushIndex brush) const
+const MAP::BRUSH::BrushInfo& MapEditorWidgetBrush::getBrushInfo(BrushIndex brush) const
 {
-    return m_pBrushes.at(static_cast<uint32>(brush))->getBrushType();
+    return m_pBrushes.at(static_cast<uint32>(brush))->getBrushInfo();
 }
 
 void MapEditorWidgetBrush::_onSelectionChanged(BrushIndex brush, SelectionType selectionType, uint32 ID)
 {
-    m_pBrushes.at(static_cast<uint32>(brush))->setSelection(selectionType, ID);
-
+    if (auto pBrush = m_pBrushes.at(static_cast<uint32>(brush)))
+    {
+        auto brushInfo = pBrush->getBrushInfo();
+        brushInfo.m_ID = ID;
+        brushInfo.m_SelectionType = selectionType;
+        pBrush->setBrushInfo(brushInfo);
+    }
 }

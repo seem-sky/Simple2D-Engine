@@ -106,11 +106,11 @@
     <Filter Include="Map Editor\Widgets">
       <UniqueIdentifier>{b9456fbd-31bc-4a86-8448-dd67e235a12a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Map Editor\Widgets\MapEditorWidgetBrush">
-      <UniqueIdentifier>{e558ed2b-bf3d-4d95-ae22-bb9d7ddb7e5b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Map Editor\Modules\Brush">
       <UniqueIdentifier>{3df57d72-18f0-4b1c-96db-af0c1afedba2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map Editor\Widgets\Brush">
+      <UniqueIdentifier>{e558ed2b-bf3d-4d95-ae22-bb9d7ddb7e5b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -217,12 +217,14 @@
       <Filter>EditorCore\GraphicsSpriteItem</Filter>
     </ClCompile>
     <ClCompile Include="MapEditorWidgetBrush.cpp">
-      <Filter>Map Editor\Widgets\MapEditorWidgetBrush</Filter>
+      <Filter>Map Editor\Widgets\Brush</Filter>
     </ClCompile>
     <ClCompile Include="MapEditorModuleBrush.cpp">
       <Filter>Map Editor\Modules\Brush</Filter>
     </ClCompile>
-    <ClCompile Include="MapEditorModuleTileSelection.cpp" />
+    <ClCompile Include="MapEditorModuleTileSelection.cpp">
+      <Filter>Map Editor\Modules\TileTabs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <compile_QT_Files Include="UI\MainWindow.ui">
@@ -326,7 +328,13 @@
       <Filter>Map Editor\Modules\MapTree</Filter>
     </moc_header>
     <moc_header Include="MapEditorWidgetBrush.h">
-      <Filter>Map Editor\Widgets\MapEditorWidgetBrush</Filter>
+      <Filter>Map Editor\Widgets\Brush</Filter>
+    </moc_header>
+    <moc_header Include="MapEditorModuleTileSets.h">
+      <Filter>Map Editor\Modules\TileTabs</Filter>
+    </moc_header>
+    <moc_header Include="MapEditorModuleTileSelection.h">
+      <Filter>Map Editor\Modules\TileTabs</Filter>
     </moc_header>
   </ItemGroup>
   <ItemGroup>
@@ -367,9 +375,6 @@
     <ClInclude Include="MapEditorModuleTiles.h">
       <Filter>Map Editor\Modules\TileTabs\Tiles</Filter>
     </ClInclude>
-    <ClInclude Include="MapEditorModuleTileSets.h">
-      <Filter>Map Editor\Modules\TileTabs</Filter>
-    </ClInclude>
     <ClInclude Include="GraphicsTextureItem.h">
       <Filter>EditorCore\GraphicsSpriteItem</Filter>
     </ClInclude>
@@ -379,7 +384,6 @@
     <ClInclude Include="MapEditorModuleBrush.h">
       <Filter>Map Editor\Modules\Brush</Filter>
     </ClInclude>
-    <ClInclude Include="MapEditorModuleTileSelection.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GameEditor.rc" />
