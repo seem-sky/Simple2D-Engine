@@ -4,14 +4,18 @@
 #include <QtWidgets/QTableWidget>
 #include "TexturePrototypeFrame.h"
 #include "DatabaseMgr.h"
+#include "MapEditorWidgetBrush.h"
 
-class TexturePrototypeFrameEx : public TexturePrototypeFrame
+class AbstractPixmapWidget : public QWidget
 {
 protected:
     virtual void paintEvent(QPaintEvent *pEvent);
+    virtual void drawPixmap() = 0;
+
+    void drawSelection();
 
 public:
-    TexturePrototypeFrameEx(QWidget *pParent = nullptr);
+    AbstractPixmapWidget(uint32 ID, QWidget *pParent = nullptr);
 
     enum Selection
     {
@@ -22,16 +26,19 @@ public:
     bool hasSelection(Selection selection);
     void removeSelection(Selection selection);
 
+    inline uint32 getID() const { return m_ID; }
+
 private:
     uint8 m_Selection;
+    uint32 m_ID;
 };
 
 class AbstractPrototypeTable : public QTableWidget
 {
     Q_OBJECT
 private:
-    void _itemRightClicked(TexturePrototypeFrameEx *pItem);
-    void _itemLeftClicked(TexturePrototypeFrameEx *pItem);
+    void _itemRightClicked(AbstractPixmapWidget *pItem);
+    void _itemLeftClicked(AbstractPixmapWidget *pItem);
     virtual void _setup() = NULL;
 
 protected:
@@ -39,11 +46,10 @@ protected:
     void mousePressEvent(QMouseEvent *pEvent);
 
 public:
-    AbstractPrototypeTable(QWidget *pParent = nullptr);
+    AbstractPrototypeTable(const DATABASE::DatabaseMgr &DBMgr, QWidget *pParent = nullptr);
 
     void setup();
     void clear();
-    inline void setDBMgr(const DATABASE::DatabaseMgr *pDBMgr) { m_pDBMgr = pDBMgr; }
 
     enum SelectionIndex
     {
@@ -51,15 +57,16 @@ public:
         LEFT
     };
 
+    virtual BRUSH::SelectionType getType() const = 0;
+
 signals:
-    void itemRightClicked(TexturePrototypeFrameEx *pItem);
-    void itemLeftClicked(TexturePrototypeFrameEx *pItem);
+    void selectionChanged(BRUSH::BrushIndex brush, BRUSH::SelectionType selectioType, uint32 ID);
 
 private:
-    std::array<TexturePrototypeFrameEx*, 2> m_SelectedItems;
+    std::array<AbstractPixmapWidget*, 2> m_SelectedItems;
 
 protected:
-    const DATABASE::DatabaseMgr *m_pDBMgr;
+    const DATABASE::DatabaseMgr &m_DBMgr;
 };
 
 #endif

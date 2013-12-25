@@ -5,14 +5,14 @@
 #include <QtGui/QPainter>
 
 /*#####
-# TexturePrototypeFrameEx
+# AbstractPixmapWidget
 #####*/
-TexturePrototypeFrameEx::TexturePrototypeFrameEx(QWidget *pParent) : TexturePrototypeFrame(pParent), m_Selection(0)
+AbstractPixmapWidget::AbstractPixmapWidget(uint32 ID, QWidget *pParent) : QWidget(pParent), m_Selection(0), m_ID(ID)
 {
     resize(TILE_SIZE, TILE_SIZE);
 }
 
-void TexturePrototypeFrameEx::addSelection(Selection selection)
+void AbstractPixmapWidget::addSelection(Selection selection)
 {
     if (!hasSelection(selection))
     {
@@ -21,12 +21,12 @@ void TexturePrototypeFrameEx::addSelection(Selection selection)
     }
 }
 
-bool TexturePrototypeFrameEx::hasSelection(Selection selection)
+bool AbstractPixmapWidget::hasSelection(Selection selection)
 {
     return (m_Selection & selection) != 0;
 }
 
-void TexturePrototypeFrameEx::removeSelection(Selection selection)
+void AbstractPixmapWidget::removeSelection(Selection selection)
 {
     if (hasSelection(selection))
     {
@@ -35,10 +35,16 @@ void TexturePrototypeFrameEx::removeSelection(Selection selection)
     }
 }
 
-void TexturePrototypeFrameEx::paintEvent(QPaintEvent *pEvent)
+void AbstractPixmapWidget::paintEvent(QPaintEvent *pEvent)
 {
-    TexturePrototypeFrame::paintEvent(pEvent);
+    QWidget::paintEvent(pEvent);
 
+    drawPixmap();
+    drawSelection();
+}
+
+void AbstractPixmapWidget::drawSelection()
+{
     QPainter painter(this);
     const uint32 SIZE = TILE_SIZE-1;
 
@@ -82,7 +88,7 @@ void TexturePrototypeFrameEx::paintEvent(QPaintEvent *pEvent)
 /*#####
 # MapEditorModuleTiles
 #####*/
-AbstractPrototypeTable::AbstractPrototypeTable(QWidget *pParent) : QTableWidget(pParent), m_pDBMgr(nullptr)
+AbstractPrototypeTable::AbstractPrototypeTable(const DATABASE::DatabaseMgr &DBMgr, QWidget *pParent) : QTableWidget(pParent), m_DBMgr(DBMgr)
 {
     // setup header
     auto hHeader = horizontalHeader();
@@ -111,7 +117,7 @@ void AbstractPrototypeTable::clear()
 
 void AbstractPrototypeTable::mousePressEvent(QMouseEvent *pEvent)
 {
-    if (auto pWidget = dynamic_cast<TexturePrototypeFrameEx*>(cellWidget(rowAt(pEvent->y()), columnAt(pEvent->x()))))
+    if (auto pWidget = dynamic_cast<AbstractPixmapWidget*>(cellWidget(rowAt(pEvent->y()), columnAt(pEvent->x()))))
     {
         if (pEvent->button() == Qt::RightButton)
             _itemRightClicked(pWidget);
@@ -129,22 +135,22 @@ void AbstractPrototypeTable::showEvent(QShowEvent *pEvent)
         _setup();
 }
 
-void AbstractPrototypeTable::_itemLeftClicked(TexturePrototypeFrameEx *pItem)
+void AbstractPrototypeTable::_itemLeftClicked(AbstractPixmapWidget *pItem)
 {
     if (m_SelectedItems.at(LEFT))
-        m_SelectedItems.at(LEFT)->removeSelection(TexturePrototypeFrameEx::SELECTION_LEFT);
-    pItem->addSelection(TexturePrototypeFrameEx::SELECTION_LEFT);
+        m_SelectedItems.at(LEFT)->removeSelection(AbstractPixmapWidget::SELECTION_LEFT);
+    pItem->addSelection(AbstractPixmapWidget::SELECTION_LEFT);
     m_SelectedItems.at(LEFT) = pItem;
-    emit itemLeftClicked(pItem);
+    emit selectionChanged(BRUSH::BrushIndex::BRUSH_LEFT, getType(), pItem->getID());
 }
 
-void AbstractPrototypeTable::_itemRightClicked(TexturePrototypeFrameEx *pItem)
+void AbstractPrototypeTable::_itemRightClicked(AbstractPixmapWidget *pItem)
 {
     if (m_SelectedItems.at(RIGHT))
-        m_SelectedItems.at(RIGHT)->removeSelection(TexturePrototypeFrameEx::SELECTION_RIGHT);
-    pItem->addSelection(TexturePrototypeFrameEx::SELECTION_RIGHT);
+        m_SelectedItems.at(RIGHT)->removeSelection(AbstractPixmapWidget::SELECTION_RIGHT);
+    pItem->addSelection(AbstractPixmapWidget::SELECTION_RIGHT);
     m_SelectedItems.at(RIGHT) = pItem;
-    emit itemRightClicked(pItem);
+    emit selectionChanged(BRUSH::BrushIndex::BRUSH_RIGHT, getType(), pItem->getID());
 }
 
 void AbstractPrototypeTable::setup()

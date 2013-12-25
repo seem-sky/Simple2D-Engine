@@ -13,13 +13,18 @@ MapEditorModuleContent::MapEditorModuleContent(DATABASE::DatabaseMgr &databaseMg
     connect(m_pLayerBackground, SIGNAL(clicked()), this, SLOT(_onLayerTypeChanged()));
     connect(m_pLayerForeground, SIGNAL(clicked()), this, SLOT(_onLayerTypeChanged()));
     connect(m_pShowGrid, SIGNAL(stateChanged(int)), this, SLOT(_onGridShowChanged(int)));
+
+    _onZoomChanged(m_pZoom->value());
 }
 
 void MapEditorModuleContent::_onCurrentChanged(int index)
 {
     if (auto pTab = dynamic_cast<MapViewer*>(m_pMapTabs->widget(index)))
     {
+        // setup zoom
         m_pZoom->setValue(pTab->getZoom());
+        m_pZoomLabel->setText("zoom: " + QString::number(pTab->getZoom()) + "%");
+
         m_pShowGrid->setCheckState(pTab->isGridActive() ? Qt::Checked : Qt::Unchecked);
         pTab->getLayerType() == MAP::LAYER_BACKGROUND ? m_pLayerBackground->setChecked(true) : m_pLayerForeground->setChecked(true);
         _onLayerTypeChanged();
@@ -30,6 +35,7 @@ void MapEditorModuleContent::_onZoomChanged(int value)
 {
     if (auto pTab = dynamic_cast<MapViewer*>(m_pMapTabs->currentWidget()))
         pTab->setZoom(value);
+    m_pZoomLabel->setText("zoom: " + QString::number(value) + "%");
 }
 
 void MapEditorModuleContent::_onLayerChanged(int value)

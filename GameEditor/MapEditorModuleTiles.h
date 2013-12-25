@@ -4,16 +4,51 @@
 #include <QtWidgets/QTableWidget>
 #include "AbstractPrototypeTable.h"
 
+/*#####
+# tile module
+#####*/
+class TilePixmapWidget : public AbstractPixmapWidget
+{
+protected:
+    void drawPixmap();
+
+public:
+    TilePixmapWidget(uint32 ID, QWidget *pParent = nullptr);
+};
+
 class MapEditorModuleTiles : public AbstractPrototypeTable
 {
 private:
     void _setup();
+
+    BRUSH::SelectionType getType() const { return BRUSH::SelectionType::TILES; }
+
+public:
+    MapEditorModuleTiles(const DATABASE::DatabaseMgr &DBMgr, QWidget *pParent = nullptr);
 };
+
+/*#####
+# auto tile module
+#####*/
+class AutoTilePixmapWidget : public AbstractPixmapWidget
+{
+protected:
+    void drawPixmap();
+
+public:
+    AutoTilePixmapWidget(uint32 ID, QWidget *pParent = nullptr);
+};
+
 
 class MapEditorModuleAutoTiles : public AbstractPrototypeTable
 {
 private:
     void _setup();
+
+    BRUSH::SelectionType getType() const { return BRUSH::SelectionType::AUTO_TILES; }
+
+public:
+    MapEditorModuleAutoTiles(const DATABASE::DatabaseMgr &DBMgr, QWidget *pParent = nullptr);
 };
 
 #endif

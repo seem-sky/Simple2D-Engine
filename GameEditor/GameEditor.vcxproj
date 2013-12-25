@@ -232,10 +232,13 @@
     <ClCompile Include="DatabaseWindow.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapEditorDialogMapSettings.cpp" />
+    <ClCompile Include="MapEditorModuleBrush.cpp" />
     <ClCompile Include="MapEditorModuleContent.cpp" />
     <ClCompile Include="MapEditorModuleMapTree.cpp" />
     <ClCompile Include="MapEditorModuleTiles.cpp" />
+    <ClCompile Include="MapEditorModuleTileSelection.cpp" />
     <ClCompile Include="MapEditorModuleTileSets.cpp" />
+    <ClCompile Include="MapEditorWidgetBrush.cpp" />
     <ClCompile Include="MapEditorWidgetEditor.cpp" />
     <ClCompile Include="MapViewer.cpp" />
     <ClCompile Include="Project.cpp" />
@@ -277,8 +280,8 @@
     <compile_QT_Files Include="UI\MainWindow.ui" />
     <compile_QT_Files Include="UI\Database.ui" />
     <compile_QT_Files Include="UI\MapEditorDialogMapSettings.ui" />
+    <compile_QT_Files Include="UI\MapEditorModuleBrush.ui" />
     <compile_QT_Files Include="UI\MapEditorModuleContent.ui" />
-    <compile_QT_Files Include="UI\MapEditorWidget.ui" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.vcxproj">
@@ -292,7 +295,10 @@
     <moc_header Include="MapEditorModuleContent.h" />
     <moc_header Include="MapEditorModuleMapTree.h" />
     <ClInclude Include="GraphicsTextureItem.h" />
+    <ClInclude Include="MapEditorModuleBrush.h" />
+    <ClInclude Include="MapEditorModuleTileSelection.h" />
     <ClInclude Include="MapEditorModuleTileSets.h" />
+    <moc_header Include="MapEditorWidgetBrush.h" />
     <ClInclude Include="MapViewer.h" />
     <ClInclude Include="TexturePrototypeFrame.h" />
     <moc_header Include="DatabaseDialogResize.h" />

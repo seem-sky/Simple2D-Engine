@@ -103,6 +103,15 @@
     <Filter Include="EditorCore\GraphicsSpriteItem">
       <UniqueIdentifier>{fd3dee09-aa14-40a4-9620-dfa1fc68f21a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Map Editor\Widgets">
+      <UniqueIdentifier>{b9456fbd-31bc-4a86-8448-dd67e235a12a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map Editor\Widgets\MapEditorWidgetBrush">
+      <UniqueIdentifier>{e558ed2b-bf3d-4d95-ae22-bb9d7ddb7e5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map Editor\Modules\Brush">
+      <UniqueIdentifier>{3df57d72-18f0-4b1c-96db-af0c1afedba2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainWindow.cpp">
@@ -207,6 +216,13 @@
     <ClCompile Include="GraphicsTextureItem.cpp">
       <Filter>EditorCore\GraphicsSpriteItem</Filter>
     </ClCompile>
+    <ClCompile Include="MapEditorWidgetBrush.cpp">
+      <Filter>Map Editor\Widgets\MapEditorWidgetBrush</Filter>
+    </ClCompile>
+    <ClCompile Include="MapEditorModuleBrush.cpp">
+      <Filter>Map Editor\Modules\Brush</Filter>
+    </ClCompile>
+    <ClCompile Include="MapEditorModuleTileSelection.cpp" />
   </ItemGroup>
   <ItemGroup>
     <compile_QT_Files Include="UI\MainWindow.ui">
@@ -239,14 +255,14 @@
     <compile_QT_Files Include="UI\DatabaseModuleLocalisation.ui">
       <Filter>Database\Modules\Localisation</Filter>
     </compile_QT_Files>
-    <compile_QT_Files Include="UI\MapEditorWidget.ui">
-      <Filter>Map Editor</Filter>
-    </compile_QT_Files>
     <compile_QT_Files Include="UI\MapEditorDialogMapSettings.ui">
       <Filter>Map Editor\Dialogs\MapEditorDialogMapSettings</Filter>
     </compile_QT_Files>
     <compile_QT_Files Include="UI\MapEditorModuleContent.ui">
       <Filter>Map Editor\Modules\Content</Filter>
+    </compile_QT_Files>
+    <compile_QT_Files Include="UI\MapEditorModuleBrush.ui">
+      <Filter>Map Editor\Modules\Brush</Filter>
     </compile_QT_Files>
   </ItemGroup>
   <ItemGroup>
@@ -309,6 +325,9 @@
     <moc_header Include="MapEditorModuleMapTree.h">
       <Filter>Map Editor\Modules\MapTree</Filter>
     </moc_header>
+    <moc_header Include="MapEditorWidgetBrush.h">
+      <Filter>Map Editor\Widgets\MapEditorWidgetBrush</Filter>
+    </moc_header>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -357,6 +376,10 @@
     <ClInclude Include="MapViewer.h">
       <Filter>Map Editor\Modules\Content</Filter>
     </ClInclude>
+    <ClInclude Include="MapEditorModuleBrush.h">
+      <Filter>Map Editor\Modules\Brush</Filter>
+    </ClInclude>
+    <ClInclude Include="MapEditorModuleTileSelection.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GameEditor.rc" />

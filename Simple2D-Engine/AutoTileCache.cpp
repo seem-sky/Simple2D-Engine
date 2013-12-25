@@ -18,8 +18,7 @@ AutoTile* AutoTileCache::_createAutoTile(uint32 uiID)
         return nullptr;
     if (auto pAutoTile = m_pDBMgr->getAutoTileDatabase()->getOriginalPrototype(uiID))
     {
-        auto pNewAutoTile(new AutoTile());
-        pNewAutoTile->setAutoTilePrototype(pAutoTile);
+        auto pNewAutoTile(new AutoTile(*m_pDBMgr, uiID));
         setItem(uiID, pNewAutoTile);
         return pNewAutoTile;
     }

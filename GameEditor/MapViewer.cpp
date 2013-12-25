@@ -106,7 +106,7 @@ void MapViewerScene::_drawGrid(QPainter *painter, const QRectF &rect)
 /*#####
 # MapViewer
 #####*/
-MapViewer::MapViewer(uint32 mapID, const DATABASE::DatabaseMgr &DBMgr, QWidget *pParent) : QGraphicsView(pParent), m_DBMgr(DBMgr), m_AutoTile(2, DBMgr)
+MapViewer::MapViewer(uint32 mapID, const DATABASE::DatabaseMgr &DBMgr, QWidget *pParent) : QGraphicsView(pParent), m_DBMgr(DBMgr)
 {
     setScene(new MapViewerScene(mapID, DBMgr));
     setFrameShape(QFrame::NoFrame);

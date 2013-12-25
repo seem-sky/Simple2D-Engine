@@ -69,7 +69,6 @@ public:
 
 private:
     const DATABASE::DatabaseMgr &m_DBMgr;
-    AutoTileV2 m_AutoTile;
 };
 
 #endif

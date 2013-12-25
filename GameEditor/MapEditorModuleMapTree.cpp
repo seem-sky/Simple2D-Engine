@@ -35,6 +35,18 @@ bool MapTreeItem::operator <(const QTreeWidgetItem &other) const
 #####*/
 MapEditorModuleMapTree::MapEditorModuleMapTree(QWidget *pParent) : QTreeWidget(pParent), m_pMapDatabase(nullptr)
 {
+    // header labels
+    setColumnCount(0);
+    QStringList labels;
+    labels.push_back("ID");
+    labels.push_back("name");
+    setHeaderLabels(labels);
+
+    // other stuff
+    setIndentation(15);
+    setColumnWidth(0, 50);
+    setMaximumSize(200, 200);
+
     setContextMenuPolicy(Qt::CustomContextMenu);
     connect(this, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(onContextMenuRequested(const QPoint&)));
 }

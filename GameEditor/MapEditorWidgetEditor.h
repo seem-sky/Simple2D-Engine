@@ -2,15 +2,13 @@
 #define MAP_EDITOR_WIDGET_EDITOR_H
 
 #include "MapEditorModuleTiles.h"
-#include "UI/UI_MapEditorWidget.h"
 #include "MapEditorModuleContent.h"
+#include "MapEditorModuleTileSelection.h"
+#include "MapEditorModuleMapTree.h"
 
-class MapEditorWidgetEditor : public QWidget, Ui_MapEditorWidget
+class MapEditorWidgetEditor : public QWidget
 {
     Q_OBJECT
-private:
-    void _setupTileModules();
-
 public:
     MapEditorWidgetEditor(DATABASE::DatabaseMgr &databaseMgr, QWidget *pParent = nullptr);
 
@@ -19,7 +17,11 @@ public:
 
 private:
     DATABASE::DatabaseMgr &m_DatabaseMgr;
-    MapEditorModuleContent *m_pContent;
+
+    // modules
+    MapEditorModuleContent *m_pModuleContent;
+    MapEditorModuleTileSelection *m_pModuleTileSelection;
+    MapEditorModuleMapTree *m_pModuleMapTree;
 };
 
 #endif
