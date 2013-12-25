@@ -27,6 +27,7 @@ MapEditorWidgetEditor::MapEditorWidgetEditor(DATABASE::DatabaseMgr &databaseMgr,
 
 void MapEditorWidgetEditor::setup()
 {
+    m_pModuleTileSelection->clearSelection();
     m_pModuleTileSelection->setup();
 }
 

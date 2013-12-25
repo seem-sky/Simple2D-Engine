@@ -21,22 +21,7 @@ QWidget* MapEditorModuleTileSets::_setupTooltipWidget(uint32 uiPrototypeID)
     {
         if (auto pPrototype = dynamic_cast<DATABASE::TILE_SET::TileSetPrototype*>(pModel->getDatabase()->getPrototype(uiPrototypeID)))
         {
-            QPixmap pixmap(pPrototype->getTileCount().x*TILE_SIZE, pPrototype->getTileCount().y*TILE_SIZE);
-            pixmap.fill();
-            QPainter painter(&pixmap);
-            if (m_pTileDB)
-            {
-                for (uint32 x = 0; x < pPrototype->getTileCount().x; ++x)
-                {
-                    for (uint32 y = 0; y < pPrototype->getTileCount().y; ++y)
-                    {
-                        auto pTilePrototype = m_pTileDB->getOriginalPrototype(pPrototype->getTileID(UInt32Point(x, y)));
-                        QPixmap tilePixmap;
-                        if (createPixmapFromTexturePrototype(Config::get()->getProjectDirectory(), pTilePrototype, tilePixmap))
-                            painter.drawTiledPixmap(x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE, TILE_SIZE, tilePixmap);
-                    }
-                }
-            }
+            auto pixmap = DATABASE::TILE_SET::createPixmap(*pPrototype);
             pLabel->setPixmap(pixmap);
             pLabel->resize(pixmap.size());
         }

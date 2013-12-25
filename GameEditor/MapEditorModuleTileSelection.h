@@ -15,6 +15,8 @@ public:
 
     void setup();
 
+    void clearSelection();
+
 public slots:
     void onItemClicked(BRUSH::BrushIndex brush, AbstractPixmapWidget *pWidget = nullptr);
 

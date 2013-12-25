@@ -23,29 +23,34 @@ void MapEditorModuleBrush::_update()
     newPixmap.fill(Qt::transparent);
     QPainter painter(&newPixmap);
 
-    const QPixmap *pPixmap = nullptr;
+    QPixmap pixmap;
     QString text;
     switch (m_BrushInfo.m_SelectionType)
     {
     case MAP::BRUSH::SelectionType::TILES:
         text = "tile";
-        pPixmap = GTileCache::get()->getItem(m_BrushInfo.m_ID);
+        if (auto pPixmap = GTileCache::get()->getItem(m_BrushInfo.m_ID))
+            pixmap = *pPixmap;
         break;
     case MAP::BRUSH::SelectionType::AUTO_TILES:
         text = "auto tile";
         if (auto pAutoTile = GAutoTileCache::get()->getItem(m_BrushInfo.m_ID))
-            pPixmap = pAutoTile->getPixmap(DATABASE::AUTO_TILE::INDEX_INNER_CENTER);
+        {
+            if (auto pPixmap = pAutoTile->getPixmap(DATABASE::AUTO_TILE::INDEX_INNER_CENTER))
+                pixmap = *pPixmap;
+        }
         break;
     case MAP::BRUSH::SelectionType::TILE_SETS:
         text = "tile set";
-        //pPixmap = GTileCache::get()->getItem(ID);
+        if (auto pTileSet = m_DBMgr.getTileSetDatabase()->getOriginalPrototype(m_BrushInfo.m_ID))
+            pixmap = DATABASE::TILE_SET::createPixmap(*pTileSet);
         break;
     }
 
     // draw pixmap
-    if (pPixmap)
-        painter.drawPixmap((labelSize.width() - pPixmap->size().width()) / 2, (labelSize.height() - pPixmap->size().height()) / 2,
-        pPixmap->size().width(), pPixmap->size().height(), *pPixmap);
+    if (!pixmap.isNull())
+        painter.drawPixmap((labelSize.width() - pixmap.size().width()) / 2, (labelSize.height() - pixmap.size().height()) / 2,
+            pixmap.size().width(), pixmap.size().height(), pixmap);
 
     // draw text
     QTextOption textOption(Qt::AlignHCenter | Qt::AlignVCenter);

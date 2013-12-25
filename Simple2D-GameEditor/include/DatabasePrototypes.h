@@ -151,6 +151,8 @@ namespace DATABASE
             UInt32Point m_Size;
             UInt32Multiarray2D m_Tiles;
         };
+        
+        QPixmap createPixmap(const TileSetPrototype &tileSet);
     }
 
     /*#####

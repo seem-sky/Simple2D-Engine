@@ -1,4 +1,7 @@
 #include "DatabasePrototypes.h"
+#include <QtGui/QPixmap>
+#include <QtGui/QPainter>
+#include "TileCache.h"
 
 namespace DATABASE
 {
@@ -181,6 +184,23 @@ namespace DATABASE
             newSize.y = size.y;
         if (newSize != m_Size)
             resizeTiles(newSize);
+    }
+
+    QPixmap TILE_SET::createPixmap(const TileSetPrototype &tileSet)
+    {
+        QPixmap pixmap(tileSet.getTileCount().x*TILE_SIZE, tileSet.getTileCount().y*TILE_SIZE);
+        pixmap.fill();
+        QPainter painter(&pixmap);
+        UInt32Point pos;
+        for (pos.x = 0; pos.x < tileSet.getTileCount().x; ++pos.x)
+        {
+            for (pos.y = 0; pos.y < tileSet.getTileCount().y; ++pos.y)
+            {
+                if (auto pTilePixmap = GTileCache::get()->getItem(tileSet.getTileID(pos)))
+                    painter.drawTiledPixmap(pos.x*TILE_SIZE, pos.y*TILE_SIZE, TILE_SIZE, TILE_SIZE, *pTilePixmap);
+            }
+        }
+        return pixmap;
     }
 
     /*#####

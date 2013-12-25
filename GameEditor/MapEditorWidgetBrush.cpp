@@ -57,3 +57,8 @@ void MapEditorWidgetBrush::_onSelectionChanged(BrushIndex brush, SelectionType s
         pBrush->setBrushInfo(brushInfo);
     }
 }
+
+void MapEditorWidgetBrush::setBrushInfo(BrushIndex brush, const MAP::BRUSH::BrushInfo& brushInfo)
+{
+    m_pBrushes.at(static_cast<uint32>(brush))->setBrushInfo(brushInfo);
+}

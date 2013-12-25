@@ -15,6 +15,9 @@ MapEditorModuleTileSelection::MapEditorModuleTileSelection(const DATABASE::Datab
     setCurrentIndex(0);
 
     setMaximumWidth(200);
+    m_pModuleTiles->setMaximumWidth(maximumWidth());
+    m_pModuleAutoTiles->setMaximumWidth(maximumWidth());
+    m_pModuleTileSets->setMaximumWidth(maximumWidth());
 
     // connect brush with tile selection
     connect(m_pModuleTiles, SIGNAL(selectionChanged(BRUSH::BrushIndex, MAP::BRUSH::SelectionType, uint32)),
@@ -32,6 +35,13 @@ MapEditorModuleTileSelection::MapEditorModuleTileSelection(const DATABASE::Datab
         this, SLOT(onItemClicked(BRUSH::BrushIndex)));
 
     m_pWidgetBrush->show();
+}
+
+void MapEditorModuleTileSelection::clearSelection()
+{
+    m_SelectedItems.fill(nullptr);
+    m_pWidgetBrush->setBrushInfo(BRUSH::BrushIndex::BRUSH_LEFT, MAP::BRUSH::BrushInfo());
+    m_pWidgetBrush->setBrushInfo(BRUSH::BrushIndex::BRUSH_RIGHT, MAP::BRUSH::BrushInfo());
 }
 
 void MapEditorModuleTileSelection::setup()

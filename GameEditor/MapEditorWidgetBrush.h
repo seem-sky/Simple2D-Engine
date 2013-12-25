@@ -25,6 +25,7 @@ namespace BRUSH
         MapEditorWidgetBrush(const DATABASE::DatabaseMgr &DBMgr, QWidget *pParent = nullptr);
 
         const MAP::BRUSH::BrushInfo& getBrushInfo(BrushIndex brush) const;
+        void setBrushInfo(BrushIndex brush, const MAP::BRUSH::BrushInfo& brushInfo);
 
     public slots:
         void _onSelectionChanged(BRUSH::BrushIndex brush, MAP::BRUSH::SelectionType selectioType, uint32 ID);
