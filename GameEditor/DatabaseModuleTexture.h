@@ -23,6 +23,8 @@ public:
     inline QGraphicsView* getTextureView() { return m_pView; }
     void setPixmap(const QPixmap &pPixmap);
 
+    void clear();
+
 private slots:
     void _onTransparencyColorChanged(int value);
 

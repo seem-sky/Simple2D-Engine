@@ -49,15 +49,15 @@ void DatabaseWidgetAnimation::setupPrototypeFromWidgets(DATABASE::Prototype *pPr
         if (!animation.empty())
         {
             uint32 sizeWithoutEmptyFrames = animation.size();
-            for (uint32 i = animation.size()-1; i >= 0; --i)
+            for (uint32 i = animation.size(); i > 0; --i)
             {
-                if (!animation.at(i).isEmpty())
+                if (!animation.at(i-1).isEmpty())
                 {
                     animation.resize(sizeWithoutEmptyFrames);
                     break;
                 }
                 else
-                    sizeWithoutEmptyFrames = i;
+                    sizeWithoutEmptyFrames = i-1;
             }
         }
 

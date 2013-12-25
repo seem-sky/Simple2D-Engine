@@ -67,8 +67,11 @@ void MainWindow::_openDatabase()
 {
     DatabaseWindow pDB(m_Project.getDatabaseMgr(), this);
     pDB.exec();
+
+    // clear map editor and caches
     m_pMapEditor->setup();
-    //m_pMapEditor->updateMapEditor();
+    GAutoTileCache::get()->clear();
+    GTileCache::get()->clear();
 }
 
 void MainWindow::_saveProject()

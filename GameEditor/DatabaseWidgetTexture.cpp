@@ -41,9 +41,7 @@ void DatabaseWidgetTexture::setupPrototypeFromWidgets(DATABASE::Prototype *pProt
 
 void DatabaseWidgetTexture::clear()
 {
-    m_pModuleTexture->setDataRed(-1);
-    m_pModuleTexture->setDataGreen(-1);
-    m_pModuleTexture->setDataBlue(-1);
+    m_pModuleTexture->clear();
     DatabaseWidgetRessource::clear();
 }
 

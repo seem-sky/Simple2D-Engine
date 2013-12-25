@@ -106,7 +106,7 @@
       </size>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="widget">
       <attribute name="title">
@@ -116,7 +116,7 @@
        <item row="0" column="0">
         <widget class="QTabWidget" name="m_pTextureTabs">
          <property name="currentIndex">
-          <number>2</number>
+          <number>0</number>
          </property>
          <widget class="DatabaseWidgetTile" name="m_pTiles">
           <property name="font">
