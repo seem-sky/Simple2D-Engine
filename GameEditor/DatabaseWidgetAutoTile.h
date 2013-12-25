@@ -8,19 +8,19 @@
 class DatabaseWidgetAutoTile : public DatabaseWidgetBase
 {
 protected:
-    void setupWidgetsFromPrototype(const DATABASE::Prototype *pPrototype);
-    void setupPrototypeFromWidgets(DATABASE::Prototype *pPrototype);
+    void setupWidgetsFromPrototype(const DATABASE::Prototype* pPrototype);
+    void setupPrototypeFromWidgets(DATABASE::Prototype* pPrototype);
 
 public:
-    DatabaseWidgetAutoTile(QWidget *pParent = nullptr);
+    DatabaseWidgetAutoTile(QWidget* pParent = nullptr);
 
     void clear();
 
-    void setTileDatabaseModel(TileDatabaseModel *pTileDBModel);
+    void setTileDatabaseModel(TileDatabaseModel* pTileDBModel);
 
 private:
-    DatabaseModuleAutoTile *m_pModuleAutoTile;
-    DatabaseModuleTextureDragList *m_pModuleTileList;
+    DatabaseModuleAutoTile* m_pModuleAutoTile;
+    DatabaseModuleTextureDragList* m_pModuleTileList;
 };
 
 #endif

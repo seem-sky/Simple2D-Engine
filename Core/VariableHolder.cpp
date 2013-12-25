@@ -5,14 +5,14 @@
 ///*#####
 //# VariableSettings
 //#####*/
-//bool VariableSettings::LoadDataFromXML(const XML::XML_ReadData &p_Data)
+//bool VariableSettings::LoadDataFromXML(const XML::XML_ReadData& p_Data)
 //{
 //    CComVariant t_Value;
-//    if (!p_Data.GetAttributeValue("Localisation", t_Value) || FAILED(t_Value.ChangeType(VT_UINT, &t_Value)) || t_Value.uintVal > VARIABLE_LOCALISATION_MAX)
+//    if (!p_Data.GetAttributeValue("Localisation", t_Value) || FAILED(t_Value.ChangeType(VT_UINT,& t_Value)) || t_Value.uintVal > VARIABLE_LOCALISATION_MAX)
 //        return false;
 //    m_VarLocalisation = (VariableLocalisation)t_Value.uintVal;
 //
-//    if (!p_Data.GetAttributeValue("VariableType", t_Value) || FAILED(t_Value.ChangeType(VT_UINT, &t_Value)) || t_Value.uintVal > VARIABLE_TYPE_MAX)
+//    if (!p_Data.GetAttributeValue("VariableType", t_Value) || FAILED(t_Value.ChangeType(VT_UINT,& t_Value)) || t_Value.uintVal > VARIABLE_TYPE_MAX)
 //        return false;
 //    m_VariableType = (VariableType)t_Value.uintVal;
 //    switch (m_VarLocalisation)
@@ -23,7 +23,7 @@
 //        switch (m_VariableType)
 //        {
 //        case VARIABLE_BOOL:
-//            if (FAILED(t_Value.ChangeType(VT_BOOL, &t_Value)))
+//            if (FAILED(t_Value.ChangeType(VT_BOOL,& t_Value)))
 //                return false;
 //            m_Type.m_Value.m_VariableType.m_BoolValue = t_Value.boolVal ? true : false;
 //            break;
@@ -43,7 +43,7 @@
 //        }
 //        break;
 //    default:
-//        if (!p_Data.GetAttributeValue("ID", t_Value) || FAILED(t_Value.ChangeType(VT_UINT, &t_Value)))
+//        if (!p_Data.GetAttributeValue("ID", t_Value) || FAILED(t_Value.ChangeType(VT_UINT,& t_Value)))
 //            return false;
 //
 //        switch (m_VarLocalisation)
@@ -61,7 +61,7 @@
 //    return true;
 //}
 //
-//bool VariableSettings::GetVariableXMLData(XML::XML_WriteData &p_Data) const
+//bool VariableSettings::GetVariableXMLData(XML::XML_WriteData& p_Data) const
 //{
 //    switch (m_VarLocalisation)
 //    {
@@ -152,9 +152,9 @@
 //    m_Strings.Clear();
 //}
 //
-//void VariableHolder::LoadDataFromXML(const XML::XML_ReadData &p_Data)
+//void VariableHolder::LoadDataFromXML(const XML::XML_ReadData& p_Data)
 //{
-//    const XML::ReadChildList *t_pVariableList = p_Data.GetChildList();
+//    const XML::ReadChildList* t_pVariableList = p_Data.GetChildList();
 //    if (!t_pVariableList)
 //        return;
 //
@@ -175,7 +175,7 @@
 //    }
 //}
 //
-//int32 VariableHolder::AddBoolFromXML(const XML::XML_ReadData &p_Data)
+//int32 VariableHolder::AddBoolFromXML(const XML::XML_ReadData& p_Data)
 //{
 //    if (p_Data.HasAttributes())
 //    {
@@ -195,7 +195,7 @@
 //    return -1;
 //}
 //
-//int32 VariableHolder::AddIntegerFromXML(const XML::XML_ReadData &p_Data)
+//int32 VariableHolder::AddIntegerFromXML(const XML::XML_ReadData& p_Data)
 //{
 //    if (p_Data.HasAttributes())
 //    {
@@ -215,7 +215,7 @@
 //    return -1;
 //}
 //
-//int32 VariableHolder::AddFloatFromXML(const XML::XML_ReadData &p_Data)
+//int32 VariableHolder::AddFloatFromXML(const XML::XML_ReadData& p_Data)
 //{
 //    if (p_Data.HasAttributes())
 //    {
@@ -235,7 +235,7 @@
 //    return -1;
 //}
 //
-//int32 VariableHolder::AddStringFromXML(const XML::XML_ReadData &p_Data)
+//int32 VariableHolder::AddStringFromXML(const XML::XML_ReadData& p_Data)
 //{
 //    if (p_Data.HasAttributes())
 //    {
@@ -255,11 +255,11 @@
 //    return -1;
 //}
 //
-//void VariableHolder::ParseBoolsToXML(XML::XML_WriteData &p_XMLData) const
+//void VariableHolder::ParseBoolsToXML(XML::XML_WriteData& p_XMLData) const
 //{
 //    for (uint32 i = 0; i < m_Bools.Size(); ++i)
 //    {
-//        if (const TVariable<bool> *t_pVar = m_Bools.GetVariable(i))
+//        if (const TVariable<bool>* t_pVar = m_Bools.GetVariable(i))
 //        {
 //            XML::XML_WriteData t_Data(XML::XML_WRITE_APPEND);
 //            t_Data.AddAttribute("name", (LPCSTR)t_pVar->m_sName.c_str());
@@ -269,11 +269,11 @@
 //    }
 //}
 //
-//void VariableHolder::ParseIntegersToXML(XML::XML_WriteData &p_XMLData) const
+//void VariableHolder::ParseIntegersToXML(XML::XML_WriteData& p_XMLData) const
 //{
 //    for (uint32 i = 0; i < m_Integers.Size(); ++i)
 //    {
-//        if (const TVariable<int32> *t_pVar = m_Integers.GetVariable(i))
+//        if (const TVariable<int32>* t_pVar = m_Integers.GetVariable(i))
 //        {
 //            XML::XML_WriteData t_Data(XML::XML_WRITE_APPEND);
 //            t_Data.AddAttribute("name", (LPCSTR)t_pVar->m_sName.c_str());
@@ -283,11 +283,11 @@
 //    }
 //}
 //
-//void VariableHolder::ParseFloatsToXML(XML::XML_WriteData &p_XMLData) const
+//void VariableHolder::ParseFloatsToXML(XML::XML_WriteData& p_XMLData) const
 //{
 //    for (uint32 i = 0; i < m_Floats.Size(); ++i)
 //    {
-//        if (const TVariable<float> *t_pVar = m_Floats.GetVariable(i))
+//        if (const TVariable<float>* t_pVar = m_Floats.GetVariable(i))
 //        {
 //            XML::XML_WriteData t_Data(XML::XML_WRITE_APPEND);
 //            t_Data.AddAttribute("name", (LPCSTR)t_pVar->m_sName.c_str());
@@ -297,11 +297,11 @@
 //    }
 //}
 //
-//void VariableHolder::ParseStringsToXML(XML::XML_WriteData &p_XMLData) const
+//void VariableHolder::ParseStringsToXML(XML::XML_WriteData& p_XMLData) const
 //{
 //    for (uint32 i = 0; i < m_Strings.Size(); ++i)
 //    {
-//        if (const TVariable<QString> *t_pVar = m_Strings.GetVariable(i))
+//        if (const TVariable<QString>* t_pVar = m_Strings.GetVariable(i))
 //        {
 //            XML::XML_WriteData t_Data(XML::XML_WRITE_APPEND);
 //            t_Data.AddAttribute("name", (LPCSTR)t_pVar->m_sName.c_str());
@@ -311,7 +311,7 @@
 //    }
 //}
 //
-//void VariableHolder::GetXMLData(XML::XML_WriteData &p_XMLData) const
+//void VariableHolder::GetXMLData(XML::XML_WriteData& p_XMLData) const
 //{
 //    ParseBoolsToXML(p_XMLData);
 //    ParseIntegersToXML(p_XMLData);

@@ -13,7 +13,7 @@ using namespace SCENE;
 /*#####
 # GameScene
 #####*/
-GameScene::GameScene(Game &game) : Scene(game), m_Player(m_MapMgr)
+GameScene::GameScene(Game& game) : Scene(game), m_Player(m_MapMgr)
 {
     m_pSceneView = new GameSceneView(this, m_DatabaseMgr);
     m_DatabaseMgr.loadDatabase("projects/untitled/", DATABASE::DatabaseMgr::ALL_DATABASES^DATABASE::DatabaseMgr::TILE_SET_DATABASE);
@@ -22,7 +22,7 @@ GameScene::GameScene(Game &game) : Scene(game), m_Player(m_MapMgr)
     showFPS();
 
     // player key binds
-    m_Player.addKeyBind(KEY::KEY_F11, std::bind(&Game::toggleFullScreen, &m_Game), 500);
+    m_Player.addKeyBind(KEY::KEY_F11, std::bind(&Game::toggleFullScreen,& m_Game), 500);
 }
 
 void GameScene::playerChangesMap(MAP::MapPtr pMap)
@@ -39,9 +39,9 @@ void GameScene::playerChangesMap(MAP::MapPtr pMap)
     }
 }
 
-MapItem* GameScene::createNewWorldObject(MAP::OBJECT::WorldObject *pObject)
+MapItem* GameScene::createNewWorldObject(MAP::OBJECT::WorldObject* pObject)
 {
-    MapItem *pItem = new MapItem(pObject, m_DatabaseMgr);
+    MapItem* pItem = new MapItem(pObject, m_DatabaseMgr);
     pItem->setPos(pObject->getPosition().x, pObject->getPosition().y);
     return pItem;
 }
@@ -54,7 +54,7 @@ void GameScene::update(uint32 uiDiff)
     if (auto pMap = m_MapMgr.getItem(m_Player.getMapGUID()))
     {
         // add new world objects
-        for (auto &obj : pMap->getNewWorldObjects())
+        for (auto& obj : pMap->getNewWorldObjects())
             m_pSceneView->addItem(createNewWorldObject(obj));
     }
 
@@ -71,7 +71,7 @@ void GameScene::update(uint32 uiDiff)
 /*#####
 # MapItem
 #####*/
-MapItem::MapItem(const MAP::OBJECT::WorldObject *pWorldObject, const DATABASE::DatabaseMgr &DBMgr) : QGraphicsItem(), m_DBMgr(DBMgr), m_pWorldObject(pWorldObject)
+MapItem::MapItem(const MAP::OBJECT::WorldObject* pWorldObject, const DATABASE::DatabaseMgr& DBMgr) : QGraphicsItem(), m_DBMgr(DBMgr), m_pWorldObject(pWorldObject)
 {}
 
 bool MapItem::_animationChanged()
@@ -87,14 +87,14 @@ QRectF MapItem::boundingRect() const
     return QRectF();
 }
 
-void MapItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void MapItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
     syncWithWorldObject();
     QPixmap pixmap;
     if (!QPixmapCache::find(m_PixmapIdentify, pixmap))
     {
         // generate new pixmap
-        if (m_pCurrentAnimation && m_DBMgr.getSpriteDatabase())
+        if (m_pCurrentAnimation& & m_DBMgr.getSpriteDatabase())
         {
             ObjectAnimationWidget widget(m_pCurrentAnimation, m_DBMgr.getSpriteDatabase(), m_uiCurrentFrame);
             QRect boundingRect = widget.scene()->itemsBoundingRect().toRect();
@@ -134,28 +134,28 @@ void MapItem::syncWithWorldObject()
 /*#####
 # GameSceneView
 #####*/
-GameSceneView::GameSceneView(GameScene *pScene, const DATABASE::DatabaseMgr &DBMgr) : SceneView(pScene), m_DatabaseMgr(DBMgr)
+GameSceneView::GameSceneView(GameScene* pScene, const DATABASE::DatabaseMgr& DBMgr) : SceneView(pScene), m_DatabaseMgr(DBMgr)
 {}
 
-void GameSceneView::drawBackground(QPainter *pPainter, const QRectF &rect)
+void GameSceneView::drawBackground(QPainter* pPainter, const QRectF& rect)
 {
     pPainter->fillRect(rect, QColor(0, 0, 0));
     drawTiles(pPainter, rect, MAP::LAYER_BACKGROUND);
 }
 
-void GameSceneView::drawForeground(QPainter *painter, const QRectF &rect)
+void GameSceneView::drawForeground(QPainter* painter, const QRectF& rect)
 {
     drawTiles(painter, rect, MAP::LAYER_FOREGROUND);
     SceneView::drawForeground(painter, rect);
 }
 
-void GameSceneView::drawTiles(QPainter *painter, const QRectF &rect, MAP::Layer layerType)
+void GameSceneView::drawTiles(QPainter* painter, const QRectF& rect, MAP::Layer layerType)
 {
-    GameScene *pScene = getGameScene();
+    GameScene* pScene = getGameScene();
     if (!pScene)
         return;
 
-    const PLAYER::GamePlayer &player = pScene->getPlayer();
+    const PLAYER::GamePlayer& player = pScene->getPlayer();
     auto pMap = player.getMap();
     if (!pMap)
         return;
@@ -174,14 +174,14 @@ void GameSceneView::drawTiles(QPainter *painter, const QRectF &rect, MAP::Layer 
                 if (!tileObj.isAutoTile())
                 {
                     if (auto pPixmap = m_TileCache.getItem(tileObj.m_uiTileID))
-                        painter->drawTiledPixmap(x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE, TILE_SIZE, *pPixmap);
+                        painter->drawTiledPixmap(x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE, TILE_SIZE,* pPixmap);
                 }
                 else
                 {
                     if (auto pAutoTile = m_AutoTileCache.getItem(tileObj.m_uiAutoTileSetID))
                     {
                         if (auto pPixmap = pAutoTile->getPixmap(static_cast<DATABASE::AUTO_TILE::AUTO_TILE_INDEX>(tileObj.m_uiTileID)))
-                            painter->drawTiledPixmap(x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE, TILE_SIZE, *pPixmap);
+                            painter->drawTiledPixmap(x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE, TILE_SIZE,* pPixmap);
                     }
                 }
             }

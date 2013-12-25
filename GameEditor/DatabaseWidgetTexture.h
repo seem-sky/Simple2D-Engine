@@ -14,21 +14,21 @@ private:
     QPixmap _createPrototypePixmap(uint32 uiID) const;
 
 protected:
-    virtual void setupWidgetsFromPrototype(const DATABASE::Prototype *pPrototype);
-    virtual void setupPrototypeFromWidgets(DATABASE::Prototype *pPrototype);
+    virtual void setupWidgetsFromPrototype(const DATABASE::Prototype* pPrototype);
+    virtual void setupPrototypeFromWidgets(DATABASE::Prototype* pPrototype);
     virtual void clear();
 
-    virtual void setupPixmap(const QPixmap &pixmap);
+    virtual void setupPixmap(const QPixmap& pixmap);
 
 private slots:
     void _onFileImport(uint32 uiID);
-    void _onTransparencyColorChanged(const Color &color);
+    void _onTransparencyColorChanged(const Color& color);
 
 public:
-    DatabaseWidgetTexture(QWidget *pParent = nullptr);
+    DatabaseWidgetTexture(QWidget* pParent = nullptr);
 
 protected:
-    DatabaseModuleTexture *m_pModuleTexture;
+    DatabaseModuleTexture* m_pModuleTexture;
 };
 
 #endif

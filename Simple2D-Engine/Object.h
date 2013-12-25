@@ -12,12 +12,12 @@ namespace MAP
         class Object : public ENTITY::Entity
         {
         public:
-            Object(uint32 GUID, uint32 ID = 0, const std::string &name = "", const std::string &script = "");
+            Object(uint32 GUID, uint32 ID = 0, const std::string& name = "", const std::string& script = "");
 
             inline Int32Point getPosition() const { return m_Position; }
-            inline void setPosition(const Int32Point &newPos) { m_Position = newPos; }
+            inline void setPosition(const Int32Point& newPos) { m_Position = newPos; }
 
-            inline void setMap(Map *pMap) { m_pMap = pMap; }
+            inline void setMap(Map* pMap) { m_pMap = pMap; }
             inline const Map* getMap() const { return m_pMap; }
             inline Map* getMap() { return m_pMap; }
             uint32 getMapGUID() const;
@@ -25,7 +25,7 @@ namespace MAP
             virtual void update(uint32 uiDiff);
 
         private:
-            Map *m_pMap;
+            Map* m_pMap;
 
         protected:
             Int32Point m_Position;

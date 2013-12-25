@@ -1,19 +1,19 @@
 #include "DatabaseWidgetTileSet.h"
 
-DatabaseWidgetTileSet::DatabaseWidgetTileSet(const DATABASE::TileSetDatabase *pDatabase, QWidget *pParent) : DatabaseWidgetBase(pParent),
+DatabaseWidgetTileSet::DatabaseWidgetTileSet(const DATABASE::TileSetDatabase* pDatabase, QWidget* pParent) : DatabaseWidgetBase(pParent),
     m_pModuleTileSet(new DatabaseModuleTileSet(this)), m_pModuleTileList(new DatabaseModuleTextureDragList(this))
 {
     // setup tileset module
-    if (QGridLayout *pLayout = dynamic_cast<QGridLayout*>(layout()))
+    if (QGridLayout* pLayout = dynamic_cast<QGridLayout*>(layout()))
     {
         pLayout->addWidget(m_pModuleTileSet, 0, 1);
 
         // add tile list module
-        QVBoxLayout *pBoxLayout(new QVBoxLayout());
+        QVBoxLayout* pBoxLayout(new QVBoxLayout());
         pBoxLayout->setSpacing(6);
 
         // setup "tiles:" label
-        QLabel *pLabel(new QLabel("tiles:"));
+        QLabel* pLabel(new QLabel("tiles:"));
         QFont font;
         font.setPointSize(8);
         font.setBold(true);
@@ -26,13 +26,13 @@ DatabaseWidgetTileSet::DatabaseWidgetTileSet(const DATABASE::TileSetDatabase *pD
     }
 }
 
-void DatabaseWidgetTileSet::setTileDatabaseModel(DatabaseModel<DATABASE::TileDatabase> *pDBModel)
+void DatabaseWidgetTileSet::setTileDatabaseModel(DatabaseModel<DATABASE::TileDatabase>* pDBModel)
 {
     m_pModuleTileList->setModel(pDBModel);
     m_pModuleTileSet->setTileDatabase(dynamic_cast<DATABASE::TileDatabase*>(pDBModel->getDatabase()));
 }
 
-void DatabaseWidgetTileSet::setupWidgetsFromPrototype(const DATABASE::Prototype *pPrototype)
+void DatabaseWidgetTileSet::setupWidgetsFromPrototype(const DATABASE::Prototype* pPrototype)
 {
     if (auto pProto = dynamic_cast<const DATABASE::TILE_SET::TileSetPrototype*>(pPrototype))
     {
@@ -48,7 +48,7 @@ void DatabaseWidgetTileSet::setupWidgetsFromPrototype(const DATABASE::Prototype 
     DatabaseWidgetBase::setupWidgetsFromPrototype(pPrototype);
 }
 
-void DatabaseWidgetTileSet::setupPrototypeFromWidgets(DATABASE::Prototype *pPrototype)
+void DatabaseWidgetTileSet::setupPrototypeFromWidgets(DATABASE::Prototype* pPrototype)
 {
     if (auto pProto = dynamic_cast<DATABASE::TILE_SET::TileSetPrototype*>(pPrototype))
     {

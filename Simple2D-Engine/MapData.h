@@ -44,7 +44,7 @@ namespace MAP
         class MapData
         {
         public:
-            MapData(const DATABASE::DatabaseMgr &DBMgr, uint32 mapID);
+            MapData(const DATABASE::DatabaseMgr& DBMgr, uint32 mapID);
 
             inline MapLayer& getMapLayer() { return m_Layer; }
             inline const MapLayer& getMapLayer() const { return m_Layer; }
@@ -59,14 +59,14 @@ namespace MAP
             void reload();
 
         private:
-            const DATABASE::DatabaseMgr &m_DBMgr;
+            const DATABASE::DatabaseMgr& m_DBMgr;
             const uint32 m_MapID;
             MapLayer m_Layer;
             MapObjectContainer m_Objects;
         };
     }
 
-    QString getFilePath(const DATABASE::MAP_STRUCTURE::MapPrototype &map);
+    QString getFilePath(const DATABASE::MAP_STRUCTURE::MapPrototype& map);
 }
 
 #endif

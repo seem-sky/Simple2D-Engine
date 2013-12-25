@@ -30,15 +30,15 @@
     <number>3</number>
    </property>
    <item row="2" column="0">
-    <widget class="QComboBox" name="m_pMode">
+    <widget class="QComboBox" name="m_pBrushType">
      <item>
       <property name="text">
-       <string>Pen</string>
+       <string>pen</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>Fill</string>
+       <string>fill</string>
       </property>
      </item>
     </widget>

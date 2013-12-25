@@ -35,13 +35,13 @@ namespace MAP
         class Brush
         {
         public:
-            Brush(MapLayer &mapLayer);
+            Brush(MapLayer& mapLayer);
 
-            void setBrushInfo(const BrushInfo &brushInfo);
+            void setBrushInfo(const BrushInfo& brushInfo);
             inline const BrushInfo& getBrushInfo() const { return m_BrushInfo; }
 
         private:
-            MapLayer &m_MapLayer;
+            MapLayer& m_MapLayer;
             BrushInfo m_BrushInfo;
         };
     }

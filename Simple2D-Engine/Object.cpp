@@ -4,7 +4,7 @@
 using namespace MAP;
 using namespace OBJECT;
 
-Object::Object(uint32 GUID, uint32 ID, const std::string &name, const std::string &script) : Entity(GUID, ID, name, script)
+Object::Object(uint32 GUID, uint32 ID, const std::string& name, const std::string& script) : Entity(GUID, ID, name, script)
 {}
 
 void Object::update(uint32 uiDiff)

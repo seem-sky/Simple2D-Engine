@@ -7,16 +7,16 @@
 class DatabaseWidgetLocalisation : public DatabaseWidgetBase
 {
 protected:
-    void setupWidgetsFromPrototype(const DATABASE::Prototype *pPrototype);
-    void setupPrototypeFromWidgets(DATABASE::Prototype *pPrototype);
+    void setupWidgetsFromPrototype(const DATABASE::Prototype* pPrototype);
+    void setupPrototypeFromWidgets(DATABASE::Prototype* pPrototype);
 
 public:
-    DatabaseWidgetLocalisation(QWidget *pParent = nullptr);
+    DatabaseWidgetLocalisation(QWidget* pParent = nullptr);
 
     void clear();
 
 private:
-    DatabaseModuleLocalisation *m_pModuleLocalisation;
+    DatabaseModuleLocalisation* m_pModuleLocalisation;
 };
 
 #endif

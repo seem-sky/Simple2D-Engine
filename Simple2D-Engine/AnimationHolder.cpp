@@ -21,7 +21,7 @@ void AnimationHolder::update(uint32 uiDiff)
         m_uiTimer -= uiDiff;
 }
 
-void AnimationHolder::changeAnimation(const AnimationPrototype *pAnimation)
+void AnimationHolder::changeAnimation(const AnimationPrototype* pAnimation)
 {
     m_uiCurrentFrame = 0;
     m_pAnimation = pAnimation;

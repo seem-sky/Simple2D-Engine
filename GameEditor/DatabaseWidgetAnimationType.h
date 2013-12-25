@@ -6,7 +6,7 @@
 class DatabaseWidgetAnimationType : public DatabaseWidgetBase
 {
 public:
-    DatabaseWidgetAnimationType(QWidget *pParent = nullptr);
+    DatabaseWidgetAnimationType(QWidget* pParent = nullptr);
 };
 
 #endif

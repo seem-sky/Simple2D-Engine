@@ -17,7 +17,7 @@ public:
     inline void setDBMgr(const DATABASE::DatabaseMgr* pDBMgr) { m_pDBMgr = pDBMgr; }
 
 private:
-    const DATABASE::DatabaseMgr *m_pDBMgr;
+    const DATABASE::DatabaseMgr* m_pDBMgr;
 };
 typedef TSingleton<AutoTileCache> GAutoTileCache;
 

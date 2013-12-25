@@ -10,9 +10,9 @@ private:
     void _setRowCount(uint32 count);
 
 public:
-    DatabaseModuleLocalisation(QWidget *pParent = nullptr);
+    DatabaseModuleLocalisation(QWidget* pParent = nullptr);
 
-    void setLocalisation(uint32 index, const QString &localisation);
+    void setLocalisation(uint32 index, const QString& localisation);
     QString getLocalisation(uint32 index);
 
     void clear();

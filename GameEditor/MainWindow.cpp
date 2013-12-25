@@ -10,7 +10,7 @@
 
 using namespace DATABASE;
 
-MainWindow::MainWindow(QMainWindow *pParent) : QMainWindow(pParent), Ui_MainWindow(), m_pMapEditor(new MapEditorWidgetEditor(m_Project.getDatabaseMgr(), this))
+MainWindow::MainWindow(QMainWindow* pParent) : QMainWindow(pParent), Ui_MainWindow(), m_pMapEditor(new MapEditorWidgetEditor(m_Project.getDatabaseMgr(), this))
 {
     Logfile::get();
     setupUi(this);
@@ -40,7 +40,7 @@ MainWindow::MainWindow(QMainWindow *pParent) : QMainWindow(pParent), Ui_MainWind
     Config::get()->loadConfig();
     //move(Config::get()->getMainWindowPos().x, Config::get()->getMainWindowPos().y);
     //QSize newSize = QSize(Config::get()->getMainWindowSize().x, Config::get()->getMainWindowSize().y);
-    //if (newSize.width() >= minimumWidth() && newSize.height() >= minimumHeight())
+    //if (newSize.width() >= minimumWidth()& & newSize.height() >= minimumHeight())
     //    resize(newSize);
     if (!Config::get()->getProjectDirectory().isEmpty())
         _loadProject(Config::get()->getProjectDirectory());
@@ -108,7 +108,7 @@ void MainWindow::_loadProject()
     }
 }
 
-bool MainWindow::_loadProject(const QString &dir)
+bool MainWindow::_loadProject(const QString& dir)
 {
     QTime time;
     time.start();
@@ -122,7 +122,7 @@ bool MainWindow::_loadProject(const QString &dir)
         emit projectLoadDone();
         return true;
     }
-    QErrorMessage *pMsg = new QErrorMessage(this);
+    QErrorMessage* pMsg = new QErrorMessage(this);
     pMsg->showMessage(dir + " is no valid project directory.");
     ERROR_LOG("Unable to load " + dir + ". Corrupt project or no such directory.");
     Config::get()->clear();

@@ -28,8 +28,8 @@ namespace MAP
         DATABASE::AUTO_TILE_INDEX m_uiAutoTileSetID;
 
         inline bool isAutoTile() const { return m_uiAutoTileSetID != 0; }
-        inline bool isEmpty() const { return !m_uiTileID && !m_uiAutoTileSetID; }
-        inline bool isValid() const { return m_uiTileID != MATH::maximum<DATABASE::TILE_INDEX>() &&
+        inline bool isEmpty() const { return !m_uiTileID& & !m_uiAutoTileSetID; }
+        inline bool isValid() const { return m_uiTileID != MATH::maximum<DATABASE::TILE_INDEX>()& &
             m_uiAutoTileSetID != MATH::maximum<DATABASE::AUTO_TILE_INDEX>(); }
     };
 
@@ -40,16 +40,16 @@ namespace MAP
     public:
         void clear();
 
-        void resize(const UInt32Point &size, uint8 uiForegroundLayerSize, uint8 uiBackgroundLayerSize);
+        void resize(const UInt32Point& size, uint8 uiForegroundLayerSize, uint8 uiBackgroundLayerSize);
         inline UInt32Point getSize() const { return m_Size; }
         inline uint8 getLayerSize(Layer layer) const { return m_uiLayer.at(layer); };
 
-        MapTile& getMapTile(const UInt32Point3D &at, Layer layer);
-        const MapTile& getMapTile(const UInt32Point3D &at, Layer layer) const;
+        MapTile& getMapTile(const UInt32Point3D& at, Layer layer);
+        const MapTile& getMapTile(const UInt32Point3D& at, Layer layer) const;
 
-        void setMapTile(const UInt32Point3D &at, Layer layer, MapTile tile);
+        void setMapTile(const UInt32Point3D& at, Layer layer, MapTile tile);
 
-        inline bool isInMap(const UInt32Point &at) const { return at.x < getSize().x && at.y < getSize().y; }
+        inline bool isInMap(const UInt32Point& at) const { return at.x < getSize().x& & at.y < getSize().y; }
 
     private:
         TileDataMultiarray3D m_BackgroundTiles;

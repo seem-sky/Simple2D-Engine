@@ -19,10 +19,10 @@ namespace BRUSH
         void _updateOpacity();
 
     protected:
-        void changeEvent(QEvent *pEvent);
+        void changeEvent(QEvent* pEvent);
 
     public:
-        MapEditorWidgetBrush(const DATABASE::DatabaseMgr &DBMgr, QWidget *pParent = nullptr);
+        MapEditorWidgetBrush(const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent = nullptr);
 
         const MAP::BRUSH::BrushInfo& getBrushInfo(BrushIndex brush) const;
         void setBrushInfo(BrushIndex brush, const MAP::BRUSH::BrushInfo& brushInfo);
@@ -32,7 +32,7 @@ namespace BRUSH
 
     private:
         std::array<MapEditorModuleBrush*, 2> m_pBrushes;
-        const DATABASE::DatabaseMgr &m_DBMgr; 
+        const DATABASE::DatabaseMgr& m_DBMgr; 
     };
 }
 

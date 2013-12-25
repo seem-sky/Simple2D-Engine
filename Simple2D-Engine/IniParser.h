@@ -18,21 +18,21 @@ public:
     ## ini reader
     #####*/
     // open and read file
-    bool readFile(const QString &fileName);
+    bool readFile(const QString& fileName);
 
-    QString getString(const QString &key, const QString &sector, const QString defaultString = "");
-    void getAllStrings(const QString &key, const QString &sector, StringVector &data);
+    QString getString(const QString& key, const QString& sector, const QString defaultString = "");
+    void getAllStrings(const QString& key, const QString& sector, StringVector& data);
 
-    int32 getInt(const QString &key, const QString &sector, const int32 defaultValue = 0);
-    uint32 getUInt(const QString &key, const QString &sector, const uint32 defaultValue = 0);
-    bool getBool(const QString &key, const QString &sector, const bool defaultValue = false);
+    int32 getInt(const QString& key, const QString& sector, const int32 defaultValue = 0);
+    uint32 getUInt(const QString& key, const QString& sector, const uint32 defaultValue = 0);
+    bool getBool(const QString& key, const QString& sector, const bool defaultValue = false);
 
     /*#####
     ## ini writer
     #####*/
     template <typename T>
-    void addData(const QString &key, const QString &sector, const T &data) { addData(key, sector, QString::number(data)); };
-    void addData(const QString &key, const QString &sector, const QString &sData);
+    void addData(const QString& key, const QString& sector, const T& data) { addData(key, sector, QString::number(data)); };
+    void addData(const QString& key, const QString& sector, const QString& sData);
     void saveDataToFile(QString sFileName);
 };
 #endif

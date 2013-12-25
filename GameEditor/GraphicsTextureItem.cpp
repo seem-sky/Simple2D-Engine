@@ -9,12 +9,12 @@
 /*#####
 # GraphicsTextureItem
 #####*/
-GraphicsTextureItem::GraphicsTextureItem(const DATABASE::TexturePrototype *pPrototype) : QGraphicsItem(), m_pPrototype(pPrototype)
+GraphicsTextureItem::GraphicsTextureItem(const DATABASE::TexturePrototype* pPrototype) : QGraphicsItem(), m_pPrototype(pPrototype)
 {
     setFlag(QGraphicsItem::ItemSendsGeometryChanges);
 }
 
-void GraphicsTextureItem::keyPressEvent(QKeyEvent *pEvent)
+void GraphicsTextureItem::keyPressEvent(QKeyEvent* pEvent)
 {
     switch(pEvent->key())
     {
@@ -25,7 +25,7 @@ void GraphicsTextureItem::keyPressEvent(QKeyEvent *pEvent)
     }
 }
 
-void GraphicsTextureItem::paint(QPainter *pPainter, const QStyleOptionGraphicsItem *pOption, QWidget *pWidget)
+void GraphicsTextureItem::paint(QPainter* pPainter, const QStyleOptionGraphicsItem* pOption, QWidget* pWidget)
 {
     auto pixmap = _getPixmap();
     pPainter->drawPixmap(0, 0, pixmap);
@@ -34,7 +34,7 @@ void GraphicsTextureItem::paint(QPainter *pPainter, const QStyleOptionGraphicsIt
         _hightlightSelection(pPainter, pOption);
 }
 
-void GraphicsTextureItem::_hightlightSelection(QPainter *pPainter, const QStyleOptionGraphicsItem *pOption)
+void GraphicsTextureItem::_hightlightSelection(QPainter* pPainter, const QStyleOptionGraphicsItem* pOption)
 {
     // from QGraphicsItem.cpp
     const QRectF murect = pPainter->transform().mapRect(QRectF(0, 0, 1, 1));

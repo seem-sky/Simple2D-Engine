@@ -11,25 +11,26 @@ class MapEditorModuleTileSelection : public QTabWidget
 {
     Q_OBJECT
 public:
-    MapEditorModuleTileSelection(const DATABASE::DatabaseMgr &databaseMgr, QWidget *pParent = nullptr);
+    MapEditorModuleTileSelection(const DATABASE::DatabaseMgr& databaseMgr, QWidget* pParent = nullptr);
 
     void setup();
 
     void clearSelection();
 
 public slots:
-    void onItemClicked(BRUSH::BrushIndex brush, AbstractPixmapWidget *pWidget = nullptr);
+    void onItemClicked(BRUSH::BrushIndex brush, AbstractPixmapWidget* pWidget = nullptr);
+    void onDrawRequested(BRUSH::BrushIndex brush, MAP::MapLayer& mapLayer, const UInt32Point& pos);
 
 private:
     std::array<AbstractPixmapWidget*, 2> m_SelectedItems;
-    const DATABASE::DatabaseMgr &m_DatabaseMgr;
+    const DATABASE::DatabaseMgr& m_DatabaseMgr;
 
     // tabs
-    MapEditorModuleTiles *m_pModuleTiles;
-    MapEditorModuleAutoTiles *m_pModuleAutoTiles;
-    MapEditorModuleTileSets *m_pModuleTileSets;
+    MapEditorModuleTiles* m_pModuleTiles;
+    MapEditorModuleAutoTiles* m_pModuleAutoTiles;
+    MapEditorModuleTileSets* m_pModuleTileSets;
 
-    BRUSH::MapEditorWidgetBrush *m_pWidgetBrush;
+    BRUSH::MapEditorWidgetBrush* m_pWidgetBrush;
 };
 
 #endif

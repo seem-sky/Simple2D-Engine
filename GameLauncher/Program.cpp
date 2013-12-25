@@ -12,7 +12,7 @@ using namespace PROGRAM;
 CMD_Params::CMD_Params() : m_DebugMode(false)
 {}
 
-void CMD_Params::parseParam(const QString &param)
+void CMD_Params::parseParam(const QString& param)
 {
     if (param == "-debug")
         m_DebugMode = true;
@@ -25,7 +25,7 @@ void Program::setApplication(ApplicationPtr pApp)
     m_pApplication = std::move(pApp);
 }
 
-void Program::init(int argc, char *argv[])
+void Program::init(int argc, char* argv[])
 {
     // parse command line commands
     for (int32 i = 1; i < argc; ++i)

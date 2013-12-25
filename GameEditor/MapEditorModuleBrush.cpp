@@ -2,16 +2,20 @@
 #include "AutoTileCache.h"
 #include <QtGui/QPainter>
 #include <QtGui/QTextOption>
+#include "moc_MapEditorModuleBrush.h"
 
 using namespace BRUSH;
+using namespace MAP::BRUSH;
 
-MapEditorModuleBrush::MapEditorModuleBrush(const DATABASE::DatabaseMgr &DBMgr, QWidget *pParent) : QWidget(), Ui_MapEditorModuleBrush(), m_DBMgr(DBMgr)
+MapEditorModuleBrush::MapEditorModuleBrush(const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent) : QWidget(), Ui_MapEditorModuleBrush(), m_DBMgr(DBMgr)
 {
     setupUi(this);
     _update();
+
+    connect(m_pBrushType, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(_onBrushTypeChanged(const QString&)));
 }
 
-void MapEditorModuleBrush::setText(const QString &text)
+void MapEditorModuleBrush::setText(const QString& text)
 {
     m_pText->setText(text);
 }
@@ -30,14 +34,14 @@ void MapEditorModuleBrush::_update()
     case MAP::BRUSH::SelectionType::TILES:
         text = "tile";
         if (auto pPixmap = GTileCache::get()->getItem(m_BrushInfo.m_ID))
-            pixmap = *pPixmap;
+            pixmap =* pPixmap;
         break;
     case MAP::BRUSH::SelectionType::AUTO_TILES:
         text = "auto tile";
         if (auto pAutoTile = GAutoTileCache::get()->getItem(m_BrushInfo.m_ID))
         {
             if (auto pPixmap = pAutoTile->getPixmap(DATABASE::AUTO_TILE::INDEX_INNER_CENTER))
-                pixmap = *pPixmap;
+                pixmap =* pPixmap;
         }
         break;
     case MAP::BRUSH::SelectionType::TILE_SETS:
@@ -65,8 +69,16 @@ void MapEditorModuleBrush::_update()
     m_pCurrentTile->setPixmap(newPixmap);
 }
 
-void MapEditorModuleBrush::setBrushInfo(const MAP::BRUSH::BrushInfo& brushInfo)
+void MapEditorModuleBrush::setBrushInfo(const BrushInfo& brushInfo)
 {
     m_BrushInfo = brushInfo;
     _update();
+}
+
+void MapEditorModuleBrush::_onBrushTypeChanged(const QString& text)
+{
+    if (text == "fill")
+        m_BrushInfo.m_Type = BrushType::FILL;
+    else
+        m_BrushInfo.m_Type = BrushType::PEN;
 }

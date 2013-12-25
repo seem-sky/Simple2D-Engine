@@ -3,7 +3,7 @@
 
 using namespace PLAYER;
 
-GamePlayer::GamePlayer(MAP::MapMgr &mapMgr) : Player(), m_MapMgr(mapMgr), m_Camera(this), m_MapGUID(0), m_ObjectGUID(0)
+GamePlayer::GamePlayer(MAP::MapMgr& mapMgr) : Player(), m_MapMgr(mapMgr), m_Camera(this), m_MapGUID(0), m_ObjectGUID(0)
 {}
 
 void GamePlayer::update(uint32 uiDiff)

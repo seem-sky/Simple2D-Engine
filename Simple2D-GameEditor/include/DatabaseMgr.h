@@ -95,22 +95,22 @@ namespace DATABASE
         inline const MAP_STRUCTURE::MapDatabase* getMapDatabase() const { return dynamic_cast<MAP_STRUCTURE::MapDatabase*>(m_Databases.at(DATABASE::MAP_DATABASE).get()); }
         inline MAP_STRUCTURE::MapDatabase* getMapDatabase() { return dynamic_cast<MAP_STRUCTURE::MapDatabase*>(m_Databases.at(DATABASE::MAP_DATABASE).get()); }
 
-        inline void setTileDatabase(TileDatabase *db) { m_Databases.at(DATABASE::TILE_DATABASE) = std::unique_ptr<IDatabase>(db); }
-        inline void setTileSetDatabase(TileSetDatabase *db) { m_Databases.at(DATABASE::TILE_SET_DATABASE) = std::unique_ptr<IDatabase>(db); }
-        inline void setAutoTileDatabase(AutoTileDatabase *db) { m_Databases.at(DATABASE::AUTO_TILE_DATABASE) = std::unique_ptr<IDatabase>(db); }
-        inline void setSpriteDatabase(SpriteDatabase *db) { m_Databases.at(DATABASE::SPRITE_DATABASE) = std::unique_ptr<IDatabase>(db); }
-        inline void setAnimationDatabase(AnimationDatabase *db) { m_Databases.at(DATABASE::ANIMATION_DATABASE) = std::unique_ptr<IDatabase>(db); }
-        inline void setAnimationTypeDatabase(AnimationTypeDatabase *db) { m_Databases.at(DATABASE::ANIMATION_TYPE_DATABASE) = std::unique_ptr<IDatabase>(db); }
-        inline void setWorldObjectDatabase(WorldObjectDatabase *db) { m_Databases.at(DATABASE::WORLD_OBJECT_DATABASE) = std::unique_ptr<IDatabase>(db); }
-        inline void setDynamicObjectDatabase(DynamicObjectDatabase *db) { m_Databases.at(DATABASE::DYNAMIC_OBJECT_DATABASE) = std::unique_ptr<IDatabase>(db); }
-        inline void setLocalisationDatabase(LocalisationDatabase *db) { m_Databases.at(DATABASE::LOCALISATION_DATABASE) = std::unique_ptr<IDatabase>(db); }
-        inline void setMapDatabase(MAP_STRUCTURE::MapDatabase *db) { m_Databases.at(DATABASE::MAP_DATABASE) = std::unique_ptr<IDatabase>(db); }
+        inline void setTileDatabase(TileDatabase* db) { m_Databases.at(DATABASE::TILE_DATABASE) = std::unique_ptr<IDatabase>(db); }
+        inline void setTileSetDatabase(TileSetDatabase* db) { m_Databases.at(DATABASE::TILE_SET_DATABASE) = std::unique_ptr<IDatabase>(db); }
+        inline void setAutoTileDatabase(AutoTileDatabase* db) { m_Databases.at(DATABASE::AUTO_TILE_DATABASE) = std::unique_ptr<IDatabase>(db); }
+        inline void setSpriteDatabase(SpriteDatabase* db) { m_Databases.at(DATABASE::SPRITE_DATABASE) = std::unique_ptr<IDatabase>(db); }
+        inline void setAnimationDatabase(AnimationDatabase* db) { m_Databases.at(DATABASE::ANIMATION_DATABASE) = std::unique_ptr<IDatabase>(db); }
+        inline void setAnimationTypeDatabase(AnimationTypeDatabase* db) { m_Databases.at(DATABASE::ANIMATION_TYPE_DATABASE) = std::unique_ptr<IDatabase>(db); }
+        inline void setWorldObjectDatabase(WorldObjectDatabase* db) { m_Databases.at(DATABASE::WORLD_OBJECT_DATABASE) = std::unique_ptr<IDatabase>(db); }
+        inline void setDynamicObjectDatabase(DynamicObjectDatabase* db) { m_Databases.at(DATABASE::DYNAMIC_OBJECT_DATABASE) = std::unique_ptr<IDatabase>(db); }
+        inline void setLocalisationDatabase(LocalisationDatabase* db) { m_Databases.at(DATABASE::LOCALISATION_DATABASE) = std::unique_ptr<IDatabase>(db); }
+        inline void setMapDatabase(MAP_STRUCTURE::MapDatabase* db) { m_Databases.at(DATABASE::MAP_DATABASE) = std::unique_ptr<IDatabase>(db); }
 
         void clear();
 
         // in/output
-        bool loadDatabase(const QString &projectPath, uint32 databases = ALL_DATABASES);
-        bool saveDatabase(const QString &projectPath, uint32 databases = ALL_DATABASES);
+        bool loadDatabase(const QString& projectPath, uint32 databases = ALL_DATABASES);
+        bool saveDatabase(const QString& projectPath, uint32 databases = ALL_DATABASES);
 
     private:
         std::array<std::unique_ptr<IDatabase>, DATABASE_COUNT> m_Databases;
@@ -118,7 +118,7 @@ namespace DATABASE
 
     namespace TILE_SET
     {
-        QPixmap createTileSetPixmap(const QString &path, const TileSetPrototype *pSet, const TileDatabase* pTileDB);
+        QPixmap createTileSetPixmap(const QString& path, const TileSetPrototype* pSet, const TileDatabase* pTileDB);
     }
 }
 #endif

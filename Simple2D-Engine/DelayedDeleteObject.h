@@ -9,7 +9,7 @@ template <typename T>
 class DelayedDeleteObject : public QObject
 {
 public:
-    explicit DelayedDeleteObject(T *item) : m_item(item)
+    explicit DelayedDeleteObject(T* item) : m_item(item)
     {
         item = 0;
         deleteLater();
@@ -21,7 +21,7 @@ public:
     }
 
 private:
-    T *m_item;
+    T* m_item;
 };
 
 #endif

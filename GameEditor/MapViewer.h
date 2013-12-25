@@ -14,15 +14,15 @@
 class MapViewerScene : public QGraphicsScene
 {
 private:
-    void _drawGrid(QPainter *painter, const QRectF &rect);
-    void _drawTiles(QPainter *painter, const QRectF &rect, DATABASE::MAP_STRUCTURE::Layer layer);
+    void _drawGrid(QPainter* painter, const QRectF& rect);
+    void _drawTiles(QPainter* painter, const QRectF& rect, DATABASE::MAP_STRUCTURE::Layer layer);
 
 protected:
-    void drawBackground(QPainter *painter, const QRectF &rect);
-    void drawForeground(QPainter *painter, const QRectF &rect);
+    void drawBackground(QPainter* painter, const QRectF& rect);
+    void drawForeground(QPainter* painter, const QRectF& rect);
 
 public:
-    MapViewerScene(uint32 mapID, const DATABASE::DatabaseMgr &DBMgr);
+    MapViewerScene(uint32 mapID, const DATABASE::DatabaseMgr& DBMgr);
 
     inline MAP::MAP_DATA::MapData& getMapData() { return m_MapData; }
 
@@ -49,7 +49,7 @@ private:
 class MapViewer : public QGraphicsView
 {
 public:
-    MapViewer(uint32 mapID, const DATABASE::DatabaseMgr &DBMgr, QWidget *pWidget = nullptr);
+    MapViewer(uint32 mapID, const DATABASE::DatabaseMgr& DBMgr, QWidget* pWidget = nullptr);
 
     void loadMap();
     void updateMap();
@@ -68,7 +68,7 @@ public:
     uint32 getMapID() const;
 
 private:
-    const DATABASE::DatabaseMgr &m_DBMgr;
+    const DATABASE::DatabaseMgr& m_DBMgr;
 };
 
 #endif

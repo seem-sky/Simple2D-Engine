@@ -8,10 +8,10 @@
 class MapTreeItem : public QTreeWidgetItem
 {
 public:
-    MapTreeItem(const DATABASE::MAP_STRUCTURE::MapPrototype &map);
-    bool operator <(const QTreeWidgetItem &other) const;
+    MapTreeItem(const DATABASE::MAP_STRUCTURE::MapPrototype& map);
+    bool operator <(const QTreeWidgetItem& other) const;
 
-    void setup(const DATABASE::MAP_STRUCTURE::MapPrototype &map);
+    void setup(const DATABASE::MAP_STRUCTURE::MapPrototype& map);
 };
 
 class MapEditorModuleMapTree : public QTreeWidget
@@ -21,15 +21,15 @@ private:
     void _reload();
 
 protected:
-    void dropEvent(QDropEvent *pEvent);
+    void dropEvent(QDropEvent* pEvent);
 
 public:
-    MapEditorModuleMapTree(QWidget *pParent = nullptr);
+    MapEditorModuleMapTree(QWidget* pParent = nullptr);
 
-    void setDatabase(DATABASE::MAP_STRUCTURE::MapDatabase *pMapDatabase);
+    void setDatabase(DATABASE::MAP_STRUCTURE::MapDatabase* pMapDatabase);
 
 private slots:
-    void onContextMenuRequested(const QPoint &pos);
+    void onContextMenuRequested(const QPoint& pos);
     void onActionOpen();
     void onActionEdit();
     void onActionNew();
@@ -42,7 +42,7 @@ signals:
     void editMap(uint32 mapID);
 
 private:
-    DATABASE::MAP_STRUCTURE::MapDatabase *m_pMapDatabase;
+    DATABASE::MAP_STRUCTURE::MapDatabase* m_pMapDatabase;
     UInt32List m_DeletedMaps;
 };
 

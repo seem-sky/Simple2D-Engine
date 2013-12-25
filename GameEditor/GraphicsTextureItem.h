@@ -9,22 +9,22 @@ class GraphicsTextureItem : public QGraphicsItem
 {
 private:
     QPixmap _getPixmap() const;
-    void _hightlightSelection(QPainter *pPainter, const QStyleOptionGraphicsItem *pOption);
+    void _hightlightSelection(QPainter* pPainter, const QStyleOptionGraphicsItem* pOption);
 
 protected:
-    virtual void keyPressEvent(QKeyEvent *pEvent);
+    virtual void keyPressEvent(QKeyEvent* pEvent);
 
 public:
-    GraphicsTextureItem(const DATABASE::TexturePrototype *pPrototype);
+    GraphicsTextureItem(const DATABASE::TexturePrototype* pPrototype);
 
-    virtual void paint(QPainter *pPainter, const QStyleOptionGraphicsItem *pOption, QWidget *pWidget = 0);
+    virtual void paint(QPainter* pPainter, const QStyleOptionGraphicsItem* pOption, QWidget* pWidget = 0);
 
     uint32 getID() const;
 
     QRectF boundingRect() const;
 
 private:
-    const DATABASE::TexturePrototype *m_pPrototype;
+    const DATABASE::TexturePrototype* m_pPrototype;
 };
 
 #endif

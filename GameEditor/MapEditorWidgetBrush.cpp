@@ -8,7 +8,7 @@ using namespace MAP::BRUSH;
 
 const qreal INACTIVE_OPACITY = 0.5;
 
-MapEditorWidgetBrush::MapEditorWidgetBrush(const DATABASE::DatabaseMgr &DBMgr, QWidget *pParent) : QWidget(pParent), m_DBMgr(DBMgr)
+MapEditorWidgetBrush::MapEditorWidgetBrush(const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent) : QWidget(pParent), m_DBMgr(DBMgr)
 {
     setWindowFlags(Qt::Tool | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::MSWindowsFixedSizeDialogHint);
     setWindowTitle("map editor brush");
@@ -31,7 +31,7 @@ MapEditorWidgetBrush::MapEditorWidgetBrush(const DATABASE::DatabaseMgr &DBMgr, Q
     update();
 }
 
-void MapEditorWidgetBrush::changeEvent(QEvent *pEvent)
+void MapEditorWidgetBrush::changeEvent(QEvent* pEvent)
 {
     if (pEvent->type() == QEvent::ActivationChange)
         _updateOpacity();

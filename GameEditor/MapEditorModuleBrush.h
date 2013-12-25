@@ -10,18 +10,22 @@ namespace BRUSH
 {
     class MapEditorModuleBrush : public QWidget, Ui_MapEditorModuleBrush
     {
+    Q_OBJECT
         void _update();
 
     public:
-        MapEditorModuleBrush(const DATABASE::DatabaseMgr &DBMgr, QWidget *pParent = nullptr);
+        MapEditorModuleBrush(const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent = nullptr);
 
-        void setText(const QString &text);
+        void setText(const QString& text);
 
         void setBrushInfo(const MAP::BRUSH::BrushInfo& brushInfo);
         inline const MAP::BRUSH::BrushInfo& getBrushInfo() const { return m_BrushInfo; }
 
+    private slots:
+        void _onBrushTypeChanged(const QString& text);
+
     private:
-        const DATABASE::DatabaseMgr &m_DBMgr;
+        const DATABASE::DatabaseMgr& m_DBMgr;
         MAP::BRUSH::BrushInfo m_BrushInfo;
     };
 }

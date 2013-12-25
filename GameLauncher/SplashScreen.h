@@ -9,10 +9,10 @@ namespace SPLASH_SCREEN
     class CustomSplashScreen : public QSplashScreen
     {
     protected:
-        void mousePressEvent(QMouseEvent *pEvent);
+        void mousePressEvent(QMouseEvent* pEvent);
 
     public:
-        CustomSplashScreen(const QPixmap & pixmap);
+        CustomSplashScreen(const QPixmap&  pixmap);
     };
 
     class SplashScreen : public PROGRAM::Application

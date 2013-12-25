@@ -11,7 +11,7 @@ void Config::clear()
     saveConfig();
 }
 
-void Config::removeOpenMap(const uint32 &uiMapID)
+void Config::removeOpenMap(const uint32& uiMapID)
 {
     UInt32UnorderedSet::iterator itr = m_openMaps.find(uiMapID);
     if (itr != m_openMaps.end())

@@ -9,7 +9,7 @@ using namespace MAP;
 
 typedef std::unique_ptr<QPixmap> QPixmapPtr;
 
-AutoTile::AutoTile(const DATABASE::DatabaseMgr &DBMgr, uint32 ID) : m_DBMgr(DBMgr), m_ID(ID)
+AutoTile::AutoTile(const DATABASE::DatabaseMgr& DBMgr, uint32 ID) : m_DBMgr(DBMgr), m_ID(ID)
 {
     _createPixmaps();
 }
@@ -41,28 +41,28 @@ void AutoTile::_createPixmaps()
         switch (i)
         {
         case INDEX_INNER_EDGE_TOP_LEFT:
-            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, 0, 0);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pCenter, TILE_SIZE/2, 0);
-            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pCenter, 0, TILE_SIZE/2);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pCenter, TILE_SIZE/2, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2,* pInnerCenter, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2,* pCenter, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pCenter, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pCenter, TILE_SIZE/2, TILE_SIZE/2);
             break;
         case INDEX_INNER_EDGE_TOP_RIGHT:
-            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pCenter, 0, 0);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, TILE_SIZE/2, 0);
-            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pCenter, 0, TILE_SIZE/2);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pCenter, TILE_SIZE/2, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2,* pCenter, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2,* pInnerCenter, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pCenter, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pCenter, TILE_SIZE/2, TILE_SIZE/2);
             break;
         case INDEX_INNER_EDGE_BOTTOM_LEFT:
-            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pCenter, 0, 0);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pCenter, TILE_SIZE/2, 0);
-            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, 0, TILE_SIZE/2);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pCenter, TILE_SIZE/2, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2,* pCenter, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2,* pCenter, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pInnerCenter, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pCenter, TILE_SIZE/2, TILE_SIZE/2);
             break;
         case INDEX_INNER_EDGE_BOTTOM_RIGHT:
-            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pCenter, 0, 0);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pCenter, TILE_SIZE/2, 0);
-            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pCenter, 0, TILE_SIZE/2);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, TILE_SIZE/2, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2,* pCenter, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2,* pCenter, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pCenter, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pInnerCenter, TILE_SIZE/2, TILE_SIZE/2);
             break;
         }
         _setPixmap(static_cast<AUTO_TILE::AUTO_TILE_INDEX>(i), pNewPixmap.release());
@@ -81,45 +81,45 @@ void AutoTile::_createPixmaps()
         switch (i)
         {
         case INDEX_INNER_EDGE_TOP_LEFT_BOTTOM_RIGHT:
-            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, 0, 0);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pCenter, TILE_SIZE/2, 0);
-            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pCenter, 0, TILE_SIZE/2);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, TILE_SIZE/2, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2,* pInnerCenter, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2,* pCenter, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pCenter, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pInnerCenter, TILE_SIZE/2, TILE_SIZE/2);
             break;
 
         case INDEX_INNER_EDGE_TOP_RIGHT_BOTTOM_LEFT:
-            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pCenter, 0, 0);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, TILE_SIZE/2, 0);
-            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, 0, TILE_SIZE/2);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pCenter, TILE_SIZE/2, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2,* pCenter, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2,* pInnerCenter, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pInnerCenter, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pCenter, TILE_SIZE/2, TILE_SIZE/2);
             break;
 
         case INDEX_INNER_EDGE_TOP_LEFT_TOP_RIGHT:
-            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, 0, 0);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, TILE_SIZE/2, 0);
-            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pCenter, 0, TILE_SIZE/2);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pCenter, TILE_SIZE/2, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2,* pInnerCenter, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2,* pInnerCenter, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pCenter, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pCenter, TILE_SIZE/2, TILE_SIZE/2);
             break;
 
         case INDEX_INNER_EDGE_TOP_LEFT_BOTTOM_LEFT:
-            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, 0, 0);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pCenter, TILE_SIZE/2, 0);
-            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, 0, TILE_SIZE/2);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pCenter, TILE_SIZE/2, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2,* pInnerCenter, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2,* pCenter, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pInnerCenter, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pCenter, TILE_SIZE/2, TILE_SIZE/2);
             break;
 
         case INDEX_INNER_EDGE_TOP_RIGHT_BOTTOM_RIGHT:
-            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pCenter, 0, 0);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, TILE_SIZE/2, 0);
-            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pCenter, 0, TILE_SIZE/2);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, TILE_SIZE/2, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2,* pCenter, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2,* pInnerCenter, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pCenter, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pInnerCenter, TILE_SIZE/2, TILE_SIZE/2);
             break;
 
         case INDEX_INNER_EDGE_BOTTOM_LEFT_BOTTOM_RIGHT:
-            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pCenter, 0, 0);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pCenter, TILE_SIZE/2, 0);
-            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, 0, TILE_SIZE/2);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, TILE_SIZE/2, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2,* pCenter, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2,* pCenter, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pInnerCenter, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pInnerCenter, TILE_SIZE/2, TILE_SIZE/2);
             break;
         }
         _setPixmap(static_cast<AUTO_TILE::AUTO_TILE_INDEX>(i), pNewPixmap.release());
@@ -150,9 +150,9 @@ void AutoTile::_createPixmaps()
         QPixmapPtr pNewPixmap(new QPixmap(QSize(TILE_SIZE, TILE_SIZE)));
         pNewPixmap->fill(Qt::transparent);
         QPainter pixmapPainter(pNewPixmap.get());
-        pixmapPainter.drawTiledPixmap(size.width() % TILE_SIZE, size.height() % TILE_SIZE, size.width(), size.height(), *pSide[0],
+        pixmapPainter.drawTiledPixmap(size.width() % TILE_SIZE, size.height() % TILE_SIZE, size.width(), size.height(),* pSide[0],
             size.width() % TILE_SIZE, size.height() % TILE_SIZE);
-        pixmapPainter.drawTiledPixmap(0, 0, size.width(), size.height(), *pSide[1], 0, 0);
+        pixmapPainter.drawTiledPixmap(0, 0, size.width(), size.height(),* pSide[1], 0, 0);
         _setPixmap(static_cast<AUTO_TILE::AUTO_TILE_INDEX>(i), pNewPixmap.release());
     }
 
@@ -177,20 +177,20 @@ void AutoTile::_createPixmaps()
         switch (i)
         {
         case INDEX_T_TOP:
-            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE, TILE_SIZE/2, *pSide, 0, 0);
-            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE, TILE_SIZE/2, *pInnerCenter, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE, TILE_SIZE/2,* pSide, 0, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE, TILE_SIZE/2,* pInnerCenter, 0, TILE_SIZE/2);
             break;
         case INDEX_T_BOTTOM:
-            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE, TILE_SIZE/2, *pInnerCenter, 0, 0);
-            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE, TILE_SIZE/2, *pSide, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE, TILE_SIZE/2,* pInnerCenter, 0, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE, TILE_SIZE/2,* pSide, 0, TILE_SIZE/2);
             break;
         case INDEX_T_LEFT:
-            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE, *pSide, 0, 0);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE, *pInnerCenter, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE,* pSide, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE,* pInnerCenter, TILE_SIZE/2, 0);
             break;
         case INDEX_T_RIGHT:
-            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE, *pInnerCenter, 0, 0);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE, *pSide, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE,* pInnerCenter, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE,* pSide, TILE_SIZE/2, 0);
             break;
         }
         _setPixmap(static_cast<AUTO_TILE::AUTO_TILE_INDEX>(i), pNewPixmap.release());
@@ -247,31 +247,31 @@ void AutoTile::_createPixmaps()
         {
         case INDEX_Y_TOP_BOTTOM_LEFT:
         case INDEX_Y_RIGHT_BOTTOM_LEFT:
-            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pSide, 0, 0);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pSide, TILE_SIZE/2, 0);
-            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, 0, TILE_SIZE/2);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pSide, TILE_SIZE/2, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2,* pSide, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2,* pSide, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pInnerCenter, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pSide, TILE_SIZE/2, TILE_SIZE/2);
             break;
         case INDEX_Y_TOP_BOTTOM_RIGHT:
         case INDEX_Y_LEFT_BOTTOM_RIGHT:
-            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pSide, 0, 0);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pSide, TILE_SIZE/2, 0);
-            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pSide, 0, TILE_SIZE/2);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, TILE_SIZE/2, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2,* pSide, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2,* pSide, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pSide, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pInnerCenter, TILE_SIZE/2, TILE_SIZE/2);
             break;
         case INDEX_Y_BOTTOM_TOP_LEFT:
         case INDEX_Y_RIGHT_TOP_LEFT:
-            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, 0, 0);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pSide, TILE_SIZE/2, 0);
-            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pSide, 0, TILE_SIZE/2);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pSide, TILE_SIZE/2, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2,* pInnerCenter, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2,* pSide, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pSide, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pSide, TILE_SIZE/2, TILE_SIZE/2);
             break;
         case INDEX_Y_BOTTOM_TOP_RIGHT:
         case INDEX_Y_LEFT_TOP_RIGHT:
-            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pSide, 0, 0);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, TILE_SIZE/2, 0);
-            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pSide, 0, TILE_SIZE/2);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pSide, TILE_SIZE/2, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2,* pSide, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2,* pInnerCenter, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pSide, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pSide, TILE_SIZE/2, TILE_SIZE/2);
             break;
         }
         _setPixmap(static_cast<AUTO_TILE::AUTO_TILE_INDEX>(i), pNewPixmap.release());
@@ -299,28 +299,28 @@ void AutoTile::_createPixmaps()
         switch (i)
         {
         case INDEX_CURVE_TOP_LEFT:
-            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pEdge, 0, 0);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pEdge, TILE_SIZE/2, 0);
-            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pEdge, 0, TILE_SIZE/2);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, TILE_SIZE/2, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2,* pEdge, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2,* pEdge, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pEdge, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pInnerCenter, TILE_SIZE/2, TILE_SIZE/2);
             break;
         case INDEX_CURVE_TOP_RIGHT:
-            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pEdge, 0, 0);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pEdge, TILE_SIZE/2, 0);
-            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, 0, TILE_SIZE/2);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pEdge, TILE_SIZE/2, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2,* pEdge, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2,* pEdge, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pInnerCenter, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pEdge, TILE_SIZE/2, TILE_SIZE/2);
             break;
         case INDEX_CURVE_BOTTOM_LEFT:
-            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pEdge, 0, 0);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, TILE_SIZE/2, 0);
-            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pEdge, 0, TILE_SIZE/2);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pEdge, TILE_SIZE/2, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2,* pEdge, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2,* pInnerCenter, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pEdge, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pEdge, TILE_SIZE/2, TILE_SIZE/2);
             break;
         case INDEX_CURVE_BOTTOM_RIGHT:
-            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, 0, 0);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pEdge, TILE_SIZE/2, 0);
-            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pEdge, 0, TILE_SIZE/2);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pEdge, TILE_SIZE/2, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2,* pInnerCenter, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2,* pEdge, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pEdge, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pEdge, TILE_SIZE/2, TILE_SIZE/2);
             break;
         }
         _setPixmap(static_cast<AUTO_TILE::AUTO_TILE_INDEX>(i), pNewPixmap.release());
@@ -339,28 +339,28 @@ void AutoTile::_createPixmaps()
         switch (i)
         {
         case INDEX_INNER_EDGE_TOP_LEFT_TOP_RIGHT_BOTTOM_LEFT:
-            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, 0, 0);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, TILE_SIZE/2, 0);
-            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, 0, TILE_SIZE/2);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pCenter, TILE_SIZE/2, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2,* pInnerCenter, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2,* pInnerCenter, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pInnerCenter, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pCenter, TILE_SIZE/2, TILE_SIZE/2);
             break;
         case INDEX_INNER_EDGE_TOP_LEFT_TOP_RIGHT_BOTTOM_RIGHT:
-            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, 0, 0);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, TILE_SIZE/2, 0);
-            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pCenter, 0, TILE_SIZE/2);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, TILE_SIZE/2, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2,* pInnerCenter, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2,* pInnerCenter, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pCenter, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pInnerCenter, TILE_SIZE/2, TILE_SIZE/2);
             break;
         case INDEX_INNER_EDGE_TOP_LEFT_BOTTOM_LEFT_BOTTOM_RIGHT:
-            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, 0, 0);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pCenter, TILE_SIZE/2, 0);
-            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, 0, TILE_SIZE/2);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, TILE_SIZE/2, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2,* pInnerCenter, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2,* pCenter, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pInnerCenter, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pInnerCenter, TILE_SIZE/2, TILE_SIZE/2);
             break;
         case INDEX_INNER_EDGE_TOP_RIGHT_BOTTOM_LEFT_BOTTOM_RIGHT:
-            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pCenter, 0, 0);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, TILE_SIZE/2, 0);
-            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, 0, TILE_SIZE/2);
-            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pInnerCenter, TILE_SIZE/2, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2,* pCenter, 0, 0);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2,* pInnerCenter, TILE_SIZE/2, 0);
+            pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pInnerCenter, 0, TILE_SIZE/2);
+            pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pInnerCenter, TILE_SIZE/2, TILE_SIZE/2);
             break;
         }
         _setPixmap(static_cast<AUTO_TILE::AUTO_TILE_INDEX>(i), pNewPixmap.release());
@@ -401,9 +401,9 @@ void AutoTile::_createPixmaps()
         QPixmapPtr pNewPixmap(new QPixmap(QSize(TILE_SIZE, TILE_SIZE)));
         pNewPixmap->fill(Qt::transparent);
         QPainter pixmapPainter(pNewPixmap.get());
-        pixmapPainter.drawTiledPixmap(size.width() % TILE_SIZE, size.height() % TILE_SIZE, size.width(), size.height(), *pSide.at(0),
+        pixmapPainter.drawTiledPixmap(size.width() % TILE_SIZE, size.height() % TILE_SIZE, size.width(), size.height(),* pSide.at(0),
             size.width() % TILE_SIZE, size.height() % TILE_SIZE);
-        pixmapPainter.drawTiledPixmap(0, 0, size.width(), size.height(), *pSide.at(1), 0, 0);
+        pixmapPainter.drawTiledPixmap(0, 0, size.width(), size.height(),* pSide.at(1), 0, 0);
         _setPixmap(static_cast<AUTO_TILE::AUTO_TILE_INDEX>(i), pNewPixmap.release());
     }
 
@@ -422,9 +422,9 @@ void AutoTile::_createPixmaps()
     QPixmapPtr pNewPixmap(new QPixmap(QSize(TILE_SIZE, TILE_SIZE)));
     pNewPixmap->fill(Qt::transparent);
     QPainter pixmapPainter(pNewPixmap.get());
-    pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2, *pSide.at(0), 0, 0);
-    pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2, *pSide.at(1), TILE_SIZE/2, 0);
-    pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pSide.at(2), 0, TILE_SIZE/2);
-    pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, *pSide.at(3), TILE_SIZE/2, TILE_SIZE/2);
+    pixmapPainter.drawTiledPixmap(0, 0, TILE_SIZE/2, TILE_SIZE/2,* pSide.at(0), 0, 0);
+    pixmapPainter.drawTiledPixmap(TILE_SIZE/2, 0, TILE_SIZE/2, TILE_SIZE/2,* pSide.at(1), TILE_SIZE/2, 0);
+    pixmapPainter.drawTiledPixmap(0, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pSide.at(2), 0, TILE_SIZE/2);
+    pixmapPainter.drawTiledPixmap(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2,* pSide.at(3), TILE_SIZE/2, TILE_SIZE/2);
     _setPixmap(INDEX_CIRCLE, pNewPixmap.release());
 }

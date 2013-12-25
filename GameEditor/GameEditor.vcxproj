@@ -295,7 +295,7 @@
     <moc_header Include="MapEditorModuleContent.h" />
     <moc_header Include="MapEditorModuleMapTree.h" />
     <ClInclude Include="GraphicsTextureItem.h" />
-    <ClInclude Include="MapEditorModuleBrush.h" />
+    <moc_header Include="MapEditorModuleBrush.h" />
     <moc_header Include="MapEditorModuleTileSelection.h" />
     <moc_header Include="MapEditorModuleTileSets.h" />
     <moc_header Include="MapEditorWidgetBrush.h" />

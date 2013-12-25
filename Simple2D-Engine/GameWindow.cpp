@@ -10,7 +10,7 @@
 
 using namespace GAME_LOGIC;
 
-GameWindow::GameWindow(Game *pGame) : QMainWindow(), m_pGame(pGame), m_Viewer(this)
+GameWindow::GameWindow(Game* pGame) : QMainWindow(), m_pGame(pGame), m_Viewer(this)
 {
     installEventFilter(this);
     grabKeyboard();
@@ -45,35 +45,35 @@ void GameWindow::setFullScreen(bool fullScreen)
     }
 }
 
-void GameWindow::closeEvent(QCloseEvent *pEvent)
+void GameWindow::closeEvent(QCloseEvent* pEvent)
 {
     m_pGame->closeGame();
 }
 
-void GameWindow::resizeEvent(QResizeEvent *pEvent)
+void GameWindow::resizeEvent(QResizeEvent* pEvent)
 {
     m_Viewer.resize(pEvent->size());
 }
 
-void GameWindow::setSceneView(SCENE::SceneView *pScene)
+void GameWindow::setSceneView(SCENE::SceneView* pScene)
 {
     m_Viewer.setScene(pScene);
     m_Viewer.scene()->setParent(&m_Viewer);
 }
 
-void GameWindow::keyPressEvent(QKeyEvent *pEvent)
+void GameWindow::keyPressEvent(QKeyEvent* pEvent)
 {
     //QMainWindow::keyPressEvent(pEvent);
     KEY::GlobalKeyboard::get()->changeKeyState(KEY::wrapKeyFromQT(pEvent->key()), true);
 }
 
-void GameWindow::keyReleaseEvent(QKeyEvent *pEvent)
+void GameWindow::keyReleaseEvent(QKeyEvent* pEvent)
 {
     //QMainWindow::keyReleaseEvent(pEvent);
     KEY::GlobalKeyboard::get()->changeKeyState(KEY::wrapKeyFromQT(pEvent->key()), false);
 }
 
-bool GameWindow::eventFilter(QObject *pObj, QEvent *pEvent)
+bool GameWindow::eventFilter(QObject* pObj, QEvent* pEvent)
 {
     if (pEvent->type() == QEvent::WindowDeactivate)
     {
@@ -83,7 +83,7 @@ bool GameWindow::eventFilter(QObject *pObj, QEvent *pEvent)
     return QMainWindow::event(pEvent);
 }
 
-GameViewer::GameViewer(QWidget *pParent) : QGraphicsView(pParent)
+GameViewer::GameViewer(QWidget* pParent) : QGraphicsView(pParent)
 {
     //setupViewport(new QGLWidget(this));
     //setGeometry(0, 0, width(), height());
@@ -95,9 +95,9 @@ GameViewer::GameViewer(QWidget *pParent) : QGraphicsView(pParent)
     setFrameShape(Shape::NoFrame);
 }
 
-bool GameViewer::eventFilter(QObject *pObj, QEvent *pEvent)
+bool GameViewer::eventFilter(QObject* pObj, QEvent* pEvent)
 {
-    if(pObj == viewport() && pEvent->type() == QEvent::Wheel)
+    if(pObj == viewport()& & pEvent->type() == QEvent::Wheel)
         return true;
     return QWidget::eventFilter(pObj, pEvent);
 }

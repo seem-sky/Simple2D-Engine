@@ -15,11 +15,11 @@ namespace MAP
         class WorldObject : public Object
         {
         private:
-            void _setupFromPrototype(const DATABASE::MAP_OBJECT::WorldObjectPrototype *pWorldObject);
+            void _setupFromPrototype(const DATABASE::MAP_OBJECT::WorldObjectPrototype* pWorldObject);
             void _setCurrentAnimation(uint32 pose);
 
         public:
-            WorldObject(const DATABASE::DatabaseMgr &pDBMgr, uint32 GUID = 0, uint32 ID = 0);
+            WorldObject(const DATABASE::DatabaseMgr& pDBMgr, uint32 GUID = 0, uint32 ID = 0);
 
             inline const DATABASE::ANIMATION::AnimationPrototype* getCurrentAnimation() const { return m_AnimationHolder.getCurrentAnimation(); }
             inline uint32 getCurrentFrame() const { return m_AnimationHolder.getCurrentFrame(); }
@@ -34,7 +34,7 @@ namespace MAP
             UInt32UInt32UMap m_Animations;
             DATABASE::MAP_STRUCTURE::MapDirection m_Direction;
             Int32Rect m_BoundingRect;
-            const DATABASE::DatabaseMgr &m_DBMgr;
+            const DATABASE::DatabaseMgr& m_DBMgr;
         };
     }
 }

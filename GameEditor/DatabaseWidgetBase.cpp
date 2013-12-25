@@ -1,12 +1,12 @@
 #include "DatabaseWidgetBase.h"
 #include "moc_DatabaseWidgetBase.h"
 
-DatabaseWidgetBase::DatabaseWidgetBase(QWidget *pParent) : QWidget(pParent), m_pModuleList(new DatabaseModuleList(this))
+DatabaseWidgetBase::DatabaseWidgetBase(QWidget* pParent) : QWidget(pParent), m_pModuleList(new DatabaseModuleList(this))
 {
     setFocusPolicy(Qt::StrongFocus);
 
     // setup layout
-    QGridLayout *pLayout(new QGridLayout(this));
+    QGridLayout* pLayout(new QGridLayout(this));
     setLayout(pLayout);
     layout()->setContentsMargins(5, 5, 5, 5);
     pLayout->setHorizontalSpacing(15);
@@ -30,13 +30,13 @@ void DatabaseWidgetBase::_onItemSelected()
         setupWidgetsFromPrototype(pPrototype);
 }
 
-void DatabaseWidgetBase::setupWidgetsFromPrototype(const DATABASE::Prototype *pPrototype)
+void DatabaseWidgetBase::setupWidgetsFromPrototype(const DATABASE::Prototype* pPrototype)
 {
     m_pModuleList->setDataName(pPrototype->getName());
     m_pModuleList->setDataID(pPrototype->getID());
 }
 
-void DatabaseWidgetBase::setupPrototypeFromWidgets(DATABASE::Prototype *pPrototype)
+void DatabaseWidgetBase::setupPrototypeFromWidgets(DATABASE::Prototype* pPrototype)
 {
     pPrototype->setName(m_pModuleList->getDataName());
     pPrototype->setID(m_pModuleList->getDataID());
@@ -61,7 +61,7 @@ void DatabaseWidgetBase::saveCurrent()
     }
 }
 
-void DatabaseWidgetBase::hideEvent(QHideEvent *pEvent)
+void DatabaseWidgetBase::hideEvent(QHideEvent* pEvent)
 {
     saveCurrent();
 }

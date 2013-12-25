@@ -38,21 +38,21 @@ public:
         m_pDatabase = std::move(pDB);
     }
 
-    int rowCount(const QModelIndex &parent) const
+    int rowCount(const QModelIndex& parent) const
     {
         if (m_pDatabase)
             return m_pDatabase->getSize();
         return 0;
     }
 
-    int columnCount(const QModelIndex &parent) const
+    int columnCount(const QModelIndex& parent) const
     {
         return MODEL_COLUMN_COUNT;
     }
 
-    QVariant data(const QModelIndex &index, int role) const
+    QVariant data(const QModelIndex& index, int role) const
     {
-        if(m_pDatabase && index.isValid())
+        if(m_pDatabase& & index.isValid())
         {
             switch (role)
             {
@@ -73,7 +73,7 @@ public:
 
     QVariant headerData(int section, Qt::Orientation orientation, int role) const
     {
-        if(role == Qt::DisplayRole && orientation == Qt::Horizontal)
+        if(role == Qt::DisplayRole& & orientation == Qt::Horizontal)
         {
             switch (section)
             {
@@ -91,14 +91,14 @@ public:
         return Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsDragEnabled;
     }
 
-    bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex())
+    bool insertRows(int row, int count, const QModelIndex& parent = QModelIndex())
     {
         beginInsertRows(parent, row, row+count);
         endInsertRows();
         return true;
     }
 
-    bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex())
+    bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex())
     {
         beginRemoveRows(parent, row, row+count);
         endRemoveRows();
@@ -155,9 +155,9 @@ public:
         DatabaseModel(std::move(pDB))
     {}
 
-    QVariant data(const QModelIndex &index, int role) const
+    QVariant data(const QModelIndex& index, int role) const
     {
-        if(index.isValid() && (role == Qt::ForegroundRole))
+        if(index.isValid()& & (role == Qt::ForegroundRole))
         {
             if (index.row() <= 8)
                 return QVariant(QColor(Qt::blue));

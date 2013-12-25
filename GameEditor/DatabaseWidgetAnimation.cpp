@@ -1,6 +1,6 @@
 #include "DatabaseWidgetAnimation.h"
 
-DatabaseWidgetAnimation::DatabaseWidgetAnimation(QWidget *pParent) : DatabaseWidgetBase(pParent), m_pModuleAnimation(new DatabaseModuleAnimation(this)),
+DatabaseWidgetAnimation::DatabaseWidgetAnimation(QWidget* pParent) : DatabaseWidgetBase(pParent), m_pModuleAnimation(new DatabaseModuleAnimation(this)),
     m_pModuleSpriteList(new DatabaseModuleTextureDragList(this))
 {
     if (auto pLayout = dynamic_cast<QGridLayout*>(layout()))
@@ -8,11 +8,11 @@ DatabaseWidgetAnimation::DatabaseWidgetAnimation(QWidget *pParent) : DatabaseWid
         pLayout->addWidget(m_pModuleAnimation, 0, 1);
 
         // add tile list module
-        QVBoxLayout *pBoxLayout(new QVBoxLayout());
+        QVBoxLayout* pBoxLayout(new QVBoxLayout());
         pBoxLayout->setSpacing(6);
 
         // setup "tiles:" label
-        QLabel *pLabel(new QLabel("sprites:"));
+        QLabel* pLabel(new QLabel("sprites:"));
         QFont font;
         font.setPointSize(8);
         font.setBold(true);
@@ -25,13 +25,13 @@ DatabaseWidgetAnimation::DatabaseWidgetAnimation(QWidget *pParent) : DatabaseWid
     }
 }
 
-void DatabaseWidgetAnimation::setSpriteDatabaseModel(SpriteDatabaseModel *pDBModel)
+void DatabaseWidgetAnimation::setSpriteDatabaseModel(SpriteDatabaseModel* pDBModel)
 {
     m_pModuleSpriteList->setModel(pDBModel);
     m_pModuleAnimation->setSpriteDatabase(dynamic_cast<DATABASE::SpriteDatabase*>(pDBModel->getDatabase()));
 }
 
-void DatabaseWidgetAnimation::setupWidgetsFromPrototype(const DATABASE::Prototype *pPrototype)
+void DatabaseWidgetAnimation::setupWidgetsFromPrototype(const DATABASE::Prototype* pPrototype)
 {
     if (auto pProto = dynamic_cast<const DATABASE::ANIMATION::AnimationPrototype*>(pPrototype))
     {
@@ -40,7 +40,7 @@ void DatabaseWidgetAnimation::setupWidgetsFromPrototype(const DATABASE::Prototyp
     DatabaseWidgetBase::setupWidgetsFromPrototype(pPrototype);
 }
 
-void DatabaseWidgetAnimation::setupPrototypeFromWidgets(DATABASE::Prototype *pPrototype)
+void DatabaseWidgetAnimation::setupPrototypeFromWidgets(DATABASE::Prototype* pPrototype)
 {
     if (auto pProto = dynamic_cast<DATABASE::ANIMATION::AnimationPrototype*>(pPrototype))
     {

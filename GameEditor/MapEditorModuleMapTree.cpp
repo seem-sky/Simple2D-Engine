@@ -10,18 +10,18 @@
 /*#####
 # MapTreeItem
 #####*/
-MapTreeItem::MapTreeItem(const DATABASE::MAP_STRUCTURE::MapPrototype &map) : QTreeWidgetItem()
+MapTreeItem::MapTreeItem(const DATABASE::MAP_STRUCTURE::MapPrototype& map) : QTreeWidgetItem()
 {
     setup(map);
 }
 
-void MapTreeItem::setup(const DATABASE::MAP_STRUCTURE::MapPrototype &map)
+void MapTreeItem::setup(const DATABASE::MAP_STRUCTURE::MapPrototype& map)
 {
     setData(0, 0, map.getID());
     setData(1, 0, map.getName());
 }
 
-bool MapTreeItem::operator <(const QTreeWidgetItem &other) const
+bool MapTreeItem::operator <(const QTreeWidgetItem& other) const
 {
     switch (treeWidget()->sortColumn())
     {
@@ -33,7 +33,7 @@ bool MapTreeItem::operator <(const QTreeWidgetItem &other) const
 /*#####
 # MapTree
 #####*/
-MapEditorModuleMapTree::MapEditorModuleMapTree(QWidget *pParent) : QTreeWidget(pParent), m_pMapDatabase(nullptr)
+MapEditorModuleMapTree::MapEditorModuleMapTree(QWidget* pParent) : QTreeWidget(pParent), m_pMapDatabase(nullptr)
 {
     // header labels
     setColumnCount(0);
@@ -51,7 +51,7 @@ MapEditorModuleMapTree::MapEditorModuleMapTree(QWidget *pParent) : QTreeWidget(p
     connect(this, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(onContextMenuRequested(const QPoint&)));
 }
 
-void MapEditorModuleMapTree::setDatabase(DATABASE::MAP_STRUCTURE::MapDatabase *pMapDatabase)
+void MapEditorModuleMapTree::setDatabase(DATABASE::MAP_STRUCTURE::MapDatabase* pMapDatabase)
 {
     m_pMapDatabase = pMapDatabase;
     _reload();
@@ -88,7 +88,7 @@ void MapEditorModuleMapTree::_reload()
     const DATABASE::MAP_STRUCTURE::MapPrototype* pFirstUnsortedMap = nullptr;
     while (!unsortedMaps.empty())
     {
-        auto pMap = *unsortedMaps.begin();
+        auto pMap =* unsortedMaps.begin();
         unsortedMaps.pop_front();
         if (auto pParent = items.at(pMap->getParentID()-1))
         {
@@ -110,7 +110,7 @@ void MapEditorModuleMapTree::_reload()
     }
 }
 
-void MapEditorModuleMapTree::onContextMenuRequested(const QPoint &pos)
+void MapEditorModuleMapTree::onContextMenuRequested(const QPoint& pos)
 {
     // setup context menu
     auto pMenu = new QMenu(this);
@@ -217,10 +217,10 @@ void MapEditorModuleMapTree::onProjectSave()
     m_DeletedMaps.clear();
 }
 
-void MapEditorModuleMapTree::dropEvent(QDropEvent *pEvent)
+void MapEditorModuleMapTree::dropEvent(QDropEvent* pEvent)
 {
     auto items = selectedItems();
-    MapTreeItem *pItem = nullptr;
+    MapTreeItem* pItem = nullptr;
     if (!items.isEmpty())
         pItem = dynamic_cast<MapTreeItem*>(items.first());
     

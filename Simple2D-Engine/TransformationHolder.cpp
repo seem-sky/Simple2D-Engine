@@ -28,7 +28,7 @@ TransformationProcess Transformation::update(uint32 uiDiff)
 /*#####
 # Move
 #####*/
-Move::Move(uint32 uiTime, Int32Point range, Int32Point &position) : m_Range(range), m_Position(position),
+Move::Move(uint32 uiTime, Int32Point range, Int32Point& position) : m_Range(range), m_Position(position),
     Transformation(uiTime, TRANSFORMATION_MOVE)
 {
     m_RangePerMSEC.x = static_cast<double>(m_Range.x) / getTimeRemain();
@@ -61,12 +61,12 @@ void TransformationHolder::updateTransformations(uint32 uiDiff)
     // update transformations
     for (TransformationArray::iterator itr = m_Transformations.begin(); itr != m_Transformations.end(); ++itr)
     {
-        if (!itr->empty() && itr->front()->update(uiDiff) == DONE)
+        if (!itr->empty()& & itr->front()->update(uiDiff) == DONE)
             itr->pop_front();
     }
 }
 
-void TransformationHolder::addTransformation(Transformation *pTransformation)
+void TransformationHolder::addTransformation(Transformation* pTransformation)
 {
     if (pTransformation)
         m_Transformations.at(pTransformation->getType()).push_back(TransformationPtr(pTransformation));
@@ -79,6 +79,6 @@ void TransformationHolder::clearTransformation(TransformationType type)
 
 void TransformationHolder::clearAllTransformations()
 {
-    for (auto &x : m_Transformations)
+    for (auto& x : m_Transformations)
         x.clear();
 }

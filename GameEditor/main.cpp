@@ -5,7 +5,7 @@
 //#ifndef DEBUG
 //#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
 //#endif
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
     app.setWindowIcon(QIcon("icons/Logo-clean.png"));

@@ -8,18 +8,18 @@
 class DatabaseWidgetTileSet : public DatabaseWidgetBase
 {
 protected:
-    virtual void setupWidgetsFromPrototype(const DATABASE::Prototype *pPrototype);
-    virtual void setupPrototypeFromWidgets(DATABASE::Prototype *pPrototype);
+    virtual void setupWidgetsFromPrototype(const DATABASE::Prototype* pPrototype);
+    virtual void setupPrototypeFromWidgets(DATABASE::Prototype* pPrototype);
     virtual void clear();
 
 public:
-    DatabaseWidgetTileSet(const DATABASE::TileSetDatabase *pDatabase = nullptr, QWidget *pParent = nullptr);
+    DatabaseWidgetTileSet(const DATABASE::TileSetDatabase* pDatabase = nullptr, QWidget* pParent = nullptr);
 
-    void setTileDatabaseModel(DatabaseModel<DATABASE::TileDatabase> *pDBModel);
+    void setTileDatabaseModel(DatabaseModel<DATABASE::TileDatabase>* pDBModel);
 
 private:
-    DatabaseModuleTileSet *m_pModuleTileSet;
-    DatabaseModuleDragList *m_pModuleTileList;
+    DatabaseModuleTileSet* m_pModuleTileSet;
+    DatabaseModuleDragList* m_pModuleTileList;
 };
 
 #endif

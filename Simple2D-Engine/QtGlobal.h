@@ -9,7 +9,7 @@
 #include "Container.h"
 #include <QtCore/QDebug>
 
-static bool createPixmap(const QString &path, const QString &fileNamePath, const Color &color, QPixmap &result)
+static bool createPixmap(const QString& path, const QString& fileNamePath, const Color& color, QPixmap& result)
 {
     result = QPixmap(path + "/Textures/" + fileNamePath);
     if (!result.isNull())
@@ -22,7 +22,7 @@ static bool createPixmap(const QString &path, const QString &fileNamePath, const
     return false;
 }
 
-static bool createPixmapFromTexturePrototype(const QString &path, const DATABASE::TexturePrototype *pTexture, QPixmap &result)
+static bool createPixmapFromTexturePrototype(const QString& path, const DATABASE::TexturePrototype* pTexture, QPixmap& result)
 {
     if (pTexture)
     {

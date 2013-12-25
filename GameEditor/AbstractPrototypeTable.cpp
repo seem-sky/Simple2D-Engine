@@ -7,7 +7,7 @@
 /*#####
 # AbstractPixmapWidget
 #####*/
-AbstractPixmapWidget::AbstractPixmapWidget(uint32 ID, QWidget *pParent) : QWidget(pParent), m_Selection(0), m_ID(ID)
+AbstractPixmapWidget::AbstractPixmapWidget(uint32 ID, QWidget* pParent) : QWidget(pParent), m_Selection(0), m_ID(ID)
 {
     resize(TILE_SIZE, TILE_SIZE);
 }
@@ -23,7 +23,7 @@ void AbstractPixmapWidget::addSelection(Selection selection)
 
 bool AbstractPixmapWidget::hasSelection(Selection selection)
 {
-    return (m_Selection & selection) != 0;
+    return (m_Selection&  selection) != 0;
 }
 
 void AbstractPixmapWidget::removeSelection(Selection selection)
@@ -35,7 +35,7 @@ void AbstractPixmapWidget::removeSelection(Selection selection)
     }
 }
 
-void AbstractPixmapWidget::paintEvent(QPaintEvent *pEvent)
+void AbstractPixmapWidget::paintEvent(QPaintEvent* pEvent)
 {
     QWidget::paintEvent(pEvent);
 
@@ -53,7 +53,7 @@ void AbstractPixmapWidget::drawSelection()
     pen.setCapStyle(Qt::RoundCap);
     pen.setJoinStyle(Qt::RoundJoin);
     painter.setPen(pen);
-    if (m_Selection & SELECTION_RIGHT && m_Selection & SELECTION_LEFT)
+    if (m_Selection&  SELECTION_RIGHT& & m_Selection&  SELECTION_LEFT)
     {
         // draw left
         QPen pen = painter.pen();
@@ -69,14 +69,14 @@ void AbstractPixmapWidget::drawSelection()
         painter.drawLine(SIZE, 0, SIZE, SIZE);
         painter.drawLine(0, SIZE, SIZE, SIZE);
     }
-    else if (m_Selection & SELECTION_RIGHT)
+    else if (m_Selection&  SELECTION_RIGHT)
     {
         QPen pen = painter.pen();
         pen.setColor(Qt::yellow);
         painter.setPen(pen);
         painter.drawRect(0, 0, SIZE, SIZE);
     }
-    else if (m_Selection & SELECTION_LEFT)
+    else if (m_Selection&  SELECTION_LEFT)
     {
         QPen pen = painter.pen();
         pen.setColor(Qt::blue);
@@ -88,7 +88,7 @@ void AbstractPixmapWidget::drawSelection()
 /*#####
 # MapEditorModuleTiles
 #####*/
-AbstractPrototypeTable::AbstractPrototypeTable(const DATABASE::DatabaseMgr &DBMgr, QWidget *pParent) : QTableWidget(pParent), m_DBMgr(DBMgr)
+AbstractPrototypeTable::AbstractPrototypeTable(const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent) : QTableWidget(pParent), m_DBMgr(DBMgr)
 {
     // setup header
     auto hHeader = horizontalHeader();
@@ -114,7 +114,7 @@ void AbstractPrototypeTable::clear()
     setRowCount(0);
 }
 
-void AbstractPrototypeTable::mousePressEvent(QMouseEvent *pEvent)
+void AbstractPrototypeTable::mousePressEvent(QMouseEvent* pEvent)
 {
     if (auto pWidget = dynamic_cast<AbstractPixmapWidget*>(cellWidget(rowAt(pEvent->y()), columnAt(pEvent->x()))))
     {
@@ -132,10 +132,10 @@ void AbstractPrototypeTable::mousePressEvent(QMouseEvent *pEvent)
         QTableWidget::mousePressEvent(pEvent);
 }
 
-void AbstractPrototypeTable::showEvent(QShowEvent *pEvent)
+void AbstractPrototypeTable::showEvent(QShowEvent* pEvent)
 {
     // if has no data, reload it
-    if (!columnCount() && !rowCount())
+    if (!columnCount()& & !rowCount())
         _setup();
 }
 

@@ -8,7 +8,7 @@
 /*#####
 # tile module
 #####*/
-TilePixmapWidget::TilePixmapWidget(uint32 ID, QWidget *pParent) : AbstractPixmapWidget(ID, pParent)
+TilePixmapWidget::TilePixmapWidget(uint32 ID, QWidget* pParent) : AbstractPixmapWidget(ID, pParent)
 {
 }
 
@@ -17,11 +17,11 @@ void TilePixmapWidget::drawPixmap()
     if (auto pPixmap = GTileCache::get()->getItem(getID()))
     {
         QPainter painter(this);
-        painter.drawPixmap(0, 0, *pPixmap);
+        painter.drawPixmap(0, 0,* pPixmap);
     }
 }
 
-MapEditorModuleTiles::MapEditorModuleTiles(const DATABASE::DatabaseMgr &DBMgr, QWidget *pParent) : AbstractPrototypeTable(DBMgr, pParent)
+MapEditorModuleTiles::MapEditorModuleTiles(const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent) : AbstractPrototypeTable(DBMgr, pParent)
 {
 }
 
@@ -44,7 +44,7 @@ void MapEditorModuleTiles::_setup()
 /*#####
 # auto tile module
 #####*/
-AutoTilePixmapWidget::AutoTilePixmapWidget(uint32 ID, QWidget *pParent) : AbstractPixmapWidget(ID, pParent)
+AutoTilePixmapWidget::AutoTilePixmapWidget(uint32 ID, QWidget* pParent) : AbstractPixmapWidget(ID, pParent)
 {
 }
 
@@ -55,12 +55,12 @@ void AutoTilePixmapWidget::drawPixmap()
         if (auto pPixmap = pAutoTile->getPixmap(DATABASE::AUTO_TILE::INDEX_INNER_CENTER))
         {
             QPainter painter(this);
-            painter.drawPixmap(0, 0, *pPixmap);
+            painter.drawPixmap(0, 0,* pPixmap);
         }
     }
 }
 
-MapEditorModuleAutoTiles::MapEditorModuleAutoTiles(const DATABASE::DatabaseMgr &DBMgr, QWidget *pParent) : AbstractPrototypeTable(DBMgr, pParent)
+MapEditorModuleAutoTiles::MapEditorModuleAutoTiles(const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent) : AbstractPrototypeTable(DBMgr, pParent)
 {
 }
 

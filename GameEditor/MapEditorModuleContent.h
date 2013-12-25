@@ -27,6 +27,9 @@ public slots:
     void onMapClosed(uint32 mapID);
     void onMapEdited(uint32 mapID);
 
+signals:
+    void registerTab(MapViewer* pTab);
+
 private:
     DATABASE::DatabaseMgr &m_DBMgr;
 };

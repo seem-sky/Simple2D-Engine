@@ -8,7 +8,7 @@
 /*#####
 # AnimationActions
 #####*/
-AnimationAction::AnimationAction(AnimationSpriteItem *pItem, AnimationViewerScene *pScene) : m_pScene(pScene), m_pItem(pItem)
+AnimationAction::AnimationAction(AnimationSpriteItem* pItem, AnimationViewerScene* pScene) : m_pScene(pScene), m_pItem(pItem)
 {}
 
 void AnimationActionInsert::revert()
@@ -35,7 +35,7 @@ AnimationActionRemove::~AnimationActionRemove()
         new DelayedDeleteObject<AnimationSpriteItem>(m_pItem);
 }
 
-AnimationActionModify::AnimationActionModify(QGraphicsItem::GraphicsItemChange change, const QVariant &value, AnimationSpriteItem *pItem, AnimationViewerScene *pScene)
+AnimationActionModify::AnimationActionModify(QGraphicsItem::GraphicsItemChange change, const QVariant& value, AnimationSpriteItem* pItem, AnimationViewerScene* pScene)
     : AnimationAction(pItem, pScene), m_Value(value), m_ItemChange(change)
 {
 }
@@ -68,7 +68,7 @@ void AnimationActionModify::revert()
 /*#####
 # DatabaseModuleAnimation
 #####*/
-DatabaseModuleAnimation::DatabaseModuleAnimation(QWidget *pParent) : QWidget(pParent), Ui_DatabaseModuleAnimation(), m_pSpriteDB(nullptr)
+DatabaseModuleAnimation::DatabaseModuleAnimation(QWidget* pParent) : QWidget(pParent), Ui_DatabaseModuleAnimation(), m_pSpriteDB(nullptr)
 {
     setupUi(this);
 
@@ -109,13 +109,13 @@ void DatabaseModuleAnimation::clear()
     m_pAniViewer->clear();
 }
 
-void DatabaseModuleAnimation::setSpriteDatabase(const DATABASE::SpriteDatabase *pSpriteDB)
+void DatabaseModuleAnimation::setSpriteDatabase(const DATABASE::SpriteDatabase* pSpriteDB)
 {
     m_pSpriteDB = pSpriteDB;
     m_pAniViewer->setSpriteDatabase(m_pSpriteDB);
 }
 
-void DatabaseModuleAnimation::setAnimation(const DATABASE::ANIMATION::FrameVector &animation)
+void DatabaseModuleAnimation::setAnimation(const DATABASE::ANIMATION::FrameVector& animation)
 {
     _saveCurrentFrame();
     clear();
@@ -168,7 +168,7 @@ void DatabaseModuleAnimation::_onPlayStopButtonClicked()
     }
 }
 
-void DatabaseModuleAnimation::_setupSpriteFrame(AnimationSpriteItem *pItem)
+void DatabaseModuleAnimation::_setupSpriteFrame(AnimationSpriteItem* pItem)
 {
     if (!pItem)
         return;
@@ -248,7 +248,7 @@ void DatabaseModuleAnimation::_onOpacityChanged(double value)
         pItem->setOpacity(value);
 }
 
-void DatabaseModuleAnimation::_onItemChanged(AnimationSpriteItem *pItem, QGraphicsItem::GraphicsItemChange change, const QVariant &value)
+void DatabaseModuleAnimation::_onItemChanged(AnimationSpriteItem* pItem, QGraphicsItem::GraphicsItemChange change, const QVariant& value)
 {
     if (pItem == m_pAniViewer->getSelectedItem())
         _setupSpriteFrame(pItem);

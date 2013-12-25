@@ -13,7 +13,7 @@ private:
     void clearWidgets();
 
 public:
-    DatabaseWindow(DATABASE::DatabaseMgr &DBMgr, QWidget *parent);
+    DatabaseWindow(DATABASE::DatabaseMgr& DBMgr, QWidget* parent);
 
     QString getCurrentDatabaseSection();
     inline const DATABASE::DatabaseMgr& getDBMgr() const { return m_pDBMgr; }
@@ -27,6 +27,6 @@ signals:
     void storeChanges();
 
 private:
-    DATABASE::DatabaseMgr &m_pDBMgr;
+    DATABASE::DatabaseMgr& m_pDBMgr;
 };
 #endif

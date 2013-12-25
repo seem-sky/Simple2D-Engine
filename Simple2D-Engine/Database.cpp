@@ -3,11 +3,11 @@
 
 using namespace DATABASE;
 
-//void Database::getPrototypeShortInfos(UInt32StringPairVector &result) const
+//void Database::getPrototypeShortInfos(UInt32StringPairVector& result) const
 //{
 //    for (uint32 i = 0; i < getSize(); ++i)
 //    {
-//        if (m_Items.at(i) && m_Items.at(i)->getID() != 0)
+//        if (m_Items.at(i)& & m_Items.at(i)->getID() != 0)
 //            result.push_back(std::make_pair(m_Items.at(i)->getID(), m_Items.at(i)->getName()));
 //    }
 //}
@@ -17,7 +17,7 @@ using namespace DATABASE;
 //    UInt32StringPairVector result;
 //    for (uint32 i = 0; i < getSize(); ++i)
 //    {
-//        if (m_Items.at(i) && m_Items.at(i)->getID() != 0)
+//        if (m_Items.at(i)& & m_Items.at(i)->getID() != 0)
 //            result.push_back(std::make_pair(m_Items.at(i)->getID(), m_Items.at(i)->getName()));
 //    }
 //    return result;
@@ -34,7 +34,7 @@ TileDatabase::TileDatabase() : Database()
     setMaximumSize(MATH::maximum<TILE_INDEX>()-1);
 }
 
-//void TileDatabase::setPrototype(TilePrototype *pItem)
+//void TileDatabase::setPrototype(TilePrototype* pItem)
 //{
 //    Database::setPrototype(pItem);
 //}
@@ -57,7 +57,7 @@ TileDatabase::TileDatabase() : Database()
 /*#####
 # TileSetDatabase
 #####*/
-//void TileSetDatabase::setPrototype(TILE_SET::TileSetPrototype *pItem)
+//void TileSetDatabase::setPrototype(TILE_SET::TileSetPrototype* pItem)
 //{
 //    Database::setPrototype(pItem);
 //}
@@ -85,7 +85,7 @@ AutoTileDatabase::AutoTileDatabase() : Database()
     setMaximumSize(MATH::maximum<AUTO_TILE_INDEX>()-1);
 }
 
-//void AutoTileDatabase::setPrototype(AUTO_TILE::AutoTilePrototype *pItem)
+//void AutoTileDatabase::setPrototype(AUTO_TILE::AutoTilePrototype* pItem)
 //{
 //    Database::setPrototype(pItem);
 //}
@@ -108,7 +108,7 @@ AutoTileDatabase::AutoTileDatabase() : Database()
 /*#####
 # SpriteDatabase
 #####*/
-//void SpriteDatabase::setPrototype(SpritePrototype *pItem)
+//void SpriteDatabase::setPrototype(SpritePrototype* pItem)
 //{
 //    Database::setPrototype(pItem);
 //}
@@ -131,7 +131,7 @@ AutoTileDatabase::AutoTileDatabase() : Database()
 /*#####
 # AnimationDatabase
 #####*/
-//void AnimationDatabase::setPrototype(AnimationPrototype *pItem)
+//void AnimationDatabase::setPrototype(AnimationPrototype* pItem)
 //{
 //    Database::setPrototype(pItem);
 //}
@@ -173,9 +173,9 @@ void AnimationTypeDatabase::clear()
     Database::setPrototype(new ANIMATION::AnimationTypePrototype(8, "WALK_LEFT"));
 }
 
-//void AnimationTypeDatabase::setPrototype(AnimationTypePrototype *pItem)
+//void AnimationTypeDatabase::setPrototype(AnimationTypePrototype* pItem)
 //{
-//    if (pItem && pItem->getID() > MAP_OBJECT::MIN_DYNAMIC_OBJECT_POSE)
+//    if (pItem& & pItem->getID() > MAP_OBJECT::MIN_DYNAMIC_OBJECT_POSE)
 //        Database::setPrototype(pItem);
 //}
 
@@ -197,7 +197,7 @@ void AnimationTypeDatabase::clear()
 /*#####
 # WorldObjectDatabase
 #####*/
-//void WorldObjectDatabase::setPrototype(MAP_OBJECT::WorldObjectPrototype *pItem)
+//void WorldObjectDatabase::setPrototype(MAP_OBJECT::WorldObjectPrototype* pItem)
 //{
 //    Database::setPrototype(pItem);
 //}
@@ -220,7 +220,7 @@ void AnimationTypeDatabase::clear()
 /*#####
 # DynamicObjectDatabase
 #####*/
-//void DynamicObjectDatabase::setPrototype(MAP_OBJECT::DynamicObjectPrototype *pItem)
+//void DynamicObjectDatabase::setPrototype(MAP_OBJECT::DynamicObjectPrototype* pItem)
 //{
 //    Database::setPrototype(pItem);
 //}
@@ -243,7 +243,7 @@ void AnimationTypeDatabase::clear()
 /*#####
 # LocalisationDatabase
 #####*/
-//void LocalisationDatabase::setPrototype(LocalisationPrototype *pItem)
+//void LocalisationDatabase::setPrototype(LocalisationPrototype* pItem)
 //{
 //    Database::setPrototype(pItem);
 //}

@@ -16,7 +16,7 @@ Logfile::~Logfile()
     WriteMessage(LOGFILE_CLOSING_MESSAGE);
 }
 
-void Logfile::WriteMessage(const QString &msg, bool append)
+void Logfile::WriteMessage(const QString& msg, bool append)
 {
     QFile file(LOGFILE_FILENAME);
     if (file.open(append ? QIODevice::Append : QIODevice::WriteOnly))
@@ -27,7 +27,7 @@ void Logfile::WriteMessage(const QString &msg, bool append)
     }
 }
 
-void Logfile::WriteErrorMessage(const QString &msg)
+void Logfile::WriteErrorMessage(const QString& msg)
 {
     WriteMessage("###ERROR### " + msg);
 }

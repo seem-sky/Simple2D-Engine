@@ -24,15 +24,15 @@ namespace DATABASE
     public:
         Prototype(uint32 ID = 0) : m_ID(ID) {}
 
-        inline void setName(const QString &sName) { m_Name = sName; }
+        inline void setName(const QString& sName) { m_Name = sName; }
         inline QString getName() const { return m_Name; }
         inline uint32 getID() const { return m_ID; }
         inline void setID(uint32 ID) { m_ID = ID; }
 
         // IO
-        virtual void toXML(QXmlStreamWriter &writer) const;
-        virtual void fromXML(const QXmlStreamAttributes &attributes);
-        virtual void insertChildren(const QXmlStreamReader &reader) {}
+        virtual void toXML(QXmlStreamWriter& writer) const;
+        virtual void fromXML(const QXmlStreamAttributes& attributes);
+        virtual void insertChildren(const QXmlStreamReader& reader) {}
 
     private:
         uint32 m_ID;
@@ -47,15 +47,15 @@ namespace DATABASE
     public:
         RessourcePrototype(uint32 ID = 0) : Prototype(ID) {}
 
-        inline void setFileName(const QString &sFileName) { m_FileName = sFileName; }
+        inline void setFileName(const QString& sFileName) { m_FileName = sFileName; }
         inline QString getFileName() const { return m_FileName; }
-        inline void setPath(const QString &sPath) { m_Path = sPath; }
+        inline void setPath(const QString& sPath) { m_Path = sPath; }
         inline QString getPath() const { return m_Path; }
         inline QString getPathName() const { return getPath() + getFileName(); }
 
         // IO
-        virtual void toXML(QXmlStreamWriter &writer) const;
-        virtual void fromXML(const QXmlStreamAttributes &attributes);
+        virtual void toXML(QXmlStreamWriter& writer) const;
+        virtual void fromXML(const QXmlStreamAttributes& attributes);
 
     private:
         QString m_Path;        // path from ~/textures
@@ -71,11 +71,11 @@ namespace DATABASE
         TexturePrototype(uint32 ID = 0) : RessourcePrototype(ID) {}
 
         inline Color getTransparencyColor() const { return m_TransparencyColor; }
-        inline void setTransparencyColor(const Color &color) { m_TransparencyColor = color; }
+        inline void setTransparencyColor(const Color& color) { m_TransparencyColor = color; }
 
         // IO
-        virtual void toXML(QXmlStreamWriter &writer) const;
-        virtual void fromXML(const QXmlStreamAttributes &attributes);
+        virtual void toXML(QXmlStreamWriter& writer) const;
+        virtual void fromXML(const QXmlStreamAttributes& attributes);
 
         inline QString getTextureString() const { return getPathName() + QString::fromStdString(getTransparencyColor().getColorString()); }
 
@@ -103,7 +103,7 @@ namespace DATABASE
             PASSABLE_LEFT_TO_RIGHT  = PASSABLE_LEFT|PASSABLE_RIGHT,
             PASSABLE_ALL            = PASSABLE_LEFT|PASSABLE_RIGHT|PASSABLE_DOWN|PASSABLE_UP,
         };
-        inline bool hasPassabilityFlag(const PassabilityFlag flag) const { return (m_uiPassable & flag) != 0; }
+        inline bool hasPassabilityFlag(const PassabilityFlag flag) const { return (m_uiPassable&  flag) != 0; }
         inline void addPassabilityFlag(const uint8 flag) { m_uiPassable |= flag; }
         inline void removePassabilityFlag(const uint8 flag) { m_uiPassable ^= flag; }
         inline uint8 getPassability() const  { return m_uiPassable; }
@@ -112,8 +112,8 @@ namespace DATABASE
         inline uint32 getTerrainType() const { return m_uiTerrainType; }
 
         // IO
-        void toXML(QXmlStreamWriter &writer) const;
-        void fromXML(const QXmlStreamAttributes &attributes);
+        void toXML(QXmlStreamWriter& writer) const;
+        void fromXML(const QXmlStreamAttributes& attributes);
 
     private:
         uint8 m_uiPassable;
@@ -144,15 +144,15 @@ namespace DATABASE
             uint32 getTileID(UInt32Point pos) const;
 
             // IO
-            void toXML(QXmlStreamWriter &writer) const;
-            void fromXML(const QXmlStreamAttributes &attributes);
+            void toXML(QXmlStreamWriter& writer) const;
+            void fromXML(const QXmlStreamAttributes& attributes);
 
         private:
             UInt32Point m_Size;
             UInt32Multiarray2D m_Tiles;
         };
         
-        QPixmap createPixmap(const TileSetPrototype &tileSet);
+        QPixmap createPixmap(const TileSetPrototype& tileSet);
     }
 
     /*#####
@@ -322,12 +322,12 @@ namespace DATABASE
             inline void setTileID(AUTO_TILE_INDEX index, uint32 ID) { m_uiTileID.at(index) = ID; }
             inline uint32 getTileID(AUTO_TILE_INDEX index) const { return m_uiTileID.at(index); }
 
-            inline void setTiles(const TileArray &tiles) { m_uiTileID = tiles; }
+            inline void setTiles(const TileArray& tiles) { m_uiTileID = tiles; }
             inline const TileArray& getTiles() const { return m_uiTileID; }
 
             // IO
-            virtual void toXML(QXmlStreamWriter &writer) const;
-            virtual void fromXML(const QXmlStreamAttributes &attributes);
+            virtual void toXML(QXmlStreamWriter& writer) const;
+            virtual void fromXML(const QXmlStreamAttributes& attributes);
 
         private:
             TileArray m_uiTileID;
@@ -396,12 +396,12 @@ namespace DATABASE
 
             inline const Int32Point& getOffset() const { return m_FrameOffset; }
             void calculateOffset();
-            void setOffsetIfNeeded(const Int32Point &offset);
+            void setOffsetIfNeeded(const Int32Point& offset);
 
             inline uint32 getTimeInMsec() const { return m_uiMsecTime; }
             inline void setTimeInMsec(uint32 time) { m_uiMsecTime = time; }
 
-            inline bool isEmpty() const { return m_Sprites.empty() && !m_uiMsecTime; }
+            inline bool isEmpty() const { return m_Sprites.empty()& & !m_uiMsecTime; }
 
         private:
             Int32Point m_FrameOffset;
@@ -415,7 +415,7 @@ namespace DATABASE
         public:
             AnimationPrototype(uint32 ID = 0) : Prototype(ID) {}
 
-            bool getFrame(uint32 uiIndex, Frame &frame) const;
+            bool getFrame(uint32 uiIndex, Frame& frame) const;
             void setFrame(uint32 uiIndex, Frame frame);
             void removeFrame(uint32 uiIndex);
             inline uint32 getFrameCount() const { return m_Frames.size(); }
@@ -423,8 +423,8 @@ namespace DATABASE
             inline void setAnimation(const FrameVector& animation) { m_Frames = animation; }
 
             // IO
-            void toXML(QXmlStreamWriter &writer) const;
-            void insertChildren(const QXmlStreamReader &reader);
+            void toXML(QXmlStreamWriter& writer) const;
+            void insertChildren(const QXmlStreamReader& reader);
 
         private:
             FrameVector m_Frames;
@@ -476,7 +476,7 @@ namespace DATABASE
             inline void setAnimationSpeed(uint16 uiSpeed) { m_uiAnimationSpeed = uiSpeed; }
             inline uint16 getAnimationSpeed() const { return m_uiAnimationSpeed; }
 
-            inline void setScriptName(const QString &sScriptName) { m_ScriptName = sScriptName; }
+            inline void setScriptName(const QString& sScriptName) { m_ScriptName = sScriptName; }
             inline QString getScriptName() const { return m_ScriptName; }
 
             inline const AnimationInfo& getAnimationInfo(uint32 uiIndex) const { return m_AnimationInfos.at(uiIndex); }
@@ -489,9 +489,9 @@ namespace DATABASE
             virtual uint8 getMinimumAnimationCount() const { return MIN_WORLD_OBJECT_POSE; }
 
             // IO
-            virtual void toXML(QXmlStreamWriter &writer) const;
-            virtual void fromXML(const QXmlStreamAttributes &attributes);
-            virtual void insertChildren(const QXmlStreamReader &reader);
+            virtual void toXML(QXmlStreamWriter& writer) const;
+            virtual void fromXML(const QXmlStreamAttributes& attributes);
+            virtual void insertChildren(const QXmlStreamReader& reader);
 
         private:
             Int32Rect m_BoundingRect;
@@ -538,7 +538,7 @@ namespace DATABASE
 
             inline void setLocalsCount(uint32 uiCount) { m_Locals.resize(uiCount); }
             inline uint32 getLocalsCount() const { return m_Locals.size(); }
-            inline void setLocalisation(uint32 uiIndex, const QString &sLocal)
+            inline void setLocalisation(uint32 uiIndex, const QString& sLocal)
             {
                 if (uiIndex >= getLocalsCount())
                     setLocalsCount(uiIndex+1);
@@ -553,8 +553,8 @@ namespace DATABASE
             }
 
             // IO
-            void toXML(QXmlStreamWriter &writer) const;
-            void insertChildren(const QXmlStreamReader &reader);
+            void toXML(QXmlStreamWriter& writer) const;
+            void insertChildren(const QXmlStreamReader& reader);
 
         private:
             StringVector m_Locals;
@@ -587,7 +587,7 @@ namespace DATABASE
         {
             MapObject() : m_Type(DATABASE::MAP_OBJECT::TYPE_WORLDOBJECT), m_ObjectID(0), m_GUID(0), m_Direction(DIRECTION_DOWN), m_Layer(LAYER_MIDDLE) {}
 
-            bool isEmpty() const { return !m_GUID && !m_ObjectID; }
+            bool isEmpty() const { return !m_GUID& & !m_ObjectID; }
 
             DATABASE::MAP_OBJECT::ObjectType m_Type;
             uint32 m_ObjectID;
@@ -612,20 +612,20 @@ namespace DATABASE
             void _clearTiles();
 
         public:
-            MapPrototype(uint32 ID = 0, const QString &fileName = "") : Prototype(ID), m_FileName(fileName), m_uiParentID(0)
+            MapPrototype(uint32 ID = 0, const QString& fileName = "") : Prototype(ID), m_FileName(fileName), m_uiParentID(0)
             {}
 
             bool isValid();
 
             inline QString getFileName() const { return m_FileName; }
-            inline void setFileName(const QString &sFileName) { m_FileName = sFileName; }
-            inline void setScriptName(const QString &sScriptName) { m_ScriptName = sScriptName; }
+            inline void setFileName(const QString& sFileName) { m_FileName = sFileName; }
+            inline void setScriptName(const QString& sScriptName) { m_ScriptName = sScriptName; }
             inline QString getScriptName() const { return m_ScriptName; }
 
             void setSizeX(uint32 x);
             void setSizeY(uint32 y);
             void setLayerSize(uint8 size, Layer layer);
-            void setSize(const UInt32Point &size, uint8 uiForegroundLayerSize, uint8 uiBackgroundLayerSize);
+            void setSize(const UInt32Point& size, uint8 uiForegroundLayerSize, uint8 uiBackgroundLayerSize);
             inline UInt32Point getSize() const { return m_Size; }
             inline uint8 getLayerSize(Layer layer) const { return m_Layer.at(layer); };
 
@@ -633,7 +633,7 @@ namespace DATABASE
             inline void setParentID(uint32 uiParentID) { m_uiParentID = uiParentID; }
 
             // ToDo: remove following
-            void addMapObject(MapObject *pObject);
+            void addMapObject(MapObject* pObject);
             MapObject* addMapObject(DATABASE::MAP_OBJECT::ObjectType type, uint32 ID, Int32Point pos);
             inline uint32 getMapObjectCount() const { return m_Objects.getSize(); }
             inline const MapObject* getMapObject(uint32 GUID) const { return m_Objects.getItem(GUID); }
@@ -648,11 +648,11 @@ namespace DATABASE
                 FLAG_OTHER      = 0x2,
                 FLAG_ALL        = FLAG_SAME | FLAG_OTHER
             };
-            uint32 checkAutoTiles(uint32 ID, UInt32Point3D pos, UInt32PointSet &result, Layer layer, uint32 resultFlag = FLAG_ALL);
+            uint32 checkAutoTiles(uint32 ID, UInt32Point3D pos, UInt32PointSet& result, Layer layer, uint32 resultFlag = FLAG_ALL);
 
             // XML IO
-            void toXML(QXmlStreamWriter &writer) const;
-            void fromXML(const QXmlStreamAttributes &attributes);
+            void toXML(QXmlStreamWriter& writer) const;
+            void fromXML(const QXmlStreamAttributes& attributes);
 
         private:
             bool m_DataLoaded;

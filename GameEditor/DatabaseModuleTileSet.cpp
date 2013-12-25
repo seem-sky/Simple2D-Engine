@@ -4,7 +4,7 @@
 const uint32 MIN_COLUMN_COUNT = 1;
 const uint32 MIN_ROW_COUNT = 1;
 
-DatabaseModuleTileSet::DatabaseModuleTileSet(QWidget *pParent) : Ui_DatabaseModuleTileSet(), m_pTileDB(nullptr)
+DatabaseModuleTileSet::DatabaseModuleTileSet(QWidget* pParent) : Ui_DatabaseModuleTileSet(), m_pTileDB(nullptr)
 {
     setupUi(this);
 
@@ -90,13 +90,13 @@ void DatabaseModuleTileSet::_fillCells(int32 startRow, int32 startColumn)
 
 TileDropLabel* DatabaseModuleTileSet::_getNewTileDropLabel() const
 {
-    TileDropLabel *pLabel = new TileDropLabel(m_pTileSetTable);
+    TileDropLabel* pLabel = new TileDropLabel(m_pTileSetTable);
     pLabel->setTileDatabase(m_pTileDB);
     //connect(pLabel, SIGNAL(onDrop(uint32, Int32Point)), this, SLOT(_onTileDrop(uint32, Int32Point)));
     return pLabel;
 }
 
-void DatabaseModuleTileSet::setTileDatabase(const DATABASE::TileDatabase *pTileDB)
+void DatabaseModuleTileSet::setTileDatabase(const DATABASE::TileDatabase* pTileDB)
 {
     m_pTileDB = pTileDB;
     // update cell widgets
@@ -104,7 +104,7 @@ void DatabaseModuleTileSet::setTileDatabase(const DATABASE::TileDatabase *pTileD
     {
         for (int column = 0; column < m_pTileSetTable->columnCount(); ++column)
         {
-            if (TileDropLabel *pLabel = dynamic_cast<TileDropLabel*>(m_pTileSetTable->cellWidget(row, column)))
+            if (TileDropLabel* pLabel = dynamic_cast<TileDropLabel*>(m_pTileSetTable->cellWidget(row, column)))
                 pLabel->setTileDatabase(m_pTileDB);
         }
     }

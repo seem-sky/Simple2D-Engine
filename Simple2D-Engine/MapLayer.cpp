@@ -7,7 +7,7 @@ void MapLayer::clear()
     resize(UInt32Point(), 0, 0);
 }
 
-void MapLayer::resize(const UInt32Point &size, uint8 uiForegroundLayerSize, uint8 uiBackgroundLayerSize)
+void MapLayer::resize(const UInt32Point& size, uint8 uiForegroundLayerSize, uint8 uiBackgroundLayerSize)
 {
     m_Size = size;
     m_uiLayer.at(LAYER_FOREGROUND) = uiForegroundLayerSize;
@@ -17,9 +17,9 @@ void MapLayer::resize(const UInt32Point &size, uint8 uiForegroundLayerSize, uint
     m_ForegroundTiles.resize(boost::extents[m_Size.x][m_Size.y][m_uiLayer.at(LAYER_FOREGROUND)]);
 }
 
-const MapTile& MapLayer::getMapTile(const UInt32Point3D &at, Layer layer) const
+const MapTile& MapLayer::getMapTile(const UInt32Point3D& at, Layer layer) const
 {
-    if (isInMap(at) && getLayerSize(layer) > at.z)
+    if (isInMap(at)& & getLayerSize(layer) > at.z)
     {
         switch (layer)
         {
@@ -30,14 +30,14 @@ const MapTile& MapLayer::getMapTile(const UInt32Point3D &at, Layer layer) const
     throw std::out_of_range(nullptr);
 }
 
-MapTile& MapLayer::getMapTile(const UInt32Point3D &at, Layer layer)
+MapTile& MapLayer::getMapTile(const UInt32Point3D& at, Layer layer)
 {
     return const_cast<MapTile&>(const_cast<const MapLayer&>(*this).getMapTile(at, layer));
 }
 
-void MapLayer::setMapTile(const UInt32Point3D &at, Layer layer, MapTile tile)
+void MapLayer::setMapTile(const UInt32Point3D& at, Layer layer, MapTile tile)
 {
-    if (isInMap(at) && getLayerSize(layer) > at.z)
+    if (isInMap(at)& & getLayerSize(layer) > at.z)
     {
         switch (layer)
         {

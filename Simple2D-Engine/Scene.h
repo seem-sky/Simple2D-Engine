@@ -18,16 +18,16 @@ namespace GAME_LOGIC
         class SceneView : public QGraphicsScene
         {
         protected:
-            virtual void drawForeground(QPainter *painter, const QRectF &rect);
+            virtual void drawForeground(QPainter* painter, const QRectF& rect);
 
-            void drawFPSCounter(QPainter *painter, const QRectF &rect);
+            void drawFPSCounter(QPainter* painter, const QRectF& rect);
 
         public:
-            SceneView(Scene *pScene) : QGraphicsScene(), m_pScene(pScene)
+            SceneView(Scene* pScene) : QGraphicsScene(), m_pScene(pScene)
             {}
 
         protected:
-            Scene *m_pScene;
+            Scene* m_pScene;
 
         private:
             QTime m_FPSCounter;
@@ -50,7 +50,7 @@ namespace GAME_LOGIC
             void _updateFPS(uint32 uiDiff);
 
         public:
-            Scene(Game &game);
+            Scene(Game& game);
 
             SceneView* getSceneView() { return m_pSceneView; }
 
@@ -60,8 +60,8 @@ namespace GAME_LOGIC
             inline void showFPS(bool show = true) { m_ShowFPS = show; }
 
         protected:
-            Game &m_Game;
-            SceneView *m_pSceneView;
+            Game& m_Game;
+            SceneView* m_pSceneView;
 
         private:
             bool m_ShowFPS;

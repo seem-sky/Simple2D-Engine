@@ -24,17 +24,17 @@ namespace GAME_LOGIC
             bool _animationChanged();
 
         public:
-            MapItem(const MAP::OBJECT::WorldObject *pWorldObject, const DATABASE::DatabaseMgr &DBMgr);
+            MapItem(const MAP::OBJECT::WorldObject* pWorldObject, const DATABASE::DatabaseMgr& DBMgr);
 
             void syncWithWorldObject();
 
             QRectF boundingRect() const;
-            void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+            void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
 
         private:
-            const DATABASE::DatabaseMgr &m_DBMgr;
-            const MAP::OBJECT::WorldObject *m_pWorldObject;
-            const DATABASE::ANIMATION::AnimationPrototype *m_pCurrentAnimation;
+            const DATABASE::DatabaseMgr& m_DBMgr;
+            const MAP::OBJECT::WorldObject* m_pWorldObject;
+            const DATABASE::ANIMATION::AnimationPrototype* m_pCurrentAnimation;
             uint32 m_uiCurrentFrame;
             QString m_PixmapIdentify;
             QRect m_BoundingRect;
@@ -46,10 +46,10 @@ namespace GAME_LOGIC
         #####*/
         class GameScene : public Scene
         {
-            MapItem* createNewWorldObject(MAP::OBJECT::WorldObject *pObject);
+            MapItem* createNewWorldObject(MAP::OBJECT::WorldObject* pObject);
 
         public:
-            GameScene(Game &game);
+            GameScene(Game& game);
 
             void update(uint32 uiDiff);
 
@@ -70,18 +70,18 @@ namespace GAME_LOGIC
         class GameSceneView : public SceneView
         {
         protected:
-            virtual void drawBackground(QPainter *painter, const QRectF &rect);
-            virtual void drawForeground(QPainter *painter, const QRectF &rect);
+            virtual void drawBackground(QPainter* painter, const QRectF& rect);
+            virtual void drawForeground(QPainter* painter, const QRectF& rect);
 
-            virtual void drawTiles(QPainter *painter, const QRectF &rect, MAP::Layer layer);
+            virtual void drawTiles(QPainter* painter, const QRectF& rect, MAP::Layer layer);
 
         public:
-            GameSceneView(GameScene *pScene, const DATABASE::DatabaseMgr &DBMgr);
+            GameSceneView(GameScene* pScene, const DATABASE::DatabaseMgr& DBMgr);
 
             inline GameScene* getGameScene() { return dynamic_cast<GameScene*>(m_pScene); }
 
         private:
-            const DATABASE::DatabaseMgr &m_DatabaseMgr;
+            const DATABASE::DatabaseMgr& m_DatabaseMgr;
             AutoTileCache m_AutoTileCache;
             TileCache m_TileCache;
         };

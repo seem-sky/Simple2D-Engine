@@ -5,8 +5,8 @@ using namespace MAP;
 /*#####
 # Map
 #####*/
-Map::Map(uint32 GUID, uint32 ID, MapLayer &layer, const DATABASE::MAP_STRUCTURE::MapObjectContainer &objects, const DATABASE::DatabaseMgr &DBMgr,
-         const std::string &name, const std::string &script) : m_Layer(std::move(layer)), m_DBMgr(DBMgr), Entity(GUID, ID, name, script)
+Map::Map(uint32 GUID, uint32 ID, MapLayer& layer, const DATABASE::MAP_STRUCTURE::MapObjectContainer& objects, const DATABASE::DatabaseMgr& DBMgr,
+         const std::string& name, const std::string& script) : m_Layer(std::move(layer)), m_DBMgr(DBMgr), Entity(GUID, ID, name, script)
 {
     _setupObjects(objects);
 }
@@ -23,13 +23,13 @@ void Map::update(uint32 uiDiff)
     }
 }
 
-void Map::_setupObjects(const DATABASE::MAP_STRUCTURE::MapObjectContainer &objects)
+void Map::_setupObjects(const DATABASE::MAP_STRUCTURE::MapObjectContainer& objects)
 {
     for (uint16 i = 1; i <= objects.getSize(); ++i)
     {
         if (auto pObj = objects.getItem(i))
         {
-            OBJECT::WorldObject *pWorldObject(nullptr);
+            OBJECT::WorldObject* pWorldObject(nullptr);
             switch (pObj->m_Type)
             {
             case DATABASE::MAP_OBJECT::TYPE_WORLDOBJECT:
@@ -49,7 +49,7 @@ void Map::_setupObjects(const DATABASE::MAP_STRUCTURE::MapObjectContainer &objec
     }
 }
 
-void Map::addWorldObject(OBJECT::WorldObject *pWorldObject)
+void Map::addWorldObject(OBJECT::WorldObject* pWorldObject)
 {
     // add object to grid
     if (pWorldObject)
@@ -64,7 +64,7 @@ void Map::addWorldObject(OBJECT::WorldObject *pWorldObject)
 # non-member functions
 #####*/
 // ToDo:
-//BitsetVector MAP::generatePassabilityMap(DATABASE::ConstDatabaseMgrPtr pDBMgr, const MapLayer &mapLayer)
+//BitsetVector MAP::generatePassabilityMap(DATABASE::ConstDatabaseMgrPtr pDBMgr, const MapLayer& mapLayer)
 //{
 //    BitsetVector passabilityMap;
 //    //UInt32Point size = mapLayer.getSize();
@@ -72,12 +72,12 @@ void Map::addWorldObject(OBJECT::WorldObject *pWorldObject)
 //    //for (uint32 x = 0; x < size.x; ++x)
 //    //{
 //    //    for (uint32 y = 0; y < size.y; ++y)
-//    //        passabilityMap.at(x)[y] = isLayerPassable(pDBMgr, mapLayer, UInt32Point(x, y), LAYER_BACKGROUND) && isLayerPassable(pDBMgr, mapLayer, UInt32Point(x, y), LAYER_FOREGROUND);
+//    //        passabilityMap.at(x)[y] = isLayerPassable(pDBMgr, mapLayer, UInt32Point(x, y), LAYER_BACKGROUND)& & isLayerPassable(pDBMgr, mapLayer, UInt32Point(x, y), LAYER_FOREGROUND);
 //    //}
 //    return std::move(passabilityMap);
 //}
 //
-//bool MAP::isLayerPassable(DATABASE::ConstDatabaseMgrPtr pDBMgr, const MapLayer &mapLayer, UInt32Point pos, Layer layer)
+//bool MAP::isLayerPassable(DATABASE::ConstDatabaseMgrPtr pDBMgr, const MapLayer& mapLayer, UInt32Point pos, Layer layer)
 //{
 //    //DATABASE::ConstTileDatabasePtr pTileDB;
 //    //DATABASE::ConstAutoTileDatabasePtr pAutoTileDB;

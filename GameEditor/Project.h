@@ -6,8 +6,8 @@
 class Project
 {
 public:
-    bool createNew(const QString &path);
-    bool load(const QString &path);
+    bool createNew(const QString& path);
+    bool load(const QString& path);
     void close();
     bool save();
 

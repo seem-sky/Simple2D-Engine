@@ -5,11 +5,11 @@
 #include <QtGui/QKeyEvent>
 #include "DelayedDeleteObject.h"
 
-AnimationSpriteItem::AnimationSpriteItem(const DATABASE::SpritePrototype *pPrototype) : GraphicsTextureItem(pPrototype)
+AnimationSpriteItem::AnimationSpriteItem(const DATABASE::SpritePrototype* pPrototype) : GraphicsTextureItem(pPrototype)
 {
 }
 
-void AnimationSpriteItem::keyPressEvent(QKeyEvent *pEvent)
+void AnimationSpriteItem::keyPressEvent(QKeyEvent* pEvent)
 {
     switch(pEvent->key())
     {
@@ -17,7 +17,7 @@ void AnimationSpriteItem::keyPressEvent(QKeyEvent *pEvent)
         if (scene())
         {
             scene()->removeItem(this);
-            if (auto *pScene = dynamic_cast<AnimationViewerScene*>(scene()))
+            if (auto* pScene = dynamic_cast<AnimationViewerScene*>(scene()))
                 emit pScene->itemRemoved(this);
         }
         new DelayedDeleteObject<GraphicsTextureItem>(this);
@@ -26,7 +26,7 @@ void AnimationSpriteItem::keyPressEvent(QKeyEvent *pEvent)
     }
 }
 
-QVariant AnimationSpriteItem::itemChange(GraphicsItemChange change, const QVariant &value)
+QVariant AnimationSpriteItem::itemChange(GraphicsItemChange change, const QVariant& value)
 {
     auto pScene = dynamic_cast<AnimationViewerScene*>(scene());
     if (!pScene)
@@ -63,7 +63,7 @@ DATABASE::ANIMATION::Sprite AnimationSpriteItem::toSprite() const
 AnimationViewerScene::AnimationViewerScene() : QGraphicsScene(), m_DrawGrid(true)
 {}
 
-void AnimationViewerScene::drawForeground(QPainter *pPainter, const QRectF &rect)
+void AnimationViewerScene::drawForeground(QPainter* pPainter, const QRectF& rect)
 {
     if (m_DrawGrid)
         _drawGrid(pPainter, rect);
@@ -76,17 +76,17 @@ void AnimationViewerScene::showGrid(bool show)
 }
 
 const uint32 GRID_SPACE = 10;
-void AnimationViewerScene::_drawGrid(QPainter *pPainter, const QRectF &rect)
+void AnimationViewerScene::_drawGrid(QPainter* pPainter, const QRectF& rect)
 {
     // draw 0 lines
     QPainterPath painterPath;
     pPainter->setPen(QColor(255,0,0));
-    if (rect.y() <= 0 && rect.y() + rect.height() >= 0)
+    if (rect.y() <= 0& & rect.y() + rect.height() >= 0)
     {
         painterPath.moveTo(rect.x(), 0);
         painterPath.lineTo(rect.x()+rect.width(), 0);
     }
-    if (rect.x() <= 0 && rect.x() + rect.width() >= 0)
+    if (rect.x() <= 0& & rect.x() + rect.width() >= 0)
     {
         painterPath.moveTo(0, rect.y());
         painterPath.lineTo(0, rect.y()+rect.height());
@@ -118,7 +118,7 @@ void AnimationViewerScene::_drawGrid(QPainter *pPainter, const QRectF &rect)
 /*#####
 # AnimationViewer
 #####*/
-AnimationViewer::AnimationViewer(QWidget *pParent) : QGraphicsView(pParent), m_pAnimation(nullptr), m_uiCurrentFrameIndex(0), m_pSpriteDB(nullptr), m_Mode(MODE_MODIFY)
+AnimationViewer::AnimationViewer(QWidget* pParent) : QGraphicsView(pParent), m_pAnimation(nullptr), m_uiCurrentFrameIndex(0), m_pSpriteDB(nullptr), m_Mode(MODE_MODIFY)
 {
     setScene(new AnimationViewerScene());
     m_AnimationTimer.setSingleShot(true);
@@ -131,12 +131,12 @@ void AnimationViewer::clear()
     m_uiCurrentFrameIndex = 0;
 }
 
-void AnimationViewer::setSpriteDatabase(const DATABASE::SpriteDatabase *pSpriteDB)
+void AnimationViewer::setSpriteDatabase(const DATABASE::SpriteDatabase* pSpriteDB)
 {
     m_pSpriteDB = pSpriteDB;
 }
 
-void AnimationViewer::setAnimation(const DATABASE::ANIMATION::FrameVector *pAnimation)
+void AnimationViewer::setAnimation(const DATABASE::ANIMATION::FrameVector* pAnimation)
 {
     m_pAnimation = pAnimation;
     showFrame(0);
@@ -157,12 +157,12 @@ void AnimationViewer::showFrame(uint32 index)
     repaint();
 }
 
-void AnimationViewer::_setupFrame(const DATABASE::ANIMATION::Frame &frame)
+void AnimationViewer::_setupFrame(const DATABASE::ANIMATION::Frame& frame)
 {
     if (!m_pSpriteDB)
         return;
     uint32 z = 0;
-    for (auto &sprite : frame.getSprites())
+    for (auto& sprite : frame.getSprites())
     {
         if (auto pPrototype = m_pSpriteDB->getOriginalPrototype(sprite.m_uiSpriteID))
         {
@@ -181,7 +181,7 @@ void AnimationViewer::_setupFrame(const DATABASE::ANIMATION::Frame &frame)
     }
 }
 
-void AnimationViewer::addGraphicsSpriteItem(AnimationSpriteItem *pItem)
+void AnimationViewer::addGraphicsSpriteItem(AnimationSpriteItem* pItem)
 {
     // set item flags
     pItem->setFlag(QGraphicsItem::ItemIsSelectable, m_Mode == MODE_MODIFY);
@@ -223,7 +223,7 @@ void AnimationViewer::_onFrameExpired()
 
 void AnimationViewer::_setupTimer()
 {
-    m_AnimationTimer.start(m_pAnimation && m_uiCurrentFrameIndex < m_pAnimation->size() ? m_pAnimation->at(m_uiCurrentFrameIndex).getTimeInMsec() : 1000);
+    m_AnimationTimer.start(m_pAnimation& & m_uiCurrentFrameIndex < m_pAnimation->size() ? m_pAnimation->at(m_uiCurrentFrameIndex).getTimeInMsec() : 1000);
 }
 
 void AnimationViewer::setMode(Mode mode)
@@ -246,17 +246,17 @@ AnimationSpriteItem* AnimationViewer::getSelectedItem()
     return dynamic_cast<AnimationSpriteItem*>(items.first());
 }
 
-void AnimationViewer::dragMoveEvent(QDragMoveEvent *pEvent)
+void AnimationViewer::dragMoveEvent(QDragMoveEvent* pEvent)
 {
     pEvent->accept();
 }
 
-void AnimationViewer::dragEnterEvent(QDragEnterEvent *pEvent)
+void AnimationViewer::dragEnterEvent(QDragEnterEvent* pEvent)
 {
     pEvent->acceptProposedAction();
 }
 
-void AnimationViewer::dropEvent(QDropEvent *pEvent)
+void AnimationViewer::dropEvent(QDropEvent* pEvent)
 {
     if (!m_pSpriteDB)
         return;

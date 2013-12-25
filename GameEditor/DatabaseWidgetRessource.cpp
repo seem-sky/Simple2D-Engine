@@ -2,18 +2,18 @@
 #include "moc_DatabaseWidgetRessource.h"
 #include <QtCore/QFileInfo>
 
-DatabaseWidgetRessource::DatabaseWidgetRessource(QWidget *pParent) : DatabaseWidgetBase(pParent),
+DatabaseWidgetRessource::DatabaseWidgetRessource(QWidget* pParent) : DatabaseWidgetBase(pParent),
     m_pMassImport(new QPushButton(this)), m_pModuleResource(new DatabaseModuleResource(this))
 {
     // setup mass import button
     m_pMassImport->setText("mass import");
     m_pMassImport->setToolTip("Allows you to import one or more resources. They will append at end of list.");
     // insert button into layout
-    if (QWidget *pBase = layout()->itemAt(0)->widget())
+    if (QWidget* pBase = layout()->itemAt(0)->widget())
         pBase->layout()->addWidget(m_pMassImport);
 
     // insert module resource
-    if (QGridLayout *pLayout = dynamic_cast<QGridLayout*>(layout()))
+    if (QGridLayout* pLayout = dynamic_cast<QGridLayout*>(layout()))
     {
         pLayout->addWidget(m_pModuleResource, 0, 1);
         pLayout->setColumnStretch(2, 1);
@@ -24,7 +24,7 @@ DatabaseWidgetRessource::DatabaseWidgetRessource(QWidget *pParent) : DatabaseWid
     connect(m_pMassImport, SIGNAL(clicked()), this, SLOT(_onClickMassFileImportButton()));
 }
 
-void DatabaseWidgetRessource::setupWidgetsFromPrototype(const DATABASE::Prototype *pPrototype)
+void DatabaseWidgetRessource::setupWidgetsFromPrototype(const DATABASE::Prototype* pPrototype)
 {
     if (auto pProto = dynamic_cast<const DATABASE::RessourcePrototype*>(pPrototype))
     {
@@ -34,7 +34,7 @@ void DatabaseWidgetRessource::setupWidgetsFromPrototype(const DATABASE::Prototyp
     DatabaseWidgetBase::setupWidgetsFromPrototype(pPrototype);
 }
 
-void DatabaseWidgetRessource::setupPrototypeFromWidgets(DATABASE::Prototype *pPrototype)
+void DatabaseWidgetRessource::setupPrototypeFromWidgets(DATABASE::Prototype* pPrototype)
 {
     if (auto pProto = dynamic_cast<DATABASE::RessourcePrototype*>(pPrototype))
     {
@@ -57,7 +57,7 @@ void DatabaseWidgetRessource::_onClickMassFileImportButton()
     if (!files.isEmpty())
     {
         //uint32 currentID = getDatabase()->getSize();
-        //for (auto &file : files)
+        //for (auto& file : files)
         //{
         //    std::unique_ptr<DATABASE::RessourcePrototype> pPrototype(dynamic_cast<DATABASE::TexturePrototype*>(getDatabase()->getNewPrototype(++currentID)));
         //    if (!pPrototype || file.isEmpty())
@@ -88,7 +88,7 @@ void DatabaseWidgetRessource::_onClickFileButton()
     _import(m_pModuleList->getDataID(), _selectFile());
 }
 
-void DatabaseWidgetRessource::_import(uint32 uiID, const QString &fileNamePath)
+void DatabaseWidgetRessource::_import(uint32 uiID, const QString& fileNamePath)
 {
     if (!uiID || fileNamePath.isEmpty())
         return;

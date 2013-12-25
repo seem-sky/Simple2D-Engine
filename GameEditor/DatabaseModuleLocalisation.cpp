@@ -3,7 +3,7 @@
 
 using namespace DATABASE::LOCALISATION;
 
-DatabaseModuleLocalisation::DatabaseModuleLocalisation(QWidget *pParent) : QWidget(pParent), Ui_DatabaseModuleLocalisation()
+DatabaseModuleLocalisation::DatabaseModuleLocalisation(QWidget* pParent) : QWidget(pParent), Ui_DatabaseModuleLocalisation()
 {
     setupUi(this);
 
@@ -35,7 +35,7 @@ QString DatabaseModuleLocalisation::getLocalisation(uint32 index)
     return result;
 }
 
-void DatabaseModuleLocalisation::setLocalisation(uint32 index, const QString &localisation)
+void DatabaseModuleLocalisation::setLocalisation(uint32 index, const QString& localisation)
 {
     if (auto pTextEdit = dynamic_cast<QPlainTextEdit*>(m_pLocalTable->cellWidget(index, 0)))
         pTextEdit->setPlainText(localisation);

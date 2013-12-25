@@ -15,15 +15,15 @@ private:
     //void _beginTracking(QTreeWidgetItem* pItem);
 
 protected:
-    virtual void leaveEvent(QEvent *pEvent);
+    virtual void leaveEvent(QEvent* pEvent);
 
 public:
-    DatabaseModuleDragList(QWidget *pParent = nullptr);
+    DatabaseModuleDragList(QWidget* pParent = nullptr);
 
-    virtual void setModel(IDatabaseModel *pModel);
+    virtual void setModel(IDatabaseModel* pModel);
 
     // tooltip
-    inline void setMaximumTooltipSize(const QSize &size) { m_MaximumTooltipSize = size; }
+    inline void setMaximumTooltipSize(const QSize& size) { m_MaximumTooltipSize = size; }
     inline QSize getMaximumTooltipSize() const { return m_MaximumTooltipSize; }
 
     void setShowTooltip(bool show = true);
@@ -38,10 +38,10 @@ public:
 
 private slots:
     void _showTooltip();
-    void _onItemEntered(const QModelIndex &index);
+    void _onItemEntered(const QModelIndex& index);
 
 private:
-    QWidget *m_pToolTip;
+    QWidget* m_pToolTip;
     uint32 m_CurrentRow;
     QTimer m_Timer;
     QSize m_MaximumTooltipSize;
@@ -61,32 +61,32 @@ protected:
     void startDrag(Qt::DropActions supportedActions);
 
 public:
-    DatabaseModuleTextureDragList(QWidget *pParent = nullptr);
+    DatabaseModuleTextureDragList(QWidget* pParent = nullptr);
 };
 
 class TileDropLabel : public QLabel
 {
     Q_OBJECT
 protected:
-    void dragMoveEvent(QDragMoveEvent *pEvent);
-    void dragEnterEvent(QDragEnterEvent *pEvent);
-    void dropEvent(QDropEvent *pEvent);
-    void paintEvent(QPaintEvent *pEvent);
+    void dragMoveEvent(QDragMoveEvent* pEvent);
+    void dragEnterEvent(QDragEnterEvent* pEvent);
+    void dropEvent(QDropEvent* pEvent);
+    void paintEvent(QPaintEvent* pEvent);
 
 public:
-    TileDropLabel(QWidget *pParent = nullptr);
+    TileDropLabel(QWidget* pParent = nullptr);
 
     inline uint32 getCurrentTileID() const { return m_uiCurrentTileID; }
     inline void setCurrentTileID(uint32 uiTileID) { m_uiCurrentTileID = uiTileID; repaint(); }
 
-    inline void setTileDatabase(const DATABASE::TileDatabase *pDB) { m_pTileDB = pDB; }
+    inline void setTileDatabase(const DATABASE::TileDatabase* pDB) { m_pTileDB = pDB; }
 
 signals:
-    void onDrop(uint32 uiID, const Int32Point &pos);
+    void onDrop(uint32 uiID, const Int32Point& pos);
 
 private:
     uint32 m_uiCurrentTileID;
-    const DATABASE::TileDatabase *m_pTileDB;
+    const DATABASE::TileDatabase* m_pTileDB;
 };
 
 #endif

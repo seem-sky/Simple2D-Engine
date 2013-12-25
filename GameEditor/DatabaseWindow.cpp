@@ -8,7 +8,7 @@
 
 using namespace DATABASE;
 
-DatabaseWindow::DatabaseWindow(DatabaseMgr &pDBMgr, QWidget *p_pParent) : QDialog(p_pParent), Ui_Database(), m_pDBMgr(pDBMgr)
+DatabaseWindow::DatabaseWindow(DatabaseMgr& pDBMgr, QWidget* p_pParent) : QDialog(p_pParent), Ui_Database(), m_pDBMgr(pDBMgr)
 {
     setupUi(this);
     setWindowFlags(Qt::Window);

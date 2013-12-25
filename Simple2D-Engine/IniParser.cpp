@@ -2,7 +2,7 @@
 #include <QtCore/QFile>
 #include <QtCore/QTextStream>
 
-bool IniParser::readFile(const QString &fileName)
+bool IniParser::readFile(const QString& fileName)
 {
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly))
@@ -37,7 +37,7 @@ bool IniParser::readFile(const QString &fileName)
         {
             pos = dataLine.indexOf('[');
             int32 endPos = dataLine.indexOf(']');
-            if (pos != -1 && endPos != -1 && pos+1 < endPos)
+            if (pos != -1& & endPos != -1& & pos+1 < endPos)
             {
                 // store dataLine
                 if (!newData.empty())
@@ -62,7 +62,7 @@ bool IniParser::readFile(const QString &fileName)
     return true;
 }
 
-QString IniParser::getString(const QString &key, const QString &sector, const QString sDefault)
+QString IniParser::getString(const QString& key, const QString& sector, const QString sDefault)
 {
     SectorData::const_iterator sectorItr = m_FileData.find(sector);
     if (sectorItr == m_FileData.end())
@@ -73,35 +73,35 @@ QString IniParser::getString(const QString &key, const QString &sector, const QS
     return keyItr->second;
 }
 
-void IniParser::getAllStrings(const QString &key, const QString &sector, StringVector &data)
+void IniParser::getAllStrings(const QString& key, const QString& sector, StringVector& data)
 {
     SectorData::const_iterator sectorItr = m_FileData.find(sector);
     if (sectorItr == m_FileData.end())
         return;
 
-    for (DataMultimap::const_iterator keyItr = sectorItr->second.find(key); keyItr != sectorItr->second.end() && keyItr->first == key; ++keyItr)
+    for (DataMultimap::const_iterator keyItr = sectorItr->second.find(key); keyItr != sectorItr->second.end()& & keyItr->first == key; ++keyItr)
         data.push_back(keyItr->second);
 }
 
-int IniParser::getInt(const QString &key, const QString &sector, const int32 defaultValue)
+int IniParser::getInt(const QString& key, const QString& sector, const int32 defaultValue)
 {
     QString result = getString(key, sector, "");
     return result.isEmpty() ? defaultValue : result.toInt();
 }
 
-bool IniParser::getBool(const QString &key, const QString &sector, const bool defaultValue)
+bool IniParser::getBool(const QString& key, const QString& sector, const bool defaultValue)
 {
     QString result = getString(key, sector, "");
     return result.isEmpty() ? defaultValue : static_cast<bool>(result.toInt());
 }
 
-uint32 IniParser::getUInt(const QString &key, const QString &sector, const uint32 defaultValue)
+uint32 IniParser::getUInt(const QString& key, const QString& sector, const uint32 defaultValue)
 {
     QString result = getString(key, sector, "");
     return result.isEmpty() ? defaultValue : result.toUInt();
 }
 
-void IniParser::addData(const QString &key, const QString &sector, const QString &data)
+void IniParser::addData(const QString& key, const QString& sector, const QString& data)
 {
     if (key.isEmpty() || data.isEmpty())
         return;

@@ -10,18 +10,24 @@ class MapEditorWidgetEditor : public QWidget
 {
     Q_OBJECT
 public:
-    MapEditorWidgetEditor(DATABASE::DatabaseMgr &databaseMgr, QWidget *pParent = nullptr);
+    MapEditorWidgetEditor(DATABASE::DatabaseMgr& databaseMgr, QWidget* pParent = nullptr);
 
     void setup();
     void projectOpened();
 
+public slots:
+    void onRegisterTab(MapViewer* pTab);
+
+signals:
+    void requestDraw(BRUSH::BrushIndex brush, MAP::MapLayer& mapLayer, const UInt32Point& pos);
+
 private:
-    DATABASE::DatabaseMgr &m_DatabaseMgr;
+    DATABASE::DatabaseMgr& m_DatabaseMgr;
 
     // modules
-    MapEditorModuleContent *m_pModuleContent;
-    MapEditorModuleTileSelection *m_pModuleTileSelection;
-    MapEditorModuleMapTree *m_pModuleMapTree;
+    MapEditorModuleContent* m_pModuleContent;
+    MapEditorModuleTileSelection* m_pModuleTileSelection;
+    MapEditorModuleMapTree* m_pModuleMapTree;
 };
 
 #endif

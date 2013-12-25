@@ -9,13 +9,13 @@
 class AbstractPixmapWidget : public QWidget
 {
 protected:
-    virtual void paintEvent(QPaintEvent *pEvent);
+    virtual void paintEvent(QPaintEvent* pEvent);
     virtual void drawPixmap() = 0;
 
     void drawSelection();
 
 public:
-    AbstractPixmapWidget(uint32 ID, QWidget *pParent = nullptr);
+    AbstractPixmapWidget(uint32 ID, QWidget* pParent = nullptr);
 
     enum Selection
     {
@@ -40,11 +40,11 @@ private:
     virtual void _setup() = 0;
 
 protected:
-    void showEvent(QShowEvent *pEvent);
-    void mousePressEvent(QMouseEvent *pEvent);
+    void showEvent(QShowEvent* pEvent);
+    void mousePressEvent(QMouseEvent* pEvent);
 
 public:
-    AbstractPrototypeTable(const DATABASE::DatabaseMgr &DBMgr, QWidget *pParent = nullptr);
+    AbstractPrototypeTable(const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent = nullptr);
 
     void setup();
     void clear();
@@ -53,10 +53,10 @@ public:
 
 signals:
     void selectionChanged(BRUSH::BrushIndex brush, MAP::BRUSH::SelectionType selectioType, uint32 ID);
-    void itemClicked(BRUSH::BrushIndex brush, AbstractPixmapWidget *pWidget);
+    void itemClicked(BRUSH::BrushIndex brush, AbstractPixmapWidget* pWidget);
 
 protected:
-    const DATABASE::DatabaseMgr &m_DBMgr;
+    const DATABASE::DatabaseMgr& m_DBMgr;
 };
 
 #endif

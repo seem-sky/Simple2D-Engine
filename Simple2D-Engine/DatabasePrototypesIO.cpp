@@ -6,13 +6,13 @@ using namespace DATABASE;
 /*#####
 # Prototype
 #####*/
-void Prototype::toXML(QXmlStreamWriter &writer) const
+void Prototype::toXML(QXmlStreamWriter& writer) const
 {
     writer.writeAttribute("ID", QString::number(getID()));
     writer.writeAttribute("name", getName());
 }
 
-void Prototype::fromXML(const QXmlStreamAttributes &attributes)
+void Prototype::fromXML(const QXmlStreamAttributes& attributes)
 {
     setID(attributes.value("ID").toUInt());
     setName(attributes.value("name").toString());
@@ -21,7 +21,7 @@ void Prototype::fromXML(const QXmlStreamAttributes &attributes)
 /*#####
 # RessourcePrototype
 #####*/
-void RessourcePrototype::fromXML(const QXmlStreamAttributes &attributes)
+void RessourcePrototype::fromXML(const QXmlStreamAttributes& attributes)
 {
     Prototype::fromXML(attributes);
 
@@ -29,7 +29,7 @@ void RessourcePrototype::fromXML(const QXmlStreamAttributes &attributes)
     setPath(attributes.value("path").toString());
 }
 
-void RessourcePrototype::toXML(QXmlStreamWriter &writer) const
+void RessourcePrototype::toXML(QXmlStreamWriter& writer) const
 {
     writer.writeAttribute("file", getFileName());
     writer.writeAttribute("path", getPath());
@@ -40,14 +40,14 @@ void RessourcePrototype::toXML(QXmlStreamWriter &writer) const
 /*#####
 # TexturePrototype
 #####*/
-void TexturePrototype::fromXML(const QXmlStreamAttributes &attributes)
+void TexturePrototype::fromXML(const QXmlStreamAttributes& attributes)
 {
     RessourcePrototype::fromXML(attributes);
 
     setTransparencyColor(Color(attributes.value("transparency_color").toString().toStdString()));
 }
 
-void TexturePrototype::toXML(QXmlStreamWriter &writer) const
+void TexturePrototype::toXML(QXmlStreamWriter& writer) const
 {
     writer.writeAttribute("transparency_color", QString::fromStdString(getTransparencyColor().getColorString()));
 
@@ -57,7 +57,7 @@ void TexturePrototype::toXML(QXmlStreamWriter &writer) const
 /*#####
 # TilePrototype
 #####*/
-void TilePrototype::fromXML(const QXmlStreamAttributes &attributes)
+void TilePrototype::fromXML(const QXmlStreamAttributes& attributes)
 {
     TexturePrototype::fromXML(attributes);
 
@@ -65,7 +65,7 @@ void TilePrototype::fromXML(const QXmlStreamAttributes &attributes)
     addPassabilityFlag(attributes.value("passability").toUInt());
 }
 
-void TilePrototype::toXML(QXmlStreamWriter &writer) const
+void TilePrototype::toXML(QXmlStreamWriter& writer) const
 {
     writer.writeAttribute("terraintype", QString::number(getTerrainType()));
     writer.writeAttribute("passability", QString::number(getPassability()));;
@@ -76,7 +76,7 @@ void TilePrototype::toXML(QXmlStreamWriter &writer) const
 /*#####
 # AutoTilePrototype
 #####*/
-void AUTO_TILE::AutoTilePrototype::fromXML(const QXmlStreamAttributes &attributes)
+void AUTO_TILE::AutoTilePrototype::fromXML(const QXmlStreamAttributes& attributes)
 {
     Prototype::fromXML(attributes);
 
@@ -88,7 +88,7 @@ void AUTO_TILE::AutoTilePrototype::fromXML(const QXmlStreamAttributes &attribute
     }
 }
 
-void AUTO_TILE::AutoTilePrototype::toXML(QXmlStreamWriter &writer) const
+void AUTO_TILE::AutoTilePrototype::toXML(QXmlStreamWriter& writer) const
 {
     Prototype::toXML(writer);
 
@@ -106,7 +106,7 @@ void AUTO_TILE::AutoTilePrototype::toXML(QXmlStreamWriter &writer) const
 /*#####
 # TileSetPrototype
 #####*/
-void TILE_SET::TileSetPrototype::fromXML(const QXmlStreamAttributes &attributes)
+void TILE_SET::TileSetPrototype::fromXML(const QXmlStreamAttributes& attributes)
 {
     Prototype::fromXML(attributes);
 
@@ -120,7 +120,7 @@ void TILE_SET::TileSetPrototype::fromXML(const QXmlStreamAttributes &attributes)
     }
 }
 
-void TILE_SET::TileSetPrototype::toXML(QXmlStreamWriter &writer) const
+void TILE_SET::TileSetPrototype::toXML(QXmlStreamWriter& writer) const
 {
     writer.writeAttribute("columns", QString::number(getTileCount().x));
     writer.writeAttribute("rows", QString::number(getTileCount().y));
@@ -144,7 +144,7 @@ void TILE_SET::TileSetPrototype::toXML(QXmlStreamWriter &writer) const
 /*#####
 # AnimationPrototype
 #####*/
-void ANIMATION::AnimationPrototype::toXML(QXmlStreamWriter &writer) const
+void ANIMATION::AnimationPrototype::toXML(QXmlStreamWriter& writer) const
 {
     Prototype::toXML(writer);
 
@@ -172,7 +172,7 @@ void ANIMATION::AnimationPrototype::toXML(QXmlStreamWriter &writer) const
     }
 }
 
-void ANIMATION::AnimationPrototype::insertChildren(const QXmlStreamReader &reader)
+void ANIMATION::AnimationPrototype::insertChildren(const QXmlStreamReader& reader)
 {
     if (reader.name() == "frame")
     {
@@ -205,7 +205,7 @@ void ANIMATION::AnimationPrototype::insertChildren(const QXmlStreamReader &reade
 /*#####
 # LocalisationPrototype
 #####*/
-void LOCALISATION::LocalisationPrototype::toXML(QXmlStreamWriter &writer) const
+void LOCALISATION::LocalisationPrototype::toXML(QXmlStreamWriter& writer) const
 {
     Prototype::toXML(writer);
 
@@ -217,7 +217,7 @@ void LOCALISATION::LocalisationPrototype::toXML(QXmlStreamWriter &writer) const
     }
 }
 
-void LOCALISATION::LocalisationPrototype::insertChildren(const QXmlStreamReader &reader)
+void LOCALISATION::LocalisationPrototype::insertChildren(const QXmlStreamReader& reader)
 {
     if (reader.name() == "local")
     {
@@ -234,7 +234,7 @@ void LOCALISATION::LocalisationPrototype::insertChildren(const QXmlStreamReader 
 /*#####
 # WorldObjectPrototype
 #####*/
-void MAP_OBJECT::WorldObjectPrototype::fromXML(const QXmlStreamAttributes &attributes)
+void MAP_OBJECT::WorldObjectPrototype::fromXML(const QXmlStreamAttributes& attributes)
 {
     Prototype::fromXML(attributes);
 
@@ -248,7 +248,7 @@ void MAP_OBJECT::WorldObjectPrototype::fromXML(const QXmlStreamAttributes &attri
     setScriptName(attributes.value("script").toString());
 }
 
-void MAP_OBJECT::WorldObjectPrototype::toXML(QXmlStreamWriter &writer) const
+void MAP_OBJECT::WorldObjectPrototype::toXML(QXmlStreamWriter& writer) const
 {
     writer.writeAttribute("boundingX", QString::number(getBoundingX()));
     writer.writeAttribute("boundingY", QString::number(getBoundingY()));
@@ -262,7 +262,7 @@ void MAP_OBJECT::WorldObjectPrototype::toXML(QXmlStreamWriter &writer) const
     for (uint32 i = 1; i <= getAnimationCount(); ++i)
     {
         MAP_OBJECT::AnimationInfo animationInfo = getAnimationInfo(i);
-        if (animationInfo.m_uiAnimationID == 0 && animationInfo.m_uiAnimationTypeID == 0)
+        if (animationInfo.m_uiAnimationID == 0& & animationInfo.m_uiAnimationTypeID == 0)
             continue;
         writer.writeEmptyElement("animation");
         writer.writeAttribute("entry", QString::number(i));
@@ -271,7 +271,7 @@ void MAP_OBJECT::WorldObjectPrototype::toXML(QXmlStreamWriter &writer) const
     }
 }
 
-void MAP_OBJECT::WorldObjectPrototype::insertChildren(const QXmlStreamReader &reader)
+void MAP_OBJECT::WorldObjectPrototype::insertChildren(const QXmlStreamReader& reader)
 {
     if (reader.name() == "animation")
     {
@@ -289,7 +289,7 @@ void MAP_OBJECT::WorldObjectPrototype::insertChildren(const QXmlStreamReader &re
 /*#####
 # MapPrototype
 #####*/
-void MAP_STRUCTURE::MapPrototype::fromXML(const QXmlStreamAttributes &attributes)
+void MAP_STRUCTURE::MapPrototype::fromXML(const QXmlStreamAttributes& attributes)
 {
     Prototype::fromXML(attributes);
 
@@ -302,7 +302,7 @@ void MAP_STRUCTURE::MapPrototype::fromXML(const QXmlStreamAttributes &attributes
     setFileName(attributes.value("file").toString());
 }
 
-void MAP_STRUCTURE::MapPrototype::toXML(QXmlStreamWriter &writer) const
+void MAP_STRUCTURE::MapPrototype::toXML(QXmlStreamWriter& writer) const
 {
     writer.writeAttribute("sizeX", QString::number(getSize().x));
     writer.writeAttribute("sizeY", QString::number(getSize().y));

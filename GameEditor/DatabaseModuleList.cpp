@@ -2,7 +2,7 @@
 #include "moc_DatabaseModuleList.h"
 #include "DatabaseDialogResize.h"
 
-DatabaseModuleList::DatabaseModuleList(QWidget *pParent) : QWidget(pParent), Ui_DatabaseModuleList()
+DatabaseModuleList::DatabaseModuleList(QWidget* pParent) : QWidget(pParent), Ui_DatabaseModuleList()
 {
     setupUi(this);
     
@@ -18,7 +18,7 @@ void DatabaseModuleList::_onClickResizeButton()
     resizeDialog.exec();
 }
 
-void DatabaseModuleList::_onSelectionChanged(const QModelIndex &current, const QModelIndex &previous)
+void DatabaseModuleList::_onSelectionChanged(const QModelIndex& current, const QModelIndex& previous)
 {
     emit selectionChanged();
 }
@@ -29,7 +29,7 @@ const DATABASE::Prototype* DatabaseModuleList::getCurrentPrototype() const
     return getDatabaseModel()->getDatabase()->getPrototype(m_pList->currentIndex().row()+1);
 }
 
-void DatabaseModuleList::setDatabaseModel(IDatabaseModel *pModel)
+void DatabaseModuleList::setDatabaseModel(IDatabaseModel* pModel)
 {
     m_pList->setModel(pModel);
     connect(m_pList->selectionModel(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),

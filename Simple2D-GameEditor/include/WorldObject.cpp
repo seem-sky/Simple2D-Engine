@@ -3,11 +3,11 @@
 using namespace MAP;
 using namespace OBJECT;
 
-WorldObject::WorldObject(const DATABASE::DatabaseMgr &DBMgr, uint32 GUID, uint32 ID) : Object(GUID), m_Direction(DATABASE::MAP_STRUCTURE::DIRECTION_DOWN), m_DBMgr(DBMgr)
+WorldObject::WorldObject(const DATABASE::DatabaseMgr& DBMgr, uint32 GUID, uint32 ID) : Object(GUID), m_Direction(DATABASE::MAP_STRUCTURE::DIRECTION_DOWN), m_DBMgr(DBMgr)
 {
 }
 
-void WorldObject::_setupFromPrototype(const DATABASE::MAP_OBJECT::WorldObjectPrototype *pWorldObject)
+void WorldObject::_setupFromPrototype(const DATABASE::MAP_OBJECT::WorldObjectPrototype* pWorldObject)
 {
     if (!pWorldObject)
         assert("No empty prototypes allowed!");

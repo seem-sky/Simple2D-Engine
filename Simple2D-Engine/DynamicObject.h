@@ -10,9 +10,9 @@ namespace MAP
         class DynamicObject : public WorldObject
         {
         public:
-            DynamicObject(const DATABASE::DatabaseMgr &pDBMgr, uint32 GUID, uint32 ID);
+            DynamicObject(const DATABASE::DatabaseMgr& pDBMgr, uint32 GUID, uint32 ID);
 
-            void move(const Int32Point &range, uint32 time);
+            void move(const Int32Point& range, uint32 time);
         };
     }
 }

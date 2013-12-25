@@ -47,13 +47,13 @@ namespace TRANSFORMATION
         void _update(uint32 uiDiff);
 
     public:
-        Move(uint32 uiTime, Int32Point range, Int32Point &position);
+        Move(uint32 uiTime, Int32Point range, Int32Point& position);
 
     private:
         DoublePoint m_RangePerMSEC;
         DoublePoint m_RangeBuffer;
         Int32Point m_Range;
-        Int32Point &m_Position;
+        Int32Point& m_Position;
     };
 
     /*#####
@@ -64,7 +64,7 @@ namespace TRANSFORMATION
     public:
         void updateTransformations(uint32 uiDiff);
 
-        void addTransformation(Transformation *pTransformation);
+        void addTransformation(Transformation* pTransformation);
         void clearTransformation(TransformationType type);
         void clearAllTransformations();
 

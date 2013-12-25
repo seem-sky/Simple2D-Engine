@@ -5,12 +5,12 @@
 
 using namespace SPLASH_SCREEN;
 
-CustomSplashScreen::CustomSplashScreen(const QPixmap &pixmap) : QSplashScreen(pixmap)
+CustomSplashScreen::CustomSplashScreen(const QPixmap& pixmap) : QSplashScreen(pixmap)
 {
     setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
 }
 
-void CustomSplashScreen::mousePressEvent(QMouseEvent *pEvent)
+void CustomSplashScreen::mousePressEvent(QMouseEvent* pEvent)
 {}
 
 SplashScreen::SplashScreen() : Application()

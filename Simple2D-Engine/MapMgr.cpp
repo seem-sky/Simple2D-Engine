@@ -13,7 +13,7 @@ void MapMgr::setDatabaseMgr(DATABASE::DatabaseMgr pDBMgr)
 MapPtr MapMgr::loadMap(uint32 uiID)
 {
     DATABASE::MAP_STRUCTURE::MapDatabase* pMapDB = const_cast<DATABASE::MAP_STRUCTURE::MapDatabase*>(m_pDBMgr.getMapDatabase());
-    //if (pMapDB && pMapDB->loadMapFile(uiID, "projects/untitled/"))
+    //if (pMapDB& & pMapDB->loadMapFile(uiID, "projects/untitled/"))
     //{
     //    if (auto pMapProto = pMapDB->getOriginalPrototype(uiID))
     //    {
@@ -29,7 +29,7 @@ MapPtr MapMgr::loadMap(uint32 uiID)
 
 void MapMgr::updateMaps(uint32 uiDiff)
 {
-    for (auto &x : m_Maps)
+    for (auto& x : m_Maps)
     {
         if (x)
             x->update(uiDiff);

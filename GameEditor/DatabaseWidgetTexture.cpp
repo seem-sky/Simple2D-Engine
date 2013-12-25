@@ -5,11 +5,11 @@
 #include "QtGlobal.h"
 #include <QtGui/QPixmapCache>
 
-DatabaseWidgetTexture::DatabaseWidgetTexture(QWidget *pParent) : DatabaseWidgetRessource(pParent),
+DatabaseWidgetTexture::DatabaseWidgetTexture(QWidget* pParent) : DatabaseWidgetRessource(pParent),
     m_pModuleTexture(new DatabaseModuleTexture(this))
 {
     //insert module into layout
-    if (QGridLayout *pLayout = dynamic_cast<QGridLayout*>(layout()))
+    if (QGridLayout* pLayout = dynamic_cast<QGridLayout*>(layout()))
     {
         pLayout->addWidget(m_pModuleTexture, 1,1);
         pLayout->setRowStretch(1, 1);
@@ -18,7 +18,7 @@ DatabaseWidgetTexture::DatabaseWidgetTexture(QWidget *pParent) : DatabaseWidgetR
     connect(m_pModuleTexture, SIGNAL(transparencyColorChanged(const Color&)), this, SLOT(_onTransparencyColorChanged(const Color&)));
 }
 
-void DatabaseWidgetTexture::setupWidgetsFromPrototype(const DATABASE::Prototype *pPrototype)
+void DatabaseWidgetTexture::setupWidgetsFromPrototype(const DATABASE::Prototype* pPrototype)
 {
     if (auto pProto = dynamic_cast<const DATABASE::TexturePrototype*>(pPrototype))
     {
@@ -32,7 +32,7 @@ void DatabaseWidgetTexture::setupWidgetsFromPrototype(const DATABASE::Prototype 
     DatabaseWidgetRessource::setupWidgetsFromPrototype(pPrototype);
 }
 
-void DatabaseWidgetTexture::setupPrototypeFromWidgets(DATABASE::Prototype *pPrototype)
+void DatabaseWidgetTexture::setupPrototypeFromWidgets(DATABASE::Prototype* pPrototype)
 {
     if (auto pProto = dynamic_cast<DATABASE::TexturePrototype*>(pPrototype))
         pProto->setTransparencyColor(Color(m_pModuleTexture->getDataRed(), m_pModuleTexture->getDataGreen(), m_pModuleTexture->getDataBlue()));
@@ -68,12 +68,12 @@ void DatabaseWidgetTexture::_onFileImport(uint32 uiID)
     setupPixmap(_createPrototypePixmap(uiID));
 }
 
-void DatabaseWidgetTexture::setupPixmap(const QPixmap &pixmap)
+void DatabaseWidgetTexture::setupPixmap(const QPixmap& pixmap)
 {
     m_pModuleTexture->setPixmap(pixmap);
 }
 
-void DatabaseWidgetTexture::_onTransparencyColorChanged(const Color &color)
+void DatabaseWidgetTexture::_onTransparencyColorChanged(const Color& color)
 {
     if (auto pProto = dynamic_cast<const DATABASE::TexturePrototype*>(getDatabase()->getPrototype(m_pModuleList->getDataID())))
     {

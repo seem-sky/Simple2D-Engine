@@ -7,16 +7,16 @@
 class TexturePrototypeFrame : public QFrame
 {
 protected:
-    virtual void paintEvent(QPaintEvent *pEvent);
+    virtual void paintEvent(QPaintEvent* pEvent);
 
 public:
-    TexturePrototypeFrame(QWidget *pParent = nullptr);
+    TexturePrototypeFrame(QWidget* pParent = nullptr);
 
-    void setPrototype(const DATABASE::TexturePrototype *pPrototype);
+    void setPrototype(const DATABASE::TexturePrototype* pPrototype);
     uint32 getID() const;
 
 private:
-    const DATABASE::TexturePrototype *m_pPrototype;
+    const DATABASE::TexturePrototype* m_pPrototype;
 };
 
 #endif

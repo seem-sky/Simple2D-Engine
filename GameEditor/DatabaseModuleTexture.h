@@ -9,7 +9,7 @@ class DatabaseModuleTexture : public QWidget, protected Ui_DatabaseModuleTexture
 {
     Q_OBJECT
 public:
-    DatabaseModuleTexture(QWidget *pParent = nullptr);
+    DatabaseModuleTexture(QWidget* pParent = nullptr);
 
     // data
     inline void setDataRed(int32 color) { m_pColorRed->setValue(color); }
@@ -21,7 +21,7 @@ public:
 
     // widgets
     inline QGraphicsView* getTextureView() { return m_pView; }
-    void setPixmap(const QPixmap &pPixmap);
+    void setPixmap(const QPixmap& pPixmap);
 
     void clear();
 
@@ -29,7 +29,7 @@ private slots:
     void _onTransparencyColorChanged(int value);
 
 signals:
-    void transparencyColorChanged(const Color &color);
+    void transparencyColorChanged(const Color& color);
 };
 
 #endif

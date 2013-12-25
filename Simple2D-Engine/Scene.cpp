@@ -12,14 +12,14 @@ using namespace SCENE;
 const uint8 FPS_SPACE = 25;
 const uint8 FPS_BORDER = 15;
 
-Scene::Scene(Game &game) : m_Game(game), m_pSceneView(nullptr), m_ShowFPS(false)
+Scene::Scene(Game& game) : m_Game(game), m_pSceneView(nullptr), m_ShowFPS(false)
 {}
 
-void SceneView::drawFPSCounter(QPainter *painter, const QRectF &rect)
+void SceneView::drawFPSCounter(QPainter* painter, const QRectF& rect)
 {
     if (m_pScene->isFPSShown())
     {
-        if (QGraphicsView *pView = dynamic_cast<QGraphicsView*>(parent()))
+        if (QGraphicsView* pView = dynamic_cast<QGraphicsView*>(parent()))
         {
             QString frameString = QString::number(m_FPSCounter.elapsed() ? IN_MILLISECOND/m_FPSCounter.elapsed() : 0);
             QFont newFont(painter->font());
@@ -36,7 +36,7 @@ void SceneView::drawFPSCounter(QPainter *painter, const QRectF &rect)
     m_FPSCounter.restart();
 }
 
-void SceneView::drawForeground(QPainter *painter, const QRectF &rect)
+void SceneView::drawForeground(QPainter* painter, const QRectF& rect)
 {
     drawFPSCounter(painter, rect);
 }

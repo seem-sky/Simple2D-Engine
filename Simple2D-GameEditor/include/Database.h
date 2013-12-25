@@ -16,7 +16,7 @@ namespace DATABASE
     public:
         virtual void clear() = 0;
 
-        virtual void setPrototype(Prototype *pPrototype) = 0;
+        virtual void setPrototype(Prototype* pPrototype) = 0;
         virtual Prototype* getNewPrototype(uint32 ID = 0) const = 0;
         virtual Prototype* getPrototype(uint32 ID) = 0;
         virtual const Prototype* getPrototype(uint32 ID) const = 0;
@@ -31,12 +31,12 @@ namespace DATABASE
     public:
         Database() : Container(), IDatabase() {}
         // overwrite copy constructor
-        Database(const Database<T> &pOther)
+        Database(const Database<T>& pOther)
         {
             m_uiMaxSize = pOther.getMaximumSize();
             uint32 i = 0;
             m_Items.resize(pOther.getSize());
-            for (auto &pItem : pOther.getItems())
+            for (auto& pItem : pOther.getItems())
             {
                 if (pItem)
                     m_Items.at(i) = std::unique_ptr<T>(new T(*pItem));
@@ -46,7 +46,7 @@ namespace DATABASE
 
         inline void clear() { Container::clear(); }
 
-        //void getPrototypeShortInfos(UInt32StringPairVector &result) const;
+        //void getPrototypeShortInfos(UInt32StringPairVector& result) const;
         //UInt32StringPairVector Database::getPrototypeShortInfos() const;
 
         void resize(uint32 uiSize)
@@ -77,14 +77,14 @@ namespace DATABASE
         inline const Prototype* getPrototype(uint32 ID) const  { return Container::getItem(ID); }
         inline T* getOriginalPrototype(uint32 ID) { return Container::getItem(ID); }
         inline const T* getOriginalPrototype(uint32 ID) const  { return Container::getItem(ID); }
-        inline void setPrototype(Prototype *pPrototype)
+        inline void setPrototype(Prototype* pPrototype)
         {
             if (auto pCast = dynamic_cast<T*>(pPrototype))
                 Container::setItem(pCast->getID(), pCast);
             else
                 throw std::bad_typeid("Invalid prototype type.");
         }
-        virtual void setPrototype(T *pPrototype)
+        virtual void setPrototype(T* pPrototype)
         {
             if (pPrototype)
                 Container::setItem(pPrototype->getID(), pPrototype);
@@ -99,7 +99,7 @@ namespace DATABASE
     public:
         TileDatabase();
 
-        //void setPrototype(TilePrototype *pItem);
+        //void setPrototype(TilePrototype* pItem);
         //const TilePrototype* getPrototype(uint32 ID) const;
         //TilePrototype* getPrototype(uint32 ID);
 
@@ -109,7 +109,7 @@ namespace DATABASE
     class TileSetDatabase : public Database<TILE_SET::TileSetPrototype>
     {
     public:
-        //void setPrototype(TILE_SET::TileSetPrototype *pItem);
+        //void setPrototype(TILE_SET::TileSetPrototype* pItem);
         //const TILE_SET::TileSetPrototype* getPrototype(uint32 ID) const;
         //TILE_SET::TileSetPrototype* getPrototype(uint32 ID);
 
@@ -121,7 +121,7 @@ namespace DATABASE
     public:
         AutoTileDatabase();
 
-        //void setPrototype(AUTO_TILE::AutoTilePrototype *pItem);
+        //void setPrototype(AUTO_TILE::AutoTilePrototype* pItem);
         //const AUTO_TILE::AutoTilePrototype* getPrototype(uint32 ID) const;
         //AUTO_TILE::AutoTilePrototype* getPrototype(uint32 ID);
 
@@ -131,7 +131,7 @@ namespace DATABASE
     class SpriteDatabase : public Database<SpritePrototype>
     {
     public:
-        //void setPrototype(SpritePrototype *pItem);
+        //void setPrototype(SpritePrototype* pItem);
         //const SpritePrototype* getPrototype(uint32 ID) const;
         //SpritePrototype* getPrototype(uint32 ID);
 
@@ -141,7 +141,7 @@ namespace DATABASE
     class AnimationDatabase : public Database<ANIMATION::AnimationPrototype>
     {
     public:
-        //void setPrototype(AnimationPrototype *pItem);
+        //void setPrototype(AnimationPrototype* pItem);
         //const AnimationPrototype* getPrototype(uint32 ID) const;
         //AnimationPrototype* getPrototype(uint32 ID);
 
@@ -155,7 +155,7 @@ namespace DATABASE
 
         void clear();
 
-        //void setPrototype(AnimationTypePrototype *pItem);
+        //void setPrototype(AnimationTypePrototype* pItem);
         //const AnimationTypePrototype* getPrototype(uint32 ID) const;
         //AnimationTypePrototype* getPrototype(uint32 ID);
 
@@ -165,7 +165,7 @@ namespace DATABASE
     class WorldObjectDatabase : public Database<MAP_OBJECT::WorldObjectPrototype>
     {
     public:
-        //virtual void setPrototype(MAP_OBJECT::WorldObjectPrototype *pItem);
+        //virtual void setPrototype(MAP_OBJECT::WorldObjectPrototype* pItem);
         //virtual const MAP_OBJECT::WorldObjectPrototype* getPrototype(uint32 ID) const;
         //virtual MAP_OBJECT::WorldObjectPrototype* getPrototype(uint32 ID);
 
@@ -175,7 +175,7 @@ namespace DATABASE
     class DynamicObjectDatabase : public Database<MAP_OBJECT::DynamicObjectPrototype>
     {
     public:
-        //void setPrototype(MAP_OBJECT::DynamicObjectPrototype *pItem);
+        //void setPrototype(MAP_OBJECT::DynamicObjectPrototype* pItem);
         //const MAP_OBJECT::DynamicObjectPrototype* getPrototype(uint32 ID) const;
         //MAP_OBJECT::DynamicObjectPrototype* getPrototype(uint32 ID);
 
@@ -185,7 +185,7 @@ namespace DATABASE
     class LocalisationDatabase : public Database<LOCALISATION::LocalisationPrototype>
     {
     public:
-        //void setPrototype(LocalisationPrototype *pItem);
+        //void setPrototype(LocalisationPrototype* pItem);
         //const LocalisationPrototype* getPrototype(uint32 ID) const;
         //LocalisationPrototype* getPrototype(uint32 ID);
 

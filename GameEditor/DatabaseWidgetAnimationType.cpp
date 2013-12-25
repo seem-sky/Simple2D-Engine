@@ -1,5 +1,5 @@
 #include "DatabaseWidgetAnimationType.h"
 
-DatabaseWidgetAnimationType::DatabaseWidgetAnimationType(QWidget *pParent) : DatabaseWidgetBase(pParent)
+DatabaseWidgetAnimationType::DatabaseWidgetAnimationType(QWidget* pParent) : DatabaseWidgetBase(pParent)
 {
 }

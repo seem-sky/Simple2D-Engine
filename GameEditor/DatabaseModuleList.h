@@ -8,13 +8,13 @@ class DatabaseModuleList : public QWidget, Ui_DatabaseModuleList
 {
     Q_OBJECT
 public:
-    DatabaseModuleList(QWidget *pParent = nullptr);
+    DatabaseModuleList(QWidget* pParent = nullptr);
 
     IDatabaseModel* getDatabaseModel() const { return dynamic_cast<IDatabaseModel*>(m_pList->model()); }
-    void setDatabaseModel(IDatabaseModel *pModel);
+    void setDatabaseModel(IDatabaseModel* pModel);
 
     // data widgets
-    inline void setDataName(const QString &name) { m_pName->setText(name); }
+    inline void setDataName(const QString& name) { m_pName->setText(name); }
     inline QString getDataName() const { return m_pName->text(); }
 
     inline void setDataID(uint32 uiID) { m_pID->setValue(uiID); }
@@ -24,7 +24,7 @@ public:
 
 private slots:
     void _onClickResizeButton();
-    void _onSelectionChanged(const QModelIndex &current, const QModelIndex &previous);
+    void _onSelectionChanged(const QModelIndex& current, const QModelIndex& previous);
 
 signals:
     void selectionChanged();

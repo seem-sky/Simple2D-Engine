@@ -21,7 +21,7 @@ bool MapDatabase::removeMap(uint32 uiID)
 MapPrototypePtr MapDatabase::getNewPrototype()
 {
     // search for invalid prototypes
-    for (auto &pPrototype : getPrototypes())
+    for (auto& pPrototype : getPrototypes())
     {
         if (!pPrototype->isValid())
             return MapPrototypePtr(new MapPrototype(*pPrototype));
@@ -30,7 +30,7 @@ MapPrototypePtr MapDatabase::getNewPrototype()
     return MapPrototypePtr(new MapPrototype(getSize()+1));
 }
 
-//void MapDatabase::setPrototype(MapPrototype *pItem)
+//void MapDatabase::setPrototype(MapPrototype* pItem)
 //{
 //    Database::setPrototype(pItem);
 //}

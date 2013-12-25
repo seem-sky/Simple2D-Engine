@@ -11,19 +11,19 @@ class DatabaseWidgetRessource : public DatabaseWidgetBase
 private:
     virtual QString _selectFile() const = 0;
     virtual QStringList _selectFiles() const = 0;
-    void _import(uint32 uiID, const QString &fileNamePath);
+    void _import(uint32 uiID, const QString& fileNamePath);
 
 protected:
-    virtual void setupWidgetsFromPrototype(const DATABASE::Prototype *pPrototype);
-    virtual void setupPrototypeFromWidgets(DATABASE::Prototype *pPrototype);
+    virtual void setupWidgetsFromPrototype(const DATABASE::Prototype* pPrototype);
+    virtual void setupPrototypeFromWidgets(DATABASE::Prototype* pPrototype);
     virtual void clear();
 
 public:
-    DatabaseWidgetRessource(QWidget *pParent = nullptr);
+    DatabaseWidgetRessource(QWidget* pParent = nullptr);
 
 protected:
-    QPushButton *m_pMassImport;
-    DatabaseModuleResource *m_pModuleResource;
+    QPushButton* m_pMassImport;
+    DatabaseModuleResource* m_pModuleResource;
 
 private slots:
     void _onClickFileButton();

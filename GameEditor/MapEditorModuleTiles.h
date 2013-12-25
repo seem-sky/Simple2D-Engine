@@ -13,7 +13,7 @@ protected:
     void drawPixmap();
 
 public:
-    TilePixmapWidget(uint32 ID, QWidget *pParent = nullptr);
+    TilePixmapWidget(uint32 ID, QWidget* pParent = nullptr);
 };
 
 class MapEditorModuleTiles : public AbstractPrototypeTable
@@ -24,7 +24,7 @@ private:
     MAP::BRUSH::SelectionType getType() const { return MAP::BRUSH::SelectionType::TILES; }
 
 public:
-    MapEditorModuleTiles(const DATABASE::DatabaseMgr &DBMgr, QWidget *pParent = nullptr);
+    MapEditorModuleTiles(const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent = nullptr);
 };
 
 /*#####
@@ -36,7 +36,7 @@ protected:
     void drawPixmap();
 
 public:
-    AutoTilePixmapWidget(uint32 ID, QWidget *pParent = nullptr);
+    AutoTilePixmapWidget(uint32 ID, QWidget* pParent = nullptr);
 };
 
 
@@ -48,7 +48,7 @@ private:
     MAP::BRUSH::SelectionType getType() const { return MAP::BRUSH::SelectionType::AUTO_TILES; }
 
 public:
-    MapEditorModuleAutoTiles(const DATABASE::DatabaseMgr &DBMgr, QWidget *pParent = nullptr);
+    MapEditorModuleAutoTiles(const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent = nullptr);
 };
 
 #endif

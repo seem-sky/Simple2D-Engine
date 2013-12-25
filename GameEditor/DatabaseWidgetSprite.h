@@ -6,7 +6,7 @@
 class DatabaseWidgetSprite : public DatabaseWidgetTexture
 {
 public:
-    DatabaseWidgetSprite(QWidget *pParent = nullptr);
+    DatabaseWidgetSprite(QWidget* pParent = nullptr);
 };
 
 #endif

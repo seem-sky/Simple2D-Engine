@@ -13,7 +13,7 @@ namespace PROGRAM
     public:
         CMD_Params();
 
-        void parseParam(const QString &param);
+        void parseParam(const QString& param);
 
         bool isDebugMode() const { return m_DebugMode; }
 
@@ -26,7 +26,7 @@ namespace PROGRAM
     public:
         void setApplication(ApplicationPtr pApp);
 
-        void init(int argc, char *argv[]);
+        void init(int argc, char* argv[]);
         int exec();
 
     private:

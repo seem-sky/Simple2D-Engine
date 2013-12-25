@@ -7,7 +7,7 @@ template <class T>
 class Manager
 {
 protected:
-    virtual void setNew(std::unique_ptr<T> &pNew)
+    virtual void setNew(std::unique_ptr<T>& pNew)
     {
         m_pCurrent = std::move(pNew);
     }
@@ -16,7 +16,7 @@ public:
     Manager::Manager() : m_isUpdating(false)
     {}
 
-    void change(std::unique_ptr<T> &pNew, bool storeOld = false)
+    void change(std::unique_ptr<T>& pNew, bool storeOld = false)
     {
         // do not change current while updating
         if (m_isUpdating)

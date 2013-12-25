@@ -8,7 +8,7 @@ const uint16 CURRENT_VERSION = 2;
 /*#####
 # MapBinaryReader
 #####*/
-void INPUT::MapBinaryReader::readFile(const QString &fileName, MAP::MAP_DATA::MapData &data)
+void INPUT::MapBinaryReader::readFile(const QString& fileName, MAP::MAP_DATA::MapData& data)
 {
     QFile mapFile(fileName);
     if (!mapFile.open(QIODevice::ReadOnly))
@@ -27,7 +27,7 @@ void INPUT::MapBinaryReader::readFile(const QString &fileName, MAP::MAP_DATA::Ma
     //_readObjects(in, pMap, version);
 }
 
-void INPUT::MapBinaryReader::_readLayer(QDataStream &in, MAP::MapLayer &mapLayer, MAP::Layer layer, uint16 version)
+void INPUT::MapBinaryReader::_readLayer(QDataStream& in, MAP::MapLayer& mapLayer, MAP::Layer layer, uint16 version)
 {
     switch(version)
     {
@@ -37,7 +37,7 @@ void INPUT::MapBinaryReader::_readLayer(QDataStream &in, MAP::MapLayer &mapLayer
     }
 }
 
-void INPUT::MapBinaryReader::_readObjects(QDataStream &in, DATABASE::MAP_STRUCTURE::MapPrototype *pMap, uint16 version)
+void INPUT::MapBinaryReader::_readObjects(QDataStream& in, DATABASE::MAP_STRUCTURE::MapPrototype* pMap, uint16 version)
 {
     switch(version)
     {
@@ -50,7 +50,7 @@ void INPUT::MapBinaryReader::_readObjects(QDataStream &in, DATABASE::MAP_STRUCTU
 }
 
 // Tile = uint32; AutoTile = uint32
-void INPUT::MapBinaryReader::_readLayerV1(QDataStream &in, MAP::MapLayer &mapLayer, MAP::Layer layer)
+void INPUT::MapBinaryReader::_readLayerV1(QDataStream& in, MAP::MapLayer& mapLayer, MAP::Layer layer)
 {
     UInt32Point3D pos;
     for (pos.z = 0; pos.z < mapLayer.getLayerSize(layer); ++pos.z)
@@ -69,7 +69,7 @@ void INPUT::MapBinaryReader::_readLayerV1(QDataStream &in, MAP::MapLayer &mapLay
 }
 
 // Tile = uint16; AutoTile = uint8
-void INPUT::MapBinaryReader::_readLayerV2(QDataStream &in, MAP::MapLayer &mapLayer, MAP::Layer layer)
+void INPUT::MapBinaryReader::_readLayerV2(QDataStream& in, MAP::MapLayer& mapLayer, MAP::Layer layer)
 {
     UInt32Point3D pos;
     for (pos.z = 0; pos.z < mapLayer.getLayerSize(layer); ++pos.z)
@@ -86,7 +86,7 @@ void INPUT::MapBinaryReader::_readLayerV2(QDataStream &in, MAP::MapLayer &mapLay
     }
 }
 
-void INPUT::MapBinaryReader::_readObjectsV1(QDataStream &in, DATABASE::MAP_STRUCTURE::MapPrototype *pMap)
+void INPUT::MapBinaryReader::_readObjectsV1(QDataStream& in, DATABASE::MAP_STRUCTURE::MapPrototype* pMap)
 {
     // ToDo: add fill into ObjectContainer
     //uint32 objectCount = 0;
@@ -105,7 +105,7 @@ void INPUT::MapBinaryReader::_readObjectsV1(QDataStream &in, DATABASE::MAP_STRUC
 /*#####
 # MapBinaryWriter
 #####*/
-void OUTPUT::MapBinaryWriter::writeFile(const QString &fileName, const MAP_DATA::MapData &data)
+void OUTPUT::MapBinaryWriter::writeFile(const QString& fileName, const MAP_DATA::MapData& data)
 {
     QFile mapFile(fileName);
     if (!mapFile.open(QIODevice::WriteOnly))
@@ -123,7 +123,7 @@ void OUTPUT::MapBinaryWriter::writeFile(const QString &fileName, const MAP_DATA:
     //_writeObjects(out, pMap);
 }
 
-void OUTPUT::MapBinaryWriter::_writeLayer(QDataStream &out, const MapLayer &mapLayer, MAP::Layer layer)
+void OUTPUT::MapBinaryWriter::_writeLayer(QDataStream& out, const MapLayer& mapLayer, MAP::Layer layer)
 {
     UInt32Point3D pos;
     for (pos.z = 0; pos.z < mapLayer.getLayerSize(layer); ++pos.z)
@@ -132,20 +132,20 @@ void OUTPUT::MapBinaryWriter::_writeLayer(QDataStream &out, const MapLayer &mapL
         {
             for (pos.x = 0; pos.x < mapLayer.getSize().x; ++pos.x)
             {
-                auto &tile = mapLayer.getMapTile(pos, layer);
+                auto& tile = mapLayer.getMapTile(pos, layer);
                 out << tile.m_uiTileID << tile.m_uiAutoTileSetID;
             }
         }
     }
 }
 
-void OUTPUT::MapBinaryWriter::_writeObjects(QDataStream &out, const DATABASE::MAP_STRUCTURE::MapPrototype *pMap)
+void OUTPUT::MapBinaryWriter::_writeObjects(QDataStream& out, const DATABASE::MAP_STRUCTURE::MapPrototype* pMap)
 {
     out << pMap->getMapObjectCount();
     for (uint32 i = 1; i <= pMap->getMapObjectCount(); ++i)
     {
         auto pObj = pMap->getMapObject(i);
-        if (pObj && !pObj->isEmpty())
+        if (pObj& & !pObj->isEmpty())
             out << pObj->m_GUID << pObj->m_ObjectID << pObj->m_Type << pObj->m_Position.x << pObj->m_Position.y << pObj->m_Layer << pObj->m_GUID;
     }
 }

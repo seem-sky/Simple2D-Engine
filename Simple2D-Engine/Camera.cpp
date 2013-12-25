@@ -33,7 +33,7 @@ void Camera::stopMoving()
 /*#####
 # MapCamera
 #####*/
-MapCamera::MapCamera(PLAYER::GamePlayer *pOwner) : Camera(), m_pOwner(pOwner), m_CameraSettings(FREE)
+MapCamera::MapCamera(PLAYER::GamePlayer* pOwner) : Camera(), m_pOwner(pOwner), m_CameraSettings(FREE)
 {}
 
 void MapCamera::centerOnPlayer()
@@ -42,7 +42,7 @@ void MapCamera::centerOnPlayer()
     m_CameraSettings = CENTER_ON_PLAYER;
 }
 
-void MapCamera::centerOn(const MAP::OBJECT::WorldObject *pWorldObj)
+void MapCamera::centerOn(const MAP::OBJECT::WorldObject* pWorldObj)
 {
     stopMoving();
     m_CameraSettings = CENTER_ON_WORLD_OBJECT;

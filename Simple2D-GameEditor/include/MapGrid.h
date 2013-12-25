@@ -17,18 +17,18 @@ namespace MAP
         class MapGrid
         {
         private:
-            //void _resizeGrid(const UInt32Point3D &size);
+            //void _resizeGrid(const UInt32Point3D& size);
 
-            //bool _isValidGrid(const UInt32Point3D &grid);
+            //bool _isValidGrid(const UInt32Point3D& grid);
 
         public:
-            //static UInt32Point3D getGridFromMapPos(const UInt32Point3D &mapPos);
+            //static UInt32Point3D getGridFromMapPos(const UInt32Point3D& mapPos);
 
             //void updateGridSize(UInt32Point3D mapSize);
             //inline void clearGrid() { _resizeGrid(UInt32Point3D()); }
 
-            void addObject(OBJECT::WorldObject *pObject);
-            void removeObject(OBJECT::WorldObject *pObject);
+            void addObject(OBJECT::WorldObject* pObject);
+            void removeObject(OBJECT::WorldObject* pObject);
 
             inline WorldObjectContainer& getObjects() { return m_WorldObjects; }
 

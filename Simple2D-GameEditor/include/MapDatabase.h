@@ -22,7 +22,7 @@ namespace DATABASE
 
             MapPrototypePtr getNewPrototype();
 
-            /*void setPrototype(MapPrototype *pItem);
+            /*void setPrototype(MapPrototype* pItem);
             const MapPrototype* getPrototype(uint32 ID) const;*/
             //MapPrototype* getPrototype(uint32 ID);
 

@@ -1,7 +1,7 @@
 #include "Project.h"
 #include <QtCore/QDir>
 
-bool Project::load(const QString &path)
+bool Project::load(const QString& path)
 {
     if (isOpen())
         close();
@@ -25,7 +25,7 @@ bool Project::save()
     return m_DBMgr.saveDatabase(m_projectPath);
 }
 
-bool Project::createNew(const QString &path)
+bool Project::createNew(const QString& path)
 {
     QDir dir(path);
     dir.mkpath(path);

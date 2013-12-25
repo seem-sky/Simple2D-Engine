@@ -19,15 +19,15 @@ private:
     void _saveMaps();
 
 protected:
-    void resizeEvent(QResizeEvent *pEvent) { m_ModifyObj.resizeEvent(this); }
+    void resizeEvent(QResizeEvent* pEvent) { m_ModifyObj.resizeEvent(this); }
 
 public:
-    MapEditorWidget(QWidget *pParent = NULL);
+    MapEditorWidget(QWidget* pParent = NULL);
 
     AutoTile* createAutoTilePixmaps(uint32 uiID);
     void clearWidgets();
 
-    void setDBMgr(const DATABASE::DatabaseMgr &pDBMgr);
+    void setDBMgr(const DATABASE::DatabaseMgr& pDBMgr);
 
     void updateMapEditor();
 
@@ -41,14 +41,14 @@ private slots:
     void _autoTileClicked(uint32 uiID, Qt::MouseButton button);
     void _tileClicked(uint32 uiID, Qt::MouseButton button);
 
-    void _pressBrush(MapViewer *pWidget, UInt32Point3D point, uint32 uiButton);
-    void _releaseBrush(MapViewer *pWidget, UInt32Point3D point, uint32 uiButton);
-    void _moveBrush(MapViewer *pWidget, UInt32Point3D point);
+    void _pressBrush(MapViewer* pWidget, UInt32Point3D point, uint32 uiButton);
+    void _releaseBrush(MapViewer* pWidget, UInt32Point3D point, uint32 uiButton);
+    void _moveBrush(MapViewer* pWidget, UInt32Point3D point);
 
     void _layerChanged(bool state);
     void _MappingModeChanged(int index);
     void _objectTabChanged(int index);
-    void _currentObjectChanged(QTreeWidgetItem *pItem, QTreeWidgetItem *pPreviousItem);
+    void _currentObjectChanged(QTreeWidgetItem* pItem, QTreeWidgetItem* pPreviousItem);
 
     void _zoomChanged(int zoom);
     void _layerSelected(int layer);
@@ -57,7 +57,7 @@ private slots:
 
     void _tabSelected(int index);
 
-    void _mapUpdated(DATABASE::MAP_STRUCTURE::MapPrototype *map);
+    void _mapUpdated(DATABASE::MAP_STRUCTURE::MapPrototype* map);
 
 signals:
     void leftTileChanged(uint32 uiID, DATABASE::MAP_STRUCTURE::BRUSH::BrushType type);

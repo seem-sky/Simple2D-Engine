@@ -50,7 +50,7 @@ namespace PLAYER
         class MapCamera : public Camera
         {
         public:
-            MapCamera(GamePlayer *pOwner);
+            MapCamera(GamePlayer* pOwner);
 
             void move(Int32Point about, uint32 uiTime);
 
@@ -58,10 +58,10 @@ namespace PLAYER
 
             // camera settings
             void centerOnPlayer();
-            void centerOn(const MAP::OBJECT::WorldObject *pWorldObj);
+            void centerOn(const MAP::OBJECT::WorldObject* pWorldObj);
 
         private:
-            GamePlayer *m_pOwner;
+            GamePlayer* m_pOwner;
             CameraSettings m_CameraSettings;
         };
     }

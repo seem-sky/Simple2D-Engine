@@ -23,7 +23,7 @@ QPixmap* TileCache::_createPixmap(uint32 uiID)
     if (auto pTile = m_pDBMgr->getTileDatabase()->getOriginalPrototype(uiID))
     {
         std::unique_ptr<QPixmap> pixmapPtr(new QPixmap);
-        if (createPixmap(Config::get()->getProjectDirectory(), pTile->getPathName(), pTile->getTransparencyColor(), *pixmapPtr))
+        if (createPixmap(Config::get()->getProjectDirectory(), pTile->getPathName(), pTile->getTransparencyColor(),* pixmapPtr))
         {
             auto pPixmap = pixmapPtr.release();
             setItem(uiID, pPixmap);

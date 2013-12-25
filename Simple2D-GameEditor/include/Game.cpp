@@ -18,9 +18,9 @@ int Game::update(uint32 uiDiff)
     return m_closeGame;
 }
 
-void Game::setSceneView(SCENE::SceneView *pScene)
+void Game::setSceneView(SCENE::SceneView* pScene)
 {
-    if (GameWindow *pWindow = dynamic_cast<GameWindow*>(&*m_pWidget))
+    if (GameWindow* pWindow = dynamic_cast<GameWindow*>(&*m_pWidget))
         pWindow->setSceneView(pScene);
 }
 
@@ -32,12 +32,12 @@ void Game::setScene(SCENE::ScenePtr pScene)
 bool Game::isFullScreen() const
 {
     if (m_pWidget)
-        return m_pWidget->windowState() & Qt::WindowFullScreen;
+        return m_pWidget->windowState()&  Qt::WindowFullScreen;
     return false;
 }
 
 void Game::toggleFullScreen()
 {
-    if (GameWindow *pWindow = dynamic_cast<GameWindow*>(&*m_pWidget))
+    if (GameWindow* pWindow = dynamic_cast<GameWindow*>(&*m_pWidget))
         pWindow->setFullScreen(!isFullScreen());
 }

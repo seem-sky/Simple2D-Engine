@@ -1,7 +1,7 @@
 #include "MapEditorWidgetEditor.h"
 #include "moc_MapEditorWidgetEditor.h"
 
-MapEditorWidgetEditor::MapEditorWidgetEditor(DATABASE::DatabaseMgr &databaseMgr, QWidget *pParent) : QWidget(pParent), m_DatabaseMgr(databaseMgr),
+MapEditorWidgetEditor::MapEditorWidgetEditor(DATABASE::DatabaseMgr& databaseMgr, QWidget* pParent) : QWidget(pParent), m_DatabaseMgr(databaseMgr),
     // modules
     m_pModuleTileSelection(new MapEditorModuleTileSelection(m_DatabaseMgr, this)),
     m_pModuleMapTree(new MapEditorModuleMapTree(pParent)),
@@ -23,6 +23,11 @@ MapEditorWidgetEditor::MapEditorWidgetEditor(DATABASE::DatabaseMgr &databaseMgr,
 
     connect(m_pModuleMapTree, SIGNAL(openMap(uint32)), m_pModuleContent, SLOT(onMapOpened(uint32)));
     connect(m_pModuleMapTree, SIGNAL(editMap(uint32)), m_pModuleContent, SLOT(onMapEdited(uint32)));
+
+    connect(this, SIGNAL(requestDraw(BRUSH::BrushIndex, MAP::MapLayer&, const UInt32Point&)),
+        m_pModuleTileSelection, SLOT(onDrawRequested(BRUSH::BrushIndex, MAP::MapLayer&, const UInt32Point&)));
+
+    connect(m_pModuleContent, SIGNAL(registerTab(MapViewer*)), this, SLOT(onRegisterTab(MapViewer*)));
 }
 
 void MapEditorWidgetEditor::setup()

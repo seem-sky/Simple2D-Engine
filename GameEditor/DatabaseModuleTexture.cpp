@@ -1,7 +1,7 @@
 #include "DatabaseModuleTexture.h"
 #include "moc_DatabaseModuleTexture.h"
 
-DatabaseModuleTexture::DatabaseModuleTexture(QWidget *pParent) : QWidget(pParent), Ui_DatabaseModuleTexture()
+DatabaseModuleTexture::DatabaseModuleTexture(QWidget* pParent) : QWidget(pParent), Ui_DatabaseModuleTexture()
 {
     setupUi(this);
     connect(m_pColorRed, SIGNAL(valueChanged(int)), this, SLOT(_onTransparencyColorChanged(int)));
@@ -9,7 +9,7 @@ DatabaseModuleTexture::DatabaseModuleTexture(QWidget *pParent) : QWidget(pParent
     connect(m_pColorBlue, SIGNAL(valueChanged(int)), this, SLOT(_onTransparencyColorChanged(int)));
 }
 
-void DatabaseModuleTexture::setPixmap(const QPixmap &pixmap)
+void DatabaseModuleTexture::setPixmap(const QPixmap& pixmap)
 {
     m_pView->setScene(new QGraphicsScene());
     m_pView->scene()->addPixmap(pixmap);

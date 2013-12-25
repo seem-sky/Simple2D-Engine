@@ -13,7 +13,7 @@ class Logfile : public TSingleton<Logfile>
 public:
     Logfile();
     ~Logfile();
-    void WriteMessage(const QString &msg, bool append = true);
-    void WriteErrorMessage(const QString &msg);
+    void WriteMessage(const QString& msg, bool append = true);
+    void WriteErrorMessage(const QString& msg);
 };
 #endif

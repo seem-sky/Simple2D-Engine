@@ -8,12 +8,12 @@ namespace ENTITY
     class Entity
     {
     public:
-        Entity(uint32 GUID, uint32 ID = 0, const std::string &name = "", const std::string &script = "");
+        Entity(uint32 GUID, uint32 ID = 0, const std::string& name = "", const std::string& script = "");
 
-        inline void setScript(const std::string &script) { m_Script = script; }
+        inline void setScript(const std::string& script) { m_Script = script; }
         inline const std::string& getScript() const { return m_Script; }
 
-        inline void setName(const std::string &name) { m_Name = name; }
+        inline void setName(const std::string& name) { m_Name = name; }
         inline const std::string& getName() const { return m_Name; }
 
         inline uint32 getGUID() const { return m_uiGUID; }

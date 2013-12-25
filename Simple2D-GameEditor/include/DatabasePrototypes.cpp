@@ -12,7 +12,7 @@ namespace DATABASE
     {
         bool hasTileCheck(uint32 uiTileCheck, AUTO_TILE_TILE_REQUIREMENTS tiles)
         {
-            if ((uiTileCheck & tiles) == tiles)
+            if ((uiTileCheck&  tiles) == tiles)
                 return true;
             return false;
         }
@@ -170,7 +170,7 @@ namespace DATABASE
 
     uint32 TILE_SET::TileSetPrototype::getTileID(UInt32Point pos) const
     {
-        if (pos.x < m_Size.x && pos.y < m_Size.y)
+        if (pos.x < m_Size.x& & pos.y < m_Size.y)
             return m_Tiles[pos.x][pos.y];
         return 0;
     }
@@ -186,7 +186,7 @@ namespace DATABASE
             resizeTiles(newSize);
     }
 
-    QPixmap TILE_SET::createPixmap(const TileSetPrototype &tileSet)
+    QPixmap TILE_SET::createPixmap(const TileSetPrototype& tileSet)
     {
         QPixmap pixmap(tileSet.getTileCount().x*TILE_SIZE, tileSet.getTileCount().y*TILE_SIZE);
         pixmap.fill();
@@ -197,7 +197,7 @@ namespace DATABASE
             for (pos.y = 0; pos.y < tileSet.getTileCount().y; ++pos.y)
             {
                 if (auto pTilePixmap = GTileCache::get()->getItem(tileSet.getTileID(pos)))
-                    painter.drawTiledPixmap(pos.x*TILE_SIZE, pos.y*TILE_SIZE, TILE_SIZE, TILE_SIZE, *pTilePixmap);
+                    painter.drawTiledPixmap(pos.x*TILE_SIZE, pos.y*TILE_SIZE, TILE_SIZE, TILE_SIZE,* pTilePixmap);
             }
         }
         return pixmap;
@@ -208,7 +208,7 @@ namespace DATABASE
     #####*/
     namespace ANIMATION
     {
-        bool AnimationPrototype::getFrame(uint32 uiIndex, Frame &frame) const
+        bool AnimationPrototype::getFrame(uint32 uiIndex, Frame& frame) const
         {
             if (uiIndex < m_Frames.size())
             {
@@ -239,7 +239,7 @@ namespace DATABASE
         {
             m_FrameOffset.x = 0;
             m_FrameOffset.y = 0;
-            for (auto &sprite : m_Sprites)
+            for (auto& sprite : m_Sprites)
             {
                 if (sprite.m_Pos.x < m_FrameOffset.x)
                     m_FrameOffset.x = sprite.m_Pos.x;
@@ -269,7 +269,7 @@ namespace DATABASE
             setOffsetIfNeeded(sprite.m_Pos);
         }
 
-        void Frame::setOffsetIfNeeded(const Int32Point &offset)
+        void Frame::setOffsetIfNeeded(const Int32Point& offset)
         {
             if (m_FrameOffset.x > offset.x)
                 m_FrameOffset.x = offset.x;
@@ -335,7 +335,7 @@ namespace DATABASE
     #####*/
     namespace MAP_STRUCTURE
     {
-        void MapPrototype::addMapObject(MapObject *pObject)
+        void MapPrototype::addMapObject(MapObject* pObject)
         {
             if (pObject)
                 m_Objects.setItem(pObject->m_GUID, pObject);
@@ -358,7 +358,7 @@ namespace DATABASE
             return newObject;
         }
 
-        uint32 MapPrototype::checkAutoTiles(uint32 uiID, UInt32Point3D pos, UInt32PointSet &result, Layer layer, uint32 resultFlag)
+        uint32 MapPrototype::checkAutoTiles(uint32 uiID, UInt32Point3D pos, UInt32PointSet& result, Layer layer, uint32 resultFlag)
         {
             uint32 uiBorderCheck = 0;
             //MapTile centerTile = getMapTile(pos, layer);
@@ -438,11 +438,11 @@ namespace DATABASE
             //    if (mapTile.m_uiAutoTileSetID != uiID)
             //    {
             //        uiBorderCheck += curTileCheck;
-            //        if (resultFlag & FLAG_OTHER)
+            //        if (resultFlag&  FLAG_OTHER)
             //            result.insert(checkPos);
             //    }
             //    // if same
-            //    else if (resultFlag & FLAG_SAME)
+            //    else if (resultFlag&  FLAG_SAME)
             //        result.insert(checkPos);
             //}
             return uiBorderCheck;
@@ -469,7 +469,7 @@ namespace DATABASE
                 layer == MAP::LAYER_BACKGROUND ? size : getLayerSize(MAP::LAYER_BACKGROUND));
         }
 
-        void MapPrototype::setSize(const UInt32Point &size, uint8 uiForegroundLayerSize, uint8 uiBackgroundLayerSize)
+        void MapPrototype::setSize(const UInt32Point& size, uint8 uiForegroundLayerSize, uint8 uiBackgroundLayerSize)
         {
             m_Size = size;
             m_Layer.at(MAP::LAYER_BACKGROUND) = uiBackgroundLayerSize;

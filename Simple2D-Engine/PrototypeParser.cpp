@@ -3,7 +3,7 @@
 
 using namespace DATABASE;
 
-//void PrototypeParser::parseToXML(PrototypePtr pProto,  QXmlStreamWriter &writer)
+//void PrototypeParser::parseToXML(PrototypePtr pProto,  QXmlStreamWriter& writer)
 //{
 //    if (!pProto)
 //        return;
@@ -12,7 +12,7 @@ using namespace DATABASE;
 //    writer.writeAttribute("name", pProto->getName());
 //}
 //
-//void PrototypeParser::parseToXML(TexturePrototypePtr pProto, QXmlStreamWriter &writer)
+//void PrototypeParser::parseToXML(TexturePrototypePtr pProto, QXmlStreamWriter& writer)
 //{
 //    if (!pProto)
 //        return;
@@ -22,7 +22,7 @@ using namespace DATABASE;
 //    parseToXML(std::static_pointer_cast<Prototype>(pProto), writer);
 //}
 //
-//void PrototypeParser::parseToXML(TilePrototypePtr pProto, QXmlStreamWriter &writer)
+//void PrototypeParser::parseToXML(TilePrototypePtr pProto, QXmlStreamWriter& writer)
 //{
 //    if (!pProto)
 //        return;
@@ -31,7 +31,7 @@ using namespace DATABASE;
 //    parseToXML(std::static_pointer_cast<TexturePrototype>(pProto), writer);
 //}
 //
-//void PrototypeParser::parseToXML(TileSetPrototypePtr pProto, QXmlStreamWriter &writer)
+//void PrototypeParser::parseToXML(TileSetPrototypePtr pProto, QXmlStreamWriter& writer)
 //{
 //    if (!pProto)
 //        return;
@@ -54,7 +54,7 @@ using namespace DATABASE;
 //        writer.writeAttribute("tiles", tiles);
 //}
 //
-//void PrototypeParser::parseToXML(AutoTilePrototypePtr pProto, QXmlStreamWriter &writer)
+//void PrototypeParser::parseToXML(AutoTilePrototypePtr pProto, QXmlStreamWriter& writer)
 //{
 //    if (!pProto)
 //        return;
@@ -71,7 +71,7 @@ using namespace DATABASE;
 //        writer.writeAttribute("tiles", tiles);
 //}
 //
-//void PrototypeParser::parseToXML(AnimationPrototypePtr pProto, QXmlStreamWriter &writer)
+//void PrototypeParser::parseToXML(AnimationPrototypePtr pProto, QXmlStreamWriter& writer)
 //{
 //    if (!pProto)
 //        return;
@@ -111,7 +111,7 @@ using namespace DATABASE;
 //    }
 //}
 //
-//void PrototypeParser::parseToXML(MAP_STRUCTURE::MapPrototypePtr pProto, QXmlStreamWriter &writer)
+//void PrototypeParser::parseToXML(MAP_STRUCTURE::MapPrototypePtr pProto, QXmlStreamWriter& writer)
 //{
 //    if (!pProto)
 //        return;
@@ -125,7 +125,7 @@ using namespace DATABASE;
 //    parseToXML(std::static_pointer_cast<Prototype>(pProto), writer);
 //}
 //
-//void PrototypeParser::parseToXML(LocalisationPrototypePtr pProto, QXmlStreamWriter &writer)
+//void PrototypeParser::parseToXML(LocalisationPrototypePtr pProto, QXmlStreamWriter& writer)
 //{
 //    if (!pProto)
 //        return;
@@ -139,7 +139,7 @@ using namespace DATABASE;
 //    }
 //}
 //
-//void PrototypeParser::parseToXML(WorldObjectPrototypePtr pProto, QXmlStreamWriter &writer)
+//void PrototypeParser::parseToXML(WorldObjectPrototypePtr pProto, QXmlStreamWriter& writer)
 //{
 //    if (!pProto)
 //        return;
@@ -155,7 +155,7 @@ using namespace DATABASE;
 //    for (uint32 i = 1; i <= pProto->getAnimationCount(); ++i)
 //    {
 //        MAP_OBJECT::AnimationInfo animationInfo = pProto->getAnimationInfo(i);
-//        if (animationInfo.m_uiAnimationID == 0 && animationInfo.m_uiAnimationTypeID == 0)
+//        if (animationInfo.m_uiAnimationID == 0& & animationInfo.m_uiAnimationTypeID == 0)
 //            continue;
 //        writer.writeEmptyElement("animation");
 //        writer.writeAttribute("entry", QString::number(i));
@@ -164,7 +164,7 @@ using namespace DATABASE;
 //    }
 //}
 //
-//void PrototypeParser::parseToXML(DynamicObjectPrototypePtr pProto, QXmlStreamWriter &writer)
+//void PrototypeParser::parseToXML(DynamicObjectPrototypePtr pProto, QXmlStreamWriter& writer)
 //{
 //    if (!pProto)
 //        return;
@@ -175,13 +175,13 @@ using namespace DATABASE;
 ///*#####
 //# reading: attributes
 //#####*/
-//void PrototypeParser::parseAttributesFromXML(PrototypePtr pProto, QXmlStreamAttributes &attributes)
+//void PrototypeParser::parseAttributesFromXML(PrototypePtr pProto, QXmlStreamAttributes& attributes)
 //{
 //    pProto->setID(attributes.value("ID").toUInt());
 //    pProto->setName(attributes.value("name").toString());
 //}
 //
-//void PrototypeParser::parseAttributesFromXML(TexturePrototypePtr pProto, QXmlStreamAttributes &attributes)
+//void PrototypeParser::parseAttributesFromXML(TexturePrototypePtr pProto, QXmlStreamAttributes& attributes)
 //{
 //    parseAttributesFromXML(std::static_pointer_cast<Prototype>(pProto), attributes);
 //
@@ -190,12 +190,12 @@ using namespace DATABASE;
 //    pProto->setTransparencyColor(Color(attributes.value("transparency_color").toString().toStdString()));
 //}
 //
-//void PrototypeParser::parseAttributesFromXML(SpritePrototypePtr pProto, QXmlStreamAttributes &attributes)
+//void PrototypeParser::parseAttributesFromXML(SpritePrototypePtr pProto, QXmlStreamAttributes& attributes)
 //{
 //    parseAttributesFromXML(std::static_pointer_cast<TexturePrototype>(pProto), attributes);
 //}
 //
-//void PrototypeParser::parseAttributesFromXML(TilePrototypePtr pProto, QXmlStreamAttributes &attributes)
+//void PrototypeParser::parseAttributesFromXML(TilePrototypePtr pProto, QXmlStreamAttributes& attributes)
 //{
 //    parseAttributesFromXML(std::static_pointer_cast<TexturePrototype>(pProto), attributes);
 //
@@ -203,7 +203,7 @@ using namespace DATABASE;
 //    pProto->addPassabilityFlag(attributes.value("passability").toUInt());
 //}
 //
-//void PrototypeParser::parseAttributesFromXML(TileSetPrototypePtr pProto, QXmlStreamAttributes &attributes)
+//void PrototypeParser::parseAttributesFromXML(TileSetPrototypePtr pProto, QXmlStreamAttributes& attributes)
 //{
 //    parseAttributesFromXML(std::static_pointer_cast<Prototype>(pProto), attributes);
 //
@@ -217,7 +217,7 @@ using namespace DATABASE;
 //    }
 //}
 //
-//void PrototypeParser::parseAttributesFromXML(AutoTilePrototypePtr pProto, QXmlStreamAttributes &attributes)
+//void PrototypeParser::parseAttributesFromXML(AutoTilePrototypePtr pProto, QXmlStreamAttributes& attributes)
 //{
 //    parseAttributesFromXML(std::static_pointer_cast<Prototype>(pProto), attributes);
 //
@@ -229,7 +229,7 @@ using namespace DATABASE;
 //    }
 //}
 //
-//void PrototypeParser::parseAttributesFromXML(MAP_STRUCTURE::MapPrototypePtr pProto, QXmlStreamAttributes &attributes)
+//void PrototypeParser::parseAttributesFromXML(MAP_STRUCTURE::MapPrototypePtr pProto, QXmlStreamAttributes& attributes)
 //{
 //    parseAttributesFromXML(std::static_pointer_cast<Prototype>(pProto), attributes);
 //
@@ -242,7 +242,7 @@ using namespace DATABASE;
 //    pProto->setFileName(attributes.value("file").toString());
 //}
 //
-//void PrototypeParser::parseAttributesFromXML(WorldObjectPrototypePtr pProto, QXmlStreamAttributes &attributes)
+//void PrototypeParser::parseAttributesFromXML(WorldObjectPrototypePtr pProto, QXmlStreamAttributes& attributes)
 //{
 //    parseAttributesFromXML(std::static_pointer_cast<Prototype>(pProto), attributes);
 //
@@ -256,7 +256,7 @@ using namespace DATABASE;
 //    pProto->setScriptName(attributes.value("script").toString());
 //}
 //
-//void PrototypeParser::parseAttributesFromXML(DynamicObjectPrototypePtr pProto, QXmlStreamAttributes &attributes)
+//void PrototypeParser::parseAttributesFromXML(DynamicObjectPrototypePtr pProto, QXmlStreamAttributes& attributes)
 //{
 //    parseAttributesFromXML(std::static_pointer_cast<MAP_OBJECT::WorldObjectPrototype>(pProto), attributes);
 //    pProto->setMovementSpeed(attributes.value("movementSpeed").toUShort());
@@ -265,7 +265,7 @@ using namespace DATABASE;
 ///*#####
 //# reading: children
 //#####*/
-//void PrototypeParser::parseChildrenFromXML(AnimationPrototypePtr pProto, const QXmlStreamReader &reader)
+//void PrototypeParser::parseChildrenFromXML(AnimationPrototypePtr pProto, const QXmlStreamReader& reader)
 //{
 //    if (reader.name() == "frame")
 //    {
@@ -293,7 +293,7 @@ using namespace DATABASE;
 //    }
 //}
 //
-//void PrototypeParser::parseChildrenFromXML(LocalisationPrototypePtr pProto, const QXmlStreamReader &reader)
+//void PrototypeParser::parseChildrenFromXML(LocalisationPrototypePtr pProto, const QXmlStreamReader& reader)
 //{
 //    if (reader.name() == "local")
 //    {
@@ -305,7 +305,7 @@ using namespace DATABASE;
 //    }
 //}
 //
-//void PrototypeParser::parseChildrenFromXML(WorldObjectPrototypePtr pProto, const QXmlStreamReader &reader)
+//void PrototypeParser::parseChildrenFromXML(WorldObjectPrototypePtr pProto, const QXmlStreamReader& reader)
 //{
 //    if (reader.name() == "animation")
 //    {

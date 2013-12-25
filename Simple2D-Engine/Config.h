@@ -14,12 +14,12 @@ public:
     void saveConfig();
 
     inline QString getProjectDirectory() const { return m_projectDirectory; }
-    inline void setProjectDirectory(const QString &projectDir) { m_projectDirectory = projectDir; saveConfig(); }
+    inline void setProjectDirectory(const QString& projectDir) { m_projectDirectory = projectDir; saveConfig(); }
 
     void clear();
 
-    inline void addOpenMap(const uint32 &uiMapID) { m_openMaps.insert(uiMapID); saveConfig(); }
-    void removeOpenMap(const uint32 &uiMapID);
+    inline void addOpenMap(const uint32& uiMapID) { m_openMaps.insert(uiMapID); saveConfig(); }
+    void removeOpenMap(const uint32& uiMapID);
     inline const UInt32UnorderedSet getOpenMaps() const { return m_openMaps; }
 
     inline UInt32Point getMainWindowSize() const { return m_MainWindowSize; }

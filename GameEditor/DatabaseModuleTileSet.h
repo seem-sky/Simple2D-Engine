@@ -12,7 +12,7 @@ private:
     TileDropLabel* _getNewTileDropLabel() const;
 
 public:
-    DatabaseModuleTileSet(QWidget *pParent = nullptr);
+    DatabaseModuleTileSet(QWidget* pParent = nullptr);
 
     void resizeTileSetTableColumns(uint32 columns);
     void resizeTileSetTableRows(uint32 rows);
@@ -24,7 +24,7 @@ public:
 
     void clear();
 
-    void setTileDatabase(const DATABASE::TileDatabase *pTileDB);
+    void setTileDatabase(const DATABASE::TileDatabase* pTileDB);
 
 private slots:
     void _onHorizontalAddClicked();
@@ -33,7 +33,7 @@ private slots:
     void _onVerticalRemoveClicked();
 
 private:
-    const DATABASE::TileDatabase *m_pTileDB;
+    const DATABASE::TileDatabase* m_pTileDB;
 };
 
 #endif

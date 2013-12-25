@@ -5,7 +5,7 @@
 #include <QtGui/QPainter>
 #include "moc_MapEditorModuleTileSets.h"
 
-MapEditorModuleTileSets::MapEditorModuleTileSets(QWidget *pParent) : DatabaseModuleDragList(pParent), m_pTileDB(nullptr)
+MapEditorModuleTileSets::MapEditorModuleTileSets(QWidget* pParent) : DatabaseModuleDragList(pParent), m_pTileDB(nullptr)
 {
     setDragEnabled(false);
     setToolTipPosition(TOOLTIP_RIGHT);
@@ -29,12 +29,12 @@ QWidget* MapEditorModuleTileSets::_setupTooltipWidget(uint32 uiPrototypeID)
     return pLabel;
 }
 
-void MapEditorModuleTileSets::setTileDatabase(const DATABASE::TileDatabase *pDB)
+void MapEditorModuleTileSets::setTileDatabase(const DATABASE::TileDatabase* pDB)
 {
     m_pTileDB = pDB;
 }
 
-void MapEditorModuleTileSets::setModel(IDatabaseModel *pModel)
+void MapEditorModuleTileSets::setModel(IDatabaseModel* pModel)
 {
     // remove old database, otherwise it will be deleted
     if (auto pOldModel = dynamic_cast<IDatabaseModel*>(model()))
@@ -42,12 +42,12 @@ void MapEditorModuleTileSets::setModel(IDatabaseModel *pModel)
     DatabaseModuleDragList::setModel(pModel);
 }
 
-void MapEditorModuleTileSets::mousePressEvent(QMouseEvent *pEvent)
+void MapEditorModuleTileSets::mousePressEvent(QMouseEvent* pEvent)
 {
     DatabaseModuleDragList::mousePressEvent(pEvent);
 
     auto item = indexAt(pEvent->pos());
-    if (item.isValid() && (pEvent->button() == Qt::RightButton || pEvent->button() == Qt::LeftButton))
+    if (item.isValid()& & (pEvent->button() == Qt::RightButton || pEvent->button() == Qt::LeftButton))
     {
         auto brush = BRUSH::BrushIndex::BRUSH_LEFT;
         if (pEvent->button() == Qt::RightButton)

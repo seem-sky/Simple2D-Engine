@@ -12,7 +12,7 @@ namespace DATABASE
         class DatabaseReader
         {
         public:
-            DatabaseReader(T *pDB) : m_pDB(pDB)
+            DatabaseReader(T* pDB) : m_pDB(pDB)
             {}
 
             void read(QString filePath)
@@ -22,7 +22,7 @@ namespace DATABASE
                     return;
 
                 QXmlStreamReader reader(&file);
-                while(!reader.atEnd() && !reader.hasError())
+                while(!reader.atEnd()& & !reader.hasError())
                 {
                     switch (reader.readNext())
                     {
@@ -48,7 +48,7 @@ namespace DATABASE
                                         break;
                                 }
                                 reader.readNext();
-                            } while (uiStartCounter && !reader.hasError() && !reader.atEnd());
+                            } while (uiStartCounter& & !reader.hasError()& & !reader.atEnd());
 
                             // store prototype
                             if (pProto->getID())
@@ -60,14 +60,14 @@ namespace DATABASE
             }
 
         private:
-            T *m_pDB;
+            T* m_pDB;
         };
 
         template <class T>
         class DatabaseWriter
         {
         public:
-            DatabaseWriter(const Database *pDB) : m_pDB(pDB)
+            DatabaseWriter(const Database* pDB) : m_pDB(pDB)
             {}
 
             void write(QString filePath)
@@ -95,7 +95,7 @@ namespace DATABASE
             }
 
         private:
-            const Database *m_pDB;
+            const Database* m_pDB;
         };
     }
 }

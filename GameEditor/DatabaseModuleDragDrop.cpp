@@ -7,7 +7,7 @@
 #include "QtGlobal.h"
 #include "Config.h"
 
-DatabaseModuleDragList::DatabaseModuleDragList(QWidget *pParent) : QTreeView(pParent), m_CurrentRow(MATH::maximum<uint32>()), m_pToolTip(nullptr), m_ShowTooltip(false),
+DatabaseModuleDragList::DatabaseModuleDragList(QWidget* pParent) : QTreeView(pParent), m_CurrentRow(MATH::maximum<uint32>()), m_pToolTip(nullptr), m_ShowTooltip(false),
     m_ToolTipPos(TOOLTIP_LEFT), m_MaximumTooltipSize(100, 100)
 {
     setDragEnabled(true);
@@ -23,7 +23,7 @@ void DatabaseModuleDragList::setShowTooltip(bool show)
     if (m_ShowTooltip == show)
         return;
     // do not show
-    if (m_ShowTooltip && !show)
+    if (m_ShowTooltip& & !show)
     {
         this->removeEventFilter(this);
         setMouseTracking(false);
@@ -32,7 +32,7 @@ void DatabaseModuleDragList::setShowTooltip(bool show)
         disconnect(this, SIGNAL(entered(const QModelIndex&)), this, SLOT(_onItemEntered(const QModelIndex&)));
     }
     // show
-    else if (!m_ShowTooltip && show)
+    else if (!m_ShowTooltip& & show)
     {
         this->installEventFilter(this);
         setMouseTracking(true);
@@ -42,7 +42,7 @@ void DatabaseModuleDragList::setShowTooltip(bool show)
     m_ShowTooltip = show;
 }
 
-void DatabaseModuleDragList::setModel(IDatabaseModel *pModel)
+void DatabaseModuleDragList::setModel(IDatabaseModel* pModel)
 {
     if (pModel)
     {
@@ -62,7 +62,7 @@ void DatabaseModuleDragList::_endTracking()
     m_CurrentRow = MATH::maximum<uint32>();
 }
 
-void DatabaseModuleDragList::_onItemEntered(const QModelIndex &index)
+void DatabaseModuleDragList::_onItemEntered(const QModelIndex& index)
 {
     if (!showTooltip())
         return;
@@ -102,7 +102,7 @@ void DatabaseModuleDragList::_showTooltip()
     }
 }
 
-void DatabaseModuleDragList::leaveEvent(QEvent *pEvent)
+void DatabaseModuleDragList::leaveEvent(QEvent* pEvent)
 {
     _endTracking();
     pEvent->accept();
@@ -112,7 +112,7 @@ void DatabaseModuleDragList::leaveEvent(QEvent *pEvent)
 /*#####
 # Tile drag&drop
 #####*/
-DatabaseModuleTextureDragList::DatabaseModuleTextureDragList(QWidget *pParent) : DatabaseModuleDragList(pParent)
+DatabaseModuleTextureDragList::DatabaseModuleTextureDragList(QWidget* pParent) : DatabaseModuleDragList(pParent)
 {
     setShowTooltip(true);
 }
@@ -160,22 +160,22 @@ void DatabaseModuleTextureDragList::startDrag(Qt::DropActions supportedActions)
     QTreeView::startDrag(supportedActions);
 }
 
-TileDropLabel::TileDropLabel(QWidget *pParent) : QLabel(pParent), m_uiCurrentTileID(0), m_pTileDB(nullptr)
+TileDropLabel::TileDropLabel(QWidget* pParent) : QLabel(pParent), m_uiCurrentTileID(0), m_pTileDB(nullptr)
 {
     setAcceptDrops(true);
 }
 
-void TileDropLabel::dragMoveEvent(QDragMoveEvent *pEvent)
+void TileDropLabel::dragMoveEvent(QDragMoveEvent* pEvent)
 {
     pEvent->accept();
 }
 
-void TileDropLabel::dragEnterEvent(QDragEnterEvent *pEvent)
+void TileDropLabel::dragEnterEvent(QDragEnterEvent* pEvent)
 {
     pEvent->acceptProposedAction();
 }
 
-void TileDropLabel::dropEvent(QDropEvent *pEvent)
+void TileDropLabel::dropEvent(QDropEvent* pEvent)
 {
     if (uint32 ID = pEvent->mimeData()->text().toUInt())
     {
@@ -184,7 +184,7 @@ void TileDropLabel::dropEvent(QDropEvent *pEvent)
     }
 }
 
-void TileDropLabel::paintEvent(QPaintEvent *pEvent)
+void TileDropLabel::paintEvent(QPaintEvent* pEvent)
 {
     QLabel::paintEvent(pEvent);
 

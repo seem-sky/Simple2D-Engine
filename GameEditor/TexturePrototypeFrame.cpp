@@ -3,10 +3,10 @@
 #include "Config.h"
 #include "QtGlobal.h"
 
-TexturePrototypeFrame::TexturePrototypeFrame(QWidget *pParent) : QFrame(pParent), m_pPrototype(nullptr)
+TexturePrototypeFrame::TexturePrototypeFrame(QWidget* pParent) : QFrame(pParent), m_pPrototype(nullptr)
 {}
 
-void TexturePrototypeFrame::paintEvent(QPaintEvent *pEvent)
+void TexturePrototypeFrame::paintEvent(QPaintEvent* pEvent)
 {
     QFrame::paintEvent(pEvent);
 
@@ -18,7 +18,7 @@ void TexturePrototypeFrame::paintEvent(QPaintEvent *pEvent)
     }
 }
 
-void TexturePrototypeFrame::setPrototype(const DATABASE::TexturePrototype *pPrototype)
+void TexturePrototypeFrame::setPrototype(const DATABASE::TexturePrototype* pPrototype)
 {
     m_pPrototype = pPrototype;
     repaint();

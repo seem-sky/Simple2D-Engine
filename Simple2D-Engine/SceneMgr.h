@@ -13,13 +13,13 @@ namespace GAME_LOGIC
         class SceneMgr : public Manager<Scene>
         {
         private:
-            void setNew(ScenePtr &pNew);
+            void setNew(ScenePtr& pNew);
 
         public:
-            SceneMgr(Game *pGame);
+            SceneMgr(Game* pGame);
 
         private:
-            Game *m_pGame;
+            Game* m_pGame;
         };
     }
 }

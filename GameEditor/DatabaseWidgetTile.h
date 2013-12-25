@@ -12,8 +12,8 @@ private:
     void _updatePassabilityIcons();
 
 protected:
-    virtual void setupWidgetsFromPrototype(const DATABASE::Prototype *pPrototype);
-    virtual void setupPrototypeFromWidgets(DATABASE::Prototype *pPrototype);
+    virtual void setupWidgetsFromPrototype(const DATABASE::Prototype* pPrototype);
+    virtual void setupPrototypeFromWidgets(DATABASE::Prototype* pPrototype);
     virtual void clear();
 
     void setDataPassability(uint8 passability);
@@ -23,7 +23,7 @@ private slots:
     void _onPassabilityButtonClicked();
 
 public:
-    DatabaseWidgetTile(QWidget *pParent = nullptr);
+    DatabaseWidgetTile(QWidget* pParent = nullptr);
 
 private:
     ButtonPtrArray m_Buttons;

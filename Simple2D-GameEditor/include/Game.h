@@ -16,7 +16,7 @@ namespace GAME_LOGIC
 
         inline void closeGame() { m_closeGame = true; }
 
-        void setSceneView(SCENE::SceneView *pScene);
+        void setSceneView(SCENE::SceneView* pScene);
         void setScene(SCENE::ScenePtr pScene);
 
         bool isFullScreen() const;

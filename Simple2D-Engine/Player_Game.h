@@ -11,9 +11,9 @@ namespace PLAYER
     class GamePlayer : public Player
     {
     public:
-        GamePlayer(MAP::MapMgr &mapMgr);
+        GamePlayer(MAP::MapMgr& mapMgr);
 
-        void setControle(const MAP::OBJECT::DynamicObject *pObject);
+        void setControle(const MAP::OBJECT::DynamicObject* pObject);
         const MAP::OBJECT::DynamicObject* getControledObject();
         void releaseControle();
 
@@ -39,7 +39,7 @@ namespace PLAYER
     private:
         uint32 m_ObjectGUID;
         uint32 m_MapGUID;
-        MAP::MapMgr &m_MapMgr;
+        MAP::MapMgr& m_MapMgr;
 
     protected:
         CAMERA::MapCamera m_Camera;

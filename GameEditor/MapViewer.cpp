@@ -6,7 +6,7 @@
 /*#####
 # MapViewerScene
 #####*/
-MapViewerScene::MapViewerScene(uint32 mapID, const DATABASE::DatabaseMgr &DBMgr) : QGraphicsScene(), m_MapData(DBMgr, mapID), m_ShowGrid(true),
+MapViewerScene::MapViewerScene(uint32 mapID, const DATABASE::DatabaseMgr& DBMgr) : QGraphicsScene(), m_MapData(DBMgr, mapID), m_ShowGrid(true),
     m_LayerType(MAP::LAYER_BACKGROUND)
 {
 }
@@ -35,21 +35,21 @@ void MapViewerScene::setLayerType(MAP::Layer layerType)
     update();
 }
 
-void MapViewerScene::drawBackground(QPainter *painter, const QRectF &rect)
+void MapViewerScene::drawBackground(QPainter* painter, const QRectF& rect)
 {
     _drawTiles(painter, rect, MAP::LAYER_BACKGROUND);
 }
 
-void MapViewerScene::drawForeground(QPainter *painter, const QRectF &rect)
+void MapViewerScene::drawForeground(QPainter* painter, const QRectF& rect)
 {
     _drawTiles(painter, rect, MAP::LAYER_FOREGROUND);
     if (isGridActive())
         _drawGrid(painter, rect);
 }
 
-void MapViewerScene::_drawTiles(QPainter *painter, const QRectF &rect, DATABASE::MAP_STRUCTURE::Layer currentLayer)
+void MapViewerScene::_drawTiles(QPainter* painter, const QRectF& rect, DATABASE::MAP_STRUCTURE::Layer currentLayer)
 {
-    const auto &mapLayer = m_MapData.getMapLayer();
+    const auto& mapLayer = m_MapData.getMapLayer();
     const UInt32Point startTile(rect.x() <= 0 ? 0 : (uint32)rect.x() / TILE_SIZE, rect.y() <= 0 ? 0 : (uint32)rect.y() / TILE_SIZE);
     const UInt32Point endTile(qMin<uint32>(ceil(rect.width() / TILE_SIZE) + startTile.x + 1, mapLayer.getSize().x),
         qMin<uint32>(ceil(rect.height() / TILE_SIZE) + startTile.y + 1, mapLayer.getSize().y));
@@ -60,14 +60,14 @@ void MapViewerScene::_drawTiles(QPainter *painter, const QRectF &rect, DATABASE:
         {
             for (uint32 y = startTile.y; y < endTile.y; ++y)
             {
-                auto &tileObj = mapLayer.getMapTile(UInt32Point3D(x, y, layerIndex), currentLayer);
+                auto& tileObj = mapLayer.getMapTile(UInt32Point3D(x, y, layerIndex), currentLayer);
                 if (tileObj.isEmpty())      // ignore tile ID 0; empty tile
                     continue;
                 // is no auto tile
                 if (tileObj.m_uiAutoTileSetID == 0)
                 {
                     if (auto pPixmap = GTileCache::get()->getItem(tileObj.m_uiTileID))
-                        painter->drawTiledPixmap(x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE, TILE_SIZE, *pPixmap);
+                        painter->drawTiledPixmap(x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE, TILE_SIZE,* pPixmap);
                 }
                 // autotiles
                 else
@@ -75,7 +75,7 @@ void MapViewerScene::_drawTiles(QPainter *painter, const QRectF &rect, DATABASE:
                     if (auto pAutoTile = GAutoTileCache::get()->getItem(tileObj.m_uiAutoTileSetID))
                     {
                         if (auto pPixmap = pAutoTile->getPixmap(static_cast<DATABASE::AUTO_TILE::AUTO_TILE_INDEX>(tileObj.m_uiTileID)))
-                            painter->drawTiledPixmap(x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE, TILE_SIZE, *pPixmap);
+                            painter->drawTiledPixmap(x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE, TILE_SIZE,* pPixmap);
                     }
                 }
             }
@@ -83,12 +83,12 @@ void MapViewerScene::_drawTiles(QPainter *painter, const QRectF &rect, DATABASE:
     }
 }
 
-void MapViewerScene::_drawGrid(QPainter *painter, const QRectF &rect)
+void MapViewerScene::_drawGrid(QPainter* painter, const QRectF& rect)
 {
-    const auto &mapLayer = m_MapData.getMapLayer();
-    const UInt32Point startTile(rect.x() <= 0 ? 0 : (uint32)rect.x() / TILE_SIZE * TILE_SIZE, rect.y() <= 0 ? 0 : (uint32)rect.y() / TILE_SIZE * TILE_SIZE);
-    const UInt32Point endTile(qMin<uint32>(ceil(rect.width() / TILE_SIZE) + startTile.x + 1, mapLayer.getSize().x) * TILE_SIZE,
-        qMin<uint32>(ceil(rect.height() / TILE_SIZE) + startTile.y + 1, mapLayer.getSize().y) * TILE_SIZE);
+    const auto& mapLayer = m_MapData.getMapLayer();
+    const UInt32Point startTile(rect.x() <= 0 ? 0 : (uint32)rect.x() / TILE_SIZE*  TILE_SIZE, rect.y() <= 0 ? 0 : (uint32)rect.y() / TILE_SIZE*  TILE_SIZE);
+    const UInt32Point endTile(qMin<uint32>(ceil(rect.width() / TILE_SIZE) + startTile.x + 1, mapLayer.getSize().x)*  TILE_SIZE,
+        qMin<uint32>(ceil(rect.height() / TILE_SIZE) + startTile.y + 1, mapLayer.getSize().y)*  TILE_SIZE);
     QVector<QPoint> pointPairs;
     for (uint32 x = startTile.x; x < endTile.x; x += TILE_SIZE)
     {
@@ -106,7 +106,7 @@ void MapViewerScene::_drawGrid(QPainter *painter, const QRectF &rect)
 /*#####
 # MapViewer
 #####*/
-MapViewer::MapViewer(uint32 mapID, const DATABASE::DatabaseMgr &DBMgr, QWidget *pParent) : QGraphicsView(pParent), m_DBMgr(DBMgr)
+MapViewer::MapViewer(uint32 mapID, const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent) : QGraphicsView(pParent), m_DBMgr(DBMgr)
 {
     setScene(new MapViewerScene(mapID, DBMgr));
     setFrameShape(QFrame::NoFrame);
@@ -149,7 +149,7 @@ void MapViewer::setZoom( uint32 zoom )
 
 uint32 MapViewer::getZoom() const
 {
-    return transform().m11() * 100;       // get zoom
+    return transform().m11()*  100;       // get zoom
 }
 
 void MapViewer::showGrid(bool show)
