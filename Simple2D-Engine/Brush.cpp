@@ -6,66 +6,76 @@ using namespace BRUSH;
 /*#####
 # Brush
 #####*/
-Brush::Brush(const DATABASE::DatabaseMgr& DBMgr, uint32 ID, SelectionType selectionType) : m_ID(ID), m_SelectionType(selectionType), m_DBMgr(DBMgr)
+Brush::Brush(const DATABASE::DatabaseMgr& DBMgr, MapLayer &mapLayer, uint32 ID, SelectionType selectionType, Layer layerType, uint32 layerIndex) :
+    m_ID(ID), m_SelectionType(selectionType), m_DBMgr(DBMgr), m_LayerIndex(layerIndex), m_LayerType(layerType), m_MapLayer(mapLayer)
 {
+    m_RevertInfo.m_LayerIndex = m_LayerIndex;
+    m_RevertInfo.m_LayerType = m_LayerType;
 }
 
 /*#####
 # BrushPen
 #####*/
-BrushPen::BrushPen(const DATABASE::DatabaseMgr& DBMgr, uint32 ID, SelectionType selectionType) : Brush(DBMgr, ID, selectionType)
+BrushPen::BrushPen(const DATABASE::DatabaseMgr& DBMgr, MapLayer &mapLayer, uint32 ID, SelectionType selectionType, Layer layerType, uint32 layerIndex) :
+    Brush(DBMgr, mapLayer, ID, selectionType, layerType, layerIndex)
 {
 }
 
-void BrushPen::_updateAutoTilesAround(MapLayer& mapLayer, const UInt32PointVector& positions, uint32 layerIndex, Layer layerType) const
+void BrushPen::_updateAutoTilesAround(const UInt32PointVector& positions)
 {
     // get tiles
     UInt32PointUSet positionChecks;
     for (auto current : positions)
-        mapLayer.checkAutoTiles(0, UInt32Point3D(current, layerIndex), positionChecks, layerType, MapLayer::FLAG_OTHER);
+        m_MapLayer.checkAutoTiles(0, UInt32Point3D(current, getLayerIndex()), positionChecks, getLayerType(), MapLayer::FLAG_OTHER);
 
     // update tiles
     for (auto& tilePos : positionChecks)
     {
-        UInt32Point3D pos(tilePos, layerIndex);
-        auto& tile = mapLayer.getMapTile(pos, layerType);
-        tile.m_uiTileID = DATABASE::AUTO_TILE::getAutoTileIndexForTileCheck(mapLayer.checkAutoTiles(tile.m_uiAutoTileSetID, pos, UInt32PointUSet(),
-            layerType, MapLayer::FLAG_NOTHING));
+        UInt32Point3D pos(tilePos, getLayerIndex());
+        auto& tile = m_MapLayer.getMapTile(pos, getLayerType());
+        tile.m_uiTileID = DATABASE::AUTO_TILE::getAutoTileIndexForTileCheck(m_MapLayer.checkAutoTiles(tile.m_uiAutoTileSetID, pos, UInt32PointUSet(),
+            getLayerType(), MapLayer::FLAG_NOTHING));
     }
 }
 
-void BrushPen::_drawTile( MapLayer &mapLayer, const UInt32Point3D &pos, Layer layerType ) const
+void BrushPen::_drawTile(const UInt32Point& pos)
 {
     // check center
     MapTile newMapTile(getID(), 0);
-    if (mapLayer.getMapTile(pos, layerType) == newMapTile)
+    UInt32Point3D currentPos(pos, getLayerIndex());
+    auto oldTile = m_MapLayer.getMapTile(currentPos, getLayerType());
+    if (oldTile == newMapTile)
         return;
 
-    mapLayer.setMapTile(pos, layerType, newMapTile);
+    // store old tile in revert info
+    m_RevertInfo.m_Tiles.push_back(std::make_pair(oldTile, pos));
+
+    m_MapLayer.setMapTile(currentPos, getLayerType(), newMapTile);
     UInt32PointVector positions;
     positions.push_back(pos);
-    _updateAutoTilesAround(mapLayer, positions, pos.z, layerType);
+    _updateAutoTilesAround(positions);
 }
 
-void BrushPen::_drawAutoTile( MapLayer &mapLayer, const UInt32Point3D &pos, Layer layerType ) const
+void BrushPen::_drawAutoTile(const UInt32Point& pos)
 {
+    UInt32Point3D currentPos(pos, getLayerIndex());
     // when same auto tile, return
-    auto& tile = mapLayer.getMapTile(pos, layerType);
+    auto& tile = m_MapLayer.getMapTile(currentPos, getLayerType());
     if (tile.m_uiAutoTileSetID == getID())
         return;
 
     // setup autotile
     tile.m_uiAutoTileSetID = getID();
-    tile.m_uiTileID = DATABASE::AUTO_TILE::getAutoTileIndexForTileCheck(mapLayer.checkAutoTiles(tile.m_uiAutoTileSetID, pos, UInt32PointUSet(),
-        layerType, MapLayer::FLAG_NOTHING));
+    tile.m_uiTileID = DATABASE::AUTO_TILE::getAutoTileIndexForTileCheck(m_MapLayer.checkAutoTiles(tile.m_uiAutoTileSetID, currentPos, UInt32PointUSet(),
+        getLayerType(), MapLayer::FLAG_NOTHING));
 
     // check around
     UInt32PointVector positions;
     positions.push_back(pos);
-    _updateAutoTilesAround(mapLayer, positions, pos.z, layerType);
+    _updateAutoTilesAround(positions);
 }
 
-void BrushPen::_drawTileSet( const UInt32Point3D &pos, MapLayer &mapLayer, Layer layerType ) const
+void BrushPen::_drawTileSet(const UInt32Point& pos)
 {
     if (auto pTileSet = m_DBMgr.getTileSetDatabase()->getOriginalPrototype(getID()))
     {
@@ -75,56 +85,57 @@ void BrushPen::_drawTileSet( const UInt32Point3D &pos, MapLayer &mapLayer, Layer
         {
             for (tilePos.y = 0; tilePos.y < pTileSet->getTileCount().y; ++tilePos.y)
             {
-                UInt32Point3D currentPos = pos + UInt32Point3D(tilePos);
-                if (!mapLayer.isInMap(currentPos))
+                UInt32Point currentPos = pos + tilePos;
+                if (!m_MapLayer.isInMap(currentPos))
                     continue;
 
                 // store position
                 positions.push_back(currentPos);
 
                 // setup tile
-                mapLayer.setMapTile(currentPos, layerType, MapTile(pTileSet->getTileID(tilePos), 0));
+                m_MapLayer.setMapTile(UInt32Point3D(currentPos, getLayerIndex()), getLayerType(), MapTile(pTileSet->getTileID(tilePos), 0));
             }
         }
 
         // update around
-        _updateAutoTilesAround(mapLayer, positions, pos.z, layerType);
+        _updateAutoTilesAround(positions);
     }
 }
 
-void BrushPen::draw(MapLayer& mapLayer, const UInt32Point3D& pos, Layer layerType) const
+void BrushPen::draw(const UInt32Point& pos)
 {
-    if (!mapLayer.isInMap(pos) || mapLayer.getLayerSize(layerType) <= pos.z)
+    if (!m_MapLayer.isInMap(pos) || m_MapLayer.getLayerSize(getLayerType()) <= getLayerIndex())
         return;
 
     switch (getSelectionType())
     {
-    case MAP::BRUSH::SelectionType::TILES: _drawTile(mapLayer, pos, layerType); break;
-    case MAP::BRUSH::SelectionType::AUTO_TILES: _drawAutoTile(mapLayer, pos, layerType); break;
-    case MAP::BRUSH::SelectionType::TILE_SETS: _drawTileSet(pos, mapLayer, layerType); break;
+    case MAP::BRUSH::SelectionType::TILES: _drawTile(pos); break;
+    case MAP::BRUSH::SelectionType::AUTO_TILES: _drawAutoTile(pos); break;
+    case MAP::BRUSH::SelectionType::TILE_SETS: _drawTileSet(pos); break;
     }
 }
 
 /*#####
 # BrushFill
 #####*/
-BrushFill::BrushFill(const DATABASE::DatabaseMgr& DBMgr, uint32 ID, SelectionType selectionType) : Brush(DBMgr, ID, selectionType)
+BrushFill::BrushFill(const DATABASE::DatabaseMgr& DBMgr, MapLayer &mapLayer, uint32 ID, SelectionType selectionType, Layer layerType, uint32 layerIndex)
+    : Brush(DBMgr, mapLayer, ID, selectionType, layerType, layerIndex)
 {
 }
 
-void BrushFill::draw(MapLayer& mapLayer, const UInt32Point3D& pos, Layer layerType) const
+void BrushFill::draw(const UInt32Point& pos)
 {
 }
 
 /*#####
 # BrushFactory
 #####*/
-BrushPtr BrushFactory::createBrush(const DATABASE::DatabaseMgr& DBMgr, const BrushInfo& info)
+BrushPtr BrushFactory::createBrush(const DATABASE::DatabaseMgr& DBMgr, MapLayer &mapLayer, const BrushInfo& info, Layer layerType, uint32 layerIndex)
 {
     switch (info.m_BrushType)
     {
-    case BrushType::PEN: return BrushPtr(new BrushPen(DBMgr, info.m_ID, info.m_SelectionType)); break;
-    case BrushType::FILL: return BrushPtr(new BrushPen(DBMgr, info.m_ID, info.m_SelectionType)); break;
+    case BrushType::PEN: return BrushPtr(new BrushPen(DBMgr, mapLayer, info.m_ID, info.m_SelectionType, layerType, layerIndex)); break;
+    case BrushType::FILL: return BrushPtr(new BrushPen(DBMgr, mapLayer, info.m_ID, info.m_SelectionType, layerType, layerIndex)); break;
     }
     throw std::bad_typeid("invalid brush type");
 }

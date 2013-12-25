@@ -51,7 +51,6 @@ class MapViewer : public QGraphicsView
 {
     Q_OBJECT
 private:
-    bool _getInfosFromEvent(QMouseEvent* pEvent, MAP::BRUSH::BrushInfo& info, QPoint &pos);
     void _drawTiles(const QPoint& pos);
 
 protected:

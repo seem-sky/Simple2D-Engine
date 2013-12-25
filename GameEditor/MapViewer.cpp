@@ -108,8 +108,7 @@ void MapViewerScene::_drawGrid(QPainter* painter, const QRectF& rect)
 /*#####
 # MapViewer
 #####*/
-MapViewer::MapViewer(uint32 mapID, const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent) : QGraphicsView(pParent), m_DBMgr(DBMgr), m_ActiveDraw(false),
-    m_LastMouseButton(Qt::NoButton)
+MapViewer::MapViewer(uint32 mapID, const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent) : QGraphicsView(pParent), m_DBMgr(DBMgr)
 {
     setScene(new MapViewerScene(mapID, DBMgr));
     setFrameShape(QFrame::NoFrame);
@@ -201,21 +200,6 @@ uint32 MapViewer::getMaximumLayerIndex(MAP::Layer layerType) const
     return 0;
 }
 
-bool MapViewer::_getInfosFromEvent(QMouseEvent* pEvent, MAP::BRUSH::BrushInfo& info, QPoint &pos)
-{
-    if (m_LastMouseButton == Qt::RightButton || m_LastMouseButton == Qt::LeftButton)
-    {
-        auto brush = BRUSH::BrushIndex::BRUSH_LEFT;
-        if (m_LastMouseButton == Qt::RightButton)
-            brush = BRUSH::BrushIndex::BRUSH_RIGHT;
-
-        pos = mapToScene(pEvent->pos()).toPoint();
-        emit requestBrushInfo(brush, info);
-        return true;
-    }
-    return false;
-}
-
 void MapViewer::mousePressEvent(QMouseEvent* pEvent)
 {
     QGraphicsView::mousePressEvent(pEvent);
@@ -229,7 +213,9 @@ void MapViewer::mousePressEvent(QMouseEvent* pEvent)
 
         MAP::BRUSH::BrushInfo brushInfo;
         emit requestBrushInfo(brush, brushInfo);
-        m_CurrentBrush = MAP::BRUSH::BrushFactory::createBrush(m_DBMgr, brushInfo);
+        if (auto pScene = dynamic_cast<MapViewerScene*>(scene()))
+            m_CurrentBrush = MAP::BRUSH::BrushFactory::createBrush(m_DBMgr, pScene->getMapData().getMapLayer(), brushInfo,
+                    pScene->getLayerType(), pScene->getLayerIndex());
 
         _drawTiles(mapToScene(pEvent->pos()).toPoint());
     }
@@ -245,7 +231,7 @@ void MapViewer::mouseMoveEvent(QMouseEvent* pEvent)
     if (!m_CurrentBrush)
         return;
 
-    _drawTiles(pos);
+    _drawTiles(mapToScene(pEvent->pos()).toPoint());
 }
 
 void MapViewer::_drawTiles(const QPoint& pos)
@@ -257,7 +243,6 @@ void MapViewer::_drawTiles(const QPoint& pos)
     if (!pScene)
         return;
 
-    UInt32Point3D tilePos(pos.x() / TILE_SIZE, pos.y() / TILE_SIZE, getLayerIndex()-1);
-    m_CurrentBrush->draw(pScene->getMapData().getMapLayer(), tilePos, getLayerType());
+    m_CurrentBrush->draw(UInt32Point(pos.x() / TILE_SIZE, pos.y() / TILE_SIZE));
     pScene->update();
 }
