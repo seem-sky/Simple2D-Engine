@@ -17,9 +17,10 @@ public:
 
     void clearSelection();
 
+    inline BRUSH::MapEditorWidgetBrush* getBrushWidget() const { return m_pWidgetBrush; }
+
 public slots:
     void onItemClicked(BRUSH::BrushIndex brush, AbstractPixmapWidget* pWidget = nullptr);
-    void onDrawRequested(BRUSH::BrushIndex brush, MAP::MapLayer& mapLayer, const UInt32Point& pos);
 
 private:
     std::array<AbstractPixmapWidget*, 2> m_SelectedItems;

@@ -74,6 +74,7 @@ void MapEditorModuleContent::onMapOpened(uint32 mapID)
         tabName = pMap->getName();
     m_pMapTabs->addTab(pNewMapViewer, tabName);
     m_pMapTabs->setCurrentWidget(pNewMapViewer);
+    emit registerTab(pNewMapViewer);
 }
 
 void MapEditorModuleContent::onMapClosed(uint32 mapID)

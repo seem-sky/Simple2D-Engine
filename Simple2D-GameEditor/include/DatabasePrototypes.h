@@ -641,15 +641,6 @@ namespace DATABASE
             void removeMapObject(uint32 GUID);
             inline const MapObjectContainer& getMapObjects() const { return m_Objects; }
 
-            enum RESULT_FLAG
-            {
-                FLAG_NOTHING    = 0x0,
-                FLAG_SAME       = 0x1,
-                FLAG_OTHER      = 0x2,
-                FLAG_ALL        = FLAG_SAME | FLAG_OTHER
-            };
-            uint32 checkAutoTiles(uint32 ID, UInt32Point3D pos, UInt32PointSet& result, Layer layer, uint32 resultFlag = FLAG_ALL);
-
             // XML IO
             void toXML(QXmlStreamWriter& writer) const;
             void fromXML(const QXmlStreamAttributes& attributes);

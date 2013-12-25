@@ -32,6 +32,15 @@ namespace MAP
         inline bool isValid() const { return m_uiTileID != MATH::maximum<DATABASE::TILE_INDEX>() &&
             m_uiAutoTileSetID != MATH::maximum<DATABASE::AUTO_TILE_INDEX>(); }
     };
+    static bool operator==(const MapTile& lhs, const MapTile& rhs)
+    {
+        return lhs.m_uiTileID == rhs.m_uiTileID && lhs.m_uiAutoTileSetID == rhs.m_uiAutoTileSetID;
+    }
+
+    static bool operator!=(const MapTile& lhs, const MapTile& rhs)
+    {
+        return !(lhs == rhs);
+    }
 
     typedef boost::multi_array<MapTile, 3> TileDataMultiarray3D;
     typedef std::vector<boost::dynamic_bitset<>> BitsetVector;
@@ -50,6 +59,15 @@ namespace MAP
         void setMapTile(const UInt32Point3D& at, Layer layer, MapTile tile);
 
         inline bool isInMap(const UInt32Point& at) const { return at.x < getSize().x && at.y < getSize().y; }
+
+        enum RESULT_FLAG
+        {
+            FLAG_NOTHING    = 0x0,
+            FLAG_SAME       = 0x1,
+            FLAG_OTHER      = 0x2,
+            FLAG_ALL        = FLAG_SAME | FLAG_OTHER
+        };
+        uint32 checkAutoTiles(uint32 uiID, const UInt32Point3D& pos, UInt32PointUSet& result, Layer layer, uint32 resultFlag);
 
     private:
         TileDataMultiarray3D m_BackgroundTiles;

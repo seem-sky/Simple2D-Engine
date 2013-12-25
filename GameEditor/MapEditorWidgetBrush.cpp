@@ -47,7 +47,7 @@ const MAP::BRUSH::BrushInfo& MapEditorWidgetBrush::getBrushInfo(BrushIndex brush
     return m_pBrushes.at(static_cast<uint32>(brush))->getBrushInfo();
 }
 
-void MapEditorWidgetBrush::_onSelectionChanged(BrushIndex brush, SelectionType selectionType, uint32 ID)
+void MapEditorWidgetBrush::onSelectionChanged(BrushIndex brush, SelectionType selectionType, uint32 ID)
 {
     if (auto pBrush = m_pBrushes.at(static_cast<uint32>(brush)))
     {
@@ -61,4 +61,9 @@ void MapEditorWidgetBrush::_onSelectionChanged(BrushIndex brush, SelectionType s
 void MapEditorWidgetBrush::setBrushInfo(BrushIndex brush, const MAP::BRUSH::BrushInfo& brushInfo)
 {
     m_pBrushes.at(static_cast<uint32>(brush))->setBrushInfo(brushInfo);
+}
+
+void MapEditorWidgetBrush::onBrushInfoRequested(BRUSH::BrushIndex brush, MAP::BRUSH::BrushInfo& brushInfo)
+{
+    brushInfo = m_pBrushes.at(static_cast<uint32>(brush))->getBrushInfo();
 }

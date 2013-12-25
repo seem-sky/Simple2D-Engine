@@ -3,6 +3,7 @@
 #include "GraphicsTextureItem.h"
 #include "AutoTileCache.h"
 #include "moc_MapViewer.h"
+#include <QtGui/QMouseEvent>
 
 /*#####
 # MapViewerScene
@@ -107,7 +108,8 @@ void MapViewerScene::_drawGrid(QPainter* painter, const QRectF& rect)
 /*#####
 # MapViewer
 #####*/
-MapViewer::MapViewer(uint32 mapID, const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent) : QGraphicsView(pParent), m_DBMgr(DBMgr)
+MapViewer::MapViewer(uint32 mapID, const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent) : QGraphicsView(pParent), m_DBMgr(DBMgr), m_ActiveDraw(false),
+    m_LastMouseButton(Qt::NoButton)
 {
     setScene(new MapViewerScene(mapID, DBMgr));
     setFrameShape(QFrame::NoFrame);
@@ -197,4 +199,79 @@ uint32 MapViewer::getMaximumLayerIndex(MAP::Layer layerType) const
     if (auto pScene = dynamic_cast<MapViewerScene*>(scene()))
         return pScene->getMapData().getMapLayer().getLayerSize(layerType);
     return 0;
+}
+
+bool MapViewer::_getInfosFromEvent(QMouseEvent* pEvent, MAP::BRUSH::BrushInfo& info, QPoint &pos)
+{
+    if (m_LastMouseButton == Qt::RightButton || m_LastMouseButton == Qt::LeftButton)
+    {
+        auto brush = BRUSH::BrushIndex::BRUSH_LEFT;
+        if (m_LastMouseButton == Qt::RightButton)
+            brush = BRUSH::BrushIndex::BRUSH_RIGHT;
+
+        pos = mapToScene(pEvent->pos()).toPoint();
+        emit requestBrushInfo(brush, info);
+        return true;
+    }
+    return false;
+}
+
+void MapViewer::mousePressEvent(QMouseEvent* pEvent)
+{
+    QGraphicsView::mousePressEvent(pEvent);
+
+    if (pEvent->button() == Qt::RightButton || pEvent->button() == Qt::LeftButton)
+    {
+        m_LastMouseButton = pEvent->button();
+        QPoint pos;
+        if (!_getInfosFromEvent(pEvent, m_LastBrushInfo, pos))
+            return;
+
+        m_ActiveDraw = true;
+        _drawTiles(pos);
+    }
+}
+
+void MapViewer::mouseReleaseEvent(QMouseEvent* pEvent)
+{
+    m_ActiveDraw = false;
+    m_LastMouseButton = Qt::NoButton;
+}
+
+void MapViewer::mouseMoveEvent(QMouseEvent* pEvent)
+{
+    if (!m_ActiveDraw)
+        return;
+
+    QPoint pos;
+    MAP::BRUSH::BrushInfo brushInfo;
+    if (!_getInfosFromEvent(pEvent, brushInfo, pos) || brushInfo != m_LastBrushInfo)
+    {
+        m_ActiveDraw = false;
+        m_LastMouseButton = Qt::NoButton;
+        return;
+    }
+
+    _drawTiles(pos);
+}
+
+void MapViewer::_drawTiles(const QPoint& pos)
+{
+    MAP::BRUSH::BrushPtr pBrush;
+    try
+    {
+        pBrush = MAP::BRUSH::BrushFactory::createBrush(m_DBMgr, m_LastBrushInfo);
+    }
+    catch (const std::bad_typeid &e)
+    {
+        return;
+    }
+
+    auto pScene = dynamic_cast<MapViewerScene*>(scene());
+    if (!pScene)
+        return;
+
+    UInt32Point3D tilePos(pos.x() / TILE_SIZE, pos.y() / TILE_SIZE, getLayerIndex()-1);
+    pBrush->draw(pScene->getMapData().getMapLayer(), tilePos, getLayerType());
+    pScene->update();
 }

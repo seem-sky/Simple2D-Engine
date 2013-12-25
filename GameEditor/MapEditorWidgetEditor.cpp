@@ -41,6 +41,6 @@ void MapEditorWidgetEditor::projectOpened()
 
 void MapEditorWidgetEditor::onRegisterTab(MapViewer* pTab)
 {
-    connect(pTab, SIGNAL(requestDraw(BRUSH::BrushIndex, MAP::MapLayer&, const UInt32Point&)),
-        m_pModuleTileSelection, SLOT(onDrawRequested(BRUSH::BrushIndex, MAP::MapLayer&, const UInt32Point&)));
+    connect(pTab, SIGNAL(requestBrushInfo(BRUSH::BrushIndex, MAP::BRUSH::BrushInfo&)),
+        m_pModuleTileSelection->getBrushWidget(), SLOT(onBrushInfoRequested(BRUSH::BrushIndex, MAP::BRUSH::BrushInfo&)));
 }

@@ -12,7 +12,7 @@ namespace SPLASH_SCREEN
         void mousePressEvent(QMouseEvent* pEvent);
 
     public:
-        CustomSplashScreen(const QPixmap&  pixmap);
+        CustomSplashScreen(const QPixmap& pixmap);
     };
 
     class SplashScreen : public PROGRAM::Application

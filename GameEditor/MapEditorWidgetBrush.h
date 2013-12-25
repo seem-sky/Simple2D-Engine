@@ -28,7 +28,8 @@ namespace BRUSH
         void setBrushInfo(BrushIndex brush, const MAP::BRUSH::BrushInfo& brushInfo);
 
     public slots:
-        void _onSelectionChanged(BRUSH::BrushIndex brush, MAP::BRUSH::SelectionType selectioType, uint32 ID);
+        void onSelectionChanged(BRUSH::BrushIndex brush, MAP::BRUSH::SelectionType selectioType, uint32 ID);
+        void onBrushInfoRequested(BRUSH::BrushIndex brush, MAP::BRUSH::BrushInfo& brushInfo);
 
     private:
         std::array<MapEditorModuleBrush*, 2> m_pBrushes;

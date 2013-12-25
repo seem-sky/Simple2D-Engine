@@ -7,6 +7,7 @@
 #include "AutoTile.h"
 #include <QtWidgets/QGraphicsItem>
 #include "MapData.h"
+#include "MapEditorWidgetBrush.h"
 
 /*#####
 # MapViewerScene
@@ -49,6 +50,15 @@ private:
 class MapViewer : public QGraphicsView
 {
     Q_OBJECT
+private:
+    bool _getInfosFromEvent(QMouseEvent* pEvent, MAP::BRUSH::BrushInfo& info, QPoint &pos);
+    void _drawTiles(const QPoint& pos);
+
+protected:
+    void mousePressEvent(QMouseEvent* pEvent);
+    void mouseReleaseEvent(QMouseEvent* pEvent);
+    void mouseMoveEvent(QMouseEvent* pEvent);
+
 public:
     MapViewer(uint32 mapID, const DATABASE::DatabaseMgr& DBMgr, QWidget* pWidget = nullptr);
 
@@ -69,10 +79,13 @@ public:
     uint32 getMapID() const;
 
 signals:
-    void requestDraw(BRUSH::BrushIndex brush, MAP::MapLayer& mapLayer, const UInt32Point& pos);
+    void requestBrushInfo(BRUSH::BrushIndex brush, MAP::BRUSH::BrushInfo& brushInfo);
 
 private:
     const DATABASE::DatabaseMgr& m_DBMgr;
+    MAP::BRUSH::BrushInfo m_LastBrushInfo;
+    bool m_ActiveDraw;
+    Qt::MouseButton m_LastMouseButton;
 };
 
 #endif

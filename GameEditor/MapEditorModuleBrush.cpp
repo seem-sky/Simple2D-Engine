@@ -78,7 +78,7 @@ void MapEditorModuleBrush::setBrushInfo(const BrushInfo& brushInfo)
 void MapEditorModuleBrush::_onBrushTypeChanged(const QString& text)
 {
     if (text == "fill")
-        m_BrushInfo.m_Type = BrushType::FILL;
+        m_BrushInfo.m_BrushType = BrushType::FILL;
     else
-        m_BrushInfo.m_Type = BrushType::PEN;
+        m_BrushInfo.m_BrushType = BrushType::PEN;
 }

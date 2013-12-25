@@ -21,11 +21,11 @@ MapEditorModuleTileSelection::MapEditorModuleTileSelection(const DATABASE::Datab
 
     // connect brush with tile selection
     connect(m_pModuleTiles, SIGNAL(selectionChanged(BRUSH::BrushIndex, MAP::BRUSH::SelectionType, uint32)),
-        m_pWidgetBrush, SLOT(_onSelectionChanged(BRUSH::BrushIndex, MAP::BRUSH::SelectionType, uint32)));
+        m_pWidgetBrush, SLOT(onSelectionChanged(BRUSH::BrushIndex, MAP::BRUSH::SelectionType, uint32)));
     connect(m_pModuleAutoTiles, SIGNAL(selectionChanged(BRUSH::BrushIndex, MAP::BRUSH::SelectionType, uint32)),
-        m_pWidgetBrush, SLOT(_onSelectionChanged(BRUSH::BrushIndex, MAP::BRUSH::SelectionType, uint32)));
+        m_pWidgetBrush, SLOT(onSelectionChanged(BRUSH::BrushIndex, MAP::BRUSH::SelectionType, uint32)));
     connect(m_pModuleTileSets, SIGNAL(selectionChanged(BRUSH::BrushIndex, MAP::BRUSH::SelectionType, uint32)),
-        m_pWidgetBrush, SLOT(_onSelectionChanged(BRUSH::BrushIndex, MAP::BRUSH::SelectionType, uint32)));
+        m_pWidgetBrush, SLOT(onSelectionChanged(BRUSH::BrushIndex, MAP::BRUSH::SelectionType, uint32)));
 
     connect(m_pModuleTiles, SIGNAL(itemClicked(BRUSH::BrushIndex, AbstractPixmapWidget*)),
         this, SLOT(onItemClicked(BRUSH::BrushIndex, AbstractPixmapWidget*)));
@@ -71,3 +71,4 @@ void MapEditorModuleTileSelection::onItemClicked(BRUSH::BrushIndex brush, Abstra
         pWidget->addSelection(selection);
     m_SelectedItems.at(static_cast<uint32>(brush)) = pWidget;
 }
+

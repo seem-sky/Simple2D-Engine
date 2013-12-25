@@ -124,12 +124,17 @@ void AbstractPrototypeTable::mousePressEvent(QMouseEvent* pEvent)
             if (pEvent->button() == Qt::RightButton)
                 brush = BRUSH::BrushIndex::BRUSH_RIGHT;
 
-            emit selectionChanged(brush, getType(), pWidget->getID());
-            emit itemClicked(brush, pWidget);
+            clickItem(brush, pWidget);
         }
     }
     else
         QTableWidget::mousePressEvent(pEvent);
+}
+
+void AbstractPrototypeTable::clickItem(BRUSH::BrushIndex brush, AbstractPixmapWidget* pItem)
+{
+    emit selectionChanged(brush, getType(), pItem->getID());
+    emit itemClicked(brush, pItem);
 }
 
 void AbstractPrototypeTable::showEvent(QShowEvent* pEvent)

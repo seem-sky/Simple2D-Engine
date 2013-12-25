@@ -42,6 +42,7 @@ private:
 protected:
     void showEvent(QShowEvent* pEvent);
     void mousePressEvent(QMouseEvent* pEvent);
+    void clickItem(BRUSH::BrushIndex brush, AbstractPixmapWidget* pItem);
 
 public:
     AbstractPrototypeTable(const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent = nullptr);

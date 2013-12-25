@@ -77,10 +77,10 @@ uint8 DatabaseWidgetTile::getDataPassability() const
 
 void DatabaseWidgetTile::setDataPassability(uint8 passability)
 {
-    m_Buttons.at(PASSABILITY_UP)->setChecked(passability&  DATABASE::TilePrototype::PASSABLE_UP);
-    m_Buttons.at(PASSABILITY_LEFT)->setChecked(passability&  DATABASE::TilePrototype::PASSABLE_LEFT);
-    m_Buttons.at(PASSABILITY_RIGHT)->setChecked(passability&  DATABASE::TilePrototype::PASSABLE_RIGHT);
-    m_Buttons.at(PASSABILITY_DOWN)->setChecked(passability&  DATABASE::TilePrototype::PASSABLE_DOWN);
+    m_Buttons.at(PASSABILITY_UP)->setChecked(passability & DATABASE::TilePrototype::PASSABLE_UP);
+    m_Buttons.at(PASSABILITY_LEFT)->setChecked(passability & DATABASE::TilePrototype::PASSABLE_LEFT);
+    m_Buttons.at(PASSABILITY_RIGHT)->setChecked(passability & DATABASE::TilePrototype::PASSABLE_RIGHT);
+    m_Buttons.at(PASSABILITY_DOWN)->setChecked(passability & DATABASE::TilePrototype::PASSABLE_DOWN);
     _updatePassabilityIcons();
 }
 

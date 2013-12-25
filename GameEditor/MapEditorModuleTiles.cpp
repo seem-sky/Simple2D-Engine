@@ -38,7 +38,16 @@ void MapEditorModuleTiles::_setup()
     setRowCount(std::ceil(double(pTileDB->getSize()+1)/tilesPerRow));
 
     for (uint32 i = 0; i <= pTileDB->getSize(); ++i)
-        setCellWidget(i/tilesPerRow, i%tilesPerRow, new TilePixmapWidget(i, this));
+    {
+        auto pItem = new TilePixmapWidget(i, this);
+        // click first item, so border will be visible
+        if (i == 0)
+        {
+            clickItem(BRUSH::BrushIndex::BRUSH_LEFT, pItem);
+            clickItem(BRUSH::BrushIndex::BRUSH_RIGHT, pItem);
+        }
+        setCellWidget(i/tilesPerRow, i%tilesPerRow, pItem);
+    }
 }
 
 /*#####
