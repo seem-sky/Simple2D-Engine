@@ -11,7 +11,7 @@ class MapEditorModuleContent : public QWidget, Ui_MapEditorModuleContent
 {
     Q_OBJECT
 public:
-    MapEditorModuleContent(DATABASE::DatabaseMgr &databaseMgr, QWidget *pWidget = nullptr);
+    MapEditorModuleContent(DATABASE::DatabaseMgr& databaseMgr, QWidget* pWidget = nullptr);
 
     MapViewer* getTab(uint32 mapID);
 
@@ -31,7 +31,7 @@ signals:
     void registerTab(MapViewer* pTab);
 
 private:
-    DATABASE::DatabaseMgr &m_DBMgr;
+    DATABASE::DatabaseMgr& m_DBMgr;
 };
 
 #endif

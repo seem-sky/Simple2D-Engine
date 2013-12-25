@@ -1,7 +1,7 @@
 #include "MapEditorModuleTileSelection.h"
 #include "moc_MapEditorModuleTileSelection.h"
 
-MapEditorModuleTileSelection::MapEditorModuleTileSelection(const DATABASE::DatabaseMgr &databaseMgr, QWidget *pParent) : QTabWidget(pParent),
+MapEditorModuleTileSelection::MapEditorModuleTileSelection(const DATABASE::DatabaseMgr& databaseMgr, QWidget* pParent) : QTabWidget(pParent),
     m_DatabaseMgr(databaseMgr), m_pWidgetBrush(new BRUSH::MapEditorWidgetBrush(m_DatabaseMgr, this)),
     // tabs
     m_pModuleTiles(new MapEditorModuleTiles(m_DatabaseMgr, this)),
@@ -57,7 +57,7 @@ void MapEditorModuleTileSelection::setup()
     m_pModuleTileSets->setTileDatabase(m_DatabaseMgr.getTileDatabase());
 }
 
-void MapEditorModuleTileSelection::onItemClicked(BRUSH::BrushIndex brush, AbstractPixmapWidget *pWidget)
+void MapEditorModuleTileSelection::onItemClicked(BRUSH::BrushIndex brush, AbstractPixmapWidget* pWidget)
 {
     // move selection from previosu selected widget to new one;
     // items in m_pModuleTileSets doesn´t have a AbstractPixmapWidget, so only store nullptr

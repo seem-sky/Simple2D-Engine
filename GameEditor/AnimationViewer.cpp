@@ -81,12 +81,12 @@ void AnimationViewerScene::_drawGrid(QPainter* pPainter, const QRectF& rect)
     // draw 0 lines
     QPainterPath painterPath;
     pPainter->setPen(QColor(255,0,0));
-    if (rect.y() <= 0& & rect.y() + rect.height() >= 0)
+    if (rect.y() <= 0 && rect.y() + rect.height() >= 0)
     {
         painterPath.moveTo(rect.x(), 0);
         painterPath.lineTo(rect.x()+rect.width(), 0);
     }
-    if (rect.x() <= 0& & rect.x() + rect.width() >= 0)
+    if (rect.x() <= 0 && rect.x() + rect.width() >= 0)
     {
         painterPath.moveTo(0, rect.y());
         painterPath.lineTo(0, rect.y()+rect.height());
@@ -223,7 +223,7 @@ void AnimationViewer::_onFrameExpired()
 
 void AnimationViewer::_setupTimer()
 {
-    m_AnimationTimer.start(m_pAnimation& & m_uiCurrentFrameIndex < m_pAnimation->size() ? m_pAnimation->at(m_uiCurrentFrameIndex).getTimeInMsec() : 1000);
+    m_AnimationTimer.start(m_pAnimation && m_uiCurrentFrameIndex < m_pAnimation->size() ? m_pAnimation->at(m_uiCurrentFrameIndex).getTimeInMsec() : 1000);
 }
 
 void AnimationViewer::setMode(Mode mode)

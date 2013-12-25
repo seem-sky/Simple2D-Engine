@@ -17,7 +17,7 @@ using namespace GRID;
 //
 //bool MapGrid::_isValidGrid(const UInt32Point3D& grid)
 //{
-//    if (grid.x < m_GridSize.x& & grid.y < m_GridSize.y& & grid.z < m_GridSize.z)
+//    if (grid.x < m_GridSize.x && grid.y < m_GridSize.y && grid.z < m_GridSize.z)
 //        return true;
 //    return false;
 //}
@@ -29,7 +29,7 @@ using namespace GRID;
 //
 void MapGrid::addObject(OBJECT::WorldObject* pObject)
 {
-    if (pObject& & !m_WorldObjects.hasValidItem(pObject->getGUID()))
+    if (pObject && !m_WorldObjects.hasValidItem(pObject->getGUID()))
         m_WorldObjects.setItem(pObject->getGUID(), pObject);
 }
 

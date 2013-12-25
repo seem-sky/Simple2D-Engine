@@ -19,7 +19,7 @@ void MapLayer::resize(const UInt32Point& size, uint8 uiForegroundLayerSize, uint
 
 const MapTile& MapLayer::getMapTile(const UInt32Point3D& at, Layer layer) const
 {
-    if (isInMap(at)& & getLayerSize(layer) > at.z)
+    if (isInMap(at) && getLayerSize(layer) > at.z)
     {
         switch (layer)
         {
@@ -37,7 +37,7 @@ MapTile& MapLayer::getMapTile(const UInt32Point3D& at, Layer layer)
 
 void MapLayer::setMapTile(const UInt32Point3D& at, Layer layer, MapTile tile)
 {
-    if (isInMap(at)& & getLayerSize(layer) > at.z)
+    if (isInMap(at) && getLayerSize(layer) > at.z)
     {
         switch (layer)
         {

@@ -24,9 +24,6 @@ MapEditorWidgetEditor::MapEditorWidgetEditor(DATABASE::DatabaseMgr& databaseMgr,
     connect(m_pModuleMapTree, SIGNAL(openMap(uint32)), m_pModuleContent, SLOT(onMapOpened(uint32)));
     connect(m_pModuleMapTree, SIGNAL(editMap(uint32)), m_pModuleContent, SLOT(onMapEdited(uint32)));
 
-    connect(this, SIGNAL(requestDraw(BRUSH::BrushIndex, MAP::MapLayer&, const UInt32Point&)),
-        m_pModuleTileSelection, SLOT(onDrawRequested(BRUSH::BrushIndex, MAP::MapLayer&, const UInt32Point&)));
-
     connect(m_pModuleContent, SIGNAL(registerTab(MapViewer*)), this, SLOT(onRegisterTab(MapViewer*)));
 }
 
@@ -40,4 +37,10 @@ void MapEditorWidgetEditor::projectOpened()
 {
     setup();
     m_pModuleMapTree->setDatabase(m_DatabaseMgr.getMapDatabase());
+}
+
+void MapEditorWidgetEditor::onRegisterTab(MapViewer* pTab)
+{
+    connect(pTab, SIGNAL(requestDraw(BRUSH::BrushIndex, MAP::MapLayer&, const UInt32Point&)),
+        m_pModuleTileSelection, SLOT(onDrawRequested(BRUSH::BrushIndex, MAP::MapLayer&, const UInt32Point&)));
 }

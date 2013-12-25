@@ -102,7 +102,7 @@ QPixmap TILE_SET::createTileSetPixmap(const QString& path, const TileSetPrototyp
         {
             auto pTileProto = pTileDB->getOriginalPrototype(pSet->getTileID(pos));
             QPixmap tempPixmap;
-            if (pTileProto& & createPixmapFromTexturePrototype(path, pTileProto, tempPixmap))
+            if (pTileProto && createPixmapFromTexturePrototype(path, pTileProto, tempPixmap))
                 painter.drawTiledPixmap(pos.x*TILE_SIZE, pos.y*TILE_SIZE, TILE_SIZE, TILE_SIZE, tempPixmap);
         }
     }

@@ -48,6 +48,7 @@ private:
 #####*/
 class MapViewer : public QGraphicsView
 {
+    Q_OBJECT
 public:
     MapViewer(uint32 mapID, const DATABASE::DatabaseMgr& DBMgr, QWidget* pWidget = nullptr);
 
@@ -66,6 +67,9 @@ public:
     MAP::Layer getLayerType() const;
 
     uint32 getMapID() const;
+
+signals:
+    void requestDraw(BRUSH::BrushIndex brush, MAP::MapLayer& mapLayer, const UInt32Point& pos);
 
 private:
     const DATABASE::DatabaseMgr& m_DBMgr;

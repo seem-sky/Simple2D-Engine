@@ -52,7 +52,7 @@ public:
 
     QVariant data(const QModelIndex& index, int role) const
     {
-        if(m_pDatabase& & index.isValid())
+        if(m_pDatabase && index.isValid())
         {
             switch (role)
             {
@@ -73,7 +73,7 @@ public:
 
     QVariant headerData(int section, Qt::Orientation orientation, int role) const
     {
-        if(role == Qt::DisplayRole& & orientation == Qt::Horizontal)
+        if(role == Qt::DisplayRole && orientation == Qt::Horizontal)
         {
             switch (section)
             {
@@ -157,7 +157,7 @@ public:
 
     QVariant data(const QModelIndex& index, int role) const
     {
-        if(index.isValid()& & (role == Qt::ForegroundRole))
+        if(index.isValid() && (role == Qt::ForegroundRole))
         {
             if (index.row() <= 8)
                 return QVariant(QColor(Qt::blue));

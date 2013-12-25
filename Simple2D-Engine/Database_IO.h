@@ -22,7 +22,7 @@ namespace DATABASE
                     return;
 
                 QXmlStreamReader reader(&file);
-                while(!reader.atEnd()& & !reader.hasError())
+                while(!reader.atEnd() && !reader.hasError())
                 {
                     switch (reader.readNext())
                     {
@@ -48,7 +48,7 @@ namespace DATABASE
                                         break;
                                 }
                                 reader.readNext();
-                            } while (uiStartCounter& & !reader.hasError()& & !reader.atEnd());
+                            } while (uiStartCounter && !reader.hasError() && !reader.atEnd());
 
                             // store prototype
                             if (pProto->getID())

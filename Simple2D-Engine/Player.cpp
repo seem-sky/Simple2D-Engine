@@ -11,7 +11,7 @@ void Player::update(uint32 uiDiff)
     {
         if (pair.second.m_uiRepeatTimer < pair.second.m_uiRepeatTime)
             pair.second.m_uiRepeatTimer += uiDiff;
-        if (KEY::GlobalKeyboard::get()->isKeyPressed(pair.first)& & pair.second.m_uiRepeatTimer >= pair.second.m_uiRepeatTime)
+        if (KEY::GlobalKeyboard::get()->isKeyPressed(pair.first) && pair.second.m_uiRepeatTimer >= pair.second.m_uiRepeatTime)
         {
             pair.second.m_Function();
             pair.second.m_uiRepeatTimer = 0;

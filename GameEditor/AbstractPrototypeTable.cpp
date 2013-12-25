@@ -53,7 +53,7 @@ void AbstractPixmapWidget::drawSelection()
     pen.setCapStyle(Qt::RoundCap);
     pen.setJoinStyle(Qt::RoundJoin);
     painter.setPen(pen);
-    if (m_Selection&  SELECTION_RIGHT& & m_Selection&  SELECTION_LEFT)
+    if (m_Selection&  SELECTION_RIGHT && m_Selection&  SELECTION_LEFT)
     {
         // draw left
         QPen pen = painter.pen();
@@ -135,7 +135,7 @@ void AbstractPrototypeTable::mousePressEvent(QMouseEvent* pEvent)
 void AbstractPrototypeTable::showEvent(QShowEvent* pEvent)
 {
     // if has no data, reload it
-    if (!columnCount()& & !rowCount())
+    if (!columnCount() && !rowCount())
         _setup();
 }
 

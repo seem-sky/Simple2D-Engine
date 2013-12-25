@@ -401,7 +401,7 @@ namespace DATABASE
             inline uint32 getTimeInMsec() const { return m_uiMsecTime; }
             inline void setTimeInMsec(uint32 time) { m_uiMsecTime = time; }
 
-            inline bool isEmpty() const { return m_Sprites.empty()& & !m_uiMsecTime; }
+            inline bool isEmpty() const { return m_Sprites.empty() && !m_uiMsecTime; }
 
         private:
             Int32Point m_FrameOffset;
@@ -587,7 +587,7 @@ namespace DATABASE
         {
             MapObject() : m_Type(DATABASE::MAP_OBJECT::TYPE_WORLDOBJECT), m_ObjectID(0), m_GUID(0), m_Direction(DIRECTION_DOWN), m_Layer(LAYER_MIDDLE) {}
 
-            bool isEmpty() const { return !m_GUID& & !m_ObjectID; }
+            bool isEmpty() const { return !m_GUID && !m_ObjectID; }
 
             DATABASE::MAP_OBJECT::ObjectType m_Type;
             uint32 m_ObjectID;

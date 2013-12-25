@@ -94,7 +94,7 @@ void MapItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, Q
     if (!QPixmapCache::find(m_PixmapIdentify, pixmap))
     {
         // generate new pixmap
-        if (m_pCurrentAnimation& & m_DBMgr.getSpriteDatabase())
+        if (m_pCurrentAnimation && m_DBMgr.getSpriteDatabase())
         {
             ObjectAnimationWidget widget(m_pCurrentAnimation, m_DBMgr.getSpriteDatabase(), m_uiCurrentFrame);
             QRect boundingRect = widget.scene()->itemsBoundingRect().toRect();

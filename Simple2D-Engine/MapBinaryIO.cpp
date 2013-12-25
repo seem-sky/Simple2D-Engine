@@ -145,7 +145,7 @@ void OUTPUT::MapBinaryWriter::_writeObjects(QDataStream& out, const DATABASE::MA
     for (uint32 i = 1; i <= pMap->getMapObjectCount(); ++i)
     {
         auto pObj = pMap->getMapObject(i);
-        if (pObj& & !pObj->isEmpty())
+        if (pObj && !pObj->isEmpty())
             out << pObj->m_GUID << pObj->m_ObjectID << pObj->m_Type << pObj->m_Position.x << pObj->m_Position.y << pObj->m_Layer << pObj->m_GUID;
     }
 }

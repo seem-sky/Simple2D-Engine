@@ -47,7 +47,7 @@ void MapEditorModuleTileSets::mousePressEvent(QMouseEvent* pEvent)
     DatabaseModuleDragList::mousePressEvent(pEvent);
 
     auto item = indexAt(pEvent->pos());
-    if (item.isValid()& & (pEvent->button() == Qt::RightButton || pEvent->button() == Qt::LeftButton))
+    if (item.isValid() && (pEvent->button() == Qt::RightButton || pEvent->button() == Qt::LeftButton))
     {
         auto brush = BRUSH::BrushIndex::BRUSH_LEFT;
         if (pEvent->button() == Qt::RightButton)

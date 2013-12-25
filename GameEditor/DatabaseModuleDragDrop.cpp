@@ -23,7 +23,7 @@ void DatabaseModuleDragList::setShowTooltip(bool show)
     if (m_ShowTooltip == show)
         return;
     // do not show
-    if (m_ShowTooltip& & !show)
+    if (m_ShowTooltip && !show)
     {
         this->removeEventFilter(this);
         setMouseTracking(false);
@@ -32,7 +32,7 @@ void DatabaseModuleDragList::setShowTooltip(bool show)
         disconnect(this, SIGNAL(entered(const QModelIndex&)), this, SLOT(_onItemEntered(const QModelIndex&)));
     }
     // show
-    else if (!m_ShowTooltip& & show)
+    else if (!m_ShowTooltip && show)
     {
         this->installEventFilter(this);
         setMouseTracking(true);

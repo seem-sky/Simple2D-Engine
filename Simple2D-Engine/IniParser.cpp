@@ -37,7 +37,7 @@ bool IniParser::readFile(const QString& fileName)
         {
             pos = dataLine.indexOf('[');
             int32 endPos = dataLine.indexOf(']');
-            if (pos != -1& & endPos != -1& & pos+1 < endPos)
+            if (pos != -1 && endPos != -1 && pos+1 < endPos)
             {
                 // store dataLine
                 if (!newData.empty())
@@ -79,7 +79,7 @@ void IniParser::getAllStrings(const QString& key, const QString& sector, StringV
     if (sectorItr == m_FileData.end())
         return;
 
-    for (DataMultimap::const_iterator keyItr = sectorItr->second.find(key); keyItr != sectorItr->second.end()& & keyItr->first == key; ++keyItr)
+    for (DataMultimap::const_iterator keyItr = sectorItr->second.find(key); keyItr != sectorItr->second.end() && keyItr->first == key; ++keyItr)
         data.push_back(keyItr->second);
 }
 

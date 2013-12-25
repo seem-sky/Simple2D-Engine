@@ -18,9 +18,6 @@ public:
 public slots:
     void onRegisterTab(MapViewer* pTab);
 
-signals:
-    void requestDraw(BRUSH::BrushIndex brush, MAP::MapLayer& mapLayer, const UInt32Point& pos);
-
 private:
     DATABASE::DatabaseMgr& m_DatabaseMgr;
 

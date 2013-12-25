@@ -339,6 +339,9 @@
     <moc_header Include="MapEditorModuleBrush.h">
       <Filter>Map Editor\Modules\Brush</Filter>
     </moc_header>
+    <moc_header Include="MapViewer.h">
+      <Filter>Map Editor\Modules\Content</Filter>
+    </moc_header>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -380,9 +383,6 @@
     </ClInclude>
     <ClInclude Include="GraphicsTextureItem.h">
       <Filter>EditorCore\GraphicsSpriteItem</Filter>
-    </ClInclude>
-    <ClInclude Include="MapViewer.h">
-      <Filter>Map Editor\Modules\Content</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

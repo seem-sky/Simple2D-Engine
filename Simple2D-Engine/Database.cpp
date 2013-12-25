@@ -7,7 +7,7 @@ using namespace DATABASE;
 //{
 //    for (uint32 i = 0; i < getSize(); ++i)
 //    {
-//        if (m_Items.at(i)& & m_Items.at(i)->getID() != 0)
+//        if (m_Items.at(i) && m_Items.at(i)->getID() != 0)
 //            result.push_back(std::make_pair(m_Items.at(i)->getID(), m_Items.at(i)->getName()));
 //    }
 //}
@@ -17,7 +17,7 @@ using namespace DATABASE;
 //    UInt32StringPairVector result;
 //    for (uint32 i = 0; i < getSize(); ++i)
 //    {
-//        if (m_Items.at(i)& & m_Items.at(i)->getID() != 0)
+//        if (m_Items.at(i) && m_Items.at(i)->getID() != 0)
 //            result.push_back(std::make_pair(m_Items.at(i)->getID(), m_Items.at(i)->getName()));
 //    }
 //    return result;
@@ -175,7 +175,7 @@ void AnimationTypeDatabase::clear()
 
 //void AnimationTypeDatabase::setPrototype(AnimationTypePrototype* pItem)
 //{
-//    if (pItem& & pItem->getID() > MAP_OBJECT::MIN_DYNAMIC_OBJECT_POSE)
+//    if (pItem && pItem->getID() > MAP_OBJECT::MIN_DYNAMIC_OBJECT_POSE)
 //        Database::setPrototype(pItem);
 //}
 

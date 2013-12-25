@@ -12,7 +12,7 @@ void DatabaseWidgetLocalisation::setupWidgetsFromPrototype(const DATABASE::Proto
 {
     if (auto pProto = dynamic_cast<const LocalisationPrototype*>(pPrototype))
     {
-        for (uint32 i = 0; i < pProto->getLocalsCount()& & i < LOCALISATION_COUNT; ++i)
+        for (uint32 i = 0; i < pProto->getLocalsCount() && i < LOCALISATION_COUNT; ++i)
             m_pModuleLocalisation->setLocalisation(i, pProto->getLocalisation(i));
     }
     DatabaseWidgetBase::setupWidgetsFromPrototype(pPrototype);

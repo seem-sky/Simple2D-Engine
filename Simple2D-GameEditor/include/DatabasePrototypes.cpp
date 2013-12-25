@@ -170,7 +170,7 @@ namespace DATABASE
 
     uint32 TILE_SET::TileSetPrototype::getTileID(UInt32Point pos) const
     {
-        if (pos.x < m_Size.x& & pos.y < m_Size.y)
+        if (pos.x < m_Size.x && pos.y < m_Size.y)
             return m_Tiles[pos.x][pos.y];
         return 0;
     }

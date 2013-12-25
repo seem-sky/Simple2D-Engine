@@ -2,6 +2,7 @@
 #include "QtGlobal.h"
 #include "GraphicsTextureItem.h"
 #include "AutoTileCache.h"
+#include "moc_MapViewer.h"
 
 /*#####
 # MapViewerScene

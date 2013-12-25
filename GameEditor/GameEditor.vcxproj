@@ -299,7 +299,7 @@
     <moc_header Include="MapEditorModuleTileSelection.h" />
     <moc_header Include="MapEditorModuleTileSets.h" />
     <moc_header Include="MapEditorWidgetBrush.h" />
-    <ClInclude Include="MapViewer.h" />
+    <moc_header Include="MapViewer.h" />
     <ClInclude Include="TexturePrototypeFrame.h" />
     <moc_header Include="DatabaseDialogResize.h" />
     <moc_header Include="AnimationViewer.h" />

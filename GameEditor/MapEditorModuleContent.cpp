@@ -2,7 +2,7 @@
 #include "moc_MapEditorModuleContent.h"
 #include "Project.h"
 
-MapEditorModuleContent::MapEditorModuleContent(DATABASE::DatabaseMgr &databaseMgr, QWidget *pWidget) : QWidget(pWidget), Ui_MapEditorModuleContent(),
+MapEditorModuleContent::MapEditorModuleContent(DATABASE::DatabaseMgr& databaseMgr, QWidget* pWidget) : QWidget(pWidget), Ui_MapEditorModuleContent(),
     m_DBMgr(databaseMgr)
 {
     setupUi(this);

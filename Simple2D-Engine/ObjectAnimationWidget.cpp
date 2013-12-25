@@ -23,7 +23,7 @@ void ObjectAnimationWidget::_drawFrame(const DATABASE::ANIMATION::Frame& frame)
     //{
     //    QPixmap pixmap;
     //    auto pSprite = m_pSpriteDB->getOriginalPrototype(sprite.m_uiSpriteID);
-    //    if (pSprite& & createPixmapFromTexturePrototype("projects/untitled/", pSprite, pixmap))
+    //    if (pSprite && createPixmapFromTexturePrototype("projects/untitled/", pSprite, pixmap))
     //    {
     //        auto* pItem = scene()->addPixmap(pixmap);
     //        pItem->setPos(QPoint(sprite.m_Pos.x, sprite.m_Pos.y));

@@ -40,7 +40,7 @@ MainWindow::MainWindow(QMainWindow* pParent) : QMainWindow(pParent), Ui_MainWind
     Config::get()->loadConfig();
     //move(Config::get()->getMainWindowPos().x, Config::get()->getMainWindowPos().y);
     //QSize newSize = QSize(Config::get()->getMainWindowSize().x, Config::get()->getMainWindowSize().y);
-    //if (newSize.width() >= minimumWidth()& & newSize.height() >= minimumHeight())
+    //if (newSize.width() >= minimumWidth() && newSize.height() >= minimumHeight())
     //    resize(newSize);
     if (!Config::get()->getProjectDirectory().isEmpty())
         _loadProject(Config::get()->getProjectDirectory());

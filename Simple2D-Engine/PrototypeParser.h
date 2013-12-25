@@ -70,7 +70,7 @@ namespace DATABASE
             //            break;
             //    }
             //    reader.readNext();
-            //} while (uiStartCounter& & !reader.hasError()& & !reader.atEnd());
+            //} while (uiStartCounter && !reader.hasError() && !reader.atEnd());
         }
     };
 }

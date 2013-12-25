@@ -97,7 +97,7 @@ GameViewer::GameViewer(QWidget* pParent) : QGraphicsView(pParent)
 
 bool GameViewer::eventFilter(QObject* pObj, QEvent* pEvent)
 {
-    if(pObj == viewport()& & pEvent->type() == QEvent::Wheel)
+    if(pObj == viewport() && pEvent->type() == QEvent::Wheel)
         return true;
     return QWidget::eventFilter(pObj, pEvent);
 }

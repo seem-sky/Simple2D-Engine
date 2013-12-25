@@ -262,7 +262,7 @@ void MAP_OBJECT::WorldObjectPrototype::toXML(QXmlStreamWriter& writer) const
     for (uint32 i = 1; i <= getAnimationCount(); ++i)
     {
         MAP_OBJECT::AnimationInfo animationInfo = getAnimationInfo(i);
-        if (animationInfo.m_uiAnimationID == 0& & animationInfo.m_uiAnimationTypeID == 0)
+        if (animationInfo.m_uiAnimationID == 0 && animationInfo.m_uiAnimationTypeID == 0)
             continue;
         writer.writeEmptyElement("animation");
         writer.writeAttribute("entry", QString::number(i));

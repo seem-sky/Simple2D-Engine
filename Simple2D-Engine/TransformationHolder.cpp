@@ -61,7 +61,7 @@ void TransformationHolder::updateTransformations(uint32 uiDiff)
     // update transformations
     for (TransformationArray::iterator itr = m_Transformations.begin(); itr != m_Transformations.end(); ++itr)
     {
-        if (!itr->empty()& & itr->front()->update(uiDiff) == DONE)
+        if (!itr->empty() && itr->front()->update(uiDiff) == DONE)
             itr->pop_front();
     }
 }
