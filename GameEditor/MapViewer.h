@@ -83,9 +83,8 @@ signals:
 
 private:
     const DATABASE::DatabaseMgr& m_DBMgr;
-    MAP::BRUSH::BrushInfo m_LastBrushInfo;
-    bool m_ActiveDraw;
-    Qt::MouseButton m_LastMouseButton;
+
+    MAP::BRUSH::BrushPtr m_CurrentBrush;
 };
 
 #endif
