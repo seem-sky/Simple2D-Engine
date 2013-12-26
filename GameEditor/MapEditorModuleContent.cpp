@@ -14,8 +14,18 @@ MapEditorModuleContent::MapEditorModuleContent(DATABASE::DatabaseMgr& databaseMg
     connect(m_pLayerForeground, SIGNAL(clicked()), this, SLOT(_onLayerTypeChanged()));
     connect(m_pShowGrid, SIGNAL(stateChanged(int)), this, SLOT(_onGridShowChanged(int)));
     connect(m_pRevert, SIGNAL(clicked()), this, SLOT(_onRevertPressed()));
+    connect(m_pMapTabs, (SIGNAL(tabCloseRequested(int))), this, SLOT(_onTabCloseRequested(int)));
 
     _onZoomChanged(m_pZoom->value());
+}
+
+void MapEditorModuleContent::_onTabCloseRequested(int index)
+{
+    if (auto pTab = dynamic_cast<MapViewer*>(m_pMapTabs->widget(index)))
+    {
+        m_pMapTabs->removeTab(index);
+        pTab->deleteLater();
+    }
 }
 
 void MapEditorModuleContent::_onRevertPressed()

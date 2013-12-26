@@ -24,6 +24,7 @@ private slots:
     void _onRevertPressed();
 
     void _onMapChanged(MapViewer* pMapViewer);
+    void _onTabCloseRequested(int index);
 
 public slots:
     void onMapOpened(uint32 mapID);
