@@ -87,13 +87,11 @@ namespace MAP
             friend class BrushFactory;
 
         private:
-            void _updateAutoTilesAround(const UInt32PointVector& positions);
-
-            void _calculateFillArea(const UInt32Point &center);
-
             void _drawTile(const UInt32Point& pos);
             void _drawAutoTile(const UInt32Point& pos);
             void _drawTileSet(const UInt32Point& pos);
+            
+            bool _getPosition(uint32 i, UInt32Point3D &checkPos) const;
 
         protected:
             BrushFill(const DATABASE::DatabaseMgr& DBMgr, MapLayer &mapLayer, uint32 ID, SelectionType selectionType, Layer layerType, uint32 layerIndex);

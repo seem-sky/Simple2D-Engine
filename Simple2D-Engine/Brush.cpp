@@ -148,56 +148,84 @@ BrushFill::BrushFill(const DATABASE::DatabaseMgr& DBMgr, MapLayer &mapLayer, uin
 {
 }
 
-void BrushFill::_updateAutoTilesAround(const UInt32PointVector& positions)
+bool BrushFill::_getPosition(uint32 i, UInt32Point3D &checkPos) const
 {
+    switch (i)
+    {
+    case 0: // top
+        if (!checkPos.y)
+            return false;
+        --checkPos.y;
+        break;
+
+    case 1: // left
+        if (!checkPos.x)
+            return false;
+        --checkPos.x;
+        break;
+
+    case 2: // right
+        if (checkPos.x+1 >= m_MapLayer.getSize().x)
+            return false;
+        ++checkPos.x;
+        break;
+
+    case 3: // bottom
+        if (checkPos.y+1 >= m_MapLayer.getSize().y)
+            return false;
+        ++checkPos.y;
+        break;
+    }
+    return true;
 }
 
-void BrushFill::_drawTile(const UInt32Point& pos)
+void BrushFill::_drawTile(const UInt32Point& center)
 {
-    //// store old tile in revert info
-    //m_RevertInfo.m_Tiles.insert(std::make_pair(pos, oldTile));
+    BitsetVector checkPositions(m_MapLayer.getSize().y, boost::dynamic_bitset<>(m_MapLayer.getSize().x));
 
-    //m_MapLayer.setMapTile(currentPos, getLayerType(), newMapTile);
-    //UInt32PointVector positions;
-    //positions.push_back(pos);
-    //_updateAutoTilesAround(positions);
-}
-
-void BrushFill::_drawAutoTile(const UInt32Point& pos)
-{
-}
-
-void BrushFill::_drawTileSet(const UInt32Point& pos)
-{
-}
-
-void BrushFill::draw(const UInt32Point& pos)
-{
-    if (!m_MapLayer.isInMap(pos) || m_MapLayer.getLayerSize(getLayerType()) <= getLayerIndex())
+    MAP::MapTile startTile(m_MapLayer.getMapTile(UInt32Point3D(center, getLayerIndex()), getLayerType()));
+    if (!startTile.isValid())
         return;
 
-    switch (getSelectionType())
-    {
-    case MAP::BRUSH::SelectionType::TILES:
-        // is same tile?
-        if (m_MapLayer.getMapTile(UInt32Point3D(pos, getLayerIndex()), getLayerType()) == MapTile(getID(), 0))
-            return;
-        break;
-    case MAP::BRUSH::SelectionType::AUTO_TILES:
-        {
-            // is same tile?
-            const auto& tile = m_MapLayer.getMapTile(UInt32Point3D(pos, getLayerIndex()), getLayerType());
-            if (tile.isAutoTile() && tile.m_uiAutoTileSetID == getID())
-                return;
-            break;
-        }
-    case MAP::BRUSH::SelectionType::TILE_SETS: _drawTileSet(pos); break;
-    }
+    // store center in open points
+    UInt32PointList openPoints;
+    openPoints.push_back(center);
+    checkPositions.at(center.x)[center.y] = true;
 
-    _calculateFillArea(pos);
+    while (!openPoints.empty())
+    {
+        UInt32Point3D openPointPos(openPoints.front(), getLayerIndex());
+        openPoints.pop_front();
+
+        // store positions around
+        for (uint32 i = 0; i < 4; ++i)
+        {
+            // set position check
+            UInt32Point3D checkPos = openPointPos;
+            if (!_getPosition(i, checkPos))
+                continue;
+
+            const auto& checkTile = m_MapLayer.getMapTile(UInt32Point3D(checkPos, getLayerIndex()), getLayerType());
+            if (!startTile.isAutoTile() && checkTile == startTile ||
+                startTile.isAutoTile() && checkTile.m_uiAutoTileSetID == startTile.m_uiAutoTileSetID)
+            {
+                // bitset check
+                if (checkPositions.at(checkPos.x)[checkPos.y])
+                    continue;
+                checkPositions.at(checkPos.x)[checkPos.y] = true;
+
+                openPoints.push_back(checkPos);
+            }
+        }
+
+        // setup revert
+        m_RevertInfo.addTile(openPointPos, m_MapLayer.getMapTile(openPointPos, getLayerType()));
+        
+        m_MapLayer.setMapTile(openPointPos, getLayerType(), MapTile(getID(), 0));
+    }
 }
 
-void BrushFill::_calculateFillArea(const UInt32Point &center)
+void BrushFill::_drawAutoTile(const UInt32Point& center)
 {
     BitsetVector checkPositions(m_MapLayer.getSize().y, boost::dynamic_bitset<>(m_MapLayer.getSize().x));
 
@@ -220,43 +248,14 @@ void BrushFill::_calculateFillArea(const UInt32Point &center)
         bool pushIntoBorderCheck = false;
         for (uint32 i = 0; i < 4; ++i)
         {
-            DATABASE::AUTO_TILE::TILE_CHECK curTileCheck = DATABASE::AUTO_TILE::SAME_AROUND;
             // set position check
             UInt32Point3D checkPos = openPointPos;
-            switch (i)
-            {
-            case 0: // top
-                if (!checkPos.y)
-                    continue;
-                --checkPos.y;
-                curTileCheck = DATABASE::AUTO_TILE::OTHER_TOP;
-                break;
-
-            case 1: // left
-                if (!checkPos.x)
-                    continue;
-                --checkPos.x;
-                curTileCheck = DATABASE::AUTO_TILE::OTHER_LEFT;
-                break;
-
-            case 2: // right
-                if (checkPos.x+1 >= m_MapLayer.getSize().x)
-                    continue;
-                ++checkPos.x;
-                curTileCheck = DATABASE::AUTO_TILE::OTHER_RIGHT;
-                break;
-
-            case 3: // bottom
-                if (checkPos.y+1 >= m_MapLayer.getSize().y)
-                    continue;
-                ++checkPos.y;
-                curTileCheck = DATABASE::AUTO_TILE::OTHER_BOTTOM;
-                break;
-            }
+            if (!_getPosition(i, checkPos))
+                continue;
 
             const auto& checkTile = m_MapLayer.getMapTile(UInt32Point3D(checkPos, getLayerIndex()), getLayerType());
-            if (!checkTile.isAutoTile() && checkTile == startTile ||
-                checkTile.isAutoTile() && checkTile.m_uiAutoTileSetID == startTile.m_uiAutoTileSetID)
+            if (!startTile.isAutoTile() && checkTile == startTile ||
+                startTile.isAutoTile() && checkTile.m_uiAutoTileSetID == startTile.m_uiAutoTileSetID)
             {
                 // bitset check
                 if (checkPositions.at(checkPos.x)[checkPos.y])
@@ -275,19 +274,103 @@ void BrushFill::_calculateFillArea(const UInt32Point &center)
         // setup revert
         m_RevertInfo.addTile(openPointPos, m_MapLayer.getMapTile(openPointPos, getLayerType()));
 
-        switch (getSelectionType())
-        {
-        case MAP::BRUSH::SelectionType::TILES: m_MapLayer.setMapTile(openPointPos, getLayerType(), MapTile(getID(), 0)); break;
-        case MAP::BRUSH::SelectionType::AUTO_TILES:
-            m_MapLayer.setMapTile(openPointPos, getLayerType(), MapTile(DATABASE::AUTO_TILE::INDEX_CENTER, getID()));
-            break;
-        case MAP::BRUSH::SelectionType::TILE_SETS:break;
-        }
+        m_MapLayer.setMapTile(openPointPos, getLayerType(), MapTile(DATABASE::AUTO_TILE::INDEX_CENTER, getID()));
     }
 
     // do final checks
     if (getSelectionType() == MAP::BRUSH::SelectionType::AUTO_TILES)
         updateAutoTilesAround(borderChecks);
+}
+
+void BrushFill::_drawTileSet(const UInt32Point& center)
+{
+    auto pTileSet = m_DBMgr.getTileSetDatabase()->getOriginalPrototype(getID());
+    if (!pTileSet)
+        return;
+
+    const auto tileSetSize = pTileSet->getTileCount();
+    BitsetVector checkPositions(m_MapLayer.getSize().y, boost::dynamic_bitset<>(m_MapLayer.getSize().x));
+
+    MAP::MapTile startTile(m_MapLayer.getMapTile(UInt32Point3D(center, getLayerIndex()), getLayerType()));
+    if (!startTile.isValid())
+        return;
+
+    // store center in open points
+    UInt32PointList openPoints;
+    openPoints.push_back(center);
+    checkPositions.at(center.x)[center.y] = true;
+
+    UInt32PointVector borderChecks;
+    while (!openPoints.empty())
+    {
+        UInt32Point3D openPointPos(openPoints.front(), getLayerIndex());
+        openPoints.pop_front();
+
+        // store positions around
+        bool pushIntoBorderCheck = false;
+        for (uint32 i = 0; i < 4; ++i)
+        {
+            // set position check
+            UInt32Point3D checkPos = openPointPos;
+            if (!_getPosition(i, checkPos))
+                continue;
+
+            const auto& checkTile = m_MapLayer.getMapTile(UInt32Point3D(checkPos, getLayerIndex()), getLayerType());
+            if (!startTile.isAutoTile() && checkTile == startTile ||
+                startTile.isAutoTile() && checkTile.m_uiAutoTileSetID == startTile.m_uiAutoTileSetID)
+            {
+                // bitset check
+                if (checkPositions.at(checkPos.x)[checkPos.y])
+                    continue;
+                checkPositions.at(checkPos.x)[checkPos.y] = true;
+
+                openPoints.push_back(checkPos);
+            }
+            else if (checkTile.m_uiAutoTileSetID != getID() || !checkPositions.at(checkPos.x)[checkPos.y] && checkTile.m_uiAutoTileSetID == getID())
+                pushIntoBorderCheck = true;
+        }
+
+        if (pushIntoBorderCheck)
+            borderChecks.push_back(openPointPos);
+
+        // setup revert
+        m_RevertInfo.addTile(openPointPos, m_MapLayer.getMapTile(openPointPos, getLayerType()));
+
+        // get correct tile ID
+        UInt32Point index(openPointPos.x % tileSetSize.x - center.x % tileSetSize.x, openPointPos.y % tileSetSize.y - center.y % tileSetSize.y);
+        // if index overflows, add tileCount
+        if (index.x > tileSetSize.x)
+            index.x += tileSetSize.x;
+        if (index.y > tileSetSize.y)
+            index.y += tileSetSize.y;
+        m_MapLayer.setMapTile(openPointPos, getLayerType(), MapTile(pTileSet->getTileID(index), 0));
+    }
+}
+
+void BrushFill::draw(const UInt32Point& pos)
+{
+    if (!m_MapLayer.isInMap(pos) || m_MapLayer.getLayerSize(getLayerType()) <= getLayerIndex())
+        return;
+
+    switch (getSelectionType())
+    {
+    case MAP::BRUSH::SelectionType::TILES:
+        // is same tile?
+        if (m_MapLayer.getMapTile(UInt32Point3D(pos, getLayerIndex()), getLayerType()) == MapTile(getID(), 0))
+            return;
+        _drawTile(pos);
+        break;
+    case MAP::BRUSH::SelectionType::AUTO_TILES:
+        {
+            // is same tile?
+            const auto& tile = m_MapLayer.getMapTile(UInt32Point3D(pos, getLayerIndex()), getLayerType());
+            if (tile.isAutoTile() && tile.m_uiAutoTileSetID == getID())
+                return;
+            _drawAutoTile(pos);
+            break;
+        }
+    case MAP::BRUSH::SelectionType::TILE_SETS: _drawTileSet(pos); break;
+    }
 }
 
 /*#####
