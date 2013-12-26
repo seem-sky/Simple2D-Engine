@@ -1,6 +1,7 @@
 #include "MapEditorModuleContent.h"
 #include "moc_MapEditorModuleContent.h"
 #include "Project.h"
+#include <QtWidgets/QMessageBox>
 
 MapEditorModuleContent::MapEditorModuleContent(DATABASE::DatabaseMgr& databaseMgr, QWidget* pWidget) : QWidget(pWidget), Ui_MapEditorModuleContent(),
     m_DBMgr(databaseMgr)
@@ -23,6 +24,17 @@ void MapEditorModuleContent::_onTabCloseRequested(int index)
 {
     if (auto pTab = dynamic_cast<MapViewer*>(m_pMapTabs->widget(index)))
     {
+        // ask for saving before closing tab
+        if (pTab->hasChanges())
+        {
+            QString mapName = pTab->getMapName();
+            switch (QMessageBox::question(this, "close " + mapName, mapName + " has been changed. Do you want to save changes?",
+                QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Yes))
+            {
+            case QMessageBox::Yes: pTab->saveMap(); break;  // save map
+            case QMessageBox::Cancel: return;               // do nothing
+            }
+        }
         m_pMapTabs->removeTab(index);
         pTab->deleteLater();
     }

@@ -126,6 +126,12 @@ void MapViewer::loadMap()
     }
 }
 
+void MapViewer::saveMap()
+{
+    if (auto pScene = dynamic_cast<MapViewerScene*>(scene()))
+        pScene->getMapData().save();
+}
+
 void MapViewer::updateMap()
 {
     if (auto pScene = dynamic_cast<MapViewerScene*>(scene()))
@@ -250,9 +256,13 @@ void MapViewer::mousePressEvent(QMouseEvent* pEvent)
 
 void MapViewer::mouseReleaseEvent(QMouseEvent* pEvent)
 {
-    m_RevertInfos.push_back(m_pCurrentBrush->getRevertInfo());
+    // push only if there are changes
+    if (m_pCurrentBrush->getRevertInfo().hasChanges())
+    {
+        m_RevertInfos.push_back(m_pCurrentBrush->getRevertInfo());
+        emit changed(this);
+    }
     m_pCurrentBrush.reset();
-    emit changed(this);
 }
 
 void MapViewer::mouseMoveEvent(QMouseEvent* pEvent)

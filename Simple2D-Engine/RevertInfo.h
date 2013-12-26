@@ -37,6 +37,8 @@ namespace MAP
 
                 void addTile(const UInt32Point& pos, const MapTile& tile);
 
+                inline bool hasChanges() const { return !m_Tiles.empty(); }
+
             private:
                 UInt32Point_MapTileVector m_Tiles;
                 uint32 m_LayerIndex;

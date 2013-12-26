@@ -61,6 +61,7 @@ protected:
 public:
     MapViewer(uint32 mapID, const DATABASE::DatabaseMgr& DBMgr, QWidget* pWidget = nullptr);
 
+    void saveMap();
     void loadMap();
     void updateMap();
 
