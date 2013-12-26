@@ -200,6 +200,19 @@ uint32 MapViewer::getMaximumLayerIndex(MAP::Layer layerType) const
     return 0;
 }
 
+void MapViewer::revertLast()
+{
+    if (m_RevertInfos.empty())
+        return;
+
+    if (auto pScene = dynamic_cast<MapViewerScene*>(scene()))
+    {
+        m_RevertInfos.at(m_RevertInfos.size()-1).revert(pScene->getMapData().getMapLayer());
+        pScene->update();
+    }
+    m_RevertInfos.pop_back();
+}
+
 void MapViewer::mousePressEvent(QMouseEvent* pEvent)
 {
     QGraphicsView::mousePressEvent(pEvent);
@@ -214,8 +227,8 @@ void MapViewer::mousePressEvent(QMouseEvent* pEvent)
         MAP::BRUSH::BrushInfo brushInfo;
         emit requestBrushInfo(brush, brushInfo);
         if (auto pScene = dynamic_cast<MapViewerScene*>(scene()))
-            m_CurrentBrush = MAP::BRUSH::BrushFactory::createBrush(m_DBMgr, pScene->getMapData().getMapLayer(), brushInfo,
-                    pScene->getLayerType(), pScene->getLayerIndex());
+            m_pCurrentBrush = MAP::BRUSH::BrushFactory::createBrush(m_DBMgr, pScene->getMapData().getMapLayer(), brushInfo,
+                    pScene->getLayerType(), pScene->getLayerIndex()-1);
 
         _drawTiles(mapToScene(pEvent->pos()).toPoint());
     }
@@ -223,12 +236,13 @@ void MapViewer::mousePressEvent(QMouseEvent* pEvent)
 
 void MapViewer::mouseReleaseEvent(QMouseEvent* pEvent)
 {
-    m_CurrentBrush.reset();
+    m_RevertInfos.push_back(m_pCurrentBrush->getRevertInfo());
+    m_pCurrentBrush.reset();
 }
 
 void MapViewer::mouseMoveEvent(QMouseEvent* pEvent)
 {
-    if (!m_CurrentBrush)
+    if (!m_pCurrentBrush)
         return;
 
     _drawTiles(mapToScene(pEvent->pos()).toPoint());
@@ -236,13 +250,13 @@ void MapViewer::mouseMoveEvent(QMouseEvent* pEvent)
 
 void MapViewer::_drawTiles(const QPoint& pos)
 {
-    if (!m_CurrentBrush)
+    if (!m_pCurrentBrush)
         return;
 
     auto pScene = dynamic_cast<MapViewerScene*>(scene());
     if (!pScene)
         return;
 
-    m_CurrentBrush->draw(UInt32Point(pos.x() / TILE_SIZE, pos.y() / TILE_SIZE));
+    m_pCurrentBrush->draw(UInt32Point(pos.x() / TILE_SIZE, pos.y() / TILE_SIZE));
     pScene->update();
 }

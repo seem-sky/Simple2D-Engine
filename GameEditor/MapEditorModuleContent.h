@@ -21,6 +21,7 @@ private slots:
     void _onLayerTypeChanged();
     void _onZoomChanged(int value);
     void _onGridShowChanged(int state);
+    void _onRevertPressed();
 
 public slots:
     void onMapOpened(uint32 mapID);

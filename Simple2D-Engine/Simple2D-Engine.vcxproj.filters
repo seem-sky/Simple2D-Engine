@@ -43,6 +43,9 @@
     <Filter Include="Map\IO">
       <UniqueIdentifier>{62360327-8a3b-4849-b41c-355c258ba063}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Map\Brush">
+      <UniqueIdentifier>{60670c74-fe47-464a-8eba-122efbaa7520}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Simple2D-GameEditor\include\Game.cpp">
@@ -150,7 +153,12 @@
     <ClCompile Include="MapData.cpp">
       <Filter>Map\IO</Filter>
     </ClCompile>
-    <ClCompile Include="Brush.cpp" />
+    <ClCompile Include="Brush.cpp">
+      <Filter>Map\Brush</Filter>
+    </ClCompile>
+    <ClCompile Include="RevertInfo.cpp">
+      <Filter>Map\Brush</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Simple2D-GameEditor\include\Application.h">
@@ -270,7 +278,12 @@
     <ClInclude Include="MapData.h">
       <Filter>Map\IO</Filter>
     </ClInclude>
-    <ClInclude Include="Brush.h" />
+    <ClInclude Include="Brush.h">
+      <Filter>Map\Brush</Filter>
+    </ClInclude>
+    <ClInclude Include="RevertInfo.h">
+      <Filter>Map\Brush</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

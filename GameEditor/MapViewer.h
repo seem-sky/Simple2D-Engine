@@ -77,13 +77,17 @@ public:
 
     uint32 getMapID() const;
 
+    void revertLast();
+
 signals:
     void requestBrushInfo(BRUSH::BrushIndex brush, MAP::BRUSH::BrushInfo& brushInfo);
 
 private:
     const DATABASE::DatabaseMgr& m_DBMgr;
 
-    MAP::BRUSH::BrushPtr m_CurrentBrush;
+    MAP::BRUSH::BrushPtr m_pCurrentBrush;
+
+    std::vector<MAP::BRUSH::REVERT::RevertInfo> m_RevertInfos;
 };
 
 #endif

@@ -13,8 +13,15 @@ MapEditorModuleContent::MapEditorModuleContent(DATABASE::DatabaseMgr& databaseMg
     connect(m_pLayerBackground, SIGNAL(clicked()), this, SLOT(_onLayerTypeChanged()));
     connect(m_pLayerForeground, SIGNAL(clicked()), this, SLOT(_onLayerTypeChanged()));
     connect(m_pShowGrid, SIGNAL(stateChanged(int)), this, SLOT(_onGridShowChanged(int)));
+    connect(m_pRevert, SIGNAL(clicked()), this, SLOT(_onRevertPressed()));
 
     _onZoomChanged(m_pZoom->value());
+}
+
+void MapEditorModuleContent::_onRevertPressed()
+{
+    if (auto pTab = dynamic_cast<MapViewer*>(m_pMapTabs->currentWidget()))
+        pTab->revertLast();
 }
 
 void MapEditorModuleContent::_onCurrentChanged(int index)

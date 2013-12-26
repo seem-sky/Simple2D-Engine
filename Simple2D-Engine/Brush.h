@@ -1,26 +1,13 @@
 #ifndef BRUSH_H
 #define BRUSH_H
 
-#include "MapLayer.h"
 #include "DatabaseMgr.h"
+#include "RevertInfo.h"
 
 namespace MAP
 {
     namespace BRUSH
     {
-        enum class BrushType
-        {
-            PEN,
-            FILL
-        };
-
-        enum class SelectionType
-        {
-            TILES,
-            AUTO_TILES,
-            TILE_SETS
-        };
-
         /*#####
         # BrushInfo
         #####*/
@@ -47,17 +34,6 @@ namespace MAP
         }
 
         /*#####
-        # RevertInfo
-        #####*/
-        class RevertInfo
-        {
-        public:
-            std::vector<std::pair<MapTile, UInt32Point>> m_Tiles;
-            uint32 m_LayerIndex;
-            Layer m_LayerType;
-        };
-
-        /*#####
         # Brush
         #####*/
         class Brush
@@ -73,7 +49,7 @@ namespace MAP
             inline Layer getLayerType() const { return m_LayerType; }
             inline uint32 getLayerIndex() const { return m_LayerIndex; }
 
-            const RevertInfo& getRevertInfo() const { return m_RevertInfo; }
+            const REVERT::RevertInfo& getRevertInfo() const { return m_RevertInfo; }
 
         private:
             uint32 m_ID;
@@ -83,7 +59,7 @@ namespace MAP
 
         protected:
             const DATABASE::DatabaseMgr& m_DBMgr;
-            RevertInfo m_RevertInfo;
+            REVERT::RevertInfo m_RevertInfo;
             MapLayer& m_MapLayer;
         };
         typedef std::unique_ptr<Brush> BrushPtr;

@@ -33,6 +33,10 @@ void BrushPen::_updateAutoTilesAround(const UInt32PointVector& positions)
     {
         UInt32Point3D pos(tilePos, getLayerIndex());
         auto& tile = m_MapLayer.getMapTile(pos, getLayerType());
+
+        // store tile
+        m_RevertInfo.m_Tiles.insert(std::make_pair(tilePos, tile));
+
         tile.m_uiTileID = DATABASE::AUTO_TILE::getAutoTileIndexForTileCheck(m_MapLayer.checkAutoTiles(tile.m_uiAutoTileSetID, pos, UInt32PointUSet(),
             getLayerType(), MapLayer::FLAG_NOTHING));
     }
@@ -48,7 +52,7 @@ void BrushPen::_drawTile(const UInt32Point& pos)
         return;
 
     // store old tile in revert info
-    m_RevertInfo.m_Tiles.push_back(std::make_pair(oldTile, pos));
+    m_RevertInfo.m_Tiles.insert(std::make_pair(pos, oldTile));
 
     m_MapLayer.setMapTile(currentPos, getLayerType(), newMapTile);
     UInt32PointVector positions;
@@ -63,6 +67,9 @@ void BrushPen::_drawAutoTile(const UInt32Point& pos)
     auto& tile = m_MapLayer.getMapTile(currentPos, getLayerType());
     if (tile.m_uiAutoTileSetID == getID())
         return;
+
+    // store old tile in revert info
+    m_RevertInfo.m_Tiles.insert(std::make_pair(pos, tile));
 
     // setup autotile
     tile.m_uiAutoTileSetID = getID();
@@ -92,8 +99,13 @@ void BrushPen::_drawTileSet(const UInt32Point& pos)
                 // store position
                 positions.push_back(currentPos);
 
+                auto currentPos3D = UInt32Point3D(currentPos, getLayerIndex());
+
+                // store old tile in revert info
+                m_RevertInfo.m_Tiles.insert(std::make_pair(currentPos, m_MapLayer.getMapTile(currentPos3D, getLayerType())));
+
                 // setup tile
-                m_MapLayer.setMapTile(UInt32Point3D(currentPos, getLayerIndex()), getLayerType(), MapTile(pTileSet->getTileID(tilePos), 0));
+                m_MapLayer.setMapTile(currentPos3D, getLayerType(), MapTile(pTileSet->getTileID(tilePos), 0));
             }
         }
 
