@@ -17,15 +17,16 @@ DatabaseDialogResize::DatabaseDialogResize(IDatabaseModel* pDBModel, QWidget* pP
 
 void DatabaseDialogResize::_onAccept()
 {
-    if (m_pNewSize->value() != m_pOldSize->value())
+    uint32 oldSize = m_pOldSize->value(), newSize = m_pNewSize->value();
+    if (newSize != oldSize)
     {
-        if (m_pNewSize->value() < m_pOldSize->value())
+        if (newSize < oldSize)
         {
-            if (QMessageBox::Yes != QMessageBox::question(0, "Delete " + QString::number(m_pOldSize->value() - m_pNewSize->value()) + " entrys.",
-                "Do you really want to delete entry " + QString::number(m_pNewSize->value()+1) + " up to end?", QMessageBox::Yes | QMessageBox::No))
+            if (QMessageBox::Yes != QMessageBox::question(0, "Delete " + QString::number(oldSize - newSize) + " entrys.",
+                "Do you really want to delete entry " + QString::number(newSize+1) + " up to end?", QMessageBox::Yes | QMessageBox::No))
                 return;
         }
 
-        m_pDBModel->resize(m_pNewSize->value());
+        m_pDBModel->resize(newSize);
     }
 }

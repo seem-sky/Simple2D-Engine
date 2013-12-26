@@ -17,7 +17,7 @@ void AnimationActionInsert::revert()
         return;
     // remove and delete later
     m_pScene->removeItem(m_pItem);
-    new DelayedDeleteObject<GraphicsTextureItem>(m_pItem);
+    new DelayedDeleteObject<GraphicsSpriteItem>(m_pItem);
 }
 
 void AnimationActionRemove::revert()
@@ -87,6 +87,11 @@ DatabaseModuleAnimation::DatabaseModuleAnimation(QWidget* pParent) : QWidget(pPa
     connect(m_pSpriteOpacity, SIGNAL(valueChanged(double)), this, SLOT(_onOpacityChanged(double)));
     connect(m_pSpriteRotation, SIGNAL(valueChanged(int)), this, SLOT(_onRotationChanged(int)));
 
+    connect(m_pAddFrame, SIGNAL(clicked()), this, SLOT(_onFrameAddClicked()));
+    connect(m_pRemoveFrame, SIGNAL(clicked()), this, SLOT(_onFrameRemoveClicked()));
+    connect(m_pPreviousFrame, SIGNAL(clicked()), this, SLOT(_onFramePreviousClicked()));
+    connect(m_pNextFrame, SIGNAL(clicked()), this, SLOT(_onFrameNextClicked()));
+
     //// add revert action
     //auto newAction = new QAction(this);
     //newAction->setShortcut(tr("Ctrl+Z"));
@@ -121,7 +126,59 @@ void DatabaseModuleAnimation::setAnimation(const DATABASE::ANIMATION::FrameVecto
     clear();
     m_Animation = animation;
     m_pAniViewer->setAnimation(&m_Animation);
+    // get sure, there is at least one frame
+    if (m_Animation.empty())
+        m_Animation.push_back(DATABASE::ANIMATION::Frame());
+    m_pCurrentFrame->setMaximum(m_Animation.size()-1);
     _setupFrame(0);
+}
+
+void DatabaseModuleAnimation::_onFrameAddClicked()
+{
+    uint32 newIndex = m_pAniViewer->getCurrentFrame()+1;
+    m_Animation.insert(m_Animation.begin()+newIndex, DATABASE::ANIMATION::Frame());
+    m_pCurrentFrame->setMaximum(m_Animation.size()-1);
+    m_pCurrentFrame->setValue(newIndex);
+    _onFrameChanged(newIndex);
+}
+
+void DatabaseModuleAnimation::_onFrameRemoveClicked()
+{
+    // need at least one frame
+    if (m_Animation.size() <= 1)
+        return;
+
+    uint32 newIndex = m_pAniViewer->getCurrentFrame();
+    m_Animation.erase(m_Animation.begin()+newIndex);
+    if (newIndex >= m_Animation.size())
+        newIndex = m_Animation.size()-1;
+    m_pCurrentFrame->setValue(newIndex);
+    m_pCurrentFrame->setMaximum(m_Animation.size()-1);
+
+    // change frame without saving last!
+    _setupFrame(newIndex);
+}
+
+void DatabaseModuleAnimation::_onFrameNextClicked()
+{
+    uint32 newIndex = m_pAniViewer->getCurrentFrame();
+    if (newIndex == m_Animation.size()-1)
+        return;
+
+    ++newIndex;
+    m_pCurrentFrame->setValue(newIndex);
+    _onFrameChanged(newIndex);
+}
+
+void DatabaseModuleAnimation::_onFramePreviousClicked()
+{
+    uint32 newIndex = m_pAniViewer->getCurrentFrame();
+    if (newIndex == 0)
+        return;
+
+    --newIndex;
+    m_pCurrentFrame->setValue(newIndex);
+    _onFrameChanged(newIndex);
 }
 
 void DatabaseModuleAnimation::_onGridCheckboxClicked(bool checked)
@@ -142,13 +199,8 @@ void DatabaseModuleAnimation::_setupFrame(uint32 index)
     // clear actions
     m_LastActions.clear();
 
-    if (index >= m_Animation.size())
-        m_Animation.resize(index+1);
     m_pAniViewer->showFrame(index);
-    if (m_pAniViewer->getCurrentFrame() < m_Animation.size())
-        m_pFrameTime->setValue(m_Animation.at(m_pAniViewer->getCurrentFrame()).getTimeInMsec());
-    else
-        m_pFrameTime->setValue(50);
+    m_pFrameTime->setValue(m_Animation.at(m_pAniViewer->getCurrentFrame()).getTimeInMsec());
 }
 
 void DatabaseModuleAnimation::_onPlayStopButtonClicked()
@@ -158,6 +210,10 @@ void DatabaseModuleAnimation::_onPlayStopButtonClicked()
         m_pAniPlayerButton->setText("start");
         m_pAniViewer->stopAnimation();
         m_pFrame->setEnabled(true);
+        m_pAddFrame->setEnabled(true);
+        m_pRemoveFrame->setEnabled(true);
+        m_pPreviousFrame->setEnabled(true);
+        m_pNextFrame->setEnabled(true);
         _onFrameChanged(0);
     }
     else
@@ -165,6 +221,10 @@ void DatabaseModuleAnimation::_onPlayStopButtonClicked()
         m_pAniPlayerButton->setText("stop");
         m_pAniViewer->startAnimation();
         m_pFrame->setEnabled(false);
+        m_pAddFrame->setEnabled(false);
+        m_pRemoveFrame->setEnabled(false);
+        m_pPreviousFrame->setEnabled(false);
+        m_pNextFrame->setEnabled(false);
     }
 }
 
@@ -185,7 +245,7 @@ void DatabaseModuleAnimation::_saveCurrentFrame()
 {
     uint32 size = m_pAniViewer->getCurrentFrame()+1;
     if (size > m_Animation.size())
-        m_Animation.resize(size);
+        return;
 
     // save current frame
     DATABASE::ANIMATION::Frame frame;

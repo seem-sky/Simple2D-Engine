@@ -9,12 +9,14 @@
 /*#####
 # GraphicsTextureItem
 #####*/
-GraphicsTextureItem::GraphicsTextureItem(const DATABASE::TexturePrototype* pPrototype) : QGraphicsItem(), m_pPrototype(pPrototype)
+GraphicsSpriteItem::GraphicsSpriteItem(uint32 ID) : QGraphicsItem(), m_ID(ID)
 {
+    if (!m_ID)
+        assert("ID not allowed to be NULL!");
     setFlag(QGraphicsItem::ItemSendsGeometryChanges);
 }
 
-void GraphicsTextureItem::keyPressEvent(QKeyEvent* pEvent)
+void GraphicsSpriteItem::keyPressEvent(QKeyEvent* pEvent)
 {
     switch(pEvent->key())
     {
@@ -25,7 +27,7 @@ void GraphicsTextureItem::keyPressEvent(QKeyEvent* pEvent)
     }
 }
 
-void GraphicsTextureItem::paint(QPainter* pPainter, const QStyleOptionGraphicsItem* pOption, QWidget* pWidget)
+void GraphicsSpriteItem::paint(QPainter* pPainter, const QStyleOptionGraphicsItem* pOption, QWidget* pWidget)
 {
     auto pixmap = _getPixmap();
     pPainter->drawPixmap(0, 0, pixmap);
@@ -34,7 +36,7 @@ void GraphicsTextureItem::paint(QPainter* pPainter, const QStyleOptionGraphicsIt
         _hightlightSelection(pPainter, pOption);
 }
 
-void GraphicsTextureItem::_hightlightSelection(QPainter* pPainter, const QStyleOptionGraphicsItem* pOption)
+void GraphicsSpriteItem::_hightlightSelection(QPainter* pPainter, const QStyleOptionGraphicsItem* pOption)
 {
     // from QGraphicsItem.cpp
     const QRectF murect = pPainter->transform().mapRect(QRectF(0, 0, 1, 1));
@@ -65,22 +67,13 @@ void GraphicsTextureItem::_hightlightSelection(QPainter* pPainter, const QStyleO
     pPainter->drawRect(boundingRect().adjusted(pad, pad, -pad, -pad));
 }
 
-QRectF GraphicsTextureItem::boundingRect() const
+QRectF GraphicsSpriteItem::boundingRect() const
 {
     auto pixmap = _getPixmap();
     return pixmap.rect();
 }
 
-QPixmap GraphicsTextureItem::_getPixmap() const
+uint32 GraphicsSpriteItem::getID() const
 {
-    QPixmap pixmap;
-    createPixmapFromTexturePrototype(Config::get()->getProjectDirectory(), m_pPrototype, pixmap);
-    return pixmap;
-}
-
-uint32 GraphicsTextureItem::getID() const
-{
-    if (m_pPrototype)
-        return m_pPrototype->getID();
-    return 0;
+    return m_ID;
 }

@@ -1,21 +1,21 @@
 #ifndef GRAPHICS_SPRITE_ITEM_H
 #define GRAPHICS_SPRITE_ITEM_H
 
-#include "Database.h"
+#include "DatabaseMgr.h"
 #include <QtWidgets/QGraphicsItem>
 #include <QtWidgets/QGraphicsScene>
 
-class GraphicsTextureItem : public QGraphicsItem
+class GraphicsSpriteItem : public QGraphicsItem
 {
 private:
-    QPixmap _getPixmap() const;
+    virtual QPixmap _getPixmap() const = 0;
     void _hightlightSelection(QPainter* pPainter, const QStyleOptionGraphicsItem* pOption);
 
 protected:
     virtual void keyPressEvent(QKeyEvent* pEvent);
 
 public:
-    GraphicsTextureItem(const DATABASE::TexturePrototype* pPrototype);
+    GraphicsSpriteItem(uint32 ID);
 
     virtual void paint(QPainter* pPainter, const QStyleOptionGraphicsItem* pOption, QWidget* pWidget = 0);
 
@@ -24,7 +24,7 @@ public:
     QRectF boundingRect() const;
 
 private:
-    const DATABASE::TexturePrototype* m_pPrototype;
+    uint32 m_ID;
 };
 
 #endif

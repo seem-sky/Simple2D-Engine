@@ -4,9 +4,22 @@
 #include <QtCore/QMimeData>
 #include <QtGui/QKeyEvent>
 #include "DelayedDeleteObject.h"
+#include "QtGlobal.h"
 
-AnimationSpriteItem::AnimationSpriteItem(const DATABASE::SpritePrototype* pPrototype) : GraphicsTextureItem(pPrototype)
+AnimationSpriteItem::AnimationSpriteItem(const DATABASE::SpriteDatabase* pSpriteDB, uint32 ID) : GraphicsSpriteItem(ID), m_pSpriteDB(pSpriteDB)
 {
+}
+
+QPixmap AnimationSpriteItem::_getPixmap() const
+{
+    QPixmap pixmap;
+    if (m_pSpriteDB)
+    {
+        if (auto pSprite = m_pSpriteDB->getOriginalPrototype(getID()))
+            createPixmap(Config::get()->getProjectDirectory(), pSprite->getPathName(), pSprite->getTransparencyColor(), pixmap);
+    }
+
+    return pixmap;
 }
 
 void AnimationSpriteItem::keyPressEvent(QKeyEvent* pEvent)
@@ -20,9 +33,9 @@ void AnimationSpriteItem::keyPressEvent(QKeyEvent* pEvent)
             if (auto* pScene = dynamic_cast<AnimationViewerScene*>(scene()))
                 emit pScene->itemRemoved(this);
         }
-        new DelayedDeleteObject<GraphicsTextureItem>(this);
+        new DelayedDeleteObject<GraphicsSpriteItem>(this);
         break;
-    default: GraphicsTextureItem::keyPressEvent(pEvent);
+    default: GraphicsSpriteItem::keyPressEvent(pEvent);
     }
 }
 
@@ -164,19 +177,16 @@ void AnimationViewer::_setupFrame(const DATABASE::ANIMATION::Frame& frame)
     uint32 z = 0;
     for (auto& sprite : frame.getSprites())
     {
-        if (auto pPrototype = m_pSpriteDB->getOriginalPrototype(sprite.m_uiSpriteID))
-        {
-            auto pItem = new AnimationSpriteItem(pPrototype);
+        auto pItem = new AnimationSpriteItem(m_pSpriteDB, sprite.m_uiSpriteID);
 
-            // set transformation
-            pItem->setZValue(z);
-            pItem->setScale(sprite.m_Scale);
-            pItem->setOpacity(sprite.m_Opacity);
-            pItem->setPos(sprite.m_Pos.x, sprite.m_Pos.y);
-            pItem->setRotation(sprite.m_uiRotation);
+        // set transformation
+        pItem->setZValue(z);
+        pItem->setScale(sprite.m_Scale);
+        pItem->setOpacity(sprite.m_Opacity);
+        pItem->setPos(sprite.m_Pos.x, sprite.m_Pos.y);
+        pItem->setRotation(sprite.m_uiRotation);
 
-            addGraphicsSpriteItem(pItem);
-        }
+        addGraphicsSpriteItem(pItem);
         ++z;
     }
 }
@@ -262,7 +272,7 @@ void AnimationViewer::dropEvent(QDropEvent* pEvent)
         return;
     if (auto pSprite = m_pSpriteDB->getOriginalPrototype(pEvent->mimeData()->text().toUInt()))
     {
-        auto pItem = new AnimationSpriteItem(pSprite);
+        auto pItem = new AnimationSpriteItem(m_pSpriteDB, pSprite->getID());
         pItem->setPos(mapToScene(pEvent->pos()).toPoint());
         addGraphicsSpriteItem(pItem);
         pItem->setSelected(true);

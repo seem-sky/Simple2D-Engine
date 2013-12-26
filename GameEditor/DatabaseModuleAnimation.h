@@ -66,6 +66,11 @@ private slots:
     void _onFrameChanged(int index);
     void _onSelectionChanged();
     void _onItemChanged(AnimationSpriteItem* pItem, QGraphicsItem::GraphicsItemChange change, const QVariant& value);
+
+    void _onFrameAddClicked();
+    void _onFrameRemoveClicked();
+    void _onFrameNextClicked();
+    void _onFramePreviousClicked();
     //void _onActionRevert();
 
     // sprite slots

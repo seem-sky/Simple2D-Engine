@@ -6,16 +6,22 @@
 #include <QtCore/QTimer>
 #include "GraphicsTextureItem.h"
 
-class AnimationSpriteItem : public GraphicsTextureItem
+class AnimationSpriteItem : public GraphicsSpriteItem
 {
+private:
+    QPixmap _getPixmap() const;
+
 protected:
     QVariant itemChange(GraphicsItemChange change, const QVariant& value);
     void keyPressEvent(QKeyEvent* pEvent);
 
 public:
-    AnimationSpriteItem(const DATABASE::SpritePrototype* pPrototype);
+    AnimationSpriteItem(const DATABASE::SpriteDatabase* pSpriteDB, uint32 ID);
 
     DATABASE::ANIMATION::Sprite toSprite() const;
+
+private:
+    const DATABASE::SpriteDatabase* m_pSpriteDB;
 };
 
 class AnimationViewerScene : public QGraphicsScene
