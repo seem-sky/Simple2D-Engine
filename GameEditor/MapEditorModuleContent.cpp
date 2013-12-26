@@ -63,6 +63,7 @@ void MapEditorModuleContent::_onLayerTypeChanged()
         m_pCurLayer->setMinimum(maxSize == 0 ? 0 : 1);
         m_pCurLayer->setMaximum(maxSize);
         m_pCurLayer->setValue(pTab->getLayerIndex());
+        pTab->setLayerIndex(m_pCurLayer->value());
     }
 }
 

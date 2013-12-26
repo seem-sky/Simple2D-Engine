@@ -41,6 +41,8 @@ namespace MAP
         protected:
             Brush(const DATABASE::DatabaseMgr& DBMgr, MapLayer &mapLayer, uint32 ID, SelectionType selectionType, Layer layerType, uint32 layerIndex);
 
+            void updateAutoTilesAround(const UInt32PointVector& positions);
+
         public:
             virtual void draw(const UInt32Point& pos) = 0;
 
@@ -69,7 +71,6 @@ namespace MAP
             friend class BrushFactory;
 
         private:
-            void _updateAutoTilesAround(const UInt32PointVector& positions);
             void _drawTile(const UInt32Point& pos);
             void _drawAutoTile(const UInt32Point& pos);
             void _drawTileSet(const UInt32Point& pos);
@@ -84,6 +85,16 @@ namespace MAP
         class BrushFill : public Brush
         {
             friend class BrushFactory;
+
+        private:
+            void _updateAutoTilesAround(const UInt32PointVector& positions);
+
+            void _calculateFillArea(const UInt32Point &center);
+
+            void _drawTile(const UInt32Point& pos);
+            void _drawAutoTile(const UInt32Point& pos);
+            void _drawTileSet(const UInt32Point& pos);
+
         protected:
             BrushFill(const DATABASE::DatabaseMgr& DBMgr, MapLayer &mapLayer, uint32 ID, SelectionType selectionType, Layer layerType, uint32 layerIndex);
 

@@ -279,6 +279,15 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>m_pRevert</tabstop>
+  <tabstop>m_pZoom</tabstop>
+  <tabstop>m_pShowGrid</tabstop>
+  <tabstop>m_pCurLayer</tabstop>
+  <tabstop>m_pLayerBackground</tabstop>
+  <tabstop>m_pLayerForeground</tabstop>
+  <tabstop>m_pMapTabs</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

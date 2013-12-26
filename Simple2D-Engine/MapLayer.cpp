@@ -54,7 +54,7 @@ void MapLayer::setMapTile(const UInt32Point3D& at, Layer layer, MapTile tile)
         throw std::out_of_range(nullptr);
 }
 
-uint32 MapLayer::checkAutoTiles(uint32 uiID, const UInt32Point3D& pos, UInt32PointUSet& result, Layer layer, uint32 resultFlag)
+uint32 MapLayer::checkAutoTiles(uint32 uiID, const UInt32Point3D& pos, UInt32PointVector& result, Layer layer, uint32 resultFlag)
 {
     uint32 uiBorderCheck = 0;
     MapTile centerTile = getMapTile(pos, layer);
@@ -136,12 +136,12 @@ uint32 MapLayer::checkAutoTiles(uint32 uiID, const UInt32Point3D& pos, UInt32Poi
             uiBorderCheck += curTileCheck;
             if (resultFlag & FLAG_OTHER)
             {
-                result.insert(checkPos);
+                result.push_back(checkPos);
             }
         }
         // if same
         else if (resultFlag & FLAG_SAME)
-            result.insert(checkPos);
+            result.push_back(checkPos);
     }
     return uiBorderCheck;
 }

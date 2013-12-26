@@ -11,6 +11,7 @@
 MapViewerScene::MapViewerScene(uint32 mapID, const DATABASE::DatabaseMgr& DBMgr) : QGraphicsScene(), m_MapData(DBMgr, mapID), m_ShowGrid(true),
     m_LayerType(MAP::LAYER_BACKGROUND)
 {
+    m_LayerIndex.fill(0);
 }
 
 void MapViewerScene::showGrid(bool show)
@@ -235,8 +236,13 @@ void MapViewer::mousePressEvent(QMouseEvent* pEvent)
         MAP::BRUSH::BrushInfo brushInfo;
         emit requestBrushInfo(brush, brushInfo);
         if (auto pScene = dynamic_cast<MapViewerScene*>(scene()))
+        {
             m_pCurrentBrush = MAP::BRUSH::BrushFactory::createBrush(m_DBMgr, pScene->getMapData().getMapLayer(), brushInfo,
                     pScene->getLayerType(), pScene->getLayerIndex()-1);
+
+        int x = pScene->getLayerIndex();
+        int y = 0;
+        }
 
         _drawTiles(mapToScene(pEvent->pos()).toPoint());
     }

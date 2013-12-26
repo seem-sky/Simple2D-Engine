@@ -67,7 +67,7 @@ namespace MAP
             FLAG_OTHER      = 0x2,
             FLAG_ALL        = FLAG_SAME | FLAG_OTHER
         };
-        uint32 checkAutoTiles(uint32 uiID, const UInt32Point3D& pos, UInt32PointUSet& result, Layer layer, uint32 resultFlag);
+        uint32 checkAutoTiles(uint32 uiID, const UInt32Point3D& pos, UInt32PointVector& result, Layer layer, uint32 resultFlag);
 
     private:
         TileDataMultiarray3D m_BackgroundTiles;
