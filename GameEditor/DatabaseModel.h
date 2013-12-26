@@ -110,11 +110,12 @@ public:
         if (!m_pDatabase)
             return;
         uint32 uiOldSize = m_pDatabase->getSize();
-        m_pDatabase->resize(size);
         if (uiOldSize < size)
             insertRows(uiOldSize, size-uiOldSize);
         else if (size < uiOldSize)
             removeRows(size, uiOldSize-size);
+
+        m_pDatabase->resize(size);
     }
 
     uint32 getSize() const
