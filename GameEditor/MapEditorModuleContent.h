@@ -23,6 +23,8 @@ private slots:
     void _onGridShowChanged(int state);
     void _onRevertPressed();
 
+    void _onMapChanged(MapViewer* pMapViewer);
+
 public slots:
     void onMapOpened(uint32 mapID);
     void onMapClosed(uint32 mapID);

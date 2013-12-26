@@ -200,6 +200,13 @@ uint32 MapViewer::getMaximumLayerIndex(MAP::Layer layerType) const
     return 0;
 }
 
+QString MapViewer::getMapName() const
+{
+    if (auto pMap = m_DBMgr.getMapDatabase()->getOriginalPrototype(getMapID()))
+        return pMap->getName();
+    return "";
+}
+
 void MapViewer::revertLast()
 {
     if (m_RevertInfos.empty())
@@ -211,6 +218,7 @@ void MapViewer::revertLast()
         pScene->update();
     }
     m_RevertInfos.pop_back();
+    emit changed(this);
 }
 
 void MapViewer::mousePressEvent(QMouseEvent* pEvent)
@@ -238,6 +246,7 @@ void MapViewer::mouseReleaseEvent(QMouseEvent* pEvent)
 {
     m_RevertInfos.push_back(m_pCurrentBrush->getRevertInfo());
     m_pCurrentBrush.reset();
+    emit changed(this);
 }
 
 void MapViewer::mouseMoveEvent(QMouseEvent* pEvent)

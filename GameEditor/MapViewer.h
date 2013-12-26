@@ -77,10 +77,14 @@ public:
 
     uint32 getMapID() const;
 
+    QString getMapName() const;
+
     void revertLast();
+    inline bool hasChanges() const { return !m_RevertInfos.empty(); }
 
 signals:
     void requestBrushInfo(BRUSH::BrushIndex brush, MAP::BRUSH::BrushInfo& brushInfo);
+    void changed(MapViewer* pViewer);
 
 private:
     const DATABASE::DatabaseMgr& m_DBMgr;

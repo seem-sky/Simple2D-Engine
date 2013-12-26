@@ -76,12 +76,11 @@ void MapEditorModuleContent::onMapOpened(uint32 mapID)
         return;
     auto pNewMapViewer = new MapViewer(mapID, m_DBMgr, this);
     pNewMapViewer->loadMap();
-    QString tabName = "untitled";
-    if (auto pMap = m_DBMgr.getMapDatabase()->getOriginalPrototype(mapID))
-        tabName = pMap->getName();
-    m_pMapTabs->addTab(pNewMapViewer, tabName);
+    m_pMapTabs->addTab(pNewMapViewer, pNewMapViewer->getMapName());
     m_pMapTabs->setCurrentWidget(pNewMapViewer);
     emit registerTab(pNewMapViewer);
+
+    connect(pNewMapViewer, SIGNAL(changed(MapViewer*)), this, SLOT(_onMapChanged(MapViewer*)));
 }
 
 void MapEditorModuleContent::onMapClosed(uint32 mapID)
@@ -111,4 +110,9 @@ MapViewer* MapEditorModuleContent::getTab(uint32 mapID)
         }
     }
     return nullptr;
+}
+
+void MapEditorModuleContent::_onMapChanged(MapViewer* pMapViewer)
+{
+    m_pMapTabs->setTabText(m_pMapTabs->indexOf(pMapViewer), pMapViewer->getMapName() + (pMapViewer->hasChanges() ? "*" : ""));
 }
