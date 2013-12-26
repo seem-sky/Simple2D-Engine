@@ -32,6 +32,8 @@ void MapEditorModuleContent::_onCurrentChanged(int index)
         m_pZoom->setValue(pTab->getZoom());
         m_pZoomLabel->setText("zoom: " + QString::number(pTab->getZoom()) + "%");
 
+        m_pRevert->setEnabled(pTab->hasChanges());
+
         m_pShowGrid->setCheckState(pTab->isGridActive() ? Qt::Checked : Qt::Unchecked);
         pTab->getLayerType() == MAP::LAYER_BACKGROUND ? m_pLayerBackground->setChecked(true) : m_pLayerForeground->setChecked(true);
         _onLayerTypeChanged();
@@ -115,4 +117,5 @@ MapViewer* MapEditorModuleContent::getTab(uint32 mapID)
 void MapEditorModuleContent::_onMapChanged(MapViewer* pMapViewer)
 {
     m_pMapTabs->setTabText(m_pMapTabs->indexOf(pMapViewer), pMapViewer->getMapName() + (pMapViewer->hasChanges() ? "*" : ""));
+    m_pRevert->setEnabled(pMapViewer->hasChanges());
 }
