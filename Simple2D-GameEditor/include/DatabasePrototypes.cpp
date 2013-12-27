@@ -296,13 +296,15 @@ namespace DATABASE
                 m_AnimationInfos.at(i-1).m_uiAnimationTypeID = i;
         }
 
-        void WorldObjectPrototype::setAnimationInfo(uint32 uiIndex, AnimationInfo animationInfo)
+        void WorldObjectPrototype::setAnimationInfo(uint32 index, AnimationInfo animationInfo)
         {
+            if (index >= m_AnimationInfos.size())
+                m_AnimationInfos.resize(index+1);
             // do not change animation type id if its an standard entry
-            if (uiIndex <= getMinimumAnimationCount())
-                m_AnimationInfos.at(uiIndex).m_uiAnimationID = animationInfo.m_uiAnimationID;
+            if (index <= getMinimumAnimationCount())
+                m_AnimationInfos.at(index).m_uiAnimationID = animationInfo.m_uiAnimationID;
             else
-                m_AnimationInfos.at(uiIndex) = animationInfo;
+                m_AnimationInfos.at(index) = animationInfo;
         }
 
         void WorldObjectPrototype::setAnimationCount(uint32 uiCount)

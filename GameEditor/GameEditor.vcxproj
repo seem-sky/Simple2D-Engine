@@ -209,6 +209,7 @@
     <ClCompile Include="AbstractPrototypeTable.cpp" />
     <ClCompile Include="AnimationViewer.cpp" />
     <ClCompile Include="DatabaseDialogResize.cpp" />
+    <ClCompile Include="DatabaseModel.cpp" />
     <ClCompile Include="DatabaseModuleAnimation.cpp" />
     <ClCompile Include="DatabaseModuleAutoTile.cpp" />
     <ClCompile Include="DatabaseModuleDragDrop.cpp" />

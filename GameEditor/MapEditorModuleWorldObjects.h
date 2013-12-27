@@ -6,6 +6,9 @@
 
 class MapEditorModuleWorldObjects : public DatabaseModuleDragList
 {
+private:
+    QWidget* MapEditorModuleWorldObjects::_setupTooltipWidget(uint32 uiPrototypeID);
+
 public:
     MapEditorModuleWorldObjects(const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent = nullptr);
 

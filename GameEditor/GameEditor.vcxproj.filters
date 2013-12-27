@@ -234,6 +234,9 @@
     <ClCompile Include="MapEditorWidgetEditor.cpp">
       <Filter>Map Editor\Widgets\MapEditor</Filter>
     </ClCompile>
+    <ClCompile Include="DatabaseModel.cpp">
+      <Filter>Database</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <compile_QT_Files Include="UI\MainWindow.ui">

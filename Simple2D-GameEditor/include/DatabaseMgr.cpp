@@ -93,8 +93,8 @@ bool DatabaseMgr::loadDatabase(const QString& projectPath, uint32 databases)
         IO::DatabaseReader<MAP_STRUCTURE::MapDatabase>(getMapDatabase()).read(projectPath + DATABASE_FILE.at(static_cast<uint32>(DatabaseType::MAP_DATABASE)));
     if (databases & LOCALISATION_DATABASE)
         IO::DatabaseReader<LocalisationDatabase>(getLocalisationDatabase()).read(projectPath + DATABASE_FILE.at(static_cast<uint32>(DatabaseType::LOCALISATION_DATABASE)));
-    //if (databases&  WORLD_OBJECT_DATABASE)
-    //    IO::DatabaseReader<WorldObjectDatabase>(getWorldObjectDatabase()).read(projectPath + DATABASE_FILE.at(DATABASE::WORLD_OBJECT_DATABASE));
+    if (databases&  WORLD_OBJECT_DATABASE)
+        IO::DatabaseReader<WorldObjectDatabase>(getWorldObjectDatabase()).read(projectPath + DATABASE_FILE.at(static_cast<uint32>(DatabaseType::WORLD_OBJECT_DATABASE)));
 
     return true;
 }

@@ -2,7 +2,7 @@
 #define MAP_TREE_H
 
 #include <QtWidgets/QTreeWidget>
-#include "MapDatabase.h"
+#include "DatabaseMgr.h"
 #include <QtWidgets/QMenu>
 
 class MapTreeItem : public QTreeWidgetItem
@@ -17,16 +17,13 @@ public:
 class MapEditorModuleMapTree : public QTreeWidget
 {
     Q_OBJECT
-private:
-    void _reload();
-
 protected:
     void dropEvent(QDropEvent* pEvent);
 
 public:
-    MapEditorModuleMapTree(QWidget* pParent = nullptr);
+    MapEditorModuleMapTree(DATABASE::DatabaseMgr& DBMgr, QWidget* pParent = nullptr);
 
-    void setDatabase(DATABASE::MAP_STRUCTURE::MapDatabase* pMapDatabase);
+    void reload();
 
 private slots:
     void onContextMenuRequested(const QPoint& pos);
@@ -42,7 +39,7 @@ signals:
     void editMap(uint32 mapID);
 
 private:
-    DATABASE::MAP_STRUCTURE::MapDatabase* m_pMapDatabase;
+    DATABASE::DatabaseMgr& m_DBMgr;
     UInt32List m_DeletedMaps;
 };
 

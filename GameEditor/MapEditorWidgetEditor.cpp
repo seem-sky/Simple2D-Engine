@@ -11,7 +11,7 @@ const std::array<const char*, 3> MAPPING_MODES =
 MapEditorWidgetEditor::MapEditorWidgetEditor(DATABASE::DatabaseMgr& databaseMgr, QWidget* pParent) : QWidget(pParent), m_DatabaseMgr(databaseMgr),
     // modules
     m_pModuleTileSelection(new MapEditorModuleTileSelection(m_DatabaseMgr, this)),
-    m_pModuleMapTree(new MapEditorModuleMapTree(pParent)),
+    m_pModuleMapTree(new MapEditorModuleMapTree(m_DatabaseMgr, pParent)),
     m_pModuleContent(new MapEditorModuleContent(m_DatabaseMgr, this)),
     m_pModuleWorldObjects(new MapEditorModuleWorldObjects(m_DatabaseMgr, this)),
 
@@ -25,6 +25,9 @@ MapEditorWidgetEditor::MapEditorWidgetEditor(DATABASE::DatabaseMgr& databaseMgr,
     m_pMappingMode->setCurrentIndex(static_cast<int>(MappingMode::TILE_MAPPING));
     m_pMappingMode->show();
     _onMappingModeChanged(m_pMappingMode->currentIndex());
+
+    // setup ModuleWorldObjects
+    m_pModuleWorldObjects->setModel(new DATABASE::ConstDatabaseModel(m_DatabaseMgr, DATABASE::DatabaseType::WORLD_OBJECT_DATABASE));
 
     // setup modules
     auto pLayout = new QGridLayout();
@@ -95,7 +98,7 @@ void MapEditorWidgetEditor::setup()
 void MapEditorWidgetEditor::projectOpened()
 {
     setup();
-    m_pModuleMapTree->setDatabase(m_DatabaseMgr.getMapDatabase());
+    m_pModuleMapTree->reload();
 }
 
 void MapEditorWidgetEditor::onRegisterTab(MapViewer* pTab)

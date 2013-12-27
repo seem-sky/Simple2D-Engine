@@ -33,7 +33,7 @@ bool MapTreeItem::operator <(const QTreeWidgetItem& other) const
 /*#####
 # MapTree
 #####*/
-MapEditorModuleMapTree::MapEditorModuleMapTree(QWidget* pParent) : QTreeWidget(pParent), m_pMapDatabase(nullptr)
+MapEditorModuleMapTree::MapEditorModuleMapTree(DATABASE::DatabaseMgr& DBMgr, QWidget* pParent) : QTreeWidget(pParent), m_DBMgr(DBMgr)
 {
     // header labels
     setColumnCount(0);
@@ -51,25 +51,18 @@ MapEditorModuleMapTree::MapEditorModuleMapTree(QWidget* pParent) : QTreeWidget(p
     connect(this, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(onContextMenuRequested(const QPoint&)));
 }
 
-void MapEditorModuleMapTree::setDatabase(DATABASE::MAP_STRUCTURE::MapDatabase* pMapDatabase)
-{
-    m_pMapDatabase = pMapDatabase;
-    _reload();
-}
-
-void MapEditorModuleMapTree::_reload()
+void MapEditorModuleMapTree::reload()
 {
     clear();
-    if (!m_pMapDatabase)
-        return;
 
-    uint32 size = m_pMapDatabase->getSize();
+    auto pMapDB = m_DBMgr.getMapDatabase();
+    uint32 size = pMapDB->getSize();
     std::list<const DATABASE::MAP_STRUCTURE::MapPrototype*> unsortedMaps;
     std::vector<QTreeWidgetItem*> items(size, nullptr);
 
     for (uint32 i = 1; i <= size; ++i)
     {
-        auto pMap = m_pMapDatabase->getOriginalPrototype(i);
+        auto pMap = pMapDB->getOriginalPrototype(i);
         if (!pMap->isValid())
             continue;
 
@@ -131,7 +124,7 @@ void MapEditorModuleMapTree::onActionEdit()
 {
     if (auto pItem = dynamic_cast<MapTreeItem*>(currentItem()))
     {
-        if (auto pPrototype = m_pMapDatabase->getOriginalPrototype(pItem->data(0, 0).toUInt()))
+        if (auto pPrototype = m_DBMgr.getMapDatabase()->getOriginalPrototype(pItem->data(0, 0).toUInt()))
         {
             MapEditorDialogMapSettings dialog(pPrototype, this);
             if (dialog.exec())
@@ -145,7 +138,7 @@ void MapEditorModuleMapTree::onActionEdit()
 
 void MapEditorModuleMapTree::onActionNew()
 {
-    if (auto pPrototype = m_pMapDatabase->getNewPrototype())
+    if (auto pPrototype = m_DBMgr.getMapDatabase()->getNewPrototype())
     {
         pPrototype->setFileName("map" + QString::number(pPrototype->getID()) + ".map");
         MapEditorDialogMapSettings dialog(pPrototype.get(), this);
@@ -156,7 +149,7 @@ void MapEditorModuleMapTree::onActionNew()
                 pParent->addChild(pItem);
             else
                 addTopLevelItem(pItem);
-            m_pMapDatabase->setPrototype(pPrototype.release());
+            m_DBMgr.getMapDatabase()->setPrototype(pPrototype.release());
         }
     }
 }
@@ -171,7 +164,7 @@ void MapEditorModuleMapTree::onActionDelete()
 {
     if (auto pItem = currentItem())
     {
-        if (auto pPrototype = m_pMapDatabase->getOriginalPrototype(pItem->data(0, 0).toUInt()))
+        if (auto pPrototype = m_DBMgr.getMapDatabase()->getOriginalPrototype(pItem->data(0, 0).toUInt()))
         {
             if (QMessageBox::Yes == QMessageBox::question(this, "Delete map",
                 "Do you realy want to delete map\n"
@@ -208,7 +201,7 @@ void MapEditorModuleMapTree::onProjectSave()
     // delete maps
     for (auto ID : m_DeletedMaps)
     {
-        if (auto pMap = m_pMapDatabase->getOriginalPrototype(ID))
+        if (auto pMap = m_DBMgr.getMapDatabase()->getOriginalPrototype(ID))
         {
             QFile::remove(Config::get()->getProjectDirectory()+"/maps/"+pMap->getFileName());
             pMap->setFileName("");
@@ -229,7 +222,7 @@ void MapEditorModuleMapTree::dropEvent(QDropEvent* pEvent)
     // update parent ID
     if (pItem)
     {
-        if (auto pMap = m_pMapDatabase->getOriginalPrototype(pItem->data(0, 0).toUInt()))
+        if (auto pMap = m_DBMgr.getMapDatabase()->getOriginalPrototype(pItem->data(0, 0).toUInt()))
         {
             uint32 parentID = 0;
             if (pItem->parent())
