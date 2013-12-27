@@ -118,6 +118,9 @@
     <Filter Include="Map Editor\Widgets\MapEditor">
       <UniqueIdentifier>{ad64a3f6-1f23-4ed4-a90c-b17b231c793a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="EditorCore\DatabaseModel">
+      <UniqueIdentifier>{fdb631f8-7510-4675-a444-b70f58c2eadb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainWindow.cpp">
@@ -235,7 +238,7 @@
       <Filter>Map Editor\Widgets\MapEditor</Filter>
     </ClCompile>
     <ClCompile Include="DatabaseModel.cpp">
-      <Filter>Database</Filter>
+      <Filter>EditorCore\DatabaseModel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -366,9 +369,6 @@
     <ClInclude Include="DatabaseWidgetSprite.h">
       <Filter>Database\Widgets\Resources\Texture\Sprites</Filter>
     </ClInclude>
-    <ClInclude Include="DatabaseModel.h">
-      <Filter>Database</Filter>
-    </ClInclude>
     <ClInclude Include="DatabaseModuleResource.h">
       <Filter>Database\Modules\Resource</Filter>
     </ClInclude>
@@ -398,6 +398,9 @@
     </ClInclude>
     <ClInclude Include="MapEditorModuleWorldObjects.h">
       <Filter>Map Editor\Modules\ObjectSelection</Filter>
+    </ClInclude>
+    <ClInclude Include="DatabaseModel.h">
+      <Filter>EditorCore\DatabaseModel</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

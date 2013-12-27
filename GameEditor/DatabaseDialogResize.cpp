@@ -22,7 +22,7 @@ void DatabaseDialogResize::_onAccept()
     {
         if (newSize < oldSize)
         {
-            if (QMessageBox::Yes != QMessageBox::question(0, "Delete " + QString::number(oldSize - newSize) + " entrys.",
+            if (QMessageBox::Yes != QMessageBox::question(0, "Delete " + QString::number(oldSize - newSize) + " entries.",
                 "Do you really want to delete entry " + QString::number(newSize+1) + " up to end?", QMessageBox::Yes | QMessageBox::No))
                 return;
         }

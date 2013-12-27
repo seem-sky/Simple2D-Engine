@@ -1,6 +1,7 @@
 #include "DatabaseModuleList.h"
 #include "moc_DatabaseModuleList.h"
 #include "DatabaseDialogResize.h"
+#include <QtWidgets/QMessageBox>
 
 DatabaseModuleList::DatabaseModuleList(QWidget* pParent) : QWidget(pParent), Ui_DatabaseModuleList()
 {
@@ -14,8 +15,15 @@ DatabaseModuleList::DatabaseModuleList(QWidget* pParent) : QWidget(pParent), Ui_
 
 void DatabaseModuleList::_onClickResizeButton()
 {
-    DatabaseDialogResize resizeDialog(getDatabaseModel(), this);
-    resizeDialog.exec();
+    try
+    {
+        DatabaseDialogResize resizeDialog(getDatabaseModel(), this);
+        resizeDialog.exec();
+    }
+    catch (const std::runtime_error& e)
+    {
+        QMessageBox::information(0, "Resize error.", e.what(), QMessageBox::Ok, QMessageBox::Ok);
+    }
 }
 
 void DatabaseModuleList::_onSelectionChanged(const QModelIndex& current, const QModelIndex& previous)
