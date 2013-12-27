@@ -296,14 +296,14 @@ void BrushFill::_drawTileSet(const UInt32Point& center)
         return;
 
     // store center in open points
-    UInt32PointList openPoints;
+    UInt32PointVector openPoints;
     openPoints.push_back(center);
     checkPositions.at(center.y)[center.x] = true;
 
     while (!openPoints.empty())
     {
-        UInt32Point3D openPointPos(openPoints.front(), getLayerIndex());
-        openPoints.pop_front();
+        UInt32Point3D openPointPos(openPoints.back(), getLayerIndex());
+        openPoints.pop_back();
 
         for (uint32 i = 0; i < 4; ++i)
         {
