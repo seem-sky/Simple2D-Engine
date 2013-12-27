@@ -1,6 +1,8 @@
 #include "DatabaseWidgetBase.h"
 #include "moc_DatabaseWidgetBase.h"
 
+using namespace DATABASE;
+
 DatabaseWidgetBase::DatabaseWidgetBase(QWidget* pParent) : QWidget(pParent), m_pModuleList(new DatabaseModuleList(this))
 {
     setFocusPolicy(Qt::StrongFocus);
@@ -30,13 +32,13 @@ void DatabaseWidgetBase::_onItemSelected()
         setupWidgetsFromPrototype(pPrototype);
 }
 
-void DatabaseWidgetBase::setupWidgetsFromPrototype(const DATABASE::Prototype* pPrototype)
+void DatabaseWidgetBase::setupWidgetsFromPrototype(const Prototype* pPrototype)
 {
     m_pModuleList->setDataName(pPrototype->getName());
     m_pModuleList->setDataID(pPrototype->getID());
 }
 
-void DatabaseWidgetBase::setupPrototypeFromWidgets(DATABASE::Prototype* pPrototype)
+void DatabaseWidgetBase::setupPrototypeFromWidgets(Prototype* pPrototype)
 {
     pPrototype->setName(m_pModuleList->getDataName());
     pPrototype->setID(m_pModuleList->getDataID());
@@ -52,11 +54,14 @@ void DatabaseWidgetBase::saveCurrent()
 {
     if (m_pModuleList->getDataID())
     {
-        if (auto pDB = getDatabase())
+        if (auto pModel = m_pModuleList->getDatabaseModel())
         {
-            auto pPrototype = pDB->getNewPrototype();
-            setupPrototypeFromWidgets(pPrototype);
-            pDB->setPrototype(pPrototype);
+            if (auto pDB = pModel->getDatabase())
+            {
+                auto pPrototype = pDB->getNewPrototype();
+                setupPrototypeFromWidgets(pPrototype);
+                pDB->setPrototype(pPrototype);
+            }
         }
     }
 }
@@ -64,4 +69,9 @@ void DatabaseWidgetBase::saveCurrent()
 void DatabaseWidgetBase::hideEvent(QHideEvent* pEvent)
 {
     saveCurrent();
+}
+
+ConstDatabaseModel* DatabaseWidgetBase::getDatabaseModel() const
+{
+    return dynamic_cast<ConstDatabaseModel*>(m_pModuleList->getDatabaseModel());
 }

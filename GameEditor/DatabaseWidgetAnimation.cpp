@@ -1,5 +1,7 @@
 #include "DatabaseWidgetAnimation.h"
 
+using namespace DATABASE;
+
 DatabaseWidgetAnimation::DatabaseWidgetAnimation(QWidget* pParent) : DatabaseWidgetBase(pParent), m_pModuleAnimation(new DatabaseModuleAnimation(this)),
     m_pModuleSpriteList(new DatabaseModuleTextureDragList(this))
 {
@@ -25,24 +27,29 @@ DatabaseWidgetAnimation::DatabaseWidgetAnimation(QWidget* pParent) : DatabaseWid
     }
 }
 
-void DatabaseWidgetAnimation::setSpriteDatabaseModel(DATABASE::ConstDatabaseModel* pDBModel)
+void DatabaseWidgetAnimation::setDatabaseMgr(DatabaseMgr& DBMgr)
 {
-    m_pModuleSpriteList->setModel(pDBModel);
-    m_pModuleAnimation->setSpriteDatabase(dynamic_cast<const DATABASE::SpriteDatabase*>(pDBModel->getDatabase()));
+    m_pModuleList->setDatabaseModel(new DatabaseModel(DBMgr, DatabaseType::ANIMATION_DATABASE));
+    m_pModuleAnimation->setSpriteDatabase(DBMgr.getSpriteDatabase());
 }
 
-void DatabaseWidgetAnimation::setupWidgetsFromPrototype(const DATABASE::Prototype* pPrototype)
+void DatabaseWidgetAnimation::setSpriteDatabaseModel(ConstDatabaseModel* pModel)
 {
-    if (auto pProto = dynamic_cast<const DATABASE::ANIMATION::AnimationPrototype*>(pPrototype))
+    m_pModuleSpriteList->setModel(pModel);
+}
+
+void DatabaseWidgetAnimation::setupWidgetsFromPrototype(const Prototype* pPrototype)
+{
+    if (auto pProto = dynamic_cast<const ANIMATION::AnimationPrototype*>(pPrototype))
     {
         m_pModuleAnimation->setAnimation(pProto->getAnimation());
     }
     DatabaseWidgetBase::setupWidgetsFromPrototype(pPrototype);
 }
 
-void DatabaseWidgetAnimation::setupPrototypeFromWidgets(DATABASE::Prototype* pPrototype)
+void DatabaseWidgetAnimation::setupPrototypeFromWidgets(Prototype* pPrototype)
 {
-    if (auto pProto = dynamic_cast<DATABASE::ANIMATION::AnimationPrototype*>(pPrototype))
+    if (auto pProto = dynamic_cast<ANIMATION::AnimationPrototype*>(pPrototype))
     {
         auto animation = m_pModuleAnimation->getAnimation();
         // remove empty sprites at end

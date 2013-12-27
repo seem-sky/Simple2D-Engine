@@ -266,6 +266,7 @@ void WORLD_OBJECT::WorldObjectPrototype::toXML(QXmlStreamWriter& writer) const
             continue;
         writer.writeEmptyElement("animation");
         writer.writeAttribute("entry", QString::number(i));
+        writer.writeAttribute("visualType", QString::number(static_cast<uint32>(animationInfo.m_VisualType)));
         writer.writeAttribute("ID", QString::number(animationInfo.m_ID));
         writer.writeAttribute("typeID", QString::number(animationInfo.m_uiAnimationTypeID));
     }

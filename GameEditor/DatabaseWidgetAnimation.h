@@ -15,6 +15,7 @@ protected:
 public:
     DatabaseWidgetAnimation(QWidget* pParent = nullptr);
 
+    void setDatabaseMgr(DATABASE::DatabaseMgr& DBMgr);
     void setSpriteDatabaseModel(DATABASE::ConstDatabaseModel* pModel);
 
 protected:

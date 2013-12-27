@@ -1,6 +1,7 @@
 #include "DatabaseWidgetLocalisation.h"
 
-using namespace DATABASE::LOCALISATION;
+using namespace DATABASE;
+using namespace LOCALISATION;
 
 DatabaseWidgetLocalisation::DatabaseWidgetLocalisation(QWidget* pParent) : DatabaseWidgetBase(pParent), m_pModuleLocalisation(new DatabaseModuleLocalisation(this))
 {
@@ -8,7 +9,7 @@ DatabaseWidgetLocalisation::DatabaseWidgetLocalisation(QWidget* pParent) : Datab
         pLayout->addWidget(m_pModuleLocalisation, 0, 1, -1, 1);
 }
 
-void DatabaseWidgetLocalisation::setupWidgetsFromPrototype(const DATABASE::Prototype* pPrototype)
+void DatabaseWidgetLocalisation::setupWidgetsFromPrototype(const Prototype* pPrototype)
 {
     if (auto pProto = dynamic_cast<const LocalisationPrototype*>(pPrototype))
     {
@@ -18,7 +19,7 @@ void DatabaseWidgetLocalisation::setupWidgetsFromPrototype(const DATABASE::Proto
     DatabaseWidgetBase::setupWidgetsFromPrototype(pPrototype);
 }
 
-void DatabaseWidgetLocalisation::setupPrototypeFromWidgets(DATABASE::Prototype* pPrototype)
+void DatabaseWidgetLocalisation::setupPrototypeFromWidgets(Prototype* pPrototype)
 {
     if (auto pProto = dynamic_cast<LocalisationPrototype*>(pPrototype))
     {
@@ -32,4 +33,9 @@ void DatabaseWidgetLocalisation::clear()
 {
     m_pModuleLocalisation->clear();
     DatabaseWidgetBase::clear();
+}
+
+void DatabaseWidgetLocalisation::setDatabaseMgr(DatabaseMgr& DBMgr)
+{
+    m_pModuleList->setDatabaseModel(new DatabaseModel(DBMgr, DatabaseType::LOCALISATION_DATABASE));
 }

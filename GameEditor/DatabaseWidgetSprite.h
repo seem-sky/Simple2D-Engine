@@ -7,6 +7,8 @@ class DatabaseWidgetSprite : public DatabaseWidgetTexture
 {
 public:
     DatabaseWidgetSprite(QWidget* pParent = nullptr);
+
+    void setDatabaseMgr(DATABASE::DatabaseMgr& DBMgr);
 };
 
 #endif

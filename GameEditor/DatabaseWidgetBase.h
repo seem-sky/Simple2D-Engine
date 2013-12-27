@@ -18,8 +18,8 @@ protected:
 public:
     DatabaseWidgetBase(QWidget* pParent = nullptr);
 
-    inline DATABASE::IDatabase* getDatabase() const { return m_pModuleList->getDatabaseModel()->getDatabase(); }
-    inline void setDatabaseModel(DATABASE::DatabaseModel* pModel) { m_pModuleList->setDatabaseModel(pModel); }
+    virtual void setDatabaseMgr(DATABASE::DatabaseMgr& DBMgr) = 0;
+    DATABASE::ConstDatabaseModel* getDatabaseModel() const;
 
 private slots:
     void _onItemSelected();

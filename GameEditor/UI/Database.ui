@@ -155,14 +155,9 @@
          <property name="currentIndex">
           <number>0</number>
          </property>
-         <widget class="QWidget" name="m_pWorldObjects">
+         <widget class="DatabaseWidgetWorldObject" name="m_pWorldObjects">
           <attribute name="title">
            <string>WorldObjects</string>
-          </attribute>
-         </widget>
-         <widget class="QWidget" name="m_pDynamicObjects">
-          <attribute name="title">
-           <string>DynamicObjects</string>
           </attribute>
          </widget>
         </widget>
@@ -233,6 +228,12 @@
    <class>DatabaseWidgetAutoTile</class>
    <extends>QWidget</extends>
    <header>databasewidgetautotile.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>DatabaseWidgetWorldObject</class>
+   <extends>QWidget</extends>
+   <header>databasewidgetworldobject.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

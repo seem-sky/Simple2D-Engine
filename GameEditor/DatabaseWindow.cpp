@@ -8,38 +8,28 @@
 
 using namespace DATABASE;
 
-DatabaseWindow::DatabaseWindow(DatabaseMgr& DBMgr, QWidget* p_pParent) : QDialog(p_pParent), Ui_Database(), m_OwnDBMgr(DATABASE::DatabaseMgr(DBMgr)), m_DBMgr(DBMgr)
+DatabaseWindow::DatabaseWindow(DatabaseMgr& DBMgr, QWidget* p_pParent) : QDialog(p_pParent), Ui_Database(), m_OwnDBMgr(DatabaseMgr(DBMgr)), m_DBMgr(DBMgr)
 {
     setupUi(this);
     setWindowFlags(Qt::Window);
 
-    m_pTiles->setDatabaseModel(new DATABASE::DatabaseModel(m_OwnDBMgr, DatabaseType::TILE_DATABASE));
-    m_pTileSets->setDatabaseModel(new DATABASE::DatabaseModel(m_OwnDBMgr, DatabaseType::TILE_SET_DATABASE));
-    m_pTileSets->setTileDatabaseModel(new DATABASE::DatabaseModel(m_OwnDBMgr, DatabaseType::TILE_DATABASE));
+    m_pTiles->setDatabaseMgr(m_OwnDBMgr);
+    m_pTileSets->setDatabaseMgr(m_OwnDBMgr);
+    m_pTileSets->setTileDatabaseModel(m_pTiles->getDatabaseModel());
+    m_pAutoTiles->setDatabaseMgr(m_OwnDBMgr);
+    m_pAutoTiles->setTileDatabaseModel(m_pTiles->getDatabaseModel());
+    m_pSprites->setDatabaseMgr(m_OwnDBMgr);
+    m_pAnimations->setDatabaseMgr(m_OwnDBMgr);
+    m_pAnimations->setSpriteDatabaseModel(m_pSprites->getDatabaseModel());
+    m_pAnimationTypes->setDatabaseMgr(m_OwnDBMgr);
 
-    // 3 dbs for AutoTile widget
-    m_pAutoTiles->setDatabaseModel(new DATABASE::DatabaseModel(m_OwnDBMgr, DatabaseType::AUTO_TILE_DATABASE));
-    m_pAutoTiles->setTileDatabaseModel(new DATABASE::DatabaseModel(m_OwnDBMgr, DatabaseType::TILE_DATABASE));
-
-    m_pSprites->setDatabaseModel(new DATABASE::DatabaseModel(m_OwnDBMgr, DatabaseType::SPRITE_DATABASE));
-
-    // set 2 dbs for animation widget
-    m_pAnimations->setSpriteDatabaseModel(new DATABASE::DatabaseModel(m_OwnDBMgr, DatabaseType::SPRITE_DATABASE));
-    m_pAnimations->setDatabaseModel(new DATABASE::DatabaseModel(m_OwnDBMgr, DatabaseType::ANIMATION_DATABASE));
-
-    m_pAnimationTypes->setDatabaseModel(new DATABASE::DatabaseModel(m_OwnDBMgr, DatabaseType::ANIMATION_TYPE_DATABASE));
-
-
-    //// object section
-    //m_pObjectAnimationTypes->setDB(m_pDBMgr->getObjectAnimationTypeDatabase());
-    //m_pWorldObjects->setAdditionalDB(m_pSprites->getDBChanger(), m_pAnimations->getDBChanger(), m_pObjectAnimationTypes->getDBChanger());
-    //m_pWorldObjects->setDB(m_pDBMgr->getWorldObjectDatabase());
-
-    //m_pDynamicObjects->setAdditionalDB(m_pSprites->getDBChanger(), m_pAnimations->getDBChanger(), m_pObjectAnimationTypes->getDBChanger());
-    //m_pDynamicObjects->setDB(m_pDBMgr->getDynamicObjectDatabase());
+    // object section
+    m_pWorldObjects->setDatabaseMgr(m_OwnDBMgr);
+    m_pWorldObjects->setSpriteDatabaseModel(m_pSprites->getDatabaseModel());
+    m_pWorldObjects->setAnimationDatabaseModel(m_pAnimations->getDatabaseModel());
 
     // text section
-    m_pLocalisation->setDatabaseModel(new DATABASE::DatabaseModel(m_OwnDBMgr, DatabaseType::LOCALISATION_DATABASE));
+    m_pLocalisation->setDatabaseMgr(m_OwnDBMgr);
 
     connect(ButtonOK, SIGNAL(clicked()), this, SLOT(clickButtonOK()));
     connect(ButtonApply, SIGNAL(clicked()), this, SLOT(clickButtonApply()));

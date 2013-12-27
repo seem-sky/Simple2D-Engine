@@ -9,11 +9,12 @@ class DatabaseWidgetLocalisation : public DatabaseWidgetBase
 protected:
     void setupWidgetsFromPrototype(const DATABASE::Prototype* pPrototype);
     void setupPrototypeFromWidgets(DATABASE::Prototype* pPrototype);
+    void clear();
 
 public:
     DatabaseWidgetLocalisation(QWidget* pParent = nullptr);
 
-    void clear();
+    void setDatabaseMgr(DATABASE::DatabaseMgr& DBMgr);
 
 private:
     DatabaseModuleLocalisation* m_pModuleLocalisation;

@@ -228,6 +228,7 @@
     <ClCompile Include="DatabaseWidgetTexture.cpp" />
     <ClCompile Include="DatabaseWidgetTile.cpp" />
     <ClCompile Include="DatabaseWidgetTileSet.cpp" />
+    <ClCompile Include="DatabaseWidgetWorldObject.cpp" />
     <ClCompile Include="GraphicsTextureItem.cpp" />
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="DatabaseWindow.cpp" />
@@ -296,6 +297,7 @@
     <moc_header Include="MapEditorDialogMapSettings.h" />
     <moc_header Include="MapEditorModuleContent.h" />
     <moc_header Include="MapEditorModuleMapTree.h" />
+    <moc_header Include="DatabaseWidgetWorldObject.h" />
     <ClInclude Include="GraphicsTextureItem.h" />
     <moc_header Include="MapEditorModuleBrush.h" />
     <moc_header Include="MapEditorModuleTileSelection.h" />

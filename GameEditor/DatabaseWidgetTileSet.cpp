@@ -1,5 +1,7 @@
 #include "DatabaseWidgetTileSet.h"
 
+using namespace DATABASE;
+
 DatabaseWidgetTileSet::DatabaseWidgetTileSet(QWidget* pParent) : DatabaseWidgetBase(pParent),
     m_pModuleTileSet(new DatabaseModuleTileSet(this)), m_pModuleTileList(new DatabaseModuleTextureDragList(this))
 {
@@ -26,15 +28,20 @@ DatabaseWidgetTileSet::DatabaseWidgetTileSet(QWidget* pParent) : DatabaseWidgetB
     }
 }
 
-void DatabaseWidgetTileSet::setTileDatabaseModel(DATABASE::ConstDatabaseModel* pDBModel)
+void DatabaseWidgetTileSet::setDatabaseMgr(DATABASE::DatabaseMgr& DBMgr)
 {
-    m_pModuleTileList->setModel(pDBModel);
-    m_pModuleTileSet->setTileDatabase(dynamic_cast<const DATABASE::TileDatabase*>(pDBModel->getDatabase()));
+    m_pModuleList->setDatabaseModel(new DatabaseModel(DBMgr, DatabaseType::TILE_SET_DATABASE));
+    m_pModuleTileSet->setTileDatabase(DBMgr.getTileDatabase());
 }
 
-void DatabaseWidgetTileSet::setupWidgetsFromPrototype(const DATABASE::Prototype* pPrototype)
+void DatabaseWidgetTileSet::setTileDatabaseModel(DATABASE::ConstDatabaseModel* pModel)
 {
-    if (auto pProto = dynamic_cast<const DATABASE::TILE_SET::TileSetPrototype*>(pPrototype))
+    m_pModuleTileList->setModel(pModel);
+}
+
+void DatabaseWidgetTileSet::setupWidgetsFromPrototype(const Prototype* pPrototype)
+{
+    if (auto pProto = dynamic_cast<const TILE_SET::TileSetPrototype*>(pPrototype))
     {
         auto size = pProto->getTileCount();
         m_pModuleTileSet->resizeTileSetTableColumns(size.x);
@@ -48,9 +55,9 @@ void DatabaseWidgetTileSet::setupWidgetsFromPrototype(const DATABASE::Prototype*
     DatabaseWidgetBase::setupWidgetsFromPrototype(pPrototype);
 }
 
-void DatabaseWidgetTileSet::setupPrototypeFromWidgets(DATABASE::Prototype* pPrototype)
+void DatabaseWidgetTileSet::setupPrototypeFromWidgets(Prototype* pPrototype)
 {
-    if (auto pProto = dynamic_cast<DATABASE::TILE_SET::TileSetPrototype*>(pPrototype))
+    if (auto pProto = dynamic_cast<TILE_SET::TileSetPrototype*>(pPrototype))
     {
         UInt32Point size(m_pModuleTileSet->getTileSetTableColumnCount(), m_pModuleTileSet->getTileSetTableColumnCount());
         pProto->resizeTiles(size);

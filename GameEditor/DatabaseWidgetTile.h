@@ -19,11 +19,14 @@ protected:
     void setDataPassability(uint8 passability);
     uint8 getDataPassability() const;
 
-private slots:
-    void _onPassabilityButtonClicked();
-
 public:
     DatabaseWidgetTile(QWidget* pParent = nullptr);
+
+    DATABASE::TileDatabase* getDatabase() const;
+    void setDatabaseMgr(DATABASE::DatabaseMgr& DBMgr);
+
+private slots:
+    void _onPassabilityButtonClicked();
 
 private:
     ButtonPtrArray m_Buttons;

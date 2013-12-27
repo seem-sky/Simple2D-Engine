@@ -1,5 +1,7 @@
 #include "DatabaseWidgetAutoTile.h"
 
+using namespace DATABASE;
+
 DatabaseWidgetAutoTile::DatabaseWidgetAutoTile(QWidget* pParent) : DatabaseWidgetBase(pParent), m_pModuleAutoTile(new DatabaseModuleAutoTile(this)),
     m_pModuleTileList(new DatabaseModuleTextureDragList(this))
 {
@@ -29,16 +31,16 @@ DatabaseWidgetAutoTile::DatabaseWidgetAutoTile(QWidget* pParent) : DatabaseWidge
     }
 }
 
-void DatabaseWidgetAutoTile::setupWidgetsFromPrototype(const DATABASE::Prototype* pPrototype)
+void DatabaseWidgetAutoTile::setupWidgetsFromPrototype(const Prototype* pPrototype)
 {
-    if (auto pProto = dynamic_cast<const DATABASE::AUTO_TILE::AutoTilePrototype*>(pPrototype))
+    if (auto pProto = dynamic_cast<const AUTO_TILE::AutoTilePrototype*>(pPrototype))
         m_pModuleAutoTile->setTiles(pProto->getTiles());
     DatabaseWidgetBase::setupWidgetsFromPrototype(pPrototype);
 }
 
-void DatabaseWidgetAutoTile::setupPrototypeFromWidgets(DATABASE::Prototype* pPrototype)
+void DatabaseWidgetAutoTile::setupPrototypeFromWidgets(Prototype* pPrototype)
 {
-    if (auto pProto = dynamic_cast<DATABASE::AUTO_TILE::AutoTilePrototype*>(pPrototype))
+    if (auto pProto = dynamic_cast<AUTO_TILE::AutoTilePrototype*>(pPrototype))
         pProto->setTiles(m_pModuleAutoTile->getTiles());
     DatabaseWidgetBase::setupPrototypeFromWidgets(pPrototype);
 }
@@ -49,8 +51,13 @@ void DatabaseWidgetAutoTile::clear()
     DatabaseWidgetBase::clear();
 }
 
-void DatabaseWidgetAutoTile::setTileDatabaseModel(DATABASE::ConstDatabaseModel* pTileDBModel)
+void DatabaseWidgetAutoTile::setDatabaseMgr(DATABASE::DatabaseMgr& DBMgr)
 {
-    m_pModuleAutoTile->setTileDatabase(dynamic_cast<const DATABASE::TileDatabase*>(pTileDBModel->getDatabase()));
-    m_pModuleTileList->setModel(pTileDBModel);
+    m_pModuleList->setDatabaseModel(new DatabaseModel(DBMgr, DatabaseType::AUTO_TILE_DATABASE));
+    m_pModuleAutoTile->setTileDatabase(DBMgr.getTileDatabase());
+}
+
+void DatabaseWidgetAutoTile::setTileDatabaseModel(DATABASE::ConstDatabaseModel* pModel)
+{
+    m_pModuleTileList->setModel(pModel);
 }

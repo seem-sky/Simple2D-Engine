@@ -7,6 +7,8 @@ class DatabaseWidgetAnimationType : public DatabaseWidgetBase
 {
 public:
     DatabaseWidgetAnimationType(QWidget* pParent = nullptr);
+
+    void setDatabaseMgr(DATABASE::DatabaseMgr& DBMgr);
 };
 
 #endif

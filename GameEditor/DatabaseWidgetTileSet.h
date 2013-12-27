@@ -15,7 +15,8 @@ protected:
 public:
     DatabaseWidgetTileSet(QWidget* pParent = nullptr);
 
-    void setTileDatabaseModel(DATABASE::ConstDatabaseModel* pDBModel);
+    void setDatabaseMgr(DATABASE::DatabaseMgr& DBMgr);
+    void setTileDatabaseModel(DATABASE::ConstDatabaseModel* pModel);
 
 private:
     DatabaseModuleTileSet* m_pModuleTileSet;

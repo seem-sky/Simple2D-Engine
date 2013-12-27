@@ -5,6 +5,8 @@
 #include "QtGlobal.h"
 #include <QtGui/QPixmapCache>
 
+using namespace DATABASE;
+
 DatabaseWidgetTexture::DatabaseWidgetTexture(QWidget* pParent) : DatabaseWidgetRessource(pParent),
     m_pModuleTexture(new DatabaseModuleTexture(this))
 {
@@ -18,9 +20,9 @@ DatabaseWidgetTexture::DatabaseWidgetTexture(QWidget* pParent) : DatabaseWidgetR
     connect(m_pModuleTexture, SIGNAL(transparencyColorChanged(const Color&)), this, SLOT(_onTransparencyColorChanged(const Color&)));
 }
 
-void DatabaseWidgetTexture::setupWidgetsFromPrototype(const DATABASE::Prototype* pPrototype)
+void DatabaseWidgetTexture::setupWidgetsFromPrototype(const Prototype* pPrototype)
 {
-    if (auto pProto = dynamic_cast<const DATABASE::TexturePrototype*>(pPrototype))
+    if (auto pProto = dynamic_cast<const TexturePrototype*>(pPrototype))
     {
         m_pModuleTexture->setDataRed(pProto->getTransparencyColor().getRed());
         m_pModuleTexture->setDataGreen(pProto->getTransparencyColor().getGreen());
@@ -32,9 +34,9 @@ void DatabaseWidgetTexture::setupWidgetsFromPrototype(const DATABASE::Prototype*
     DatabaseWidgetRessource::setupWidgetsFromPrototype(pPrototype);
 }
 
-void DatabaseWidgetTexture::setupPrototypeFromWidgets(DATABASE::Prototype* pPrototype)
+void DatabaseWidgetTexture::setupPrototypeFromWidgets(Prototype* pPrototype)
 {
-    if (auto pProto = dynamic_cast<DATABASE::TexturePrototype*>(pPrototype))
+    if (auto pProto = dynamic_cast<TexturePrototype*>(pPrototype))
         pProto->setTransparencyColor(Color(m_pModuleTexture->getDataRed(), m_pModuleTexture->getDataGreen(), m_pModuleTexture->getDataBlue()));
     DatabaseWidgetRessource::setupPrototypeFromWidgets(pPrototype);
 }
@@ -58,7 +60,9 @@ QStringList DatabaseWidgetTexture::_selectFiles() const
 QPixmap DatabaseWidgetTexture::_createPrototypePixmap(uint32 uiID) const
 {
     QPixmap pixmap;
-    if (auto pProto = dynamic_cast<const DATABASE::TexturePrototype*>(getDatabase()->getPrototype(uiID)))
+    if (!getDatabaseModel())
+        return pixmap;
+    if (auto pProto = dynamic_cast<const TexturePrototype*>(getDatabaseModel()->getDatabase()->getPrototype(uiID)))
         createPixmapFromTexturePrototype(Config::get()->getProjectDirectory(), pProto, pixmap);
     return pixmap;
 }
@@ -75,7 +79,9 @@ void DatabaseWidgetTexture::setupPixmap(const QPixmap& pixmap)
 
 void DatabaseWidgetTexture::_onTransparencyColorChanged(const Color& color)
 {
-    if (auto pProto = dynamic_cast<const DATABASE::TexturePrototype*>(getDatabase()->getPrototype(m_pModuleList->getDataID())))
+    if (!getDatabaseModel())
+        return;
+    if (auto pProto = dynamic_cast<const TexturePrototype*>(getDatabaseModel()->getDatabase()->getPrototype(m_pModuleList->getDataID())))
     {
         QPixmap pixmap;
         createPixmap(Config::get()->getProjectDirectory(), pProto->getPathName(), color, pixmap);

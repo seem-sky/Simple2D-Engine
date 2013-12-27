@@ -15,6 +15,8 @@ enum PassabilityButton
     PASSABILITY_DOWN
 };
 
+using namespace DATABASE;
+
 DatabaseWidgetTile::DatabaseWidgetTile(QWidget* pParent) : DatabaseWidgetTexture(pParent)
 {
     auto* pNewLayout = new QGridLayout();
@@ -36,16 +38,21 @@ DatabaseWidgetTile::DatabaseWidgetTile(QWidget* pParent) : DatabaseWidgetTexture
     _updatePassabilityIcons();
 }
 
-void DatabaseWidgetTile::setupWidgetsFromPrototype(const DATABASE::Prototype* pPrototype)
+void DatabaseWidgetTile::setDatabaseMgr(DatabaseMgr& DBMgr)
 {
-    if (auto pProto = dynamic_cast<const DATABASE::TilePrototype*>(pPrototype))
+    m_pModuleList->setDatabaseModel(new DatabaseModel(DBMgr, DatabaseType::TILE_DATABASE));
+}
+
+void DatabaseWidgetTile::setupWidgetsFromPrototype(const Prototype* pPrototype)
+{
+    if (auto pProto = dynamic_cast<const TilePrototype*>(pPrototype))
         setDataPassability(pProto->getPassability());
     DatabaseWidgetTexture::setupWidgetsFromPrototype(pPrototype);
 }
 
-void DatabaseWidgetTile::setupPrototypeFromWidgets(DATABASE::Prototype* pPrototype)
+void DatabaseWidgetTile::setupPrototypeFromWidgets(Prototype* pPrototype)
 {
-    if (auto pProto = dynamic_cast<DATABASE::TilePrototype*>(pPrototype))
+    if (auto pProto = dynamic_cast<TilePrototype*>(pPrototype))
         pProto->addPassabilityFlag(getDataPassability());
     DatabaseWidgetTexture::setupPrototypeFromWidgets(pPrototype);
 }
@@ -65,22 +72,22 @@ uint8 DatabaseWidgetTile::getDataPassability() const
 {
     uint8 result = 0;
     if (m_Buttons.at(PASSABILITY_UP)->isChecked())
-        result |= DATABASE::TilePrototype::PASSABLE_UP;
+        result |= TilePrototype::PASSABLE_UP;
     if (m_Buttons.at(PASSABILITY_RIGHT)->isChecked())
-        result |= DATABASE::TilePrototype::PASSABLE_RIGHT;
+        result |= TilePrototype::PASSABLE_RIGHT;
     if (m_Buttons.at(PASSABILITY_LEFT)->isChecked())
-        result |= DATABASE::TilePrototype::PASSABLE_LEFT;
+        result |= TilePrototype::PASSABLE_LEFT;
     if (m_Buttons.at(PASSABILITY_DOWN)->isChecked())
-        result |= DATABASE::TilePrototype::PASSABLE_DOWN;
+        result |= TilePrototype::PASSABLE_DOWN;
     return result;
 }
 
 void DatabaseWidgetTile::setDataPassability(uint8 passability)
 {
-    m_Buttons.at(PASSABILITY_UP)->setChecked(passability & DATABASE::TilePrototype::PASSABLE_UP);
-    m_Buttons.at(PASSABILITY_LEFT)->setChecked(passability & DATABASE::TilePrototype::PASSABLE_LEFT);
-    m_Buttons.at(PASSABILITY_RIGHT)->setChecked(passability & DATABASE::TilePrototype::PASSABLE_RIGHT);
-    m_Buttons.at(PASSABILITY_DOWN)->setChecked(passability & DATABASE::TilePrototype::PASSABLE_DOWN);
+    m_Buttons.at(PASSABILITY_UP)->setChecked(passability & TilePrototype::PASSABLE_UP);
+    m_Buttons.at(PASSABILITY_LEFT)->setChecked(passability & TilePrototype::PASSABLE_LEFT);
+    m_Buttons.at(PASSABILITY_RIGHT)->setChecked(passability & TilePrototype::PASSABLE_RIGHT);
+    m_Buttons.at(PASSABILITY_DOWN)->setChecked(passability & TilePrototype::PASSABLE_DOWN);
     _updatePassabilityIcons();
 }
 

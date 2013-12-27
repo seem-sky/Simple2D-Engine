@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="MainWindow">
-      <UniqueIdentifier>{1a1fddbb-68fc-464a-9955-32bdc1d0cb79}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Database">
       <UniqueIdentifier>{1ab761ae-7a2a-4e47-9937-134847639fd2}</UniqueIdentifier>
     </Filter>
@@ -121,10 +118,16 @@
     <Filter Include="EditorCore\DatabaseModel">
       <UniqueIdentifier>{fdb631f8-7510-4675-a444-b70f58c2eadb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Database\Widgets\WorldObject">
+      <UniqueIdentifier>{6faefc3c-020e-4f1a-b074-8e6940869196}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EditorCore\MainWindow">
+      <UniqueIdentifier>{1a1fddbb-68fc-464a-9955-32bdc1d0cb79}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainWindow.cpp">
-      <Filter>MainWindow</Filter>
+      <Filter>EditorCore\MainWindow</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>EditorCore</Filter>
@@ -240,10 +243,13 @@
     <ClCompile Include="DatabaseModel.cpp">
       <Filter>EditorCore\DatabaseModel</Filter>
     </ClCompile>
+    <ClCompile Include="DatabaseWidgetWorldObject.cpp">
+      <Filter>Database\Widgets\WorldObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <compile_QT_Files Include="UI\MainWindow.ui">
-      <Filter>MainWindow</Filter>
+      <Filter>EditorCore\MainWindow</Filter>
     </compile_QT_Files>
     <compile_QT_Files Include="UI\DatabaseModuleTileSet.ui">
       <Filter>Database\Widgets\TileSet</Filter>
@@ -289,7 +295,7 @@
   </ItemGroup>
   <ItemGroup>
     <moc_header Include="MainWindow.h">
-      <Filter>MainWindow</Filter>
+      <Filter>EditorCore\MainWindow</Filter>
     </moc_header>
     <moc_header Include="DatabaseWindow.h">
       <Filter>Database</Filter>
@@ -356,6 +362,9 @@
     </moc_header>
     <moc_header Include="MapEditorWidgetEditor.h">
       <Filter>Map Editor\Widgets\MapEditor</Filter>
+    </moc_header>
+    <moc_header Include="DatabaseWidgetWorldObject.h">
+      <Filter>Database\Widgets\WorldObject</Filter>
     </moc_header>
   </ItemGroup>
   <ItemGroup>
