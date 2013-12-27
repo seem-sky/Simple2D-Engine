@@ -7,7 +7,7 @@ WorldObject::WorldObject(const DATABASE::DatabaseMgr& DBMgr, uint32 GUID, uint32
 {
 }
 
-void WorldObject::_setupFromPrototype(const DATABASE::MAP_OBJECT::WorldObjectPrototype* pWorldObject)
+void WorldObject::_setupFromPrototype(const DATABASE::WORLD_OBJECT::WorldObjectPrototype* pWorldObject)
 {
     if (!pWorldObject)
         assert("No empty prototypes allowed!");
@@ -15,8 +15,8 @@ void WorldObject::_setupFromPrototype(const DATABASE::MAP_OBJECT::WorldObjectPro
     // get animations
     for (uint32 i = 0; i < pWorldObject->getAnimationCount(); ++i)
     {
-        DATABASE::MAP_OBJECT::AnimationInfo info = pWorldObject->getAnimationInfo(i);
-        m_Animations.insert(std::make_pair(info.m_uiAnimationTypeID, info.m_uiAnimationID));
+        DATABASE::WORLD_OBJECT::AnimationInfo info = pWorldObject->getAnimationInfo(i);
+        m_Animations.insert(std::make_pair(info.m_uiAnimationTypeID, info.m_ID));
     }
     _setCurrentAnimation(m_Direction);
 

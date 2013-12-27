@@ -3,7 +3,7 @@
 
 using namespace MAP;
 
-const uint16 CURRENT_VERSION = 2;
+const uint16 CURRENT_VERSION = 3;
 
 /*#####
 # MapBinaryReader
@@ -32,7 +32,9 @@ void INPUT::MapBinaryReader::_readLayer(QDataStream& in, MAP::MapLayer& mapLayer
     switch(version)
     {
     case 1: _readLayerV1(in, mapLayer, layer); break;
-    case 2: _readLayerV2(in, mapLayer, layer); break;
+    case 2:
+    case 3:
+        _readLayerV2(in, mapLayer, layer); break;
     default: throw std::ios::failure("No valid file version."); break;
     }
 }
@@ -44,6 +46,8 @@ void INPUT::MapBinaryReader::_readObjects(QDataStream& in, DATABASE::MAP_STRUCTU
     case 1:
     case 2:
         _readObjectsV1(in, pMap);
+    case 3:
+        _readObjectsV2(in, pMap);
         break;
     default: throw std::ios::failure("No valid file version."); break;
     }
@@ -87,6 +91,23 @@ void INPUT::MapBinaryReader::_readLayerV2(QDataStream& in, MAP::MapLayer& mapLay
 }
 
 void INPUT::MapBinaryReader::_readObjectsV1(QDataStream& in, DATABASE::MAP_STRUCTURE::MapPrototype* pMap)
+{
+    // ToDo: add fill into ObjectContainer
+    //uint32 objectCount = 0;
+    //in >> objectCount;
+    //for (uint32 i = 0; i < objectCount; ++i)
+    //{
+    //    auto pObj = new MapObject();
+    //    uint32 type = 0, layer = 0;
+    //    in >> pObj->m_GUID >> pObj->m_ObjectID >> type >> pObj->m_Position.x >> pObj->m_Position.y >> layer >> pObj->m_GUID;
+    //    pObj->m_Type = static_cast<MAP_OBJECT::ObjectType>(type);
+    //    pObj->m_Layer = static_cast<MapObjectLayer>(layer);
+    //    pMap->addMapObject(pObj);
+    //}
+}
+
+// without world_object type (there is only one type left)
+void INPUT::MapBinaryReader::_readObjectsV2(QDataStream& in, DATABASE::MAP_STRUCTURE::MapPrototype* pMap)
 {
     // ToDo: add fill into ObjectContainer
     //uint32 objectCount = 0;
@@ -146,6 +167,6 @@ void OUTPUT::MapBinaryWriter::_writeObjects(QDataStream& out, const DATABASE::MA
     {
         auto pObj = pMap->getMapObject(i);
         if (pObj && !pObj->isEmpty())
-            out << pObj->m_GUID << pObj->m_ObjectID << pObj->m_Type << pObj->m_Position.x << pObj->m_Position.y << pObj->m_Layer << pObj->m_GUID;
+            out << pObj->m_GUID << pObj->m_ObjectID << pObj->m_Position.x << pObj->m_Position.y << pObj->m_Layer << pObj->m_GUID;
     }
 }

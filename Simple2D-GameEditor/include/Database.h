@@ -165,7 +165,7 @@ namespace DATABASE
         //AnimationTypePrototype* getNewPrototype(uint32 uiID = 0) const;
     };
 
-    class WorldObjectDatabase : public Database<MAP_OBJECT::WorldObjectPrototype>
+    class WorldObjectDatabase : public Database<WORLD_OBJECT::WorldObjectPrototype>
     {
     public:
         //virtual void setPrototype(MAP_OBJECT::WorldObjectPrototype* pItem);

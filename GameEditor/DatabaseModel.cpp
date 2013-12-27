@@ -25,7 +25,7 @@ QVariant ConstDatabaseModel::data(const QModelIndex& index, int role) const
         {
             // draw standard entry ins AnimationTypeDatabase blue
         case Qt::ForegroundRole:
-            if (getDatabaseType() == DatabaseType::ANIMATION_TYPE_DATABASE && index.row() <= 8)
+            if (getDatabaseType() == DatabaseType::ANIMATION_TYPE_DATABASE && index.row() <= ANIMATION::STANDARD_ANIMATION_TYPES)
                 return QVariant(QColor(Qt::blue));
             return QVariant(QColor(Qt::black));
 

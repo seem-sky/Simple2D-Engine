@@ -354,6 +354,7 @@ namespace DATABASE
         /*#####
         # AnimationTypePrototype
         #####*/
+        const uint32 STANDARD_ANIMATION_TYPES = 8;
         class AnimationTypePrototype : public Prototype
         {
         public:
@@ -434,22 +435,25 @@ namespace DATABASE
     /*#####
     # WorldObjectPrototype
     #####*/
-    namespace MAP_OBJECT
+    namespace WORLD_OBJECT
     {
-        enum ObjectType
-        {
-            TYPE_WORLDOBJECT,
-            TYPE_DYNAMIC_OBJECT
-        };
-
         // animation stuff
         const uint8 MIN_WORLD_OBJECT_POSE = 4;
-        struct AnimationInfo
+        class AnimationInfo
         {
-            AnimationInfo(uint32 uiAnimationID = 0, uint32 uiAnimationTypeID = 0) : m_uiAnimationID(uiAnimationID), m_uiAnimationTypeID(uiAnimationTypeID)
+        public:
+            enum class VisualType
+            {
+                SPRITE,
+                ANIMATION
+            };
+
+            AnimationInfo(uint32 ID = 0, VisualType visualType = VisualType::SPRITE, uint32 animationTypeID = 0)
+                : m_ID(ID), m_VisualType(visualType), m_uiAnimationTypeID(animationTypeID)
             {}
 
-            uint32 m_uiAnimationID;
+            uint32 m_ID;
+            VisualType m_VisualType;
             uint32 m_uiAnimationTypeID;
         };
         typedef std::vector<AnimationInfo> AnimationInfoVector;
@@ -457,7 +461,7 @@ namespace DATABASE
         class WorldObjectPrototype : public Prototype
         {
         private:
-            void initAnimationPoses();
+            void _initAnimationPoses();
 
         public:
             WorldObjectPrototype(uint32 ID = 0);
@@ -481,7 +485,7 @@ namespace DATABASE
 
             inline const AnimationInfo& getAnimationInfo(uint32 uiIndex) const { return m_AnimationInfos.at(uiIndex); }
             inline AnimationInfo& getAnimationInfo(uint32 uiIndex) { return m_AnimationInfos.at(uiIndex); }
-            void setAnimationInfo(uint32 uiIndex, AnimationInfo animationInfo);
+            void setAnimationInfo(uint32 uiIndex, AnimationInfo& animationInfo);
 
             inline uint32 getAnimationCount() const { return m_AnimationInfos.size(); }
             void setAnimationCount(uint32 uiCount);
@@ -499,26 +503,6 @@ namespace DATABASE
             uint16 m_uiAnimationSpeed;
             QString m_ScriptName;
         };
-
-        /*#####
-        # DynamicObjectPrototype
-        #####*/
-        const uint8 MIN_DYNAMIC_OBJECT_POSE = 8;
-        class DynamicObjectPrototype : public WorldObjectPrototype
-        {
-        public:
-            DynamicObjectPrototype(uint32 ID = 0) : WorldObjectPrototype(ID), m_uiMovementSpeed(TILE_SIZE) {}
-
-            inline void setMovementSpeed(uint16 uiSpeed) { m_uiMovementSpeed = uiSpeed; }
-            inline uint16 getMovementSpeed() const { return m_uiMovementSpeed; }
-
-            uint8 getMinimumAnimationCount() const { return MIN_DYNAMIC_OBJECT_POSE; }
-
-        private:
-            uint16 m_uiMovementSpeed;
-        };
-
-        QString getTypeString(ObjectType type);
     }
 
     /*#####
@@ -585,11 +569,10 @@ namespace DATABASE
         // map objects
         struct MapObject
         {
-            MapObject() : m_Type(DATABASE::MAP_OBJECT::TYPE_WORLDOBJECT), m_ObjectID(0), m_GUID(0), m_Direction(DIRECTION_DOWN), m_Layer(LAYER_MIDDLE) {}
+            MapObject() : m_ObjectID(0), m_GUID(0), m_Direction(DIRECTION_DOWN), m_Layer(LAYER_MIDDLE) {}
 
             bool isEmpty() const { return !m_GUID && !m_ObjectID; }
 
-            DATABASE::MAP_OBJECT::ObjectType m_Type;
             uint32 m_ObjectID;
             uint32 m_GUID;
             Int32Point m_Position;
@@ -633,7 +616,7 @@ namespace DATABASE
 
             // ToDo: remove following
             void addMapObject(MapObject* pObject);
-            MapObject* addMapObject(DATABASE::MAP_OBJECT::ObjectType type, uint32 ID, Int32Point pos);
+            MapObject* addMapObject(uint32 ID, Int32Point pos);
             inline uint32 getMapObjectCount() const { return m_Objects.getSize(); }
             inline const MapObject* getMapObject(uint32 GUID) const { return m_Objects.getItem(GUID); }
             inline MapObject* getMapObject(uint32 GUID)  { return m_Objects.getItem(GUID); }

@@ -29,21 +29,9 @@ void Map::_setupObjects(const DATABASE::MAP_STRUCTURE::MapObjectContainer& objec
     {
         if (auto pObj = objects.getItem(i))
         {
-            OBJECT::WorldObject* pWorldObject(nullptr);
-            switch (pObj->m_Type)
-            {
-            case DATABASE::MAP_OBJECT::TYPE_WORLDOBJECT:
-                {
-                    pWorldObject = new OBJECT::WorldObject(m_DBMgr, i, pObj->m_ObjectID);
-                    pWorldObject->setPosition(pObj->m_Position);
-                    pWorldObject->setDirection(pObj->m_Direction);
-                    break;
-                }
-            case DATABASE::MAP_OBJECT::TYPE_DYNAMIC_OBJECT:
-                {
-                    break;
-                }
-            }
+            OBJECT::WorldObject* pWorldObject(new OBJECT::WorldObject(m_DBMgr, i, pObj->m_ObjectID));
+            pWorldObject->setPosition(pObj->m_Position);
+            pWorldObject->setDirection(pObj->m_Direction);
             addWorldObject(pWorldObject);
         }
     }

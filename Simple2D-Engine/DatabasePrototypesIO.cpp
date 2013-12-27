@@ -234,7 +234,7 @@ void LOCALISATION::LocalisationPrototype::insertChildren(const QXmlStreamReader&
 /*#####
 # WorldObjectPrototype
 #####*/
-void MAP_OBJECT::WorldObjectPrototype::fromXML(const QXmlStreamAttributes& attributes)
+void WORLD_OBJECT::WorldObjectPrototype::fromXML(const QXmlStreamAttributes& attributes)
 {
     Prototype::fromXML(attributes);
 
@@ -248,7 +248,7 @@ void MAP_OBJECT::WorldObjectPrototype::fromXML(const QXmlStreamAttributes& attri
     setScriptName(attributes.value("script").toString());
 }
 
-void MAP_OBJECT::WorldObjectPrototype::toXML(QXmlStreamWriter& writer) const
+void WORLD_OBJECT::WorldObjectPrototype::toXML(QXmlStreamWriter& writer) const
 {
     writer.writeAttribute("boundingX", QString::number(getBoundingX()));
     writer.writeAttribute("boundingY", QString::number(getBoundingY()));
@@ -261,26 +261,29 @@ void MAP_OBJECT::WorldObjectPrototype::toXML(QXmlStreamWriter& writer) const
     //store animation infos
     for (uint32 i = 1; i <= getAnimationCount(); ++i)
     {
-        MAP_OBJECT::AnimationInfo animationInfo = getAnimationInfo(i);
-        if (animationInfo.m_uiAnimationID == 0 && animationInfo.m_uiAnimationTypeID == 0)
+        WORLD_OBJECT::AnimationInfo animationInfo = getAnimationInfo(i);
+        if (animationInfo.m_ID == 0 && animationInfo.m_uiAnimationTypeID == 0)
             continue;
         writer.writeEmptyElement("animation");
         writer.writeAttribute("entry", QString::number(i));
-        writer.writeAttribute("ID", QString::number(animationInfo.m_uiAnimationID));
+        writer.writeAttribute("ID", QString::number(animationInfo.m_ID));
         writer.writeAttribute("typeID", QString::number(animationInfo.m_uiAnimationTypeID));
     }
 }
 
-void MAP_OBJECT::WorldObjectPrototype::insertChildren(const QXmlStreamReader& reader)
+void WORLD_OBJECT::WorldObjectPrototype::insertChildren(const QXmlStreamReader& reader)
 {
     if (reader.name() == "animation")
     {
         QXmlStreamAttributes attributes = reader.attributes();
         if (!attributes.hasAttribute("entry"))
             return;
-                        
+
         setAnimationInfo(attributes.value("entry").toUInt(),
-        MAP_OBJECT::AnimationInfo(attributes.value("ID").toUInt(), attributes.value("typeID").toUInt()));
+            WORLD_OBJECT::AnimationInfo(
+                attributes.value("ID").toUInt(),
+                static_cast<WORLD_OBJECT::AnimationInfo::VisualType>(attributes.value("visualType").toUInt()),
+                attributes.value("typeID").toUInt()));
     }
     else
         Prototype::insertChildren(reader);

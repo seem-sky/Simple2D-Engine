@@ -15,7 +15,7 @@ namespace MAP
         class WorldObject : public Object
         {
         private:
-            void _setupFromPrototype(const DATABASE::MAP_OBJECT::WorldObjectPrototype* pWorldObject);
+            void _setupFromPrototype(const DATABASE::WORLD_OBJECT::WorldObjectPrototype* pWorldObject);
             void _setCurrentAnimation(uint32 pose);
 
         public:

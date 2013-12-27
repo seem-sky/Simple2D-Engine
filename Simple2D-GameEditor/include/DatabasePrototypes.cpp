@@ -281,14 +281,14 @@ namespace DATABASE
     /*#####
     # WorldObjectPrototype
     #####*/
-    namespace MAP_OBJECT
+    namespace WORLD_OBJECT
     {
         WorldObjectPrototype::WorldObjectPrototype(uint32 uiID) : Prototype(uiID), m_uiAnimationSpeed(100)
         {
-            initAnimationPoses();
+            _initAnimationPoses();
         }
 
-        void WorldObjectPrototype::initAnimationPoses()
+        void WorldObjectPrototype::_initAnimationPoses()
         {
             // set minimum poses
             m_AnimationInfos.resize(getMinimumAnimationCount());
@@ -296,13 +296,17 @@ namespace DATABASE
                 m_AnimationInfos.at(i-1).m_uiAnimationTypeID = i;
         }
 
-        void WorldObjectPrototype::setAnimationInfo(uint32 index, AnimationInfo animationInfo)
+        void WorldObjectPrototype::setAnimationInfo(uint32 index, AnimationInfo& animationInfo)
         {
             if (index >= m_AnimationInfos.size())
                 m_AnimationInfos.resize(index+1);
             // do not change animation type id if its an standard entry
             if (index <= getMinimumAnimationCount())
-                m_AnimationInfos.at(index).m_uiAnimationID = animationInfo.m_uiAnimationID;
+            {
+                auto &info = m_AnimationInfos.at(index);
+                info.m_ID = animationInfo.m_ID;
+                info.m_VisualType = animationInfo.m_VisualType;
+            }
             else
                 m_AnimationInfos.at(index) = animationInfo;
         }
@@ -312,23 +316,6 @@ namespace DATABASE
             if (uiCount < getMinimumAnimationCount())
                 uiCount = getMinimumAnimationCount();
             m_AnimationInfos.resize(uiCount);
-        }
-
-        /*#####
-        # DynamicObjectPrototype
-        #####*/
-
-        /*#####
-        # free functions
-        #####*/
-        QString getTypeString(ObjectType type)
-        {
-            switch (type)
-            {
-            case TYPE_WORLDOBJECT: return "WorldObject";
-            case TYPE_DYNAMIC_OBJECT: return "DynamicObject";
-            }
-            return "Unknown";
         }
     }
 
@@ -355,11 +342,10 @@ namespace DATABASE
                 m_Objects.setItem(GUID, nullptr);
         }
 
-        MapObject* MapPrototype::addMapObject(DATABASE::MAP_OBJECT::ObjectType type, uint32 uiID, Int32Point pos)
+        MapObject* MapPrototype::addMapObject(uint32 uiID, Int32Point pos)
         {
             auto newObject = new MapObject();
             newObject->m_ObjectID = uiID;
-            newObject->m_Type = type;
             newObject->m_Position = pos;
             newObject->m_GUID = m_Objects.getSize()+1;
             m_Objects.setItem(newObject->m_GUID, newObject);

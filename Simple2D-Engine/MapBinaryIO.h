@@ -19,8 +19,9 @@ namespace MAP
             // different versions
             void _readLayerV1(QDataStream& in, MapLayer& mapLayer, Layer layer);
             void _readLayerV2(QDataStream& in, MapLayer& mapLayer, Layer layer);
+
             void _readObjectsV1(QDataStream& in, DATABASE::MAP_STRUCTURE::MapPrototype* pMap);
-            void _readInfoV1(QDataStream& in, DATABASE::MAP_STRUCTURE::MapPrototype* pMap);
+            void _readObjectsV2(QDataStream& in, DATABASE::MAP_STRUCTURE::MapPrototype* pMap);
 
         public:
             void readFile(const QString& file, MAP_DATA::MapData& data);
