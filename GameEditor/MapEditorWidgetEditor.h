@@ -5,6 +5,7 @@
 #include "MapEditorModuleContent.h"
 #include "MapEditorModuleTileSelection.h"
 #include "MapEditorModuleMapTree.h"
+#include "MapEditorModuleWorldObjects.h"
 
 class MapEditorWidgetEditor : public QWidget
 {
@@ -14,6 +15,9 @@ public:
 
     void setup();
     void projectOpened();
+
+private slots:
+    void _onMappingModeChanged(int index);
 
 public slots:
     void onRegisterTab(MapViewer* pTab);
@@ -25,6 +29,10 @@ private:
     MapEditorModuleContent* m_pModuleContent;
     MapEditorModuleTileSelection* m_pModuleTileSelection;
     MapEditorModuleMapTree* m_pModuleMapTree;
+    MapEditorModuleWorldObjects* m_pModuleWorldObjects;
+
+    // others
+    QComboBox* m_pMappingMode;
 };
 
 #endif

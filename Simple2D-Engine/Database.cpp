@@ -3,26 +3,6 @@
 
 using namespace DATABASE;
 
-//void Database::getPrototypeShortInfos(UInt32StringPairVector& result) const
-//{
-//    for (uint32 i = 0; i < getSize(); ++i)
-//    {
-//        if (m_Items.at(i) && m_Items.at(i)->getID() != 0)
-//            result.push_back(std::make_pair(m_Items.at(i)->getID(), m_Items.at(i)->getName()));
-//    }
-//}
-//
-//UInt32StringPairVector Database::getPrototypeShortInfos() const
-//{
-//    UInt32StringPairVector result;
-//    for (uint32 i = 0; i < getSize(); ++i)
-//    {
-//        if (m_Items.at(i) && m_Items.at(i)->getID() != 0)
-//            result.push_back(std::make_pair(m_Items.at(i)->getID(), m_Items.at(i)->getName()));
-//    }
-//    return result;
-//}
-
 /*#####
 # Special Databases
 #####*/
@@ -32,6 +12,10 @@ using namespace DATABASE;
 TileDatabase::TileDatabase() : Database()
 {
     setMaximumSize(MATH::maximum<TILE_INDEX>()-1);
+}
+
+TileDatabase::TileDatabase(const TileDatabase& other) : Database(other)
+{
 }
 
 //void TileDatabase::setPrototype(TilePrototype* pItem)
@@ -83,6 +67,10 @@ TileDatabase::TileDatabase() : Database()
 AutoTileDatabase::AutoTileDatabase() : Database()
 {
     setMaximumSize(MATH::maximum<AUTO_TILE_INDEX>()-1);
+}
+
+AutoTileDatabase::AutoTileDatabase(const AutoTileDatabase& other) : Database(other)
+{
 }
 
 //void AutoTileDatabase::setPrototype(AUTO_TILE::AutoTilePrototype* pItem)
@@ -159,6 +147,10 @@ AnimationTypeDatabase::AnimationTypeDatabase() : Database()
     clear();
 }
 
+AnimationTypeDatabase::AnimationTypeDatabase(const AnimationTypeDatabase& other) : Database(other)
+{
+}
+
 // add standard entrys
 void AnimationTypeDatabase::clear()
 {
@@ -215,29 +207,6 @@ void AnimationTypeDatabase::clear()
 //MAP_OBJECT::WorldObjectPrototype* WorldObjectDatabase::getNewPrototype(uint32 uiID) const
 //{
 //    return new MAP_OBJECT::WorldObjectPrototype(uiID);
-//}
-
-/*#####
-# DynamicObjectDatabase
-#####*/
-//void DynamicObjectDatabase::setPrototype(MAP_OBJECT::DynamicObjectPrototype* pItem)
-//{
-//    Database::setPrototype(pItem);
-//}
-//
-//const MAP_OBJECT::DynamicObjectPrototype* DynamicObjectDatabase::getPrototype(uint32 ID) const
-//{
-//    return dynamic_cast<const MAP_OBJECT::DynamicObjectPrototype*>(Database::getPrototype(ID));
-//}
-//
-//MAP_OBJECT::DynamicObjectPrototype* DynamicObjectDatabase::getPrototype(uint32 ID)
-//{
-//    return dynamic_cast<MAP_OBJECT::DynamicObjectPrototype*>(Database::getPrototype(ID));
-//}
-//
-//MAP_OBJECT::DynamicObjectPrototype* DynamicObjectDatabase::getNewPrototype(uint32 uiID) const
-//{
-//    return new MAP_OBJECT::DynamicObjectPrototype(uiID);
 //}
 
 /*#####

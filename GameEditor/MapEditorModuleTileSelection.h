@@ -11,7 +11,7 @@ class MapEditorModuleTileSelection : public QTabWidget
 {
     Q_OBJECT
 public:
-    MapEditorModuleTileSelection(const DATABASE::DatabaseMgr& databaseMgr, QWidget* pParent = nullptr);
+    MapEditorModuleTileSelection(DATABASE::DatabaseMgr& databaseMgr, QWidget* pParent = nullptr);
 
     void setup();
 
@@ -24,7 +24,7 @@ public slots:
 
 private:
     std::array<AbstractPixmapWidget*, 2> m_SelectedItems;
-    const DATABASE::DatabaseMgr& m_DatabaseMgr;
+    DATABASE::DatabaseMgr& m_DatabaseMgr;
 
     // tabs
     MapEditorModuleTiles* m_pModuleTiles;

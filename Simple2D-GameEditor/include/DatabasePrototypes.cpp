@@ -335,6 +335,12 @@ namespace DATABASE
     #####*/
     namespace MAP_STRUCTURE
     {
+        MapPrototype::MapPrototype(uint32 ID, const QString& fileName) : Prototype(ID), m_FileName(fileName), m_uiParentID(0)
+        {
+            m_Layer.at(MAP::LAYER_BACKGROUND) = 1;
+            m_Layer.at(MAP::LAYER_FOREGROUND) = 0;
+        }
+
         void MapPrototype::addMapObject(MapObject* pObject)
         {
             if (pObject)

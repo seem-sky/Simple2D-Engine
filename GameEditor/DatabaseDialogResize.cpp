@@ -2,7 +2,7 @@
 #include "moc_DatabaseDialogResize.h"
 #include <QtWidgets/QMessageBox>
 
-DatabaseDialogResize::DatabaseDialogResize(IDatabaseModel* pDBModel, QWidget* pParent) : QDialog(pParent), Ui_DatabaseDialogResize(), m_pDBModel(pDBModel)
+DatabaseDialogResize::DatabaseDialogResize(DATABASE::DatabaseModel* pDBModel, QWidget* pParent) : QDialog(pParent), Ui_DatabaseDialogResize(), m_pDBModel(pDBModel)
 {
     setupUi(this);
 

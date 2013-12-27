@@ -13,9 +13,9 @@ protected:
     virtual void clear();
 
 public:
-    DatabaseWidgetTileSet(const DATABASE::TileSetDatabase* pDatabase = nullptr, QWidget* pParent = nullptr);
+    DatabaseWidgetTileSet(QWidget* pParent = nullptr);
 
-    void setTileDatabaseModel(DatabaseModel<DATABASE::TileDatabase>* pDBModel);
+    void setTileDatabaseModel(DATABASE::ConstDatabaseModel* pDBModel);
 
 private:
     DatabaseModuleTileSet* m_pModuleTileSet;

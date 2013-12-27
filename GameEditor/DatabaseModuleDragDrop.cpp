@@ -8,7 +8,7 @@
 #include "Config.h"
 
 DatabaseModuleDragList::DatabaseModuleDragList(QWidget* pParent) : QTreeView(pParent), m_CurrentRow(MATH::maximum<uint32>()), m_pToolTip(nullptr), m_ShowTooltip(false),
-    m_ToolTipPos(TOOLTIP_LEFT), m_MaximumTooltipSize(100, 100)
+    m_ToolTipPos(ToolTipPosition::TOOLTIP_LEFT), m_MaximumTooltipSize(100, 100)
 {
     setDragEnabled(true);
     setDragDropMode(QAbstractItemView::DragOnly);
@@ -42,7 +42,7 @@ void DatabaseModuleDragList::setShowTooltip(bool show)
     m_ShowTooltip = show;
 }
 
-void DatabaseModuleDragList::setModel(IDatabaseModel* pModel)
+void DatabaseModuleDragList::setModel(DATABASE::ConstDatabaseModel* pModel)
 {
     if (pModel)
     {
@@ -94,7 +94,7 @@ void DatabaseModuleDragList::_showTooltip()
             if (m_pToolTip->height() > m_MaximumTooltipSize.height())
                 newSize.setHeight(m_MaximumTooltipSize.height());
             m_pToolTip->resize(newSize);
-            QPoint widgetPos = mapToGlobal(QPoint(m_ToolTipPos == TOOLTIP_LEFT ? -m_pToolTip->width() : width(), 0));
+            QPoint widgetPos = mapToGlobal(QPoint(m_ToolTipPos == ToolTipPosition::TOOLTIP_LEFT ? -m_pToolTip->width() : width(), 0));
             widgetPos.setY(QCursor::pos().y());
             m_pToolTip->move(widgetPos);
             m_pToolTip->show();
@@ -121,9 +121,9 @@ QWidget* DatabaseModuleTextureDragList::_setupTooltipWidget(uint32 uiPrototypeID
 {
     auto pLabel = new QLabel(this);
     pLabel->resize(10, 10);
-    if (auto pModel = dynamic_cast<IDatabaseModel*>(model()))
+    if (auto pModel = dynamic_cast<DATABASE::ConstDatabaseModel*>(model()))
     {
-        if (auto pPrototype = dynamic_cast<DATABASE::TexturePrototype*>(pModel->getDatabase()->getPrototype(uiPrototypeID)))
+        if (auto pPrototype = dynamic_cast<const DATABASE::TexturePrototype*>(pModel->getDatabase()->getPrototype(uiPrototypeID)))
         {
             QPixmap pixmap;
             if (createPixmapFromTexturePrototype(Config::get()->getProjectDirectory(), pPrototype, pixmap))
@@ -143,9 +143,9 @@ void DatabaseModuleTextureDragList::startDrag(Qt::DropActions supportedActions)
     {
         QDrag* pDrag = new QDrag(this);
         auto mimeData = new QMimeData();
-        if (auto pModel = dynamic_cast<IDatabaseModel*>(model()))
+        if (auto pModel = dynamic_cast<DATABASE::ConstDatabaseModel*>(model()))
         {
-            if (auto pPrototype = dynamic_cast<DATABASE::TexturePrototype*>(pModel->getDatabase()->getPrototype(pItem.row()+1)))
+            if (auto pPrototype = dynamic_cast<const DATABASE::TexturePrototype*>(pModel->getDatabase()->getPrototype(pItem.row()+1)))
             {
                 QPixmap pixmap;
                 if (createPixmapFromTexturePrototype(Config::get()->getProjectDirectory(), pPrototype, pixmap))

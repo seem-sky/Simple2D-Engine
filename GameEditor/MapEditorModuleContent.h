@@ -15,6 +15,8 @@ public:
 
     MapViewer* getTab(uint32 mapID);
 
+    void setMappingMode(MappingMode mode);
+
 private slots:
     void _onCurrentChanged(int index);
     void _onLayerChanged(int value);

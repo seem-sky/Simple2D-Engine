@@ -29,7 +29,7 @@ const DATABASE::Prototype* DatabaseModuleList::getCurrentPrototype() const
     return getDatabaseModel()->getDatabase()->getPrototype(m_pList->currentIndex().row()+1);
 }
 
-void DatabaseModuleList::setDatabaseModel(IDatabaseModel* pModel)
+void DatabaseModuleList::setDatabaseModel(DATABASE::DatabaseModel* pModel)
 {
     m_pList->setModel(pModel);
     connect(m_pList->selectionModel(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),

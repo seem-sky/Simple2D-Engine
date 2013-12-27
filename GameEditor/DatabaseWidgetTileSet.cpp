@@ -1,6 +1,6 @@
 #include "DatabaseWidgetTileSet.h"
 
-DatabaseWidgetTileSet::DatabaseWidgetTileSet(const DATABASE::TileSetDatabase* pDatabase, QWidget* pParent) : DatabaseWidgetBase(pParent),
+DatabaseWidgetTileSet::DatabaseWidgetTileSet(QWidget* pParent) : DatabaseWidgetBase(pParent),
     m_pModuleTileSet(new DatabaseModuleTileSet(this)), m_pModuleTileList(new DatabaseModuleTextureDragList(this))
 {
     // setup tileset module
@@ -26,10 +26,10 @@ DatabaseWidgetTileSet::DatabaseWidgetTileSet(const DATABASE::TileSetDatabase* pD
     }
 }
 
-void DatabaseWidgetTileSet::setTileDatabaseModel(DatabaseModel<DATABASE::TileDatabase>* pDBModel)
+void DatabaseWidgetTileSet::setTileDatabaseModel(DATABASE::ConstDatabaseModel* pDBModel)
 {
     m_pModuleTileList->setModel(pDBModel);
-    m_pModuleTileSet->setTileDatabase(dynamic_cast<DATABASE::TileDatabase*>(pDBModel->getDatabase()));
+    m_pModuleTileSet->setTileDatabase(dynamic_cast<const DATABASE::TileDatabase*>(pDBModel->getDatabase()));
 }
 
 void DatabaseWidgetTileSet::setupWidgetsFromPrototype(const DATABASE::Prototype* pPrototype)

@@ -17,9 +17,51 @@ DatabaseMgr::DatabaseMgr()
     setAnimationDatabase(new AnimationDatabase());
     setAnimationTypeDatabase(new AnimationTypeDatabase());
     setWorldObjectDatabase(new WorldObjectDatabase());
-    setDynamicObjectDatabase(new DynamicObjectDatabase());
     setLocalisationDatabase(new LocalisationDatabase());
     setMapDatabase(new MAP_STRUCTURE::MapDatabase());
+}
+
+// overwrite copy constructor
+DatabaseMgr::DatabaseMgr(const DatabaseMgr& other)
+{
+    copyFrom(other);
+}
+
+void DatabaseMgr::takeFrom(DatabaseMgr& other, uint32 databases /* = ALL_DATABASES */)
+{
+    uint32 curDB = 0x1;
+    // ignore map database
+    databases ^= MAP_DATABASE;
+    for (uint32 i = 0; i < m_Databases.size() && i < other.m_Databases.size(); ++i)
+    {
+        if ((databases & curDB) != 0)
+            m_Databases.at(i) = std::unique_ptr<IDatabase>(other.m_Databases.at(i).release());
+        curDB <<= 1;
+    }
+}
+
+void DatabaseMgr::copyFrom(const DatabaseMgr& other, uint32 databases /* = ALL_DATABASES */)
+{
+    if (databases & TILE_DATABASE)
+        setTileDatabase(new TileDatabase(*other.getTileDatabase()));
+    if (databases & TILE_SET_DATABASE)
+        setTileSetDatabase(new TileSetDatabase(*other.getTileSetDatabase()));
+    if (databases & AUTO_TILE_DATABASE)
+        setAutoTileDatabase(new AutoTileDatabase(*other.getAutoTileDatabase()));
+    if (databases & SPRITE_DATABASE)
+        setSpriteDatabase(new SpriteDatabase(*other.getSpriteDatabase()));
+    if (databases & ANIMATION_DATABASE)
+        setAnimationDatabase(new AnimationDatabase(*other.getAnimationDatabase()));
+    if (databases & ANIMATION_TYPE_DATABASE)
+        setAnimationTypeDatabase(new AnimationTypeDatabase(*other.getAnimationTypeDatabase()));
+    if (databases & LOCALISATION_DATABASE)
+        setLocalisationDatabase(new LocalisationDatabase(*other.getLocalisationDatabase()));
+    if (databases&  WORLD_OBJECT_DATABASE)
+        setWorldObjectDatabase(new WorldObjectDatabase(*other.getWorldObjectDatabase()));
+
+    // ignore MapDatabase
+    //if (databases & MAP_DATABASE)
+    //    IO::DatabaseReader<MAP_STRUCTURE::MapDatabase>(getMapDatabase()).read(projectPath + DATABASE_FILE.at(static_cast<uint32>(DatabaseType::MAP_DATABASE)));
 }
 
 void DatabaseMgr::clear()
@@ -35,26 +77,25 @@ bool DatabaseMgr::loadDatabase(const QString& projectPath, uint32 databases)
     if (!projectDir.exists())
         return false;
 
-    if (databases&  TILE_DATABASE)
-        IO::DatabaseReader<TileDatabase>(getTileDatabase()).read(projectPath + DATABASE_FILE.at(DATABASE::TILE_DATABASE));
-    if (databases&  TILE_SET_DATABASE)
-        IO::DatabaseReader<TileSetDatabase>(getTileSetDatabase()).read(projectPath + DATABASE_FILE.at(DATABASE::TILE_SET_DATABASE));
-    if (databases&  AUTO_TILE_DATABASE)
-        IO::DatabaseReader<AutoTileDatabase>(getAutoTileDatabase()).read(projectPath + DATABASE_FILE.at(DATABASE::AUTO_TILE_DATABASE));
-    if (databases&  SPRITE_DATABASE)
-        IO::DatabaseReader<SpriteDatabase>(getSpriteDatabase()).read(projectPath + DATABASE_FILE.at(DATABASE::SPRITE_DATABASE));
-    if (databases&  ANIMATION_DATABASE)
-        IO::DatabaseReader<AnimationDatabase>(getAnimationDatabase()).read(projectPath + DATABASE_FILE.at(DATABASE::ANIMATION_DATABASE));
-    if (databases&  ANIMATION_TYPE_DATABASE)
-        IO::DatabaseReader<AnimationTypeDatabase>(getAnimationTypeDatabase()).read(projectPath + DATABASE_FILE.at(DATABASE::ANIMATION_TYPE_DATABASE));
-    if (databases&  MAP_DATABASE)
-        IO::DatabaseReader<MAP_STRUCTURE::MapDatabase>(getMapDatabase()).read(projectPath + DATABASE_FILE.at(DATABASE::MAP_DATABASE));
-    if (databases&  LOCALS_DATABASE)
-        IO::DatabaseReader<LocalisationDatabase>(getLocalisationDatabase()).read(projectPath + DATABASE_FILE.at(DATABASE::LOCALISATION_DATABASE));
+    if (databases & TILE_DATABASE)
+        IO::DatabaseReader<TileDatabase>(getTileDatabase()).read(projectPath + DATABASE_FILE.at(static_cast<uint32>(DatabaseType::TILE_DATABASE)));
+    if (databases & TILE_SET_DATABASE)
+        IO::DatabaseReader<TileSetDatabase>(getTileSetDatabase()).read(projectPath + DATABASE_FILE.at(static_cast<uint32>(DatabaseType::TILE_SET_DATABASE)));
+    if (databases & AUTO_TILE_DATABASE)
+        IO::DatabaseReader<AutoTileDatabase>(getAutoTileDatabase()).read(projectPath + DATABASE_FILE.at(static_cast<uint32>(DatabaseType::AUTO_TILE_DATABASE)));
+    if (databases & SPRITE_DATABASE)
+        IO::DatabaseReader<SpriteDatabase>(getSpriteDatabase()).read(projectPath + DATABASE_FILE.at(static_cast<uint32>(DatabaseType::SPRITE_DATABASE)));
+    if (databases & ANIMATION_DATABASE)
+        IO::DatabaseReader<AnimationDatabase>(getAnimationDatabase()).read(projectPath + DATABASE_FILE.at(static_cast<uint32>(DatabaseType::ANIMATION_DATABASE)));
+    if (databases & ANIMATION_TYPE_DATABASE)
+        IO::DatabaseReader<AnimationTypeDatabase>(getAnimationTypeDatabase()).read(projectPath + DATABASE_FILE.at(static_cast<uint32>(DatabaseType::ANIMATION_TYPE_DATABASE)));
+    if (databases & MAP_DATABASE)
+        IO::DatabaseReader<MAP_STRUCTURE::MapDatabase>(getMapDatabase()).read(projectPath + DATABASE_FILE.at(static_cast<uint32>(DatabaseType::MAP_DATABASE)));
+    if (databases & LOCALISATION_DATABASE)
+        IO::DatabaseReader<LocalisationDatabase>(getLocalisationDatabase()).read(projectPath + DATABASE_FILE.at(static_cast<uint32>(DatabaseType::LOCALISATION_DATABASE)));
     //if (databases&  WORLD_OBJECT_DATABASE)
     //    IO::DatabaseReader<WorldObjectDatabase>(getWorldObjectDatabase()).read(projectPath + DATABASE_FILE.at(DATABASE::WORLD_OBJECT_DATABASE));
-    //if (databases&  DYNAMIC_OBJECT_DATABASE)
-    //    IO::DatabaseReader<MAP_OBJECT::DynamicObjectPrototype>(getDynamicObjectDatabase()).read(projectPath + DATABASE_FILE.at(DATABASE::TILE_DATABASE));
+
     return true;
 }
 

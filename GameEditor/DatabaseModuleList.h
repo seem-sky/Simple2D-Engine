@@ -10,8 +10,8 @@ class DatabaseModuleList : public QWidget, Ui_DatabaseModuleList
 public:
     DatabaseModuleList(QWidget* pParent = nullptr);
 
-    IDatabaseModel* getDatabaseModel() const { return dynamic_cast<IDatabaseModel*>(m_pList->model()); }
-    void setDatabaseModel(IDatabaseModel* pModel);
+    DATABASE::DatabaseModel* getDatabaseModel() const { return dynamic_cast<DATABASE::DatabaseModel*>(m_pList->model()); }
+    void setDatabaseModel(DATABASE::DatabaseModel* pModel);
 
     // data widgets
     inline void setDataName(const QString& name) { m_pName->setText(name); }

@@ -9,9 +9,18 @@
 # MapViewerScene
 #####*/
 MapViewerScene::MapViewerScene(uint32 mapID, const DATABASE::DatabaseMgr& DBMgr) : QGraphicsScene(), m_MapData(DBMgr, mapID), m_ShowGrid(true),
-    m_LayerType(MAP::LAYER_BACKGROUND)
+    m_LayerType(MAP::LAYER_BACKGROUND), m_Mode(MappingMode::TILE_MAPPING)
 {
-    m_LayerIndex.fill(0);
+    m_LayerIndex.fill(1);
+}
+
+void MapViewerScene::setMode(MappingMode mode)
+{
+    if (mode == m_Mode)
+        return;
+
+    m_Mode = mode;
+    update();
 }
 
 void MapViewerScene::showGrid(bool show)
@@ -45,7 +54,7 @@ void MapViewerScene::drawBackground(QPainter* painter, const QRectF& rect)
 
 void MapViewerScene::drawForeground(QPainter* painter, const QRectF& rect)
 {
-    if (getLayerType() == MAP::LAYER_FOREGROUND)
+    if (getLayerType() == MAP::LAYER_FOREGROUND || getMode() != MappingMode::TILE_MAPPING)
         _drawTiles(painter, rect, MAP::LAYER_FOREGROUND);
     if (isGridActive())
         _drawGrid(painter, rect);
@@ -60,19 +69,28 @@ void MapViewerScene::_drawTiles(QPainter* painter, const QRectF& rect, DATABASE:
     QRectF tileRect(0, 0, TILE_SIZE, TILE_SIZE);
     for (uint32 layerIndex = 0; layerIndex < mapLayer.getLayerSize(currentLayer); ++layerIndex)
     {
-        // draw black rect over lower layer
-        if (getLayerType() == currentLayer && getLayerIndex()-1 == layerIndex)
+        switch (getMode())
         {
-            painter->setOpacity(0.5);
-            painter->setBrush(Qt::SolidPattern);
-            //painter->drawRect(rect);
-            painter->drawRect(rect.x() < 0 ? 0 : rect.x(), rect.y() < 0 ? 0 : rect.y(),
-                rect.width() > endTile.x*TILE_SIZE ? endTile.x*TILE_SIZE : rect.width(),
-                rect.height() > endTile.y*TILE_SIZE ? endTile.y*TILE_SIZE : rect.height());
-        }
+        case MappingMode::TILE_MAPPING:
+            // draw black rect over lower layer
+            if (getLayerType() == currentLayer && getLayerIndex()-1 == layerIndex)
+            {
+                painter->setOpacity(0.5);
+                painter->setBrush(Qt::SolidPattern);
+                painter->drawRect(rect.x() < 0 ? 0 : rect.x(), rect.y() < 0 ? 0 : rect.y(),
+                    rect.width() > endTile.x*TILE_SIZE ? endTile.x*TILE_SIZE : rect.width(),
+                    rect.height() > endTile.y*TILE_SIZE ? endTile.y*TILE_SIZE : rect.height());
+            }
 
-        // if layer above current Layer, draw opaque
-        painter->setOpacity(getLayerIndex()-1 < layerIndex ? 0.4 : 1);
+            // if layer above current Layer, draw opaque
+            painter->setOpacity(getLayerIndex()-1 < layerIndex ? 0.4 : 1);
+            break;
+
+            // draw only foreground opaque
+        case MappingMode::OBJECT_MAPPING:
+            painter->setOpacity(currentLayer == MAP::LAYER_FOREGROUND ? 0.5 : 1);
+            break;
+        }
 
         for (uint32 x = startTile.x; x < endTile.x; ++x)
         {
@@ -174,6 +192,12 @@ void MapViewer::setZoom( uint32 zoom )
 uint32 MapViewer::getZoom() const
 {
     return transform().m11()*  100;       // get zoom
+}
+
+void MapViewer::setMappingMode(MappingMode mode)
+{
+    if (auto pScene = dynamic_cast<MapViewerScene*>(scene()))
+        pScene->setMode(mode);
 }
 
 void MapViewer::showGrid(bool show)

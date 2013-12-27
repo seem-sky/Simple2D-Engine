@@ -612,11 +612,7 @@ namespace DATABASE
             void _clearTiles();
 
         public:
-            MapPrototype(uint32 ID = 0, const QString& fileName = "") : Prototype(ID), m_FileName(fileName), m_uiParentID(0)
-            {
-                m_Layer.at(MAP::LAYER_BACKGROUND) = 1;
-                m_Layer.at(MAP::LAYER_FOREGROUND) = 0;
-            }
+            MapPrototype::MapPrototype(uint32 ID = 0, const QString& fileName = "");
 
             bool isValid();
 
@@ -649,8 +645,6 @@ namespace DATABASE
             void fromXML(const QXmlStreamAttributes& attributes);
 
         private:
-            bool m_DataLoaded;
-
             uint32 m_uiParentID;
             QString m_FileName;
             QString m_ScriptName;

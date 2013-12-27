@@ -5,10 +5,10 @@
 #include <QtGui/QPainter>
 #include "moc_MapEditorModuleTileSets.h"
 
-MapEditorModuleTileSets::MapEditorModuleTileSets(QWidget* pParent) : DatabaseModuleDragList(pParent), m_pTileDB(nullptr)
+MapEditorModuleTileSets::MapEditorModuleTileSets(QWidget* pParent) : DatabaseModuleDragList(pParent)
 {
     setDragEnabled(false);
-    setToolTipPosition(TOOLTIP_RIGHT);
+    setToolTipPosition(ToolTipPosition::TOOLTIP_RIGHT);
     setShowTooltip(true);
     setFrameShape(QFrame::NoFrame);
 }
@@ -17,7 +17,7 @@ QWidget* MapEditorModuleTileSets::_setupTooltipWidget(uint32 uiPrototypeID)
 {
     auto pLabel = new QLabel(this);
     pLabel->resize(TILE_SIZE, TILE_SIZE);
-    if (auto pModel = dynamic_cast<IDatabaseModel*>(model()))
+    if (auto pModel = dynamic_cast<DATABASE::DatabaseModel*>(model()))
     {
         if (auto pPrototype = dynamic_cast<DATABASE::TILE_SET::TileSetPrototype*>(pModel->getDatabase()->getPrototype(uiPrototypeID)))
         {
@@ -27,19 +27,6 @@ QWidget* MapEditorModuleTileSets::_setupTooltipWidget(uint32 uiPrototypeID)
         }
     }
     return pLabel;
-}
-
-void MapEditorModuleTileSets::setTileDatabase(const DATABASE::TileDatabase* pDB)
-{
-    m_pTileDB = pDB;
-}
-
-void MapEditorModuleTileSets::setModel(IDatabaseModel* pModel)
-{
-    // remove old database, otherwise it will be deleted
-    if (auto pOldModel = dynamic_cast<IDatabaseModel*>(model()))
-        pOldModel->takeDatabase();
-    DatabaseModuleDragList::setModel(pModel);
 }
 
 void MapEditorModuleTileSets::mousePressEvent(QMouseEvent* pEvent)

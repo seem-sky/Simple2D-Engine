@@ -1,7 +1,7 @@
 #include "MapEditorModuleTileSelection.h"
 #include "moc_MapEditorModuleTileSelection.h"
 
-MapEditorModuleTileSelection::MapEditorModuleTileSelection(const DATABASE::DatabaseMgr& databaseMgr, QWidget* pParent) : QTabWidget(pParent),
+MapEditorModuleTileSelection::MapEditorModuleTileSelection(DATABASE::DatabaseMgr& databaseMgr, QWidget* pParent) : QTabWidget(pParent),
     m_DatabaseMgr(databaseMgr), m_pWidgetBrush(new BRUSH::MapEditorWidgetBrush(m_DatabaseMgr, this)),
     // tabs
     m_pModuleTiles(new MapEditorModuleTiles(m_DatabaseMgr, this)),
@@ -51,10 +51,7 @@ void MapEditorModuleTileSelection::setup()
     m_pModuleTiles->setup();
     m_pModuleAutoTiles->setup();
 
-    // ToDo: hacky; find better solution in future
-    m_pModuleTileSets->setModel(new TileSetDatabaseModel(std::unique_ptr<DATABASE::TileSetDatabase>(
-        const_cast<DATABASE::TileSetDatabase*>(m_DatabaseMgr.getTileSetDatabase()))));
-    m_pModuleTileSets->setTileDatabase(m_DatabaseMgr.getTileDatabase());
+    m_pModuleTileSets->setModel(new DATABASE::DatabaseModel(m_DatabaseMgr, DATABASE::DatabaseType::TILE_SET_DATABASE));
 }
 
 void MapEditorModuleTileSelection::onItemClicked(BRUSH::BrushIndex brush, AbstractPixmapWidget* pWidget)

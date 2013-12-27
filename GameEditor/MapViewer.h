@@ -9,6 +9,13 @@
 #include "MapData.h"
 #include "MapEditorWidgetBrush.h"
 
+enum class MappingMode
+{
+    TILE_MAPPING,
+    OBJECT_MAPPING,
+    PRESENTATION
+};
+
 /*#####
 # MapViewerScene
 #####*/
@@ -28,12 +35,15 @@ public:
     inline MAP::MAP_DATA::MapData& getMapData() { return m_MapData; }
 
     void showGrid(bool show);
-    inline bool isGridActive() const { return m_ShowGrid; }
+    bool isGridActive() const { return m_ShowGrid; }
 
     void setLayerIndex(uint32 layerIndex);
-    inline uint32 getLayerIndex() const { return m_LayerIndex.at(m_LayerType); }
+    uint32 getLayerIndex() const { return m_LayerIndex.at(m_LayerType); }
     void setLayerType(MAP::Layer layerType);
-    inline MAP::Layer getLayerType() const { return m_LayerType; }
+    MAP::Layer getLayerType() const { return m_LayerType; }
+
+    MappingMode getMode() const { return m_Mode; }
+    void setMode(MappingMode mode);
 
 private:
     MAP::MAP_DATA::MapData m_MapData;
@@ -42,6 +52,7 @@ private:
 
     std::array<uint32, 2> m_LayerIndex;
     MAP::Layer m_LayerType;
+    MappingMode m_Mode;
 };
 
 /*#####
@@ -82,6 +93,8 @@ public:
 
     void revertLast();
     inline bool hasChanges() const { return !m_RevertInfos.empty(); }
+
+    void setMappingMode(MappingMode mode);
 
 signals:
     void requestBrushInfo(BRUSH::BrushIndex brush, MAP::BRUSH::BrushInfo& brushInfo);

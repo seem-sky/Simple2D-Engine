@@ -19,12 +19,7 @@ public:
     DatabaseWidgetBase(QWidget* pParent = nullptr);
 
     inline DATABASE::IDatabase* getDatabase() const { return m_pModuleList->getDatabaseModel()->getDatabase(); }
-    inline IDatabaseModel* getDatabaseModel() const { return m_pModuleList->getDatabaseModel(); }
-    inline void setDatabaseModel(IDatabaseModel* pModel) { m_pModuleList->setDatabaseModel(pModel); }
-
-    inline DATABASE::IDatabase* takeDatabase() { return m_pModuleList->getDatabaseModel()->takeDatabase(); }
-
-    
+    inline void setDatabaseModel(DATABASE::DatabaseModel* pModel) { m_pModuleList->setDatabaseModel(pModel); }
 
 private slots:
     void _onItemSelected();

@@ -9,13 +9,13 @@ class DatabaseDialogResize : public QDialog, protected Ui_DatabaseDialogResize
 {
     Q_OBJECT
 public:
-    DatabaseDialogResize(IDatabaseModel* pDBModel, QWidget* pParent);
+    DatabaseDialogResize(DATABASE::DatabaseModel* pDBModel, QWidget* pParent);
 
 private slots:
     void _onAccept();
 
 private:
-    IDatabaseModel* m_pDBModel;
+    DATABASE::DatabaseModel* m_pDBModel;
 };
 
 #endif

@@ -8,15 +8,13 @@
 class DatabaseWindow : public QDialog, Ui_Database
 {
     Q_OBJECT
-private:
-    void saveDatabase();
-    void clearWidgets();
-
 public:
     DatabaseWindow(DATABASE::DatabaseMgr& DBMgr, QWidget* parent);
 
     QString getCurrentDatabaseSection();
-    inline const DATABASE::DatabaseMgr& getDBMgr() const { return m_pDBMgr; }
+    inline const DATABASE::DatabaseMgr& getDBMgr() const { return m_OwnDBMgr; }
+
+    const DATABASE::DatabaseMgr& getDatabaseMgr() const { return m_OwnDBMgr; }
 
 private slots:
     void clickButtonOK();
@@ -27,6 +25,7 @@ signals:
     void storeChanges();
 
 private:
-    DATABASE::DatabaseMgr& m_pDBMgr;
+    DATABASE::DatabaseMgr m_OwnDBMgr;
+    DATABASE::DatabaseMgr& m_DBMgr;
 };
 #endif

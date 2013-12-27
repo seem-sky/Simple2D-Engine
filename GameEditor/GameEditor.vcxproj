@@ -238,6 +238,7 @@
     <ClCompile Include="MapEditorModuleTiles.cpp" />
     <ClCompile Include="MapEditorModuleTileSelection.cpp" />
     <ClCompile Include="MapEditorModuleTileSets.cpp" />
+    <ClCompile Include="MapEditorModuleWorldObjects.cpp" />
     <ClCompile Include="MapEditorWidgetBrush.cpp" />
     <ClCompile Include="MapEditorWidgetEditor.cpp" />
     <ClCompile Include="MapViewer.cpp" />
@@ -300,6 +301,7 @@
     <moc_header Include="MapEditorModuleTileSets.h" />
     <moc_header Include="MapEditorWidgetBrush.h" />
     <moc_header Include="MapViewer.h" />
+    <ClInclude Include="MapEditorModuleWorldObjects.h" />
     <ClInclude Include="TexturePrototypeFrame.h" />
     <moc_header Include="DatabaseDialogResize.h" />
     <moc_header Include="AnimationViewer.h" />

@@ -25,10 +25,10 @@ DatabaseWidgetAnimation::DatabaseWidgetAnimation(QWidget* pParent) : DatabaseWid
     }
 }
 
-void DatabaseWidgetAnimation::setSpriteDatabaseModel(SpriteDatabaseModel* pDBModel)
+void DatabaseWidgetAnimation::setSpriteDatabaseModel(DATABASE::ConstDatabaseModel* pDBModel)
 {
     m_pModuleSpriteList->setModel(pDBModel);
-    m_pModuleAnimation->setSpriteDatabase(dynamic_cast<DATABASE::SpriteDatabase*>(pDBModel->getDatabase()));
+    m_pModuleAnimation->setSpriteDatabase(dynamic_cast<const DATABASE::SpriteDatabase*>(pDBModel->getDatabase()));
 }
 
 void DatabaseWidgetAnimation::setupWidgetsFromPrototype(const DATABASE::Prototype* pPrototype)

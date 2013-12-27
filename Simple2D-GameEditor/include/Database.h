@@ -22,6 +22,8 @@ namespace DATABASE
         virtual const Prototype* getPrototype(uint32 ID) const = 0;
 
         virtual uint32 getSize() const = 0;
+        virtual void resize(uint32 newSize) = 0;
+        virtual uint32 getMaximumSize() const = 0;
     };
     typedef std::unique_ptr<IDatabase> IDatabasePtr;
 
@@ -45,9 +47,6 @@ namespace DATABASE
         }
 
         inline void clear() { Container::clear(); }
-
-        //void getPrototypeShortInfos(UInt32StringPairVector& result) const;
-        //UInt32StringPairVector Database::getPrototypeShortInfos() const;
 
         void resize(uint32 uiSize)
         {
@@ -98,6 +97,7 @@ namespace DATABASE
     {
     public:
         TileDatabase();
+        TileDatabase(const TileDatabase& other);
 
         //void setPrototype(TilePrototype* pItem);
         //const TilePrototype* getPrototype(uint32 ID) const;
@@ -120,6 +120,7 @@ namespace DATABASE
     {
     public:
         AutoTileDatabase();
+        AutoTileDatabase(const AutoTileDatabase& other);
 
         //void setPrototype(AUTO_TILE::AutoTilePrototype* pItem);
         //const AUTO_TILE::AutoTilePrototype* getPrototype(uint32 ID) const;
@@ -153,6 +154,8 @@ namespace DATABASE
     public:
         AnimationTypeDatabase();
 
+        AnimationTypeDatabase(const AnimationTypeDatabase& other);
+
         void clear();
 
         //void setPrototype(AnimationTypePrototype* pItem);
@@ -172,16 +175,6 @@ namespace DATABASE
         //virtual MAP_OBJECT::WorldObjectPrototype* getNewPrototype(uint32 uiID = 0) const;
     };
 
-    class DynamicObjectDatabase : public Database<MAP_OBJECT::DynamicObjectPrototype>
-    {
-    public:
-        //void setPrototype(MAP_OBJECT::DynamicObjectPrototype* pItem);
-        //const MAP_OBJECT::DynamicObjectPrototype* getPrototype(uint32 ID) const;
-        //MAP_OBJECT::DynamicObjectPrototype* getPrototype(uint32 ID);
-
-        //MAP_OBJECT::DynamicObjectPrototype* getNewPrototype(uint32 uiID = 0) const;
-    };
-
     class LocalisationDatabase : public Database<LOCALISATION::LocalisationPrototype>
     {
     public:
@@ -191,12 +184,5 @@ namespace DATABASE
 
         //LocalisationPrototype* getNewPrototype(uint32 uiID = 0) const;
     };
-
-    /*#####
-    # DatabaseMgr
-    #####*/
-    // map database typedefs
-    typedef std::shared_ptr<MAP_STRUCTURE::MapDatabase> MapDatabasePtr;
-    typedef std::shared_ptr<const MAP_STRUCTURE::MapDatabase> ConstMapDatabasePtr;
 }
 #endif

@@ -49,8 +49,8 @@ void DatabaseWidgetAutoTile::clear()
     DatabaseWidgetBase::clear();
 }
 
-void DatabaseWidgetAutoTile::setTileDatabaseModel(TileDatabaseModel* pTileDBModel)
+void DatabaseWidgetAutoTile::setTileDatabaseModel(DATABASE::ConstDatabaseModel* pTileDBModel)
 {
-    m_pModuleAutoTile->setTileDatabase(dynamic_cast<DATABASE::TileDatabase*>(pTileDBModel->getDatabase()));
+    m_pModuleAutoTile->setTileDatabase(dynamic_cast<const DATABASE::TileDatabase*>(pTileDBModel->getDatabase()));
     m_pModuleTileList->setModel(pTileDBModel);
 }

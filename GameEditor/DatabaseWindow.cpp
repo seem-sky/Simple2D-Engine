@@ -8,27 +8,26 @@
 
 using namespace DATABASE;
 
-DatabaseWindow::DatabaseWindow(DatabaseMgr& pDBMgr, QWidget* p_pParent) : QDialog(p_pParent), Ui_Database(), m_pDBMgr(pDBMgr)
+DatabaseWindow::DatabaseWindow(DatabaseMgr& DBMgr, QWidget* p_pParent) : QDialog(p_pParent), Ui_Database(), m_OwnDBMgr(DATABASE::DatabaseMgr(DBMgr)), m_DBMgr(DBMgr)
 {
     setupUi(this);
     setWindowFlags(Qt::Window);
 
-    m_pTiles->setDatabaseModel(new TileDatabaseModel(std::unique_ptr<TileDatabase>(new TileDatabase(*m_pDBMgr.getTileDatabase()))));
-    m_pTileSets->setDatabaseModel(new TileSetDatabaseModel(std::unique_ptr<TileSetDatabase>(new TileSetDatabase(*m_pDBMgr.getTileSetDatabase()))));
-    m_pTileSets->setTileDatabaseModel(dynamic_cast<TileDatabaseModel*>(m_pTiles->getDatabaseModel()));
+    m_pTiles->setDatabaseModel(new DATABASE::DatabaseModel(m_OwnDBMgr, DatabaseType::TILE_DATABASE));
+    m_pTileSets->setDatabaseModel(new DATABASE::DatabaseModel(m_OwnDBMgr, DatabaseType::TILE_SET_DATABASE));
+    m_pTileSets->setTileDatabaseModel(new DATABASE::DatabaseModel(m_OwnDBMgr, DatabaseType::TILE_DATABASE));
 
     // 3 dbs for AutoTile widget
-    m_pAutoTiles->setDatabaseModel(new AutoTileDatabaseModel(std::unique_ptr<AutoTileDatabase>(new AutoTileDatabase(*m_pDBMgr.getAutoTileDatabase()))));
-    m_pAutoTiles->setTileDatabaseModel(dynamic_cast<TileDatabaseModel*>(m_pTiles->getDatabaseModel()));
+    m_pAutoTiles->setDatabaseModel(new DATABASE::DatabaseModel(m_OwnDBMgr, DatabaseType::AUTO_TILE_DATABASE));
+    m_pAutoTiles->setTileDatabaseModel(new DATABASE::DatabaseModel(m_OwnDBMgr, DatabaseType::TILE_DATABASE));
 
-    m_pSprites->setDatabaseModel(new SpriteDatabaseModel(std::unique_ptr<SpriteDatabase>(new SpriteDatabase(*m_pDBMgr.getSpriteDatabase()))));
+    m_pSprites->setDatabaseModel(new DATABASE::DatabaseModel(m_OwnDBMgr, DatabaseType::SPRITE_DATABASE));
 
     // set 2 dbs for animation widget
-    m_pAnimations->setSpriteDatabaseModel(dynamic_cast<SpriteDatabaseModel*>(m_pSprites->getDatabaseModel()));
-    m_pAnimations->setDatabaseModel(new AnimationDatabaseModel(std::unique_ptr<AnimationDatabase>(new AnimationDatabase(*m_pDBMgr.getAnimationDatabase()))));
+    m_pAnimations->setSpriteDatabaseModel(new DATABASE::DatabaseModel(m_OwnDBMgr, DatabaseType::SPRITE_DATABASE));
+    m_pAnimations->setDatabaseModel(new DATABASE::DatabaseModel(m_OwnDBMgr, DatabaseType::ANIMATION_DATABASE));
 
-    m_pAnimationTypes->setDatabaseModel(new AnimationTypeDatabaseModel(
-        std::unique_ptr<AnimationTypeDatabase>(new AnimationTypeDatabase(*m_pDBMgr.getAnimationTypeDatabase()))));
+    m_pAnimationTypes->setDatabaseModel(new DATABASE::DatabaseModel(m_OwnDBMgr, DatabaseType::ANIMATION_TYPE_DATABASE));
 
 
     //// object section
@@ -40,7 +39,7 @@ DatabaseWindow::DatabaseWindow(DatabaseMgr& pDBMgr, QWidget* p_pParent) : QDialo
     //m_pDynamicObjects->setDB(m_pDBMgr->getDynamicObjectDatabase());
 
     // text section
-    m_pLocalisation->setDatabaseModel(new LocalisationDatabaseModel(std::unique_ptr<LocalisationDatabase>(new LocalisationDatabase(*m_pDBMgr.getLocalisationDatabase()))));
+    m_pLocalisation->setDatabaseModel(new DATABASE::DatabaseModel(m_OwnDBMgr, DatabaseType::LOCALISATION_DATABASE));
 
     connect(ButtonOK, SIGNAL(clicked()), this, SLOT(clickButtonOK()));
     connect(ButtonApply, SIGNAL(clicked()), this, SLOT(clickButtonApply()));
@@ -56,28 +55,19 @@ DatabaseWindow::DatabaseWindow(DatabaseMgr& pDBMgr, QWidget* p_pParent) : QDialo
     connect(this, SIGNAL(storeChanges()), m_pLocalisation, SLOT(saveCurrent()));
 }
 
-void DatabaseWindow::saveDatabase()
+void DatabaseWindow::clickButtonApply()
 {
     // request store of current prototype
     emit storeChanges();
-
-    m_pDBMgr.setTileDatabase(dynamic_cast<TileDatabase*>(m_pTiles->takeDatabase()));
-    m_pDBMgr.setTileSetDatabase(dynamic_cast<TileSetDatabase*>(m_pTileSets->takeDatabase()));
-    m_pDBMgr.setAutoTileDatabase(dynamic_cast<AutoTileDatabase*>(m_pAutoTiles->takeDatabase()));
-    m_pDBMgr.setSpriteDatabase(dynamic_cast<SpriteDatabase*>(m_pSprites->takeDatabase()));
-    m_pDBMgr.setAnimationDatabase(dynamic_cast<AnimationDatabase*>(m_pAnimations->takeDatabase()));
-    m_pDBMgr.setAnimationTypeDatabase(dynamic_cast<AnimationTypeDatabase*>(m_pAnimationTypes->takeDatabase()));
-    m_pDBMgr.setLocalisationDatabase(dynamic_cast<LocalisationDatabase*>(m_pLocalisation->takeDatabase()));
-}
-
-void DatabaseWindow::clickButtonApply()
-{
-    saveDatabase();
+    m_DBMgr.copyFrom(m_OwnDBMgr);
 }
 
 void DatabaseWindow::clickButtonOK()
 {
-    clickButtonApply();
+    // request store of current prototype
+    emit storeChanges();
+    m_DBMgr.takeFrom(m_OwnDBMgr);
+
     close();
 }
 

@@ -16,7 +16,7 @@ public:
 
     void clear();
 
-    void setTileDatabaseModel(TileDatabaseModel* pTileDBModel);
+    void setTileDatabaseModel(DATABASE::ConstDatabaseModel* pTileDBModel);
 
 private:
     DatabaseModuleAutoTile* m_pModuleAutoTile;

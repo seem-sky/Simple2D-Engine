@@ -112,6 +112,12 @@
     <Filter Include="Map Editor\Widgets\Brush">
       <UniqueIdentifier>{e558ed2b-bf3d-4d95-ae22-bb9d7ddb7e5b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Map Editor\Modules\ObjectSelection">
+      <UniqueIdentifier>{ee79f19d-d553-4603-92ab-bc4e9aaec55c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map Editor\Widgets\MapEditor">
+      <UniqueIdentifier>{ad64a3f6-1f23-4ed4-a90c-b17b231c793a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainWindow.cpp">
@@ -189,9 +195,6 @@
     <ClCompile Include="MapEditorModuleTiles.cpp">
       <Filter>Map Editor\Modules\TileTabs\Tiles</Filter>
     </ClCompile>
-    <ClCompile Include="MapEditorWidgetEditor.cpp">
-      <Filter>Map Editor</Filter>
-    </ClCompile>
     <ClCompile Include="TexturePrototypeFrame.cpp">
       <Filter>EditorCore</Filter>
     </ClCompile>
@@ -224,6 +227,12 @@
     </ClCompile>
     <ClCompile Include="MapEditorModuleTileSelection.cpp">
       <Filter>Map Editor\Modules\TileTabs</Filter>
+    </ClCompile>
+    <ClCompile Include="MapEditorModuleWorldObjects.cpp">
+      <Filter>Map Editor\Modules\ObjectSelection</Filter>
+    </ClCompile>
+    <ClCompile Include="MapEditorWidgetEditor.cpp">
+      <Filter>Map Editor\Widgets\MapEditor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -312,9 +321,6 @@
     <moc_header Include="AnimationViewer.h">
       <Filter>Database\Modules\Animation\AnimationViewer</Filter>
     </moc_header>
-    <moc_header Include="MapEditorWidgetEditor.h">
-      <Filter>Map Editor</Filter>
-    </moc_header>
     <moc_header Include="AbstractPrototypeTable.h">
       <Filter>Map Editor\Modules\TileTabs</Filter>
     </moc_header>
@@ -341,6 +347,9 @@
     </moc_header>
     <moc_header Include="MapViewer.h">
       <Filter>Map Editor\Modules\Content</Filter>
+    </moc_header>
+    <moc_header Include="MapEditorWidgetEditor.h">
+      <Filter>Map Editor\Widgets\MapEditor</Filter>
     </moc_header>
   </ItemGroup>
   <ItemGroup>
@@ -383,6 +392,9 @@
     </ClInclude>
     <ClInclude Include="GraphicsTextureItem.h">
       <Filter>EditorCore\GraphicsSpriteItem</Filter>
+    </ClInclude>
+    <ClInclude Include="MapEditorModuleWorldObjects.h">
+      <Filter>Map Editor\Modules\ObjectSelection</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

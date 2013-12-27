@@ -20,7 +20,7 @@ protected:
 public:
     DatabaseModuleDragList(QWidget* pParent = nullptr);
 
-    virtual void setModel(IDatabaseModel* pModel);
+    void setModel(DATABASE::ConstDatabaseModel* pModel);
 
     // tooltip
     inline void setMaximumTooltipSize(const QSize& size) { m_MaximumTooltipSize = size; }
@@ -29,7 +29,7 @@ public:
     void setShowTooltip(bool show = true);
     inline bool showTooltip() const { return m_ShowTooltip; }
 
-    enum ToolTipPosition
+    enum class ToolTipPosition
     {
         TOOLTIP_LEFT,
         TOOLTIP_RIGHT
