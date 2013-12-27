@@ -32,6 +32,7 @@ namespace MAP
             {
             public:
                 RevertInfo(const UInt32Point& layerSize, uint32 layerIndex, Layer layerType);
+                ~RevertInfo();
 
                 void revert(MapLayer &mapLayer);
 

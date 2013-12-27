@@ -8,6 +8,11 @@ RevertInfo::RevertInfo(const UInt32Point& layerSize, uint32 layerIndex, MAP::Lay
 {
 }
 
+RevertInfo::~RevertInfo()
+{
+    m_Check.reset();
+}
+
 void RevertInfo::revert(MAP::MapLayer &mapLayer)
 {
     for (auto& pair : m_Tiles)
@@ -24,7 +29,7 @@ void RevertInfo::revert(MAP::MapLayer &mapLayer)
 
 void RevertInfo::addTile(const UInt32Point& pos, const MAP::MapTile& tile)
 {
-    uint32 index = pos.x*m_LayerSize.x + pos.y;
+    uint32 index = pos.x*m_LayerSize.y + pos.y;
     if (index > m_LayerSize.x*m_LayerSize.y || m_Check[index])
         return;
     m_Check[index] = true;

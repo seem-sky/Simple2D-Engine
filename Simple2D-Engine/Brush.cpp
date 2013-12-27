@@ -190,7 +190,7 @@ void BrushFill::_drawTile(const UInt32Point& center)
     // store center in open points
     UInt32PointList openPoints;
     openPoints.push_back(center);
-    checkPositions.at(center.x)[center.y] = true;
+    checkPositions.at(center.y)[center.x] = true;
 
     while (!openPoints.empty())
     {
@@ -210,9 +210,9 @@ void BrushFill::_drawTile(const UInt32Point& center)
                 startTile.isAutoTile() && checkTile.m_uiAutoTileSetID == startTile.m_uiAutoTileSetID)
             {
                 // bitset check
-                if (checkPositions.at(checkPos.x)[checkPos.y])
+                if (checkPositions.at(checkPos.y)[checkPos.x])
                     continue;
-                checkPositions.at(checkPos.x)[checkPos.y] = true;
+                checkPositions.at(checkPos.y)[checkPos.x] = true;
 
                 openPoints.push_back(checkPos);
             }
@@ -236,7 +236,7 @@ void BrushFill::_drawAutoTile(const UInt32Point& center)
     // store center in open points
     UInt32PointList openPoints;
     openPoints.push_back(center);
-    checkPositions.at(center.x)[center.y] = true;
+    checkPositions.at(center.y)[center.x] = true;
 
     UInt32PointVector borderChecks;
     while (!openPoints.empty())
@@ -258,13 +258,13 @@ void BrushFill::_drawAutoTile(const UInt32Point& center)
                 startTile.isAutoTile() && checkTile.m_uiAutoTileSetID == startTile.m_uiAutoTileSetID)
             {
                 // bitset check
-                if (checkPositions.at(checkPos.x)[checkPos.y])
+                if (checkPositions.at(checkPos.y)[checkPos.x])
                     continue;
-                checkPositions.at(checkPos.x)[checkPos.y] = true;
+                checkPositions.at(checkPos.y)[checkPos.x] = true;
 
                 openPoints.push_back(checkPos);
             }
-            else if (checkTile.m_uiAutoTileSetID != getID() || !checkPositions.at(checkPos.x)[checkPos.y] && checkTile.m_uiAutoTileSetID == getID())
+            else if (checkTile.m_uiAutoTileSetID != getID() || !checkPositions.at(checkPos.y)[checkPos.x] && checkTile.m_uiAutoTileSetID == getID())
                 pushIntoBorderCheck = true;
         }
 
@@ -298,16 +298,13 @@ void BrushFill::_drawTileSet(const UInt32Point& center)
     // store center in open points
     UInt32PointList openPoints;
     openPoints.push_back(center);
-    checkPositions.at(center.x)[center.y] = true;
+    checkPositions.at(center.y)[center.x] = true;
 
-    UInt32PointVector borderChecks;
     while (!openPoints.empty())
     {
         UInt32Point3D openPointPos(openPoints.front(), getLayerIndex());
         openPoints.pop_front();
 
-        // store positions around
-        bool pushIntoBorderCheck = false;
         for (uint32 i = 0; i < 4; ++i)
         {
             // set position check
@@ -320,18 +317,13 @@ void BrushFill::_drawTileSet(const UInt32Point& center)
                 startTile.isAutoTile() && checkTile.m_uiAutoTileSetID == startTile.m_uiAutoTileSetID)
             {
                 // bitset check
-                if (checkPositions.at(checkPos.x)[checkPos.y])
+                if (checkPositions.at(checkPos.y)[checkPos.x])
                     continue;
-                checkPositions.at(checkPos.x)[checkPos.y] = true;
+                checkPositions.at(checkPos.y)[checkPos.x] = true;
 
                 openPoints.push_back(checkPos);
             }
-            else if (checkTile.m_uiAutoTileSetID != getID() || !checkPositions.at(checkPos.x)[checkPos.y] && checkTile.m_uiAutoTileSetID == getID())
-                pushIntoBorderCheck = true;
         }
-
-        if (pushIntoBorderCheck)
-            borderChecks.push_back(openPointPos);
 
         // setup revert
         m_RevertInfo.addTile(openPointPos, m_MapLayer.getMapTile(openPointPos, getLayerType()));

@@ -470,6 +470,24 @@
    <header>animationviewer.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>m_pGridCheckbox</tabstop>
+  <tabstop>m_pAniViewer</tabstop>
+  <tabstop>m_pAniPlayerButton</tabstop>
+  <tabstop>m_pPreviousFrame</tabstop>
+  <tabstop>m_pRemoveFrame</tabstop>
+  <tabstop>m_pAddFrame</tabstop>
+  <tabstop>m_pNextFrame</tabstop>
+  <tabstop>m_pCurrentFrame</tabstop>
+  <tabstop>m_pFrameTime</tabstop>
+  <tabstop>m_pSpritePosX</tabstop>
+  <tabstop>m_pSpritePosY</tabstop>
+  <tabstop>m_pSpriteZValue</tabstop>
+  <tabstop>m_pSpriteScale</tabstop>
+  <tabstop>m_pSpriteOpacity</tabstop>
+  <tabstop>m_pSpriteRotation</tabstop>
+  <tabstop>m_pSpriteSpriteID</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

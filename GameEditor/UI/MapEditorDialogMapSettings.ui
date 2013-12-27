@@ -298,8 +298,13 @@
  <tabstops>
   <tabstop>m_pID</tabstop>
   <tabstop>m_pFileName</tabstop>
+  <tabstop>m_pName</tabstop>
+  <tabstop>m_pScriptName</tabstop>
   <tabstop>m_pSizeX</tabstop>
   <tabstop>m_pSizeY</tabstop>
+  <tabstop>m_pBackgroundLayer</tabstop>
+  <tabstop>m_pForegroundLayer</tabstop>
+  <tabstop>m_pButtons</tabstop>
  </tabstops>
  <resources/>
  <connections>
