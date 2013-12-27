@@ -30,6 +30,7 @@ void GraphicsSpriteItem::keyPressEvent(QKeyEvent* pEvent)
 void GraphicsSpriteItem::paint(QPainter* pPainter, const QStyleOptionGraphicsItem* pOption, QWidget* pWidget)
 {
     auto pixmap = _getPixmap();
+    setTransformOriginPoint(pixmap.rect().center());
     pPainter->drawPixmap(0, 0, pixmap);
     // draw selection box
     if (isSelected())

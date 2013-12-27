@@ -80,13 +80,6 @@ DatabaseModuleAnimation::DatabaseModuleAnimation(QWidget* pParent) : QWidget(pPa
         this, SLOT(_onItemChanged(AnimationSpriteItem*, QGraphicsItem::GraphicsItemChange, const QVariant&)));
     connect(m_pGridCheckbox, SIGNAL(clicked(bool)), this, SLOT(_onGridCheckboxClicked(bool)));
 
-    connect(m_pSpritePosX, SIGNAL(valueChanged(int)), this, SLOT(_onXChanged(int)));
-    connect(m_pSpritePosY, SIGNAL(valueChanged(int)), this, SLOT(_onYChanged(int)));
-    connect(m_pSpriteZValue, SIGNAL(valueChanged(int)), this, SLOT(_onZValueChanged(int)));
-    connect(m_pSpriteScale, SIGNAL(valueChanged(double)), this, SLOT(_onScaleChanged(double)));
-    connect(m_pSpriteOpacity, SIGNAL(valueChanged(double)), this, SLOT(_onOpacityChanged(double)));
-    connect(m_pSpriteRotation, SIGNAL(valueChanged(int)), this, SLOT(_onRotationChanged(int)));
-
     connect(m_pAddFrame, SIGNAL(clicked()), this, SLOT(_onFrameAddClicked()));
     connect(m_pRemoveFrame, SIGNAL(clicked()), this, SLOT(_onFrameRemoveClicked()));
     connect(m_pPreviousFrame, SIGNAL(clicked()), this, SLOT(_onFramePreviousClicked()));
@@ -232,6 +225,15 @@ void DatabaseModuleAnimation::_setupSpriteFrame(AnimationSpriteItem* pItem)
 {
     if (!pItem)
         return;
+
+    // disconnect first
+    disconnect(m_pSpritePosX, SIGNAL(valueChanged(int)), this, SLOT(_onXChanged(int)));
+    disconnect(m_pSpritePosY, SIGNAL(valueChanged(int)), this, SLOT(_onYChanged(int)));
+    disconnect(m_pSpriteZValue, SIGNAL(valueChanged(int)), this, SLOT(_onZValueChanged(int)));
+    disconnect(m_pSpriteScale, SIGNAL(valueChanged(double)), this, SLOT(_onScaleChanged(double)));
+    disconnect(m_pSpriteOpacity, SIGNAL(valueChanged(double)), this, SLOT(_onOpacityChanged(double)));
+    disconnect(m_pSpriteRotation, SIGNAL(valueChanged(int)), this, SLOT(_onRotationChanged(int)));
+
     m_pSpritePosX->setValue(pItem->x());
     m_pSpritePosY->setValue(pItem->y());
     m_pSpriteZValue->setValue(pItem->zValue());
@@ -239,6 +241,13 @@ void DatabaseModuleAnimation::_setupSpriteFrame(AnimationSpriteItem* pItem)
     m_pSpriteRotation->setValue(pItem->rotation());
     m_pSpriteOpacity->setValue(pItem->opacity());
     m_pSpriteSpriteID->setValue(pItem->getID());
+
+    connect(m_pSpritePosX, SIGNAL(valueChanged(int)), this, SLOT(_onXChanged(int)));
+    connect(m_pSpritePosY, SIGNAL(valueChanged(int)), this, SLOT(_onYChanged(int)));
+    connect(m_pSpriteZValue, SIGNAL(valueChanged(int)), this, SLOT(_onZValueChanged(int)));
+    connect(m_pSpriteScale, SIGNAL(valueChanged(double)), this, SLOT(_onScaleChanged(double)));
+    connect(m_pSpriteOpacity, SIGNAL(valueChanged(double)), this, SLOT(_onOpacityChanged(double)));
+    connect(m_pSpriteRotation, SIGNAL(valueChanged(int)), this, SLOT(_onRotationChanged(int)));
 }
 
 void DatabaseModuleAnimation::_saveCurrentFrame()

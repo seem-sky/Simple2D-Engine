@@ -49,11 +49,10 @@ QVariant AnimationSpriteItem::itemChange(GraphicsItemChange change, const QVaria
     switch (change)
     {
     case QGraphicsItem::ItemPositionHasChanged:
-    case QGraphicsItem::ItemPositionChange:
-    case QGraphicsItem::ItemZValueChange:
-    case QGraphicsItem::ItemOpacityChange:
-    case QGraphicsItem::ItemRotationChange:
-    case QGraphicsItem::ItemScaleChange:
+    case QGraphicsItem::ItemZValueHasChanged:
+    case QGraphicsItem::ItemOpacityHasChanged:
+    case QGraphicsItem::ItemRotationHasChanged:
+    case QGraphicsItem::ItemScaleHasChanged:
         emit pScene->itemChanged(this, change, result);
     }
     return result;
