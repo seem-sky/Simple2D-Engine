@@ -12,7 +12,7 @@ void GamePlayer::update(uint32 uiDiff)
     Player::update(uiDiff);
 }
 
-const MAP::OBJECT::DynamicObject* GamePlayer::getControledObject()
+const MAP::OBJECT::WorldObject* GamePlayer::getControledObject()
 {
     //if (auto pMap = m_MapMgr.getItem(getMapGUID(), pMap))
     //    pObj = std::dynamic_pointer_cast<MAP::OBJECT::DynamicObject>(pMap->getWorldObject(m_ObjectGUID));

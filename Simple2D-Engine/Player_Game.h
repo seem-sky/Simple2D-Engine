@@ -2,7 +2,7 @@
 #define PLAYER_GAME_H
 
 #include "Player.h"
-#include "DynamicObject.h"
+#include "WorldObject.h"
 #include "Camera.h"
 #include "MapMgr.h"
 
@@ -13,8 +13,8 @@ namespace PLAYER
     public:
         GamePlayer(MAP::MapMgr& mapMgr);
 
-        void setControle(const MAP::OBJECT::DynamicObject* pObject);
-        const MAP::OBJECT::DynamicObject* getControledObject();
+        void setControle(const MAP::OBJECT::WorldObject* pObject);
+        const MAP::OBJECT::WorldObject* getControledObject();
         void releaseControle();
 
         // keybinds

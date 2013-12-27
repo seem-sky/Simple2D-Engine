@@ -105,9 +105,6 @@
     <ClCompile Include="TransformationHolder.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="DynamicObject.cpp">
-      <Filter>Map\MapObjects</Filter>
-    </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>Game\Player</Filter>
     </ClCompile>
@@ -229,9 +226,6 @@
     </ClInclude>
     <ClInclude Include="TransformationHolder.h">
       <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="DynamicObject.h">
-      <Filter>Map\MapObjects</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>Game\Player</Filter>

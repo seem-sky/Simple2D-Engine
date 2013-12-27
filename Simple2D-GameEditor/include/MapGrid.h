@@ -2,7 +2,7 @@
 #define MAP_GRID_H
 
 #include <Global.h>
-#include "DynamicObject.h"
+#include "WorldObject.h"
 #include <boost/multi_array.hpp>
 #include <unordered_set>
 
