@@ -9,7 +9,8 @@ using namespace DATABASE;
 void Prototype::toXML(QXmlStreamWriter& writer) const
 {
     writer.writeAttribute("ID", QString::number(getID()));
-    writer.writeAttribute("name", getName());
+    if (!getName().isEmpty())
+        writer.writeAttribute("name", getName());
 }
 
 void Prototype::fromXML(const QXmlStreamAttributes& attributes)
@@ -31,8 +32,10 @@ void RessourcePrototype::fromXML(const QXmlStreamAttributes& attributes)
 
 void RessourcePrototype::toXML(QXmlStreamWriter& writer) const
 {
-    writer.writeAttribute("file", getFileName());
-    writer.writeAttribute("path", getPath());
+    if (!getFileName().isEmpty())
+        writer.writeAttribute("file", getFileName());
+    if (!getPath().isEmpty())
+        writer.writeAttribute("path", getPath());
 
     Prototype::toXML(writer);
 }
@@ -44,12 +47,23 @@ void TexturePrototype::fromXML(const QXmlStreamAttributes& attributes)
 {
     RessourcePrototype::fromXML(attributes);
 
-    setTransparencyColor(Color(attributes.value("transparency_color").toString().toStdString()));
+    if (attributes.hasAttribute("tRed") && attributes.hasAttribute("tGreen") && attributes.hasAttribute("tBlue"))
+    {
+        Color color(attributes.value("tRed").toShort(), attributes.value("tGreen").toShort(), attributes.value("tBlue").toShort());
+        setTransparencyColor(color);
+    }
 }
 
 void TexturePrototype::toXML(QXmlStreamWriter& writer) const
 {
-    writer.writeAttribute("transparency_color", QString::fromStdString(getTransparencyColor().getColorString()));
+    // if invalid, its default
+    auto color = getTransparencyColor();
+    if (color.isValid())
+    {
+        writer.writeAttribute("tRed", QString::number(color.getRed()));
+        writer.writeAttribute("tGreen", QString::number(color.getGreen()));
+        writer.writeAttribute("tBlue", QString::number(color.getBlue()));
+    }
 
     RessourcePrototype::toXML(writer);
 }
@@ -68,7 +82,8 @@ void TilePrototype::fromXML(const QXmlStreamAttributes& attributes)
 void TilePrototype::toXML(QXmlStreamWriter& writer) const
 {
     writer.writeAttribute("terraintype", QString::number(getTerrainType()));
-    writer.writeAttribute("passability", QString::number(getPassability()));;
+    if (getPassability())
+        writer.writeAttribute("passability", QString::number(getPassability()));
 
     TexturePrototype::toXML(writer);
 }
@@ -164,9 +179,12 @@ void ANIMATION::AnimationPrototype::toXML(QXmlStreamWriter& writer) const
             writer.writeAttribute("ID", QString::number(sprite.m_uiSpriteID));
             writer.writeAttribute("x", QString::number(sprite.m_Pos.x));
             writer.writeAttribute("y", QString::number(sprite.m_Pos.y));
-            writer.writeAttribute("scale", QString::number(sprite.m_Scale));
-            writer.writeAttribute("rotation", QString::number(sprite.m_uiRotation));
-            writer.writeAttribute("opacity", QString::number(sprite.m_Opacity));
+            if (sprite.m_Scale != 100)
+                writer.writeAttribute("scale", QString::number(sprite.m_Scale));
+            if (sprite.m_uiRotation)
+                writer.writeAttribute("rotation", QString::number(sprite.m_uiRotation));
+            if (sprite.m_Opacity != 100)
+                writer.writeAttribute("opacity", QString::number(sprite.m_Opacity));
         }
         writer.writeEndElement();
     }
@@ -191,9 +209,14 @@ void ANIMATION::AnimationPrototype::insertChildren(const QXmlStreamReader& reade
             newSprite.m_uiSpriteID = attributes.value("ID").toUInt();
             newSprite.m_Pos.x = attributes.value("x").toInt();
             newSprite.m_Pos.y = attributes.value("y").toInt();
-            newSprite.m_Scale = attributes.value("scale").toFloat();
+            if (attributes.hasAttribute("scale"))
+                newSprite.m_Scale = attributes.value("scale").toFloat();
+
             newSprite.m_uiRotation = attributes.value("rotation").toUInt();
-            newSprite.m_Opacity = attributes.value("opacity").toFloat();
+
+            if (attributes.hasAttribute("opacity"))
+                newSprite.m_Opacity = attributes.value("opacity").toFloat();
+
             lastFrame.addSprite(newSprite);
             setFrame(getFrameCount()-1, lastFrame);
         }
@@ -255,7 +278,9 @@ void WORLD_OBJECT::WorldObjectPrototype::toXML(QXmlStreamWriter& writer) const
     writer.writeAttribute("boundingWidth", QString::number(getBoundingWidth()));
     writer.writeAttribute("boundingHeight", QString::number(getBoundingHeight()));
     writer.writeAttribute("animationSpeed", QString::number(getAnimationSpeed()));
-    writer.writeAttribute("script", getScriptName());
+
+    if (!getScriptName().isEmpty())
+        writer.writeAttribute("script", getScriptName());
     Prototype::toXML(writer);
 
     //store animation infos
@@ -312,8 +337,10 @@ void MAP_STRUCTURE::MapPrototype::toXML(QXmlStreamWriter& writer) const
     writer.writeAttribute("sizeY", QString::number(getSize().y));
     writer.writeAttribute("backLayer", QString::number(getLayerSize(MAP::LAYER_BACKGROUND)));
     writer.writeAttribute("foreLayer", QString::number(getLayerSize(MAP::LAYER_FOREGROUND)));
-    writer.writeAttribute("parentID", QString::number(getParentID()));
-    writer.writeAttribute("script", getScriptName());
+    if (getParentID())
+        writer.writeAttribute("parentID", QString::number(getParentID()));
+    if (!getScriptName().isEmpty())
+        writer.writeAttribute("script", getScriptName());
     writer.writeAttribute("file", getFileName());
 
     Prototype::toXML(writer);
