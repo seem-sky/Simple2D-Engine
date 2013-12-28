@@ -2,7 +2,6 @@
 #define DATABASE_IO_H
 
 #include "Database.h"
-#include "PrototypeParser.h"
 
 namespace DATABASE
 {

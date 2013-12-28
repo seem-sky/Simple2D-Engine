@@ -9,7 +9,7 @@
 # MapViewerScene
 #####*/
 MapViewerScene::MapViewerScene(uint32 mapID, const DATABASE::DatabaseMgr& DBMgr) : QGraphicsScene(), m_MapData(DBMgr, mapID), m_ShowGrid(true),
-    m_LayerType(MAP::LAYER_BACKGROUND), m_Mode(MappingMode::TILE_MAPPING)
+    m_LayerType(MAP::Layer::LAYER_BACKGROUND), m_Mode(MappingMode::TILE_MAPPING)
 {
     m_LayerIndex.fill(1);
 }
@@ -33,9 +33,9 @@ void MapViewerScene::showGrid(bool show)
 
 void MapViewerScene::setLayerIndex(uint32 layerIndex)
 {
-    if (m_LayerIndex.at(m_LayerType) == layerIndex)
+    if (m_LayerIndex.at(static_cast<uint32>(m_LayerType)) == layerIndex)
         return;
-    m_LayerIndex.at(m_LayerType) = layerIndex;
+    m_LayerIndex.at(static_cast<uint32>(m_LayerType)) = layerIndex;
     update();
 }
 
@@ -49,18 +49,18 @@ void MapViewerScene::setLayerType(MAP::Layer layerType)
 
 void MapViewerScene::drawBackground(QPainter* painter, const QRectF& rect)
 {
-    _drawTiles(painter, rect, MAP::LAYER_BACKGROUND);
+    _drawTiles(painter, rect, MAP::Layer::LAYER_BACKGROUND);
 }
 
 void MapViewerScene::drawForeground(QPainter* painter, const QRectF& rect)
 {
-    if (getLayerType() == MAP::LAYER_FOREGROUND || getMode() != MappingMode::TILE_MAPPING)
-        _drawTiles(painter, rect, MAP::LAYER_FOREGROUND);
+    if (getLayerType() == MAP::Layer::LAYER_FOREGROUND || getMode() != MappingMode::TILE_MAPPING)
+        _drawTiles(painter, rect, MAP::Layer::LAYER_FOREGROUND);
     if (isGridActive())
         _drawGrid(painter, rect);
 }
 
-void MapViewerScene::_drawTiles(QPainter* painter, const QRectF& rect, DATABASE::MAP_STRUCTURE::Layer currentLayer)
+void MapViewerScene::_drawTiles(QPainter* painter, const QRectF& rect, MAP::Layer currentLayer)
 {
     const auto& mapLayer = m_MapData.getMapLayer();
     const UInt32Point startTile(rect.x() <= 0 ? 0 : (uint32)rect.x() / TILE_SIZE, rect.y() <= 0 ? 0 : (uint32)rect.y() / TILE_SIZE);
@@ -88,7 +88,7 @@ void MapViewerScene::_drawTiles(QPainter* painter, const QRectF& rect, DATABASE:
 
             // draw only foreground opaque
         case MappingMode::OBJECT_MAPPING:
-            painter->setOpacity(currentLayer == MAP::LAYER_FOREGROUND ? 0.5 : 1);
+            painter->setOpacity(currentLayer == MAP::Layer::LAYER_FOREGROUND ? 0.5 : 1);
             break;
         }
 
@@ -236,7 +236,7 @@ MAP::Layer MapViewer::getLayerType() const
 {
     if (auto pScene = dynamic_cast<MapViewerScene*>(scene()))
         return pScene->getLayerType();
-    return MAP::LAYER_BACKGROUND;
+    return MAP::Layer::LAYER_BACKGROUND;
 }
 
 uint32 MapViewer::getMaximumLayerIndex(MAP::Layer layerType) const

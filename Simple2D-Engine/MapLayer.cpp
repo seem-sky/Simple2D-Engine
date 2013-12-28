@@ -11,11 +11,11 @@ void MapLayer::clear()
 void MapLayer::resize(const UInt32Point& size, uint8 uiForegroundLayerSize, uint8 uiBackgroundLayerSize)
 {
     m_Size = size;
-    m_uiLayer.at(LAYER_FOREGROUND) = uiForegroundLayerSize;
-    m_uiLayer.at(LAYER_BACKGROUND) = uiBackgroundLayerSize;
+    m_uiLayer.at(static_cast<uint32>(Layer::LAYER_FOREGROUND)) = uiForegroundLayerSize;
+    m_uiLayer.at(static_cast<uint32>(Layer::LAYER_BACKGROUND)) = uiBackgroundLayerSize;
 
-    m_BackgroundTiles.resize(boost::extents[m_Size.x][m_Size.y][m_uiLayer.at(LAYER_BACKGROUND)]);
-    m_ForegroundTiles.resize(boost::extents[m_Size.x][m_Size.y][m_uiLayer.at(LAYER_FOREGROUND)]);
+    m_BackgroundTiles.resize(boost::extents[m_Size.x][m_Size.y][m_uiLayer.at(static_cast<uint32>(Layer::LAYER_BACKGROUND))]);
+    m_ForegroundTiles.resize(boost::extents[m_Size.x][m_Size.y][m_uiLayer.at(static_cast<uint32>(Layer::LAYER_FOREGROUND))]);
 }
 
 const MapTile& MapLayer::getMapTile(const UInt32Point3D& at, Layer layer) const
@@ -24,8 +24,8 @@ const MapTile& MapLayer::getMapTile(const UInt32Point3D& at, Layer layer) const
     {
         switch (layer)
         {
-        case LAYER_BACKGROUND: return m_BackgroundTiles[at.x][at.y][at.z];
-        case LAYER_FOREGROUND: return m_ForegroundTiles[at.x][at.y][at.z];
+        case Layer::LAYER_BACKGROUND: return m_BackgroundTiles[at.x][at.y][at.z];
+        case Layer::LAYER_FOREGROUND: return m_ForegroundTiles[at.x][at.y][at.z];
         }
     }
     throw std::out_of_range(nullptr);
@@ -42,10 +42,10 @@ void MapLayer::setMapTile(const UInt32Point3D& at, Layer layer, MapTile tile)
     {
         switch (layer)
         {
-        case LAYER_BACKGROUND:
+        case Layer::LAYER_BACKGROUND:
             m_BackgroundTiles[at.x][at.y][at.z] = tile;
             break;
-        case LAYER_FOREGROUND:
+        case Layer::LAYER_FOREGROUND:
             m_ForegroundTiles[at.x][at.y][at.z] = tile;
             break;
         }

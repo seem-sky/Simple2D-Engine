@@ -14,7 +14,7 @@ namespace DATABASE
 
 namespace MAP
 {
-    enum Layer
+    enum class Layer
     {
         LAYER_BACKGROUND,
         LAYER_FOREGROUND
@@ -51,7 +51,7 @@ namespace MAP
 
         void resize(const UInt32Point& size, uint8 uiForegroundLayerSize, uint8 uiBackgroundLayerSize);
         inline UInt32Point getSize() const { return m_Size; }
-        inline uint8 getLayerSize(Layer layer) const { return m_uiLayer.at(layer); };
+        inline uint8 getLayerSize(Layer layer) const { return m_uiLayer.at(static_cast<uint32>(layer)); };
 
         MapTile& getMapTile(const UInt32Point3D& at, Layer layer);
         const MapTile& getMapTile(const UInt32Point3D& at, Layer layer) const;

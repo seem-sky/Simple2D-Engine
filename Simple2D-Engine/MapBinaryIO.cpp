@@ -20,8 +20,8 @@ void INPUT::MapBinaryReader::readFile(const QString& fileName, MAP::MAP_DATA::Ma
     in >> version;
 
     // load layer data
-    _readLayer(in, data.getMapLayer(), MAP::LAYER_BACKGROUND, version);
-    _readLayer(in, data.getMapLayer(), MAP::LAYER_FOREGROUND, version);
+    _readLayer(in, data.getMapLayer(), MAP::Layer::LAYER_BACKGROUND, version);
+    _readLayer(in, data.getMapLayer(), MAP::Layer::LAYER_FOREGROUND, version);
 
     //// load objects
     //_readObjects(in, pMap, version);
@@ -137,8 +137,8 @@ void OUTPUT::MapBinaryWriter::writeFile(const QString& fileName, const MAP_DATA:
     out << CURRENT_VERSION;
 
     // store layer data
-    _writeLayer(out, data.getMapLayer(), MAP::LAYER_BACKGROUND);
-    _writeLayer(out, data.getMapLayer(), MAP::LAYER_FOREGROUND);
+    _writeLayer(out, data.getMapLayer(), MAP::Layer::LAYER_BACKGROUND);
+    _writeLayer(out, data.getMapLayer(), MAP::Layer::LAYER_FOREGROUND);
 
     //// store objects
     //_writeObjects(out, pMap);

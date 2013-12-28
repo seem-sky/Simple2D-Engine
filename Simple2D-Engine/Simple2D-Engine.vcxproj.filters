@@ -129,9 +129,6 @@
     <ClCompile Include="Object.cpp">
       <Filter>Map\MapObjects</Filter>
     </ClCompile>
-    <ClCompile Include="PrototypeParser.cpp">
-      <Filter>Database\IO</Filter>
-    </ClCompile>
     <ClCompile Include="MapBinaryIO.cpp">
       <Filter>Map\IO</Filter>
     </ClCompile>
@@ -250,9 +247,6 @@
     </ClInclude>
     <ClInclude Include="Object.h">
       <Filter>Map\MapObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="PrototypeParser.h">
-      <Filter>Database\IO</Filter>
     </ClInclude>
     <ClInclude Include="Database_IO.h">
       <Filter>Database\IO</Filter>

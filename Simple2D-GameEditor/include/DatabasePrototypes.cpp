@@ -326,8 +326,8 @@ namespace DATABASE
     {
         MapPrototype::MapPrototype(uint32 ID, const QString& fileName) : Prototype(ID), m_FileName(fileName), m_uiParentID(0)
         {
-            m_Layer.at(MAP::LAYER_BACKGROUND) = 1;
-            m_Layer.at(MAP::LAYER_FOREGROUND) = 0;
+            m_Layer.at(static_cast<uint32>(MAP::Layer::LAYER_BACKGROUND)) = 1;
+            m_Layer.at(static_cast<uint32>(MAP::Layer::LAYER_FOREGROUND)) = 0;
         }
 
         void MapPrototype::addMapObject(MapObject* pObject)
@@ -359,25 +359,25 @@ namespace DATABASE
 
         void MapPrototype::setSizeX(uint32 x)
         {
-            setSize(UInt32Point(x, getSize().y), getLayerSize(MAP::LAYER_FOREGROUND), getLayerSize(MAP::LAYER_BACKGROUND));
+            setSize(UInt32Point(x, getSize().y), getLayerSize(MAP::Layer::LAYER_FOREGROUND), getLayerSize(MAP::Layer::LAYER_BACKGROUND));
         }
 
         void MapPrototype::setSizeY(uint32 y)
         {
-            setSize(UInt32Point(getSize().x, y), getLayerSize(MAP::LAYER_FOREGROUND), getLayerSize(MAP::LAYER_BACKGROUND));
+            setSize(UInt32Point(getSize().x, y), getLayerSize(MAP::Layer::LAYER_FOREGROUND), getLayerSize(MAP::Layer::LAYER_BACKGROUND));
         }
 
-        void MapPrototype::setLayerSize(uint8 size, Layer layer)
+        void MapPrototype::setLayerSize(uint8 size, MAP::Layer layer)
         {
-            setSize(getSize(), layer == MAP::LAYER_FOREGROUND ? size : getLayerSize(MAP::LAYER_FOREGROUND),
-                layer == MAP::LAYER_BACKGROUND ? size : getLayerSize(MAP::LAYER_BACKGROUND));
+            setSize(getSize(), layer == MAP::Layer::LAYER_FOREGROUND ? size : getLayerSize(MAP::Layer::LAYER_FOREGROUND),
+                layer == MAP::Layer::LAYER_BACKGROUND ? size : getLayerSize(MAP::Layer::LAYER_BACKGROUND));
         }
 
         void MapPrototype::setSize(const UInt32Point& size, uint8 uiForegroundLayerSize, uint8 uiBackgroundLayerSize)
         {
             m_Size = size;
-            m_Layer.at(MAP::LAYER_BACKGROUND) = uiBackgroundLayerSize;
-            m_Layer.at(MAP::LAYER_FOREGROUND) = uiForegroundLayerSize;
+            m_Layer.at(static_cast<uint32>(MAP::Layer::LAYER_BACKGROUND)) = uiBackgroundLayerSize;
+            m_Layer.at(static_cast<uint32>(MAP::Layer::LAYER_FOREGROUND)) = uiForegroundLayerSize;
         }
     }
 }

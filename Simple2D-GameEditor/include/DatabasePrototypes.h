@@ -582,14 +582,11 @@ namespace DATABASE
         typedef Container<MapObject> MapObjectContainer;
         typedef boost::multi_array<MapObjectContainer, 3> MapObjectPtrVectorMultiarray3D;
 
-        // map infos
-        typedef MAP::MapTile MapTile;
-        typedef MAP::Layer Layer;
         class MapPrototype : public Prototype
         {
-            friend class MapDatabase;
-            friend class MAP::MapMgr;
-            friend class MapDatabaseXMLReader;
+            //friend class MapDatabase;
+            //friend class MAP::MapMgr;
+            //friend class MapDatabaseXMLReader;
 
         private:
             void _clearTiles();
@@ -606,10 +603,10 @@ namespace DATABASE
 
             void setSizeX(uint32 x);
             void setSizeY(uint32 y);
-            void setLayerSize(uint8 size, Layer layer);
+            void setLayerSize(uint8 size, MAP::Layer layer);
             void setSize(const UInt32Point& size, uint8 uiForegroundLayerSize, uint8 uiBackgroundLayerSize);
             inline UInt32Point getSize() const { return m_Size; }
-            inline uint8 getLayerSize(Layer layer) const { return m_Layer.at(layer); };
+            inline uint8 getLayerSize(MAP::Layer layer) const { return m_Layer.at(static_cast<uint32>(layer)); };
 
             inline uint32 getParentID() const { return m_uiParentID; }
             inline void setParentID(uint32 uiParentID) { m_uiParentID = uiParentID; }

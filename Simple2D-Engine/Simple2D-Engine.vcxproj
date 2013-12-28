@@ -41,7 +41,6 @@
     <ClCompile Include="ObjectAnimationWidget.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Player_Game.cpp" />
-    <ClCompile Include="PrototypeParser.cpp" />
     <ClCompile Include="RevertInfo.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneMgr.cpp" />
@@ -81,7 +80,6 @@
     <ClInclude Include="ObjectAnimationWidget.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Player_Game.h" />
-    <ClInclude Include="PrototypeParser.h" />
     <ClInclude Include="RevertInfo.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="GameWindow.h" />

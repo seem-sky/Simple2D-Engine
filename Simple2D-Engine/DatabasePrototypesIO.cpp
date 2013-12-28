@@ -335,8 +335,8 @@ void MAP_STRUCTURE::MapPrototype::toXML(QXmlStreamWriter& writer) const
 {
     writer.writeAttribute("sizeX", QString::number(getSize().x));
     writer.writeAttribute("sizeY", QString::number(getSize().y));
-    writer.writeAttribute("backLayer", QString::number(getLayerSize(MAP::LAYER_BACKGROUND)));
-    writer.writeAttribute("foreLayer", QString::number(getLayerSize(MAP::LAYER_FOREGROUND)));
+    writer.writeAttribute("backLayer", QString::number(getLayerSize(MAP::Layer::LAYER_BACKGROUND)));
+    writer.writeAttribute("foreLayer", QString::number(getLayerSize(MAP::Layer::LAYER_FOREGROUND)));
     if (getParentID())
         writer.writeAttribute("parentID", QString::number(getParentID()));
     if (!getScriptName().isEmpty())

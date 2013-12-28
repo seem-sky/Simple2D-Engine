@@ -22,8 +22,8 @@ void MapEditorDialogMapSettings::_setup()
     m_pFileName->setText(m_pPrototype->getFileName());
     m_pSizeX->setValue(m_pPrototype->getSize().x);
     m_pSizeY->setValue(m_pPrototype->getSize().y);
-    m_pBackgroundLayer->setValue(m_pPrototype->getLayerSize(MAP::LAYER_BACKGROUND));
-    m_pForegroundLayer->setValue(m_pPrototype->getLayerSize(MAP::LAYER_FOREGROUND));
+    m_pBackgroundLayer->setValue(m_pPrototype->getLayerSize(MAP::Layer::LAYER_BACKGROUND));
+    m_pForegroundLayer->setValue(m_pPrototype->getLayerSize(MAP::Layer::LAYER_FOREGROUND));
 }
 
 void MapEditorDialogMapSettings::_save()
@@ -35,8 +35,8 @@ void MapEditorDialogMapSettings::_save()
     m_pPrototype->setScriptName(m_pScriptName->text());
     m_pPrototype->setSizeX(m_pSizeX->value());
     m_pPrototype->setSizeY(m_pSizeY->value());
-    m_pPrototype->setLayerSize(m_pBackgroundLayer->value(), MAP::LAYER_BACKGROUND);
-    m_pPrototype->setLayerSize(m_pForegroundLayer->value(), MAP::LAYER_FOREGROUND);
+    m_pPrototype->setLayerSize(m_pBackgroundLayer->value(), MAP::Layer::LAYER_BACKGROUND);
+    m_pPrototype->setLayerSize(m_pForegroundLayer->value(), MAP::Layer::LAYER_FOREGROUND);
 }
 
 void MapEditorDialogMapSettings::_onAccepted()

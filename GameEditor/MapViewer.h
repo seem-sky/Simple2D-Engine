@@ -23,7 +23,7 @@ class MapViewerScene : public QGraphicsScene
 {
 private:
     void _drawGrid(QPainter* painter, const QRectF& rect);
-    void _drawTiles(QPainter* painter, const QRectF& rect, DATABASE::MAP_STRUCTURE::Layer layer);
+    void _drawTiles(QPainter* painter, const QRectF& rect, MAP::Layer layer);
 
 protected:
     void drawBackground(QPainter* painter, const QRectF& rect);
@@ -38,7 +38,7 @@ public:
     bool isGridActive() const { return m_ShowGrid; }
 
     void setLayerIndex(uint32 layerIndex);
-    uint32 getLayerIndex() const { return m_LayerIndex.at(m_LayerType); }
+    uint32 getLayerIndex() const { return m_LayerIndex.at(static_cast<uint32>(m_LayerType)); }
     void setLayerType(MAP::Layer layerType);
     MAP::Layer getLayerType() const { return m_LayerType; }
 

@@ -60,7 +60,7 @@ void Map::addWorldObject(OBJECT::WorldObject* pWorldObject)
 //    //for (uint32 x = 0; x < size.x; ++x)
 //    //{
 //    //    for (uint32 y = 0; y < size.y; ++y)
-//    //        passabilityMap.at(x)[y] = isLayerPassable(pDBMgr, mapLayer, UInt32Point(x, y), LAYER_BACKGROUND) && isLayerPassable(pDBMgr, mapLayer, UInt32Point(x, y), LAYER_FOREGROUND);
+//    //        passabilityMap.at(x)[y] = isLayerPassable(pDBMgr, mapLayer, UInt32Point(x, y), Layer::LAYER_BACKGROUND) && isLayerPassable(pDBMgr, mapLayer, UInt32Point(x, y), Layer::LAYER_FOREGROUND);
 //    //}
 //    return std::move(passabilityMap);
 //}
