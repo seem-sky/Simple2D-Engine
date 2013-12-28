@@ -25,7 +25,7 @@ void Color::setColor(const std::string& colorText)
 
 std::string Color::getColorString() const
 {
-    if (hasValidColor())
+    if (isValid())
         return "R" + std::to_string(m_Red) + "G" + std::to_string(m_Green) + "B" + std::to_string(m_Blue);
     return "";
 }

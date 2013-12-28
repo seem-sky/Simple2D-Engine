@@ -4,6 +4,7 @@
 #include "moc_DatabaseWidgetTexture.h"
 #include "QtGlobal.h"
 #include <QtGui/QPixmapCache>
+#include "DatabaseDialogChoseColor.h"
 
 using namespace DATABASE;
 
@@ -19,6 +20,7 @@ DatabaseWidgetTexture::DatabaseWidgetTexture(QWidget* pParent) : DatabaseWidgetR
 
     connect(m_pModuleTexture, SIGNAL(transparencyColorChanged(const Color&)), this, SLOT(_onTransparencyColorChanged(const Color&)));
     connect(this, SIGNAL(fileImport(uint32)), this, SLOT(_onFileImport(uint32)));
+    connect(m_pModuleTexture, SIGNAL(choseColorButtonClicked()), this, SLOT(_onChoseColorButtonClicked()));
 }
 
 void DatabaseWidgetTexture::setupWidgetsFromPrototype(const Prototype* pPrototype)
@@ -38,7 +40,7 @@ void DatabaseWidgetTexture::setupWidgetsFromPrototype(const Prototype* pPrototyp
 void DatabaseWidgetTexture::setupPrototypeFromWidgets(Prototype* pPrototype)
 {
     if (auto pProto = dynamic_cast<TexturePrototype*>(pPrototype))
-        pProto->setTransparencyColor(Color(m_pModuleTexture->getDataRed(), m_pModuleTexture->getDataGreen(), m_pModuleTexture->getDataBlue()));
+        pProto->setTransparencyColor(m_pModuleTexture->getTransparencyColor());
     DatabaseWidgetRessource::setupPrototypeFromWidgets(pPrototype);
 }
 
@@ -87,5 +89,15 @@ void DatabaseWidgetTexture::_onTransparencyColorChanged(const Color& color)
         QPixmap pixmap;
         createPixmap(Config::get()->getProjectDirectory(), pProto->getPathName(), color, pixmap);
         setupPixmap(pixmap);
+    }
+}
+
+void DatabaseWidgetTexture::_onChoseColorButtonClicked()
+{
+    ChoseColorDialog dialog(_createPrototypePixmap(m_pModuleList->getDataID()));
+    if (dialog.exec())
+    {
+        auto color = dialog.getColor();
+        m_pModuleTexture->setTransparencyColor(Color(color.red(), color.green(), color.blue()));
     }
 }

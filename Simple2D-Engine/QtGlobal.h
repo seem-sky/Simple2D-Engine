@@ -15,7 +15,7 @@ static bool createPixmap(const QString& path, const QString& fileNamePath, const
     if (!result.isNull())
     {
         // set transparency color
-        if (color.hasValidColor())
+        if (color.isValid())
             result.setMask(result.createMaskFromColor(QColor(color.getRed(), color.getGreen(), color.getBlue())));
         return true;
     }

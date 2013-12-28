@@ -208,6 +208,7 @@
   <ItemGroup>
     <ClCompile Include="AbstractPrototypeTable.cpp" />
     <ClCompile Include="AnimationViewer.cpp" />
+    <ClCompile Include="DatabaseDialogChoseColor.cpp" />
     <ClCompile Include="DatabaseDialogResize.cpp" />
     <ClCompile Include="DatabaseModel.cpp" />
     <ClCompile Include="DatabaseModuleAnimation.cpp" />
@@ -298,6 +299,7 @@
     <moc_header Include="MapEditorModuleContent.h" />
     <moc_header Include="MapEditorModuleMapTree.h" />
     <moc_header Include="DatabaseWidgetWorldObject.h" />
+    <ClInclude Include="DatabaseDialogChoseColor.h" />
     <ClInclude Include="GraphicsTextureItem.h" />
     <moc_header Include="MapEditorModuleBrush.h" />
     <moc_header Include="MapEditorModuleTileSelection.h" />

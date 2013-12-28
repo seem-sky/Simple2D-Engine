@@ -124,6 +124,9 @@
     <Filter Include="EditorCore\MainWindow">
       <UniqueIdentifier>{1a1fddbb-68fc-464a-9955-32bdc1d0cb79}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Database\Dialogs\ChoseColor">
+      <UniqueIdentifier>{1afd9a2d-0c9e-48d1-a765-e5ad166928a9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainWindow.cpp">
@@ -245,6 +248,9 @@
     </ClCompile>
     <ClCompile Include="DatabaseWidgetWorldObject.cpp">
       <Filter>Database\Widgets\WorldObject</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabaseDialogChoseColor.cpp">
+      <Filter>Database\Dialogs\ChoseColor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -410,6 +416,9 @@
     </ClInclude>
     <ClInclude Include="DatabaseModel.h">
       <Filter>EditorCore\DatabaseModel</Filter>
+    </ClInclude>
+    <ClInclude Include="DatabaseDialogChoseColor.h">
+      <Filter>Database\Dialogs\ChoseColor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

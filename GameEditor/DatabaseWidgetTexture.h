@@ -23,6 +23,7 @@ protected:
 private slots:
     void _onFileImport(uint32 uiID);
     void _onTransparencyColorChanged(const Color& color);
+    void _onChoseColorButtonClicked();
 
 public:
     DatabaseWidgetTexture(QWidget* pParent = nullptr);

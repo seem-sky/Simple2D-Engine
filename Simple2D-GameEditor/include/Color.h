@@ -3,6 +3,8 @@
 
 #include <Global.h>
 
+// ToDo: optimize variable types
+
 class Color
 {
 public:
@@ -18,8 +20,8 @@ public:
     inline int32 getGreen() const { return m_Green; }
     inline int32 getBlue() const { return m_Blue; }
 
-    inline bool hasValidColor() const { if (m_Red >= 0 && m_Green >= 0 && m_Blue >= 0) return true; return false; }
-    inline void clearColor() { m_Red = -1; m_Green = -1; m_Blue = -1; }
+    inline bool isValid() const { return m_Red >= 0 && m_Green >= 0 && m_Blue >= 0; }
+    inline void clear() { m_Red = -1; m_Green = -1; m_Blue = -1; }
 
 private:
     int32 m_Red;
