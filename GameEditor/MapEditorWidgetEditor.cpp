@@ -26,9 +26,6 @@ MapEditorWidgetEditor::MapEditorWidgetEditor(DATABASE::DatabaseMgr& databaseMgr,
     m_pMappingMode->show();
     _onMappingModeChanged(m_pMappingMode->currentIndex());
 
-    // setup ModuleWorldObjects
-    m_pModuleWorldObjects->setModel(new DATABASE::ConstDatabaseModel(m_DatabaseMgr, DATABASE::DatabaseType::WORLD_OBJECT_DATABASE));
-
     // setup modules
     auto pLayout = new QGridLayout();
     setLayout(pLayout);
@@ -93,6 +90,9 @@ void MapEditorWidgetEditor::setup()
 {
     m_pModuleTileSelection->clearSelection();
     m_pModuleTileSelection->setup();
+
+    // setup ModuleWorldObjects
+    m_pModuleWorldObjects->setModel(new DATABASE::ConstDatabaseModel(m_DatabaseMgr, DATABASE::DatabaseType::WORLD_OBJECT_DATABASE));
 }
 
 void MapEditorWidgetEditor::projectOpened()

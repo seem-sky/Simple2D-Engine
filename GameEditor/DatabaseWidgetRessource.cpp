@@ -1,6 +1,9 @@
 #include "DatabaseWidgetRessource.h"
 #include "moc_DatabaseWidgetRessource.h"
 #include <QtCore/QFileInfo>
+#include "Logfile.h"
+
+using namespace DATABASE;
 
 DatabaseWidgetRessource::DatabaseWidgetRessource(QWidget* pParent) : DatabaseWidgetBase(pParent),
     m_pMassImport(new QPushButton(this)), m_pModuleResource(new DatabaseModuleResource(this))
@@ -24,9 +27,9 @@ DatabaseWidgetRessource::DatabaseWidgetRessource(QWidget* pParent) : DatabaseWid
     connect(m_pMassImport, SIGNAL(clicked()), this, SLOT(_onClickMassFileImportButton()));
 }
 
-void DatabaseWidgetRessource::setupWidgetsFromPrototype(const DATABASE::Prototype* pPrototype)
+void DatabaseWidgetRessource::setupWidgetsFromPrototype(const Prototype* pPrototype)
 {
-    if (auto pProto = dynamic_cast<const DATABASE::RessourcePrototype*>(pPrototype))
+    if (auto pProto = dynamic_cast<const RessourcePrototype*>(pPrototype))
     {
         m_pModuleResource->setDataFileName(pProto->getFileName());
         m_pModuleResource->setDataPath(pProto->getPath());
@@ -34,9 +37,9 @@ void DatabaseWidgetRessource::setupWidgetsFromPrototype(const DATABASE::Prototyp
     DatabaseWidgetBase::setupWidgetsFromPrototype(pPrototype);
 }
 
-void DatabaseWidgetRessource::setupPrototypeFromWidgets(DATABASE::Prototype* pPrototype)
+void DatabaseWidgetRessource::setupPrototypeFromWidgets(Prototype* pPrototype)
 {
-    if (auto pProto = dynamic_cast<DATABASE::RessourcePrototype*>(pPrototype))
+    if (auto pProto = dynamic_cast<RessourcePrototype*>(pPrototype))
     {
         pProto->setFileName(m_pModuleResource->getDataFileName());
         pProto->setPath(m_pModuleResource->getDataPath());
@@ -54,33 +57,41 @@ void DatabaseWidgetRessource::clear()
 void DatabaseWidgetRessource::_onClickMassFileImportButton()
 {
     auto files = _selectFiles();
+    auto pModel = dynamic_cast<DatabaseModel*>(getDatabaseModel());
+    if (!pModel)
+        return;
+    auto pDatabase = pModel->getDatabase();
+    if (!pDatabase)
+        return;
     if (!files.isEmpty())
     {
-        //uint32 currentID = getDatabase()->getSize();
-        //for (auto& file : files)
-        //{
-        //    std::unique_ptr<DATABASE::RessourcePrototype> pPrototype(dynamic_cast<DATABASE::TexturePrototype*>(getDatabase()->getNewPrototype(++currentID)));
-        //    if (!pPrototype || file.isEmpty())
-        //        continue;
+        uint32 currentID = pDatabase->getSize();
+        for (auto& file : files)
+        {
+            std::unique_ptr<RessourcePrototype> pPrototype(dynamic_cast<RessourcePrototype*>(pDatabase->getNewPrototype(++currentID)));
+            if (!pPrototype || file.isEmpty())
+                continue;
 
-        //    QFileInfo fileInfo(file);
-        //    if (fileInfo.isFile())
-        //    {
-        //        QString path(fileInfo.absolutePath());
-        //        path = path.remove(0, path.lastIndexOf("/Textures")+10);
-        //        if (!path.isEmpty())
-        //        {
-        //            path += "/";
-        //            pPrototype->setPath(path);
-        //        }
-        //        pPrototype->setFileName(fileInfo.fileName());
-        //        pPrototype->setName(fileInfo.fileName());
-        //        getDatabaseModel()->resize(currentID);
-        //        getDatabase()->setPrototype(pPrototype.release());
-        //        //BASIC_LOG("File import succeeded: ID: " + QString::number(proto->getID()) + "; file name: " + proto->getPathName());
-        //    }
-        //}
+            QFileInfo fileInfo(file);
+            if (fileInfo.isFile())
+            {
+                QString path(fileInfo.absolutePath());
+                path = path.remove(0, path.lastIndexOf("/Textures")+10);
+                if (!path.isEmpty())
+                {
+                    path += "/";
+                    pPrototype->setPath(path);
+                }
+                pPrototype->setFileName(fileInfo.fileName());
+                pPrototype->setName(fileInfo.fileName());
+                pModel->resize(currentID);
+                BASIC_LOG("File import succeeded: ID: " + QString::number(pPrototype->getID()) + "; file name: " + pPrototype->getPathName());
+
+                pDatabase->setPrototype(pPrototype.release());
+            }
+        }
     }
+    m_pModuleList->selectItem(pDatabase->getSize()-1);
 }
 
 void DatabaseWidgetRessource::_onClickFileButton()
@@ -99,8 +110,6 @@ void DatabaseWidgetRessource::_import(uint32 uiID, const QString& fileNamePath)
         // clear previous data
         m_pModuleResource->setDataFileName("");
         m_pModuleResource->setDataPath("");
-        /*if (m_pView->scene())
-        m_pView->scene()->clear();*/
 
         QString path(fileInfo.absolutePath());
         path = path.remove(0, path.lastIndexOf("/Textures")+10);
@@ -113,7 +122,10 @@ void DatabaseWidgetRessource::_import(uint32 uiID, const QString& fileNamePath)
         // if name is empty fill with filename
         if (m_pModuleList->getDataName().isEmpty())
             m_pModuleList->setDataName(fileInfo.fileName());
-        //BASIC_LOG("File import succeeded: ID: " + QString::number(proto->getID()) + "; file name: " + proto->getPathName());
+        BASIC_LOG("File import succeeded: ID: " + QString::number(m_pModuleList->getDataID()) + "; file name: " + path+fileInfo.fileName());
+
+        saveCurrent();
+        emit fileImport(m_pModuleList->getDataID());
     }
 }
 

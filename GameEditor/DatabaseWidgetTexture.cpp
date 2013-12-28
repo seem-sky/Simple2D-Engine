@@ -18,6 +18,7 @@ DatabaseWidgetTexture::DatabaseWidgetTexture(QWidget* pParent) : DatabaseWidgetR
     }
 
     connect(m_pModuleTexture, SIGNAL(transparencyColorChanged(const Color&)), this, SLOT(_onTransparencyColorChanged(const Color&)));
+    connect(this, SIGNAL(fileImport(uint32)), this, SLOT(_onFileImport(uint32)));
 }
 
 void DatabaseWidgetTexture::setupWidgetsFromPrototype(const Prototype* pPrototype)

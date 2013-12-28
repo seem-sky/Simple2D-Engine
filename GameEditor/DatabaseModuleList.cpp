@@ -45,3 +45,10 @@ void DatabaseModuleList::setDatabaseModel(DATABASE::DatabaseModel* pModel)
     m_pList->resizeColumnToContents(0);
     m_pList->setCurrentIndex(pModel->index(0));
 }
+
+void DatabaseModuleList::selectItem(uint32 ID)
+{
+    auto model = m_pList->model()->index(ID, 0);
+    if (model.isValid())
+        m_pList->setCurrentIndex(model);
+}

@@ -22,6 +22,8 @@ public:
 
     const DATABASE::Prototype* getCurrentPrototype() const;
 
+    void selectItem(uint32 ID);
+
 private slots:
     void _onClickResizeButton();
     void _onSelectionChanged(const QModelIndex& current, const QModelIndex& previous);

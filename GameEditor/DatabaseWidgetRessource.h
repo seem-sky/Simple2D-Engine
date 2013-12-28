@@ -30,7 +30,7 @@ private slots:
     void _onClickMassFileImportButton();
 
 signals:
-    void fileImport(uint32 uiID);
+    void fileImport(uint32 ID);
 };
 
 #endif
