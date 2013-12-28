@@ -65,29 +65,27 @@ void MapEditorWidgetEditor::_onMappingModeChanged(int index)
     case MappingMode::TILE_MAPPING:
         m_pModuleTileSelection->show();
         m_pModuleTileSelection->getBrushWidget()->show();
-
-        mode = MappingMode::TILE_MAPPING;
         break;
 
     case MappingMode::OBJECT_MAPPING:
         m_pModuleWorldObjects->show();
-
-        mode = MappingMode::OBJECT_MAPPING;
         break;
 
     case MappingMode::PRESENTATION:
-
-        mode = MappingMode::PRESENTATION;
         break;
     default:
         throw std::runtime_error("invalid mapping mode detected");
     }
 
-    m_pModuleContent->setMappingMode(mode);
+    m_pModuleContent->setMappingMode(static_cast<MappingMode>(mode));
 }
 
 void MapEditorWidgetEditor::setup()
 {
+    // clear cache first
+    GAutoTileCache::get()->clear();
+    GTileCache::get()->clear();
+
     m_pModuleTileSelection->clearSelection();
     m_pModuleTileSelection->setup();
 

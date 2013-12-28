@@ -55,9 +55,23 @@ void MapViewerScene::drawBackground(QPainter* painter, const QRectF& rect)
 void MapViewerScene::drawForeground(QPainter* painter, const QRectF& rect)
 {
     if (getLayerType() == MAP::Layer::LAYER_FOREGROUND || getMode() != MappingMode::TILE_MAPPING)
+    {
+        if (getMode() == MappingMode::TILE_MAPPING && m_MapData.getMapLayer().getLayerSize(MAP::Layer::LAYER_FOREGROUND) == 0)
+            _drawDarkRect(painter, rect);
         _drawTiles(painter, rect, MAP::Layer::LAYER_FOREGROUND);
+    }
     if (isGridActive())
         _drawGrid(painter, rect);
+}
+
+void MapViewerScene::_drawDarkRect(QPainter* painter, const QRectF& rect)
+{
+    painter->setOpacity(0.5);
+    painter->setBrush(Qt::SolidPattern);
+    auto size = m_MapData.getMapLayer().getSize();
+    painter->drawRect(rect.x() < 0 ? 0 : rect.x(), rect.y() < 0 ? 0 : rect.y(),
+        rect.width() > size.x*TILE_SIZE ? size.x*TILE_SIZE : rect.width(),
+        rect.height() > size.y*TILE_SIZE ? size.y*TILE_SIZE : rect.height());
 }
 
 void MapViewerScene::_drawTiles(QPainter* painter, const QRectF& rect, MAP::Layer currentLayer)
@@ -74,13 +88,7 @@ void MapViewerScene::_drawTiles(QPainter* painter, const QRectF& rect, MAP::Laye
         case MappingMode::TILE_MAPPING:
             // draw black rect over lower layer
             if (getLayerType() == currentLayer && getLayerIndex()-1 == layerIndex)
-            {
-                painter->setOpacity(0.5);
-                painter->setBrush(Qt::SolidPattern);
-                painter->drawRect(rect.x() < 0 ? 0 : rect.x(), rect.y() < 0 ? 0 : rect.y(),
-                    rect.width() > endTile.x*TILE_SIZE ? endTile.x*TILE_SIZE : rect.width(),
-                    rect.height() > endTile.y*TILE_SIZE ? endTile.y*TILE_SIZE : rect.height());
-            }
+                _drawDarkRect(painter, rect);
 
             // if layer above current Layer, draw opaque
             painter->setOpacity(getLayerIndex()-1 < layerIndex ? 0.4 : 1);
@@ -145,6 +153,7 @@ void MapViewerScene::_drawGrid(QPainter* painter, const QRectF& rect)
 MapViewer::MapViewer(uint32 mapID, const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent) : QGraphicsView(pParent), m_DBMgr(DBMgr)
 {
     setScene(new MapViewerScene(mapID, DBMgr));
+    scene()->setParent(this);
     setFrameShape(QFrame::NoFrame);
 }
 

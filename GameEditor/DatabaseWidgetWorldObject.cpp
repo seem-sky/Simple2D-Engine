@@ -15,6 +15,8 @@ DatabaseWidgetWorldObject::DatabaseWidgetWorldObject(QWidget* pParent) : Databas
     m_pVisualTypeBox->addItem("animations");
     m_pVisualTypeBox->setCurrentIndex(0);
 
+    m_pModuleSpriteList->setMaximumWidth(200);
+
     connect(m_pVisualTypeBox, SIGNAL(currentIndexChanged(int)), this, SLOT(_onVisualTypeChanged(int)));
 
     if (auto pLayout = dynamic_cast<QGridLayout*>(layout()))
@@ -25,6 +27,8 @@ DatabaseWidgetWorldObject::DatabaseWidgetWorldObject(QWidget* pParent) : Databas
         pLayout->setColumnStretch(2, 0);
         pLayout->setRowStretch(0, 0);
         pLayout->setRowStretch(1, 1);
+
+        pLayout->setColumnMinimumWidth(2, 200);
 
         pLayout->addWidget(m_pVisualTypeBox, 0, 2);
         pLayout->addWidget(m_pModuleSpriteList, 1, 2, -1, 1);
@@ -52,8 +56,20 @@ void DatabaseWidgetWorldObject::setupWidgetsFromPrototype(const DATABASE::Protot
     DatabaseWidgetBase::setupWidgetsFromPrototype(pPrototype);
 }
 
-void DatabaseWidgetWorldObject::_onVisualTypeChanged(int)
+void DatabaseWidgetWorldObject::_onVisualTypeChanged(int type)
 {
+    // hide all first
+    m_pModuleSpriteList->hide();
+
+    switch (static_cast<WORLD_OBJECT::AnimationInfo::VisualType>(type))
+    {
+    case WORLD_OBJECT::AnimationInfo::VisualType::SPRITE:
+        m_pModuleSpriteList->show();
+        break;
+    case WORLD_OBJECT::AnimationInfo::VisualType::ANIMATION:
+        break;
+    }
+
 }
 
 void DatabaseWidgetWorldObject::setDatabaseMgr(DatabaseMgr& DBMgr)

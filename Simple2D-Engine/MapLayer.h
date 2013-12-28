@@ -4,22 +4,10 @@
 #include <Global.h>
 #include <boost/multi_array.hpp>
 #include <boost/dynamic_bitset.hpp>
-
-namespace DATABASE
-{
-    // index typedefs
-    typedef uint16 TILE_INDEX;
-    typedef uint8 AUTO_TILE_INDEX;
-}
+#include "DatabasePrototypes.h"
 
 namespace MAP
 {
-    enum class Layer
-    {
-        LAYER_BACKGROUND,
-        LAYER_FOREGROUND
-    };
-
     class MapTile
     {
     public:

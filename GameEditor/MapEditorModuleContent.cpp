@@ -99,19 +99,32 @@ void MapEditorModuleContent::onMapOpened(uint32 mapID)
 {
     if (auto pTab = getTab(mapID))
         return;
-    auto pNewMapViewer = new MapViewer(mapID, m_DBMgr, this);
-    pNewMapViewer->loadMap();
-    m_pMapTabs->addTab(pNewMapViewer, pNewMapViewer->getMapName());
-    m_pMapTabs->setCurrentWidget(pNewMapViewer);
-    emit registerTab(pNewMapViewer);
 
-    connect(pNewMapViewer, SIGNAL(changed(MapViewer*)), this, SLOT(_onMapChanged(MapViewer*)));
+    auto pNewMapViewer = new MapViewer(mapID, m_DBMgr, this);
+    try
+    {
+        pNewMapViewer->loadMap();
+        m_pMapTabs->addTab(pNewMapViewer, pNewMapViewer->getMapName());
+        m_pMapTabs->setCurrentWidget(pNewMapViewer);
+        emit registerTab(pNewMapViewer);
+
+        connect(pNewMapViewer, SIGNAL(changed(MapViewer*)), this, SLOT(_onMapChanged(MapViewer*)));
+    }
+    catch (const std::bad_alloc& e)
+    {
+        pNewMapViewer->deleteLater();
+        QMessageBox::information(0, "Memory Error.", QString("It looks as if the map is too large.\n") +
+            QString("The Error-Message is: ") + QString(e.what()), QMessageBox::Ok, QMessageBox::Ok);
+    }
 }
 
 void MapEditorModuleContent::onMapClosed(uint32 mapID)
 {
     if (auto pTab = getTab(mapID))
+    {
         m_pMapTabs->removeTab(m_pMapTabs->indexOf(pTab));
+        pTab->deleteLater();
+    }
 }
 
 void MapEditorModuleContent::onMapEdited(uint32 mapID)

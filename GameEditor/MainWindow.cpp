@@ -70,8 +70,6 @@ void MainWindow::_openDatabase()
 
     // clear map editor and caches
     m_pMapEditor->setup();
-    GAutoTileCache::get()->clear();
-    GTileCache::get()->clear();
 }
 
 void MainWindow::_saveProject()

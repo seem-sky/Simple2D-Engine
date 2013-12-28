@@ -29,16 +29,10 @@ private:
     bool _loadProject(const QString& sDir);
     void _setDBs();
 
-protected:
-    // void moveEvent(QMoveEvent* pEvent) { Config::get()->setMainWindowPos(UInt32Point(pEvent->pos().x(), pEvent->pos().y())); }
-
 public:
     MainWindow(QMainWindow* parent = 0);
     ~MainWindow(void);
 
-    //inline MapEditorWidget* getMapEditorWidget() const { return m_pMapEditor; }
-
-    // ToDo:
     inline DATABASE::DatabaseMgr& getDatabaseMgr() { return m_Project.getDatabaseMgr(); }
 
 private:

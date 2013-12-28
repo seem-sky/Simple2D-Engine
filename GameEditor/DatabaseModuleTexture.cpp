@@ -13,7 +13,7 @@ DatabaseModuleTexture::DatabaseModuleTexture(QWidget* pParent) : QWidget(pParent
 
 void DatabaseModuleTexture::setPixmap(const QPixmap& pixmap)
 {
-    m_pView->setScene(new QGraphicsScene());
+    m_pView->setScene(new QGraphicsScene(m_pView));
     m_pView->scene()->addPixmap(pixmap);
 }
 
@@ -28,7 +28,7 @@ void DatabaseModuleTexture::clear()
     m_pColorGreen->setValue(-1);
     m_pColorBlue->setValue(-1);
 
-    m_pView->setScene(new QGraphicsScene());
+    m_pView->setScene(new QGraphicsScene(m_pView));
 }
 
 void DatabaseModuleTexture::_onChoseColorButtonClicked()

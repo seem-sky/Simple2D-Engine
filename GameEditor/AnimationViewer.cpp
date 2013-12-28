@@ -133,6 +133,7 @@ void AnimationViewerScene::_drawGrid(QPainter* pPainter, const QRectF& rect)
 AnimationViewer::AnimationViewer(QWidget* pParent) : QGraphicsView(pParent), m_pAnimation(nullptr), m_uiCurrentFrameIndex(0), m_pSpriteDB(nullptr), m_Mode(MODE_MODIFY)
 {
     setScene(new AnimationViewerScene());
+    scene()->setParent(this);
     m_AnimationTimer.setSingleShot(true);
 }
 

@@ -20,6 +20,11 @@ void DatabaseModuleList::_onClickResizeButton()
         DatabaseDialogResize resizeDialog(getDatabaseModel(), this);
         resizeDialog.exec();
     }
+    catch (const std::bad_alloc& e)
+    {
+        QMessageBox::information(0, "Resize error.", QString("I'm sorry, but those are too many elements.\n") +
+            QString("The Error-Message is: ") + QString(e.what()), QMessageBox::Ok, QMessageBox::Ok);
+    }
     catch (const std::runtime_error& e)
     {
         QMessageBox::information(0, "Resize error.", e.what(), QMessageBox::Ok, QMessageBox::Ok);

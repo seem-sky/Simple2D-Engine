@@ -3,8 +3,6 @@
 
 #include <Global.h>
 
-// ToDo: optimize variable types
-
 class Color
 {
 public:

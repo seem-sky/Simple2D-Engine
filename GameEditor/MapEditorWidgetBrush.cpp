@@ -14,6 +14,7 @@ MapEditorWidgetBrush::MapEditorWidgetBrush(const DATABASE::DatabaseMgr& DBMgr, Q
     setWindowTitle("map editor brush");
 
     setFocusPolicy(Qt::ClickFocus);
+    // ToDo: Check in Qt 5.2 if it works, otherwise look for a solution
     setWindowOpacity(INACTIVE_OPACITY);
 
     auto pLayout = new QHBoxLayout(this);
@@ -27,8 +28,6 @@ MapEditorWidgetBrush::MapEditorWidgetBrush(const DATABASE::DatabaseMgr& DBMgr, Q
 
     m_pBrushes.at(static_cast<uint32>(BrushIndex::BRUSH_LEFT))->setText("left brush");
     m_pBrushes.at(static_cast<uint32>(BrushIndex::BRUSH_RIGHT))->setText("right brush");
-
-    update();
 }
 
 void MapEditorWidgetBrush::changeEvent(QEvent* pEvent)

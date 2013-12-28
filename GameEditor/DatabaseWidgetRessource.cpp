@@ -85,13 +85,13 @@ void DatabaseWidgetRessource::_onClickMassFileImportButton()
                 pPrototype->setFileName(fileInfo.fileName());
                 pPrototype->setName(fileInfo.fileName());
                 pModel->resize(currentID);
-                BASIC_LOG("File import succeeded: ID: " + QString::number(pPrototype->getID()) + "; file name: " + pPrototype->getPathName());
+                BASIC_LOG("File import succeeded: ID: " + QString::number(currentID) + "; file name: " + pPrototype->getPathName());
 
                 pDatabase->setPrototype(pPrototype.release());
             }
         }
+        m_pModuleList->selectItem(currentID);
     }
-    m_pModuleList->selectItem(pDatabase->getSize()-1);
 }
 
 void DatabaseWidgetRessource::_onClickFileButton()

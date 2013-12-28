@@ -46,7 +46,10 @@ void RessourcePrototype::toXML(QXmlStreamWriter& writer) const
 void TexturePrototype::fromXML(const QXmlStreamAttributes& attributes)
 {
     RessourcePrototype::fromXML(attributes);
+    if (attributes.hasAttribute("tRed"))
+        int x = 0;
 
+    Color color(attributes.value("tRed").toShort(), attributes.value("tGreen").toShort(), attributes.value("tBlue").toShort());
     if (attributes.hasAttribute("tRed") && attributes.hasAttribute("tGreen") && attributes.hasAttribute("tBlue"))
     {
         Color color(attributes.value("tRed").toShort(), attributes.value("tGreen").toShort(), attributes.value("tBlue").toShort());

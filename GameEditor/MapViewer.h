@@ -24,6 +24,7 @@ class MapViewerScene : public QGraphicsScene
 private:
     void _drawGrid(QPainter* painter, const QRectF& rect);
     void _drawTiles(QPainter* painter, const QRectF& rect, MAP::Layer layer);
+    void _drawDarkRect(QPainter* painter, const QRectF& rect);
 
 protected:
     void drawBackground(QPainter* painter, const QRectF& rect);

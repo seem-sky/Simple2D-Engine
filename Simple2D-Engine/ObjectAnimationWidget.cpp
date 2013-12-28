@@ -11,7 +11,7 @@ ObjectAnimationWidget::ObjectAnimationWidget(const DATABASE::ANIMATION::Animatio
     setWindowFlags(Qt::FramelessWindowHint);
     setStyleSheet("background:transparent");
     setFrameShape(QFrame::NoFrame);
-    setScene(new QGraphicsScene());
+    setScene(new QGraphicsScene(this));
     DATABASE::ANIMATION::Frame frame;
     if (pAnimation->getFrame(uiCurrentFrame, frame))
         _drawFrame(frame);

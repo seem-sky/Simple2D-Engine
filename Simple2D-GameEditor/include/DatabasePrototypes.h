@@ -6,16 +6,23 @@
 #include <QtCore/QString>
 #include <QtCore/QXmlStreamReader>
 #include <QtCore/QXmlStreamWriter>
-#include "MapLayer.h"
 #include "Container.h"
 
 namespace MAP
 {
-    class MapMgr;
+    enum class Layer
+    {
+        LAYER_BACKGROUND,
+        LAYER_FOREGROUND
+    };
 }
 
 namespace DATABASE
 {
+    // index typedefs
+    typedef uint16 TILE_INDEX;
+    typedef uint8 AUTO_TILE_INDEX;
+
     /*#####
     # Prototype superclass
     #####*/
