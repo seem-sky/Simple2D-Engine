@@ -74,7 +74,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>$(SimpleLib)\include;$(QtDir_64)\include;$(BoostDir);$(SolutionDir)\Core;$(SolutionDir)\Simple2D-GameEditor\include;$(SolutionDir)\Simple2D-Engine;$(IncludePath)</IncludePath>
-    <LibraryPath>$(QtDir_64)\lib;$(BoostBin);$(SolutionDir)\Simple2D-GameEditor\lib;$(SolutionDir);$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(QtDir_64)\lib;$(BoostBin_64);$(SolutionDir)\Simple2D-GameEditor\lib;$(SolutionDir);$(LibraryPath)</LibraryPath>
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)Simple2D-GameEditor\</OutDir>
     <IntDir>$(Configuration)\</IntDir>
@@ -89,7 +89,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>$(SimpleLib)\include;$(QtDir_64)\include;$(BoostDir);$(SolutionDir)\Core;$(SolutionDir)\Simple2D-GameEditor\include;$(SolutionDir)\Simple2D-Engine;$(IncludePath)</IncludePath>
-    <LibraryPath>$(QtDir_64)\lib;$(BoostBin);$(SolutionDir)\Simple2D-GameEditor\lib;$(SolutionDir);$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(QtDir_64)\lib;$(BoostBin_64);$(SolutionDir)\Simple2D-GameEditor\lib;$(SolutionDir);$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)Simple2D-GameEditor\</OutDir>
     <IntDir>$(Configuration)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
@@ -121,7 +121,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>Qt5Xmld.lib;Qt5Widgetsd.lib;QT5Guid.lib;QT5Cored.lib;Simple2D-Engine_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Qt5Xmld.lib;Qt5Widgetsd.lib;QT5Guid.lib;QT5Cored.lib;Simple2D-Engine64_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <OutputFile>$(SolutionDir)Simple2D-GameEditor\$(ProjectName)64_d.exe</OutputFile>
     </Link>
@@ -154,7 +154,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>Qt5Xml.lib;Qt5Widgets.lib;QT5Gui.lib;QT5Core.lib;Simple2D-Engine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Qt5Xml.lib;Qt5Widgets.lib;QT5Gui.lib;QT5Core.lib;Simple2D-Engine64.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>

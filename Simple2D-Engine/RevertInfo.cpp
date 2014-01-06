@@ -21,7 +21,7 @@ void RevertInfo::revert(MAP::MapLayer &mapLayer)
         {
             mapLayer.setMapTile(UInt32Point3D(pair.first, m_LayerIndex), m_LayerType, pair.second);
         }
-        catch (std::exception& e)
+        catch (const std::exception& e)
         {
         }
     }

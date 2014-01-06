@@ -156,7 +156,7 @@
     <LibraryPath>$(QtDir)\lib;$(SolutionDir);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <TargetName>$(ProjectName)_d</TargetName>
+    <TargetName>$(ProjectName)64_d</TargetName>
     <IncludePath>$(SimpleLib)\include;$(QtDir)\include;$(BoostDir);$(SolutionDir)\Simple2D-GameEditor\include;$(SolutionDir)\Simple2D-Engine;$(IncludePath)</IncludePath>
     <LibraryPath>$(QtDir)\lib;$(SolutionDir);$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)\Simple2D-GameEditor\lib\</OutDir>
@@ -170,6 +170,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>$(SimpleLib)\include;$(QtDir)\include;$(BoostDir);$(SolutionDir)\Simple2D-GameEditor\include;$(SolutionDir)\Simple2D-Engine;$(IncludePath)</IncludePath>
     <LibraryPath>$(QtDir)\lib;$(SolutionDir);$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)\Simple2D-GameEditor\lib\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <TargetName>$(ProjectName)64</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -198,7 +201,7 @@
       <OutputFile>$(SolutionDir)</OutputFile>
     </Link>
     <Lib>
-      <OutputFile>$(SolutionDir)\Simple2D-GameEditor\lib\$(ProjectName)_d.lib</OutputFile>
+      <OutputFile>$(SolutionDir)\Simple2D-GameEditor\lib\$(ProjectName)64_d.lib</OutputFile>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -236,7 +239,7 @@
       <OutputFile>$(SolutionDir)</OutputFile>
     </Link>
     <Lib>
-      <OutputFile>$(SolutionDir)\Simple2D-GameEditor\lib\$(ProjectName).lib</OutputFile>
+      <OutputFile>$(SolutionDir)\Simple2D-GameEditor\lib\$(ProjectName)64.lib</OutputFile>
     </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

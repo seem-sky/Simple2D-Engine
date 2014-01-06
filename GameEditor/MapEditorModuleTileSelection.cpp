@@ -8,6 +8,8 @@ MapEditorModuleTileSelection::MapEditorModuleTileSelection(DATABASE::DatabaseMgr
     m_pModuleAutoTiles(new MapEditorModuleAutoTiles(m_DatabaseMgr, this)),
     m_pModuleTileSets(new MapEditorModuleTileSets(pParent))
 {
+    m_SelectedItems.fill(nullptr);
+
     // setup tile modules
     addTab(m_pModuleTiles, "tiles");
     addTab(m_pModuleAutoTiles, "auto tiles");
