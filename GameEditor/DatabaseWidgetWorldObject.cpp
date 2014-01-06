@@ -6,6 +6,7 @@ using namespace DATABASE;
 DatabaseWidgetWorldObject::DatabaseWidgetWorldObject(QWidget* pParent) : DatabaseWidgetBase(pParent),
     // modules
     m_pModuleSpriteList(new DatabaseModuleTextureDragList(this)),
+    m_pModuleVisualViewer(new DatabaseModuleVisualViewer(this)),
 
     // others
     m_pVisualTypeBox(new QComboBox(this))
@@ -16,20 +17,25 @@ DatabaseWidgetWorldObject::DatabaseWidgetWorldObject(QWidget* pParent) : Databas
     m_pVisualTypeBox->setCurrentIndex(0);
 
     m_pModuleSpriteList->setMaximumWidth(200);
+    m_pModuleVisualViewer->setMaximumWidth(200);
 
     connect(m_pVisualTypeBox, SIGNAL(currentIndexChanged(int)), this, SLOT(_onVisualTypeChanged(int)));
 
+    // setup layout
     if (auto pLayout = dynamic_cast<QGridLayout*>(layout()))
     {
+        pLayout->setColumnMinimumWidth(1, 200);
+        pLayout->setColumnMinimumWidth(2, 150);
+
         // stretches
         pLayout->setColumnStretch(0, 0);
         pLayout->setColumnStretch(1, 1);
         pLayout->setColumnStretch(2, 0);
+        pLayout->setColumnStretch(3, 1);
         pLayout->setRowStretch(0, 0);
         pLayout->setRowStretch(1, 1);
 
-        pLayout->setColumnMinimumWidth(2, 200);
-
+        pLayout->addWidget(m_pModuleVisualViewer, 0, 1, -1, 1);
         pLayout->addWidget(m_pVisualTypeBox, 0, 2);
         pLayout->addWidget(m_pModuleSpriteList, 1, 2, -1, 1);
     }
@@ -44,6 +50,7 @@ void DatabaseWidgetWorldObject::setupPrototypeFromWidgets(DATABASE::Prototype* p
 {
     if (auto pWorldObject = dynamic_cast<WORLD_OBJECT::WorldObjectPrototype*>(pPrototype))
     {
+        pWorldObject->setAnimationCount(m_pModuleVisualViewer->getVisualViewerCount());
     }
     DatabaseWidgetBase::setupPrototypeFromWidgets(pPrototype);
 }
@@ -52,6 +59,7 @@ void DatabaseWidgetWorldObject::setupWidgetsFromPrototype(const DATABASE::Protot
 {
     if (auto pWorldObject = dynamic_cast<const WORLD_OBJECT::WorldObjectPrototype*>(pPrototype))
     {
+        m_pModuleVisualViewer->setVisualViewerCount(pWorldObject->getAnimationCount());
     }
     DatabaseWidgetBase::setupWidgetsFromPrototype(pPrototype);
 }

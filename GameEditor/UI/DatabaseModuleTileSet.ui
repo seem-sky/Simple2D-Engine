@@ -182,6 +182,13 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>m_pHorizontalRemove</tabstop>
+  <tabstop>m_pHorizontalAdd</tabstop>
+  <tabstop>m_pVerticalRemove</tabstop>
+  <tabstop>m_pVerticalAdd</tabstop>
+  <tabstop>m_pTileSetTable</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

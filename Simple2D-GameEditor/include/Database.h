@@ -35,7 +35,7 @@ namespace DATABASE
         // overwrite copy constructor
         Database(const Database<T>& pOther)
         {
-            m_uiMaxSize = pOther.getMaximumSize();
+            m_MaxSize = pOther.getMaximumSize();
             uint32 i = 0;
             m_Items.resize(pOther.getSize());
             for (auto& pItem : pOther.getItems())

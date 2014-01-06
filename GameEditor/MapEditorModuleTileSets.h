@@ -4,7 +4,7 @@
 #include "DatabaseModuleDragDrop.h"
 #include "MapEditorWidgetBrush.h"
 
-class MapEditorModuleTileSets : public DatabaseModuleDragList
+class MapEditorModuleTileSets : public DatabaseModuleTooltipList
 {
     Q_OBJECT
 private:

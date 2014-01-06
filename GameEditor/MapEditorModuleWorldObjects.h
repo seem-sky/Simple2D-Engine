@@ -4,7 +4,7 @@
 #include "DatabaseModuleDragDrop.h"
 #include "DatabaseMgr.h"
 
-class MapEditorModuleWorldObjects : public DatabaseModuleDragList
+class MapEditorModuleWorldObjects : public DatabaseModuleTooltipList
 {
 private:
     QWidget* MapEditorModuleWorldObjects::_setupTooltipWidget(uint32 uiPrototypeID);

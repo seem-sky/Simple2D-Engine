@@ -293,7 +293,7 @@ namespace DATABASE
             // set minimum poses
             m_AnimationInfos.resize(getMinimumAnimationCount());
             for (uint32 i = 1; i <= getMinimumAnimationCount(); ++i)
-                m_AnimationInfos.at(i-1).m_uiAnimationTypeID = i;
+                m_AnimationInfos.at(i-1).m_AnimationTypeID = i;
         }
 
         void WorldObjectPrototype::setAnimationInfo(uint32 index, AnimationInfo& animationInfo)

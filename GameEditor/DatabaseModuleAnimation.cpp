@@ -122,7 +122,7 @@ void DatabaseModuleAnimation::setAnimation(const DATABASE::ANIMATION::FrameVecto
     // get sure, there is at least one frame
     if (m_Animation.empty())
         m_Animation.push_back(DATABASE::ANIMATION::Frame());
-    m_pCurrentFrame->setMaximum(m_Animation.size()-1);
+    m_pCurrentFrame->setMaximum(static_cast<uint32>(m_Animation.size()-1));
     _setupFrame(0);
 }
 
@@ -130,7 +130,7 @@ void DatabaseModuleAnimation::_onFrameAddClicked()
 {
     uint32 newIndex = m_pAniViewer->getCurrentFrame()+1;
     m_Animation.insert(m_Animation.begin()+newIndex, DATABASE::ANIMATION::Frame());
-    m_pCurrentFrame->setMaximum(m_Animation.size()-1);
+    m_pCurrentFrame->setMaximum(static_cast<uint32>(m_Animation.size()-1));
     m_pCurrentFrame->setValue(newIndex);
     _onFrameChanged(newIndex);
 }
@@ -144,9 +144,9 @@ void DatabaseModuleAnimation::_onFrameRemoveClicked()
     uint32 newIndex = m_pAniViewer->getCurrentFrame();
     m_Animation.erase(m_Animation.begin()+newIndex);
     if (newIndex >= m_Animation.size())
-        newIndex = m_Animation.size()-1;
+        newIndex = static_cast<uint32>(m_Animation.size()-1);
     m_pCurrentFrame->setValue(newIndex);
-    m_pCurrentFrame->setMaximum(m_Animation.size()-1);
+    m_pCurrentFrame->setMaximum(static_cast<uint32>(m_Animation.size()-1));
 
     // change frame without saving last!
     _setupFrame(newIndex);
@@ -198,7 +198,7 @@ void DatabaseModuleAnimation::_setupFrame(uint32 index)
 
 void DatabaseModuleAnimation::_onPlayStopButtonClicked()
 {
-    if (m_pAniViewer->playAnimation())
+    if (m_pAniViewer->isAnimationActive())
     {
         m_pAniPlayerButton->setText("start");
         m_pAniViewer->stopAnimation();

@@ -55,8 +55,8 @@ void DatabaseWidgetAnimation::setupPrototypeFromWidgets(Prototype* pPrototype)
         // remove empty sprites at end
         if (!animation.empty())
         {
-            uint32 sizeWithoutEmptyFrames = animation.size();
-            for (uint32 i = animation.size(); i > 0; --i)
+            auto sizeWithoutEmptyFrames = static_cast<uint32>(animation.size());
+            for (auto i = static_cast<uint32>(animation.size()); i > 0; --i)
             {
                 if (!animation.at(i-1).isEmpty())
                 {

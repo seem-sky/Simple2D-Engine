@@ -161,7 +161,7 @@ void AnimationViewer::showFrame(uint32 index)
     if (!m_pAnimation || m_pAnimation->empty())
         m_uiCurrentFrameIndex = 0;
     else if (index >= m_pAnimation->size())
-        m_uiCurrentFrameIndex = m_pAnimation->size()-1;
+        m_uiCurrentFrameIndex = static_cast<uint32>(m_pAnimation->size()-1);
     else
     {
         m_uiCurrentFrameIndex = index;
@@ -216,7 +216,7 @@ void AnimationViewer::stopAnimation()
     setMode(MODE_MODIFY);
 }
 
-bool AnimationViewer::playAnimation() const
+bool AnimationViewer::isAnimationActive() const
 {
     return m_AnimationTimer.isActive();
 }
@@ -270,11 +270,20 @@ void AnimationViewer::dropEvent(QDropEvent* pEvent)
 {
     if (!m_pSpriteDB)
         return;
-    if (auto pSprite = m_pSpriteDB->getOriginalPrototype(pEvent->mimeData()->text().toUInt()))
+    auto texts = pEvent->mimeData()->text().split(",");
+    if (texts.count() >= 2)
     {
-        auto pItem = new AnimationSpriteItem(m_pSpriteDB, pSprite->getID());
-        pItem->setPos(mapToScene(pEvent->pos()).toPoint());
-        addGraphicsSpriteItem(pItem);
-        pItem->setSelected(true);
+        uint32 ID = texts.at(0).toUInt();
+        auto DBtype = static_cast<DATABASE::DatabaseType>(texts.at(1).toUInt());
+        if (ID && DBtype == DATABASE::DatabaseType::SPRITE_DATABASE)
+        {
+            if (auto pSprite = m_pSpriteDB->getOriginalPrototype(ID))
+            {
+                auto pItem = new AnimationSpriteItem(m_pSpriteDB, pSprite->getID());
+                pItem->setPos(mapToScene(pEvent->pos()).toPoint());
+                addGraphicsSpriteItem(pItem);
+                pItem->setSelected(true);
+            }
+        }
     }
 }

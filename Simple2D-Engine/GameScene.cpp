@@ -10,6 +10,8 @@
 using namespace GAME_LOGIC;
 using namespace SCENE;
 
+// ToDo: Add scene parent to avoid memory leak
+
 /*#####
 # GameScene
 #####*/

@@ -153,6 +153,9 @@
     <ClCompile Include="RevertInfo.cpp">
       <Filter>Map\Brush</Filter>
     </ClCompile>
+    <ClCompile Include="VisualViewer.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Simple2D-GameEditor\include\Application.h">
@@ -275,5 +278,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <moc_header Include="VisualViewer.h">
+      <Filter>Core</Filter>
+    </moc_header>
   </ItemGroup>
 </Project>

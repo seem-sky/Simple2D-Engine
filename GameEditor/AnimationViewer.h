@@ -74,7 +74,7 @@ public:
 
     void startAnimation();
     void stopAnimation();
-    bool playAnimation() const;
+    bool isAnimationActive() const;
 
     AnimationSpriteItem* getSelectedItem();
 

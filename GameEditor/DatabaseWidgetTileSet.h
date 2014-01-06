@@ -20,7 +20,7 @@ public:
 
 private:
     DatabaseModuleTileSet* m_pModuleTileSet;
-    DatabaseModuleDragList* m_pModuleTileList;
+    DatabaseModuleTooltipList* m_pModuleTileList;
 };
 
 #endif

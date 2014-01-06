@@ -6,7 +6,7 @@
 #include <QtWidgets/QLabel>
 #include <QtCore/QTimer>
 
-class DatabaseModuleDragList : public QTreeView
+class DatabaseModuleTooltipList : public QTreeView
 {
     Q_OBJECT    
 private:
@@ -18,7 +18,7 @@ protected:
     virtual void leaveEvent(QEvent* pEvent);
 
 public:
-    DatabaseModuleDragList(QWidget* pParent = nullptr);
+    DatabaseModuleTooltipList(QWidget* pParent = nullptr);
 
     void setModel(DATABASE::ConstDatabaseModel* pModel);
 
@@ -52,7 +52,7 @@ private:
 /*#####
 # Texture drag&drop
 #####*/
-class DatabaseModuleTextureDragList : public DatabaseModuleDragList
+class DatabaseModuleTextureDragList : public DatabaseModuleTooltipList
 {
 private:
     QWidget* _setupTooltipWidget(uint32 uiPrototypeID);

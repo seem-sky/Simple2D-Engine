@@ -5,7 +5,7 @@
 #include <QtGui/QPainter>
 #include "moc_MapEditorModuleTileSets.h"
 
-MapEditorModuleTileSets::MapEditorModuleTileSets(QWidget* pParent) : DatabaseModuleDragList(pParent)
+MapEditorModuleTileSets::MapEditorModuleTileSets(QWidget* pParent) : DatabaseModuleTooltipList(pParent)
 {
     setDragEnabled(false);
     setToolTipPosition(ToolTipPosition::TOOLTIP_RIGHT);
@@ -31,7 +31,7 @@ QWidget* MapEditorModuleTileSets::_setupTooltipWidget(uint32 uiPrototypeID)
 
 void MapEditorModuleTileSets::mousePressEvent(QMouseEvent* pEvent)
 {
-    DatabaseModuleDragList::mousePressEvent(pEvent);
+    DatabaseModuleTooltipList::mousePressEvent(pEvent);
 
     auto item = indexAt(pEvent->pos());
     if (item.isValid() && (pEvent->button() == Qt::RightButton || pEvent->button() == Qt::LeftButton))

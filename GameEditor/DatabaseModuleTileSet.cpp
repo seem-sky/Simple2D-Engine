@@ -4,7 +4,7 @@
 const uint32 MIN_COLUMN_COUNT = 1;
 const uint32 MIN_ROW_COUNT = 1;
 
-DatabaseModuleTileSet::DatabaseModuleTileSet(QWidget* pParent) : Ui_DatabaseModuleTileSet(), m_pTileDB(nullptr)
+DatabaseModuleTileSet::DatabaseModuleTileSet(QWidget* pParent) : QWidget(pParent), Ui_DatabaseModuleTileSet(), m_pTileDB(nullptr)
 {
     setupUi(this);
 

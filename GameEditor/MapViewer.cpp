@@ -4,6 +4,8 @@
 #include "AutoTileCache.h"
 #include "moc_MapViewer.h"
 #include <QtGui/QMouseEvent>
+#include <QtCore/QTime>
+#include <QtCore/QDebug>
 
 /*#####
 # MapViewerScene
@@ -49,7 +51,10 @@ void MapViewerScene::setLayerType(MAP::Layer layerType)
 
 void MapViewerScene::drawBackground(QPainter* painter, const QRectF& rect)
 {
+    QTime time;
+    time.start();
     _drawTiles(painter, rect, MAP::Layer::LAYER_BACKGROUND);
+    qDebug() << "Background draw finishes after " << time.elapsed() << "msec.";
 }
 
 void MapViewerScene::drawForeground(QPainter* painter, const QRectF& rect)
@@ -111,7 +116,7 @@ void MapViewerScene::_drawTiles(QPainter* painter, const QRectF& rect, MAP::Laye
                 if (tileObj.m_uiAutoTileSetID == 0)
                 {
                     if (auto pPixmap = GTileCache::get()->getItem(tileObj.m_uiTileID))
-                        painter->drawTiledPixmap(x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE, TILE_SIZE,* pPixmap);
+                        painter->drawPixmap(x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE, TILE_SIZE,* pPixmap);
                 }
                 // autotiles
                 else
@@ -119,7 +124,7 @@ void MapViewerScene::_drawTiles(QPainter* painter, const QRectF& rect, MAP::Laye
                     if (auto pAutoTile = GAutoTileCache::get()->getItem(tileObj.m_uiAutoTileSetID))
                     {
                         if (auto pPixmap = pAutoTile->getPixmap(static_cast<DATABASE::AUTO_TILE::AUTO_TILE_INDEX>(tileObj.m_uiTileID)))
-                            painter->drawTiledPixmap(x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE, TILE_SIZE,* pPixmap);
+                            painter->drawPixmap(x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE, TILE_SIZE,* pPixmap);
                     }
                 }
             }

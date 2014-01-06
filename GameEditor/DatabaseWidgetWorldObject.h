@@ -4,6 +4,7 @@
 #include "DatabaseWidgetBase.h"
 #include <QtWidgets/QComboBox>
 #include "DatabaseModuleDragDrop.h"
+#include "DatabaseModuleVisualViewer.h"
 
 class DatabaseWidgetWorldObject : public DatabaseWidgetBase
 {
@@ -25,8 +26,9 @@ private slots:
 
 private:
     // source lists
-    DatabaseModuleTextureDragList *m_pModuleSpriteList;
+    DatabaseModuleTextureDragList* m_pModuleSpriteList;
 
+    DatabaseModuleVisualViewer* m_pModuleVisualViewer;
     QComboBox* m_pVisualTypeBox;
 };
 

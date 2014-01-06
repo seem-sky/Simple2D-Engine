@@ -16,7 +16,7 @@ void WorldObject::_setupFromPrototype(const DATABASE::WORLD_OBJECT::WorldObjectP
     for (uint32 i = 0; i < pWorldObject->getAnimationCount(); ++i)
     {
         DATABASE::WORLD_OBJECT::AnimationInfo info = pWorldObject->getAnimationInfo(i);
-        m_Animations.insert(std::make_pair(info.m_uiAnimationTypeID, info.m_ID));
+        m_Animations.insert(std::make_pair(info.m_AnimationTypeID, info.m_ID));
     }
     _setCurrentAnimation(m_Direction);
 

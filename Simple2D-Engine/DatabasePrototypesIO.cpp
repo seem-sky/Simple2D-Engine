@@ -290,13 +290,13 @@ void WORLD_OBJECT::WorldObjectPrototype::toXML(QXmlStreamWriter& writer) const
     for (uint32 i = 1; i <= getAnimationCount(); ++i)
     {
         WORLD_OBJECT::AnimationInfo animationInfo = getAnimationInfo(i);
-        if (animationInfo.m_ID == 0 && animationInfo.m_uiAnimationTypeID == 0)
+        if (animationInfo.m_ID == 0 && animationInfo.m_AnimationTypeID == 0)
             continue;
         writer.writeEmptyElement("animation");
         writer.writeAttribute("entry", QString::number(i));
         writer.writeAttribute("visualType", QString::number(static_cast<uint32>(animationInfo.m_VisualType)));
         writer.writeAttribute("ID", QString::number(animationInfo.m_ID));
-        writer.writeAttribute("typeID", QString::number(animationInfo.m_uiAnimationTypeID));
+        writer.writeAttribute("typeID", QString::number(animationInfo.m_AnimationTypeID));
     }
 }
 

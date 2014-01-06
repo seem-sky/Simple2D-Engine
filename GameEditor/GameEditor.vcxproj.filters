@@ -127,6 +127,9 @@
     <Filter Include="Database\Dialogs\ChoseColor">
       <UniqueIdentifier>{1afd9a2d-0c9e-48d1-a765-e5ad166928a9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Database\Modules\VisualViewer">
+      <UniqueIdentifier>{7b5280e2-66f5-4030-a79a-62de5c44e968}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainWindow.cpp">
@@ -251,6 +254,9 @@
     </ClCompile>
     <ClCompile Include="DatabaseDialogChoseColor.cpp">
       <Filter>Database\Dialogs\ChoseColor</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabaseModuleVisualViewer.cpp">
+      <Filter>Database\Modules\VisualViewer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -419,6 +425,9 @@
     </ClInclude>
     <ClInclude Include="DatabaseDialogChoseColor.h">
       <Filter>Database\Dialogs\ChoseColor</Filter>
+    </ClInclude>
+    <ClInclude Include="DatabaseModuleVisualViewer.h">
+      <Filter>Database\Modules\VisualViewer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -398,7 +398,7 @@ namespace DATABASE
             void addSprite(Sprite sprite);
             void removeSprite(uint32 index, Sprite sprite);
 
-            inline uint32 getSpriteCount() const { return m_Sprites.size(); }
+            inline uint32 getSpriteCount() const { return static_cast<uint32>(m_Sprites.size()); }
             inline void setSpriteCount(uint32 size) { m_Sprites.resize(size); calculateOffset(); }
             inline const SpriteVector& getSprites() const { return m_Sprites; }
 
@@ -426,7 +426,7 @@ namespace DATABASE
             bool getFrame(uint32 uiIndex, Frame& frame) const;
             void setFrame(uint32 uiIndex, Frame frame);
             void removeFrame(uint32 uiIndex);
-            inline uint32 getFrameCount() const { return m_Frames.size(); }
+            inline uint32 getFrameCount() const { return static_cast<uint32>(m_Frames.size()); }
             inline const FrameVector& getAnimation() const { return m_Frames; }
             inline void setAnimation(const FrameVector& animation) { m_Frames = animation; }
 
@@ -456,12 +456,14 @@ namespace DATABASE
             };
 
             AnimationInfo(uint32 ID = 0, VisualType visualType = VisualType::SPRITE, uint32 animationTypeID = 0)
-                : m_ID(ID), m_VisualType(visualType), m_uiAnimationTypeID(animationTypeID)
+                : m_ID(ID), m_VisualType(visualType), m_AnimationTypeID(animationTypeID)
             {}
+
+            bool isValid() const { return m_ID && m_AnimationTypeID; }
 
             uint32 m_ID;
             VisualType m_VisualType;
-            uint32 m_uiAnimationTypeID;
+            uint32 m_AnimationTypeID;
         };
         typedef std::vector<AnimationInfo> AnimationInfoVector;
 
@@ -494,7 +496,7 @@ namespace DATABASE
             inline AnimationInfo& getAnimationInfo(uint32 uiIndex) { return m_AnimationInfos.at(uiIndex); }
             void setAnimationInfo(uint32 uiIndex, AnimationInfo& animationInfo);
 
-            inline uint32 getAnimationCount() const { return m_AnimationInfos.size(); }
+            inline uint32 getAnimationCount() const { return static_cast<uint32>(m_AnimationInfos.size()); }
             void setAnimationCount(uint32 uiCount);
 
             virtual uint8 getMinimumAnimationCount() const { return MIN_WORLD_OBJECT_POSE; }
@@ -528,7 +530,7 @@ namespace DATABASE
             }
 
             inline void setLocalsCount(uint32 uiCount) { m_Locals.resize(uiCount); }
-            inline uint32 getLocalsCount() const { return m_Locals.size(); }
+            inline uint32 getLocalsCount() const { return static_cast<uint32>(m_Locals.size()); }
             inline void setLocalisation(uint32 uiIndex, const QString& sLocal)
             {
                 if (uiIndex >= getLocalsCount())
