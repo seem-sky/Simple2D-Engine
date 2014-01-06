@@ -29,8 +29,8 @@ DatabaseWidgetAnimation::DatabaseWidgetAnimation(QWidget* pParent) : DatabaseWid
 
 void DatabaseWidgetAnimation::setDatabaseMgr(DatabaseMgr& DBMgr)
 {
-    m_pModuleList->setDatabaseModel(new DatabaseModel(DBMgr, DatabaseType::ANIMATION_DATABASE));
     m_pModuleAnimation->setSpriteDatabase(DBMgr.getSpriteDatabase());
+    m_pModuleList->setDatabaseModel(new DatabaseModel(DBMgr, DatabaseType::ANIMATION_DATABASE));
 }
 
 void DatabaseWidgetAnimation::setSpriteDatabaseModel(ConstDatabaseModel* pModel)

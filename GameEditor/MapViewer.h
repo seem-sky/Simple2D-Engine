@@ -64,6 +64,7 @@ class MapViewer : public QGraphicsView
     Q_OBJECT
 private:
     void _drawTiles(const QPoint& pos);
+    void _finishBrush();
 
 protected:
     void mousePressEvent(QMouseEvent* pEvent);

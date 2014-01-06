@@ -105,18 +105,25 @@ void MapViewerScene::_drawTiles(QPainter* painter, const QRectF& rect, MAP::Laye
             break;
         }
 
-        for (uint32 x = startTile.x; x < endTile.x; ++x)
+        // ToDo: DrawPixmapFragments is an improvement, perhaps.
+        // std::vector<std::vector<QPainter::PixmapFragment>> fragments;
+        UInt32Point3D currentTile(0, 0, layerIndex);
+        for (currentTile.x = startTile.x; currentTile.x < endTile.x; ++currentTile.x)
         {
-            for (uint32 y = startTile.y; y < endTile.y; ++y)
+            for (currentTile.y = startTile.y; currentTile.y < endTile.y; ++currentTile.y)
             {
-                auto& tileObj = mapLayer.getMapTile(UInt32Point3D(x, y, layerIndex), currentLayer);
+                auto& tileObj = mapLayer.getMapTile(currentTile, currentLayer);
                 if (tileObj.isEmpty())      // ignore tile ID 0; empty tile
                     continue;
                 // is no auto tile
                 if (tileObj.m_uiAutoTileSetID == 0)
                 {
                     if (auto pPixmap = GTileCache::get()->getItem(tileObj.m_uiTileID))
-                        painter->drawPixmap(x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE, TILE_SIZE,* pPixmap);
+                        painter->drawPixmap(currentTile.x*TILE_SIZE, currentTile.y*TILE_SIZE, TILE_SIZE, TILE_SIZE,* pPixmap);
+                    //if (fragments.size() < tileObj.m_uiTileID)
+                    //    fragments.resize(tileObj.m_uiTileID);
+                    //fragments.at(tileObj.m_uiTileID-1).push_back(QPainter::PixmapFragment::create(QPoint(x*TILE_SIZE + TILE_SIZE/2, y*TILE_SIZE + TILE_SIZE/2),
+                    //    QRect(0, 0, TILE_SIZE, TILE_SIZE)));
                 }
                 // autotiles
                 else
@@ -124,11 +131,20 @@ void MapViewerScene::_drawTiles(QPainter* painter, const QRectF& rect, MAP::Laye
                     if (auto pAutoTile = GAutoTileCache::get()->getItem(tileObj.m_uiAutoTileSetID))
                     {
                         if (auto pPixmap = pAutoTile->getPixmap(static_cast<DATABASE::AUTO_TILE::AUTO_TILE_INDEX>(tileObj.m_uiTileID)))
-                            painter->drawPixmap(x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE, TILE_SIZE,* pPixmap);
+                            painter->drawPixmap(currentTile.x*TILE_SIZE, currentTile.y*TILE_SIZE, TILE_SIZE, TILE_SIZE,* pPixmap);
                     }
                 }
             }
         }
+
+        //// draw fragments
+        //for (uint32 i = 0; i < fragments.size(); ++i)
+        //{
+        //    if (fragments.at(i).empty())
+        //        continue;
+        //    if (auto pPixmap = GTileCache::get()->getItem(i+1))
+        //        painter->drawPixmapFragments(&*fragments.at(i).begin(), fragments.at(i).size(), *pPixmap, QPainter::OpaqueHint);
+        //}
     }
 }
 
@@ -281,6 +297,17 @@ void MapViewer::revertLast()
     emit changed(this);
 }
 
+void MapViewer::_finishBrush()
+{
+    // push only if there are changes
+    if (m_pCurrentBrush && m_pCurrentBrush->getRevertInfo().hasChanges())
+    {
+        m_RevertInfos.push_back(m_pCurrentBrush->getRevertInfo());
+        emit changed(this);
+    }
+    m_pCurrentBrush.reset();
+}
+
 void MapViewer::mousePressEvent(QMouseEvent* pEvent)
 {
     QGraphicsView::mousePressEvent(pEvent);
@@ -296,11 +323,11 @@ void MapViewer::mousePressEvent(QMouseEvent* pEvent)
         emit requestBrushInfo(brush, brushInfo);
         if (auto pScene = dynamic_cast<MapViewerScene*>(scene()))
         {
+            // if there is an old brush, release it
+            if (m_pCurrentBrush)
+                _finishBrush();
             m_pCurrentBrush = MAP::BRUSH::BrushFactory::createBrush(m_DBMgr, pScene->getMapData().getMapLayer(), brushInfo,
                     pScene->getLayerType(), pScene->getLayerIndex()-1);
-
-        int x = pScene->getLayerIndex();
-        int y = 0;
         }
 
         _drawTiles(mapToScene(pEvent->pos()).toPoint());
@@ -309,13 +336,7 @@ void MapViewer::mousePressEvent(QMouseEvent* pEvent)
 
 void MapViewer::mouseReleaseEvent(QMouseEvent* pEvent)
 {
-    // push only if there are changes
-    if (m_pCurrentBrush->getRevertInfo().hasChanges())
-    {
-        m_RevertInfos.push_back(m_pCurrentBrush->getRevertInfo());
-        emit changed(this);
-    }
-    m_pCurrentBrush.reset();
+    _finishBrush();
 }
 
 void MapViewer::mouseMoveEvent(QMouseEvent* pEvent)

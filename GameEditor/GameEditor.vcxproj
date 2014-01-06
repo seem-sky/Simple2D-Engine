@@ -82,7 +82,7 @@
     <LibraryPath>$(QtDir_64)\lib;$(BoostBin_64);$(SolutionDir);$(SolutionDir)\Simple2D-GameEditor\lib;$(LibraryPath)</LibraryPath>
     <IncludePath>$(SimpleLib)\include;$(QtDir_64)\include;$(BoostDir);$(SolutionDir)\Core;$(SolutionDir)\Simple2D-Engine;$(IncludePath);$(SolutionDir)\Simple2D-GameEditor\include</IncludePath>
     <LinkIncremental>true</LinkIncremental>
-    <IntDir>$(Configuration)\</IntDir>
+    <IntDir>x64\$(Configuration)\</IntDir>
     <OutDir>$(SolutionDir)\Simple2D-GameEditor\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -96,7 +96,7 @@
     <LibraryPath>$(QtDir_64)\lib;$(BoostBin_64);$(SolutionDir);$(SolutionDir)\Simple2D-GameEditor\lib;$(LibraryPath)</LibraryPath>
     <IncludePath>$(SimpleLib)\include;$(QtDir_64)\include;$(BoostDir);$(SolutionDir)\Core;$(SolutionDir)\Simple2D-Engine;$(IncludePath);$(SolutionDir)\Simple2D-GameEditor\include</IncludePath>
     <OutDir>$(SolutionDir)\Simple2D-GameEditor\</OutDir>
-    <IntDir>$(Configuration)\</IntDir>
+    <IntDir>x64\$(Configuration)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
     <TargetName>$(ProjectName)64</TargetName>
   </PropertyGroup>

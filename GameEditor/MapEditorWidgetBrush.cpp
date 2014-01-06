@@ -14,7 +14,6 @@ MapEditorWidgetBrush::MapEditorWidgetBrush(const DATABASE::DatabaseMgr& DBMgr, Q
     setWindowTitle("map editor brush");
 
     setFocusPolicy(Qt::ClickFocus);
-    // ToDo: Check in Qt 5.2 if it works, otherwise look for a solution
     setWindowOpacity(INACTIVE_OPACITY);
 
     auto pLayout = new QHBoxLayout(this);
