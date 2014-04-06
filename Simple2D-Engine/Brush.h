@@ -39,7 +39,7 @@ namespace MAP
         class Brush
         {
         protected:
-            Brush(const DATABASE::DatabaseMgr& DBMgr, MapLayer &mapLayer, uint32 ID, SelectionType selectionType, Layer layerType, uint32 layerIndex);
+            Brush(const DATABASE::DatabaseMgr& DBMgr, LayerContainer &mapLayer, uint32 ID, SelectionType selectionType, LayerType layerType, uint32 layerIndex);
 
             void updateAutoTilesAround(const UInt32PointVector& positions);
 
@@ -48,7 +48,7 @@ namespace MAP
 
             inline uint32 getID() const { return m_ID; }
             inline SelectionType getSelectionType() const { return m_SelectionType; }
-            inline Layer getLayerType() const { return m_LayerType; }
+            inline LayerType getLayerType() const { return m_LayerType; }
             inline uint32 getLayerIndex() const { return m_LayerIndex; }
 
             const REVERT::RevertInfo& getRevertInfo() const { return m_RevertInfo; }
@@ -56,13 +56,13 @@ namespace MAP
         private:
             uint32 m_ID;
             SelectionType m_SelectionType;
-            Layer m_LayerType;
+            LayerType m_LayerType;
             uint32 m_LayerIndex;
 
         protected:
             const DATABASE::DatabaseMgr& m_DBMgr;
             REVERT::RevertInfo m_RevertInfo;
-            MapLayer& m_MapLayer;
+            LayerContainer& m_MapLayer;
         };
         typedef std::unique_ptr<Brush> BrushPtr;
 
@@ -76,7 +76,7 @@ namespace MAP
             void _drawTileSet(const UInt32Point& pos);
 
         protected:
-            BrushPen(const DATABASE::DatabaseMgr& DBMgr, MapLayer &mapLayer, uint32 ID, SelectionType selectionType, Layer layerType, uint32 layerIndex);
+            BrushPen(const DATABASE::DatabaseMgr& DBMgr, LayerContainer &mapLayer, uint32 ID, SelectionType selectionType, LayerType layerType, uint32 layerIndex);
 
         public:
             void draw(const UInt32Point& pos);
@@ -94,7 +94,7 @@ namespace MAP
             bool _getPosition(uint32 i, UInt32Point3D &checkPos) const;
 
         protected:
-            BrushFill(const DATABASE::DatabaseMgr& DBMgr, MapLayer &mapLayer, uint32 ID, SelectionType selectionType, Layer layerType, uint32 layerIndex);
+            BrushFill(const DATABASE::DatabaseMgr& DBMgr, LayerContainer &mapLayer, uint32 ID, SelectionType selectionType, LayerType layerType, uint32 layerIndex);
 
         public:
             void draw(const UInt32Point& pos);
@@ -106,7 +106,7 @@ namespace MAP
         class BrushFactory
         {
         public:
-            static BrushPtr createBrush(const DATABASE::DatabaseMgr& DBMgr, MapLayer &mapLayer, const BrushInfo& info, Layer layerType, uint32 layerIndex);
+            static BrushPtr createBrush(const DATABASE::DatabaseMgr& DBMgr, LayerContainer &mapLayer, const BrushInfo& info, LayerType layerType, uint32 layerIndex);
         };
     }
 }

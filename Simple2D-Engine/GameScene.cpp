@@ -142,16 +142,16 @@ GameSceneView::GameSceneView(GameScene* pScene, const DATABASE::DatabaseMgr& DBM
 void GameSceneView::drawBackground(QPainter* pPainter, const QRectF& rect)
 {
     pPainter->fillRect(rect, QColor(0, 0, 0));
-    drawTiles(pPainter, rect, MAP::Layer::LAYER_BACKGROUND);
+    drawTiles(pPainter, rect, MAP::LayerType::LAYER_BACKGROUND);
 }
 
 void GameSceneView::drawForeground(QPainter* painter, const QRectF& rect)
 {
-    drawTiles(painter, rect, MAP::Layer::LAYER_FOREGROUND);
+    drawTiles(painter, rect, MAP::LayerType::LAYER_FOREGROUND);
     SceneView::drawForeground(painter, rect);
 }
 
-void GameSceneView::drawTiles(QPainter* painter, const QRectF& rect, MAP::Layer layerType)
+void GameSceneView::drawTiles(QPainter* painter, const QRectF& rect, MAP::LayerType layerType)
 {
     GameScene* pScene = getGameScene();
     if (!pScene)

@@ -23,7 +23,7 @@ class MapViewerScene : public QGraphicsScene
 {
 private:
     void _drawGrid(QPainter* painter, const QRectF& rect);
-    void _drawTiles(QPainter* painter, const QRectF& rect, MAP::Layer layer);
+    void _drawTiles(QPainter* painter, const QRectF& rect, MAP::LayerType layer);
     void _drawDarkRect(QPainter* painter, const QRectF& rect);
 
 protected:
@@ -40,8 +40,8 @@ public:
 
     void setLayerIndex(uint32 layerIndex);
     uint32 getLayerIndex() const { return m_LayerIndex.at(static_cast<uint32>(m_LayerType)); }
-    void setLayerType(MAP::Layer layerType);
-    MAP::Layer getLayerType() const { return m_LayerType; }
+    void setLayerType(MAP::LayerType layerType);
+    MAP::LayerType getLayerType() const { return m_LayerType; }
 
     MappingMode getMode() const { return m_Mode; }
     void setMode(MappingMode mode);
@@ -52,7 +52,7 @@ private:
     bool m_ShowGrid;
 
     std::array<uint32, 2> m_LayerIndex;
-    MAP::Layer m_LayerType;
+    MAP::LayerType m_LayerType;
     MappingMode m_Mode;
 };
 
@@ -85,9 +85,9 @@ public:
 
     void setLayerIndex(uint32 layerIndex);
     uint32 getLayerIndex() const;
-    uint32 getMaximumLayerIndex(MAP::Layer layerType) const;
-    void setLayerType(MAP::Layer layerType);
-    MAP::Layer getLayerType() const;
+    uint32 getMaximumLayerIndex(MAP::LayerType layerType) const;
+    void setLayerType(MAP::LayerType layerType);
+    MAP::LayerType getLayerType() const;
 
     uint32 getMapID() const;
 

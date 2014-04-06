@@ -1,60 +1,128 @@
 #include "MapLayer.h"
 #include "DatabasePrototypes.h"
+#include "MapException.h"
 
 using namespace MAP;
 
-void MapLayer::clear()
+/*#####
+# MapTileInfo
+#####*/
+MapTileInfo::MapTileInfo(const MapTile& tile, UInt32Point at) : m_Tile(tile), m_Position(at)
 {
-    resize(UInt32Point(), 0, 0);
 }
 
-void MapLayer::resize(const UInt32Point& size, uint8 uiForegroundLayerSize, uint8 uiBackgroundLayerSize)
+/*#####
+# Layer
+#####*/
+Layer::Layer(const UInt32Point& size)
+{
+    _resize(size);
+}
+
+void Layer::_resize(const UInt32Point& size)
 {
     m_Size = size;
-    m_uiLayer.at(static_cast<uint32>(Layer::LAYER_FOREGROUND)) = uiForegroundLayerSize;
-    m_uiLayer.at(static_cast<uint32>(Layer::LAYER_BACKGROUND)) = uiBackgroundLayerSize;
-
-    m_BackgroundTiles.resize(boost::extents[m_Size.x][m_Size.y][m_uiLayer.at(static_cast<uint32>(Layer::LAYER_BACKGROUND))]);
-    m_ForegroundTiles.resize(boost::extents[m_Size.x][m_Size.y][m_uiLayer.at(static_cast<uint32>(Layer::LAYER_FOREGROUND))]);
+    m_Layer.resize(boost::extents[m_Size.x][m_Size.y]);
 }
 
-const MapTile& MapLayer::getMapTile(const UInt32Point3D& at, Layer layer) const
+void Layer::_clear()
 {
-    if (isInMap(at) && getLayerSize(layer) > at.z)
+    _resize(UInt32Point());
+}
+
+const MapTile& Layer::getMapTile(const UInt32Point& at) const
+{
+    if (isInMap(at))
+        return m_Layer[at.x][at.y];
+    throw EXCEPTION::TileRangeException(nullptr);
+}
+
+MapTile& Layer::getMapTile(const UInt32Point& at)
+{
+    return const_cast<MapTile&>(const_cast<const Layer&>(*this).getMapTile(at));
+}
+
+MapTileInfo Layer::getMapTileInfo(const UInt32Point& at) const
+{
+    if (isInMap(at))
+        return MapTileInfo(m_Layer[at.x][at.y], at);
+    throw EXCEPTION::TileRangeException(nullptr);
+}
+
+void Layer::setMapTile(const UInt32Point& at, MapTile tile)
+{
+    if (isInMap(at))
+        m_Layer[at.x][at.y] = tile;
+    else
+        throw EXCEPTION::TileRangeException(nullptr);
+}
+
+/*#####
+# LayerContainer
+#####*/
+void LayerContainer::clear()
+{
+    for (auto& layer : m_BackgroundLayer)
+        layer._clear();
+    for (auto& layer : m_ForegroundLayer)
+        layer._clear();
+}
+
+void LayerContainer::resize(const UInt32Point& size, uint8 uiForegroundLayerSize, uint8 uiBackgroundLayerSize)
+{
+    m_Size = size;
+    for (auto& layer : m_BackgroundLayer)
+        layer._resize(size);
+    for (auto& layer : m_ForegroundLayer)
+        layer._resize(size);
+    m_BackgroundLayer.resize(uiBackgroundLayerSize, Layer(size));
+    m_ForegroundLayer.resize(uiForegroundLayerSize, Layer(size));
+}
+
+const Layer& LayerContainer::getLayer(LayerType layer, uint8 index) const
+{
+    if (getLayerSize(layer) > index)
     {
         switch (layer)
         {
-        case Layer::LAYER_BACKGROUND: return m_BackgroundTiles[at.x][at.y][at.z];
-        case Layer::LAYER_FOREGROUND: return m_ForegroundTiles[at.x][at.y][at.z];
+        case LayerType::LAYER_BACKGROUND: return m_BackgroundLayer.at(index);
+        case LayerType::LAYER_FOREGROUND: return m_ForegroundLayer.at(index);
         }
     }
     throw std::out_of_range(nullptr);
 }
 
-MapTile& MapLayer::getMapTile(const UInt32Point3D& at, Layer layer)
+Layer& LayerContainer::getLayer(LayerType layer, uint8 index)
 {
-    return const_cast<MapTile&>(const_cast<const MapLayer&>(*this).getMapTile(at, layer));
+    return const_cast<Layer&>(const_cast<const LayerContainer&>(*this).getLayer(layer, index));
 }
 
-void MapLayer::setMapTile(const UInt32Point3D& at, Layer layer, MapTile tile)
+uint8 LayerContainer::getLayerSize(LayerType layer) const
 {
-    if (isInMap(at) && getLayerSize(layer) > at.z)
+    switch (layer)
     {
-        switch (layer)
-        {
-        case Layer::LAYER_BACKGROUND:
-            m_BackgroundTiles[at.x][at.y][at.z] = tile;
-            break;
-        case Layer::LAYER_FOREGROUND:
-            m_ForegroundTiles[at.x][at.y][at.z] = tile;
-            break;
-        }
+    case MAP::LayerType::LAYER_BACKGROUND: return static_cast<uint8>(m_BackgroundLayer.size());
+    case MAP::LayerType::LAYER_FOREGROUND: return static_cast<uint8>(m_ForegroundLayer.size());
     }
-    else
-        throw std::out_of_range(nullptr);
+    return 0;
 }
 
-uint32 MapLayer::checkAutoTiles(uint32 uiID, const UInt32Point3D& pos, UInt32PointVector& result, Layer layer, uint32 resultFlag)
+const MapTile& LayerContainer::getMapTile(const UInt32Point3D& at, LayerType layer) const
+{
+    return getLayer(layer, at.z).getMapTile(at);
+}
+
+MapTile& LayerContainer::getMapTile(const UInt32Point3D& at, LayerType layer)
+{
+    return getLayer(layer, at.z).getMapTile(at);
+}
+
+void LayerContainer::setMapTile(const UInt32Point3D& at, LayerType layer, MapTile tile)
+{
+    getLayer(layer, at.z).setMapTile(at, tile);
+}
+
+uint32 LayerContainer::checkAutoTiles(uint32 uiID, const UInt32Point3D& pos, UInt32PointVector& result, LayerType layer, uint32 resultFlag)
 {
     uint32 uiBorderCheck = 0;
     MapTile centerTile = getMapTile(pos, layer);

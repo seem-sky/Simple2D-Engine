@@ -11,7 +11,7 @@
 # MapViewerScene
 #####*/
 MapViewerScene::MapViewerScene(uint32 mapID, const DATABASE::DatabaseMgr& DBMgr) : QGraphicsScene(), m_MapData(DBMgr, mapID), m_ShowGrid(true),
-    m_LayerType(MAP::Layer::LAYER_BACKGROUND), m_Mode(MappingMode::TILE_MAPPING)
+    m_LayerType(MAP::LayerType::LAYER_BACKGROUND), m_Mode(MappingMode::TILE_MAPPING)
 {
     m_LayerIndex.fill(1);
 }
@@ -41,7 +41,7 @@ void MapViewerScene::setLayerIndex(uint32 layerIndex)
     update();
 }
 
-void MapViewerScene::setLayerType(MAP::Layer layerType)
+void MapViewerScene::setLayerType(MAP::LayerType layerType)
 {
     if (m_LayerType == layerType)
         return;
@@ -53,17 +53,17 @@ void MapViewerScene::drawBackground(QPainter* painter, const QRectF& rect)
 {
     QTime time;
     time.start();
-    _drawTiles(painter, rect, MAP::Layer::LAYER_BACKGROUND);
+    _drawTiles(painter, rect, MAP::LayerType::LAYER_BACKGROUND);
     qDebug() << "Background draw finishes after " << time.elapsed() << "msec.";
 }
 
 void MapViewerScene::drawForeground(QPainter* painter, const QRectF& rect)
 {
-    if (getLayerType() == MAP::Layer::LAYER_FOREGROUND || getMode() != MappingMode::TILE_MAPPING)
+    if (getLayerType() == MAP::LayerType::LAYER_FOREGROUND || getMode() != MappingMode::TILE_MAPPING)
     {
-        if (getMode() == MappingMode::TILE_MAPPING && m_MapData.getMapLayer().getLayerSize(MAP::Layer::LAYER_FOREGROUND) == 0)
+        if (getMode() == MappingMode::TILE_MAPPING && m_MapData.getMapLayer().getLayerSize(MAP::LayerType::LAYER_FOREGROUND) == 0)
             _drawDarkRect(painter, rect);
-        _drawTiles(painter, rect, MAP::Layer::LAYER_FOREGROUND);
+        _drawTiles(painter, rect, MAP::LayerType::LAYER_FOREGROUND);
     }
     if (isGridActive())
         _drawGrid(painter, rect);
@@ -79,7 +79,7 @@ void MapViewerScene::_drawDarkRect(QPainter* painter, const QRectF& rect)
         rect.height() > size.y*TILE_SIZE ? size.y*TILE_SIZE : rect.height());
 }
 
-void MapViewerScene::_drawTiles(QPainter* painter, const QRectF& rect, MAP::Layer currentLayer)
+void MapViewerScene::_drawTiles(QPainter* painter, const QRectF& rect, MAP::LayerType currentLayer)
 {
     const auto& mapLayer = m_MapData.getMapLayer();
     const UInt32Point startTile(rect.x() <= 0 ? 0 : (uint32)rect.x() / TILE_SIZE, rect.y() <= 0 ? 0 : (uint32)rect.y() / TILE_SIZE);
@@ -101,7 +101,7 @@ void MapViewerScene::_drawTiles(QPainter* painter, const QRectF& rect, MAP::Laye
 
             // draw only foreground opaque
         case MappingMode::OBJECT_MAPPING:
-            painter->setOpacity(currentLayer == MAP::Layer::LAYER_FOREGROUND ? 0.5 : 1);
+            painter->setOpacity(currentLayer == MAP::LayerType::LAYER_FOREGROUND ? 0.5 : 1);
             break;
         }
 
@@ -256,20 +256,20 @@ uint32 MapViewer::getLayerIndex() const
     return 0;
 }
 
-void MapViewer::setLayerType(MAP::Layer layerType)
+void MapViewer::setLayerType(MAP::LayerType layerType)
 {
     if (auto pScene = dynamic_cast<MapViewerScene*>(scene()))
         pScene->setLayerType(layerType);
 }
 
-MAP::Layer MapViewer::getLayerType() const
+MAP::LayerType MapViewer::getLayerType() const
 {
     if (auto pScene = dynamic_cast<MapViewerScene*>(scene()))
         return pScene->getLayerType();
-    return MAP::Layer::LAYER_BACKGROUND;
+    return MAP::LayerType::LAYER_BACKGROUND;
 }
 
-uint32 MapViewer::getMaximumLayerIndex(MAP::Layer layerType) const
+uint32 MapViewer::getMaximumLayerIndex(MAP::LayerType layerType) const
 {
     if (auto pScene = dynamic_cast<MapViewerScene*>(scene()))
         return pScene->getMapData().getMapLayer().getLayerSize(layerType);

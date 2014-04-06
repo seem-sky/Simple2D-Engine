@@ -46,6 +46,12 @@
     <Filter Include="Map\Brush">
       <UniqueIdentifier>{60670c74-fe47-464a-8eba-122efbaa7520}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Map\Exceptions">
+      <UniqueIdentifier>{e40ea107-eada-4748-9718-aebc4acbc1f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map\Layer">
+      <UniqueIdentifier>{8856bb87-df12-4ee8-9728-702f242ad745}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Simple2D-GameEditor\include\Game.cpp">
@@ -82,9 +88,6 @@
       <Filter>Game\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Map.cpp">
-      <Filter>Map</Filter>
-    </ClCompile>
-    <ClCompile Include="MapLayer.cpp">
       <Filter>Map</Filter>
     </ClCompile>
     <ClCompile Include="AutoTile.cpp">
@@ -156,6 +159,15 @@
     <ClCompile Include="VisualViewer.cpp">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="BrushArea.cpp">
+      <Filter>Map\Brush</Filter>
+    </ClCompile>
+    <ClCompile Include="MapException.cpp">
+      <Filter>Map\Exceptions</Filter>
+    </ClCompile>
+    <ClCompile Include="MapLayer.cpp">
+      <Filter>Map\Layer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Simple2D-GameEditor\include\Application.h">
@@ -204,9 +216,6 @@
       <Filter>Game\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Map.h">
-      <Filter>Map</Filter>
-    </ClInclude>
-    <ClInclude Include="MapLayer.h">
       <Filter>Map</Filter>
     </ClInclude>
     <ClInclude Include="Manager.h">
@@ -274,6 +283,15 @@
     </ClInclude>
     <ClInclude Include="RevertInfo.h">
       <Filter>Map\Brush</Filter>
+    </ClInclude>
+    <ClInclude Include="BrushArea.h">
+      <Filter>Map\Brush</Filter>
+    </ClInclude>
+    <ClInclude Include="MapException.h">
+      <Filter>Map\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="MapLayer.h">
+      <Filter>Map\Layer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

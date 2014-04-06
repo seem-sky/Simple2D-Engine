@@ -72,14 +72,14 @@
     <IntDir>$(Configuration)\</IntDir>
     <PreBuildEventUseInBuild>false</PreBuildEventUseInBuild>
     <TargetName>$(ProjectName)_d</TargetName>
-    <LibraryPath>$(QtDir)\lib;$(BoostBin);$(SolutionDir);$(SolutionDir)\Simple2D-GameEditor\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SimpleLib)\bin;$(QtDir)\lib;$(BoostBin);$(SolutionDir);$(SolutionDir)\Simple2D-GameEditor\lib;$(LibraryPath)</LibraryPath>
     <IncludePath>$(SimpleLib)\include;$(QtDir)\include;$(BoostDir);$(SolutionDir)\Core;$(SolutionDir)\Simple2D-Engine;$(IncludePath);$(SolutionDir)\Simple2D-GameEditor\include</IncludePath>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <PreBuildEventUseInBuild>false</PreBuildEventUseInBuild>
     <TargetName>$(ProjectName)64_d</TargetName>
-    <LibraryPath>$(QtDir_64)\lib;$(BoostBin_64);$(SolutionDir);$(SolutionDir)\Simple2D-GameEditor\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SimpleLib)\bin;$(QtDir_64)\lib;$(BoostBin_64);$(SolutionDir);$(SolutionDir)\Simple2D-GameEditor\lib;$(LibraryPath)</LibraryPath>
     <IncludePath>$(SimpleLib)\include;$(QtDir_64)\include;$(BoostDir);$(SolutionDir)\Core;$(SolutionDir)\Simple2D-Engine;$(IncludePath);$(SolutionDir)\Simple2D-GameEditor\include</IncludePath>
     <LinkIncremental>true</LinkIncremental>
     <IntDir>x64\$(Configuration)\</IntDir>
@@ -88,12 +88,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)\Simple2D-GameEditor\</OutDir>
     <IntDir>$(Configuration)\</IntDir>
-    <LibraryPath>$(QtDir)\lib;$(BoostBin);$(SolutionDir);$(SolutionDir)\Simple2D-GameEditor\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SimpleLib)\bin;$(QtDir)\lib;$(BoostBin);$(SolutionDir);$(SolutionDir)\Simple2D-GameEditor\lib;$(LibraryPath)</LibraryPath>
     <IncludePath>$(SimpleLib)\include;$(QtDir)\include;$(BoostDir);$(SolutionDir)\Core;$(SolutionDir)\Simple2D-Engine;$(IncludePath);$(SolutionDir)\Simple2D-GameEditor\include</IncludePath>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LibraryPath>$(QtDir_64)\lib;$(BoostBin_64);$(SolutionDir);$(SolutionDir)\Simple2D-GameEditor\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SimpleLib)\bin;$(QtDir_64)\lib;$(BoostBin_64);$(SolutionDir);$(SolutionDir)\Simple2D-GameEditor\lib;$(LibraryPath)</LibraryPath>
     <IncludePath>$(SimpleLib)\include;$(QtDir_64)\include;$(BoostDir);$(SolutionDir)\Core;$(SolutionDir)\Simple2D-Engine;$(IncludePath);$(SolutionDir)\Simple2D-GameEditor\include</IncludePath>
     <OutDir>$(SolutionDir)\Simple2D-GameEditor\</OutDir>
     <IntDir>x64\$(Configuration)\</IntDir>
@@ -120,7 +120,7 @@
       <PreprocessorDefinitions>DEBUG;GAME_EDITOR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>Qt5Widgetsd.lib;Qt5Xmld.lib;QT5Guid.lib;QT5Cored.lib;Simple2D-Engine_d.lib</AdditionalDependencies>
+      <AdditionalDependencies>Qt5Widgetsd.lib;Qt5Xmld.lib;QT5Guid.lib;QT5Cored.lib;Simple2D-Engine_d.lib;SimpleLib_d.lib</AdditionalDependencies>
       <OutputFile>$(SolutionDir)\Simple2D-GameEditor\$(ProjectName)_d.exe</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>NotSet</SubSystem>
@@ -149,7 +149,7 @@
       <PreprocessorDefinitions>DEBUG;GAME_EDITOR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>Qt5Widgetsd.lib;Qt5Xmld.lib;QT5Guid.lib;QT5Cored.lib;Simple2D-Engine64_d.lib</AdditionalDependencies>
+      <AdditionalDependencies>Qt5Widgetsd.lib;Qt5Xmld.lib;QT5Guid.lib;QT5Cored.lib;Simple2D-Engine64_d.lib;SimpleLib64_d.lib</AdditionalDependencies>
       <OutputFile>$(SolutionDir)\Simple2D-GameEditor\$(ProjectName)64_d.exe</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>NotSet</SubSystem>
@@ -177,7 +177,7 @@
       <PreprocessorDefinitions>GAME_EDITOR;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>Qt5Widgets.lib;Qt5Xml.lib;QT5Gui.lib;QT5Core.lib;Simple2D-Engine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Qt5Widgets.lib;Qt5Xml.lib;QT5Gui.lib;QT5Core.lib;Simple2D-Engine.lib;SimpleLib.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(SolutionDir)\Simple2D-GameEditor\$(ProjectName).exe</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <OptimizeReferences>true</OptimizeReferences>
@@ -208,7 +208,7 @@
       <PreprocessorDefinitions>GAME_EDITOR;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>Qt5Widgets.lib;Qt5Xml.lib;QT5Gui.lib;QT5Core.lib;Simple2D-Engine64.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Qt5Widgets.lib;Qt5Xml.lib;QT5Gui.lib;QT5Core.lib;Simple2D-Engine64.lib;SimpleLib64.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(SolutionDir)\Simple2D-GameEditor\$(ProjectName)64.exe</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <OptimizeReferences>true</OptimizeReferences>
@@ -226,6 +226,7 @@
     <ClCompile Include="DatabaseModuleDragDrop.cpp" />
     <ClCompile Include="DatabaseModuleList.cpp" />
     <ClCompile Include="DatabaseModuleLocalisation.cpp" />
+    <ClCompile Include="DatabaseModuleWorldObjectAnimation.cpp" />
     <ClCompile Include="DatabaseModuleResource.cpp" />
     <ClCompile Include="DatabaseModuleTexture.cpp" />
     <ClCompile Include="DatabaseModuleTileSet.cpp" />
@@ -305,7 +306,8 @@
     <moc_header Include="MapEditorModuleMapTree.h" />
     <moc_header Include="DatabaseWidgetWorldObject.h" />
     <ClInclude Include="DatabaseDialogChoseColor.h" />
-    <ClInclude Include="DatabaseModuleVisualViewer.h" />
+    <moc_header Include="DatabaseModuleWorldObjectAnimation.h" />
+    <moc_header Include="DatabaseModuleVisualViewer.h" />
     <ClInclude Include="GraphicsTextureItem.h" />
     <moc_header Include="MapEditorModuleBrush.h" />
     <moc_header Include="MapEditorModuleTileSelection.h" />

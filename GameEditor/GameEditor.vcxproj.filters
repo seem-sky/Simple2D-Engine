@@ -130,6 +130,9 @@
     <Filter Include="Database\Modules\VisualViewer">
       <UniqueIdentifier>{7b5280e2-66f5-4030-a79a-62de5c44e968}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Database\Modules\WorldObject">
+      <UniqueIdentifier>{2e619a1c-424f-4fdb-8b3c-555f177389ab}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainWindow.cpp">
@@ -258,6 +261,9 @@
     <ClCompile Include="DatabaseModuleVisualViewer.cpp">
       <Filter>Database\Modules\VisualViewer</Filter>
     </ClCompile>
+    <ClCompile Include="DatabaseModuleWorldObjectAnimation.cpp">
+      <Filter>Database\Modules\WorldObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <compile_QT_Files Include="UI\MainWindow.ui">
@@ -378,6 +384,12 @@
     <moc_header Include="DatabaseWidgetWorldObject.h">
       <Filter>Database\Widgets\WorldObject</Filter>
     </moc_header>
+    <moc_header Include="DatabaseModuleVisualViewer.h">
+      <Filter>Database\Modules\VisualViewer</Filter>
+    </moc_header>
+    <moc_header Include="DatabaseModuleWorldObjectAnimation.h">
+      <Filter>Database\Modules\WorldObject</Filter>
+    </moc_header>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -425,9 +437,6 @@
     </ClInclude>
     <ClInclude Include="DatabaseDialogChoseColor.h">
       <Filter>Database\Dialogs\ChoseColor</Filter>
-    </ClInclude>
-    <ClInclude Include="DatabaseModuleVisualViewer.h">
-      <Filter>Database\Modules\VisualViewer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

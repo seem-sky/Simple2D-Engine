@@ -46,8 +46,8 @@ namespace MAP
         public:
             MapData(const DATABASE::DatabaseMgr& DBMgr, uint32 mapID);
 
-            inline MapLayer& getMapLayer() { return m_Layer; }
-            inline const MapLayer& getMapLayer() const { return m_Layer; }
+            inline LayerContainer& getMapLayer() { return m_Layer; }
+            inline const LayerContainer& getMapLayer() const { return m_Layer; }
 
             inline uint32 getMapID() const { return m_MapID; }
 
@@ -61,7 +61,7 @@ namespace MAP
         private:
             const DATABASE::DatabaseMgr& m_DBMgr;
             const uint32 m_MapID;
-            MapLayer m_Layer;
+            LayerContainer m_Layer;
             MapObjectContainer m_Objects;
         };
     }

@@ -308,7 +308,7 @@ void WORLD_OBJECT::WorldObjectPrototype::insertChildren(const QXmlStreamReader& 
         if (!attributes.hasAttribute("entry"))
             return;
 
-        setAnimationInfo(attributes.value("entry").toUInt(),
+        setAnimationInfo(attributes.value("entry").toUInt()-1,
             WORLD_OBJECT::AnimationInfo(
                 attributes.value("ID").toUInt(),
                 static_cast<WORLD_OBJECT::AnimationInfo::VisualType>(attributes.value("visualType").toUInt()),
@@ -338,8 +338,8 @@ void MAP_STRUCTURE::MapPrototype::toXML(QXmlStreamWriter& writer) const
 {
     writer.writeAttribute("sizeX", QString::number(getSize().x));
     writer.writeAttribute("sizeY", QString::number(getSize().y));
-    writer.writeAttribute("backLayer", QString::number(getLayerSize(MAP::Layer::LAYER_BACKGROUND)));
-    writer.writeAttribute("foreLayer", QString::number(getLayerSize(MAP::Layer::LAYER_FOREGROUND)));
+    writer.writeAttribute("backLayer", QString::number(getLayerSize(MAP::LayerType::LAYER_BACKGROUND)));
+    writer.writeAttribute("foreLayer", QString::number(getLayerSize(MAP::LayerType::LAYER_FOREGROUND)));
     if (getParentID())
         writer.writeAttribute("parentID", QString::number(getParentID()));
     if (!getScriptName().isEmpty())

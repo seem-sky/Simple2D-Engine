@@ -20,14 +20,14 @@ void INPUT::MapBinaryReader::readFile(const QString& fileName, MAP::MAP_DATA::Ma
     in >> version;
 
     // load layer data
-    _readLayer(in, data.getMapLayer(), MAP::Layer::LAYER_BACKGROUND, version);
-    _readLayer(in, data.getMapLayer(), MAP::Layer::LAYER_FOREGROUND, version);
+    _readLayer(in, data.getMapLayer(), MAP::LayerType::LAYER_BACKGROUND, version);
+    _readLayer(in, data.getMapLayer(), MAP::LayerType::LAYER_FOREGROUND, version);
 
     //// load objects
     //_readObjects(in, pMap, version);
 }
 
-void INPUT::MapBinaryReader::_readLayer(QDataStream& in, MAP::MapLayer& mapLayer, MAP::Layer layer, uint16 version)
+void INPUT::MapBinaryReader::_readLayer(QDataStream& in, MAP::LayerContainer& mapLayer, MAP::LayerType layer, uint16 version)
 {
     switch(version)
     {
@@ -54,7 +54,7 @@ void INPUT::MapBinaryReader::_readObjects(QDataStream& in, DATABASE::MAP_STRUCTU
 }
 
 // Tile = uint32; AutoTile = uint32
-void INPUT::MapBinaryReader::_readLayerV1(QDataStream& in, MAP::MapLayer& mapLayer, MAP::Layer layer)
+void INPUT::MapBinaryReader::_readLayerV1(QDataStream& in, MAP::LayerContainer& mapLayer, MAP::LayerType layer)
 {
     UInt32Point3D pos;
     for (pos.z = 0; pos.z < mapLayer.getLayerSize(layer); ++pos.z)
@@ -73,7 +73,7 @@ void INPUT::MapBinaryReader::_readLayerV1(QDataStream& in, MAP::MapLayer& mapLay
 }
 
 // Tile = uint16; AutoTile = uint8
-void INPUT::MapBinaryReader::_readLayerV2(QDataStream& in, MAP::MapLayer& mapLayer, MAP::Layer layer)
+void INPUT::MapBinaryReader::_readLayerV2(QDataStream& in, MAP::LayerContainer& mapLayer, MAP::LayerType layer)
 {
     UInt32Point3D pos;
     for (pos.z = 0; pos.z < mapLayer.getLayerSize(layer); ++pos.z)
@@ -137,14 +137,14 @@ void OUTPUT::MapBinaryWriter::writeFile(const QString& fileName, const MAP_DATA:
     out << CURRENT_VERSION;
 
     // store layer data
-    _writeLayer(out, data.getMapLayer(), MAP::Layer::LAYER_BACKGROUND);
-    _writeLayer(out, data.getMapLayer(), MAP::Layer::LAYER_FOREGROUND);
+    _writeLayer(out, data.getMapLayer(), MAP::LayerType::LAYER_BACKGROUND);
+    _writeLayer(out, data.getMapLayer(), MAP::LayerType::LAYER_FOREGROUND);
 
     //// store objects
     //_writeObjects(out, pMap);
 }
 
-void OUTPUT::MapBinaryWriter::_writeLayer(QDataStream& out, const MapLayer& mapLayer, MAP::Layer layer)
+void OUTPUT::MapBinaryWriter::_writeLayer(QDataStream& out, const LayerContainer& mapLayer, MAP::LayerType layer)
 {
     UInt32Point3D pos;
     for (pos.z = 0; pos.z < mapLayer.getLayerSize(layer); ++pos.z)

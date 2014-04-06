@@ -6,6 +6,7 @@
 #include "moc_DatabaseModuleDragDrop.h"
 #include "QtGlobal.h"
 #include "Config.h"
+#include "AnimationViewer.h"
 
 DatabaseModuleTooltipList::DatabaseModuleTooltipList(QWidget* pParent) : QTreeView(pParent), m_CurrentRow(MATH::maximum<uint32>()), m_pToolTip(nullptr), m_ShowTooltip(false),
     m_ToolTipPos(ToolTipPosition::TOOLTIP_LEFT), m_MaximumTooltipSize(100, 100)
@@ -204,4 +205,66 @@ void TileDropLabel::paintEvent(QPaintEvent* pEvent)
         if (createPixmapFromTexturePrototype(Config::get()->getProjectDirectory(), pProto, pixmap))
             painter.drawPixmap(0, 0, pixmap);
     }
+}
+
+/*#####
+# Animation drag&drop
+#####*/
+DatabaseModuleAnimationDragList::DatabaseModuleAnimationDragList(QWidget* pParent) : DatabaseModuleTooltipList(pParent), m_pSpriteDB(nullptr)
+{
+    setShowTooltip(true);
+}
+
+void DatabaseModuleAnimationDragList::setSpriteDatabase(const DATABASE::SpriteDatabase* pSpriteDB)
+{
+    m_pSpriteDB = pSpriteDB;
+}
+
+QWidget* DatabaseModuleAnimationDragList::_setupTooltipWidget(uint32 uiPrototypeID)
+{
+    if (!m_pSpriteDB)
+        throw std::runtime_error("You have to set DatabaseManager first.");
+    auto pViewer = new AnimationViewer(this);
+    pViewer->resize(100, 100);
+    pViewer->setSpriteDatabase(m_pSpriteDB);
+    pViewer->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    pViewer->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    if (auto pModel = dynamic_cast<DATABASE::ConstDatabaseModel*>(model()))
+    {
+        if (auto pPrototype = dynamic_cast<const DATABASE::ANIMATION::AnimationPrototype*>(pModel->getDatabase()->getPrototype(uiPrototypeID)))
+        {
+            pViewer->setAnimation(&pPrototype->getAnimation());
+            pViewer->startAnimation();
+        }
+    }
+    return pViewer;
+}
+
+void DatabaseModuleAnimationDragList::startDrag(Qt::DropActions supportedActions)
+{
+    auto pItem = currentIndex();
+    if (pItem.isValid())
+    {
+        QDrag* pDrag = new QDrag(this);
+        auto mimeData = new QMimeData();
+        if (auto pModel = dynamic_cast<DATABASE::ConstDatabaseModel*>(model()))
+        {
+            if (auto pPrototype = dynamic_cast<const DATABASE::ANIMATION::AnimationPrototype*>(pModel->getDatabase()->getPrototype(pItem.row()+1)))
+            {
+                AnimationViewer viewer(this);
+                viewer.resize(100, 100);
+                viewer.setSpriteDatabase(m_pSpriteDB);
+                viewer.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+                viewer.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+                viewer.setAnimation(&pPrototype->getAnimation());
+                pDrag->setPixmap(viewer.grab());
+
+                mimeData->setText(QString::number(pPrototype->getID()) + "," + QString::number(static_cast<uint32>(pModel->getDatabaseType())));
+            }
+        }
+        pDrag->setMimeData(mimeData);
+        pDrag->exec(supportedActions);
+        return;
+    }
+    QTreeView::startDrag(supportedActions);
 }

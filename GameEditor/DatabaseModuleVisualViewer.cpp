@@ -3,19 +3,23 @@
 #include <QtWidgets/QSizePolicy>
 #include <QtGui/QResizeEvent>
 #include <QtWidgets/QHeaderView>
+#include "moc_DatabaseModuleVisualViewer.h"
 
 /*#####
 # VisualViewerWidget
 #####*/
-VisualViewerItem::VisualViewerItem(const DATABASE::DatabaseMgr& DBMgr, QWidget *pParent) : QFrame(pParent),
+VisualViewerItem::VisualViewerItem(QWidget *pParent) : QFrame(pParent),
     // widgets
-    m_pVisualViewer(new VisualViewer(DBMgr, this))
+    m_pVisualViewer(new VisualViewer(this)),
+    m_pAnimationType(new QComboBox(this))
 {
     // setup layout
-    auto pLayout = new QHBoxLayout(this);
+    auto pLayout = new QVBoxLayout(this);
     setLayout(pLayout);
     pLayout->setContentsMargins(0, 0, 0, 0);
+    pLayout->setSpacing(0);
 
+    pLayout->addWidget(m_pAnimationType);
     pLayout->addWidget(m_pVisualViewer);
 
     // setup frame
@@ -25,10 +29,21 @@ VisualViewerItem::VisualViewerItem(const DATABASE::DatabaseMgr& DBMgr, QWidget *
     setContentsMargins(2, 2, 2, 2);
 }
 
+void VisualViewerItem::setAnimation(uint32 ID, DATABASE::WORLD_OBJECT::AnimationInfo::VisualType type)
+{
+    m_pVisualViewer->setAnimation(ID, type);
+}
+
+void VisualViewerItem::setAnimationTypeModel(DATABASE::ConstDatabaseModel* pModel)
+{
+    m_pAnimationType->setModel(pModel);
+    m_pAnimationType->setModelColumn(1);
+}
+
 /*#####
 # DatabaseModuleVisualViewer
 #####*/
-DatabaseModuleVisualViewer::DatabaseModuleVisualViewer(QWidget* pParent) : QWidget(pParent), m_pDBMgr(nullptr),
+DatabaseModuleVisualViewer::DatabaseModuleVisualViewer(QWidget* pParent) : QWidget(pParent), m_pDBMgr(nullptr), m_pAnimationTypeModel(nullptr),
     // widgets
     m_pVisualViewerList(new QTableWidget(this)),
     m_pAddButton(new QPushButton("+", this)),
@@ -43,7 +58,6 @@ DatabaseModuleVisualViewer::DatabaseModuleVisualViewer(QWidget* pParent) : QWidg
     m_pVisualViewerList->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
     m_pVisualViewerList->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
     m_pVisualViewerList->horizontalHeader()->setVisible(false);
-    m_pVisualViewerList->verticalHeader()->setVisible(false);
     m_pVisualViewerList->setColumnCount(1);
     m_pVisualViewerList->setSelectionMode(QAbstractItemView::NoSelection);
 
@@ -60,21 +74,35 @@ DatabaseModuleVisualViewer::DatabaseModuleVisualViewer(QWidget* pParent) : QWidg
     pLayout->addWidget(m_pVisualViewerList, 0, 0, -1, 1);
     pLayout->addWidget(m_pRemoveButton, 0, 1, 1, 1);
     pLayout->addWidget(m_pAddButton, 1, 1, 1, 1);
+
+    connect(m_pAddButton, SIGNAL(clicked()), this, SLOT(_onAddButtonClicked()));
+    connect(m_pRemoveButton, SIGNAL(clicked()), this, SLOT(_onRemoveButtonClicked()));
 }
 
 void DatabaseModuleVisualViewer::setDatabaseMgr(const DATABASE::DatabaseMgr* pDBMgr)
 {
     m_pDBMgr = pDBMgr;
+    m_pAnimationTypeModel = new DATABASE::ConstDatabaseModel(*m_pDBMgr, DATABASE::DatabaseType::ANIMATION_TYPE_DATABASE);
+    for (int32 row = 0; row < m_pVisualViewerList->rowCount(); ++row)
+    {
+        if (auto pViewerItem = dynamic_cast<VisualViewerItem*>(m_pVisualViewerList->cellWidget(row, 0)))
+        {
+            pViewerItem->setAnimationTypeModel(m_pAnimationTypeModel);
+            if (auto pViewer = pViewerItem->getVisualViewer())
+                pViewer->setDatabaseManager(pDBMgr);
+        }
+    }
 }
 
 void DatabaseModuleVisualViewer::insertVisualViewer(uint32 index)
 {
-    if (!m_pDBMgr)
-        assert("You have to setup m_pDBMgr first.");
-
     m_pVisualViewerList->insertRow(index);
-    m_pVisualViewerList->setCellWidget(index, 0, new VisualViewerItem(*m_pDBMgr, m_pVisualViewerList));
     m_pVisualViewerList->setRowHeight(index, 180);
+    auto pViewer = new VisualViewerItem(m_pVisualViewerList);
+    m_pVisualViewerList->setCellWidget(index, 0, pViewer);
+    pViewer->getVisualViewer()->setDatabaseManager(m_pDBMgr);
+    if (m_pAnimationTypeModel)
+        pViewer->setAnimationTypeModel(m_pAnimationTypeModel);
 }
 
 void DatabaseModuleVisualViewer::removeVisualViewer(uint32 index)
@@ -91,11 +119,11 @@ void DatabaseModuleVisualViewer::setVisualViewerCount(uint32 count)
     // add
     if (count > oldCount)
     {
-        for (uint32 i = oldCount; i <= count; ++i)
+        for (uint32 i = oldCount; i < count; ++i)
             insertVisualViewer(i);
     }
     // remove
-    else if (count < oldCount)
+    else
     {
         do 
         {
@@ -107,4 +135,24 @@ void DatabaseModuleVisualViewer::setVisualViewerCount(uint32 count)
 uint32 DatabaseModuleVisualViewer::getVisualViewerCount() const
 {
     return m_pVisualViewerList->rowCount();
+}
+
+void DatabaseModuleVisualViewer::_onAddButtonClicked()
+{
+    insertVisualViewer(getVisualViewerCount());
+}
+
+void DatabaseModuleVisualViewer::_onRemoveButtonClicked()
+{
+    removeVisualViewer(getVisualViewerCount()-1);
+}
+
+void DatabaseModuleVisualViewer::clear()
+{
+    m_pVisualViewerList->setRowCount(0);
+}
+
+VisualViewerItem* DatabaseModuleVisualViewer::getVisualViewer(uint32 index) const
+{
+    return dynamic_cast<VisualViewerItem*>(m_pVisualViewerList->cellWidget(index, 0));
 }

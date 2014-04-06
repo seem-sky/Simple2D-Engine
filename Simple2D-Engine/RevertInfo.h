@@ -2,7 +2,7 @@
 #define REVERT_INFO_H
 
 #include "MapLayer.h"
-#include <unordered_map>
+#include <Bitset2D.h>
 
 namespace MAP
 {
@@ -26,27 +26,23 @@ namespace MAP
             /*#####
             # RevertInfo
             #####*/
-            // unordered_map typedefs
-            typedef std::vector<std::pair<UInt32Point, MapTile>> UInt32Point_MapTileVector;
             class RevertInfo
             {
             public:
-                RevertInfo(const UInt32Point& layerSize, uint32 layerIndex, Layer layerType);
-                ~RevertInfo();
+                RevertInfo(LayerType type, uint8 index);
 
-                void revert(MapLayer &mapLayer);
-
+                void revert(LayerContainer &mapLayer);
                 void addTile(const UInt32Point& pos, const MapTile& tile);
-
                 inline bool hasChanges() const { return !m_Tiles.empty(); }
 
             private:
+                typedef std::vector<std::pair<UInt32Point, MapTile>> UInt32Point_MapTileVector;
                 UInt32Point_MapTileVector m_Tiles;
-                uint32 m_LayerIndex;
-                Layer m_LayerType;
 
-                boost::dynamic_bitset<> m_Check;
-                const UInt32Point m_LayerSize;
+                Bitset2D m_Check;
+
+                LayerType m_LayerType;
+                uint8 m_LayerIndex;
             };
         }
     }

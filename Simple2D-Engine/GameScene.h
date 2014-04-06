@@ -73,7 +73,7 @@ namespace GAME_LOGIC
             virtual void drawBackground(QPainter* painter, const QRectF& rect);
             virtual void drawForeground(QPainter* painter, const QRectF& rect);
 
-            virtual void drawTiles(QPainter* painter, const QRectF& rect, MAP::Layer layer);
+            virtual void drawTiles(QPainter* painter, const QRectF& rect, MAP::LayerType layer);
 
         public:
             GameSceneView(GameScene* pScene, const DATABASE::DatabaseMgr& DBMgr);

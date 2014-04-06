@@ -5,7 +5,7 @@ using namespace MAP;
 /*#####
 # Map
 #####*/
-Map::Map(uint32 GUID, uint32 ID, MapLayer& layer, const DATABASE::MAP_STRUCTURE::MapObjectContainer& objects, const DATABASE::DatabaseMgr& DBMgr,
+Map::Map(uint32 GUID, uint32 ID, LayerContainer& layer, const DATABASE::MAP_STRUCTURE::MapObjectContainer& objects, const DATABASE::DatabaseMgr& DBMgr,
          const std::string& name, const std::string& script) : m_Layer(std::move(layer)), m_DBMgr(DBMgr), Entity(GUID, ID, name, script)
 {
     _setupObjects(objects);

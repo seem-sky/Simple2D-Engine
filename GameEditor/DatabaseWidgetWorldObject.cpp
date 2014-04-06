@@ -1,56 +1,55 @@
 #include "DatabaseWidgetWorldObject.h"
 #include "moc_DatabaseWidgetWorldObject.h"
+#include <QtWidgets/QCheckBox>
 
 using namespace DATABASE;
 
-DatabaseWidgetWorldObject::DatabaseWidgetWorldObject(QWidget* pParent) : DatabaseWidgetBase(pParent),
-    // modules
-    m_pModuleSpriteList(new DatabaseModuleTextureDragList(this)),
-    m_pModuleVisualViewer(new DatabaseModuleVisualViewer(this)),
-
-    // others
-    m_pVisualTypeBox(new QComboBox(this))
+ModuleTab::ModuleTab(QWidget* pParent) : QTabWidget(pParent)
 {
-    // setup visual type box
-    m_pVisualTypeBox->addItem("sprites");
-    m_pVisualTypeBox->addItem("animations");
-    m_pVisualTypeBox->setCurrentIndex(0);
+}
 
-    m_pModuleSpriteList->setMaximumWidth(200);
-    m_pModuleVisualViewer->setMaximumWidth(200);
+void ModuleTab::tabInserted(int index)
+{
+    QTabWidget::tabInserted(index);
+    auto pTabBar = getTabBar();
+    pTabBar->setTabButton(index, QTabBar::RightSide, new QCheckBox(this));
+}
 
-    connect(m_pVisualTypeBox, SIGNAL(currentIndexChanged(int)), this, SLOT(_onVisualTypeChanged(int)));
+DatabaseWidgetWorldObject::DatabaseWidgetWorldObject(QWidget* pParent) : DatabaseWidgetBase(pParent),
+    m_pModuleTab(new ModuleTab(this)),
+    m_pModuleAnimation(new DatabaseModuleWorldObjectAnimation(this))
+{
+    // setup tabs
+    m_pModuleTab->addTab(m_pModuleAnimation, "animations");
 
     // setup layout
     if (auto pLayout = dynamic_cast<QGridLayout*>(layout()))
-    {
-        pLayout->setColumnMinimumWidth(1, 200);
-        pLayout->setColumnMinimumWidth(2, 150);
-
-        // stretches
-        pLayout->setColumnStretch(0, 0);
-        pLayout->setColumnStretch(1, 1);
-        pLayout->setColumnStretch(2, 0);
-        pLayout->setColumnStretch(3, 1);
-        pLayout->setRowStretch(0, 0);
-        pLayout->setRowStretch(1, 1);
-
-        pLayout->addWidget(m_pModuleVisualViewer, 0, 1, -1, 1);
-        pLayout->addWidget(m_pVisualTypeBox, 0, 2);
-        pLayout->addWidget(m_pModuleSpriteList, 1, 2, -1, 1);
-    }
+        pLayout->addWidget(m_pModuleTab, 0, 1, -1, -1);
 }
 
 void DatabaseWidgetWorldObject::clear()
 {
     DatabaseWidgetBase::clear();
+    m_pModuleAnimation->clear();
 }
 
 void DatabaseWidgetWorldObject::setupPrototypeFromWidgets(DATABASE::Prototype* pPrototype)
 {
     if (auto pWorldObject = dynamic_cast<WORLD_OBJECT::WorldObjectPrototype*>(pPrototype))
     {
-        pWorldObject->setAnimationCount(m_pModuleVisualViewer->getVisualViewerCount());
+        auto count = pWorldObject->getAnimationCount();
+        pWorldObject->setAnimationCount(count);
+        for (uint32 i = 0; i < count; ++i)
+        {
+            if (auto viewer = m_pModuleAnimation->getVisualViewer(i))
+            {
+                WORLD_OBJECT::AnimationInfo info;
+                info.m_ID = viewer->getAnimationID();
+                info.m_VisualType = viewer->getVisualType();
+                info.m_AnimationTypeID = 1;
+                pWorldObject->setAnimationInfo(i, info);
+            }
+        }
     }
     DatabaseWidgetBase::setupPrototypeFromWidgets(pPrototype);
 }
@@ -59,25 +58,18 @@ void DatabaseWidgetWorldObject::setupWidgetsFromPrototype(const DATABASE::Protot
 {
     if (auto pWorldObject = dynamic_cast<const WORLD_OBJECT::WorldObjectPrototype*>(pPrototype))
     {
-        m_pModuleVisualViewer->setVisualViewerCount(pWorldObject->getAnimationCount());
+        auto count = pWorldObject->getAnimationCount();
+        m_pModuleAnimation->setAniamtionCount(count);
+        for (uint32 i = 0; i < count; ++i)
+        {
+            if (auto viewer = m_pModuleAnimation->getVisualViewer(i))
+            {
+                auto &info = pWorldObject->getAnimationInfo(i);
+                viewer->setAnimation(info.m_ID, info.m_VisualType);
+            }
+        }
     }
     DatabaseWidgetBase::setupWidgetsFromPrototype(pPrototype);
-}
-
-void DatabaseWidgetWorldObject::_onVisualTypeChanged(int type)
-{
-    // hide all first
-    m_pModuleSpriteList->hide();
-
-    switch (static_cast<WORLD_OBJECT::AnimationInfo::VisualType>(type))
-    {
-    case WORLD_OBJECT::AnimationInfo::VisualType::SPRITE:
-        m_pModuleSpriteList->show();
-        break;
-    case WORLD_OBJECT::AnimationInfo::VisualType::ANIMATION:
-        break;
-    }
-
 }
 
 void DatabaseWidgetWorldObject::setDatabaseMgr(DatabaseMgr& DBMgr)
@@ -87,10 +79,10 @@ void DatabaseWidgetWorldObject::setDatabaseMgr(DatabaseMgr& DBMgr)
 
 void DatabaseWidgetWorldObject::setSpriteDatabaseModel(DATABASE::ConstDatabaseModel* pModel)
 {
-    m_pModuleSpriteList->setModel(pModel);
+    m_pModuleAnimation->setSpriteDatabaseModel(pModel);
 }
 
 void DatabaseWidgetWorldObject::setAnimationDatabaseModel(DATABASE::ConstDatabaseModel* pModel)
 {
-    // m_pModuleSpriteList->setModel(pModel);
+    m_pModuleAnimation->setAnimationDatabaseModel(pModel);
 }

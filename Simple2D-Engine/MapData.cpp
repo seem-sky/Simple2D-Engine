@@ -14,7 +14,7 @@ MapData::MapData(const DATABASE::DatabaseMgr& DBMgr, uint32 mapID) : m_DBMgr(DBM
 void MapData::reload()
 {
     if (auto pMap = m_DBMgr.getMapDatabase()->getOriginalPrototype(m_MapID))
-        m_Layer.resize(pMap->getSize(), pMap->getLayerSize(MAP::Layer::LAYER_FOREGROUND), pMap->getLayerSize(MAP::Layer::LAYER_BACKGROUND));
+        m_Layer.resize(pMap->getSize(), pMap->getLayerSize(MAP::LayerType::LAYER_FOREGROUND), pMap->getLayerSize(MAP::LayerType::LAYER_BACKGROUND));
 }
 
 void MapData::load()
@@ -24,7 +24,7 @@ void MapData::load()
     if (!pMap)
         return;
 
-    m_Layer.resize(pMap->getSize(), pMap->getLayerSize(MAP::Layer::LAYER_FOREGROUND), pMap->getLayerSize(MAP::Layer::LAYER_BACKGROUND));
+    m_Layer.resize(pMap->getSize(), pMap->getLayerSize(MAP::LayerType::LAYER_FOREGROUND), pMap->getLayerSize(MAP::LayerType::LAYER_BACKGROUND));
 
     try
     {

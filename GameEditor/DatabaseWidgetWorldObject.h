@@ -3,8 +3,18 @@
 
 #include "DatabaseWidgetBase.h"
 #include <QtWidgets/QComboBox>
-#include "DatabaseModuleDragDrop.h"
-#include "DatabaseModuleVisualViewer.h"
+#include "DatabaseModuleWorldObjectAnimation.h"
+
+class ModuleTab : public QTabWidget
+{
+protected:
+    virtual void tabInserted(int index);
+
+public:
+    ModuleTab(QWidget* pParent = nullptr);
+
+    QTabBar* getTabBar() const { return tabBar(); }
+};
 
 class DatabaseWidgetWorldObject : public DatabaseWidgetBase
 {
@@ -21,15 +31,11 @@ public:
     void setSpriteDatabaseModel(DATABASE::ConstDatabaseModel* pModel);
     void setAnimationDatabaseModel(DATABASE::ConstDatabaseModel* pModel);
 
-private slots:
-    void _onVisualTypeChanged(int);
-
 private:
-    // source lists
-    DatabaseModuleTextureDragList* m_pModuleSpriteList;
+    // tab widget
+    ModuleTab* m_pModuleTab;
 
-    DatabaseModuleVisualViewer* m_pModuleVisualViewer;
-    QComboBox* m_pVisualTypeBox;
+    DatabaseModuleWorldObjectAnimation *m_pModuleAnimation;
 };
 
 #endif

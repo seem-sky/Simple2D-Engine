@@ -22,29 +22,69 @@ namespace MAP
     };
     static bool operator==(const MapTile& lhs, const MapTile& rhs)
     {
-        return lhs.m_uiTileID == rhs.m_uiTileID && lhs.m_uiAutoTileSetID == rhs.m_uiAutoTileSetID;
+        if (lhs.isAutoTile() && rhs.isAutoTile())
+            return lhs.m_uiAutoTileSetID == rhs.m_uiAutoTileSetID;
+        else if (!lhs.isAutoTile() && !rhs.isAutoTile())
+            return lhs.m_uiTileID == rhs.m_uiTileID;
+        return false;
     }
+    static bool operator!=(const MapTile& lhs, const MapTile& rhs) { return !(lhs == rhs); }
 
-    static bool operator!=(const MapTile& lhs, const MapTile& rhs)
+    class MapTileInfo
     {
-        return !(lhs == rhs);
-    }
+    public:
+        MapTileInfo(const MapTile& tile, UInt32Point at);
 
-    typedef boost::multi_array<MapTile, 3> TileDataMultiarray3D;
-    typedef std::vector<boost::dynamic_bitset<>> BitsetVector;
-    class MapLayer
+        MapTile getMapTile() const { return m_Tile; }
+        UInt32Point getPosition() const { return m_Position; }
+
+    private:
+        MapTile m_Tile;
+        UInt32Point m_Position;
+    };
+
+    class LayerContainer;
+    class Layer
+    {
+        friend class LayerContainer;
+    private:
+        void _resize(const UInt32Point& size);
+        void _clear();
+
+    public:
+        Layer(const UInt32Point& size = UInt32Point());
+
+        inline UInt32Point getSize() const { return m_Size; }
+
+        MapTile& getMapTile(const UInt32Point& at);
+        const MapTile& getMapTile(const UInt32Point& at) const;
+        MapTileInfo getMapTileInfo(const UInt32Point& at) const;
+
+        void setMapTile(const UInt32Point& at, MapTile tile);
+
+        inline bool isInMap(const UInt32Point& at) const { return at.x < getSize().x && at.y < getSize().y; }
+
+    private:
+        boost::multi_array<MapTile, 2> m_Layer;
+        UInt32Point m_Size;
+    };
+
+    class LayerContainer
     {
     public:
         void clear();
 
         void resize(const UInt32Point& size, uint8 uiForegroundLayerSize, uint8 uiBackgroundLayerSize);
         inline UInt32Point getSize() const { return m_Size; }
-        inline uint8 getLayerSize(Layer layer) const { return m_uiLayer.at(static_cast<uint32>(layer)); };
+        uint8 getLayerSize(LayerType layer) const;
 
-        MapTile& getMapTile(const UInt32Point3D& at, Layer layer);
-        const MapTile& getMapTile(const UInt32Point3D& at, Layer layer) const;
+        const Layer& getLayer(LayerType layer, uint8 index) const;
+        Layer& getLayer(LayerType layer, uint8 index);
 
-        void setMapTile(const UInt32Point3D& at, Layer layer, MapTile tile);
+        MapTile& getMapTile(const UInt32Point3D& at, LayerType layer);
+        const MapTile& getMapTile(const UInt32Point3D& at, LayerType layer) const;
+
+        void setMapTile(const UInt32Point3D& at, LayerType layer, MapTile tile);
 
         inline bool isInMap(const UInt32Point& at) const { return at.x < getSize().x && at.y < getSize().y; }
 
@@ -55,14 +95,14 @@ namespace MAP
             FLAG_OTHER      = 0x2,
             FLAG_ALL        = FLAG_SAME | FLAG_OTHER
         };
-        uint32 checkAutoTiles(uint32 uiID, const UInt32Point3D& pos, UInt32PointVector& result, Layer layer, uint32 resultFlag);
+        uint32 checkAutoTiles(uint32 uiID, const UInt32Point3D& pos, UInt32PointVector& result, LayerType layer, uint32 resultFlag);
 
     private:
-        TileDataMultiarray3D m_BackgroundTiles;
-        TileDataMultiarray3D m_ForegroundTiles;
+        typedef std::vector<Layer> LayerVector;
+        LayerVector m_BackgroundLayer;
+        LayerVector m_ForegroundLayer;
 
         UInt32Point m_Size;
-        std::array<uint8, 2> m_uiLayer;
     };
 }
 #endif

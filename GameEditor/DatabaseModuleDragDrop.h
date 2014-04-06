@@ -89,4 +89,24 @@ private:
     const DATABASE::TileDatabase* m_pTileDB;
 };
 
+/*#####
+# Animation drag&drop
+#####*/
+class DatabaseModuleAnimationDragList : public DatabaseModuleTooltipList
+{
+private:
+    QWidget* _setupTooltipWidget(uint32 uiPrototypeID);
+
+protected:
+    void startDrag(Qt::DropActions supportedActions);
+
+public:
+    DatabaseModuleAnimationDragList(QWidget* pParent = nullptr);
+
+    void setSpriteDatabase(const DATABASE::SpriteDatabase* pSpriteDB);
+
+private:
+    const DATABASE::SpriteDatabase* m_pSpriteDB;
+};
+
 #endif

@@ -14,28 +14,26 @@ using namespace DATABASE;
 VisualSpriteItem::VisualSpriteItem(const DatabaseMgr& DBMgr, uint32 ID) : QGraphicsItem(), m_DBMgr(DBMgr), m_ID(ID)
 {
     if (!m_ID)
-        assert("ID not allowed to be NULL!");
+        std::runtime_error("ID not allowed to be NULL!");
 }
 
-QPixmap VisualSpriteItem::_getPixmap() const
+void VisualSpriteItem::_getPixmap(QPixmap& pixmap) const
 {
-    QPixmap pixmap;
     if (auto pSprite = m_DBMgr.getSpriteDatabase()->getOriginalPrototype(getID()))
         createPixmapFromTexturePrototype(Config::get()->getProjectDirectory(), pSprite, pixmap);
-
-    return pixmap;
 }
 
 void VisualSpriteItem::paint(QPainter* pPainter, const QStyleOptionGraphicsItem* pOption, QWidget* pWidget)
 {
-    auto pixmap = _getPixmap();
-    setTransformOriginPoint(pixmap.rect().center());
+    QPixmap pixmap;
+    _getPixmap(pixmap);
     pPainter->drawPixmap(0, 0, pixmap);
 }
 
 QRectF VisualSpriteItem::boundingRect() const
 {
-    auto pixmap = _getPixmap();
+    QPixmap pixmap;
+    _getPixmap(pixmap);
     return pixmap.rect();
 }
 
@@ -105,103 +103,103 @@ void VisualViewerScene::_drawGrid(QPainter* pPainter, const QRectF& rect)
 /*#####
 # VisualViewer
 #####*/
-VisualViewer::VisualViewer(const DatabaseMgr& DBMgr, QWidget *pParent)
-    : QGraphicsView(pParent), m_uiCurrentFrameIndex(0), m_DBMgr(DBMgr), m_WorldObjectID(0), m_AnimationEntry(0), m_DoAnimation(false)
+VisualViewer::VisualViewer(QWidget *pParent)
+    : QGraphicsView(pParent), m_uiCurrentFrameIndex(0), m_pDBMgr(nullptr), m_AnimationEntry(0), m_DoAnimation(false),
+    m_VisualType(WORLD_OBJECT::AnimationInfo::VisualType::SPRITE)
 {
     setScene(new VisualViewerScene());
     scene()->setParent(this);
     m_AnimationTimer.setSingleShot(true);
 }
 
+void VisualViewer::setDatabaseManager(const DATABASE::DatabaseMgr* pDBMgr)
+{
+    m_pDBMgr = pDBMgr;
+    if (m_pDBMgr)
+        showVisual();
+}
+
 void VisualViewer::clear()
 {
     scene()->clear();
-    m_WorldObjectID = 0;
     m_AnimationEntry = 0;
+    m_VisualType = WORLD_OBJECT::AnimationInfo::VisualType::SPRITE;
     m_uiCurrentFrameIndex = 0;
     m_DoAnimation = false;
 }
 
 void VisualViewer::showVisual()
 {
-    scene()->clear();
-
-    auto animationInfo = getAnimationInfo();
-    if (!animationInfo.isValid())
-        return;
-
-    switch (animationInfo.m_VisualType)
+    switch (m_VisualType)
     {
     case WORLD_OBJECT::AnimationInfo::VisualType::SPRITE:
-        _setupSprite(animationInfo.m_ID);
+        _setupSprite();
         break;
     case WORLD_OBJECT::AnimationInfo::VisualType::ANIMATION:
-        _setupAnimationFrame(animationInfo.m_ID, 0);
+        _setupAnimationFrame(0);
         break;
     }
-    repaint();
 }
 
-void VisualViewer::_setupSprite(uint32 ID) const
+void VisualViewer::_setupSprite() const
 {
     scene()->clear();
-    if (auto pSprite = m_DBMgr.getSpriteDatabase()->getOriginalPrototype(ID))
-        scene()->addItem(new VisualSpriteItem(m_DBMgr, ID));
+    if (!m_pDBMgr)
+        return;
+    if (auto pSprite = m_pDBMgr->getSpriteDatabase()->getOriginalPrototype(m_AnimationEntry))
+        scene()->addItem(new VisualSpriteItem(*m_pDBMgr, m_AnimationEntry));
 }
 
-void VisualViewer::_setupAnimationFrame(uint32 ID, uint32 frameIndex)
+int VisualViewer::_setupAnimationFrame(uint32 frameIndex)
 {
     scene()->clear();
-    if (auto pAnimation = m_DBMgr.getAnimationDatabase()->getOriginalPrototype(ID))
+    if (m_pDBMgr)
     {
-        // stop animation if empty
-        uint32 animationCount = pAnimation->getFrameCount();
-        if (animationCount == 0)
+        if (auto pAnimation = m_pDBMgr->getAnimationDatabase()->getOriginalPrototype(m_AnimationEntry))
         {
-            stopAnimation();
-            return;
+            // stop animation if empty
+            uint32 animationCount = pAnimation->getFrameCount();
+            if (animationCount <= 1)
+            {
+                stopAnimation();
+                frameIndex = 0;
+            }
+
+            if (animationCount <= frameIndex)
+                frameIndex = 0;
+
+            ANIMATION::Frame frame;
+            pAnimation->getFrame(frameIndex, frame);
+            uint32 z = 0;
+            for (auto& sprite : frame.getSprites())
+            {
+                auto pItem = new VisualSpriteItem(*m_pDBMgr, sprite.m_uiSpriteID);
+
+                // set transformation
+                pItem->setZValue(z);
+                pItem->setScale(sprite.m_Scale);
+                pItem->setOpacity(sprite.m_Opacity);
+                pItem->setPos(sprite.m_Pos.x, sprite.m_Pos.y);
+                pItem->setRotation(sprite.m_uiRotation);
+
+                scene()->addItem(pItem);
+                ++z;
+            }
+
+            m_AnimationTimer.start(frame.getTimeInMsec());
         }
-
-        if (animationCount <= frameIndex)
-            frameIndex = animationCount-1;
-
-        ANIMATION::Frame frame;
-        pAnimation->getFrame(frameIndex, frame);
-        uint32 z = 0;
-        for (auto& sprite : frame.getSprites())
-        {
-            auto pItem = new VisualSpriteItem(m_DBMgr, sprite.m_uiSpriteID);
-
-            // set transformation
-            pItem->setZValue(z);
-            pItem->setScale(sprite.m_Scale);
-            pItem->setOpacity(sprite.m_Opacity);
-            pItem->setPos(sprite.m_Pos.x, sprite.m_Pos.y);
-            pItem->setRotation(sprite.m_uiRotation);
-
-            scene()->addItem(pItem);
-            ++z;
-        }
-
-        m_AnimationTimer.start(frame.getTimeInMsec());
     }
-}
-
-DATABASE::WORLD_OBJECT::AnimationInfo VisualViewer::getAnimationInfo() const
-{
-    if (auto pWorldObject = m_DBMgr.getWorldObjectDatabase()->getOriginalPrototype(m_WorldObjectID))
-    {
-        if (pWorldObject->getAnimationCount() <= m_AnimationEntry)
-            return pWorldObject->getAnimationInfo(m_AnimationEntry);
-    }
-    return DATABASE::WORLD_OBJECT::AnimationInfo();
+    return frameIndex;
 }
 
 void VisualViewer::startAnimation()
 {
-    connect(&m_AnimationTimer, SIGNAL(timeout()), this, SLOT(_onFrameExpired()));
-    m_DoAnimation = true;
-    m_uiCurrentFrameIndex = 0;
+    if (m_VisualType == WORLD_OBJECT::AnimationInfo::VisualType::ANIMATION)
+    {
+        connect(&m_AnimationTimer, SIGNAL(timeout()), this, SLOT(_onFrameExpired()));
+        m_DoAnimation = true;
+        m_uiCurrentFrameIndex = 0;
+    }
     showVisual();
 }
 
@@ -219,20 +217,21 @@ bool VisualViewer::isAnimationActive() const
 
 void VisualViewer::_onFrameExpired()
 {
-    auto animationInfo = getAnimationInfo();
-    if (!animationInfo.isValid() || animationInfo.m_VisualType != WORLD_OBJECT::AnimationInfo::VisualType::ANIMATION || !isAnimationActive())
+    if (m_VisualType != WORLD_OBJECT::AnimationInfo::VisualType::ANIMATION || !isAnimationActive())
         stopAnimation();
 
-    _setupAnimationFrame(animationInfo.m_ID, ++m_uiCurrentFrameIndex);
+    m_uiCurrentFrameIndex = _setupAnimationFrame(m_uiCurrentFrameIndex+1);
 }
 
 void VisualViewer::dragMoveEvent(QDragMoveEvent* pEvent)
 {
+    QGraphicsView::dragMoveEvent(pEvent);
     pEvent->accept();
 }
 
 void VisualViewer::dragEnterEvent(QDragEnterEvent* pEvent)
 {
+    QGraphicsView::dragEnterEvent(pEvent);
     pEvent->acceptProposedAction();
 }
 
@@ -243,10 +242,29 @@ void VisualViewer::dropEvent(QDropEvent* pEvent)
     {
         uint32 ID = texts.at(0).toUInt();
         auto DBtype = static_cast<DatabaseType>(texts.at(1).toUInt());
-        if (ID && (DBtype == DatabaseType::SPRITE_DATABASE || DBtype == DatabaseType::ANIMATION_DATABASE))
+        if (ID)
         {
-            clear();
-            showVisual();
+            switch (DBtype)
+            {
+            case DATABASE::DatabaseType::SPRITE_DATABASE:
+                setAnimation(ID, WORLD_OBJECT::AnimationInfo::VisualType::SPRITE);
+                break;
+            case DATABASE::DatabaseType::ANIMATION_DATABASE:
+                setAnimation(ID, WORLD_OBJECT::AnimationInfo::VisualType::ANIMATION);
+                break;
+            default:
+                throw std::runtime_error("Invalid database type.");
+            }
+            pEvent->acceptProposedAction();
         }
     }
+    pEvent->ignore();
+}
+
+void VisualViewer::setAnimation(uint32 animationEntry, WORLD_OBJECT::AnimationInfo::VisualType type)
+{
+    clear();
+    m_AnimationEntry = animationEntry;
+    m_VisualType = type;
+    startAnimation();
 }

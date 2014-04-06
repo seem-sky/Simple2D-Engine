@@ -10,7 +10,7 @@
 
 namespace MAP
 {
-    enum class Layer
+    enum class LayerType
     {
         LAYER_BACKGROUND,
         LAYER_FOREGROUND
@@ -612,10 +612,10 @@ namespace DATABASE
 
             void setSizeX(uint32 x);
             void setSizeY(uint32 y);
-            void setLayerSize(uint8 size, MAP::Layer layer);
+            void setLayerSize(uint8 size, MAP::LayerType layer);
             void setSize(const UInt32Point& size, uint8 uiForegroundLayerSize, uint8 uiBackgroundLayerSize);
             inline UInt32Point getSize() const { return m_Size; }
-            inline uint8 getLayerSize(MAP::Layer layer) const { return m_Layer.at(static_cast<uint32>(layer)); };
+            inline uint8 getLayerSize(MAP::LayerType layer) const { return m_Layer.at(static_cast<uint32>(layer)); };
 
             inline uint32 getParentID() const { return m_uiParentID; }
             inline void setParentID(uint32 uiParentID) { m_uiParentID = uiParentID; }

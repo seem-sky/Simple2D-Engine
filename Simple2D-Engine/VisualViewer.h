@@ -10,7 +10,7 @@
 class VisualSpriteItem : public QGraphicsItem
 {
 private:
-    QPixmap _getPixmap() const;
+    void _getPixmap(QPixmap& pixmap) const;
 
 public:
     VisualSpriteItem(const DATABASE::DatabaseMgr& DBMgr, uint32 ID);
@@ -47,8 +47,8 @@ class VisualViewer : public QGraphicsView
 {
     Q_OBJECT
 private:
-    void _setupSprite(uint32 ID) const;
-    void _setupAnimationFrame(uint32 ID, uint32 frameIndex);
+    void _setupSprite() const;
+    int _setupAnimationFrame(uint32 frameIndex);
 
 protected:
     void dragMoveEvent(QDragMoveEvent* pEvent);
@@ -56,14 +56,17 @@ protected:
     virtual void dropEvent(QDropEvent* pEvent);
 
 public:
-    VisualViewer(const DATABASE::DatabaseMgr& DBMgr, QWidget *pParent = nullptr);
+    VisualViewer(QWidget *pParent = nullptr);
+    void setDatabaseManager(const DATABASE::DatabaseMgr* pDBMgr);
 
     void clear();
 
     void showVisual();
     uint32 getCurrentFrame() const { return m_uiCurrentFrameIndex; }
 
-    DATABASE::WORLD_OBJECT::AnimationInfo getAnimationInfo() const;
+    void setAnimation(uint32 animationEntry, DATABASE::WORLD_OBJECT::AnimationInfo::VisualType type);
+    inline uint32 getAnimationID() const { return m_AnimationEntry; }
+    inline DATABASE::WORLD_OBJECT::AnimationInfo::VisualType getVisualType() const { return m_VisualType; }
 
     virtual void startAnimation();
     virtual void stopAnimation();
@@ -73,12 +76,12 @@ private slots:
     void _onFrameExpired();
 
 private:
-    const DATABASE::DatabaseMgr& m_DBMgr;
+    const DATABASE::DatabaseMgr* m_pDBMgr;
     uint32 m_uiCurrentFrameIndex;
     QTimer m_AnimationTimer;
 
-    uint32 m_WorldObjectID;
     uint32 m_AnimationEntry;
+    DATABASE::WORLD_OBJECT::AnimationInfo::VisualType m_VisualType;
 
     bool m_DoAnimation;
 };

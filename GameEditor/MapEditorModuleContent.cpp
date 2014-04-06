@@ -57,7 +57,7 @@ void MapEditorModuleContent::_onCurrentChanged(int index)
         m_pRevert->setEnabled(pTab->hasChanges());
 
         m_pShowGrid->setCheckState(pTab->isGridActive() ? Qt::Checked : Qt::Unchecked);
-        pTab->getLayerType() == MAP::Layer::LAYER_BACKGROUND ? m_pLayerBackground->setChecked(true) : m_pLayerForeground->setChecked(true);
+        pTab->getLayerType() == MAP::LayerType::LAYER_BACKGROUND ? m_pLayerBackground->setChecked(true) : m_pLayerForeground->setChecked(true);
         _onLayerTypeChanged();
     }
 }
@@ -79,7 +79,7 @@ void MapEditorModuleContent::_onLayerTypeChanged()
 {
     if (auto pTab = dynamic_cast<MapViewer*>(m_pMapTabs->currentWidget()))
     {
-        auto layerType = m_pLayerBackground->isChecked() ? MAP::Layer::LAYER_BACKGROUND : MAP::Layer::LAYER_FOREGROUND;
+        auto layerType = m_pLayerBackground->isChecked() ? MAP::LayerType::LAYER_BACKGROUND : MAP::LayerType::LAYER_FOREGROUND;
         pTab->setLayerType(layerType);
         auto maxSize = pTab->getMaximumLayerIndex(layerType);
         m_pCurLayer->setMinimum(maxSize == 0 ? 0 : 1);
