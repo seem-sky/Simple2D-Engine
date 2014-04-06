@@ -31,7 +31,6 @@
     <ClCompile Include="AutoTile.cpp" />
     <ClCompile Include="AutoTileCache.cpp" />
     <ClCompile Include="Brush.cpp" />
-    <ClCompile Include="BrushArea.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="Database.cpp" />
@@ -73,7 +72,6 @@
     <ClInclude Include="AutoTile.h" />
     <ClInclude Include="AutoTileCache.h" />
     <ClInclude Include="Brush.h" />
-    <ClInclude Include="BrushArea.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="Database_IO.h" />
@@ -88,6 +86,7 @@
     <ClInclude Include="MapData.h" />
     <ClInclude Include="MapLayer.h" />
     <ClInclude Include="MapMgr.h" />
+    <ClInclude Include="MapTile.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="ObjectAnimationWidget.h" />
     <ClInclude Include="Player.h" />

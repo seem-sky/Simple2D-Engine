@@ -166,24 +166,26 @@ void GameSceneView::drawTiles(QPainter* painter, const QRectF& rect, MAP::LayerT
         qMin<uint32>(ceil(rect.height() / TILE_SIZE) + startTile.y + 1, pMap->getHeight()));
     for (uint32 layer = 0; layer < pMap->getLayerSize(layerType); ++layer)
     {
-        for (uint32 x = startTile.x; x < endTile.x; ++x)
+        auto& mapLayer = pMap->getLayer(layerType, layer);
+        UInt32Point pos;
+        for (pos.x = startTile.x; pos.x < endTile.x; ++pos.x)
         {
-            for (uint32 y = startTile.y; y < endTile.y; ++y)
+            for (pos.y = startTile.y; pos.y < endTile.y; ++pos.y)
             {
-                MAP::MapTile tileObj = pMap->getMapTile(UInt32Point3D(x, y, layer), layerType);
-                if (tileObj.isEmpty())
+                auto tileObj = mapLayer.getMapTile(pos);
+                if (tileObj.getMapTile().isEmpty())
                     continue;
-                if (!tileObj.isAutoTile())
+                if (!tileObj.getMapTile().isAutoTile())
                 {
-                    if (auto pPixmap = m_TileCache.getItem(tileObj.m_uiTileID))
-                        painter->drawTiledPixmap(x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE, TILE_SIZE,* pPixmap);
+                    if (auto pPixmap = m_TileCache.getItem(tileObj.getMapTile().m_uiTileID))
+                        painter->drawTiledPixmap(pos.x*TILE_SIZE, pos.y*TILE_SIZE, TILE_SIZE, TILE_SIZE,* pPixmap);
                 }
                 else
                 {
-                    if (auto pAutoTile = m_AutoTileCache.getItem(tileObj.m_uiAutoTileSetID))
+                    if (auto pAutoTile = m_AutoTileCache.getItem(tileObj.getMapTile().m_uiAutoTileSetID))
                     {
-                        if (auto pPixmap = pAutoTile->getPixmap(static_cast<DATABASE::AUTO_TILE::AUTO_TILE_INDEX>(tileObj.m_uiTileID)))
-                            painter->drawTiledPixmap(x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE, TILE_SIZE,* pPixmap);
+                        if (auto pPixmap = pAutoTile->getPixmap(static_cast<DATABASE::AUTO_TILE::AUTO_TILE_INDEX>(tileObj.getMapTile().m_uiTileID)))
+                            painter->drawTiledPixmap(pos.x*TILE_SIZE, pos.y*TILE_SIZE, TILE_SIZE, TILE_SIZE,* pPixmap);
                     }
                 }
             }

@@ -81,13 +81,13 @@ void MapViewerScene::_drawDarkRect(QPainter* painter, const QRectF& rect)
 
 void MapViewerScene::_drawTiles(QPainter* painter, const QRectF& rect, MAP::LayerType currentLayer)
 {
-    const auto& mapLayer = m_MapData.getMapLayer();
     const UInt32Point startTile(rect.x() <= 0 ? 0 : (uint32)rect.x() / TILE_SIZE, rect.y() <= 0 ? 0 : (uint32)rect.y() / TILE_SIZE);
-    const UInt32Point endTile(qMin<uint32>(ceil(rect.width() / TILE_SIZE) + startTile.x + 1, mapLayer.getSize().x),
-        qMin<uint32>(ceil(rect.height() / TILE_SIZE) + startTile.y + 1, mapLayer.getSize().y));
+    const UInt32Point endTile(qMin<uint32>(ceil(rect.width() / TILE_SIZE) + startTile.x + 1, m_MapData.getMapLayer().getSize().x),
+        qMin<uint32>(ceil(rect.height() / TILE_SIZE) + startTile.y + 1, m_MapData.getMapLayer().getSize().y));
     QRectF tileRect(0, 0, TILE_SIZE, TILE_SIZE);
-    for (uint32 layerIndex = 0; layerIndex < mapLayer.getLayerSize(currentLayer); ++layerIndex)
+    for (uint32 layerIndex = 0; layerIndex < m_MapData.getMapLayer().getLayerSize(currentLayer); ++layerIndex)
     {
+        auto& mapLayer = m_MapData.getMapLayer().getLayer(currentLayer, layerIndex);
         switch (getMode())
         {
         case MappingMode::TILE_MAPPING:
@@ -107,18 +107,18 @@ void MapViewerScene::_drawTiles(QPainter* painter, const QRectF& rect, MAP::Laye
 
         // ToDo: DrawPixmapFragments is an improvement, perhaps.
         // std::vector<std::vector<QPainter::PixmapFragment>> fragments;
-        UInt32Point3D currentTile(0, 0, layerIndex);
+        UInt32Point currentTile;
         for (currentTile.x = startTile.x; currentTile.x < endTile.x; ++currentTile.x)
         {
             for (currentTile.y = startTile.y; currentTile.y < endTile.y; ++currentTile.y)
             {
-                auto& tileObj = mapLayer.getMapTile(currentTile, currentLayer);
-                if (tileObj.isEmpty())      // ignore tile ID 0; empty tile
+                auto& tileObj = mapLayer.getMapTile(currentTile);
+                if (tileObj.getMapTile().isEmpty())      // ignore tile ID 0; empty tile
                     continue;
                 // is no auto tile
-                if (tileObj.m_uiAutoTileSetID == 0)
+                if (tileObj.getMapTile().m_uiAutoTileSetID == 0)
                 {
-                    if (auto pPixmap = GTileCache::get()->getItem(tileObj.m_uiTileID))
+                    if (auto pPixmap = GTileCache::get()->getItem(tileObj.getMapTile().m_uiTileID))
                         painter->drawPixmap(currentTile.x*TILE_SIZE, currentTile.y*TILE_SIZE, TILE_SIZE, TILE_SIZE,* pPixmap);
                     //if (fragments.size() < tileObj.m_uiTileID)
                     //    fragments.resize(tileObj.m_uiTileID);
@@ -128,9 +128,9 @@ void MapViewerScene::_drawTiles(QPainter* painter, const QRectF& rect, MAP::Laye
                 // autotiles
                 else
                 {
-                    if (auto pAutoTile = GAutoTileCache::get()->getItem(tileObj.m_uiAutoTileSetID))
+                    if (auto pAutoTile = GAutoTileCache::get()->getItem(tileObj.getMapTile().m_uiAutoTileSetID))
                     {
-                        if (auto pPixmap = pAutoTile->getPixmap(static_cast<DATABASE::AUTO_TILE::AUTO_TILE_INDEX>(tileObj.m_uiTileID)))
+                        if (auto pPixmap = pAutoTile->getPixmap(static_cast<DATABASE::AUTO_TILE::AUTO_TILE_INDEX>(tileObj.getMapTile().m_uiTileID)))
                             painter->drawPixmap(currentTile.x*TILE_SIZE, currentTile.y*TILE_SIZE, TILE_SIZE, TILE_SIZE,* pPixmap);
                     }
                 }

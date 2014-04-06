@@ -159,9 +159,6 @@
     <ClCompile Include="VisualViewer.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="BrushArea.cpp">
-      <Filter>Map\Brush</Filter>
-    </ClCompile>
     <ClCompile Include="MapException.cpp">
       <Filter>Map\Exceptions</Filter>
     </ClCompile>
@@ -284,13 +281,13 @@
     <ClInclude Include="RevertInfo.h">
       <Filter>Map\Brush</Filter>
     </ClInclude>
-    <ClInclude Include="BrushArea.h">
-      <Filter>Map\Brush</Filter>
-    </ClInclude>
     <ClInclude Include="MapException.h">
       <Filter>Map\Exceptions</Filter>
     </ClInclude>
     <ClInclude Include="MapLayer.h">
+      <Filter>Map\Layer</Filter>
+    </ClInclude>
+    <ClInclude Include="MapTile.h">
       <Filter>Map\Layer</Filter>
     </ClInclude>
   </ItemGroup>

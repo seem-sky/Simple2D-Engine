@@ -62,7 +62,7 @@ namespace MAP
         protected:
             const DATABASE::DatabaseMgr& m_DBMgr;
             REVERT::RevertInfo m_RevertInfo;
-            LayerContainer& m_MapLayer;
+            Layer& m_MapLayer;
         };
         typedef std::unique_ptr<Brush> BrushPtr;
 
@@ -91,7 +91,7 @@ namespace MAP
             void _drawAutoTile(const UInt32Point& pos);
             void _drawTileSet(const UInt32Point& pos);
             
-            bool _getPosition(uint32 i, UInt32Point3D &checkPos) const;
+            bool _getPosition(uint32 i, UInt32Point &checkPos) const;
 
         protected:
             BrushFill(const DATABASE::DatabaseMgr& DBMgr, LayerContainer &mapLayer, uint32 ID, SelectionType selectionType, LayerType layerType, uint32 layerIndex);

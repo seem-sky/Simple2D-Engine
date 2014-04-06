@@ -66,7 +66,7 @@ void INPUT::MapBinaryReader::_readLayerV1(QDataStream& in, MAP::LayerContainer& 
                 uint32 uiTile, uiAutoTile;
                 in >> uiTile >> uiAutoTile;
                 MapTile tile(uiTile, uiAutoTile);
-                mapLayer.setMapTile(pos, layer, tile);
+                mapLayer.getLayer(layer, pos.z).setMapTile(pos, tile);
             }
         }
     }
@@ -84,7 +84,7 @@ void INPUT::MapBinaryReader::_readLayerV2(QDataStream& in, MAP::LayerContainer& 
             {
                 MapTile tile;
                 in >> tile.m_uiTileID >> tile.m_uiAutoTileSetID;
-                mapLayer.setMapTile(pos, layer, tile);
+                mapLayer.getLayer(layer, pos.z).setMapTile(pos, tile);
             }
         }
     }
@@ -153,8 +153,8 @@ void OUTPUT::MapBinaryWriter::_writeLayer(QDataStream& out, const LayerContainer
         {
             for (pos.x = 0; pos.x < mapLayer.getSize().x; ++pos.x)
             {
-                auto& tile = mapLayer.getMapTile(pos, layer);
-                out << tile.m_uiTileID << tile.m_uiAutoTileSetID;
+                auto& tile = mapLayer.getLayer(layer, pos.z).getMapTile(pos);
+                out << tile.getMapTile().m_uiTileID << tile.getMapTile().m_uiAutoTileSetID;
             }
         }
     }
