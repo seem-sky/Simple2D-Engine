@@ -37,7 +37,7 @@ void DatabaseWidgetWorldObject::setupPrototypeFromWidgets(DATABASE::Prototype* p
 {
     if (auto pWorldObject = dynamic_cast<WORLD_OBJECT::WorldObjectPrototype*>(pPrototype))
     {
-        auto count = pWorldObject->getAnimationCount();
+        auto count = m_pModuleAnimation->getAnimationCount();
         pWorldObject->setAnimationCount(count);
         for (uint32 i = 0; i < count; ++i)
         {
@@ -46,7 +46,7 @@ void DatabaseWidgetWorldObject::setupPrototypeFromWidgets(DATABASE::Prototype* p
                 WORLD_OBJECT::AnimationInfo info;
                 info.m_ID = viewer->getAnimationID();
                 info.m_VisualType = viewer->getVisualType();
-                info.m_AnimationTypeID = 1;
+                info.m_AnimationTypeID = viewer->getAnimationTypeID();
                 pWorldObject->setAnimationInfo(i, info);
             }
         }
@@ -62,10 +62,11 @@ void DatabaseWidgetWorldObject::setupWidgetsFromPrototype(const DATABASE::Protot
         m_pModuleAnimation->setAniamtionCount(count);
         for (uint32 i = 0; i < count; ++i)
         {
-            if (auto viewer = m_pModuleAnimation->getVisualViewer(i))
+            if (auto pViewer = m_pModuleAnimation->getVisualViewer(i))
             {
                 auto &info = pWorldObject->getAnimationInfo(i);
-                viewer->setAnimation(info.m_ID, info.m_VisualType);
+                pViewer->setAnimation(info.m_ID, info.m_VisualType);
+                pViewer->setAnimationType(info.m_AnimationTypeID);
             }
         }
     }

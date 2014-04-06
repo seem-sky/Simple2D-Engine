@@ -43,6 +43,7 @@ DatabaseWindow::DatabaseWindow(DatabaseMgr& DBMgr, QWidget* p_pParent) : QDialog
     connect(this, SIGNAL(storeChanges()), m_pAnimations, SLOT(saveCurrent()));
     connect(this, SIGNAL(storeChanges()), m_pAnimationTypes, SLOT(saveCurrent()));
     connect(this, SIGNAL(storeChanges()), m_pLocalisation, SLOT(saveCurrent()));
+    connect(this, SIGNAL(storeChanges()), m_pWorldObjects, SLOT(saveCurrent()));
 }
 
 void DatabaseWindow::clickButtonApply()

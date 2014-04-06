@@ -66,7 +66,7 @@ namespace DATABASE
         class DatabaseWriter
         {
         public:
-            DatabaseWriter(const Database* pDB) : m_pDB(pDB)
+            DatabaseWriter(const T* pDB) : m_pDB(pDB)
             {}
 
             void write(QString filePath)
@@ -82,10 +82,10 @@ namespace DATABASE
                 uint32 uiElementCount = m_pDB->getSize();
                 for (uint32 i = 1; i <= uiElementCount; ++i)
                 {
-                    if (auto pProto = m_pDB->getItem(i))
+                    if (auto pProto = m_pDB->getOriginalPrototype(i))
                     {
                         writer.writeStartElement("p");
-                        //PrototypeParser::parseToXML(pProto, writer);
+                        pProto->toXML(writer);
                         writer.writeEndElement();
                     }
                 }
@@ -94,7 +94,7 @@ namespace DATABASE
             }
 
         private:
-            const Database* m_pDB;
+            const T* m_pDB;
         };
     }
 }

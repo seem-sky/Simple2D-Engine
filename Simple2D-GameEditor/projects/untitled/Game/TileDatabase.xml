@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <DB>
-    <p terraintype="0" passability="15" file="gras.png" path="" ID="1" name="gras"/>
-    <p terraintype="0" passability="0" file="stone.png" path="" ID="2" name="stone"/>
+    <p terraintype="0" passability="15" file="gras.png" ID="1" name="gras"/>
+    <p terraintype="0" file="stone.png" ID="2" name="stone"/>
     <p terraintype="0" passability="15" file="gras-inner_top-left.png" path="gras_autotileset/" ID="3" name="gras-inner-top-left"/>
     <p terraintype="0" passability="15" file="gras-inner_top-right.png" path="gras_autotileset/" ID="4" name="gras-inner_top-right"/>
     <p terraintype="0" passability="15" file="gras-top-side.png" path="gras_autotileset/" ID="5" name="gras-top-side"/>
@@ -30,34 +30,34 @@
     <p terraintype="0" passability="15" file="bottom.png" path="ice/" ID="28" name="ice-bottom"/>
     <p terraintype="0" passability="15" file="bottom-right.png" path="ice/" ID="29" name="ice-bottom-right"/>
     <p terraintype="0" passability="15" file="inner-edges.png" path="ice/" ID="30" name="ice-inner-edges"/>
-    <p terraintype="0" passability="0" file="top-left.png" path="forest_top/" tRed="7" tGreen="146" tBlue="151" ID="31" name="top-left"/>
-    <p terraintype="0" passability="0" file="top.png" path="forest_top/" tRed="7" tGreen="146" tBlue="151" ID="32" name="top"/>
-    <p terraintype="0" passability="0" file="top-right.png" path="forest_top/" tRed="7" tGreen="146" tBlue="151" ID="33" name="top-right"/>
-    <p terraintype="0" passability="0" file="left.png" path="forest_top/" tRed="7" tGreen="146" tBlue="151" ID="34" name="left"/>
-    <p terraintype="0" passability="0" file="center.png" path="forest_top/" tRed="7" tGreen="146" tBlue="151" ID="35" name="center"/>
-    <p terraintype="0" passability="0" file="right.png" path="forest_top/" tRed="7" tGreen="146" tBlue="151" ID="36" name="right"/>
-    <p terraintype="0" passability="0" file="bottom-left.png" path="forest_top/" tRed="7" tGreen="146" tBlue="151" ID="37" name="bottom-left"/>
-    <p terraintype="0" passability="0" file="bottom.png" path="forest_top/" tRed="7" tGreen="146" tBlue="151" ID="38" name="bottom"/>
-    <p terraintype="0" passability="0" file="bottom-right.png" path="forest_top/" tRed="7" tGreen="146" tBlue="151" ID="39" name="bottom-right"/>
-    <p terraintype="0" passability="15" file="inner-center.png" path="forest_top/" tRed="7" tGreen="146" tBlue="151" ID="40" name="inner-center"/>
-    <p terraintype="0" passability="0" file="top-left.png" path="high-gras/" tRed="255" tGreen="127" tBlue="39" ID="41" name="top-left"/>
-    <p terraintype="0" passability="0" file="top.png" path="high-gras/" tRed="255" tGreen="127" tBlue="39" ID="42" name="top"/>
-    <p terraintype="0" passability="0" file="top-right.png" path="high-gras/" tRed="255" tGreen="127" tBlue="39" ID="43" name="top-right"/>
-    <p terraintype="0" passability="0" file="left.png" path="high-gras/" tRed="255" tGreen="127" tBlue="39" ID="44" name="left"/>
-    <p terraintype="0" passability="0" file="center.png" path="high-gras/" tRed="255" tGreen="127" tBlue="39" ID="45" name="center"/>
-    <p terraintype="0" passability="0" file="right.png" path="high-gras/" tRed="255" tGreen="127" tBlue="39" ID="46" name="right"/>
-    <p terraintype="0" passability="0" file="bottom-left.png" path="high-gras/" tRed="255" tGreen="127" tBlue="39" ID="47" name="bottom-left"/>
-    <p terraintype="0" passability="0" file="bottom.png" path="high-gras/" tRed="255" tGreen="127" tBlue="39" ID="48" name="bottom"/>
-    <p terraintype="0" passability="0" file="bottom-right.png" path="high-gras/" tRed="255" tGreen="127" tBlue="39" ID="49" name="bottom-right"/>
-    <p terraintype="0" passability="0" file="inner-center.png" path="high-gras/" tRed="255" tGreen="127" tBlue="39" ID="50" name="inner-center"/>
-    <p terraintype="0" passability="0" file="forest-1.png" path="forest/" tRed="255" tGreen="127" tBlue="39" ID="51" name="forest-1"/>
-    <p terraintype="0" passability="0" file="forest-2.png" path="forest/" tRed="255" tGreen="127" tBlue="39" ID="52" name="forest-2"/>
-    <p terraintype="0" passability="0" file="forest-3.png" path="forest/" tRed="255" tGreen="127" tBlue="39" ID="53" name="forest-3"/>
-    <p terraintype="0" passability="0" file="forest-4.png" path="forest/" tRed="255" tGreen="127" tBlue="39" ID="54" name="forest-4"/>
-    <p terraintype="0" passability="0" file="forest-5.png" path="forest/" tRed="255" tGreen="127" tBlue="39" ID="55" name="forest-5"/>
-    <p terraintype="0" passability="0" file="forest-6.png" path="forest/" tRed="255" tGreen="127" tBlue="39" ID="56" name="forest-6"/>
-    <p terraintype="0" passability="0" file="fallen-tree.png" path="" ID="57" name="fallen-tree.png"/>
-    <p terraintype="0" passability="0" file="gras.png" path="" ID="58" name="gras.png"/>
-    <p terraintype="0" passability="0" file="halfgras.png" path="" ID="59" name="halfgras.png"/>
-    <p terraintype="0" passability="0" file="stone.png" path="" ID="60" name="stone.png"/>
+    <p terraintype="0" tRed="7" tGreen="146" tBlue="151" file="top-left.png" path="forest_top/" ID="31" name="top-left"/>
+    <p terraintype="0" tRed="7" tGreen="146" tBlue="151" file="top.png" path="forest_top/" ID="32" name="top"/>
+    <p terraintype="0" tRed="7" tGreen="146" tBlue="151" file="top-right.png" path="forest_top/" ID="33" name="top-right"/>
+    <p terraintype="0" tRed="7" tGreen="146" tBlue="151" file="left.png" path="forest_top/" ID="34" name="left"/>
+    <p terraintype="0" tRed="7" tGreen="146" tBlue="151" file="center.png" path="forest_top/" ID="35" name="center"/>
+    <p terraintype="0" tRed="7" tGreen="146" tBlue="151" file="right.png" path="forest_top/" ID="36" name="right"/>
+    <p terraintype="0" tRed="7" tGreen="146" tBlue="151" file="bottom-left.png" path="forest_top/" ID="37" name="bottom-left"/>
+    <p terraintype="0" tRed="7" tGreen="146" tBlue="151" file="bottom.png" path="forest_top/" ID="38" name="bottom"/>
+    <p terraintype="0" tRed="7" tGreen="146" tBlue="151" file="bottom-right.png" path="forest_top/" ID="39" name="bottom-right"/>
+    <p terraintype="0" passability="15" tRed="7" tGreen="146" tBlue="151" file="inner-center.png" path="forest_top/" ID="40" name="inner-center"/>
+    <p terraintype="0" tRed="255" tGreen="127" tBlue="39" file="top-left.png" path="high-gras/" ID="41" name="top-left"/>
+    <p terraintype="0" tRed="255" tGreen="127" tBlue="39" file="top.png" path="high-gras/" ID="42" name="top"/>
+    <p terraintype="0" tRed="255" tGreen="127" tBlue="39" file="top-right.png" path="high-gras/" ID="43" name="top-right"/>
+    <p terraintype="0" tRed="255" tGreen="127" tBlue="39" file="left.png" path="high-gras/" ID="44" name="left"/>
+    <p terraintype="0" tRed="255" tGreen="127" tBlue="39" file="center.png" path="high-gras/" ID="45" name="center"/>
+    <p terraintype="0" tRed="255" tGreen="127" tBlue="39" file="right.png" path="high-gras/" ID="46" name="right"/>
+    <p terraintype="0" tRed="255" tGreen="127" tBlue="39" file="bottom-left.png" path="high-gras/" ID="47" name="bottom-left"/>
+    <p terraintype="0" tRed="255" tGreen="127" tBlue="39" file="bottom.png" path="high-gras/" ID="48" name="bottom"/>
+    <p terraintype="0" tRed="255" tGreen="127" tBlue="39" file="bottom-right.png" path="high-gras/" ID="49" name="bottom-right"/>
+    <p terraintype="0" tRed="255" tGreen="127" tBlue="39" file="inner-center.png" path="high-gras/" ID="50" name="inner-center"/>
+    <p terraintype="0" tRed="255" tGreen="127" tBlue="39" file="forest-1.png" path="forest/" ID="51" name="forest-1"/>
+    <p terraintype="0" tRed="255" tGreen="127" tBlue="39" file="forest-2.png" path="forest/" ID="52" name="forest-2"/>
+    <p terraintype="0" tRed="255" tGreen="127" tBlue="39" file="forest-3.png" path="forest/" ID="53" name="forest-3"/>
+    <p terraintype="0" tRed="255" tGreen="127" tBlue="39" file="forest-4.png" path="forest/" ID="54" name="forest-4"/>
+    <p terraintype="0" tRed="255" tGreen="127" tBlue="39" file="forest-5.png" path="forest/" ID="55" name="forest-5"/>
+    <p terraintype="0" tRed="255" tGreen="127" tBlue="39" file="forest-6.png" path="forest/" ID="56" name="forest-6"/>
+    <p terraintype="0" file="fallen-tree.png" ID="57" name="fallen-tree.png"/>
+    <p terraintype="0" file="gras.png" ID="58" name="gras.png"/>
+    <p terraintype="0" file="halfgras.png" ID="59" name="halfgras.png"/>
+    <p terraintype="0" file="stone.png" ID="60" name="stone.png"/>
 </DB>

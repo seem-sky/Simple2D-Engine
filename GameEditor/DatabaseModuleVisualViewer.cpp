@@ -8,7 +8,7 @@
 /*#####
 # VisualViewerWidget
 #####*/
-VisualViewerItem::VisualViewerItem(QWidget *pParent) : QFrame(pParent),
+VisualViewerItem::VisualViewerItem(QWidget *pParent, bool standardEntry) : QFrame(pParent), m_TypeID(1),
     // widgets
     m_pVisualViewer(new VisualViewer(this)),
     m_pAnimationType(new QComboBox(this))
@@ -27,6 +27,8 @@ VisualViewerItem::VisualViewerItem(QWidget *pParent) : QFrame(pParent),
     setLineWidth(1);
     setMidLineWidth(1);
     setContentsMargins(2, 2, 2, 2);
+
+    m_pAnimationType->setEnabled(!standardEntry);
 }
 
 void VisualViewerItem::setAnimation(uint32 ID, DATABASE::WORLD_OBJECT::AnimationInfo::VisualType type)
@@ -34,10 +36,17 @@ void VisualViewerItem::setAnimation(uint32 ID, DATABASE::WORLD_OBJECT::Animation
     m_pVisualViewer->setAnimation(ID, type);
 }
 
+void VisualViewerItem::setAnimationType(uint32 ID)
+{
+    m_pAnimationType->setCurrentIndex(ID-1);
+    m_TypeID = ID;
+}
+
 void VisualViewerItem::setAnimationTypeModel(DATABASE::ConstDatabaseModel* pModel)
 {
     m_pAnimationType->setModel(pModel);
     m_pAnimationType->setModelColumn(1);
+    m_pAnimationType->setCurrentIndex(int32(m_TypeID)-1);
 }
 
 /*#####
@@ -98,7 +107,7 @@ void DatabaseModuleVisualViewer::insertVisualViewer(uint32 index)
 {
     m_pVisualViewerList->insertRow(index);
     m_pVisualViewerList->setRowHeight(index, 180);
-    auto pViewer = new VisualViewerItem(m_pVisualViewerList);
+    auto pViewer = new VisualViewerItem(m_pVisualViewerList, index < DATABASE::WORLD_OBJECT::MIN_WORLD_OBJECT_POSE);
     m_pVisualViewerList->setCellWidget(index, 0, pViewer);
     pViewer->getVisualViewer()->setDatabaseManager(m_pDBMgr);
     if (m_pAnimationTypeModel)

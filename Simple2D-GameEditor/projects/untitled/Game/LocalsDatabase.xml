@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <DB>
-	<p ID="1" name="test String">
-		<local index="0" text="whats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuup
-
-
-whats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuup" />
-	</p>
+    <p ID="1" name="test String">
+        <local index="0" text="whats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats&#10;&#10;&#10;&#10; uuuuupwhats uuuuupwhats uuuuupwhats uuuuup   whats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuupwhats uuuuup"/>
+        <local index="1" text=""/>
+    </p>
 </DB>

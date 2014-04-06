@@ -1,33 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <DB>
-    <p boundingX="2" boundingY="24" boundingWidth="18" boundingHeight="8" animationSpeed="100" script="" ID="1" name="Object1">
-        <animation entry="1" ID="2" typeID="1" visualType="1"/>
-        <animation entry="2" ID="2" typeID="2" visualType="1"/>
-        <animation entry="3" ID="2" typeID="3" visualType="1"/>
-        <animation entry="4" ID="2" typeID="4" visualType="1"/>
+    <p boundingX="0" boundingY="0" boundingWidth="0" boundingHeight="0" animationSpeed="100" ID="1" name="Object1">
+        <animation entry="0" visualType="1" ID="2" typeID="1"/>
+        <animation entry="1" visualType="1" ID="2" typeID="2"/>
+        <animation entry="2" visualType="1" ID="2" typeID="3"/>
+        <animation entry="3" visualType="1" ID="2" typeID="4"/>
     </p>
-    <p boundingX="0" boundingY="0" boundingWidth="0" boundingHeight="0" animationSpeed="100" script="" ID="2" name="explosion">
-        <animation entry="1" ID="1" typeID="1" visualType="1"/>
-        <animation entry="2" ID="1" typeID="2" visualType="1"/>
-        <animation entry="3" ID="1" typeID="3" visualType="1"/>
-        <animation entry="4" ID="1" typeID="4" visualType="1"/>
+    <p boundingX="0" boundingY="0" boundingWidth="0" boundingHeight="0" animationSpeed="100" ID="2" name="explosion">
+        <animation entry="0" visualType="1" ID="1" typeID="1"/>
+        <animation entry="1" visualType="1" ID="1" typeID="2"/>
+        <animation entry="2" visualType="1" ID="1" typeID="3"/>
+        <animation entry="3" visualType="1" ID="1" typeID="4"/>
     </p>
-    <p boundingX="14" boundingY="65" boundingWidth="36" boundingHeight="12" animationSpeed="100" script="" ID="3" name="Tree">
-        <animation entry="1" ID="3" typeID="1" visualType="1"/>
-        <animation entry="2" ID="3" typeID="2" visualType="1"/>
-        <animation entry="3" ID="3" typeID="3" visualType="1"/>
-        <animation entry="4" ID="3" typeID="4" visualType="1"/>
+    <p boundingX="14" boundingY="65" boundingWidth="36" boundingHeight="12" animationSpeed="100" ID="3" name="Tree">
+        <animation entry="0" visualType="1" ID="3" typeID="1"/>
+        <animation entry="1" visualType="1" ID="3" typeID="2"/>
+        <animation entry="2" visualType="1" ID="3" typeID="3"/>
+        <animation entry="3" visualType="1" ID="3" typeID="4"/>
     </p>
-    <p boundingX="2" boundingY="4" boundingWidth="40" boundingHeight="10" animationSpeed="100" script="" ID="4" name="fallen-tree">
-        <animation entry="1" ID="4" typeID="1" visualType="1"/>
-        <animation entry="2" ID="4" typeID="2" visualType="1"/>
-        <animation entry="3" ID="4" typeID="3" visualType="1"/>
-        <animation entry="4" ID="4" typeID="4" visualType="1"/>
+    <p boundingX="0" boundingY="0" boundingWidth="0" boundingHeight="0" animationSpeed="100" ID="4" name="fallen-tree">
+        <animation entry="0" visualType="1" ID="4" typeID="1"/>
+        <animation entry="1" visualType="1" ID="4" typeID="2"/>
+        <animation entry="2" visualType="1" ID="4" typeID="3"/>
+        <animation entry="3" visualType="1" ID="4" typeID="4"/>
     </p>
-    <p boundingX="0" boundingY="0" boundingWidth="0" boundingHeight="0" animationSpeed="100" script="" ID="5" name="test-hero">
-        <animation entry="1" ID="5" typeID="1" visualType="1"/>
-        <animation entry="2" ID="5" typeID="2" visualType="1"/>
-        <animation entry="3" ID="5" typeID="3" visualType="1"/>
-        <animation entry="4" ID="5" typeID="4" visualType="1"/>
+    <p boundingX="0" boundingY="0" boundingWidth="0" boundingHeight="0" animationSpeed="100" ID="5" name="test-hero">
+        <animation entry="0" visualType="1" ID="5" typeID="1"/>
+        <animation entry="1" visualType="1" ID="5" typeID="2"/>
+        <animation entry="2" visualType="1" ID="5" typeID="3"/>
+        <animation entry="3" visualType="1" ID="5" typeID="4"/>
+        <animation entry="4" visualType="1" ID="1" typeID="8"/>
     </p>
 </DB>

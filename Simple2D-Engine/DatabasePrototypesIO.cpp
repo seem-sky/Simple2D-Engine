@@ -287,7 +287,7 @@ void WORLD_OBJECT::WorldObjectPrototype::toXML(QXmlStreamWriter& writer) const
     Prototype::toXML(writer);
 
     //store animation infos
-    for (uint32 i = 1; i <= getAnimationCount(); ++i)
+    for (uint32 i = 0; i < getAnimationCount(); ++i)
     {
         WORLD_OBJECT::AnimationInfo animationInfo = getAnimationInfo(i);
         if (animationInfo.m_ID == 0 && animationInfo.m_AnimationTypeID == 0)
@@ -308,7 +308,7 @@ void WORLD_OBJECT::WorldObjectPrototype::insertChildren(const QXmlStreamReader& 
         if (!attributes.hasAttribute("entry"))
             return;
 
-        setAnimationInfo(attributes.value("entry").toUInt()-1,
+        setAnimationInfo(attributes.value("entry").toUInt(),
             WORLD_OBJECT::AnimationInfo(
                 attributes.value("ID").toUInt(),
                 static_cast<WORLD_OBJECT::AnimationInfo::VisualType>(attributes.value("visualType").toUInt()),

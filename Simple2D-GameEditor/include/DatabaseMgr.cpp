@@ -105,26 +105,24 @@ bool DatabaseMgr::saveDatabase(const QString& projectPath, uint32 databases)
     if (!projectDir.exists())
         return false;
 
-    //if (databases&  TILE_DATABASE)
-    //    IO::DatabaseWriter<TilePrototype>(getTileDatabase()).write(projectPath + TILE_DATABASE_PATH);
-    //if (databases&  TILE_SET_DATABASE)
-    //    IO::DatabaseWriter<TILE_SET::TileSetPrototype>(getTileSetDatabase()).write(projectPath + TILE_SET_DATABASE_PATH);
-    //if (databases&  AUTO_TILE_DATABASE)
-    //    IO::DatabaseWriter<AUTO_TILE::AutoTilePrototype>(getAutoTileDatabase()).write(projectPath + AUTO_TILE_DATABASE_PATH);
-    //if (databases&  SPRITE_DATABASE)
-    //    IO::DatabaseWriter<SpritePrototype>(getSpriteDatabase()).write(projectPath + SPRITE_DATABASE_PATH);
-    //if (databases&  ANIMATION_DATABASE)
-    //    IO::DatabaseWriter<AnimationPrototype>(getAnimationDatabase()).write(projectPath + ANIMATION_DATABASE_PATH);
-    //if (databases&  OBJECT_ANIMATION_TYPE_DATABASE)
-    //    IO::DatabaseWriter<AnimationTypePrototype>(getObjectAnimationTypeDatabase()).write(projectPath + OBJECT_ANIMATION_TYPE_DATABASE_PATH);
-    //if (databases&  MAP_DATABASE)
-    //    IO::DatabaseWriter<MAP_STRUCTURE::MapPrototype>(getMapDatabase()).write(projectPath + MAP_DATABASE_PATH);
-    //if (databases&  LOCALS_DATABASE)
-    //    IO::DatabaseWriter<LocalisationPrototype>(getLocalsDatabase()).write(projectPath + LOCALS_DATABASE_PATH);
-    //if (databases&  WORLD_OBJECT_DATABASE)
-    //    IO::DatabaseWriter<MAP_OBJECT::WorldObjectPrototype>(getWorldObjectDatabase()).write(projectPath + WORLD_OBJECT_DATABASE_PATH);
-    //if (databases&  DYNAMIC_OBJECT_DATABASE)
-    //    IO::DatabaseWriter<MAP_OBJECT::DynamicObjectPrototype>(getDynamicObjectDatabase()).write(projectPath + DYNAMIC_OBJECT_DATABASE_PATH);
+    if (databases&  TILE_DATABASE)
+        IO::DatabaseWriter<TileDatabase>(getTileDatabase()).write(projectPath + DATABASE_FILE.at(static_cast<uint32>(DatabaseType::TILE_DATABASE)));
+    if (databases&  TILE_SET_DATABASE)
+        IO::DatabaseWriter<TileSetDatabase>(getTileSetDatabase()).write(projectPath + DATABASE_FILE.at(static_cast<uint32>(DatabaseType::TILE_SET_DATABASE)));
+    if (databases&  AUTO_TILE_DATABASE)
+        IO::DatabaseWriter<AutoTileDatabase>(getAutoTileDatabase()).write(projectPath + DATABASE_FILE.at(static_cast<uint32>(DatabaseType::AUTO_TILE_DATABASE)));
+    if (databases&  SPRITE_DATABASE)
+        IO::DatabaseWriter<SpriteDatabase>(getSpriteDatabase()).write(projectPath + DATABASE_FILE.at(static_cast<uint32>(DatabaseType::SPRITE_DATABASE)));
+    if (databases&  ANIMATION_DATABASE)
+        IO::DatabaseWriter<AnimationDatabase>(getAnimationDatabase()).write(projectPath + DATABASE_FILE.at(static_cast<uint32>(DatabaseType::ANIMATION_DATABASE)));
+    if (databases&  ANIMATION_TYPE_DATABASE)
+        IO::DatabaseWriter<AnimationTypeDatabase>(getAnimationTypeDatabase()).write(projectPath + DATABASE_FILE.at(static_cast<uint32>(DatabaseType::ANIMATION_TYPE_DATABASE)));
+    if (databases&  MAP_DATABASE)
+        IO::DatabaseWriter<MAP_STRUCTURE::MapDatabase>(getMapDatabase()).write(projectPath + DATABASE_FILE.at(static_cast<uint32>(DatabaseType::MAP_DATABASE)));
+    if (databases&  LOCALISATION_DATABASE)
+        IO::DatabaseWriter<LocalisationDatabase>(getLocalisationDatabase()).write(projectPath + DATABASE_FILE.at(static_cast<uint32>(DatabaseType::LOCALISATION_DATABASE)));
+    if (databases&  WORLD_OBJECT_DATABASE)
+        IO::DatabaseWriter<WorldObjectDatabase>(getWorldObjectDatabase()).write(projectPath + DATABASE_FILE.at(static_cast<uint32>(DatabaseType::WORLD_OBJECT_DATABASE)));
     return true;
 }
 

@@ -301,7 +301,7 @@ namespace DATABASE
             if (index >= m_AnimationInfos.size())
                 m_AnimationInfos.resize(index+1);
             // do not change animation type id if its an standard entry
-            if (index <= getMinimumAnimationCount())
+            if (index < getMinimumAnimationCount())
             {
                 auto &info = m_AnimationInfos.at(index);
                 info.m_ID = animationInfo.m_ID;
