@@ -64,9 +64,9 @@ public:
     void showVisual();
     uint32 getCurrentFrame() const { return m_uiCurrentFrameIndex; }
 
-    void setAnimation(uint32 animationEntry, DATABASE::WORLD_OBJECT::AnimationInfo::VisualType type);
+    void setAnimation(uint32 animationEntry, DATABASE::PROTOTYPE::WORLD_OBJECT::AnimationInfo::VisualType type);
     inline uint32 getAnimationID() const { return m_AnimationEntry; }
-    inline DATABASE::WORLD_OBJECT::AnimationInfo::VisualType getVisualType() const { return m_VisualType; }
+    inline DATABASE::PROTOTYPE::WORLD_OBJECT::AnimationInfo::VisualType getVisualType() const { return m_VisualType; }
 
     virtual void startAnimation();
     virtual void stopAnimation();
@@ -81,7 +81,7 @@ private:
     QTimer m_AnimationTimer;
 
     uint32 m_AnimationEntry;
-    DATABASE::WORLD_OBJECT::AnimationInfo::VisualType m_VisualType;
+    DATABASE::PROTOTYPE::WORLD_OBJECT::AnimationInfo::VisualType m_VisualType;
 
     bool m_DoAnimation;
 };

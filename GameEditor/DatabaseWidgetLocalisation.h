@@ -7,8 +7,8 @@
 class DatabaseWidgetLocalisation : public DatabaseWidgetBase
 {
 protected:
-    void setupWidgetsFromPrototype(const DATABASE::Prototype* pPrototype);
-    void setupPrototypeFromWidgets(DATABASE::Prototype* pPrototype);
+    void setupWidgetsFromPrototype(const DATABASE::PROTOTYPE::Prototype* pPrototype);
+    void setupPrototypeFromWidgets(DATABASE::PROTOTYPE::Prototype* pPrototype);
     void clear();
 
 public:

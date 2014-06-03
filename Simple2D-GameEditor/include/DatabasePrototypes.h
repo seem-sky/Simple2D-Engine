@@ -19,630 +19,636 @@ namespace MAP
 
 namespace DATABASE
 {
-    // index typedefs
-    typedef uint16 TILE_INDEX;
-    typedef uint8 AUTO_TILE_INDEX;
-
-    /*#####
-    # Prototype superclass
-    #####*/
-    class Prototype
+    namespace PROTOTYPE
     {
-    public:
-        Prototype(uint32 ID = 0) : m_ID(ID) {}
+        // index typedefs
+        typedef uint16 TILE_INDEX;
+        typedef uint8 AUTO_TILE_INDEX;
 
-        inline void setName(const QString& sName) { m_Name = sName; }
-        inline QString getName() const { return m_Name; }
-        inline uint32 getID() const { return m_ID; }
-        inline void setID(uint32 ID) { m_ID = ID; }
-
-        // IO
-        virtual void toXML(QXmlStreamWriter& writer) const;
-        virtual void fromXML(const QXmlStreamAttributes& attributes);
-        virtual void insertChildren(const QXmlStreamReader& reader) {}
-
-    private:
-        uint32 m_ID;
-        QString m_Name;
-    };
-
-    /*#####
-    # ResourcePrototype
-    #####*/
-    class RessourcePrototype : public Prototype
-    {
-    public:
-        RessourcePrototype(uint32 ID = 0) : Prototype(ID) {}
-
-        inline void setFileName(const QString& sFileName) { m_FileName = sFileName; }
-        inline QString getFileName() const { return m_FileName; }
-        inline void setPath(const QString& sPath) { m_Path = sPath; }
-        inline QString getPath() const { return m_Path; }
-        inline QString getPathName() const { return getPath() + getFileName(); }
-
-        // IO
-        virtual void toXML(QXmlStreamWriter& writer) const;
-        virtual void fromXML(const QXmlStreamAttributes& attributes);
-
-    private:
-        QString m_Path;        // path from ~/textures
-        QString m_FileName;    // filename
-    };
-
-    /*#####
-    # TexturePrototype
-    #####*/
-    class TexturePrototype : public RessourcePrototype
-    {
-    public:
-        TexturePrototype(uint32 ID = 0) : RessourcePrototype(ID) {}
-
-        inline Color getTransparencyColor() const { return m_TransparencyColor; }
-        inline void setTransparencyColor(const Color& color) { m_TransparencyColor = color; }
-
-        // IO
-        virtual void toXML(QXmlStreamWriter& writer) const;
-        virtual void fromXML(const QXmlStreamAttributes& attributes);
-
-        inline QString getTextureString() const { return getPathName() + QString::fromStdString(getTransparencyColor().getColorString()); }
-
-    private:
-        Color m_TransparencyColor;
-    };
-
-    /*#####
-    # TilePrototype
-    #####*/
-    class TilePrototype : public TexturePrototype
-    {
-    public:
-        TilePrototype(uint32 ID = 0) : TexturePrototype(ID), m_uiPassable(0), m_uiTerrainType(0) {}
-
-        // passability flag, if nothing set, its unpassable
-        enum PassabilityFlag
+        /*#####
+        # Prototype superclass
+        #####*/
+        class Prototype
         {
-            PASSABLE_NONE           = 0x00,
-            PASSABLE_UP             = 0x01,
-            PASSABLE_DOWN           = 0x02,
-            PASSABLE_RIGHT          = 0x04,
-            PASSABLE_LEFT           = 0x08,
-            PASSABLE_UP_TO_DOWN     = PASSABLE_UP|PASSABLE_DOWN,
-            PASSABLE_LEFT_TO_RIGHT  = PASSABLE_LEFT|PASSABLE_RIGHT,
-            PASSABLE_ALL            = PASSABLE_LEFT|PASSABLE_RIGHT|PASSABLE_DOWN|PASSABLE_UP,
-        };
-        inline bool hasPassabilityFlag(const PassabilityFlag flag) const { return (m_uiPassable&  flag) != 0; }
-        inline void addPassabilityFlag(const uint8 flag) { m_uiPassable |= flag; }
-        inline void removePassabilityFlag(const uint8 flag) { m_uiPassable ^= flag; }
-        inline uint8 getPassability() const  { return m_uiPassable; }
-
-        inline void setTerrainType(uint32 uiTerrainType) { m_uiTerrainType = uiTerrainType; }
-        inline uint32 getTerrainType() const { return m_uiTerrainType; }
-
-        // IO
-        void toXML(QXmlStreamWriter& writer) const;
-        void fromXML(const QXmlStreamAttributes& attributes);
-
-    private:
-        uint8 m_uiPassable;
-        uint32 m_uiTerrainType;
-    };
-
-    /*#####
-    # TileSetPrototype
-    #####*/
-    namespace TILE_SET
-    {
-        typedef boost::multi_array<uint32, 2> UInt32Multiarray2D;
-        const uint32 DEFAULT_COLUMN_COUNT = 2;
-        const uint32 DEFAULT_ROW_COUNT = 2;
-        class TileSetPrototype : public Prototype
-        {
-        private:
-            void _resizeIfNeeded(UInt32Point size);
-
         public:
-            TileSetPrototype(uint32 ID = 0);
+            Prototype(uint32 ID = 0) : m_ID(ID) {}
 
-            void resizeTiles(UInt32Point size);
-            inline UInt32Point getTileCount() const { return m_Size; }
-            void clear();
-
-            void setTileID(UInt32Point pos, uint32 ID);
-            uint32 getTileID(UInt32Point pos) const;
+            inline void setName(const QString& sName) { m_Name = sName; }
+            inline QString getName() const { return m_Name; }
+            inline uint32 getID() const { return m_ID; }
+            inline void setID(uint32 ID) { m_ID = ID; }
 
             // IO
-            void toXML(QXmlStreamWriter& writer) const;
-            void fromXML(const QXmlStreamAttributes& attributes);
+            virtual void toXML(QXmlStreamWriter& writer) const;
+            virtual void fromXML(const QXmlStreamAttributes& attributes);
+            virtual void insertChildren(const QXmlStreamReader& reader) {}
 
         private:
-            UInt32Point m_Size;
-            UInt32Multiarray2D m_Tiles;
-        };
-        
-        QPixmap createPixmap(const TileSetPrototype& tileSet);
-    }
-
-    /*#####
-    # AutoTilePrototype
-    #####*/
-    namespace AUTO_TILE
-    {
-        enum TILE_CHECK
-        {
-            SAME_AROUND         = 0x00,
-            OTHER_TOP_LEFT      = 0x01,
-            OTHER_TOP           = 0x02,
-            OTHER_TOP_RIGHT     = 0x04,
-            OTHER_LEFT          = 0x08,
-            OTHER_RIGHT         = 0x10,
-            OTHER_BOTTOM_LEFT   = 0x20,
-            OTHER_BOTTOM        = 0x40,
-            OTHER_BOTTOM_RIGHT  = 0x80,
+            uint32 m_ID;
+            QString m_Name;
         };
 
-        enum AUTO_TILE_INDEX
-        {
-            // auto tile set
-            INDEX_TOP_LEFT,
-            INDEX_TOP,
-            INDEX_TOP_RIGHT,
-            INDEX_LEFT,
-            INDEX_CENTER,
-            INDEX_RIGHT,
-            INDEX_BOTTOM_LEFT,
-            INDEX_BOTTOM,
-            INDEX_BOTTOM_RIGHT,
-            INDEX_INNER_CENTER,                     // 9
-
-            // side ends
-            INDEX_SIDE_END_TOP,                     // 10
-            INDEX_SIDE_END_BOTTOM,
-            INDEX_SIDE_END_LEFT,
-            INDEX_SIDE_END_RIGHT,                   // 13
-
-            // double sides
-            INDEX_SIDE_VERTICAL,
-            INDEX_SIDE_HORIZONTAL,                  // 15
-
-            // T tiles
-            INDEX_T_TOP,
-            INDEX_T_BOTTOM,
-            INDEX_T_LEFT,
-            INDEX_T_RIGHT,                          // 19
-
-            // curves
-            INDEX_CURVE_TOP_LEFT,
-            INDEX_CURVE_TOP_RIGHT,
-            INDEX_CURVE_BOTTOM_LEFT,
-            INDEX_CURVE_BOTTOM_RIGHT,               // 23
-
-            // inner edges
-            INDEX_INNER_EDGE_TOP_LEFT,
-            INDEX_INNER_EDGE_TOP_RIGHT,
-            INDEX_INNER_EDGE_BOTTOM_LEFT,
-            INDEX_INNER_EDGE_BOTTOM_RIGHT,          // 27
-
-            // diagonal inner edges
-            INDEX_INNER_EDGE_TOP_LEFT_BOTTOM_RIGHT,
-            INDEX_INNER_EDGE_TOP_RIGHT_BOTTOM_LEFT, // 29
-
-            // multi inner edges
-            INDEX_INNER_EDGE_TOP_LEFT_TOP_RIGHT,
-            INDEX_INNER_EDGE_TOP_LEFT_BOTTOM_LEFT,
-            INDEX_INNER_EDGE_TOP_RIGHT_BOTTOM_RIGHT,
-            INDEX_INNER_EDGE_BOTTOM_LEFT_BOTTOM_RIGHT,// 33
-
-            // circle
-            INDEX_CIRCLE,                           // 34
-
-            // Y tiles
-            INDEX_Y_TOP_BOTTOM_LEFT,
-            INDEX_Y_TOP_BOTTOM_RIGHT,
-            INDEX_Y_LEFT_TOP_RIGHT,
-            INDEX_Y_LEFT_BOTTOM_RIGHT,              // 38
-            INDEX_Y_BOTTOM_TOP_LEFT,
-            INDEX_Y_BOTTOM_TOP_RIGHT,
-            INDEX_Y_RIGHT_TOP_LEFT,
-            INDEX_Y_RIGHT_BOTTOM_LEFT,              // 42
-
-            INDEX_INNER_EDGE_TOP_LEFT_TOP_RIGHT_BOTTOM_LEFT,
-            INDEX_INNER_EDGE_TOP_LEFT_TOP_RIGHT_BOTTOM_RIGHT,
-            INDEX_INNER_EDGE_TOP_LEFT_BOTTOM_LEFT_BOTTOM_RIGHT,
-            INDEX_INNER_EDGE_TOP_RIGHT_BOTTOM_LEFT_BOTTOM_RIGHT,    // 46
-
-            INDEX_NONE
-        };
-
-        enum AUTO_TILE_TILE_REQUIREMENTS
-        {
-            CENTER                              = SAME_AROUND,
-
-            SIDE_LEFT                           = OTHER_LEFT,
-            SIDE_RIGHT                          = OTHER_RIGHT,
-            SIDE_TOP                            = OTHER_TOP,
-            SIDE_BOTTOM                         = OTHER_BOTTOM,
-
-            SIDE_VERTICAL                       = SIDE_LEFT | SIDE_RIGHT,
-            SIDE_HORIZONTAL                     = SIDE_TOP | SIDE_BOTTOM,
-
-            EDGE_TOP_LEFT                       = SIDE_TOP | SIDE_LEFT,
-            EDGE_TOP_RIGHT                      = SIDE_TOP | SIDE_RIGHT,
-            EDGE_BOTTOM_LEFT                    = SIDE_BOTTOM | SIDE_LEFT,
-            EDGE_BOTTOM_RIGHT                   = SIDE_BOTTOM | SIDE_RIGHT,
-
-            LEFT_END                            = EDGE_TOP_LEFT | EDGE_BOTTOM_LEFT,
-            RIGHT_END                           = EDGE_TOP_RIGHT | EDGE_BOTTOM_RIGHT,
-            TOP_END                             = EDGE_TOP_LEFT | EDGE_TOP_RIGHT,
-            BOTTOM_END                          = EDGE_BOTTOM_LEFT | EDGE_BOTTOM_RIGHT,
-
-            CIRCLE                              = EDGE_TOP_LEFT | EDGE_BOTTOM_RIGHT,
-
-            INNER_EDGE_TOP_LEFT                 = OTHER_TOP_LEFT,
-            INNER_EDGE_TOP_RIGHT                = OTHER_TOP_RIGHT,
-            INNER_EDGE_BOTTOM_LEFT              = OTHER_BOTTOM_LEFT,
-            INNER_EDGE_BOTTOM_RIGHT             = OTHER_BOTTOM_RIGHT,
-
-            INNER_EDGE_TOP_LEFT_TOP_RIGHT       = INNER_EDGE_TOP_LEFT | INNER_EDGE_TOP_RIGHT,
-            INNER_EDGE_TOP_LEFT_BOTTOM_LEFT     = INNER_EDGE_TOP_LEFT | INNER_EDGE_BOTTOM_LEFT,
-            INNER_EDGE_TOP_RIGHT_BOTTOM_RIGHT   = INNER_EDGE_TOP_RIGHT | INNER_EDGE_BOTTOM_RIGHT,
-            INNER_EDGE_BOTTOM_LEFT_BOTTOM_RIGHT = INNER_EDGE_BOTTOM_LEFT | INNER_EDGE_BOTTOM_RIGHT,
-
-            INNER_EDGE_TOP_LEFT_BOTTOM_RIGHT    = INNER_EDGE_TOP_LEFT | INNER_EDGE_BOTTOM_RIGHT,
-            INNER_EDGE_TOP_RIGHT_BOTTOM_LEFT    = INNER_EDGE_TOP_RIGHT | INNER_EDGE_BOTTOM_LEFT,
-
-            INNER_EDGE_CENTER                   = INNER_EDGE_TOP_LEFT_BOTTOM_RIGHT | INNER_EDGE_TOP_RIGHT_BOTTOM_LEFT,
-
-            CURVE_TOP_LEFT                      = EDGE_TOP_LEFT | INNER_EDGE_BOTTOM_RIGHT,
-            CURVE_TOP_RIGHT                     = EDGE_TOP_RIGHT | INNER_EDGE_BOTTOM_LEFT,
-            CURVE_BOTTOM_LEFT                   = EDGE_BOTTOM_LEFT | INNER_EDGE_TOP_RIGHT,
-            CURVE_BOTTOM_RIGHT                  = EDGE_BOTTOM_RIGHT | INNER_EDGE_TOP_LEFT,
-
-            T_TOP                               = SIDE_TOP | INNER_EDGE_BOTTOM_LEFT_BOTTOM_RIGHT,
-            T_BOTTOM                            = SIDE_BOTTOM | INNER_EDGE_TOP_LEFT_TOP_RIGHT,
-            T_LEFT                              = SIDE_LEFT | INNER_EDGE_TOP_RIGHT_BOTTOM_RIGHT,
-            T_RIGHT                             = SIDE_RIGHT | INNER_EDGE_TOP_LEFT_BOTTOM_LEFT,
-
-            Y_TOP_BOTTOM_LEFT                   = SIDE_TOP | INNER_EDGE_BOTTOM_LEFT,
-            Y_TOP_BOTTOM_RIGHT                  = SIDE_TOP | INNER_EDGE_BOTTOM_RIGHT,
-            Y_LEFT_TOP_RIGHT                    = SIDE_LEFT | INNER_EDGE_TOP_RIGHT,
-            Y_LEFT_BOTTOM_RIGHT                 = SIDE_LEFT | INNER_EDGE_BOTTOM_RIGHT,
-            Y_BOTTOM_TOP_LEFT                   = SIDE_BOTTOM | INNER_EDGE_TOP_LEFT,
-            Y_BOTTOM_TOP_RIGHT                  = SIDE_BOTTOM | INNER_EDGE_TOP_RIGHT,
-            Y_RIGHT_TOP_LEFT                    = SIDE_RIGHT | INNER_EDGE_TOP_LEFT,
-            Y_RIGHT_BOTTOM_LEFT                 = SIDE_RIGHT | INNER_EDGE_BOTTOM_LEFT,
-
-            INNER_EDGE_TOP_LEFT_TOP_RIGHT_BOTTOM_LEFT       = INNER_EDGE_TOP_LEFT_TOP_RIGHT | INNER_EDGE_BOTTOM_LEFT,
-            INNER_EDGE_TOP_LEFT_TOP_RIGHT_BOTTOM_RIGHT      = INNER_EDGE_TOP_LEFT_TOP_RIGHT | INNER_EDGE_BOTTOM_RIGHT,
-            INNER_EDGE_TOP_LEFT_BOTTOM_LEFT_BOTTOM_RIGHT    = INNER_EDGE_BOTTOM_LEFT_BOTTOM_RIGHT | INNER_EDGE_TOP_LEFT,
-            INNER_EDGE_TOP_RIGHT_BOTTOM_LEFT_BOTTOM_RIGHT   = INNER_EDGE_BOTTOM_LEFT_BOTTOM_RIGHT | INNER_EDGE_TOP_RIGHT
-        };
-
-        const uint32 MAX_AUTO_TILE_COLUMNS      = 3;
-        const uint32 AUTO_TILE_SET_COUNT        = 10;
-
-        typedef std::array<TILE_INDEX, AUTO_TILE_SET_COUNT> TileArray;
-        class AutoTilePrototype : public Prototype
+        /*#####
+        # ResourcePrototype
+        #####*/
+        class RessourcePrototype : public Prototype
         {
         public:
-            AutoTilePrototype(uint32 ID = 0) : Prototype(ID) {}
+            RessourcePrototype(uint32 ID = 0) : Prototype(ID) {}
 
-            inline void setTileID(AUTO_TILE_INDEX index, uint32 ID) { m_uiTileID.at(index) = ID; }
-            inline uint32 getTileID(AUTO_TILE_INDEX index) const { return m_uiTileID.at(index); }
-
-            inline void setTiles(const TileArray& tiles) { m_uiTileID = tiles; }
-            inline const TileArray& getTiles() const { return m_uiTileID; }
+            inline void setFileName(const QString& sFileName) { m_FileName = sFileName; }
+            inline QString getFileName() const { return m_FileName; }
+            inline void setPath(const QString& sPath) { m_Path = sPath; }
+            inline QString getPath() const { return m_Path; }
+            inline QString getPathName() const { return getPath() + getFileName(); }
 
             // IO
             virtual void toXML(QXmlStreamWriter& writer) const;
             virtual void fromXML(const QXmlStreamAttributes& attributes);
 
         private:
-            TileArray m_uiTileID;
-        };
-
-        AUTO_TILE_INDEX getAutoTileIndexForTileCheck(uint32 uiTileCheck);
-        bool hasTileCheck(uint32 uiTileCheck, AUTO_TILE_TILE_REQUIREMENTS tiles);
-    };
-
-    /*#####
-    # SpritePrototype
-    #####*/
-    class SpritePrototype : public TexturePrototype
-    {
-    public:
-        SpritePrototype(uint32 ID = 0) : TexturePrototype(ID) {}
-    };
-
-    /*#####
-    # Animation
-    #####*/
-    namespace ANIMATION
-    {
-        /*#####
-        # AnimationTypePrototype
-        #####*/
-        const uint32 STANDARD_ANIMATION_TYPES = 8;
-        class AnimationTypePrototype : public Prototype
-        {
-        public:
-            AnimationTypePrototype(uint32 ID = 0, QString name = "") : Prototype(ID)
-            {
-                setName(name);
-            }
+            QString m_Path;        // path from ~/textures
+            QString m_FileName;    // filename
         };
 
         /*#####
-        # AnimationPrototype
+        # TexturePrototype
         #####*/
-        class Sprite
+        class TexturePrototype : public RessourcePrototype
         {
         public:
-            Sprite() : m_uiSpriteID(0), m_uiRotation(0), m_Scale(100), m_Opacity(100) {}
-            Int32Point m_Pos;
-            uint32 m_uiSpriteID;
-            uint16 m_uiRotation;
-            float m_Scale;
-            float m_Opacity;
+            TexturePrototype(uint32 ID = 0) : RessourcePrototype(ID) {}
 
-            inline bool isEmpty() const { return !m_uiSpriteID; }
-        };
-        typedef std::vector<Sprite> SpriteVector;
+            inline Color getTransparencyColor() const { return m_TransparencyColor; }
+            inline void setTransparencyColor(const Color& color) { m_TransparencyColor = color; }
 
-        class Frame
-        {
-        public:
-            Frame() : m_uiMsecTime(0) {}
+            // IO
+            virtual void toXML(QXmlStreamWriter& writer) const;
+            virtual void fromXML(const QXmlStreamAttributes& attributes);
 
-            Sprite getSprite(uint32 index) const;
-            void setSprite(uint32 index, Sprite sprite);
-            void addSprite(Sprite sprite);
-            void removeSprite(uint32 index, Sprite sprite);
-
-            inline uint32 getSpriteCount() const { return static_cast<uint32>(m_Sprites.size()); }
-            inline void setSpriteCount(uint32 size) { m_Sprites.resize(size); calculateOffset(); }
-            inline const SpriteVector& getSprites() const { return m_Sprites; }
-
-            inline const Int32Point& getOffset() const { return m_FrameOffset; }
-            void calculateOffset();
-            void setOffsetIfNeeded(const Int32Point& offset);
-
-            inline uint32 getTimeInMsec() const { return m_uiMsecTime; }
-            inline void setTimeInMsec(uint32 time) { m_uiMsecTime = time; }
-
-            inline bool isEmpty() const { return m_Sprites.empty() && !m_uiMsecTime; }
+            inline QString getTextureString() const { return getPathName() + QString::fromStdString(getTransparencyColor().getColorString()); }
 
         private:
-            Int32Point m_FrameOffset;
-            SpriteVector m_Sprites;
-            uint32 m_uiMsecTime;
+            Color m_TransparencyColor;
         };
-        typedef std::vector<Frame> FrameVector;
 
-        class AnimationPrototype : public Prototype
+        /*#####
+        # TilePrototype
+        #####*/
+        class TilePrototype : public TexturePrototype
         {
         public:
-            AnimationPrototype(uint32 ID = 0) : Prototype(ID) {}
+            TilePrototype(uint32 ID = 0) : TexturePrototype(ID), m_uiPassable(0), m_uiTerrainType(0) {}
 
-            bool getFrame(uint32 uiIndex, Frame& frame) const;
-            void setFrame(uint32 uiIndex, Frame frame);
-            void removeFrame(uint32 uiIndex);
-            inline uint32 getFrameCount() const { return static_cast<uint32>(m_Frames.size()); }
-            inline const FrameVector& getAnimation() const { return m_Frames; }
-            inline void setAnimation(const FrameVector& animation) { m_Frames = animation; }
+            // passability flag, if nothing set, its unpassable
+            enum PassabilityFlag
+            {
+                PASSABLE_NONE           = 0x00,
+                PASSABLE_UP             = 0x01,
+                PASSABLE_DOWN           = 0x02,
+                PASSABLE_RIGHT          = 0x04,
+                PASSABLE_LEFT           = 0x08,
+                PASSABLE_UP_TO_DOWN     = PASSABLE_UP|PASSABLE_DOWN,
+                PASSABLE_LEFT_TO_RIGHT  = PASSABLE_LEFT|PASSABLE_RIGHT,
+                PASSABLE_ALL            = PASSABLE_LEFT|PASSABLE_RIGHT|PASSABLE_DOWN|PASSABLE_UP,
+            };
+            inline bool hasPassabilityFlag(const PassabilityFlag flag) const { return (m_uiPassable&  flag) != 0; }
+            inline void addPassabilityFlag(const uint8 flag) { m_uiPassable |= flag; }
+            inline void removePassabilityFlag(const uint8 flag) { m_uiPassable ^= flag; }
+            inline uint8 getPassability() const  { return m_uiPassable; }
+
+            inline void setTerrainType(uint32 uiTerrainType) { m_uiTerrainType = uiTerrainType; }
+            inline uint32 getTerrainType() const { return m_uiTerrainType; }
 
             // IO
             void toXML(QXmlStreamWriter& writer) const;
-            void insertChildren(const QXmlStreamReader& reader);
+            void fromXML(const QXmlStreamAttributes& attributes);
 
         private:
-            FrameVector m_Frames;
+            uint8 m_uiPassable;
+            uint32 m_uiTerrainType;
         };
-    }
 
-    /*#####
-    # WorldObjectPrototype
-    #####*/
-    namespace WORLD_OBJECT
-    {
-        // animation stuff
-        const uint8 MIN_WORLD_OBJECT_POSE = 4;
-        class AnimationInfo
+        /*#####
+        # TileSetPrototype
+        #####*/
+        namespace TILE_SET
         {
-        public:
-            enum class VisualType
+            typedef boost::multi_array<uint32, 2> UInt32Multiarray2D;
+            const uint32 DEFAULT_COLUMN_COUNT = 2;
+            const uint32 DEFAULT_ROW_COUNT = 2;
+            class TileSetPrototype : public Prototype
             {
-                SPRITE,
-                ANIMATION
+            private:
+                void _resizeIfNeeded(UInt32Point size);
+
+            public:
+                TileSetPrototype(uint32 ID = 0);
+
+                void resizeTiles(UInt32Point size);
+                inline UInt32Point getTileCount() const { return m_Size; }
+                void clear();
+
+                void setTileID(UInt32Point pos, uint32 ID);
+                uint32 getTileID(UInt32Point pos) const;
+
+                // IO
+                void toXML(QXmlStreamWriter& writer) const;
+                void fromXML(const QXmlStreamAttributes& attributes);
+
+            private:
+                UInt32Point m_Size;
+                UInt32Multiarray2D m_Tiles;
+            };
+        
+            QPixmap createPixmap(const TileSetPrototype& tileSet);
+        }
+
+        /*#####
+        # AutoTilePrototype
+        #####*/
+        namespace AUTO_TILE
+        {
+            enum TILE_CHECK
+            {
+                SAME_AROUND         = 0x00,
+                OTHER_TOP_LEFT      = 0x01,
+                OTHER_TOP           = 0x02,
+                OTHER_TOP_RIGHT     = 0x04,
+                OTHER_LEFT          = 0x08,
+                OTHER_RIGHT         = 0x10,
+                OTHER_BOTTOM_LEFT   = 0x20,
+                OTHER_BOTTOM        = 0x40,
+                OTHER_BOTTOM_RIGHT  = 0x80,
             };
 
-            AnimationInfo(uint32 ID = 0, VisualType visualType = VisualType::SPRITE, uint32 animationTypeID = 0)
-                : m_ID(ID), m_VisualType(visualType), m_AnimationTypeID(animationTypeID)
-            {}
-
-            bool isValid() const { return m_ID && m_AnimationTypeID; }
-
-            uint32 m_ID;
-            VisualType m_VisualType;
-            uint32 m_AnimationTypeID;
-        };
-        typedef std::vector<AnimationInfo> AnimationInfoVector;
-
-        class WorldObjectPrototype : public Prototype
-        {
-        private:
-            void _initAnimationPoses();
-
-        public:
-            WorldObjectPrototype(uint32 ID = 0);
-
-            inline int32 getBoundingX() const { return m_BoundingRect.getPositionX(); }
-            inline void setBoundingX(int32 x) { m_BoundingRect.setPositionX(x); }
-            inline int32 getBoundingY() const { return m_BoundingRect.getPositionY(); }
-            inline void setBoundingY(int32 y) { m_BoundingRect.setPositionY(y); }
-            inline uint32 getBoundingWidth() const { return m_BoundingRect.getWidth(); }
-            inline void setBoundingWidth(uint32 width) { m_BoundingRect.setWidth(width); }
-            inline uint32 getBoundingHeight() const { return m_BoundingRect.getHeight(); }
-            inline void setBoundingHeight(uint32 height) { m_BoundingRect.setHeight(height); }
-            inline Int32Rect getBoundingRect() const { return m_BoundingRect; }
-            inline void setBoundingRect(Int32Rect rect) { m_BoundingRect = std::move(rect); }
-
-            inline void setAnimationSpeed(uint16 uiSpeed) { m_uiAnimationSpeed = uiSpeed; }
-            inline uint16 getAnimationSpeed() const { return m_uiAnimationSpeed; }
-
-            inline void setScriptName(const QString& sScriptName) { m_ScriptName = sScriptName; }
-            inline QString getScriptName() const { return m_ScriptName; }
-
-            inline const AnimationInfo& getAnimationInfo(uint32 uiIndex) const { return m_AnimationInfos.at(uiIndex); }
-            inline AnimationInfo& getAnimationInfo(uint32 uiIndex) { return m_AnimationInfos.at(uiIndex); }
-            void setAnimationInfo(uint32 uiIndex, AnimationInfo& animationInfo);
-
-            inline uint32 getAnimationCount() const { return static_cast<uint32>(m_AnimationInfos.size()); }
-            void setAnimationCount(uint32 uiCount);
-
-            virtual uint8 getMinimumAnimationCount() const { return MIN_WORLD_OBJECT_POSE; }
-
-            // IO
-            virtual void toXML(QXmlStreamWriter& writer) const;
-            virtual void fromXML(const QXmlStreamAttributes& attributes);
-            virtual void insertChildren(const QXmlStreamReader& reader);
-
-        private:
-            Int32Rect m_BoundingRect;
-            AnimationInfoVector m_AnimationInfos;
-            uint16 m_uiAnimationSpeed;
-            QString m_ScriptName;
-        };
-    }
-
-    /*#####
-    # LocalisationPrototype
-    #####*/
-    typedef std::vector<QString> StringVector;
-    namespace LOCALISATION
-    {
-        const uint32 LOCALISATION_COUNT = 2;
-        class LocalisationPrototype : public Prototype
-        {
-        public:
-            LocalisationPrototype(uint32 ID = 0, uint32 uiLocalCount = 1) : Prototype(ID)
+            enum AUTO_TILE_INDEX
             {
-                setLocalsCount(uiLocalCount);
-            }
+                // auto tile set
+                INDEX_TOP_LEFT,
+                INDEX_TOP,
+                INDEX_TOP_RIGHT,
+                INDEX_LEFT,
+                INDEX_CENTER,
+                INDEX_RIGHT,
+                INDEX_BOTTOM_LEFT,
+                INDEX_BOTTOM,
+                INDEX_BOTTOM_RIGHT,
+                INDEX_INNER_CENTER,                     // 9
 
-            inline void setLocalsCount(uint32 uiCount) { m_Locals.resize(uiCount); }
-            inline uint32 getLocalsCount() const { return static_cast<uint32>(m_Locals.size()); }
-            inline void setLocalisation(uint32 uiIndex, const QString& sLocal)
+                // side ends
+                INDEX_SIDE_END_TOP,                     // 10
+                INDEX_SIDE_END_BOTTOM,
+                INDEX_SIDE_END_LEFT,
+                INDEX_SIDE_END_RIGHT,                   // 13
+
+                // double sides
+                INDEX_SIDE_VERTICAL,
+                INDEX_SIDE_HORIZONTAL,                  // 15
+
+                // T tiles
+                INDEX_T_TOP,
+                INDEX_T_BOTTOM,
+                INDEX_T_LEFT,
+                INDEX_T_RIGHT,                          // 19
+
+                // curves
+                INDEX_CURVE_TOP_LEFT,
+                INDEX_CURVE_TOP_RIGHT,
+                INDEX_CURVE_BOTTOM_LEFT,
+                INDEX_CURVE_BOTTOM_RIGHT,               // 23
+
+                // inner edges
+                INDEX_INNER_EDGE_TOP_LEFT,
+                INDEX_INNER_EDGE_TOP_RIGHT,
+                INDEX_INNER_EDGE_BOTTOM_LEFT,
+                INDEX_INNER_EDGE_BOTTOM_RIGHT,          // 27
+
+                // diagonal inner edges
+                INDEX_INNER_EDGE_TOP_LEFT_BOTTOM_RIGHT,
+                INDEX_INNER_EDGE_TOP_RIGHT_BOTTOM_LEFT, // 29
+
+                // multi inner edges
+                INDEX_INNER_EDGE_TOP_LEFT_TOP_RIGHT,
+                INDEX_INNER_EDGE_TOP_LEFT_BOTTOM_LEFT,
+                INDEX_INNER_EDGE_TOP_RIGHT_BOTTOM_RIGHT,
+                INDEX_INNER_EDGE_BOTTOM_LEFT_BOTTOM_RIGHT,// 33
+
+                // circle
+                INDEX_CIRCLE,                           // 34
+
+                // Y tiles
+                INDEX_Y_TOP_BOTTOM_LEFT,
+                INDEX_Y_TOP_BOTTOM_RIGHT,
+                INDEX_Y_LEFT_TOP_RIGHT,
+                INDEX_Y_LEFT_BOTTOM_RIGHT,              // 38
+                INDEX_Y_BOTTOM_TOP_LEFT,
+                INDEX_Y_BOTTOM_TOP_RIGHT,
+                INDEX_Y_RIGHT_TOP_LEFT,
+                INDEX_Y_RIGHT_BOTTOM_LEFT,              // 42
+
+                INDEX_INNER_EDGE_TOP_LEFT_TOP_RIGHT_BOTTOM_LEFT,
+                INDEX_INNER_EDGE_TOP_LEFT_TOP_RIGHT_BOTTOM_RIGHT,
+                INDEX_INNER_EDGE_TOP_LEFT_BOTTOM_LEFT_BOTTOM_RIGHT,
+                INDEX_INNER_EDGE_TOP_RIGHT_BOTTOM_LEFT_BOTTOM_RIGHT,    // 46
+
+                INDEX_NONE
+            };
+
+            enum AUTO_TILE_TILE_REQUIREMENTS
             {
-                if (uiIndex >= getLocalsCount())
-                    setLocalsCount(uiIndex+1);
-                m_Locals.at(uiIndex) = sLocal;
-            }
+                CENTER                              = SAME_AROUND,
 
-            inline QString getLocalisation(uint32 uiIndex) const
+                SIDE_LEFT                           = OTHER_LEFT,
+                SIDE_RIGHT                          = OTHER_RIGHT,
+                SIDE_TOP                            = OTHER_TOP,
+                SIDE_BOTTOM                         = OTHER_BOTTOM,
+
+                SIDE_VERTICAL                       = SIDE_LEFT | SIDE_RIGHT,
+                SIDE_HORIZONTAL                     = SIDE_TOP | SIDE_BOTTOM,
+
+                EDGE_TOP_LEFT                       = SIDE_TOP | SIDE_LEFT,
+                EDGE_TOP_RIGHT                      = SIDE_TOP | SIDE_RIGHT,
+                EDGE_BOTTOM_LEFT                    = SIDE_BOTTOM | SIDE_LEFT,
+                EDGE_BOTTOM_RIGHT                   = SIDE_BOTTOM | SIDE_RIGHT,
+
+                LEFT_END                            = EDGE_TOP_LEFT | EDGE_BOTTOM_LEFT,
+                RIGHT_END                           = EDGE_TOP_RIGHT | EDGE_BOTTOM_RIGHT,
+                TOP_END                             = EDGE_TOP_LEFT | EDGE_TOP_RIGHT,
+                BOTTOM_END                          = EDGE_BOTTOM_LEFT | EDGE_BOTTOM_RIGHT,
+
+                CIRCLE                              = EDGE_TOP_LEFT | EDGE_BOTTOM_RIGHT,
+
+                INNER_EDGE_TOP_LEFT                 = OTHER_TOP_LEFT,
+                INNER_EDGE_TOP_RIGHT                = OTHER_TOP_RIGHT,
+                INNER_EDGE_BOTTOM_LEFT              = OTHER_BOTTOM_LEFT,
+                INNER_EDGE_BOTTOM_RIGHT             = OTHER_BOTTOM_RIGHT,
+
+                INNER_EDGE_TOP_LEFT_TOP_RIGHT       = INNER_EDGE_TOP_LEFT | INNER_EDGE_TOP_RIGHT,
+                INNER_EDGE_TOP_LEFT_BOTTOM_LEFT     = INNER_EDGE_TOP_LEFT | INNER_EDGE_BOTTOM_LEFT,
+                INNER_EDGE_TOP_RIGHT_BOTTOM_RIGHT   = INNER_EDGE_TOP_RIGHT | INNER_EDGE_BOTTOM_RIGHT,
+                INNER_EDGE_BOTTOM_LEFT_BOTTOM_RIGHT = INNER_EDGE_BOTTOM_LEFT | INNER_EDGE_BOTTOM_RIGHT,
+
+                INNER_EDGE_TOP_LEFT_BOTTOM_RIGHT    = INNER_EDGE_TOP_LEFT | INNER_EDGE_BOTTOM_RIGHT,
+                INNER_EDGE_TOP_RIGHT_BOTTOM_LEFT    = INNER_EDGE_TOP_RIGHT | INNER_EDGE_BOTTOM_LEFT,
+
+                INNER_EDGE_CENTER                   = INNER_EDGE_TOP_LEFT_BOTTOM_RIGHT | INNER_EDGE_TOP_RIGHT_BOTTOM_LEFT,
+
+                CURVE_TOP_LEFT                      = EDGE_TOP_LEFT | INNER_EDGE_BOTTOM_RIGHT,
+                CURVE_TOP_RIGHT                     = EDGE_TOP_RIGHT | INNER_EDGE_BOTTOM_LEFT,
+                CURVE_BOTTOM_LEFT                   = EDGE_BOTTOM_LEFT | INNER_EDGE_TOP_RIGHT,
+                CURVE_BOTTOM_RIGHT                  = EDGE_BOTTOM_RIGHT | INNER_EDGE_TOP_LEFT,
+
+                T_TOP                               = SIDE_TOP | INNER_EDGE_BOTTOM_LEFT_BOTTOM_RIGHT,
+                T_BOTTOM                            = SIDE_BOTTOM | INNER_EDGE_TOP_LEFT_TOP_RIGHT,
+                T_LEFT                              = SIDE_LEFT | INNER_EDGE_TOP_RIGHT_BOTTOM_RIGHT,
+                T_RIGHT                             = SIDE_RIGHT | INNER_EDGE_TOP_LEFT_BOTTOM_LEFT,
+
+                Y_TOP_BOTTOM_LEFT                   = SIDE_TOP | INNER_EDGE_BOTTOM_LEFT,
+                Y_TOP_BOTTOM_RIGHT                  = SIDE_TOP | INNER_EDGE_BOTTOM_RIGHT,
+                Y_LEFT_TOP_RIGHT                    = SIDE_LEFT | INNER_EDGE_TOP_RIGHT,
+                Y_LEFT_BOTTOM_RIGHT                 = SIDE_LEFT | INNER_EDGE_BOTTOM_RIGHT,
+                Y_BOTTOM_TOP_LEFT                   = SIDE_BOTTOM | INNER_EDGE_TOP_LEFT,
+                Y_BOTTOM_TOP_RIGHT                  = SIDE_BOTTOM | INNER_EDGE_TOP_RIGHT,
+                Y_RIGHT_TOP_LEFT                    = SIDE_RIGHT | INNER_EDGE_TOP_LEFT,
+                Y_RIGHT_BOTTOM_LEFT                 = SIDE_RIGHT | INNER_EDGE_BOTTOM_LEFT,
+
+                INNER_EDGE_TOP_LEFT_TOP_RIGHT_BOTTOM_LEFT       = INNER_EDGE_TOP_LEFT_TOP_RIGHT | INNER_EDGE_BOTTOM_LEFT,
+                INNER_EDGE_TOP_LEFT_TOP_RIGHT_BOTTOM_RIGHT      = INNER_EDGE_TOP_LEFT_TOP_RIGHT | INNER_EDGE_BOTTOM_RIGHT,
+                INNER_EDGE_TOP_LEFT_BOTTOM_LEFT_BOTTOM_RIGHT    = INNER_EDGE_BOTTOM_LEFT_BOTTOM_RIGHT | INNER_EDGE_TOP_LEFT,
+                INNER_EDGE_TOP_RIGHT_BOTTOM_LEFT_BOTTOM_RIGHT   = INNER_EDGE_BOTTOM_LEFT_BOTTOM_RIGHT | INNER_EDGE_TOP_RIGHT
+            };
+
+            const uint32 MAX_AUTO_TILE_COLUMNS      = 3;
+            const uint32 AUTO_TILE_SET_COUNT        = 10;
+
+            typedef std::array<TILE_INDEX, AUTO_TILE_SET_COUNT> TileArray;
+            class AutoTilePrototype : public Prototype
             {
-                if (uiIndex < getLocalsCount())
-                    return m_Locals.at(uiIndex);
-                return "";
-            }
+            public:
+                AutoTilePrototype(uint32 ID = 0) : Prototype(ID) {}
 
-            // IO
-            void toXML(QXmlStreamWriter& writer) const;
-            void insertChildren(const QXmlStreamReader& reader);
+                inline void setTileID(AUTO_TILE_INDEX index, uint32 ID) { m_uiTileID.at(index) = ID; }
+                inline uint32 getTileID(AUTO_TILE_INDEX index) const { return m_uiTileID.at(index); }
 
-        private:
-            StringVector m_Locals;
-        };
-    }
+                inline void setTiles(const TileArray& tiles) { m_uiTileID = tiles; }
+                inline const TileArray& getTiles() const { return m_uiTileID; }
 
-    /*#####
-    # MapPrototype
-    #####*/
-    class MapDatabaseXMLReader;
-    namespace MAP_STRUCTURE
-    {
-        enum MapDirection
-        {
-            DIRECTION_UP,
-            DIRECTION_RIGHT,
-            DIRECTION_DOWN,
-            DIRECTION_LEFT
+                // IO
+                virtual void toXML(QXmlStreamWriter& writer) const;
+                virtual void fromXML(const QXmlStreamAttributes& attributes);
+
+            private:
+                TileArray m_uiTileID;
+            };
+
+            AUTO_TILE_INDEX getAutoTileIndexForTileCheck(uint32 uiTileCheck);
+            bool hasTileCheck(uint32 uiTileCheck, AUTO_TILE_TILE_REQUIREMENTS tiles);
         };
 
-        enum MapObjectLayer
+        /*#####
+        # SpritePrototype
+        #####*/
+        class SpritePrototype : public TexturePrototype
         {
-            LAYER_LOWER,
-            LAYER_MIDDLE,
-            LAYER_UPPER
-        };
-
-        // map objects
-        struct MapObject
-        {
-            MapObject() : m_ObjectID(0), m_GUID(0), m_Direction(DIRECTION_DOWN), m_Layer(LAYER_MIDDLE) {}
-
-            bool isEmpty() const { return !m_GUID && !m_ObjectID; }
-
-            uint32 m_ObjectID;
-            uint32 m_GUID;
-            Int32Point m_Position;
-            MapDirection m_Direction;
-            MapObjectLayer m_Layer;
-        };
-        typedef Container<MapObject> MapObjectContainer;
-        typedef boost::multi_array<MapObjectContainer, 3> MapObjectPtrVectorMultiarray3D;
-
-        class MapPrototype : public Prototype
-        {
-            //friend class MapDatabase;
-            //friend class MAP::MapMgr;
-            //friend class MapDatabaseXMLReader;
-
-        private:
-            void _clearTiles();
-
         public:
-            MapPrototype::MapPrototype(uint32 ID = 0, const QString& fileName = "");
-
-            bool isValid();
-
-            inline QString getFileName() const { return m_FileName; }
-            inline void setFileName(const QString& sFileName) { m_FileName = sFileName; }
-            inline void setScriptName(const QString& sScriptName) { m_ScriptName = sScriptName; }
-            inline QString getScriptName() const { return m_ScriptName; }
-
-            void setSizeX(uint32 x);
-            void setSizeY(uint32 y);
-            void setLayerSize(uint8 size, MAP::LayerType layer);
-            void setSize(const UInt32Point& size, uint8 uiForegroundLayerSize, uint8 uiBackgroundLayerSize);
-            inline UInt32Point getSize() const { return m_Size; }
-            inline uint8 getLayerSize(MAP::LayerType layer) const { return m_Layer.at(static_cast<uint32>(layer)); };
-
-            inline uint32 getParentID() const { return m_uiParentID; }
-            inline void setParentID(uint32 uiParentID) { m_uiParentID = uiParentID; }
-
-            // ToDo: remove following
-            void addMapObject(MapObject* pObject);
-            MapObject* addMapObject(uint32 ID, Int32Point pos);
-            inline uint32 getMapObjectCount() const { return m_Objects.getSize(); }
-            inline const MapObject* getMapObject(uint32 GUID) const { return m_Objects.getItem(GUID); }
-            inline MapObject* getMapObject(uint32 GUID)  { return m_Objects.getItem(GUID); }
-            void removeMapObject(uint32 GUID);
-            inline const MapObjectContainer& getMapObjects() const { return m_Objects; }
-
-            // XML IO
-            void toXML(QXmlStreamWriter& writer) const;
-            void fromXML(const QXmlStreamAttributes& attributes);
-
-        private:
-            uint32 m_uiParentID;
-            QString m_FileName;
-            QString m_ScriptName;
-
-            MapObjectContainer m_Objects;
-
-            UInt32Point m_Size;
-            std::array<uint8, 2> m_Layer;
+            SpritePrototype(uint32 ID = 0) : TexturePrototype(ID) {}
         };
+
+        /*#####
+        # Animation
+        #####*/
+        namespace ANIMATION
+        {
+            /*#####
+            # AnimationTypePrototype
+            #####*/
+            const uint32 STANDARD_ANIMATION_TYPES = 8;
+            class AnimationTypePrototype : public Prototype
+            {
+            public:
+                AnimationTypePrototype(uint32 ID = 0, QString name = "") : Prototype(ID)
+                {
+                    setName(name);
+                }
+            };
+
+            /*#####
+            # AnimationPrototype
+            #####*/
+            class Sprite
+            {
+            public:
+                Sprite() : m_uiSpriteID(0), m_uiRotation(0), m_Scale(100), m_Opacity(100) {}
+                Int32Point m_Pos;
+                uint32 m_uiSpriteID;
+                uint16 m_uiRotation;
+                float m_Scale;
+                float m_Opacity;
+
+                inline bool isEmpty() const { return !m_uiSpriteID; }
+            };
+            typedef std::vector<Sprite> SpriteVector;
+
+            class Frame
+            {
+            public:
+                Frame() : m_uiMsecTime(0) {}
+
+                Sprite getSprite(uint32 index) const;
+                void setSprite(uint32 index, Sprite sprite);
+                void addSprite(Sprite sprite);
+                void removeSprite(uint32 index, Sprite sprite);
+
+                inline uint32 getSpriteCount() const { return static_cast<uint32>(m_Sprites.size()); }
+                inline void setSpriteCount(uint32 size) { m_Sprites.resize(size); calculateOffset(); }
+                inline const SpriteVector& getSprites() const { return m_Sprites; }
+
+                inline const Int32Point& getOffset() const { return m_FrameOffset; }
+                void calculateOffset();
+                void setOffsetIfNeeded(const Int32Point& offset);
+
+                inline uint32 getTimeInMsec() const { return m_uiMsecTime; }
+                inline void setTimeInMsec(uint32 time) { m_uiMsecTime = time; }
+
+                inline bool isEmpty() const { return m_Sprites.empty() && !m_uiMsecTime; }
+
+            private:
+                Int32Point m_FrameOffset;
+                SpriteVector m_Sprites;
+                uint32 m_uiMsecTime;
+            };
+            typedef std::vector<Frame> FrameVector;
+
+            class AnimationPrototype : public Prototype
+            {
+            public:
+                AnimationPrototype(uint32 ID = 0) : Prototype(ID) {}
+
+                bool getFrame(uint32 uiIndex, Frame& frame) const;
+                void setFrame(uint32 uiIndex, Frame frame);
+                void removeFrame(uint32 uiIndex);
+                inline uint32 getFrameCount() const { return static_cast<uint32>(m_Frames.size()); }
+                inline const FrameVector& getAnimation() const { return m_Frames; }
+                inline void setAnimation(const FrameVector& animation) { m_Frames = animation; }
+
+                // IO
+                void toXML(QXmlStreamWriter& writer) const;
+                void insertChildren(const QXmlStreamReader& reader);
+
+            private:
+                FrameVector m_Frames;
+            };
+        }
+
+        /*#####
+        # WorldObjectPrototype
+        #####*/
+        namespace WORLD_OBJECT
+        {
+            // animation stuff
+            const uint8 MIN_WORLD_OBJECT_POSE = 4;
+            class AnimationInfo
+            {
+            public:
+                enum class VisualType
+                {
+                    SPRITE,
+                    ANIMATION
+                };
+
+                AnimationInfo(uint32 ID = 0, VisualType visualType = VisualType::SPRITE, uint32 animationTypeID = 0)
+                    : m_ID(ID), m_VisualType(visualType), m_AnimationTypeID(animationTypeID)
+                {}
+
+                bool isValid() const { return m_ID && m_AnimationTypeID; }
+
+                uint32 m_ID;
+                VisualType m_VisualType;
+                uint32 m_AnimationTypeID;
+            };
+            typedef std::vector<AnimationInfo> AnimationInfoVector;
+
+            class WorldObjectPrototype : public Prototype
+            {
+            private:
+                void _initAnimationPoses();
+
+            public:
+                WorldObjectPrototype(uint32 ID = 0);
+
+                inline int32 getBoundingX() const { return m_BoundingRect.getPositionX(); }
+                inline void setBoundingX(int32 x) { m_BoundingRect.setPositionX(x); }
+                inline int32 getBoundingY() const { return m_BoundingRect.getPositionY(); }
+                inline void setBoundingY(int32 y) { m_BoundingRect.setPositionY(y); }
+                inline uint32 getBoundingWidth() const { return m_BoundingRect.getWidth(); }
+                inline void setBoundingWidth(uint32 width) { m_BoundingRect.setWidth(width); }
+                inline uint32 getBoundingHeight() const { return m_BoundingRect.getHeight(); }
+                inline void setBoundingHeight(uint32 height) { m_BoundingRect.setHeight(height); }
+                inline Int32Rect getBoundingRect() const { return m_BoundingRect; }
+                inline void setBoundingRect(Int32Rect rect) { m_BoundingRect = std::move(rect); }
+
+                inline void setAnimationSpeed(uint16 uiSpeed) { m_uiAnimationSpeed = uiSpeed; }
+                inline uint16 getAnimationSpeed() const { return m_uiAnimationSpeed; }
+
+                inline void setScriptName(const QString& sScriptName) { m_ScriptName = sScriptName; }
+                inline QString getScriptName() const { return m_ScriptName; }
+
+                inline const AnimationInfo& getAnimationInfo(uint32 uiIndex) const { return m_AnimationInfos.at(uiIndex); }
+                inline AnimationInfo& getAnimationInfo(uint32 uiIndex) { return m_AnimationInfos.at(uiIndex); }
+                void setAnimationInfo(uint32 uiIndex, AnimationInfo& animationInfo);
+
+                inline uint32 getAnimationCount() const { return static_cast<uint32>(m_AnimationInfos.size()); }
+                void setAnimationCount(uint32 uiCount);
+
+                virtual uint8 getMinimumAnimationCount() const { return MIN_WORLD_OBJECT_POSE; }
+
+                // IO
+                virtual void toXML(QXmlStreamWriter& writer) const;
+                virtual void fromXML(const QXmlStreamAttributes& attributes);
+                virtual void insertChildren(const QXmlStreamReader& reader);
+
+            private:
+                Int32Rect m_BoundingRect;
+                AnimationInfoVector m_AnimationInfos;
+                uint16 m_uiAnimationSpeed;
+                QString m_ScriptName;
+            };
+        }
+
+        /*#####
+        # LocalisationPrototype
+        #####*/
+        typedef std::vector<QString> StringVector;
+        namespace LOCALISATION
+        {
+            const uint32 LOCALISATION_COUNT = 2;
+            class LocalisationPrototype : public Prototype
+            {
+            public:
+                LocalisationPrototype(uint32 ID = 0, uint32 uiLocalCount = 1) : Prototype(ID)
+                {
+                    setLocalsCount(uiLocalCount);
+                }
+
+                inline void setLocalsCount(uint32 uiCount) { m_Locals.resize(uiCount); }
+                inline uint32 getLocalsCount() const { return static_cast<uint32>(m_Locals.size()); }
+                inline void setLocalisation(uint32 uiIndex, const QString& sLocal)
+                {
+                    if (uiIndex >= getLocalsCount())
+                        setLocalsCount(uiIndex+1);
+                    m_Locals.at(uiIndex) = sLocal;
+                }
+
+                inline QString getLocalisation(uint32 uiIndex) const
+                {
+                    if (uiIndex < getLocalsCount())
+                        return m_Locals.at(uiIndex);
+                    return "";
+                }
+
+                // IO
+                void toXML(QXmlStreamWriter& writer) const;
+                void insertChildren(const QXmlStreamReader& reader);
+
+            private:
+                StringVector m_Locals;
+            };
+        }
+
+        /*#####
+        # MapPrototype
+        #####*/
+        class MapDatabaseXMLReader;
+        namespace MAP_STRUCTURE
+        {
+            const char MAP_FILE_ENDING[] = ".map";
+            const char MAP_FOLDER[] = "/Maps/";
+
+            enum MapDirection
+            {
+                DIRECTION_UP,
+                DIRECTION_RIGHT,
+                DIRECTION_DOWN,
+                DIRECTION_LEFT
+            };
+
+            enum MapObjectLayer
+            {
+                LAYER_LOWER,
+                LAYER_MIDDLE,
+                LAYER_UPPER
+            };
+
+            // map objects
+            struct MapObject
+            {
+                MapObject() : m_ObjectID(0), m_GUID(0), m_Direction(DIRECTION_DOWN), m_Layer(LAYER_MIDDLE) {}
+
+                bool isEmpty() const { return !m_GUID && !m_ObjectID; }
+
+                uint32 m_ObjectID;
+                uint32 m_GUID;
+                Int32Point m_Position;
+                MapDirection m_Direction;
+                MapObjectLayer m_Layer;
+            };
+            typedef Container<MapObject> MapObjectContainer;
+            typedef boost::multi_array<MapObjectContainer, 3> MapObjectPtrVectorMultiarray3D;
+
+            class MapPrototype : public Prototype
+            {
+                //friend class MapDatabase;
+                //friend class MAP::MapMgr;
+                //friend class MapDatabaseXMLReader;
+
+            private:
+                void _clearTiles();
+
+            public:
+                MapPrototype::MapPrototype(uint32 ID = 0, const QString& fileName = "");
+
+                bool isValid();
+
+                inline QString getFileName() const { return m_FileName; }
+                inline void setFileName(const QString& sFileName) { m_FileName = sFileName; }
+                inline void setScriptName(const QString& sScriptName) { m_ScriptName = sScriptName; }
+                inline QString getScriptName() const { return m_ScriptName; }
+
+                void setSizeX(uint32 x);
+                void setSizeY(uint32 y);
+                void setLayerSize(uint8 size, MAP::LayerType layer);
+                void setSize(const UInt32Point& size, uint8 uiForegroundLayerSize, uint8 uiBackgroundLayerSize);
+                inline UInt32Point getSize() const { return m_Size; }
+                inline uint8 getLayerSize(MAP::LayerType layer) const { return m_Layer.at(static_cast<uint32>(layer)); };
+
+                inline uint32 getParentID() const { return m_uiParentID; }
+                inline void setParentID(uint32 uiParentID) { m_uiParentID = uiParentID; }
+
+                // ToDo: remove following
+                void addMapObject(MapObject* pObject);
+                MapObject* addMapObject(uint32 ID, Int32Point pos);
+                inline uint32 getMapObjectCount() const { return m_Objects.getSize(); }
+                inline const MapObject* getMapObject(uint32 GUID) const { return m_Objects.getItem(GUID); }
+                inline MapObject* getMapObject(uint32 GUID)  { return m_Objects.getItem(GUID); }
+                void removeMapObject(uint32 GUID);
+                inline const MapObjectContainer& getMapObjects() const { return m_Objects; }
+
+                // XML IO
+                void toXML(QXmlStreamWriter& writer) const;
+                void fromXML(const QXmlStreamAttributes& attributes);
+
+            private:
+                uint32 m_uiParentID;
+                QString m_FileName;
+                QString m_ScriptName;
+
+                MapObjectContainer m_Objects;
+
+                UInt32Point m_Size;
+                std::array<uint8, 2> m_Layer;
+            };
+        }
     }
 }
 

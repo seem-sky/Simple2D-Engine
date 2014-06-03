@@ -1,11 +1,12 @@
 #include "Map.h"
 
 using namespace MAP;
+using namespace DATABASE::PROTOTYPE::MAP_STRUCTURE;
 
 /*#####
 # Map
 #####*/
-Map::Map(uint32 GUID, uint32 ID, LayerContainer& layer, const DATABASE::MAP_STRUCTURE::MapObjectContainer& objects, const DATABASE::DatabaseMgr& DBMgr,
+Map::Map(uint32 GUID, uint32 ID, LayerContainer& layer, const MapObjectContainer& objects, const DATABASE::DatabaseMgr& DBMgr,
          const std::string& name, const std::string& script) : m_Layer(std::move(layer)), m_DBMgr(DBMgr), Entity(GUID, ID, name, script)
 {
     _setupObjects(objects);
@@ -23,7 +24,7 @@ void Map::update(uint32 uiDiff)
     }
 }
 
-void Map::_setupObjects(const DATABASE::MAP_STRUCTURE::MapObjectContainer& objects)
+void Map::_setupObjects(const MapObjectContainer& objects)
 {
     for (uint16 i = 1; i <= objects.getSize(); ++i)
     {

@@ -1,6 +1,6 @@
 #include "DatabaseWidgetLocalisation.h"
 
-using namespace DATABASE;
+using namespace DATABASE::PROTOTYPE;
 using namespace LOCALISATION;
 
 DatabaseWidgetLocalisation::DatabaseWidgetLocalisation(QWidget* pParent) : DatabaseWidgetBase(pParent), m_pModuleLocalisation(new DatabaseModuleLocalisation(this))
@@ -35,7 +35,7 @@ void DatabaseWidgetLocalisation::clear()
     DatabaseWidgetBase::clear();
 }
 
-void DatabaseWidgetLocalisation::setDatabaseMgr(DatabaseMgr& DBMgr)
+void DatabaseWidgetLocalisation::setDatabaseMgr(DATABASE::DatabaseMgr& DBMgr)
 {
-    m_pModuleList->setDatabaseModel(new DatabaseModel(DBMgr, DatabaseType::LOCALISATION_DATABASE));
+    m_pModuleList->setDatabaseModel(new DATABASE::DatabaseModel(DBMgr, DATABASE::DatabaseType::LOCALISATION_DATABASE));
 }

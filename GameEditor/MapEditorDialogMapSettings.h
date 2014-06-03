@@ -13,13 +13,13 @@ private:
     void _save();
 
 public:
-    MapEditorDialogMapSettings(DATABASE::MAP_STRUCTURE::MapPrototype* pPrototype, QWidget* pParent = nullptr);
+    MapEditorDialogMapSettings(DATABASE::PROTOTYPE::MAP_STRUCTURE::MapPrototype* pPrototype, QWidget* pParent = nullptr);
 
 private slots:
     void _onAccepted();
 
 private:
-    DATABASE::MAP_STRUCTURE::MapPrototype* m_pPrototype;
+    DATABASE::PROTOTYPE::MAP_STRUCTURE::MapPrototype* m_pPrototype;
 };
 
 #endif

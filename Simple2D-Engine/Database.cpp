@@ -2,6 +2,7 @@
 #include "Logfile.h"
 
 using namespace DATABASE;
+using namespace PROTOTYPE;
 
 /*#####
 # Special Databases

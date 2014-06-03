@@ -121,7 +121,7 @@ void MapItem::syncWithWorldObject()
         // store current animation infos
         if (m_pCurrentAnimation)
         {
-            DATABASE::ANIMATION::Frame frame;
+            DATABASE::PROTOTYPE::ANIMATION::Frame frame;
             m_pCurrentAnimation->getFrame(m_uiCurrentFrame, frame);
             m_PixmapPos = QPoint(frame.getOffset().x, frame.getOffset().y);
             m_PixmapIdentify = "Animation" + QString::number(m_pCurrentAnimation->getID()) + "/" + QString::number(m_uiCurrentFrame);
@@ -184,7 +184,7 @@ void GameSceneView::drawTiles(QPainter* painter, const QRectF& rect, MAP::LayerT
                 {
                     if (auto pAutoTile = m_AutoTileCache.getItem(tileObj.getMapTile().m_uiAutoTileSetID))
                     {
-                        if (auto pPixmap = pAutoTile->getPixmap(static_cast<DATABASE::AUTO_TILE::AUTO_TILE_INDEX>(tileObj.getMapTile().m_uiTileID)))
+                        if (auto pPixmap = pAutoTile->getPixmap(static_cast<DATABASE::PROTOTYPE::AUTO_TILE::AUTO_TILE_INDEX>(tileObj.getMapTile().m_uiTileID)))
                             painter->drawTiledPixmap(pos.x*TILE_SIZE, pos.y*TILE_SIZE, TILE_SIZE, TILE_SIZE,* pPixmap);
                     }
                 }

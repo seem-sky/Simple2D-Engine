@@ -14,8 +14,8 @@ private:
     QPixmap _createPrototypePixmap(uint32 uiID) const;
 
 protected:
-    virtual void setupWidgetsFromPrototype(const DATABASE::Prototype* pPrototype);
-    virtual void setupPrototypeFromWidgets(DATABASE::Prototype* pPrototype);
+    virtual void setupWidgetsFromPrototype(const DATABASE::PROTOTYPE::Prototype* pPrototype);
+    virtual void setupPrototypeFromWidgets(DATABASE::PROTOTYPE::Prototype* pPrototype);
     virtual void clear();
 
     virtual void setupPixmap(const QPixmap& pixmap);

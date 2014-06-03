@@ -91,8 +91,8 @@ namespace DATABASE
         const LocalisationDatabase* getLocalisationDatabase() const { return dynamic_cast<LocalisationDatabase*>(m_Databases.at(static_cast<uint32>(DatabaseType::LOCALISATION_DATABASE)).get()); }
         LocalisationDatabase* getLocalisationDatabase() { return dynamic_cast<LocalisationDatabase*>(m_Databases.at(static_cast<uint32>(DatabaseType::LOCALISATION_DATABASE)).get()); }
         
-        const MAP_STRUCTURE::MapDatabase* getMapDatabase() const { return dynamic_cast<MAP_STRUCTURE::MapDatabase*>(m_Databases.at(static_cast<uint32>(DatabaseType::MAP_DATABASE)).get()); }
-        MAP_STRUCTURE::MapDatabase* getMapDatabase() { return dynamic_cast<MAP_STRUCTURE::MapDatabase*>(m_Databases.at(static_cast<uint32>(DatabaseType::MAP_DATABASE)).get()); }
+        const MapDatabase* getMapDatabase() const { return dynamic_cast<MapDatabase*>(m_Databases.at(static_cast<uint32>(DatabaseType::MAP_DATABASE)).get()); }
+        MapDatabase* getMapDatabase() { return dynamic_cast<MapDatabase*>(m_Databases.at(static_cast<uint32>(DatabaseType::MAP_DATABASE)).get()); }
 
         void setTileDatabase(TileDatabase* db) { m_Databases.at(static_cast<uint32>(DatabaseType::TILE_DATABASE)) = std::unique_ptr<IDatabase>(db); }
         void setTileSetDatabase(TileSetDatabase* db) { m_Databases.at(static_cast<uint32>(DatabaseType::TILE_SET_DATABASE)) = std::unique_ptr<IDatabase>(db); }
@@ -102,7 +102,7 @@ namespace DATABASE
         void setAnimationTypeDatabase(AnimationTypeDatabase* db) { m_Databases.at(static_cast<uint32>(DatabaseType::ANIMATION_TYPE_DATABASE)) = std::unique_ptr<IDatabase>(db); }
         void setWorldObjectDatabase(WorldObjectDatabase* db) { m_Databases.at(static_cast<uint32>(DatabaseType::WORLD_OBJECT_DATABASE)) = std::unique_ptr<IDatabase>(db); }
         void setLocalisationDatabase(LocalisationDatabase* db) { m_Databases.at(static_cast<uint32>(DatabaseType::LOCALISATION_DATABASE)) = std::unique_ptr<IDatabase>(db); }
-        void setMapDatabase(MAP_STRUCTURE::MapDatabase* db) { m_Databases.at(static_cast<uint32>(DatabaseType::MAP_DATABASE)) = std::unique_ptr<IDatabase>(db); }
+        void setMapDatabase(MapDatabase* db) { m_Databases.at(static_cast<uint32>(DatabaseType::MAP_DATABASE)) = std::unique_ptr<IDatabase>(db); }
 
         const IDatabase* getDatabase(DatabaseType type) const { return m_Databases.at(static_cast<uint32>(type)).get(); }
         IDatabase* getDatabase(DatabaseType type) { return m_Databases.at(static_cast<uint32>(type)).get(); }
@@ -119,9 +119,12 @@ namespace DATABASE
         std::array<std::unique_ptr<IDatabase>, DATABASE_COUNT> m_Databases;
     };
 
-    namespace TILE_SET
+    namespace PROTOTYPE
     {
-        QPixmap createTileSetPixmap(const QString& path, const TileSetPrototype* pSet, const TileDatabase* pTileDB);
+        namespace TILE_SET
+        {
+            QPixmap createTileSetPixmap(const QString& path, const TileSetPrototype* pSet, const TileDatabase* pTileDB);
+        }
     }
 }
 #endif

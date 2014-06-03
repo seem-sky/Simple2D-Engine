@@ -1,6 +1,7 @@
 #include "DatabaseWidgetAnimation.h"
 
 using namespace DATABASE;
+using namespace PROTOTYPE;
 
 DatabaseWidgetAnimation::DatabaseWidgetAnimation(QWidget* pParent) : DatabaseWidgetBase(pParent), m_pModuleAnimation(new DatabaseModuleAnimation(this)),
     m_pModuleSpriteList(new DatabaseModuleTextureDragList(this))

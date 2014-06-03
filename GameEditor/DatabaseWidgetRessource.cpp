@@ -4,6 +4,7 @@
 #include "Logfile.h"
 
 using namespace DATABASE;
+using namespace PROTOTYPE;
 
 DatabaseWidgetRessource::DatabaseWidgetRessource(QWidget* pParent) : DatabaseWidgetBase(pParent),
     m_pMassImport(new QPushButton(this)), m_pModuleResource(new DatabaseModuleResource(this))

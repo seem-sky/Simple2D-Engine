@@ -3,6 +3,8 @@
 #include "DatabaseDialogResize.h"
 #include <QtWidgets/QMessageBox>
 
+using namespace DATABASE::PROTOTYPE;
+
 DatabaseModuleList::DatabaseModuleList(QWidget* pParent) : QWidget(pParent), Ui_DatabaseModuleList()
 {
     setupUi(this);
@@ -36,7 +38,7 @@ void DatabaseModuleList::_onSelectionChanged(const QModelIndex& current, const Q
     emit selectionChanged();
 }
 
-const DATABASE::Prototype* DatabaseModuleList::getCurrentPrototype() const
+const Prototype* DatabaseModuleList::getCurrentPrototype() const
 {
     // row+1 == prototype ID
     return getDatabaseModel()->getDatabase()->getPrototype(m_pList->currentIndex().row()+1);

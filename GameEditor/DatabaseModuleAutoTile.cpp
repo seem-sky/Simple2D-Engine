@@ -1,6 +1,6 @@
 #include "DatabaseModuleAutoTile.h"
 
-using namespace DATABASE::AUTO_TILE;
+using namespace DATABASE::PROTOTYPE::AUTO_TILE;
 
 DatabaseModuleAutoTile::DatabaseModuleAutoTile(QWidget* pParent) : QWidget(pParent), Ui_DatabaseModuleAutoTile()
 {
@@ -49,7 +49,7 @@ TileArray DatabaseModuleAutoTile::getTiles() const
     return tiles;
 }
 
-void DatabaseModuleAutoTile::setTiles(const DATABASE::AUTO_TILE::TileArray& tiles)
+void DatabaseModuleAutoTile::setTiles(const TileArray& tiles)
 {
     for (uint32 i = 0; i < AUTO_TILE_SET_COUNT; ++i)
     {

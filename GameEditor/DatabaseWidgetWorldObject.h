@@ -4,24 +4,14 @@
 #include "DatabaseWidgetBase.h"
 #include <QtWidgets/QComboBox>
 #include "DatabaseModuleWorldObjectAnimation.h"
-
-class ModuleTab : public QTabWidget
-{
-protected:
-    virtual void tabInserted(int index);
-
-public:
-    ModuleTab(QWidget* pParent = nullptr);
-
-    QTabBar* getTabBar() const { return tabBar(); }
-};
+#include "DeactivatedTabWidget.h"
 
 class DatabaseWidgetWorldObject : public DatabaseWidgetBase
 {
     Q_OBJECT
 protected:
-    virtual void setupWidgetsFromPrototype(const DATABASE::Prototype* pPrototype);
-    virtual void setupPrototypeFromWidgets(DATABASE::Prototype* pPrototype);
+    virtual void setupWidgetsFromPrototype(const DATABASE::PROTOTYPE::Prototype* pPrototype);
+    virtual void setupPrototypeFromWidgets(DATABASE::PROTOTYPE::Prototype* pPrototype);
     virtual void clear();
 
 public:
@@ -33,7 +23,7 @@ public:
 
 private:
     // tab widget
-    ModuleTab* m_pModuleTab;
+    DeactivatedTabWidget* m_pModuleTab;
 
     DatabaseModuleWorldObjectAnimation *m_pModuleAnimation;
 };

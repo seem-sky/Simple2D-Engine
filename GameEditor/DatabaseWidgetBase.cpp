@@ -2,6 +2,7 @@
 #include "moc_DatabaseWidgetBase.h"
 
 using namespace DATABASE;
+using namespace PROTOTYPE;
 
 DatabaseWidgetBase::DatabaseWidgetBase(QWidget* pParent) : QWidget(pParent), m_pModuleList(new DatabaseModuleList(this))
 {

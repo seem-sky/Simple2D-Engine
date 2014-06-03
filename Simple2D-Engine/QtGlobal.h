@@ -22,7 +22,7 @@ static bool createPixmap(const QString& path, const QString& fileNamePath, const
     return false;
 }
 
-static bool createPixmapFromTexturePrototype(const QString& path, const DATABASE::TexturePrototype* pTexture, QPixmap& result)
+static bool createPixmapFromTexturePrototype(const QString& path, const DATABASE::PROTOTYPE::TexturePrototype* pTexture, QPixmap& result)
 {
     if (pTexture)
     {

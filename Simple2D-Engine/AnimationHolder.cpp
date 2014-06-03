@@ -3,7 +3,7 @@
 using namespace MAP;
 using namespace OBJECT;
 using namespace ANIMATION;
-using namespace DATABASE::ANIMATION;
+using namespace DATABASE::PROTOTYPE::ANIMATION;
 
 void AnimationHolder::update(uint32 uiDiff)
 {

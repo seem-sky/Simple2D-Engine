@@ -6,7 +6,7 @@
 
 typedef std::multimap<QString, QString> DataMultimap;
 typedef std::map<QString, DataMultimap> SectorData;
-typedef std::vector<QString> StringVector;
+typedef std::vector<QString> QStringVector;
 
 class IniParser
 {
@@ -21,7 +21,7 @@ public:
     bool readFile(const QString& fileName);
 
     QString getString(const QString& key, const QString& sector, const QString defaultString = "");
-    void getAllStrings(const QString& key, const QString& sector, StringVector& data);
+    void getAllStrings(const QString& key, const QString& sector, QStringVector& data);
 
     int32 getInt(const QString& key, const QString& sector, const int32 defaultValue = 0);
     uint32 getUInt(const QString& key, const QString& sector, const uint32 defaultValue = 0);

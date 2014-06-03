@@ -130,7 +130,7 @@ void MapViewerScene::_drawTiles(QPainter* painter, const QRectF& rect, MAP::Laye
                 {
                     if (auto pAutoTile = GAutoTileCache::get()->getItem(tileObj.getMapTile().m_uiAutoTileSetID))
                     {
-                        if (auto pPixmap = pAutoTile->getPixmap(static_cast<DATABASE::AUTO_TILE::AUTO_TILE_INDEX>(tileObj.getMapTile().m_uiTileID)))
+                        if (auto pPixmap = pAutoTile->getPixmap(static_cast<DATABASE::PROTOTYPE::AUTO_TILE::AUTO_TILE_INDEX>(tileObj.getMapTile().m_uiTileID)))
                             painter->drawPixmap(currentTile.x*TILE_SIZE, currentTile.y*TILE_SIZE, TILE_SIZE, TILE_SIZE,* pPixmap);
                     }
                 }

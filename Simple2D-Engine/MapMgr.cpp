@@ -1,6 +1,7 @@
 #include "MapMgr.h"
 
 using namespace MAP;
+using namespace DATABASE;
 
 MapMgr::MapMgr() : Container()
 {}
@@ -12,7 +13,7 @@ void MapMgr::setDatabaseMgr(DATABASE::DatabaseMgr pDBMgr)
 
 MapPtr MapMgr::loadMap(uint32 uiID)
 {
-    DATABASE::MAP_STRUCTURE::MapDatabase* pMapDB = const_cast<DATABASE::MAP_STRUCTURE::MapDatabase*>(m_pDBMgr.getMapDatabase());
+    MapDatabase* pMapDB = const_cast<MapDatabase*>(m_pDBMgr.getMapDatabase());
     //if (pMapDB && pMapDB->loadMapFile(uiID, "projects/untitled/"))
     //{
     //    if (auto pMapProto = pMapDB->getOriginalPrototype(uiID))

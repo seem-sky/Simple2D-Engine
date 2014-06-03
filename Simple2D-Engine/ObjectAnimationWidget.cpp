@@ -2,7 +2,10 @@
 #include "QtGlobal.h"
 #include <QtWidgets/QGraphicsPixmapItem>
 
-ObjectAnimationWidget::ObjectAnimationWidget(const DATABASE::ANIMATION::AnimationPrototype* pAnimation, const DATABASE::SpriteDatabase* pSpriteDB, uint32 uiCurrentFrame) :
+using namespace DATABASE;
+using namespace PROTOTYPE::ANIMATION;
+
+ObjectAnimationWidget::ObjectAnimationWidget(const AnimationPrototype* pAnimation, const DATABASE::SpriteDatabase* pSpriteDB, uint32 uiCurrentFrame) :
     QGraphicsView(), m_pSpriteDB(pSpriteDB)
 {
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -12,12 +15,12 @@ ObjectAnimationWidget::ObjectAnimationWidget(const DATABASE::ANIMATION::Animatio
     setStyleSheet("background:transparent");
     setFrameShape(QFrame::NoFrame);
     setScene(new QGraphicsScene(this));
-    DATABASE::ANIMATION::Frame frame;
+    Frame frame;
     if (pAnimation->getFrame(uiCurrentFrame, frame))
         _drawFrame(frame);
 }
 
-void ObjectAnimationWidget::_drawFrame(const DATABASE::ANIMATION::Frame& frame)
+void ObjectAnimationWidget::_drawFrame(const Frame& frame)
 {
     //for (const auto& sprite : frame.getSprites())
     //{

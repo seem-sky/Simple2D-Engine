@@ -7,6 +7,7 @@
 #include "DatabaseDialogChoseColor.h"
 
 using namespace DATABASE;
+using namespace PROTOTYPE;
 
 DatabaseWidgetTexture::DatabaseWidgetTexture(QWidget* pParent) : DatabaseWidgetRessource(pParent),
     m_pModuleTexture(new DatabaseModuleTexture(this))

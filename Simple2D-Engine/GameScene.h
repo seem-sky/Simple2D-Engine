@@ -34,7 +34,7 @@ namespace GAME_LOGIC
         private:
             const DATABASE::DatabaseMgr& m_DBMgr;
             const MAP::OBJECT::WorldObject* m_pWorldObject;
-            const DATABASE::ANIMATION::AnimationPrototype* m_pCurrentAnimation;
+            const DATABASE::PROTOTYPE::ANIMATION::AnimationPrototype* m_pCurrentAnimation;
             uint32 m_uiCurrentFrame;
             QString m_PixmapIdentify;
             QRect m_BoundingRect;

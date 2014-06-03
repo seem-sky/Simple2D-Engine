@@ -4,6 +4,8 @@
 const uint32 MIN_COLUMN_COUNT = 1;
 const uint32 MIN_ROW_COUNT = 1;
 
+using namespace DATABASE::PROTOTYPE::TILE_SET;
+
 DatabaseModuleTileSet::DatabaseModuleTileSet(QWidget* pParent) : QWidget(pParent), Ui_DatabaseModuleTileSet(), m_pTileDB(nullptr)
 {
     setupUi(this);
@@ -11,8 +13,8 @@ DatabaseModuleTileSet::DatabaseModuleTileSet(QWidget* pParent) : QWidget(pParent
     // setup table
     m_pTileSetTable->setSelectionMode(QAbstractItemView::NoSelection);
 
-    resizeTileSetTableColumns(DATABASE::TILE_SET::DEFAULT_COLUMN_COUNT);
-    resizeTileSetTableRows(DATABASE::TILE_SET::DEFAULT_ROW_COUNT);
+    resizeTileSetTableColumns(DEFAULT_COLUMN_COUNT);
+    resizeTileSetTableRows(DEFAULT_ROW_COUNT);
 
     // connections
     connect(m_pHorizontalAdd, SIGNAL(clicked()), this, SLOT(_onHorizontalAddClicked()));
@@ -25,8 +27,8 @@ void DatabaseModuleTileSet::clear()
 {
     m_pTileSetTable->setRowCount(0);
     m_pTileSetTable->setColumnCount(0);
-    resizeTileSetTableColumns(DATABASE::TILE_SET::DEFAULT_COLUMN_COUNT);
-    resizeTileSetTableRows(DATABASE::TILE_SET::DEFAULT_ROW_COUNT);
+    resizeTileSetTableColumns(DEFAULT_COLUMN_COUNT);
+    resizeTileSetTableRows(DEFAULT_ROW_COUNT);
 }
 
 void DatabaseModuleTileSet::resizeTileSetTableColumns(uint32 columns)

@@ -3,7 +3,7 @@
 #include "Config.h"
 
 using namespace MAP::MAP_DATA;
-using namespace DATABASE::MAP_STRUCTURE;
+using namespace DATABASE::PROTOTYPE::MAP_STRUCTURE;
 
 MapData::MapData(const DATABASE::DatabaseMgr& DBMgr, uint32 mapID) : m_DBMgr(DBMgr), m_MapID(mapID)
 {
@@ -43,7 +43,7 @@ void MapData::save()
     }
 }
 
-QString MAP::getFilePath(const DATABASE::MAP_STRUCTURE::MapPrototype& map)
+QString MAP::getFilePath(const MapPrototype& map)
 {
     return Config::get()->getProjectDirectory() + MAP_FOLDER + map.getFileName();
 }

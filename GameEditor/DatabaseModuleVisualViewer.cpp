@@ -5,6 +5,9 @@
 #include <QtWidgets/QHeaderView>
 #include "moc_DatabaseModuleVisualViewer.h"
 
+using namespace DATABASE::PROTOTYPE;
+using namespace DATABASE::PROTOTYPE::WORLD_OBJECT;
+
 /*#####
 # VisualViewerWidget
 #####*/
@@ -31,7 +34,7 @@ VisualViewerItem::VisualViewerItem(QWidget *pParent, bool standardEntry) : QFram
     m_pAnimationType->setEnabled(!standardEntry);
 }
 
-void VisualViewerItem::setAnimation(uint32 ID, DATABASE::WORLD_OBJECT::AnimationInfo::VisualType type)
+void VisualViewerItem::setAnimation(uint32 ID, AnimationInfo::VisualType type)
 {
     m_pVisualViewer->setAnimation(ID, type);
 }
@@ -107,7 +110,7 @@ void DatabaseModuleVisualViewer::insertVisualViewer(uint32 index)
 {
     m_pVisualViewerList->insertRow(index);
     m_pVisualViewerList->setRowHeight(index, 180);
-    auto pViewer = new VisualViewerItem(m_pVisualViewerList, index < DATABASE::WORLD_OBJECT::MIN_WORLD_OBJECT_POSE);
+    auto pViewer = new VisualViewerItem(m_pVisualViewerList, index < MIN_WORLD_OBJECT_POSE);
     m_pVisualViewerList->setCellWidget(index, 0, pViewer);
     pViewer->getVisualViewer()->setDatabaseManager(m_pDBMgr);
     if (m_pAnimationTypeModel)

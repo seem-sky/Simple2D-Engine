@@ -6,6 +6,8 @@
 #include "DelayedDeleteObject.h"
 #include "QtGlobal.h"
 
+using namespace DATABASE::PROTOTYPE::ANIMATION;
+
 AnimationSpriteItem::AnimationSpriteItem(const DATABASE::SpriteDatabase* pSpriteDB, uint32 ID) : GraphicsSpriteItem(ID), m_pSpriteDB(pSpriteDB)
 {
 }
@@ -58,9 +60,9 @@ QVariant AnimationSpriteItem::itemChange(GraphicsItemChange change, const QVaria
     return result;
 }
 
-DATABASE::ANIMATION::Sprite AnimationSpriteItem::toSprite() const
+Sprite AnimationSpriteItem::toSprite() const
 {
-    DATABASE::ANIMATION::Sprite sprite;
+    Sprite sprite;
     sprite.m_Pos = Int32Point(x(), y());
     sprite.m_uiSpriteID = getID();
     sprite.m_uiRotation = rotation();
@@ -149,7 +151,7 @@ void AnimationViewer::setSpriteDatabase(const DATABASE::SpriteDatabase* pSpriteD
     m_pSpriteDB = pSpriteDB;
 }
 
-void AnimationViewer::setAnimation(const DATABASE::ANIMATION::FrameVector* pAnimation)
+void AnimationViewer::setAnimation(const FrameVector* pAnimation)
 {
     m_pAnimation = pAnimation;
     showFrame(0);
@@ -170,7 +172,7 @@ void AnimationViewer::showFrame(uint32 index)
     repaint();
 }
 
-void AnimationViewer::_setupFrame(const DATABASE::ANIMATION::Frame& frame)
+void AnimationViewer::_setupFrame(const Frame& frame)
 {
     if (!m_pSpriteDB)
         return;

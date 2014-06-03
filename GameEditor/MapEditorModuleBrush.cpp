@@ -6,6 +6,7 @@
 
 using namespace BRUSH;
 using namespace MAP::BRUSH;
+using namespace DATABASE::PROTOTYPE;
 
 MapEditorModuleBrush::MapEditorModuleBrush(const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent) : QWidget(), Ui_MapEditorModuleBrush(), m_DBMgr(DBMgr)
 {
@@ -40,14 +41,14 @@ void MapEditorModuleBrush::_update()
         text = "auto tile";
         if (auto pAutoTile = GAutoTileCache::get()->getItem(m_BrushInfo.m_ID))
         {
-            if (auto pPixmap = pAutoTile->getPixmap(DATABASE::AUTO_TILE::INDEX_INNER_CENTER))
+            if (auto pPixmap = pAutoTile->getPixmap(AUTO_TILE::INDEX_INNER_CENTER))
                 pixmap =* pPixmap;
         }
         break;
     case MAP::BRUSH::SelectionType::TILE_SETS:
         text = "tile set";
         if (auto pTileSet = m_DBMgr.getTileSetDatabase()->getOriginalPrototype(m_BrushInfo.m_ID))
-            pixmap = DATABASE::TILE_SET::createPixmap(*pTileSet);
+            pixmap = TILE_SET::createPixmap(*pTileSet);
         break;
     }
 

@@ -21,10 +21,10 @@ namespace MAP
     class Map : public ENTITY::Entity
     {
     private:
-        void _setupObjects(const DATABASE::MAP_STRUCTURE::MapObjectContainer& objects);
+        void _setupObjects(const DATABASE::PROTOTYPE::MAP_STRUCTURE::MapObjectContainer& objects);
 
     public:
-        Map(uint32 GUID, uint32 ID, LayerContainer& layer, const DATABASE::MAP_STRUCTURE::MapObjectContainer& objects, const DATABASE::DatabaseMgr& DBMgr,
+        Map(uint32 GUID, uint32 ID, LayerContainer& layer, const DATABASE::PROTOTYPE::MAP_STRUCTURE::MapObjectContainer& objects, const DATABASE::DatabaseMgr& DBMgr,
             const std::string& name = "", const std::string& script = "");
 
         void update(uint32 uiDiff);

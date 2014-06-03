@@ -4,8 +4,9 @@
 #include "DatabaseModuleDragDrop.h"
 #include "DatabaseModuleVisualViewer.h"
 #include <QtWidgets/QComboBox>
+#include "DeactivatedTabWidget.h"
 
-class DatabaseModuleWorldObjectAnimation : public QWidget
+class DatabaseModuleWorldObjectAnimation : public DeactivatedWidget
 {
     Q_OBJECT
 public:

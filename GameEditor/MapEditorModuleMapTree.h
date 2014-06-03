@@ -8,10 +8,10 @@
 class MapTreeItem : public QTreeWidgetItem
 {
 public:
-    MapTreeItem(const DATABASE::MAP_STRUCTURE::MapPrototype& map);
+    MapTreeItem(const DATABASE::PROTOTYPE::MAP_STRUCTURE::MapPrototype& map);
     bool operator <(const QTreeWidgetItem& other) const;
 
-    void setup(const DATABASE::MAP_STRUCTURE::MapPrototype& map);
+    void setup(const DATABASE::PROTOTYPE::MAP_STRUCTURE::MapPrototype& map);
 };
 
 class MapEditorModuleMapTree : public QTreeWidget

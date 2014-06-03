@@ -18,7 +18,7 @@ DatabaseMgr::DatabaseMgr()
     setAnimationTypeDatabase(new AnimationTypeDatabase());
     setWorldObjectDatabase(new WorldObjectDatabase());
     setLocalisationDatabase(new LocalisationDatabase());
-    setMapDatabase(new MAP_STRUCTURE::MapDatabase());
+    setMapDatabase(new MapDatabase());
 }
 
 // overwrite copy constructor
@@ -90,7 +90,7 @@ bool DatabaseMgr::loadDatabase(const QString& projectPath, uint32 databases)
     if (databases & ANIMATION_TYPE_DATABASE)
         IO::DatabaseReader<AnimationTypeDatabase>(getAnimationTypeDatabase()).read(projectPath + DATABASE_FILE.at(static_cast<uint32>(DatabaseType::ANIMATION_TYPE_DATABASE)));
     if (databases & MAP_DATABASE)
-        IO::DatabaseReader<MAP_STRUCTURE::MapDatabase>(getMapDatabase()).read(projectPath + DATABASE_FILE.at(static_cast<uint32>(DatabaseType::MAP_DATABASE)));
+        IO::DatabaseReader<MapDatabase>(getMapDatabase()).read(projectPath + DATABASE_FILE.at(static_cast<uint32>(DatabaseType::MAP_DATABASE)));
     if (databases & LOCALISATION_DATABASE)
         IO::DatabaseReader<LocalisationDatabase>(getLocalisationDatabase()).read(projectPath + DATABASE_FILE.at(static_cast<uint32>(DatabaseType::LOCALISATION_DATABASE)));
     if (databases&  WORLD_OBJECT_DATABASE)
@@ -118,7 +118,7 @@ bool DatabaseMgr::saveDatabase(const QString& projectPath, uint32 databases)
     if (databases&  ANIMATION_TYPE_DATABASE)
         IO::DatabaseWriter<AnimationTypeDatabase>(getAnimationTypeDatabase()).write(projectPath + DATABASE_FILE.at(static_cast<uint32>(DatabaseType::ANIMATION_TYPE_DATABASE)));
     if (databases&  MAP_DATABASE)
-        IO::DatabaseWriter<MAP_STRUCTURE::MapDatabase>(getMapDatabase()).write(projectPath + DATABASE_FILE.at(static_cast<uint32>(DatabaseType::MAP_DATABASE)));
+        IO::DatabaseWriter<MapDatabase>(getMapDatabase()).write(projectPath + DATABASE_FILE.at(static_cast<uint32>(DatabaseType::MAP_DATABASE)));
     if (databases&  LOCALISATION_DATABASE)
         IO::DatabaseWriter<LocalisationDatabase>(getLocalisationDatabase()).write(projectPath + DATABASE_FILE.at(static_cast<uint32>(DatabaseType::LOCALISATION_DATABASE)));
     if (databases&  WORLD_OBJECT_DATABASE)
@@ -126,7 +126,7 @@ bool DatabaseMgr::saveDatabase(const QString& projectPath, uint32 databases)
     return true;
 }
 
-QPixmap TILE_SET::createTileSetPixmap(const QString& path, const TileSetPrototype* pSet, const TileDatabase* pTileDB)
+QPixmap PROTOTYPE::TILE_SET::createTileSetPixmap(const QString& path, const TileSetPrototype* pSet, const TileDatabase* pTileDB)
 {
     if (!pSet || !pTileDB)
         return std::move(QPixmap());

@@ -53,8 +53,8 @@ private:
 public:
     DatabaseModuleAnimation(QWidget* pParent = nullptr);
 
-    inline const DATABASE::ANIMATION::FrameVector& getAnimation() const { return m_Animation; }
-    void setAnimation(const DATABASE::ANIMATION::FrameVector& animation);
+    inline const DATABASE::PROTOTYPE::ANIMATION::FrameVector& getAnimation() const { return m_Animation; }
+    void setAnimation(const DATABASE::PROTOTYPE::ANIMATION::FrameVector& animation);
 
     void setSpriteDatabase(const DATABASE::SpriteDatabase* pSpriteDB);
 
@@ -82,7 +82,7 @@ private slots:
     void _onOpacityChanged(double value);
 
 private:
-    DATABASE::ANIMATION::FrameVector m_Animation;
+    DATABASE::PROTOTYPE::ANIMATION::FrameVector m_Animation;
     const DATABASE::SpriteDatabase* m_pSpriteDB;
     AnimationActionPtrVector m_LastActions;
 };

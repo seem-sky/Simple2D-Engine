@@ -2,9 +2,9 @@
 #include "moc_DatabaseModuleWorldObjectAnimation.h"
 #include <QtWidgets/QGridLayout>
 
-using namespace DATABASE::WORLD_OBJECT;
+using namespace DATABASE::PROTOTYPE::WORLD_OBJECT;
 
-DatabaseModuleWorldObjectAnimation::DatabaseModuleWorldObjectAnimation(QWidget* pParent) : QWidget(pParent),
+DatabaseModuleWorldObjectAnimation::DatabaseModuleWorldObjectAnimation(QWidget* pParent) : DeactivatedWidget(pParent),
     // modules
     m_pModuleSpriteList(new DatabaseModuleTextureDragList(this)),
     m_pModuleAnimationList(new DatabaseModuleAnimationDragList(this)),

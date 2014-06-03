@@ -1,22 +1,11 @@
 #include "DatabaseWidgetWorldObject.h"
 #include "moc_DatabaseWidgetWorldObject.h"
-#include <QtWidgets/QCheckBox>
 
 using namespace DATABASE;
-
-ModuleTab::ModuleTab(QWidget* pParent) : QTabWidget(pParent)
-{
-}
-
-void ModuleTab::tabInserted(int index)
-{
-    QTabWidget::tabInserted(index);
-    auto pTabBar = getTabBar();
-    pTabBar->setTabButton(index, QTabBar::RightSide, new QCheckBox(this));
-}
+using namespace PROTOTYPE;
 
 DatabaseWidgetWorldObject::DatabaseWidgetWorldObject(QWidget* pParent) : DatabaseWidgetBase(pParent),
-    m_pModuleTab(new ModuleTab(this)),
+    m_pModuleTab(new DeactivatedTabWidget(this)),
     m_pModuleAnimation(new DatabaseModuleWorldObjectAnimation(this))
 {
     // setup tabs
@@ -33,7 +22,7 @@ void DatabaseWidgetWorldObject::clear()
     m_pModuleAnimation->clear();
 }
 
-void DatabaseWidgetWorldObject::setupPrototypeFromWidgets(DATABASE::Prototype* pPrototype)
+void DatabaseWidgetWorldObject::setupPrototypeFromWidgets(Prototype* pPrototype)
 {
     if (auto pWorldObject = dynamic_cast<WORLD_OBJECT::WorldObjectPrototype*>(pPrototype))
     {
@@ -54,7 +43,7 @@ void DatabaseWidgetWorldObject::setupPrototypeFromWidgets(DATABASE::Prototype* p
     DatabaseWidgetBase::setupPrototypeFromWidgets(pPrototype);
 }
 
-void DatabaseWidgetWorldObject::setupWidgetsFromPrototype(const DATABASE::Prototype* pPrototype)
+void DatabaseWidgetWorldObject::setupWidgetsFromPrototype(const Prototype* pPrototype)
 {
     if (auto pWorldObject = dynamic_cast<const WORLD_OBJECT::WorldObjectPrototype*>(pPrototype))
     {
@@ -78,12 +67,12 @@ void DatabaseWidgetWorldObject::setDatabaseMgr(DatabaseMgr& DBMgr)
     m_pModuleList->setDatabaseModel(new DatabaseModel(DBMgr, DatabaseType::WORLD_OBJECT_DATABASE));
 }
 
-void DatabaseWidgetWorldObject::setSpriteDatabaseModel(DATABASE::ConstDatabaseModel* pModel)
+void DatabaseWidgetWorldObject::setSpriteDatabaseModel(ConstDatabaseModel* pModel)
 {
     m_pModuleAnimation->setSpriteDatabaseModel(pModel);
 }
 
-void DatabaseWidgetWorldObject::setAnimationDatabaseModel(DATABASE::ConstDatabaseModel* pModel)
+void DatabaseWidgetWorldObject::setAnimationDatabaseModel(ConstDatabaseModel* pModel)
 {
     m_pModuleAnimation->setAnimationDatabaseModel(pModel);
 }

@@ -17,8 +17,8 @@ namespace MAP
             public:
                 AnimationHolder() : m_uiAnimationSpeed(100), m_uiTimer(0), m_uiCurrentFrame(0) {}
 
-                void changeAnimation(const DATABASE::ANIMATION::AnimationPrototype* pAnimation);
-                inline const DATABASE::ANIMATION::AnimationPrototype* getCurrentAnimation() const { return m_pAnimation; }
+                void changeAnimation(const DATABASE::PROTOTYPE::ANIMATION::AnimationPrototype* pAnimation);
+                inline const DATABASE::PROTOTYPE::ANIMATION::AnimationPrototype* getCurrentAnimation() const { return m_pAnimation; }
                 inline uint32 getCurrentFrame() const { return m_uiCurrentFrame; }
 
                 void update(uint32 uiDiff);
@@ -27,7 +27,7 @@ namespace MAP
                 inline void setAnimationSpeed(uint32 uiAnimationSpeed) { m_uiAnimationSpeed = uiAnimationSpeed; _changeCurrentFrame(m_uiCurrentFrame); }
 
             private:
-                const DATABASE::ANIMATION::AnimationPrototype* m_pAnimation;
+                const DATABASE::PROTOTYPE::ANIMATION::AnimationPrototype* m_pAnimation;
                 uint32 m_uiCurrentFrame;
                 uint32 m_uiTimer;
                 uint16 m_uiAnimationSpeed;

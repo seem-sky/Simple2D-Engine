@@ -242,6 +242,7 @@
     <ClCompile Include="DatabaseWidgetTile.cpp" />
     <ClCompile Include="DatabaseWidgetTileSet.cpp" />
     <ClCompile Include="DatabaseWidgetWorldObject.cpp" />
+    <ClCompile Include="DeactivatedTabWidget.cpp" />
     <ClCompile Include="GraphicsTextureItem.cpp" />
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="DatabaseWindow.cpp" />
@@ -308,6 +309,7 @@
     <ClInclude Include="DatabaseDialogChoseColor.h" />
     <moc_header Include="DatabaseModuleWorldObjectAnimation.h" />
     <moc_header Include="DatabaseModuleVisualViewer.h" />
+    <moc_header Include="DeactivatedTabWidget.h" />
     <ClInclude Include="GraphicsTextureItem.h" />
     <moc_header Include="MapEditorModuleBrush.h" />
     <moc_header Include="MapEditorModuleTileSelection.h" />

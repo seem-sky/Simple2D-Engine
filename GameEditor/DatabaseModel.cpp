@@ -23,9 +23,9 @@ QVariant ConstDatabaseModel::data(const QModelIndex& index, int role) const
     {
         switch (role)
         {
-            // draw standard entry ins AnimationTypeDatabase blue
+            // draw standard entries blue
         case Qt::ForegroundRole:
-            if (getDatabaseType() == DatabaseType::ANIMATION_TYPE_DATABASE && index.row() < ANIMATION::STANDARD_ANIMATION_TYPES)
+            if (getDatabaseType() == DatabaseType::ANIMATION_TYPE_DATABASE && index.row() < PROTOTYPE::ANIMATION::STANDARD_ANIMATION_TYPES)
                 return QVariant(QColor(Qt::blue));
             return QVariant(QColor(Qt::black));
 
@@ -110,7 +110,7 @@ IDatabase* DatabaseModel::getDatabase()
 
 void DatabaseModel::resize(uint32 size)
 {
-    if (getDatabaseType() == DatabaseType::ANIMATION_TYPE_DATABASE && size < ANIMATION::STANDARD_ANIMATION_TYPES)
+    if (getDatabaseType() == DatabaseType::ANIMATION_TYPE_DATABASE && size < PROTOTYPE::ANIMATION::STANDARD_ANIMATION_TYPES)
         throw std::runtime_error("Not allowed to remove standard entries.");
     uint32 uiOldSize = getDatabase()->getSize();
     if (uiOldSize < size)

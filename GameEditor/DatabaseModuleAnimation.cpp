@@ -3,6 +3,8 @@
 #include "DelayedDeleteObject.h"
 #include <QtWidgets/QAction>
 
+using namespace DATABASE::PROTOTYPE::ANIMATION;
+
 // ToDo: Final coding of revert actions (many improvements needed)
 
 /*#####
@@ -113,7 +115,7 @@ void DatabaseModuleAnimation::setSpriteDatabase(const DATABASE::SpriteDatabase* 
     m_pAniViewer->setSpriteDatabase(m_pSpriteDB);
 }
 
-void DatabaseModuleAnimation::setAnimation(const DATABASE::ANIMATION::FrameVector& animation)
+void DatabaseModuleAnimation::setAnimation(const FrameVector& animation)
 {
     _saveCurrentFrame();
     clear();
@@ -121,7 +123,7 @@ void DatabaseModuleAnimation::setAnimation(const DATABASE::ANIMATION::FrameVecto
     m_pAniViewer->setAnimation(&m_Animation);
     // get sure, there is at least one frame
     if (m_Animation.empty())
-        m_Animation.push_back(DATABASE::ANIMATION::Frame());
+        m_Animation.push_back(Frame());
     m_pCurrentFrame->setMaximum(static_cast<uint32>(m_Animation.size()-1));
     _setupFrame(0);
 }
@@ -129,7 +131,7 @@ void DatabaseModuleAnimation::setAnimation(const DATABASE::ANIMATION::FrameVecto
 void DatabaseModuleAnimation::_onFrameAddClicked()
 {
     uint32 newIndex = m_pAniViewer->getCurrentFrame()+1;
-    m_Animation.insert(m_Animation.begin()+newIndex, DATABASE::ANIMATION::Frame());
+    m_Animation.insert(m_Animation.begin()+newIndex, Frame());
     m_pCurrentFrame->setMaximum(static_cast<uint32>(m_Animation.size()-1));
     m_pCurrentFrame->setValue(newIndex);
     _onFrameChanged(newIndex);
@@ -257,7 +259,7 @@ void DatabaseModuleAnimation::_saveCurrentFrame()
         return;
 
     // save current frame
-    DATABASE::ANIMATION::Frame frame;
+    Frame frame;
     auto itemList = m_pAniViewer->scene()->items(Qt::AscendingOrder);
     for (auto pItem : itemList)
     {

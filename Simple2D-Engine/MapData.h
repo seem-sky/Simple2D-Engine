@@ -66,7 +66,7 @@ namespace MAP
         };
     }
 
-    QString getFilePath(const DATABASE::MAP_STRUCTURE::MapPrototype& map);
+    QString getFilePath(const DATABASE::PROTOTYPE::MAP_STRUCTURE::MapPrototype& map);
 }
 
 #endif

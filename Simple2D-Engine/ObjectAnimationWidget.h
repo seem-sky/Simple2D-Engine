@@ -7,10 +7,10 @@
 class ObjectAnimationWidget : public QGraphicsView
 {
 private:
-    void _drawFrame(const DATABASE::ANIMATION::Frame& frame);
+    void _drawFrame(const DATABASE::PROTOTYPE::ANIMATION::Frame& frame);
 
 public:
-    ObjectAnimationWidget(const DATABASE::ANIMATION::AnimationPrototype* pAnimation, const DATABASE::SpriteDatabase* pSpriteDB, uint32 uiCurrentFrame);
+    ObjectAnimationWidget(const DATABASE::PROTOTYPE::ANIMATION::AnimationPrototype* pAnimation, const DATABASE::SpriteDatabase* pSpriteDB, uint32 uiCurrentFrame);
 
 private:
     const DATABASE::SpriteDatabase* m_pSpriteDB;

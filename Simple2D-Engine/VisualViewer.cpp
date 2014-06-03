@@ -7,6 +7,7 @@
 #include "moc_VisualViewer.h"
 
 using namespace DATABASE;
+using namespace PROTOTYPE;
 
 /*#####
 # VisualSpriteItem
@@ -200,6 +201,8 @@ void VisualViewer::startAnimation()
         m_DoAnimation = true;
         m_uiCurrentFrameIndex = 0;
     }
+    else
+        stopAnimation();
     showVisual();
 }
 

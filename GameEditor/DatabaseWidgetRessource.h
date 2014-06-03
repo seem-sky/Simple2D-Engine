@@ -14,8 +14,8 @@ private:
     void _import(uint32 uiID, const QString& fileNamePath);
 
 protected:
-    virtual void setupWidgetsFromPrototype(const DATABASE::Prototype* pPrototype);
-    virtual void setupPrototypeFromWidgets(DATABASE::Prototype* pPrototype);
+    virtual void setupWidgetsFromPrototype(const DATABASE::PROTOTYPE::Prototype* pPrototype);
+    virtual void setupPrototypeFromWidgets(DATABASE::PROTOTYPE::Prototype* pPrototype);
     virtual void clear();
 
 public:

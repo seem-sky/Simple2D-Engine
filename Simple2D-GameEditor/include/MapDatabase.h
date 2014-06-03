@@ -6,31 +6,25 @@
 
 namespace DATABASE
 {
-    namespace MAP_STRUCTURE
+    typedef std::unique_ptr<PROTOTYPE::MAP_STRUCTURE::MapPrototype> MapPrototypePtr;
+    typedef std::vector<std::unique_ptr<PROTOTYPE::MAP_STRUCTURE::MapPrototype>> MapPrototypePtrVector;
+    class MapDatabase : public Database<PROTOTYPE::MAP_STRUCTURE::MapPrototype>
     {
-        const char MAP_FILE_ENDING[] = ".map";
-        const char MAP_FOLDER[] = "/Maps/";
+    public:
+        bool removeMap(uint32 uiID);
 
-        typedef std::unique_ptr<MapPrototype> MapPrototypePtr;
-        typedef std::vector<std::unique_ptr<MapPrototype>> MapPrototypePtrVector;
-        class MapDatabase : public Database<MapPrototype>
-        {
-        public:
-            bool removeMap(uint32 uiID);
+        void clear();
 
-            void clear();
+        MapPrototypePtr getNewPrototype();
 
-            MapPrototypePtr getNewPrototype();
+        /*void setPrototype(MapPrototype* pItem);
+        const MapPrototype* getPrototype(uint32 ID) const;*/
+        //MapPrototype* getPrototype(uint32 ID);
 
-            /*void setPrototype(MapPrototype* pItem);
-            const MapPrototype* getPrototype(uint32 ID) const;*/
-            //MapPrototype* getPrototype(uint32 ID);
+        //MapPrototype* getNewPrototype(uint32 ID = 0) const;
 
-            //MapPrototype* getNewPrototype(uint32 ID = 0) const;
-
-        private:
-            MapPrototypePtrVector m_RemovedMaps;
-        };
-    }
+    private:
+        MapPrototypePtrVector m_RemovedMaps;
+    };
 }
 #endif

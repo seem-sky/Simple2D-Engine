@@ -8,8 +8,8 @@
 class DatabaseWidgetAutoTile : public DatabaseWidgetBase
 {
 protected:
-    void setupWidgetsFromPrototype(const DATABASE::Prototype* pPrototype);
-    void setupPrototypeFromWidgets(DATABASE::Prototype* pPrototype);
+    void setupWidgetsFromPrototype(const DATABASE::PROTOTYPE::Prototype* pPrototype);
+    void setupPrototypeFromWidgets(DATABASE::PROTOTYPE::Prototype* pPrototype);
 
 public:
     DatabaseWidgetAutoTile(QWidget* pParent = nullptr);

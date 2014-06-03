@@ -73,7 +73,7 @@ QString IniParser::getString(const QString& key, const QString& sector, const QS
     return keyItr->second;
 }
 
-void IniParser::getAllStrings(const QString& key, const QString& sector, StringVector& data)
+void IniParser::getAllStrings(const QString& key, const QString& sector, QStringVector& data)
 {
     SectorData::const_iterator sectorItr = m_FileData.find(sector);
     if (sectorItr == m_FileData.end())

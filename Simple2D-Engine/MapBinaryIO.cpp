@@ -2,13 +2,14 @@
 #include <QtCore/QFile>
 
 using namespace MAP;
+using namespace DATABASE::PROTOTYPE::MAP_STRUCTURE;
 
 const uint16 CURRENT_VERSION = 3;
 
 /*#####
 # MapBinaryReader
 #####*/
-void INPUT::MapBinaryReader::readFile(const QString& fileName, MAP::MAP_DATA::MapData& data)
+void INPUT::MapBinaryReader::readFile(const QString& fileName, MAP_DATA::MapData& data)
 {
     QFile mapFile(fileName);
     if (!mapFile.open(QIODevice::ReadOnly))
@@ -20,14 +21,14 @@ void INPUT::MapBinaryReader::readFile(const QString& fileName, MAP::MAP_DATA::Ma
     in >> version;
 
     // load layer data
-    _readLayer(in, data.getMapLayer(), MAP::LayerType::LAYER_BACKGROUND, version);
-    _readLayer(in, data.getMapLayer(), MAP::LayerType::LAYER_FOREGROUND, version);
+    _readLayer(in, data.getMapLayer(), LayerType::LAYER_BACKGROUND, version);
+    _readLayer(in, data.getMapLayer(), LayerType::LAYER_FOREGROUND, version);
 
     //// load objects
     //_readObjects(in, pMap, version);
 }
 
-void INPUT::MapBinaryReader::_readLayer(QDataStream& in, MAP::LayerContainer& mapLayer, MAP::LayerType layer, uint16 version)
+void INPUT::MapBinaryReader::_readLayer(QDataStream& in, LayerContainer& mapLayer, LayerType layer, uint16 version)
 {
     switch(version)
     {
@@ -39,7 +40,7 @@ void INPUT::MapBinaryReader::_readLayer(QDataStream& in, MAP::LayerContainer& ma
     }
 }
 
-void INPUT::MapBinaryReader::_readObjects(QDataStream& in, DATABASE::MAP_STRUCTURE::MapPrototype* pMap, uint16 version)
+void INPUT::MapBinaryReader::_readObjects(QDataStream& in, MapPrototype* pMap, uint16 version)
 {
     switch(version)
     {
@@ -54,7 +55,7 @@ void INPUT::MapBinaryReader::_readObjects(QDataStream& in, DATABASE::MAP_STRUCTU
 }
 
 // Tile = uint32; AutoTile = uint32
-void INPUT::MapBinaryReader::_readLayerV1(QDataStream& in, MAP::LayerContainer& mapLayer, MAP::LayerType layer)
+void INPUT::MapBinaryReader::_readLayerV1(QDataStream& in, MAP::LayerContainer& mapLayer, LayerType layer)
 {
     UInt32Point3D pos;
     for (pos.z = 0; pos.z < mapLayer.getLayerSize(layer); ++pos.z)
@@ -73,7 +74,7 @@ void INPUT::MapBinaryReader::_readLayerV1(QDataStream& in, MAP::LayerContainer& 
 }
 
 // Tile = uint16; AutoTile = uint8
-void INPUT::MapBinaryReader::_readLayerV2(QDataStream& in, MAP::LayerContainer& mapLayer, MAP::LayerType layer)
+void INPUT::MapBinaryReader::_readLayerV2(QDataStream& in, LayerContainer& mapLayer, LayerType layer)
 {
     UInt32Point3D pos;
     for (pos.z = 0; pos.z < mapLayer.getLayerSize(layer); ++pos.z)
@@ -90,7 +91,7 @@ void INPUT::MapBinaryReader::_readLayerV2(QDataStream& in, MAP::LayerContainer& 
     }
 }
 
-void INPUT::MapBinaryReader::_readObjectsV1(QDataStream& in, DATABASE::MAP_STRUCTURE::MapPrototype* pMap)
+void INPUT::MapBinaryReader::_readObjectsV1(QDataStream& in, MapPrototype* pMap)
 {
     // ToDo: add fill into ObjectContainer
     //uint32 objectCount = 0;
@@ -107,7 +108,7 @@ void INPUT::MapBinaryReader::_readObjectsV1(QDataStream& in, DATABASE::MAP_STRUC
 }
 
 // without world_object type (there is only one type left)
-void INPUT::MapBinaryReader::_readObjectsV2(QDataStream& in, DATABASE::MAP_STRUCTURE::MapPrototype* pMap)
+void INPUT::MapBinaryReader::_readObjectsV2(QDataStream& in, MapPrototype* pMap)
 {
     // ToDo: add fill into ObjectContainer
     //uint32 objectCount = 0;
@@ -144,7 +145,7 @@ void OUTPUT::MapBinaryWriter::writeFile(const QString& fileName, const MAP_DATA:
     //_writeObjects(out, pMap);
 }
 
-void OUTPUT::MapBinaryWriter::_writeLayer(QDataStream& out, const LayerContainer& mapLayer, MAP::LayerType layer)
+void OUTPUT::MapBinaryWriter::_writeLayer(QDataStream& out, const LayerContainer& mapLayer, LayerType layer)
 {
     UInt32Point3D pos;
     for (pos.z = 0; pos.z < mapLayer.getLayerSize(layer); ++pos.z)
@@ -160,7 +161,7 @@ void OUTPUT::MapBinaryWriter::_writeLayer(QDataStream& out, const LayerContainer
     }
 }
 
-void OUTPUT::MapBinaryWriter::_writeObjects(QDataStream& out, const DATABASE::MAP_STRUCTURE::MapPrototype* pMap)
+void OUTPUT::MapBinaryWriter::_writeObjects(QDataStream& out, const MapPrototype* pMap)
 {
     out << pMap->getMapObjectCount();
     for (uint32 i = 1; i <= pMap->getMapObjectCount(); ++i)

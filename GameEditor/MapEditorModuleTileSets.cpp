@@ -5,6 +5,9 @@
 #include <QtGui/QPainter>
 #include "moc_MapEditorModuleTileSets.h"
 
+using namespace DATABASE;
+using namespace PROTOTYPE::TILE_SET;
+
 MapEditorModuleTileSets::MapEditorModuleTileSets(QWidget* pParent) : DatabaseModuleTooltipList(pParent)
 {
     setDragEnabled(false);
@@ -17,11 +20,11 @@ QWidget* MapEditorModuleTileSets::_setupTooltipWidget(uint32 uiPrototypeID)
 {
     auto pLabel = new QLabel(this);
     pLabel->resize(TILE_SIZE, TILE_SIZE);
-    if (auto pModel = dynamic_cast<DATABASE::DatabaseModel*>(model()))
+    if (auto pModel = dynamic_cast<DatabaseModel*>(model()))
     {
-        if (auto pPrototype = dynamic_cast<DATABASE::TILE_SET::TileSetPrototype*>(pModel->getDatabase()->getPrototype(uiPrototypeID)))
+        if (auto pPrototype = dynamic_cast<TileSetPrototype*>(pModel->getDatabase()->getPrototype(uiPrototypeID)))
         {
-            auto pixmap = DATABASE::TILE_SET::createPixmap(*pPrototype);
+            auto pixmap = createPixmap(*pPrototype);
             pLabel->setPixmap(pixmap);
             pLabel->resize(pixmap.size());
         }

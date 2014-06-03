@@ -20,7 +20,7 @@ public:
     inline void setDataID(uint32 uiID) { m_pID->setValue(uiID); }
     inline uint32 getDataID() const { return m_pID->value(); }
 
-    const DATABASE::Prototype* getCurrentPrototype() const;
+    const DATABASE::PROTOTYPE::Prototype* getCurrentPrototype() const;
 
     void selectItem(uint32 ID);
 

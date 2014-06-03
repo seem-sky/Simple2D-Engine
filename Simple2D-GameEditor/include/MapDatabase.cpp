@@ -2,7 +2,7 @@
 #include "MapBinaryIO.h"
 
 using namespace DATABASE;
-using namespace DATABASE::MAP_STRUCTURE;
+using namespace DATABASE::PROTOTYPE::MAP_STRUCTURE;
 
 void MapDatabase::clear()
 {

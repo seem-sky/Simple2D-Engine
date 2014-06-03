@@ -16,10 +16,10 @@ namespace DATABASE
     public:
         virtual void clear() = 0;
 
-        virtual void setPrototype(Prototype* pPrototype) = 0;
-        virtual Prototype* getNewPrototype(uint32 ID = 0) const = 0;
-        virtual Prototype* getPrototype(uint32 ID) = 0;
-        virtual const Prototype* getPrototype(uint32 ID) const = 0;
+        virtual void setPrototype(PROTOTYPE::Prototype* pPrototype) = 0;
+        virtual PROTOTYPE::Prototype* getNewPrototype(uint32 ID = 0) const = 0;
+        virtual PROTOTYPE::Prototype* getPrototype(uint32 ID) = 0;
+        virtual const PROTOTYPE::Prototype* getPrototype(uint32 ID) const = 0;
 
         virtual uint32 getSize() const = 0;
         virtual void resize(uint32 newSize) = 0;
@@ -56,12 +56,12 @@ namespace DATABASE
             //BASIC_LOG("Resize database to " + QString::number(uiSize));
             if (uiSize > uiOldSize)
             {
-                //BASIC_LOG("Fill database entrys from " + QString::number(uiOldSize) + " to " + QString::number(uiSize) + " with data.");
+                //BASIC_LOG("Fill database entries from " + QString::number(uiOldSize) + " to " + QString::number(uiSize) + " with data.");
                 for (uint32 i = uiOldSize; i < uiSize; ++i)                 // first ID == 1, so use i+1 for ID at position i
                     m_Items.at(i) = std::unique_ptr<T>(new T(i+1));
             }
             //else if (uiSize < uiOldSize)
-            //    BASIC_LOG("Erase database entrys from " + QString::number(uiOldSize) + " to " + QString::number(uiSize) + ".");
+            //    BASIC_LOG("Erase database entries from " + QString::number(uiOldSize) + " to " + QString::number(uiSize) + ".");
         }
 
         inline uint32 getSize() const { return Container::getSize(); }
@@ -69,14 +69,14 @@ namespace DATABASE
         inline void setMaximumSize(uint32 size) { Container::setMaximumSize(size); }
         inline uint32 getMaximumSize() const { return Container::getMaximumSize(); }
 
-        inline Prototype* getNewPrototype(uint32 ID = 0) const { return new T(ID); }
+        inline PROTOTYPE::Prototype* getNewPrototype(uint32 ID = 0) const { return new T(ID); }
 
         const std::vector<std::unique_ptr<T>>& getPrototypes() const { return getItems(); }
-        inline Prototype* getPrototype(uint32 ID) { return Container::getItem(ID); }
-        inline const Prototype* getPrototype(uint32 ID) const  { return Container::getItem(ID); }
+        inline PROTOTYPE::Prototype* getPrototype(uint32 ID) { return Container::getItem(ID); }
+        inline const PROTOTYPE::Prototype* getPrototype(uint32 ID) const  { return Container::getItem(ID); }
         inline T* getOriginalPrototype(uint32 ID) { return Container::getItem(ID); }
         inline const T* getOriginalPrototype(uint32 ID) const  { return Container::getItem(ID); }
-        inline void setPrototype(Prototype* pPrototype)
+        inline void setPrototype(PROTOTYPE::Prototype* pPrototype)
         {
             if (auto pCast = dynamic_cast<T*>(pPrototype))
                 Container::setItem(pCast->getID(), pCast);
@@ -93,7 +93,7 @@ namespace DATABASE
     /*#####
     # Special Databases
     #####*/
-    class TileDatabase : public Database<TilePrototype>
+    class TileDatabase : public Database<PROTOTYPE::TilePrototype>
     {
     public:
         TileDatabase();
@@ -106,7 +106,7 @@ namespace DATABASE
         //TilePrototype* getNewPrototype(uint32 uiID = 0) const;
     };
 
-    class TileSetDatabase : public Database<TILE_SET::TileSetPrototype>
+    class TileSetDatabase : public Database<PROTOTYPE::TILE_SET::TileSetPrototype>
     {
     public:
         //void setPrototype(TILE_SET::TileSetPrototype* pItem);
@@ -116,7 +116,7 @@ namespace DATABASE
         //TILE_SET::TileSetPrototype* getNewPrototype(uint32 uiID = 0) const;
     };
 
-    class AutoTileDatabase : public Database<AUTO_TILE::AutoTilePrototype>
+    class AutoTileDatabase : public Database<PROTOTYPE::AUTO_TILE::AutoTilePrototype>
     {
     public:
         AutoTileDatabase();
@@ -129,7 +129,7 @@ namespace DATABASE
         //AUTO_TILE::AutoTilePrototype* getNewPrototype(uint32 uiID = 0) const;
     };
 
-    class SpriteDatabase : public Database<SpritePrototype>
+    class SpriteDatabase : public Database<PROTOTYPE::SpritePrototype>
     {
     public:
         //void setPrototype(SpritePrototype* pItem);
@@ -139,7 +139,7 @@ namespace DATABASE
         //SpritePrototype* getNewPrototype(uint32 uiID = 0) const;
     };
 
-    class AnimationDatabase : public Database<ANIMATION::AnimationPrototype>
+    class AnimationDatabase : public Database<PROTOTYPE::ANIMATION::AnimationPrototype>
     {
     public:
         //void setPrototype(AnimationPrototype* pItem);
@@ -149,7 +149,7 @@ namespace DATABASE
         //AnimationPrototype* getNewPrototype(uint32 uiID = 0) const;
     };
 
-    class AnimationTypeDatabase : public Database<ANIMATION::AnimationTypePrototype>
+    class AnimationTypeDatabase : public Database<PROTOTYPE::ANIMATION::AnimationTypePrototype>
     {
     public:
         AnimationTypeDatabase();
@@ -165,7 +165,7 @@ namespace DATABASE
         //AnimationTypePrototype* getNewPrototype(uint32 uiID = 0) const;
     };
 
-    class WorldObjectDatabase : public Database<WORLD_OBJECT::WorldObjectPrototype>
+    class WorldObjectDatabase : public Database<PROTOTYPE::WORLD_OBJECT::WorldObjectPrototype>
     {
     public:
         //virtual void setPrototype(MAP_OBJECT::WorldObjectPrototype* pItem);
@@ -175,7 +175,7 @@ namespace DATABASE
         //virtual MAP_OBJECT::WorldObjectPrototype* getNewPrototype(uint32 uiID = 0) const;
     };
 
-    class LocalisationDatabase : public Database<LOCALISATION::LocalisationPrototype>
+    class LocalisationDatabase : public Database<PROTOTYPE::LOCALISATION::LocalisationPrototype>
     {
     public:
         //void setPrototype(LocalisationPrototype* pItem);

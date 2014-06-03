@@ -8,14 +8,14 @@ namespace MAP
     class MapTile
     {
     public:
-        MapTile(DATABASE::TILE_INDEX uiTileID = 0, DATABASE::AUTO_TILE_INDEX uiAutoTileSetID = 0) : m_uiAutoTileSetID(uiAutoTileSetID), m_uiTileID(uiTileID) {}
-        DATABASE::TILE_INDEX m_uiTileID;
-        DATABASE::AUTO_TILE_INDEX m_uiAutoTileSetID;
+        MapTile(DATABASE::PROTOTYPE::TILE_INDEX uiTileID = 0, DATABASE::PROTOTYPE::AUTO_TILE_INDEX uiAutoTileSetID = 0) : m_uiAutoTileSetID(uiAutoTileSetID), m_uiTileID(uiTileID) {}
+        DATABASE::PROTOTYPE::TILE_INDEX m_uiTileID;
+        DATABASE::PROTOTYPE::AUTO_TILE_INDEX m_uiAutoTileSetID;
 
         inline bool isAutoTile() const { return m_uiAutoTileSetID != 0; }
         inline bool isEmpty() const { return !m_uiTileID && !m_uiAutoTileSetID; }
-        inline bool isValid() const { return m_uiTileID != MATH::maximum<DATABASE::TILE_INDEX>() &&
-            m_uiAutoTileSetID != MATH::maximum<DATABASE::AUTO_TILE_INDEX>(); }
+        inline bool isValid() const { return m_uiTileID != MATH::maximum<DATABASE::PROTOTYPE::TILE_INDEX>() &&
+            m_uiAutoTileSetID != MATH::maximum<DATABASE::PROTOTYPE::AUTO_TILE_INDEX>(); }
     };
     static bool operator==(const MapTile& lhs, const MapTile& rhs)
     {

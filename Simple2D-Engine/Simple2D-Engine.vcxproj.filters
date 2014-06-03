@@ -165,6 +165,9 @@
     <ClCompile Include="MapLayer.cpp">
       <Filter>Map\Layer</Filter>
     </ClCompile>
+    <ClCompile Include="PrototypeModules.cpp">
+      <Filter>Database</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Simple2D-GameEditor\include\Application.h">
@@ -289,6 +292,9 @@
     </ClInclude>
     <ClInclude Include="MapTile.h">
       <Filter>Map\Layer</Filter>
+    </ClInclude>
+    <ClInclude Include="PrototypeModules.h">
+      <Filter>Database</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

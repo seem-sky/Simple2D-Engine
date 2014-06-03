@@ -30,7 +30,7 @@ namespace DATABASE
                     case QXmlStreamReader::StartElement:
                         if (reader.name() == "p")
                         {
-                            std::unique_ptr<Prototype> pProto(m_pDB->getNewPrototype());
+                            std::unique_ptr<PROTOTYPE::Prototype> pProto(m_pDB->getNewPrototype());
                             pProto->fromXML(reader.attributes());
                             // parse children
                             uint32 uiStartCounter = 0;

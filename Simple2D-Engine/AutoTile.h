@@ -7,9 +7,9 @@
 class AutoTile
 {
 private:
-    inline void _setPixmap(DATABASE::AUTO_TILE::AUTO_TILE_INDEX index, const QPixmap* pPixmap)
+    inline void _setPixmap(DATABASE::PROTOTYPE::AUTO_TILE::AUTO_TILE_INDEX index, const QPixmap* pPixmap)
     {
-        if (index < DATABASE::AUTO_TILE::INDEX_NONE)
+        if (index < DATABASE::PROTOTYPE::AUTO_TILE::INDEX_NONE)
             m_pPixmaps.at(index) = pPixmap;
     }
 
@@ -22,15 +22,15 @@ private:
 public:
     AutoTile(const DATABASE::DatabaseMgr& DBMgr, uint32 ID);
 
-    inline const QPixmap* getPixmap(DATABASE::AUTO_TILE::AUTO_TILE_INDEX index) const
+    inline const QPixmap* getPixmap(DATABASE::PROTOTYPE::AUTO_TILE::AUTO_TILE_INDEX index) const
     {
-        if (index >= DATABASE::AUTO_TILE::INDEX_NONE || !m_pPixmaps.at(index))
+        if (index >= DATABASE::PROTOTYPE::AUTO_TILE::INDEX_NONE || !m_pPixmaps.at(index))
             return nullptr;
         return m_pPixmaps.at(index);
     }
 
 private:
-    std::array<const QPixmap*, DATABASE::AUTO_TILE::INDEX_NONE> m_pPixmaps;
+    std::array<const QPixmap*, DATABASE::PROTOTYPE::AUTO_TILE::INDEX_NONE> m_pPixmaps;
     const uint32 m_ID;
     const DATABASE::DatabaseMgr& m_DBMgr;
 };

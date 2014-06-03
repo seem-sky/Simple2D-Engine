@@ -1,6 +1,7 @@
 #include "DatabaseWidgetTileSet.h"
 
 using namespace DATABASE;
+using namespace PROTOTYPE;
 
 DatabaseWidgetTileSet::DatabaseWidgetTileSet(QWidget* pParent) : DatabaseWidgetBase(pParent),
     m_pModuleTileSet(new DatabaseModuleTileSet(this)), m_pModuleTileList(new DatabaseModuleTextureDragList(this))
@@ -28,13 +29,13 @@ DatabaseWidgetTileSet::DatabaseWidgetTileSet(QWidget* pParent) : DatabaseWidgetB
     }
 }
 
-void DatabaseWidgetTileSet::setDatabaseMgr(DATABASE::DatabaseMgr& DBMgr)
+void DatabaseWidgetTileSet::setDatabaseMgr(DatabaseMgr& DBMgr)
 {
     m_pModuleList->setDatabaseModel(new DatabaseModel(DBMgr, DatabaseType::TILE_SET_DATABASE));
     m_pModuleTileSet->setTileDatabase(DBMgr.getTileDatabase());
 }
 
-void DatabaseWidgetTileSet::setTileDatabaseModel(DATABASE::ConstDatabaseModel* pModel)
+void DatabaseWidgetTileSet::setTileDatabaseModel(ConstDatabaseModel* pModel)
 {
     m_pModuleTileList->setModel(pModel);
 }

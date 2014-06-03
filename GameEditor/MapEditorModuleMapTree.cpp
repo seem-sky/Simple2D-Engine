@@ -7,15 +7,19 @@
 #include <QtGui/QDropEvent>
 #include "Config.h"
 
+using namespace DATABASE;
+using namespace PROTOTYPE;
+using namespace MAP_STRUCTURE;
+
 /*#####
 # MapTreeItem
 #####*/
-MapTreeItem::MapTreeItem(const DATABASE::MAP_STRUCTURE::MapPrototype& map) : QTreeWidgetItem()
+MapTreeItem::MapTreeItem(const MapPrototype& map) : QTreeWidgetItem()
 {
     setup(map);
 }
 
-void MapTreeItem::setup(const DATABASE::MAP_STRUCTURE::MapPrototype& map)
+void MapTreeItem::setup(const MapPrototype& map)
 {
     setData(0, 0, map.getID());
     setData(1, 0, map.getName());
@@ -57,7 +61,7 @@ void MapEditorModuleMapTree::reload()
 
     auto pMapDB = m_DBMgr.getMapDatabase();
     uint32 size = pMapDB->getSize();
-    std::list<const DATABASE::MAP_STRUCTURE::MapPrototype*> unsortedMaps;
+    std::list<const MapPrototype*> unsortedMaps;
     std::vector<QTreeWidgetItem*> items(size, nullptr);
 
     for (uint32 i = 1; i <= size; ++i)
@@ -78,7 +82,7 @@ void MapEditorModuleMapTree::reload()
     }
 
     // insert unsorted items
-    const DATABASE::MAP_STRUCTURE::MapPrototype* pFirstUnsortedMap = nullptr;
+    const MapPrototype* pFirstUnsortedMap = nullptr;
     while (!unsortedMaps.empty())
     {
         auto pMap =* unsortedMaps.begin();

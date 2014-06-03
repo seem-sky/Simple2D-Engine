@@ -1,7 +1,7 @@
 #include "DatabasePrototypes.h"
 #include <QtCore/QStringList>
 
-using namespace DATABASE;
+using namespace DATABASE::PROTOTYPE;
 
 /*#####
 # Prototype

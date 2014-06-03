@@ -18,7 +18,7 @@ protected:
 public:
     AnimationSpriteItem(const DATABASE::SpriteDatabase* pSpriteDB, uint32 ID);
 
-    DATABASE::ANIMATION::Sprite toSprite() const;
+    DATABASE::PROTOTYPE::ANIMATION::Sprite toSprite() const;
 
 private:
     const DATABASE::SpriteDatabase* m_pSpriteDB;
@@ -51,7 +51,7 @@ class AnimationViewer : public QGraphicsView
 {
     Q_OBJECT
 private:
-    void _setupFrame(const DATABASE::ANIMATION::Frame& frame);
+    void _setupFrame(const DATABASE::PROTOTYPE::ANIMATION::Frame& frame);
     void _setupTimer();
 
 protected:
@@ -67,7 +67,7 @@ public:
     void addGraphicsSpriteItem(AnimationSpriteItem* pItem);
 
     void setSpriteDatabase(const DATABASE::SpriteDatabase* pSpriteDB);
-    void setAnimation(const DATABASE::ANIMATION::FrameVector* pAnimation);
+    void setAnimation(const DATABASE::PROTOTYPE::ANIMATION::FrameVector* pAnimation);
 
     void showFrame(uint32 index);
     uint32 getCurrentFrame() const { return m_uiCurrentFrameIndex; }
@@ -93,7 +93,7 @@ private:
     QTimer m_AnimationTimer;
     uint32 m_uiCurrentFrameIndex;
     const DATABASE::SpriteDatabase* m_pSpriteDB;
-    const DATABASE::ANIMATION::FrameVector* m_pAnimation;
+    const DATABASE::PROTOTYPE::ANIMATION::FrameVector* m_pAnimation;
 };
 
 #endif

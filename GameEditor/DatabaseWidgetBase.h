@@ -9,8 +9,8 @@ class DatabaseWidgetBase : public QWidget
 {
     Q_OBJECT
 protected:
-    virtual void setupWidgetsFromPrototype(const DATABASE::Prototype* pPrototype);
-    virtual void setupPrototypeFromWidgets(DATABASE::Prototype* pPrototype);
+    virtual void setupWidgetsFromPrototype(const DATABASE::PROTOTYPE::Prototype* pPrototype);
+    virtual void setupPrototypeFromWidgets(DATABASE::PROTOTYPE::Prototype* pPrototype);
     virtual void clear();
 
     void hideEvent(QHideEvent* pEvent);

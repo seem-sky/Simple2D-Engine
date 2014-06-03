@@ -124,7 +124,7 @@ QWidget* DatabaseModuleTextureDragList::_setupTooltipWidget(uint32 uiPrototypeID
     pLabel->resize(10, 10);
     if (auto pModel = dynamic_cast<DATABASE::ConstDatabaseModel*>(model()))
     {
-        if (auto pPrototype = dynamic_cast<const DATABASE::TexturePrototype*>(pModel->getDatabase()->getPrototype(uiPrototypeID)))
+        if (auto pPrototype = dynamic_cast<const DATABASE::PROTOTYPE::TexturePrototype*>(pModel->getDatabase()->getPrototype(uiPrototypeID)))
         {
             QPixmap pixmap;
             if (createPixmapFromTexturePrototype(Config::get()->getProjectDirectory(), pPrototype, pixmap))
@@ -146,7 +146,7 @@ void DatabaseModuleTextureDragList::startDrag(Qt::DropActions supportedActions)
         auto mimeData = new QMimeData();
         if (auto pModel = dynamic_cast<DATABASE::ConstDatabaseModel*>(model()))
         {
-            if (auto pPrototype = dynamic_cast<const DATABASE::TexturePrototype*>(pModel->getDatabase()->getPrototype(pItem.row()+1)))
+            if (auto pPrototype = dynamic_cast<const DATABASE::PROTOTYPE::TexturePrototype*>(pModel->getDatabase()->getPrototype(pItem.row()+1)))
             {
                 QPixmap pixmap;
                 if (createPixmapFromTexturePrototype(Config::get()->getProjectDirectory(), pPrototype, pixmap))
@@ -231,7 +231,7 @@ QWidget* DatabaseModuleAnimationDragList::_setupTooltipWidget(uint32 uiPrototype
     pViewer->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     if (auto pModel = dynamic_cast<DATABASE::ConstDatabaseModel*>(model()))
     {
-        if (auto pPrototype = dynamic_cast<const DATABASE::ANIMATION::AnimationPrototype*>(pModel->getDatabase()->getPrototype(uiPrototypeID)))
+        if (auto pPrototype = dynamic_cast<const DATABASE::PROTOTYPE::ANIMATION::AnimationPrototype*>(pModel->getDatabase()->getPrototype(uiPrototypeID)))
         {
             pViewer->setAnimation(&pPrototype->getAnimation());
             pViewer->startAnimation();
@@ -249,7 +249,7 @@ void DatabaseModuleAnimationDragList::startDrag(Qt::DropActions supportedActions
         auto mimeData = new QMimeData();
         if (auto pModel = dynamic_cast<DATABASE::ConstDatabaseModel*>(model()))
         {
-            if (auto pPrototype = dynamic_cast<const DATABASE::ANIMATION::AnimationPrototype*>(pModel->getDatabase()->getPrototype(pItem.row()+1)))
+            if (auto pPrototype = dynamic_cast<const DATABASE::PROTOTYPE::ANIMATION::AnimationPrototype*>(pModel->getDatabase()->getPrototype(pItem.row()+1)))
             {
                 AnimationViewer viewer(this);
                 viewer.resize(100, 100);

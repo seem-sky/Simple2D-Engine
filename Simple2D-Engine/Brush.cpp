@@ -2,6 +2,7 @@
 
 using namespace MAP;
 using namespace BRUSH;
+using namespace DATABASE::PROTOTYPE::AUTO_TILE;
 
 /*#####
 # Brush
@@ -25,7 +26,7 @@ void Brush::updateAutoTilesAround(const UInt32PointVector& positions)
         uint32 borderCheck = m_MapLayer.checkAutoTiles(getID(), tilePosition, positionChecks, Layer::FLAG_ALL);
         auto& mapTile = m_MapLayer.getMapTile(tilePosition);
         if (mapTile.getMapTile().isAutoTile())
-            mapTile.getMapTile().m_uiTileID = DATABASE::AUTO_TILE::getAutoTileIndexForTileCheck(borderCheck);
+            mapTile.getMapTile().m_uiTileID = getAutoTileIndexForTileCheck(borderCheck);
     }
 
     // update tiles
@@ -44,7 +45,7 @@ void Brush::updateAutoTilesAround(const UInt32PointVector& positions)
         // store tile
         m_RevertInfo.addTile(tilePos, tile.getMapTile());
 
-        tile.getMapTile().m_uiTileID = DATABASE::AUTO_TILE::getAutoTileIndexForTileCheck(m_MapLayer.checkAutoTiles(tile.getMapTile().m_uiAutoTileSetID, pos, UInt32PointVector(),
+        tile.getMapTile().m_uiTileID = getAutoTileIndexForTileCheck(m_MapLayer.checkAutoTiles(tile.getMapTile().m_uiAutoTileSetID, pos, UInt32PointVector(),
             Layer::FLAG_NOTHING));
     }
 }
@@ -266,7 +267,7 @@ void BrushFill::_drawAutoTile(const UInt32Point& center)
         // setup revert
         auto tileInfo = m_MapLayer.getMapTile(openPointPos);
         m_RevertInfo.addTile(openPointPos, tileInfo.getMapTile());
-        m_MapLayer.setMapTile(openPointPos, MapTile(DATABASE::AUTO_TILE::INDEX_CENTER, getID()));
+        m_MapLayer.setMapTile(openPointPos, MapTile(INDEX_CENTER, getID()));
     }
 
     // do final checks

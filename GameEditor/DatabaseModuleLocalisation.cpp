@@ -1,7 +1,7 @@
 #include "DatabaseModuleLocalisation.h"
 #include <QtWidgets/QPlainTextEdit>
 
-using namespace DATABASE::LOCALISATION;
+using namespace DATABASE::PROTOTYPE::LOCALISATION;
 
 DatabaseModuleLocalisation::DatabaseModuleLocalisation(QWidget* pParent) : QWidget(pParent), Ui_DatabaseModuleLocalisation()
 {

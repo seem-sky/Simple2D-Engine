@@ -3,6 +3,7 @@
 #include "MapException.h"
 
 using namespace MAP;
+using namespace DATABASE::PROTOTYPE::AUTO_TILE;
 
 /*#####
 # Layer
@@ -48,7 +49,7 @@ uint32 Layer::checkAutoTiles(uint32 uiID, const UInt32Point& pos, UInt32PointVec
     uint32 uiBorderCheck = 0;
     for (uint32 i = 0; i < 8; ++i)
     {
-        DATABASE::AUTO_TILE::TILE_CHECK curTileCheck = DATABASE::AUTO_TILE::SAME_AROUND;
+        TILE_CHECK curTileCheck = SAME_AROUND;
         // set position check
         UInt32Point3D checkPos = pos;
         switch (i)
@@ -58,14 +59,14 @@ uint32 Layer::checkAutoTiles(uint32 uiID, const UInt32Point& pos, UInt32PointVec
                 continue;
             --checkPos.x;
             --checkPos.y;
-            curTileCheck = DATABASE::AUTO_TILE::OTHER_TOP_LEFT;
+            curTileCheck = OTHER_TOP_LEFT;
             break;
 
         case 1: // top
             if (!checkPos.y)
                 continue;
             --checkPos.y;
-            curTileCheck = DATABASE::AUTO_TILE::OTHER_TOP;
+            curTileCheck = OTHER_TOP;
             break;
 
         case 2: // top-right
@@ -73,21 +74,21 @@ uint32 Layer::checkAutoTiles(uint32 uiID, const UInt32Point& pos, UInt32PointVec
                 continue;
             ++checkPos.x;
             --checkPos.y;
-            curTileCheck = DATABASE::AUTO_TILE::OTHER_TOP_RIGHT;
+            curTileCheck = OTHER_TOP_RIGHT;
             break;
 
         case 3: // left
             if (!checkPos.x)
                 continue;
             --checkPos.x;
-            curTileCheck = DATABASE::AUTO_TILE::OTHER_LEFT;
+            curTileCheck = OTHER_LEFT;
             break;
 
         case 4: // right
             if (checkPos.x+1 >= getSize().x)
                 continue;
             ++checkPos.x;
-            curTileCheck = DATABASE::AUTO_TILE::OTHER_RIGHT;
+            curTileCheck = OTHER_RIGHT;
             break;
 
         case 5: // bottom-left
@@ -95,14 +96,14 @@ uint32 Layer::checkAutoTiles(uint32 uiID, const UInt32Point& pos, UInt32PointVec
                 continue;
             --checkPos.x;
             ++checkPos.y;
-            curTileCheck = DATABASE::AUTO_TILE::OTHER_BOTTOM_LEFT;
+            curTileCheck = OTHER_BOTTOM_LEFT;
             break;
 
         case 6: // bottom
             if (checkPos.y+1 >= getSize().y)
                 continue;
             ++checkPos.y;
-            curTileCheck = DATABASE::AUTO_TILE::OTHER_BOTTOM;
+            curTileCheck = OTHER_BOTTOM;
             break;
 
         case 7: // bottom-right
@@ -110,7 +111,7 @@ uint32 Layer::checkAutoTiles(uint32 uiID, const UInt32Point& pos, UInt32PointVec
                 continue;
             ++checkPos.x;
             ++checkPos.y;
-            curTileCheck = DATABASE::AUTO_TILE::OTHER_BOTTOM_RIGHT;
+            curTileCheck = OTHER_BOTTOM_RIGHT;
             break;
         }
         auto mapTile = getMapTile(checkPos);
@@ -178,8 +179,8 @@ uint8 LayerContainer::getLayerSize(LayerType layer) const
 {
     switch (layer)
     {
-    case MAP::LayerType::LAYER_BACKGROUND: return static_cast<uint8>(m_BackgroundLayer.size());
-    case MAP::LayerType::LAYER_FOREGROUND: return static_cast<uint8>(m_ForegroundLayer.size());
+    case LayerType::LAYER_BACKGROUND: return static_cast<uint8>(m_BackgroundLayer.size());
+    case LayerType::LAYER_FOREGROUND: return static_cast<uint8>(m_ForegroundLayer.size());
     }
     return 0;
 }

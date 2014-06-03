@@ -3,6 +3,8 @@
 #include "Config.h"
 #include "QtGlobal.h"
 
+using namespace DATABASE::PROTOTYPE;
+
 TexturePrototypeFrame::TexturePrototypeFrame(QWidget* pParent) : QFrame(pParent), m_pPrototype(nullptr)
 {}
 
@@ -18,7 +20,7 @@ void TexturePrototypeFrame::paintEvent(QPaintEvent* pEvent)
     }
 }
 
-void TexturePrototypeFrame::setPrototype(const DATABASE::TexturePrototype* pPrototype)
+void TexturePrototypeFrame::setPrototype(const TexturePrototype* pPrototype)
 {
     m_pPrototype = pPrototype;
     repaint();

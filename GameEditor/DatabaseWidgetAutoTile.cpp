@@ -1,6 +1,6 @@
 #include "DatabaseWidgetAutoTile.h"
 
-using namespace DATABASE;
+using namespace DATABASE::PROTOTYPE;
 
 DatabaseWidgetAutoTile::DatabaseWidgetAutoTile(QWidget* pParent) : DatabaseWidgetBase(pParent), m_pModuleAutoTile(new DatabaseModuleAutoTile(this)),
     m_pModuleTileList(new DatabaseModuleTextureDragList(this))
@@ -53,7 +53,7 @@ void DatabaseWidgetAutoTile::clear()
 
 void DatabaseWidgetAutoTile::setDatabaseMgr(DATABASE::DatabaseMgr& DBMgr)
 {
-    m_pModuleList->setDatabaseModel(new DatabaseModel(DBMgr, DatabaseType::AUTO_TILE_DATABASE));
+    m_pModuleList->setDatabaseModel(new DATABASE::DatabaseModel(DBMgr, DATABASE::DatabaseType::AUTO_TILE_DATABASE));
     m_pModuleAutoTile->setTileDatabase(DBMgr.getTileDatabase());
 }
 

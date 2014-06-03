@@ -1,6 +1,9 @@
 #include "DatabaseWidgetTile.h"
 #include "moc_DatabaseWidgetTile.h"
 
+using namespace DATABASE;
+using namespace PROTOTYPE;
+
 const char PASSABLE_RIGHT_ICON[]    = "icons/arrow-right.png";
 const char PASSABLE_LEFT_ICON[]     = "icons/arrow-left.png";
 const char PASSABLE_UP_ICON[]       = "icons/arrow-up.png";
@@ -14,8 +17,6 @@ enum PassabilityButton
     PASSABILITY_RIGHT,
     PASSABILITY_DOWN
 };
-
-using namespace DATABASE;
 
 DatabaseWidgetTile::DatabaseWidgetTile(QWidget* pParent) : DatabaseWidgetTexture(pParent)
 {

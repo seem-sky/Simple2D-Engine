@@ -1,8 +1,10 @@
 #include "MapEditorDialogMapSettings.h"
 #include "moc_MapEditorDialogMapSettings.h"
 
+using namespace DATABASE;
+using namespace PROTOTYPE::MAP_STRUCTURE;
 
-MapEditorDialogMapSettings::MapEditorDialogMapSettings(DATABASE::MAP_STRUCTURE::MapPrototype* pPrototype, QWidget* pParent) : QDialog(pParent),
+MapEditorDialogMapSettings::MapEditorDialogMapSettings(MapPrototype* pPrototype, QWidget* pParent) : QDialog(pParent),
     Ui_MapEditorDialogMapSettings(), m_pPrototype(pPrototype)
 {
     setupUi(this);
