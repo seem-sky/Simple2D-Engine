@@ -18,7 +18,7 @@ void RevertInfo::revert(MAP::LayerContainer &mapLayer)
             auto& layer = mapLayer.getLayer(m_LayerType, m_LayerIndex);
             layer.setMapTile(UInt32Point3D(pair.first), pair.second);
         }
-        catch (const MAP::EXCEPTION::TileRangeException& e)
+        catch (const MAP::EXCEPTION::TileRangeException&)
         {
         }
     }

@@ -6,6 +6,7 @@
 #include <QtWidgets/QGraphicsView>
 #include <QtCore/QTimer>
 #include "DatabaseMgr.h"
+#include "PrototypeAnimationModule.h"
 
 class VisualSpriteItem : public QGraphicsItem
 {
@@ -64,9 +65,9 @@ public:
     void showVisual();
     uint32 getCurrentFrame() const { return m_uiCurrentFrameIndex; }
 
-    void setAnimation(uint32 animationEntry, DATABASE::PROTOTYPE::WORLD_OBJECT::AnimationInfo::VisualType type);
+    void setAnimation(uint32 animationEntry, DATABASE::PROTOTYPE::MODULE::ANIMATION::VisualType type);
     inline uint32 getAnimationID() const { return m_AnimationEntry; }
-    inline DATABASE::PROTOTYPE::WORLD_OBJECT::AnimationInfo::VisualType getVisualType() const { return m_VisualType; }
+	inline DATABASE::PROTOTYPE::MODULE::ANIMATION::VisualType getVisualType() const { return m_VisualType; }
 
     virtual void startAnimation();
     virtual void stopAnimation();
@@ -81,7 +82,7 @@ private:
     QTimer m_AnimationTimer;
 
     uint32 m_AnimationEntry;
-    DATABASE::PROTOTYPE::WORLD_OBJECT::AnimationInfo::VisualType m_VisualType;
+	DATABASE::PROTOTYPE::MODULE::ANIMATION::VisualType m_VisualType;
 
     bool m_DoAnimation;
 };

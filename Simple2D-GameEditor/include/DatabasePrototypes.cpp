@@ -7,6 +7,10 @@ namespace DATABASE
 {
     namespace PROTOTYPE
     {
+		/*#####
+		# Prototype
+		#####*/
+
         /*#####
         # AutoTilePrototype
         #####*/
@@ -283,50 +287,13 @@ namespace DATABASE
         /*#####
         # WorldObjectPrototype
         #####*/
-        namespace WORLD_OBJECT
-        {
-            WorldObjectPrototype::WorldObjectPrototype(uint32 uiID) : Prototype(uiID), m_uiAnimationSpeed(100)
-            {
-                _initAnimationPoses();
-            }
-
-            void WorldObjectPrototype::_initAnimationPoses()
-            {
-                // set minimum poses
-                m_AnimationInfos.resize(getMinimumAnimationCount());
-                for (uint32 i = 1; i <= getMinimumAnimationCount(); ++i)
-                    m_AnimationInfos.at(i-1).m_AnimationTypeID = i;
-            }
-
-            void WorldObjectPrototype::setAnimationInfo(uint32 index, AnimationInfo& animationInfo)
-            {
-                if (index >= m_AnimationInfos.size())
-                    m_AnimationInfos.resize(index+1);
-                // do not change animation type id if its an standard entry
-                if (index < getMinimumAnimationCount())
-                {
-                    auto &info = m_AnimationInfos.at(index);
-                    info.m_ID = animationInfo.m_ID;
-                    info.m_VisualType = animationInfo.m_VisualType;
-                }
-                else
-                    m_AnimationInfos.at(index) = animationInfo;
-            }
-
-            void WorldObjectPrototype::setAnimationCount(uint32 uiCount)
-            {
-                if (uiCount < getMinimumAnimationCount())
-                    uiCount = getMinimumAnimationCount();
-                m_AnimationInfos.resize(uiCount);
-            }
-        }
 
         /*#####
         # MapPrototype
         #####*/
         namespace MAP_STRUCTURE
         {
-            MapPrototype::MapPrototype(uint32 ID, const QString& fileName) : Prototype(ID), m_FileName(fileName), m_uiParentID(0)
+            MapPrototype::MapPrototype(uint32 ID, const QString& fileName) : Prototype(ID), m_FileName(fileName)
             {
                 m_Layer.at(static_cast<uint32>(MAP::LayerType::LAYER_BACKGROUND)) = 1;
                 m_Layer.at(static_cast<uint32>(MAP::LayerType::LAYER_FOREGROUND)) = 0;

@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <DB>
-    <p boundingX="0" boundingY="0" boundingWidth="0" boundingHeight="0" animationSpeed="100" ID="1" name="Object1">
+    <p boundingX="0" boundingY="0" boundingWidth="0" boundingHeight="0" animationSpeed="100" ID="1" name="Object1" flags="1">
         <animation entry="0" visualType="1" ID="2" typeID="1"/>
         <animation entry="1" visualType="1" ID="2" typeID="2"/>
         <animation entry="2" visualType="1" ID="2" typeID="3"/>
         <animation entry="3" visualType="1" ID="2" typeID="4"/>
     </p>
-    <p boundingX="0" boundingY="0" boundingWidth="0" boundingHeight="0" animationSpeed="100" ID="2" name="explosion">
+    <p boundingX="0" boundingY="0" boundingWidth="0" boundingHeight="0" animationSpeed="100" ID="2" name="explosion" flags="1">
         <animation entry="0" visualType="1" ID="1" typeID="1"/>
         <animation entry="1" visualType="1" ID="1" typeID="2"/>
         <animation entry="2" visualType="1" ID="1" typeID="3"/>
         <animation entry="3" visualType="1" ID="1" typeID="4"/>
     </p>
-    <p boundingX="14" boundingY="65" boundingWidth="36" boundingHeight="12" animationSpeed="100" ID="3" name="Tree">
+    <p boundingX="14" boundingY="65" boundingWidth="36" boundingHeight="12" animationSpeed="100" ID="3" name="Tree" flags="1">
         <animation entry="0" visualType="1" ID="3" typeID="1"/>
         <animation entry="1" visualType="1" ID="3" typeID="2"/>
         <animation entry="2" visualType="1" ID="3" typeID="3"/>
         <animation entry="3" visualType="1" ID="3" typeID="4"/>
     </p>
-    <p boundingX="0" boundingY="0" boundingWidth="0" boundingHeight="0" animationSpeed="100" ID="4" name="fallen-tree">
+    <p boundingX="0" boundingY="0" boundingWidth="0" boundingHeight="0" animationSpeed="100" ID="4" name="fallen-tree" flags="1">
         <animation entry="0" visualType="1" ID="4" typeID="1"/>
         <animation entry="1" visualType="1" ID="4" typeID="2"/>
         <animation entry="2" visualType="1" ID="4" typeID="3"/>
         <animation entry="3" visualType="1" ID="4" typeID="4"/>
     </p>
-    <p boundingX="0" boundingY="0" boundingWidth="0" boundingHeight="0" animationSpeed="100" ID="5" name="test-hero">
+    <p boundingX="0" boundingY="0" boundingWidth="0" boundingHeight="0" animationSpeed="100" ID="5" name="test-hero" flags="1">
         <animation entry="0" visualType="1" ID="5" typeID="1"/>
         <animation entry="1" visualType="1" ID="5" typeID="2"/>
         <animation entry="2" visualType="1" ID="5" typeID="3"/>

@@ -133,7 +133,7 @@
     <Filter Include="Database\Modules\WorldObject">
       <UniqueIdentifier>{2e619a1c-424f-4fdb-8b3c-555f177389ab}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Database\Modules\DeactivatedTab">
+    <Filter Include="EditorCore\DeactivatedTab">
       <UniqueIdentifier>{cc76231e-7461-484b-8e76-67935d0c650c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -268,7 +268,7 @@
       <Filter>Database\Modules\WorldObject</Filter>
     </ClCompile>
     <ClCompile Include="DeactivatedTabWidget.cpp">
-      <Filter>Database\Modules\DeactivatedTab</Filter>
+      <Filter>EditorCore\DeactivatedTab</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -396,6 +396,9 @@
     <moc_header Include="DatabaseModuleWorldObjectAnimation.h">
       <Filter>Database\Modules\WorldObject</Filter>
     </moc_header>
+    <moc_header Include="DeactivatedTabWidget.h">
+      <Filter>EditorCore\DeactivatedTab</Filter>
+    </moc_header>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -443,9 +446,6 @@
     </ClInclude>
     <ClInclude Include="DatabaseDialogChoseColor.h">
       <Filter>Database\Dialogs\ChoseColor</Filter>
-    </ClInclude>
-    <ClInclude Include="DeactivatedTabWidget.h">
-      <Filter>Database\Modules\DeactivatedTab</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

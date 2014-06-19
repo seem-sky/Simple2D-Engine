@@ -26,19 +26,8 @@ void DatabaseWidgetWorldObject::setupPrototypeFromWidgets(Prototype* pPrototype)
 {
     if (auto pWorldObject = dynamic_cast<WORLD_OBJECT::WorldObjectPrototype*>(pPrototype))
     {
-        auto count = m_pModuleAnimation->getAnimationCount();
-        pWorldObject->setAnimationCount(count);
-        for (uint32 i = 0; i < count; ++i)
-        {
-            if (auto viewer = m_pModuleAnimation->getVisualViewer(i))
-            {
-                WORLD_OBJECT::AnimationInfo info;
-                info.m_ID = viewer->getAnimationID();
-                info.m_VisualType = viewer->getVisualType();
-                info.m_AnimationTypeID = viewer->getAnimationTypeID();
-                pWorldObject->setAnimationInfo(i, info);
-            }
-        }
+		auto& flagMgr = pWorldObject->getFlagManager();
+		flagMgr.setFlag(WORLD_OBJECT::Flags::FLAG_ANIMATION, m_pModuleAnimation->setupPrototype(pWorldObject->getAnimationModule()));
     }
     DatabaseWidgetBase::setupPrototypeFromWidgets(pPrototype);
 }
@@ -47,17 +36,8 @@ void DatabaseWidgetWorldObject::setupWidgetsFromPrototype(const Prototype* pProt
 {
     if (auto pWorldObject = dynamic_cast<const WORLD_OBJECT::WorldObjectPrototype*>(pPrototype))
     {
-        auto count = pWorldObject->getAnimationCount();
-        m_pModuleAnimation->setAniamtionCount(count);
-        for (uint32 i = 0; i < count; ++i)
-        {
-            if (auto pViewer = m_pModuleAnimation->getVisualViewer(i))
-            {
-                auto &info = pWorldObject->getAnimationInfo(i);
-                pViewer->setAnimation(info.m_ID, info.m_VisualType);
-                pViewer->setAnimationType(info.m_AnimationTypeID);
-            }
-        }
+		auto& flagMgr = pWorldObject->getFlagManager();
+		m_pModuleAnimation->setupModule(pWorldObject->getAnimationModule(), flagMgr.hasFlag(WORLD_OBJECT::Flags::FLAG_ANIMATION));
     }
     DatabaseWidgetBase::setupWidgetsFromPrototype(pPrototype);
 }

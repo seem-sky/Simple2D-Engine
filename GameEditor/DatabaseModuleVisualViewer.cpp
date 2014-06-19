@@ -34,7 +34,7 @@ VisualViewerItem::VisualViewerItem(QWidget *pParent, bool standardEntry) : QFram
     m_pAnimationType->setEnabled(!standardEntry);
 }
 
-void VisualViewerItem::setAnimation(uint32 ID, AnimationInfo::VisualType type)
+void VisualViewerItem::setAnimation(uint32 ID, MODULE::ANIMATION::VisualType type)
 {
     m_pVisualViewer->setAnimation(ID, type);
 }

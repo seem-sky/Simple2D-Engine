@@ -7,6 +7,8 @@
 #include <QtCore/QXmlStreamReader>
 #include <QtCore/QXmlStreamWriter>
 #include "Container.h"
+#include <FlagManager.h>
+#include "PrototypeAnimationModule.h"
 
 namespace MAP
 {
@@ -31,7 +33,7 @@ namespace DATABASE
         class Prototype
         {
         public:
-            Prototype(uint32 ID = 0) : m_ID(ID) {}
+			Prototype(uint32 ID = 0) : m_ID(ID) {}
 
             inline void setName(const QString& sName) { m_Name = sName; }
             inline QString getName() const { return m_Name; }
@@ -98,7 +100,7 @@ namespace DATABASE
         class TilePrototype : public TexturePrototype
         {
         public:
-            TilePrototype(uint32 ID = 0) : TexturePrototype(ID), m_uiPassable(0), m_uiTerrainType(0) {}
+            TilePrototype(uint32 ID = 0) : TexturePrototype(ID) {}
 
             // passability flag, if nothing set, its unpassable
             enum PassabilityFlag
@@ -125,8 +127,8 @@ namespace DATABASE
             void fromXML(const QXmlStreamAttributes& attributes);
 
         private:
-            uint8 m_uiPassable;
-            uint32 m_uiTerrainType;
+            uint8 m_uiPassable = 0;
+            uint32 m_uiTerrainType = 0;
         };
 
         /*#####
@@ -379,12 +381,11 @@ namespace DATABASE
             class Sprite
             {
             public:
-                Sprite() : m_uiSpriteID(0), m_uiRotation(0), m_Scale(100), m_Opacity(100) {}
                 Int32Point m_Pos;
-                uint32 m_uiSpriteID;
-                uint16 m_uiRotation;
-                float m_Scale;
-                float m_Opacity;
+                uint32 m_uiSpriteID = 0;
+                uint16 m_uiRotation = 0;
+                float m_Scale = 100;
+                float m_Opacity = 100;
 
                 inline bool isEmpty() const { return !m_uiSpriteID; }
             };
@@ -393,8 +394,6 @@ namespace DATABASE
             class Frame
             {
             public:
-                Frame() : m_uiMsecTime(0) {}
-
                 Sprite getSprite(uint32 index) const;
                 void setSprite(uint32 index, Sprite sprite);
                 void addSprite(Sprite sprite);
@@ -416,7 +415,7 @@ namespace DATABASE
             private:
                 Int32Point m_FrameOffset;
                 SpriteVector m_Sprites;
-                uint32 m_uiMsecTime;
+                uint32 m_uiMsecTime = 0;
             };
             typedef std::vector<Frame> FrameVector;
 
@@ -448,34 +447,20 @@ namespace DATABASE
         {
             // animation stuff
             const uint8 MIN_WORLD_OBJECT_POSE = 4;
-            class AnimationInfo
-            {
-            public:
-                enum class VisualType
-                {
-                    SPRITE,
-                    ANIMATION
-                };
 
-                AnimationInfo(uint32 ID = 0, VisualType visualType = VisualType::SPRITE, uint32 animationTypeID = 0)
-                    : m_ID(ID), m_VisualType(visualType), m_AnimationTypeID(animationTypeID)
-                {}
-
-                bool isValid() const { return m_ID && m_AnimationTypeID; }
-
-                uint32 m_ID;
-                VisualType m_VisualType;
-                uint32 m_AnimationTypeID;
-            };
-            typedef std::vector<AnimationInfo> AnimationInfoVector;
+			enum class Flags
+			{
+				FLAG_NONE = 0x00,
+				FLAG_ANIMATION = 0x01,
+			};
 
             class WorldObjectPrototype : public Prototype
             {
-            private:
-                void _initAnimationPoses();
-
             public:
-                WorldObjectPrototype(uint32 ID = 0);
+				WorldObjectPrototype(uint32 ID = 0) : Prototype(ID) {}
+
+				inline const FlagManager<Flags>& getFlagManager() const { return m_Flags; }
+				inline FlagManager<Flags>& getFlagManager() { return m_Flags; }
 
                 inline int32 getBoundingX() const { return m_BoundingRect.getPositionX(); }
                 inline void setBoundingX(int32 x) { m_BoundingRect.setPositionX(x); }
@@ -494,14 +479,11 @@ namespace DATABASE
                 inline void setScriptName(const QString& sScriptName) { m_ScriptName = sScriptName; }
                 inline QString getScriptName() const { return m_ScriptName; }
 
-                inline const AnimationInfo& getAnimationInfo(uint32 uiIndex) const { return m_AnimationInfos.at(uiIndex); }
-                inline AnimationInfo& getAnimationInfo(uint32 uiIndex) { return m_AnimationInfos.at(uiIndex); }
-                void setAnimationInfo(uint32 uiIndex, AnimationInfo& animationInfo);
+				inline uint32 getAnimationCount() const { return m_AnimationModule.getAnimationCount(); }
+				uint8 getMinimumAnimationCount() const { return MIN_WORLD_OBJECT_POSE; }
 
-                inline uint32 getAnimationCount() const { return static_cast<uint32>(m_AnimationInfos.size()); }
-                void setAnimationCount(uint32 uiCount);
-
-                virtual uint8 getMinimumAnimationCount() const { return MIN_WORLD_OBJECT_POSE; }
+				inline const MODULE::ANIMATION::AnimationModule& getAnimationModule() const { return m_AnimationModule; }
+				inline MODULE::ANIMATION::AnimationModule& getAnimationModule() { return m_AnimationModule; }
 
                 // IO
                 virtual void toXML(QXmlStreamWriter& writer) const;
@@ -510,9 +492,11 @@ namespace DATABASE
 
             private:
                 Int32Rect m_BoundingRect;
-                AnimationInfoVector m_AnimationInfos;
-                uint16 m_uiAnimationSpeed;
+				uint16 m_uiAnimationSpeed = 100;
                 QString m_ScriptName;
+
+				FlagManager<Flags> m_Flags;
+				MODULE::ANIMATION::AnimationModule m_AnimationModule;
             };
         }
 
@@ -639,7 +623,7 @@ namespace DATABASE
                 void fromXML(const QXmlStreamAttributes& attributes);
 
             private:
-                uint32 m_uiParentID;
+                uint32 m_uiParentID = 0;
                 QString m_FileName;
                 QString m_ScriptName;
 

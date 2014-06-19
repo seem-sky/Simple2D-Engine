@@ -3,6 +3,7 @@
 #include <QtWidgets/QGridLayout>
 
 using namespace DATABASE::PROTOTYPE::WORLD_OBJECT;
+using namespace DATABASE::PROTOTYPE::MODULE::ANIMATION;
 
 DatabaseModuleWorldObjectAnimation::DatabaseModuleWorldObjectAnimation(QWidget* pParent) : DeactivatedWidget(pParent),
     // modules
@@ -42,6 +43,47 @@ DatabaseModuleWorldObjectAnimation::DatabaseModuleWorldObjectAnimation(QWidget* 
     connect(m_pVisualTypeBox, SIGNAL(currentIndexChanged(int)), this, SLOT(_onVisualTypeChanged(int)));
 }
 
+void DatabaseModuleWorldObjectAnimation::setupModule(const AnimationModule& module, bool activated)
+{
+	setActivated(activated);
+	if (activated)
+	{
+		auto count = module.getAnimationCount();
+		setAniamtionCount(count);
+		for (uint32 i = 0; i < count; ++i)
+		{
+			if (auto pViewer = getVisualViewer(i))
+			{
+				auto &info = module.getAnimationInfo(i);
+				pViewer->setAnimation(info.m_ID, info.m_VisualType);
+				pViewer->setAnimationType(info.m_AnimationTypeID);
+			}
+		}
+	}
+}
+
+bool DatabaseModuleWorldObjectAnimation::setupPrototype(AnimationModule& module) const
+{
+	if (!isActivated())
+		return false;
+
+	auto count = getAnimationCount();
+	module.setAnimationCount(count);
+	for (uint32 i = 0; i < count; ++i)
+	{
+		if (auto viewer = getVisualViewer(i))
+		{
+			AnimationInfo info;
+			info.m_ID = viewer->getAnimationID();
+			info.m_VisualType = viewer->getVisualType();
+			info.m_AnimationTypeID = viewer->getAnimationTypeID();
+			module.setAnimationInfo(i, info);
+		}
+	}
+
+	return true;
+}
+
 uint32 DatabaseModuleWorldObjectAnimation::getAnimationCount() const
 {
     return m_pModuleVisualViewer->getVisualViewerCount();
@@ -58,12 +100,12 @@ void DatabaseModuleWorldObjectAnimation::_onVisualTypeChanged(int type)
     m_pModuleSpriteList->hide();
     m_pModuleAnimationList->hide();
 
-    switch (static_cast<AnimationInfo::VisualType>(type))
+    switch (static_cast<VisualType>(type))
     {
-    case AnimationInfo::VisualType::SPRITE:
+    case VisualType::SPRITE:
         m_pModuleSpriteList->show();
         break;
-    case AnimationInfo::VisualType::ANIMATION:
+    case VisualType::ANIMATION:
         m_pModuleAnimationList->show();
         break;
     }

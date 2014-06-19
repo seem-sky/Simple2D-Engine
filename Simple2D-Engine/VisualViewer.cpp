@@ -106,7 +106,7 @@ void VisualViewerScene::_drawGrid(QPainter* pPainter, const QRectF& rect)
 #####*/
 VisualViewer::VisualViewer(QWidget *pParent)
     : QGraphicsView(pParent), m_uiCurrentFrameIndex(0), m_pDBMgr(nullptr), m_AnimationEntry(0), m_DoAnimation(false),
-    m_VisualType(WORLD_OBJECT::AnimationInfo::VisualType::SPRITE)
+    m_VisualType(MODULE::ANIMATION::VisualType::SPRITE)
 {
     setScene(new VisualViewerScene());
     scene()->setParent(this);
@@ -124,7 +124,7 @@ void VisualViewer::clear()
 {
     scene()->clear();
     m_AnimationEntry = 0;
-    m_VisualType = WORLD_OBJECT::AnimationInfo::VisualType::SPRITE;
+	m_VisualType = MODULE::ANIMATION::VisualType::SPRITE;
     m_uiCurrentFrameIndex = 0;
     m_DoAnimation = false;
 }
@@ -133,10 +133,10 @@ void VisualViewer::showVisual()
 {
     switch (m_VisualType)
     {
-    case WORLD_OBJECT::AnimationInfo::VisualType::SPRITE:
+	case MODULE::ANIMATION::VisualType::SPRITE:
         _setupSprite();
         break;
-    case WORLD_OBJECT::AnimationInfo::VisualType::ANIMATION:
+	case MODULE::ANIMATION::VisualType::ANIMATION:
         _setupAnimationFrame(0);
         break;
     }
@@ -195,7 +195,7 @@ int VisualViewer::_setupAnimationFrame(uint32 frameIndex)
 
 void VisualViewer::startAnimation()
 {
-    if (m_VisualType == WORLD_OBJECT::AnimationInfo::VisualType::ANIMATION)
+	if (m_VisualType == MODULE::ANIMATION::VisualType::ANIMATION)
     {
         connect(&m_AnimationTimer, SIGNAL(timeout()), this, SLOT(_onFrameExpired()));
         m_DoAnimation = true;
@@ -220,7 +220,7 @@ bool VisualViewer::isAnimationActive() const
 
 void VisualViewer::_onFrameExpired()
 {
-    if (m_VisualType != WORLD_OBJECT::AnimationInfo::VisualType::ANIMATION || !isAnimationActive())
+	if (m_VisualType != MODULE::ANIMATION::VisualType::ANIMATION || !isAnimationActive())
         stopAnimation();
 
     m_uiCurrentFrameIndex = _setupAnimationFrame(m_uiCurrentFrameIndex+1);
@@ -250,10 +250,10 @@ void VisualViewer::dropEvent(QDropEvent* pEvent)
             switch (DBtype)
             {
             case DATABASE::DatabaseType::SPRITE_DATABASE:
-                setAnimation(ID, WORLD_OBJECT::AnimationInfo::VisualType::SPRITE);
+				setAnimation(ID, MODULE::ANIMATION::VisualType::SPRITE);
                 break;
             case DATABASE::DatabaseType::ANIMATION_DATABASE:
-                setAnimation(ID, WORLD_OBJECT::AnimationInfo::VisualType::ANIMATION);
+				setAnimation(ID, MODULE::ANIMATION::VisualType::ANIMATION);
                 break;
             default:
                 throw std::runtime_error("Invalid database type.");
@@ -264,7 +264,7 @@ void VisualViewer::dropEvent(QDropEvent* pEvent)
     pEvent->ignore();
 }
 
-void VisualViewer::setAnimation(uint32 animationEntry, WORLD_OBJECT::AnimationInfo::VisualType type)
+void VisualViewer::setAnimation(uint32 animationEntry, MODULE::ANIMATION::VisualType type)
 {
     clear();
     m_AnimationEntry = animationEntry;

@@ -16,9 +16,7 @@ MainWindow::MainWindow(QMainWindow* pParent) : QMainWindow(pParent), Ui_MainWind
     setupUi(this);
 
     // setup map editor widget
-    auto pLayout = new QGridLayout(this);
-    centralwidget->setLayout(pLayout);
-    pLayout->addWidget(m_pMapEditor, 0, 0, -1, -1);
+	setCentralWidget(m_pMapEditor);
 
     connect(this, SIGNAL(projectLoadDone()), m_pMapEditor, SLOT(_projectOpened()));
     connect(openDatabase, SIGNAL(triggered()), this, SLOT(_openDatabase()));

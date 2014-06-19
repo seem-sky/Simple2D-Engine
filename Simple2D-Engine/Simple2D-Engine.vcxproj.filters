@@ -52,6 +52,12 @@
     <Filter Include="Map\Layer">
       <UniqueIdentifier>{8856bb87-df12-4ee8-9728-702f242ad745}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Database\Protoype">
+      <UniqueIdentifier>{daec07ea-9978-4057-b4b9-ff559e108e1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Protoype\Modules">
+      <UniqueIdentifier>{d6cf38e5-65e5-44b1-b2f8-4d52cb2ab0c6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Simple2D-GameEditor\include\Game.cpp">
@@ -59,9 +65,6 @@
     </ClCompile>
     <ClCompile Include="..\Simple2D-GameEditor\include\Color.cpp">
       <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Simple2D-GameEditor\include\DatabasePrototypes.cpp">
-      <Filter>Database</Filter>
     </ClCompile>
     <ClCompile Include="..\Simple2D-GameEditor\include\Logfile.cpp">
       <Filter>Core</Filter>
@@ -165,8 +168,14 @@
     <ClCompile Include="MapLayer.cpp">
       <Filter>Map\Layer</Filter>
     </ClCompile>
-    <ClCompile Include="PrototypeModules.cpp">
-      <Filter>Database</Filter>
+    <ClCompile Include="..\Simple2D-GameEditor\include\DatabasePrototypes.cpp">
+      <Filter>Database\Protoype</Filter>
+    </ClCompile>
+    <ClCompile Include="PrototypeModuleManager.cpp">
+      <Filter>Database\Protoype\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="PrototypeAnimationModule.cpp">
+      <Filter>Database\Protoype\Modules</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -180,9 +189,6 @@
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="..\Simple2D-GameEditor\include\Database.h">
-      <Filter>Database</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Simple2D-GameEditor\include\DatabasePrototypes.h">
       <Filter>Database</Filter>
     </ClInclude>
     <ClInclude Include="..\Simple2D-GameEditor\include\Logfile.h">
@@ -293,8 +299,17 @@
     <ClInclude Include="MapTile.h">
       <Filter>Map\Layer</Filter>
     </ClInclude>
-    <ClInclude Include="PrototypeModules.h">
-      <Filter>Database</Filter>
+    <ClInclude Include="..\Simple2D-GameEditor\include\DatabasePrototypes.h">
+      <Filter>Database\Protoype</Filter>
+    </ClInclude>
+    <ClInclude Include="PrototypeModuleManager.h">
+      <Filter>Database\Protoype\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="PrototypeModule.h">
+      <Filter>Database\Protoype\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="PrototypeAnimationModule.h">
+      <Filter>Database\Protoype\Modules</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

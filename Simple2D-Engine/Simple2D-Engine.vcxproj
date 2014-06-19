@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -49,7 +49,8 @@
     <ClCompile Include="ObjectAnimationWidget.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Player_Game.cpp" />
-    <ClCompile Include="PrototypeModules.cpp" />
+    <ClCompile Include="PrototypeAnimationModule.cpp" />
+    <ClCompile Include="PrototypeModuleManager.cpp" />
     <ClCompile Include="RevertInfo.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneMgr.cpp" />
@@ -69,6 +70,7 @@
     <ClInclude Include="..\Simple2D-GameEditor\include\MapDatabase.h" />
     <ClInclude Include="..\Simple2D-GameEditor\include\MapGrid.h" />
     <ClInclude Include="..\Simple2D-GameEditor\include\WorldObject.h" />
+    <ClInclude Include="PrototypeAnimationModule.h" />
     <ClInclude Include="AnimationHolder.h" />
     <ClInclude Include="AutoTile.h" />
     <ClInclude Include="AutoTileCache.h" />
@@ -92,7 +94,8 @@
     <ClInclude Include="ObjectAnimationWidget.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Player_Game.h" />
-    <ClInclude Include="PrototypeModules.h" />
+    <ClInclude Include="PrototypeModuleManager.h" />
+    <ClInclude Include="PrototypeModule.h" />
     <ClInclude Include="RevertInfo.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="GameWindow.h" />
@@ -114,26 +117,26 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>

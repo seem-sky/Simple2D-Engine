@@ -1,5 +1,6 @@
 #include "DatabasePrototypes.h"
 #include <QtCore/QStringList>
+#include "PrototypeAnimationModule.h"
 
 using namespace DATABASE::PROTOTYPE;
 
@@ -272,6 +273,8 @@ void WORLD_OBJECT::WorldObjectPrototype::fromXML(const QXmlStreamAttributes& att
 
     setAnimationSpeed(attributes.value("animationSpeed").toUShort());
     setScriptName(attributes.value("script").toString());
+
+	getFlagManager().setFlag(attributes.value("flags").toUInt());
 }
 
 void WORLD_OBJECT::WorldObjectPrototype::toXML(QXmlStreamWriter& writer) const
@@ -281,23 +284,27 @@ void WORLD_OBJECT::WorldObjectPrototype::toXML(QXmlStreamWriter& writer) const
     writer.writeAttribute("boundingWidth", QString::number(getBoundingWidth()));
     writer.writeAttribute("boundingHeight", QString::number(getBoundingHeight()));
     writer.writeAttribute("animationSpeed", QString::number(getAnimationSpeed()));
+	writer.writeAttribute("flags", QString::number(getFlagManager().getFlag()));
 
     if (!getScriptName().isEmpty())
         writer.writeAttribute("script", getScriptName());
     Prototype::toXML(writer);
 
     //store animation infos
-    for (uint32 i = 0; i < getAnimationCount(); ++i)
-    {
-        WORLD_OBJECT::AnimationInfo animationInfo = getAnimationInfo(i);
-        if (animationInfo.m_ID == 0 && animationInfo.m_AnimationTypeID == 0)
-            continue;
-        writer.writeEmptyElement("animation");
-        writer.writeAttribute("entry", QString::number(i));
-        writer.writeAttribute("visualType", QString::number(static_cast<uint32>(animationInfo.m_VisualType)));
-        writer.writeAttribute("ID", QString::number(animationInfo.m_ID));
-        writer.writeAttribute("typeID", QString::number(animationInfo.m_AnimationTypeID));
-    }
+	if (getFlagManager().hasFlag(Flags::FLAG_ANIMATION))
+	{
+		for (uint32 i = 0; i < getAnimationCount(); ++i)
+		{
+			auto animationInfo = getAnimationModule().getAnimationInfo(i);
+			if (animationInfo.m_ID == 0 && animationInfo.m_AnimationTypeID == 0)
+				continue;
+			writer.writeEmptyElement("animation");
+			writer.writeAttribute("entry", QString::number(i));
+			writer.writeAttribute("visualType", QString::number(static_cast<uint32>(animationInfo.m_VisualType)));
+			writer.writeAttribute("ID", QString::number(animationInfo.m_ID));
+			writer.writeAttribute("typeID", QString::number(animationInfo.m_AnimationTypeID));
+		}
+	}
 }
 
 void WORLD_OBJECT::WorldObjectPrototype::insertChildren(const QXmlStreamReader& reader)
@@ -308,10 +315,10 @@ void WORLD_OBJECT::WorldObjectPrototype::insertChildren(const QXmlStreamReader& 
         if (!attributes.hasAttribute("entry"))
             return;
 
-        setAnimationInfo(attributes.value("entry").toUInt(),
-            WORLD_OBJECT::AnimationInfo(
+		getAnimationModule().setAnimationInfo(attributes.value("entry").toUInt(),
+            MODULE::ANIMATION::AnimationInfo(
                 attributes.value("ID").toUInt(),
-                static_cast<WORLD_OBJECT::AnimationInfo::VisualType>(attributes.value("visualType").toUInt()),
+				static_cast<MODULE::ANIMATION::VisualType>(attributes.value("visualType").toUInt()),
                 attributes.value("typeID").toUInt()));
     }
     else

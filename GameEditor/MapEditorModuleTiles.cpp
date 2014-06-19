@@ -61,7 +61,7 @@ void AutoTilePixmapWidget::drawPixmap()
 {
     if (auto pAutoTile = GAutoTileCache::get()->getItem(getID()))
     {
-        if (auto pPixmap = pAutoTile->getPixmap(DATABASE::AUTO_TILE::INDEX_INNER_CENTER))
+        if (auto pPixmap = pAutoTile->getPixmap(DATABASE::PROTOTYPE::AUTO_TILE::INDEX_INNER_CENTER))
         {
             QPainter painter(this);
             painter.drawPixmap(0, 0,* pPixmap);

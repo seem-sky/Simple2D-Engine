@@ -5,6 +5,7 @@
 #include "DatabaseModuleVisualViewer.h"
 #include <QtWidgets/QComboBox>
 #include "DeactivatedTabWidget.h"
+#include <PrototypeAnimationModule.h>
 
 class DatabaseModuleWorldObjectAnimation : public DeactivatedWidget
 {
@@ -21,6 +22,8 @@ public:
     inline VisualViewerItem* getVisualViewer(uint32 index) const { return m_pModuleVisualViewer->getVisualViewer(index); }
 
     void clear();
+	void setupModule(const DATABASE::PROTOTYPE::MODULE::ANIMATION::AnimationModule& module, bool activated);
+	bool setupPrototype(DATABASE::PROTOTYPE::MODULE::ANIMATION::AnimationModule& module) const;
 
 private slots:
     void _onVisualTypeChanged(int);

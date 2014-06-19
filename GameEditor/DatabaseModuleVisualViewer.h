@@ -17,9 +17,9 @@ public:
 
     inline uint32 getAnimationID() const { return m_pVisualViewer->getAnimationID(); }
     inline uint32 getAnimationTypeID() const { return m_pAnimationType->currentIndex()+1; }
-    inline DATABASE::PROTOTYPE::WORLD_OBJECT::AnimationInfo::VisualType getVisualType() const { return m_pVisualViewer->getVisualType(); }
+    inline DATABASE::PROTOTYPE::MODULE::ANIMATION::VisualType getVisualType() const { return m_pVisualViewer->getVisualType(); }
 
-    void setAnimation(uint32 ID, DATABASE::PROTOTYPE::WORLD_OBJECT::AnimationInfo::VisualType type);
+	void setAnimation(uint32 ID, DATABASE::PROTOTYPE::MODULE::ANIMATION::VisualType type);
     void setAnimationType(uint32 ID);
     void setAnimationTypeModel(DATABASE::ConstDatabaseModel* pModel);
 
