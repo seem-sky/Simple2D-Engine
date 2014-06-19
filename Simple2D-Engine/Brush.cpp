@@ -24,9 +24,12 @@ void Brush::updateAutoTilesAround(const UInt32PointVector& positions)
         checkPositions.set(current);
         auto tilePosition = UInt32Point3D(current, getLayerIndex());
         uint32 borderCheck = m_MapLayer.checkAutoTiles(getID(), tilePosition, positionChecks, Layer::FLAG_ALL);
-        auto& mapTile = m_MapLayer.getMapTile(tilePosition);
-        if (mapTile.getMapTile().isAutoTile())
-            mapTile.getMapTile().m_uiTileID = getAutoTileIndexForTileCheck(borderCheck);
+        auto mapTile = m_MapLayer.getMapTile(tilePosition);
+		if (mapTile.getMapTile().isAutoTile())
+		{
+			mapTile.getMapTile().m_uiTileID = getAutoTileIndexForTileCheck(borderCheck);
+			m_MapLayer.setMapTile(mapTile);
+		}
     }
 
     // update tiles
@@ -37,16 +40,16 @@ void Brush::updateAutoTilesAround(const UInt32PointVector& positions)
             continue;
         checkPositions.set(tilePos);
 
-        UInt32Point3D pos(tilePos, getLayerIndex());
-        auto& tile = m_MapLayer.getMapTile(pos);
+		auto tile = m_MapLayer.getMapTile(tilePos);
         if (!tile.getMapTile().isAutoTile())
             continue;
 
         // store tile
         m_RevertInfo.addTile(tilePos, tile.getMapTile());
 
-        tile.getMapTile().m_uiTileID = getAutoTileIndexForTileCheck(m_MapLayer.checkAutoTiles(tile.getMapTile().m_uiAutoTileSetID, pos, UInt32PointVector(),
+		tile.getMapTile().m_uiTileID = getAutoTileIndexForTileCheck(m_MapLayer.checkAutoTiles(tile.getMapTile().m_uiAutoTileSetID, tilePos, UInt32PointVector(),
             Layer::FLAG_NOTHING));
+		m_MapLayer.setMapTile(tile);
     }
 }
 
@@ -79,7 +82,7 @@ void BrushPen::_drawTile(const UInt32Point& pos)
 void BrushPen::_drawAutoTile(const UInt32Point& pos)
 {
     // when same auto tile, return
-    auto& tile = m_MapLayer.getMapTile(pos);
+    auto tile = m_MapLayer.getMapTile(pos);
     if (tile.getMapTile().m_uiAutoTileSetID == getID())
         return;
 
@@ -88,6 +91,7 @@ void BrushPen::_drawAutoTile(const UInt32Point& pos)
 
     // setup autotile
     tile.getMapTile().m_uiAutoTileSetID = getID();
+	m_MapLayer.setMapTile(tile);
 
     // check around
     UInt32PointVector positions;
