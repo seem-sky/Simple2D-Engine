@@ -65,6 +65,7 @@ public:
     void showVisual();
     uint32 getCurrentFrame() const { return m_uiCurrentFrameIndex; }
 
+	void setAnimation(const DATABASE::PROTOTYPE::MODULE::ANIMATION::AnimationInfo& info);
     void setAnimation(uint32 animationEntry, DATABASE::PROTOTYPE::MODULE::ANIMATION::VisualType type);
     inline uint32 getAnimationID() const { return m_AnimationEntry; }
 	inline DATABASE::PROTOTYPE::MODULE::ANIMATION::VisualType getVisualType() const { return m_VisualType; }
@@ -72,6 +73,8 @@ public:
     virtual void startAnimation();
     virtual void stopAnimation();
     bool isAnimationActive() const;
+
+	void showGrid(bool show = true);
 
 private slots:
     void _onFrameExpired();

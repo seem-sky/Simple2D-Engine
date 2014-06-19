@@ -113,6 +113,12 @@ VisualViewer::VisualViewer(QWidget *pParent)
     m_AnimationTimer.setSingleShot(true);
 }
 
+void VisualViewer::showGrid(bool show /* = true */)
+{
+	if (auto pScene = dynamic_cast<VisualViewerScene*>(scene()))
+		pScene->showGrid(show);
+}
+
 void VisualViewer::setDatabaseManager(const DATABASE::DatabaseMgr* pDBMgr)
 {
     m_pDBMgr = pDBMgr;
@@ -270,4 +276,9 @@ void VisualViewer::setAnimation(uint32 animationEntry, MODULE::ANIMATION::Visual
     m_AnimationEntry = animationEntry;
     m_VisualType = type;
     startAnimation();
+}
+
+void VisualViewer::setAnimation(const DATABASE::PROTOTYPE::MODULE::ANIMATION::AnimationInfo& info)
+{
+	setAnimation(info.m_ID, info.m_VisualType);
 }

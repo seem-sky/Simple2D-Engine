@@ -176,6 +176,7 @@ MapViewer::MapViewer(uint32 mapID, const DATABASE::DatabaseMgr& DBMgr, QWidget* 
     setScene(new MapViewerScene(mapID, DBMgr));
     scene()->setParent(this);
     setFrameShape(QFrame::NoFrame);
+	setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 }
 
 void MapViewer::loadMap()
