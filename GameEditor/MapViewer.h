@@ -2,38 +2,39 @@
 #define MAP_VIEWER_H
 
 #include <QtWidgets/QGraphicsView>
-#include "DatabasePrototypes.h"
 #include "DatabaseMgr.h"
-#include "AutoTile.h"
 #include <QtWidgets/QGraphicsItem>
-#include "MapData.h"
-#include "MapEditorWidgetBrush.h"
+#include <MapViewScene.h>
 
-enum class MappingMode
+namespace MAP
 {
-    TILE_MAPPING,
-    OBJECT_MAPPING,
-    PRESENTATION
-};
+    namespace BRUSH
+    {
+        namespace REVERT
+        {
+            class RevertInfo;
+        }
+    }
+}
+
+class MappingObject;
 
 /*#####
 # MapViewerScene
 #####*/
-class MapViewerScene : public QGraphicsScene
+class MapViewerScene : public MapViewScene
 {
 private:
-    void _drawGrid(QPainter* painter, const QRectF& rect);
-    void _drawTiles(QPainter* painter, const QRectF& rect, MAP::LayerType layer);
-    void _drawDarkRect(QPainter* painter, const QRectF& rect);
+    void _drawGrid(QPainter* painter, const QRectF& rect) const;
+    void _drawDarkRect(QPainter* painter, const QRectF& rect) const;
 
 protected:
-    void drawBackground(QPainter* painter, const QRectF& rect);
     void drawForeground(QPainter* painter, const QRectF& rect);
+
+    void drawTiles(QPainter* painter, const QRectF& rect, MAP::LayerType currentLayer) const;
 
 public:
     MapViewerScene(uint32 mapID, const DATABASE::DatabaseMgr& DBMgr);
-
-    inline MAP::MAP_DATA::MapData& getMapData() { return m_MapData; }
 
     void showGrid(bool show);
     bool isGridActive() const { return m_ShowGrid; }
@@ -43,17 +44,16 @@ public:
     void setLayerType(MAP::LayerType layerType);
     MAP::LayerType getLayerType() const { return m_LayerType; }
 
-    MappingMode getMode() const { return m_Mode; }
-    void setMode(MappingMode mode);
+    inline void setMappingObject(MappingObject* pMappingObject) { m_pMappingObject = pMappingObject; }
+    inline MappingObject* getMappingObject() const { return m_pMappingObject; }
 
 private:
-    MAP::MAP_DATA::MapData m_MapData;
-
     bool m_ShowGrid;
 
     std::array<uint32, 2> m_LayerIndex;
     MAP::LayerType m_LayerType;
-    MappingMode m_Mode;
+
+    MappingObject* m_pMappingObject = nullptr;
 };
 
 /*#####
@@ -64,7 +64,8 @@ class MapViewer : public QGraphicsView
     Q_OBJECT
 private:
     void _drawTiles(const QPoint& pos);
-    void _finishBrush();
+    void _drawLayer() const;
+    UInt32Point _calculateStartTile();
 
 protected:
     void mousePressEvent(QMouseEvent* pEvent);
@@ -93,20 +94,17 @@ public:
 
     QString getMapName() const;
 
+    void addRevertInfo(const MAP::BRUSH::REVERT::RevertInfo& info);
     void revertLast();
     inline bool hasChanges() const { return !m_RevertInfos.empty(); }
 
-    void setMappingMode(MappingMode mode);
+    MapViewerScene* getScene() const { return dynamic_cast<MapViewerScene*>(scene()); }
 
 signals:
-    void requestBrushInfo(BRUSH::BrushIndex brush, MAP::BRUSH::BrushInfo& brushInfo);
     void changed(MapViewer* pViewer);
 
 private:
     const DATABASE::DatabaseMgr& m_DBMgr;
-
-    MAP::BRUSH::BrushPtr m_pCurrentBrush;
-
     std::vector<MAP::BRUSH::REVERT::RevertInfo> m_RevertInfos;
 };
 

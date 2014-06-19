@@ -64,7 +64,7 @@ namespace MAP
             REVERT::RevertInfo m_RevertInfo;
             Layer& m_MapLayer;
         };
-        typedef std::unique_ptr<Brush> BrushPtr;
+        typedef std::unique_ptr<MAP::BRUSH::Brush> BrushPtr;
 
         class BrushPen : public Brush
         {

@@ -3,9 +3,10 @@
 
 #include <QtWidgets/QWidget>
 #include "UI/UI_MapEditorModuleContent.h"
-#include "MapViewer.h"
 #include <unordered_map>
-#include "AutoTileCache.h"
+#include <DatabaseMgr.h>
+
+class MapViewer;
 
 class MapEditorModuleContent : public QWidget, Ui_MapEditorModuleContent
 {
@@ -14,8 +15,6 @@ public:
     MapEditorModuleContent(DATABASE::DatabaseMgr& databaseMgr, QWidget* pWidget = nullptr);
 
     MapViewer* getTab(uint32 mapID);
-
-    void setMappingMode(MappingMode mode);
 
 private slots:
     void _onCurrentChanged(int index);

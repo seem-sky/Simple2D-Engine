@@ -27,6 +27,8 @@ namespace BRUSH
         const MAP::BRUSH::BrushInfo& getBrushInfo(BrushIndex brush) const;
         void setBrushInfo(BrushIndex brush, const MAP::BRUSH::BrushInfo& brushInfo);
 
+        MAP::BRUSH::BrushPtr createBrush(BrushIndex brushIndex, MAP::LayerContainer& mapData, MAP::LayerType type, uint32 index) const;
+
     public slots:
         void onSelectionChanged(BRUSH::BrushIndex brush, MAP::BRUSH::SelectionType selectioType, uint32 ID);
         void onBrushInfoRequested(BRUSH::BrushIndex brush, MAP::BRUSH::BrushInfo& brushInfo);

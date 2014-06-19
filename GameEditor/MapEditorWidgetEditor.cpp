@@ -1,5 +1,7 @@
 #include "MapEditorWidgetEditor.h"
 #include "moc_MapEditorWidgetEditor.h"
+#include "AutoTileCache.h"
+#include "MapViewer.h"
 
 const std::array<const char*, 3> MAPPING_MODES =
 {
@@ -16,13 +18,14 @@ MapEditorWidgetEditor::MapEditorWidgetEditor(DATABASE::DatabaseMgr& databaseMgr,
     m_pModuleWorldObjects(new MapEditorModuleWorldObjects(m_DatabaseMgr, this)),
 
     // others
-    m_pMappingMode(new QComboBox(this))
+    m_pMappingMode(new QComboBox(this)),
+    m_MappingObject(this, m_pModuleTileSelection->getBrushWidget())
 {
     // setup mapping mode QComboBox
     for (uint32 i = 0; i < 3; ++i)
         m_pMappingMode->addItem(MAPPING_MODES[i]);
     connect(m_pMappingMode, SIGNAL(currentIndexChanged(int)), this, SLOT(_onMappingModeChanged(int)));
-    m_pMappingMode->setCurrentIndex(static_cast<int>(MappingMode::TILE_MAPPING));
+    m_pMappingMode->setCurrentIndex(static_cast<int>(m_MappingObject.getMappingModeID()));
     m_pMappingMode->show();
     _onMappingModeChanged(m_pMappingMode->currentIndex());
 
@@ -51,7 +54,7 @@ MapEditorWidgetEditor::MapEditorWidgetEditor(DATABASE::DatabaseMgr& databaseMgr,
 
 void MapEditorWidgetEditor::_onMappingModeChanged(int index)
 {
-    MappingMode mode = MappingMode::PRESENTATION;
+    auto mode = static_cast<MAPPING_MODE::Mode>(index);
 
     // first hide all
     m_pModuleTileSelection->getBrushWidget()->hide();
@@ -60,24 +63,24 @@ void MapEditorWidgetEditor::_onMappingModeChanged(int index)
     m_pModuleWorldObjects->hide();
 
     // show only the needed widgets
-    switch (static_cast<MappingMode>(index))
+    switch (mode)
     {
-    case MappingMode::TILE_MAPPING:
+    case MAPPING_MODE::Mode::TILE_MAPPING:
         m_pModuleTileSelection->show();
         m_pModuleTileSelection->getBrushWidget()->show();
         break;
 
-    case MappingMode::OBJECT_MAPPING:
+    case MAPPING_MODE::Mode::OBJECT_MAPPING:
         m_pModuleWorldObjects->show();
         break;
 
-    case MappingMode::PRESENTATION:
+    case MAPPING_MODE::Mode::PRESENTATION:
         break;
     default:
         throw std::runtime_error("invalid mapping mode detected");
     }
 
-    m_pModuleContent->setMappingMode(static_cast<MappingMode>(mode));
+    m_MappingObject.setMappingMode(mode);
 }
 
 void MapEditorWidgetEditor::setup()
@@ -101,7 +104,5 @@ void MapEditorWidgetEditor::projectOpened()
 
 void MapEditorWidgetEditor::onRegisterTab(MapViewer* pTab)
 {
-    connect(pTab, SIGNAL(requestBrushInfo(BRUSH::BrushIndex, MAP::BRUSH::BrushInfo&)),
-        m_pModuleTileSelection->getBrushWidget(), SLOT(onBrushInfoRequested(BRUSH::BrushIndex, MAP::BRUSH::BrushInfo&)));
-    pTab->setMappingMode(static_cast<MappingMode>(m_pMappingMode->currentIndex()));
+    pTab->getScene()->setMappingObject(&m_MappingObject);
 }

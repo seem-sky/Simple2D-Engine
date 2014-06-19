@@ -7,6 +7,7 @@
 #include <QtWidgets/QErrorMessage>
 #include "Logfile.h"
 #include <QtCore/QTime>
+#include "AutoTileCache.h"
 
 using namespace DATABASE;
 

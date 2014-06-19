@@ -136,6 +136,12 @@
     <Filter Include="EditorCore\DeactivatedTab">
       <UniqueIdentifier>{cc76231e-7461-484b-8e76-67935d0c650c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Map Editor\Modules\MappingObject">
+      <UniqueIdentifier>{46597533-0007-4e3f-b5d5-1cd22afbdf45}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map Editor\Modules\MappingObject\MappingMode">
+      <UniqueIdentifier>{2dcc81c1-1e0d-4112-92c0-6b1bc3cee911}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainWindow.cpp">
@@ -269,6 +275,12 @@
     </ClCompile>
     <ClCompile Include="DeactivatedTabWidget.cpp">
       <Filter>EditorCore\DeactivatedTab</Filter>
+    </ClCompile>
+    <ClCompile Include="MappingObject.cpp">
+      <Filter>Map Editor\Modules\MappingObject</Filter>
+    </ClCompile>
+    <ClCompile Include="TileMappingMode.cpp">
+      <Filter>Map Editor\Modules\MappingObject\MappingMode</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -446,6 +458,15 @@
     </ClInclude>
     <ClInclude Include="DatabaseDialogChoseColor.h">
       <Filter>Database\Dialogs\ChoseColor</Filter>
+    </ClInclude>
+    <ClInclude Include="MappingObject.h">
+      <Filter>Map Editor\Modules\MappingObject</Filter>
+    </ClInclude>
+    <ClInclude Include="MappingModeInterface.h">
+      <Filter>Map Editor\Modules\MappingObject\MappingMode</Filter>
+    </ClInclude>
+    <ClInclude Include="TileMappingMode.h">
+      <Filter>Map Editor\Modules\MappingObject\MappingMode</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

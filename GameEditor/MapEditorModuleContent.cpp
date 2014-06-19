@@ -2,6 +2,7 @@
 #include "moc_MapEditorModuleContent.h"
 #include "Project.h"
 #include <QtWidgets/QMessageBox>
+#include "MapViewer.h"
 
 MapEditorModuleContent::MapEditorModuleContent(DATABASE::DatabaseMgr& databaseMgr, QWidget* pWidget) : QWidget(pWidget), Ui_MapEditorModuleContent(),
     m_DBMgr(databaseMgr)
@@ -154,13 +155,4 @@ void MapEditorModuleContent::_onMapChanged(MapViewer* pMapViewer)
 {
     m_pMapTabs->setTabText(m_pMapTabs->indexOf(pMapViewer), pMapViewer->getMapName() + (pMapViewer->hasChanges() ? "*" : ""));
     m_pRevert->setEnabled(pMapViewer->hasChanges());
-}
-
-void MapEditorModuleContent::setMappingMode(MappingMode mode)
-{
-    for (int32 i = 0; i < m_pMapTabs->count(); ++i)
-    {
-        if (auto pTab = dynamic_cast<MapViewer*>(m_pMapTabs->widget(i)))
-            pTab->setMappingMode(mode);
-    }
 }

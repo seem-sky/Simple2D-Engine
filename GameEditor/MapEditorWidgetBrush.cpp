@@ -65,3 +65,8 @@ void MapEditorWidgetBrush::onBrushInfoRequested(BRUSH::BrushIndex brush, MAP::BR
 {
     brushInfo = m_pBrushes.at(static_cast<uint32>(brush))->getBrushInfo();
 }
+
+BrushPtr MapEditorWidgetBrush::createBrush(BrushIndex brushIndex, MAP::LayerContainer& mapData, MAP::LayerType type, uint32 index) const
+{
+    return BrushFactory::createBrush(m_DBMgr, mapData, m_pBrushes.at(static_cast<uint32>(brushIndex))->getBrushInfo(), type, index - 1);
+}

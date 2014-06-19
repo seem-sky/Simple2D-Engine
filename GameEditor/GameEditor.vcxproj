@@ -257,9 +257,11 @@
     <ClCompile Include="MapEditorModuleWorldObjects.cpp" />
     <ClCompile Include="MapEditorWidgetBrush.cpp" />
     <ClCompile Include="MapEditorWidgetEditor.cpp" />
+    <ClCompile Include="MappingObject.cpp" />
     <ClCompile Include="MapViewer.cpp" />
     <ClCompile Include="Project.cpp" />
     <ClCompile Include="TexturePrototypeFrame.cpp" />
+    <ClCompile Include="TileMappingMode.cpp" />
   </ItemGroup>
   <ItemGroup>
     <moc_header Include="MainWindow.h">
@@ -301,6 +303,7 @@
     <compile_QT_Files Include="UI\MapEditorModuleContent.ui" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="TileMappingMode.h" />
     <moc_header Include="AbstractPrototypeTable.h" />
     <moc_header Include="MapEditorDialogMapSettings.h" />
     <moc_header Include="MapEditorModuleContent.h" />
@@ -317,6 +320,8 @@
     <moc_header Include="MapEditorWidgetBrush.h" />
     <moc_header Include="MapViewer.h" />
     <ClInclude Include="MapEditorModuleWorldObjects.h" />
+    <ClInclude Include="MappingObject.h" />
+    <ClInclude Include="MappingModeInterface.h" />
     <ClInclude Include="TexturePrototypeFrame.h" />
     <moc_header Include="DatabaseDialogResize.h" />
     <moc_header Include="AnimationViewer.h" />

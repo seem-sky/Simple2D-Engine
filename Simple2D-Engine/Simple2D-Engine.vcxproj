@@ -45,6 +45,7 @@
     <ClCompile Include="MapData.cpp" />
     <ClCompile Include="MapLayer.cpp" />
     <ClCompile Include="MapMgr.cpp" />
+    <ClCompile Include="MapViewScene.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="ObjectAnimationWidget.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -70,6 +71,7 @@
     <ClInclude Include="..\Simple2D-GameEditor\include\MapDatabase.h" />
     <ClInclude Include="..\Simple2D-GameEditor\include\MapGrid.h" />
     <ClInclude Include="..\Simple2D-GameEditor\include\WorldObject.h" />
+    <ClInclude Include="MapViewScene.h" />
     <ClInclude Include="PrototypeAnimationModule.h" />
     <ClInclude Include="AnimationHolder.h" />
     <ClInclude Include="AutoTile.h" />

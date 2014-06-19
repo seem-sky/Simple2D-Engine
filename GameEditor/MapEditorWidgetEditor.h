@@ -6,6 +6,7 @@
 #include "MapEditorModuleTileSelection.h"
 #include "MapEditorModuleMapTree.h"
 #include "MapEditorModuleWorldObjects.h"
+#include "MappingObject.h"
 
 class MapEditorWidgetEditor : public QWidget
 {
@@ -26,13 +27,15 @@ private:
     DATABASE::DatabaseMgr& m_DatabaseMgr;
 
     // modules
-    MapEditorModuleContent* m_pModuleContent;
-    MapEditorModuleTileSelection* m_pModuleTileSelection;
-    MapEditorModuleMapTree* m_pModuleMapTree;
-    MapEditorModuleWorldObjects* m_pModuleWorldObjects;
+    MapEditorModuleContent* m_pModuleContent = nullptr;
+    MapEditorModuleTileSelection* m_pModuleTileSelection = nullptr;
+    MapEditorModuleMapTree* m_pModuleMapTree = nullptr;
+    MapEditorModuleWorldObjects* m_pModuleWorldObjects = nullptr;
+
+    MappingObject m_MappingObject;
 
     // others
-    QComboBox* m_pMappingMode;
+    QComboBox* m_pMappingMode = nullptr;
 };
 
 #endif
