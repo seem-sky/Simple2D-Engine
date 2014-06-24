@@ -262,6 +262,7 @@
     <ClCompile Include="Project.cpp" />
     <ClCompile Include="TexturePrototypeFrame.cpp" />
     <ClCompile Include="TileMappingMode.cpp" />
+    <ClCompile Include="ObjectMappingMode.cpp" />
   </ItemGroup>
   <ItemGroup>
     <moc_header Include="MainWindow.h">
@@ -303,7 +304,9 @@
     <compile_QT_Files Include="UI\MapEditorModuleContent.ui" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="PresentationMappingMode.h" />
     <ClInclude Include="TileMappingMode.h" />
+    <ClInclude Include="ObjectMappingMode.h" />
     <moc_header Include="AbstractPrototypeTable.h" />
     <moc_header Include="MapEditorDialogMapSettings.h" />
     <moc_header Include="MapEditorModuleContent.h" />

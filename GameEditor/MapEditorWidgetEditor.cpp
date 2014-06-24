@@ -3,13 +3,6 @@
 #include "AutoTileCache.h"
 #include "MapViewer.h"
 
-const std::array<const char*, 3> MAPPING_MODES =
-{
-    "tile mapping",
-    "object mapping",
-    "presentation"
-};
-
 MapEditorWidgetEditor::MapEditorWidgetEditor(DATABASE::DatabaseMgr& databaseMgr, QWidget* pParent) : QWidget(pParent), m_DatabaseMgr(databaseMgr),
     // modules
     m_pModuleTileSelection(new MapEditorModuleTileSelection(m_DatabaseMgr, this)),
@@ -22,10 +15,9 @@ MapEditorWidgetEditor::MapEditorWidgetEditor(DATABASE::DatabaseMgr& databaseMgr,
     m_MappingObject(this, m_pModuleTileSelection->getBrushWidget())
 {
     // setup mapping mode QComboBox
-    for (uint32 i = 0; i < 3; ++i)
-        m_pMappingMode->addItem(MAPPING_MODES[i]);
+    m_pMappingMode->addItems(m_MappingObject.getMappingModeNames());
     connect(m_pMappingMode, SIGNAL(currentIndexChanged(int)), this, SLOT(_onMappingModeChanged(int)));
-    m_pMappingMode->setCurrentIndex(static_cast<int>(m_MappingObject.getMappingModeID()));
+    m_pMappingMode->setCurrentIndex(static_cast<int>(m_MappingObject.getMappingModeType()));
     m_pMappingMode->show();
     _onMappingModeChanged(m_pMappingMode->currentIndex());
 
@@ -54,7 +46,7 @@ MapEditorWidgetEditor::MapEditorWidgetEditor(DATABASE::DatabaseMgr& databaseMgr,
 
 void MapEditorWidgetEditor::_onMappingModeChanged(int index)
 {
-    auto mode = static_cast<MAPPING_MODE::Mode>(index);
+    auto mode = static_cast<MAPPING_MODE::Type>(index);
 
     // first hide all
     m_pModuleTileSelection->getBrushWidget()->hide();
@@ -65,16 +57,16 @@ void MapEditorWidgetEditor::_onMappingModeChanged(int index)
     // show only the needed widgets
     switch (mode)
     {
-    case MAPPING_MODE::Mode::TILE_MAPPING:
+    case MAPPING_MODE::Type::TILE_MAPPING:
         m_pModuleTileSelection->show();
         m_pModuleTileSelection->getBrushWidget()->show();
         break;
 
-    case MAPPING_MODE::Mode::OBJECT_MAPPING:
+    case MAPPING_MODE::Type::OBJECT_MAPPING:
         m_pModuleWorldObjects->show();
         break;
 
-    case MAPPING_MODE::Mode::PRESENTATION:
+    case MAPPING_MODE::Type::PRESENTATION:
         break;
     default:
         throw std::runtime_error("invalid mapping mode detected");

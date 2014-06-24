@@ -282,6 +282,9 @@
     <ClCompile Include="TileMappingMode.cpp">
       <Filter>Map Editor\Modules\MappingObject\MappingMode</Filter>
     </ClCompile>
+    <ClCompile Include="ObjectMappingMode.cpp">
+      <Filter>Map Editor\Modules\MappingObject\MappingMode</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <compile_QT_Files Include="UI\MainWindow.ui">
@@ -466,6 +469,12 @@
       <Filter>Map Editor\Modules\MappingObject\MappingMode</Filter>
     </ClInclude>
     <ClInclude Include="TileMappingMode.h">
+      <Filter>Map Editor\Modules\MappingObject\MappingMode</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectMappingMode.h">
+      <Filter>Map Editor\Modules\MappingObject\MappingMode</Filter>
+    </ClInclude>
+    <ClInclude Include="PresentationMappingMode.h">
       <Filter>Map Editor\Modules\MappingObject\MappingMode</Filter>
     </ClInclude>
   </ItemGroup>

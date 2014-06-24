@@ -46,9 +46,9 @@ void MapViewerScene::drawTiles(QPainter* painter, const QRectF& rect, MAP::Layer
     for (uint32 layerIndex = 0; layerIndex < getMapData().getMapLayer().getLayerSize(currentLayer); ++layerIndex)
     {
         auto& mapLayer = getMapData().getMapLayer().getLayer(currentLayer, layerIndex);
-        switch (m_pMappingObject->getMappingModeID())
+        switch (m_pMappingObject->getMappingModeType())
         {
-        case MAPPING_MODE::Mode::TILE_MAPPING:
+        case MAPPING_MODE::Type::TILE_MAPPING:
             // draw black rect over lower layer
             if (getLayerType() == currentLayer && getLayerIndex()-1 == layerIndex)
                 _drawDarkRect(painter, rect);
@@ -58,7 +58,7 @@ void MapViewerScene::drawTiles(QPainter* painter, const QRectF& rect, MAP::Layer
             break;
 
             // draw only foreground opaque
-        case MAPPING_MODE::Mode::OBJECT_MAPPING:
+        case MAPPING_MODE::Type::OBJECT_MAPPING:
             painter->setOpacity(currentLayer == MAP::LayerType::LAYER_FOREGROUND ? 0.5 : 1);
             break;
         }
@@ -68,9 +68,9 @@ void MapViewerScene::drawTiles(QPainter* painter, const QRectF& rect, MAP::Layer
 
 void MapViewerScene::drawForeground(QPainter* painter, const QRectF& rect)
 {
-    if (getLayerType() == MAP::LayerType::LAYER_FOREGROUND || m_pMappingObject->getMappingModeID() != MAPPING_MODE::Mode::TILE_MAPPING)
+    if (getLayerType() == MAP::LayerType::LAYER_FOREGROUND || m_pMappingObject->getMappingModeType() != MAPPING_MODE::Type::TILE_MAPPING)
     {
-        if (m_pMappingObject->getMappingModeID() == MAPPING_MODE::Mode::TILE_MAPPING && getMapData().getMapLayer().getLayerSize(MAP::LayerType::LAYER_FOREGROUND) == 0)
+        if (m_pMappingObject->getMappingModeType() == MAPPING_MODE::Type::TILE_MAPPING && getMapData().getMapLayer().getLayerSize(MAP::LayerType::LAYER_FOREGROUND) == 0)
             _drawDarkRect(painter, rect);
         drawTiles(painter, rect, MAP::LayerType::LAYER_FOREGROUND);
     }

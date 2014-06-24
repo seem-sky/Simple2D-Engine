@@ -3,23 +3,36 @@
 
 #include <QtCore/QObject>
 #include <QtGui/QMouseEvent>
-#include "TileMappingMode.h"
+#include "MappingModeInterface.h"
+#include <QtCore/QStringList>
 
 class MapViewer;
+namespace BRUSH
+{
+    class MapEditorWidgetBrush;
+}
+
 class MappingObject : public QObject
 {
+private:
+    const MAPPING_MODE::Interface* _getMode(MAPPING_MODE::Type mode) const;
+    MAPPING_MODE::Interface* _getMode(MAPPING_MODE::Type mode);
+
 public:
     MappingObject(QWidget* pParent, const BRUSH::MapEditorWidgetBrush* pBrushWidget);
 
-    void setMappingMode(MAPPING_MODE::Mode mode);
-    inline MAPPING_MODE::Mode getMappingModeID() const { return m_pMappingMode->getModeID(); }
+    void setMappingMode(MAPPING_MODE::Type mode);
+    MAPPING_MODE::Type getMappingModeType() const;
 
     void press(MapViewer* pViewer, const QMouseEvent* pEvent);
     void release(MapViewer* pViewer, const QMouseEvent* pEvent);
     void move(MapViewer* pViewer, const QMouseEvent* pEvent);
 
+    QStringList getMappingModeNames() const;
+
 private:
-    MAPPING_MODE::Interface* m_pMappingMode = nullptr;
-    MAPPING_MODE::Tile m_TileMappingMode;
+    typedef std::unique_ptr<MAPPING_MODE::Interface> MappingModePtr;
+    std::vector<MappingModePtr> m_MappingModes;
+    MAPPING_MODE::Interface* m_pCurrentMappingMode = nullptr;
 };
 #endif

@@ -23,7 +23,8 @@ namespace MAPPING_MODE
         void release(MapViewer* pViewer, const QMouseEvent* pEvent);
         void move(MapViewer* pViewer, const QMouseEvent* pEvent);
 
-        Mode getModeID() const { return Mode::TILE_MAPPING; }
+        Type getModeType() const { return Type::TILE_MAPPING; }
+        QString getModeName() const { return "tile mapping"; }
 
     private:
         MAP::BRUSH::BrushPtr m_pCurrentBrush;

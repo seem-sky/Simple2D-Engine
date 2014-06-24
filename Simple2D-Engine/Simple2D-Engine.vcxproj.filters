@@ -177,7 +177,9 @@
     <ClCompile Include="PrototypeAnimationModule.cpp">
       <Filter>Database\Protoype\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="MapViewScene.cpp" />
+    <ClCompile Include="MapViewScene.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Simple2D-GameEditor\include\Application.h">
@@ -312,7 +314,9 @@
     <ClInclude Include="PrototypeAnimationModule.h">
       <Filter>Database\Protoype\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="MapViewScene.h" />
+    <ClInclude Include="MapViewScene.h">
+      <Filter>Map</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
