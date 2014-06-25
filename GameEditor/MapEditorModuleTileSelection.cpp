@@ -22,12 +22,12 @@ MapEditorModuleTileSelection::MapEditorModuleTileSelection(DATABASE::DatabaseMgr
     m_pModuleTileSets->setMaximumWidth(maximumWidth());
 
     // connect brush with tile selection
-    connect(m_pModuleTiles, SIGNAL(selectionChanged(BRUSH::BrushIndex, MAP::BRUSH::SelectionType, uint32)),
-        m_pWidgetBrush, SLOT(onSelectionChanged(BRUSH::BrushIndex, MAP::BRUSH::SelectionType, uint32)));
-    connect(m_pModuleAutoTiles, SIGNAL(selectionChanged(BRUSH::BrushIndex, MAP::BRUSH::SelectionType, uint32)),
-        m_pWidgetBrush, SLOT(onSelectionChanged(BRUSH::BrushIndex, MAP::BRUSH::SelectionType, uint32)));
-    connect(m_pModuleTileSets, SIGNAL(selectionChanged(BRUSH::BrushIndex, MAP::BRUSH::SelectionType, uint32)),
-        m_pWidgetBrush, SLOT(onSelectionChanged(BRUSH::BrushIndex, MAP::BRUSH::SelectionType, uint32)));
+    connect(m_pModuleTiles, SIGNAL(selectionChanged(BRUSH::BrushIndex, MAP::BRUSH::BrushInfo::Type, uint32)),
+        m_pWidgetBrush, SLOT(onSelectionChanged(BRUSH::BrushIndex, MAP::BRUSH::BrushInfo::Type, uint32)));
+    connect(m_pModuleAutoTiles, SIGNAL(selectionChanged(BRUSH::BrushIndex, MAP::BRUSH::BrushInfo::Type, uint32)),
+        m_pWidgetBrush, SLOT(onSelectionChanged(BRUSH::BrushIndex, MAP::BRUSH::BrushInfo::Type, uint32)));
+    connect(m_pModuleTileSets, SIGNAL(selectionChanged(BRUSH::BrushIndex, MAP::BRUSH::BrushInfo::Type, uint32)),
+        m_pWidgetBrush, SLOT(onSelectionChanged(BRUSH::BrushIndex, MAP::BRUSH::BrushInfo::Type, uint32)));
 
     connect(m_pModuleTiles, SIGNAL(itemClicked(BRUSH::BrushIndex, AbstractPixmapWidget*)),
         this, SLOT(onItemClicked(BRUSH::BrushIndex, AbstractPixmapWidget*)));

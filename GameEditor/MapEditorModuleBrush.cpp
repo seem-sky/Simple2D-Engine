@@ -30,24 +30,24 @@ void MapEditorModuleBrush::_update()
 
     QPixmap pixmap;
     QString text;
-    switch (m_BrushInfo.m_SelectionType)
+    switch (m_BrushInfo.getType())
     {
-    case MAP::BRUSH::SelectionType::TILES:
+    case MAP::BRUSH::BrushInfo::Type::TILE:
         text = "tile";
-        if (auto pPixmap = GTileCache::get()->getItem(m_BrushInfo.m_ID))
+        if (auto pPixmap = GTileCache::get()->getItem(m_BrushInfo.getID()))
             pixmap =* pPixmap;
         break;
-    case MAP::BRUSH::SelectionType::AUTO_TILES:
+    case MAP::BRUSH::BrushInfo::Type::AUTO_TILE:
         text = "auto tile";
-        if (auto pAutoTile = GAutoTileCache::get()->getItem(m_BrushInfo.m_ID))
+        if (auto pAutoTile = GAutoTileCache::get()->getItem(m_BrushInfo.getID()))
         {
             if (auto pPixmap = pAutoTile->getPixmap(AUTO_TILE::INDEX_INNER_CENTER))
                 pixmap =* pPixmap;
         }
         break;
-    case MAP::BRUSH::SelectionType::TILE_SETS:
+    case MAP::BRUSH::BrushInfo::Type::TILE_SET:
         text = "tile set";
-        if (auto pTileSet = m_DBMgr.getTileSetDatabase()->getOriginalPrototype(m_BrushInfo.m_ID))
+        if (auto pTileSet = m_DBMgr.getTileSetDatabase()->getOriginalPrototype(m_BrushInfo.getID()))
             pixmap = TILE_SET::createPixmap(*pTileSet);
         break;
     }
@@ -79,7 +79,7 @@ void MapEditorModuleBrush::setBrushInfo(const BrushInfo& brushInfo)
 void MapEditorModuleBrush::_onBrushTypeChanged(const QString& text)
 {
     if (text == "fill")
-        m_BrushInfo.m_BrushType = BrushType::FILL;
+        m_BrushInfo.setMode(MAP::BRUSH::BrushInfo::Mode::FILL);
     else
-        m_BrushInfo.m_BrushType = BrushType::PEN;
+        m_BrushInfo.setMode(MAP::BRUSH::BrushInfo::Mode::PEN);
 }

@@ -17,7 +17,7 @@ public:
     MapEditorModuleTileSets(QWidget* pParent = nullptr);
 
 signals:
-    void selectionChanged(BRUSH::BrushIndex brush, MAP::BRUSH::SelectionType selectioType, uint32 ID);
+    void selectionChanged(BRUSH::BrushIndex brush, MAP::BRUSH::BrushInfo::Type type, uint32 ID);
     void itemClicked(BRUSH::BrushIndex brush);
 };
 

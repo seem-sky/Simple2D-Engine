@@ -1,16 +1,30 @@
 #ifndef MAP_TILE_H
 #define MAP_TILE_H
 
-#include "DatabasePrototypes.h"
+#include "Simple2D-Global.h"
 
 namespace MAP
 {
+    enum class BorderTile
+    {
+        TOP_LEFT,
+        TOP,
+        TOP_RIGHT,
+        LEFT,
+        RIGHT,
+        BOTTOM_LEFT,
+        BOTTOM,
+        BOTTOM_RIGHT
+    };
+
     class MapTile
     {
     public:
-        MapTile(DATABASE::PROTOTYPE::TILE_INDEX uiTileID = 0, DATABASE::PROTOTYPE::AUTO_TILE_INDEX uiAutoTileSetID = 0) : m_uiAutoTileSetID(uiAutoTileSetID), m_uiTileID(uiTileID) {}
-        DATABASE::PROTOTYPE::TILE_INDEX m_uiTileID;
-        DATABASE::PROTOTYPE::AUTO_TILE_INDEX m_uiAutoTileSetID;
+        MapTile(DATABASE::PROTOTYPE::TILE_INDEX tileID = 0-1,
+            DATABASE::PROTOTYPE::AUTO_TILE_INDEX autoTileSetID = 0-1)
+            : m_uiAutoTileSetID(autoTileSetID), m_uiTileID(tileID) {}
+        DATABASE::PROTOTYPE::TILE_INDEX m_uiTileID = 0-1;
+        DATABASE::PROTOTYPE::AUTO_TILE_INDEX m_uiAutoTileSetID = 0-1;
 
         inline bool isAutoTile() const { return m_uiAutoTileSetID != 0; }
         inline bool isEmpty() const { return !m_uiTileID && !m_uiAutoTileSetID; }
@@ -30,15 +44,26 @@ namespace MAP
     class MapTileInfo
     {
     public:
-        MapTileInfo(const MapTile& tile, UInt32Point at) : m_Tile(tile), m_Position(at) {}
+        MapTileInfo(const MapTile& tile = MapTile(), UInt32Point at = UInt32Point()) : m_Tile(tile), m_Position(at) {}
 
         inline const MapTile& getMapTile() const { return m_Tile; }
         inline MapTile& getMapTile() { return m_Tile; }
         inline UInt32Point getPosition() const { return m_Position; }
 
+        inline bool isValid() const { return m_Tile.isValid(); }
+        inline bool isAutoTile() const { return m_Tile.isAutoTile(); }
+
     private:
         MapTile m_Tile;
         UInt32Point m_Position;
     };
+    typedef std::vector<MapTileInfo> MapTileInfoVec;
+
+    static DATABASE::PROTOTYPE::AUTO_TILE::TILE_CHECK borderTileToTileCheck(BorderTile borderTile)
+    {
+        uint32 check = 1;
+        check <<= static_cast<uint32>(borderTile);
+        return static_cast<DATABASE::PROTOTYPE::AUTO_TILE::TILE_CHECK>(check);
+    }
 }
 #endif

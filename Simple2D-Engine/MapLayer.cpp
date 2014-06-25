@@ -135,6 +135,50 @@ uint32 Layer::checkAutoTiles(uint32 uiID, const UInt32Point& pos, UInt32PointVec
     return uiBorderCheck;
 }
 
+MapTileInfo Layer::getBorderTileInfo(const UInt32Point& pos, BorderTile borderTile) const
+{
+    UInt32Point3D checkPos = pos;
+    switch (borderTile)
+    {
+    case BorderTile::TOP_LEFT:
+        --checkPos.x;
+        --checkPos.y;
+        break;
+
+    case BorderTile::TOP:
+        --checkPos.y;
+        break;
+
+    case BorderTile::TOP_RIGHT:
+        ++checkPos.x;
+        --checkPos.y;
+        break;
+
+    case BorderTile::LEFT:
+        --checkPos.x;
+        break;
+
+    case BorderTile::RIGHT:
+        ++checkPos.x;
+        break;
+
+    case BorderTile::BOTTOM_LEFT:
+        --checkPos.x;
+        ++checkPos.y;
+        break;
+
+    case BorderTile::BOTTOM:
+        ++checkPos.y;
+        break;
+
+    case BorderTile::BOTTOM_RIGHT:
+        ++checkPos.x;
+        ++checkPos.y;
+        break;
+    }
+    return getMapTile(checkPos);
+}
+
 /*#####
 # LayerContainer
 #####*/

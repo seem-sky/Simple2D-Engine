@@ -50,10 +50,10 @@ public:
     void setup();
     void clear();
 
-    virtual MAP::BRUSH::SelectionType getType() const = 0;
+    virtual MAP::BRUSH::BrushInfo::Type getType() const = 0;
 
 signals:
-    void selectionChanged(BRUSH::BrushIndex brush, MAP::BRUSH::SelectionType selectioType, uint32 ID);
+    void selectionChanged(BRUSH::BrushIndex brush, MAP::BRUSH::BrushInfo::Type selectioType, uint32 ID);
     void itemClicked(BRUSH::BrushIndex brush, AbstractPixmapWidget* pWidget);
 
 protected:

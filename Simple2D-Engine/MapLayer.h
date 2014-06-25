@@ -34,6 +34,8 @@ namespace MAP
         };
         uint32 checkAutoTiles(uint32 uiID, const UInt32Point& pos, UInt32PointVector& result, uint32 resultFlag);
 
+        MapTileInfo getBorderTileInfo(const UInt32Point& pos, BorderTile borderTile) const;
+
     private:
         boost::multi_array<MapTile, 2> m_Layer;
         UInt32Point m_Size;

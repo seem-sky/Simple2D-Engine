@@ -44,7 +44,7 @@ void MapEditorModuleTileSets::mousePressEvent(QMouseEvent* pEvent)
             brush = BRUSH::BrushIndex::BRUSH_RIGHT;
 
         // ToDo: hacky ID; better solution?
-        emit selectionChanged(brush, MAP::BRUSH::SelectionType::TILE_SETS, item.row()+1);
+        emit selectionChanged(brush, MAP::BRUSH::BrushInfo::Type::TILE_SET, item.row()+1);
         emit itemClicked(brush);
     }
 }

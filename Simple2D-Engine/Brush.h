@@ -1,114 +1,42 @@
-#ifndef BRUSH_H
-#define BRUSH_H
+#ifndef BRUSH_2_H
+#define BRUSH_2_H
 
-#include "DatabaseMgr.h"
-#include "RevertInfo.h"
+#include "BrushAreaInterface.h"
+#include "BrushTypeInterface.h"
+#include "BrushRevert.h"
 
 namespace MAP
 {
     namespace BRUSH
     {
-        /*#####
-        # BrushInfo
-        #####*/
-        class BrushInfo
-        {
-        public:
-            BrushInfo() : m_BrushType(BrushType::PEN), m_SelectionType(SelectionType::TILES), m_ID(0)
-            {
-            }
-
-            BrushType m_BrushType;
-            SelectionType m_SelectionType;
-            uint32 m_ID;
-        };
-
-        static bool operator==(const BrushInfo& lhs, const BrushInfo& rhs)
-        {
-            return lhs.m_ID == rhs.m_ID && lhs.m_SelectionType == rhs.m_SelectionType && lhs.m_BrushType == rhs.m_BrushType;
-        }
-
-        static bool operator!=(const BrushInfo& lhs, const BrushInfo& rhs)
-        {
-            return !(lhs == rhs);
-        }
-
-        /*#####
-        # Brush
-        #####*/
         class Brush
         {
-        protected:
-            Brush(const DATABASE::DatabaseMgr& DBMgr, LayerContainer &mapLayer, uint32 ID, SelectionType selectionType, LayerType layerType, uint32 layerIndex);
-
-            void updateAutoTilesAround(const UInt32PointVector& positions);
+        private:
+            void _checkValidation() const;
 
         public:
-            virtual void draw(const UInt32Point& pos) = 0;
+            Brush(AREA::Interface* pArea = nullptr, TYPE::Interface* pType = nullptr);
 
-            inline uint32 getID() const { return m_ID; }
-            inline SelectionType getSelectionType() const { return m_SelectionType; }
-            inline LayerType getLayerType() const { return m_LayerType; }
-            inline uint32 getLayerIndex() const { return m_LayerIndex; }
+            void setArea(AREA::Interface* pArea);
+            void setType(TYPE::Interface* pType);
 
-            const REVERT::RevertInfo& getRevertInfo() const { return m_RevertInfo; }
+            void setPosition(const UInt32Point& pos);
+
+            REVERT::BrushRevert getBrushRevert() const;
+            void resetRevertInfo();
+
+            void start();
+            void start(const UInt32Point& pos);
 
         private:
-            uint32 m_ID;
-            SelectionType m_SelectionType;
-            LayerType m_LayerType;
-            uint32 m_LayerIndex;
+            AREA::AreaPtr m_pArea;
+            TYPE::TypePtr m_pType;
 
-        protected:
-            const DATABASE::DatabaseMgr& m_DBMgr;
-            REVERT::RevertInfo m_RevertInfo;
-            Layer& m_MapLayer;
-        };
-        typedef std::unique_ptr<MAP::BRUSH::Brush> BrushPtr;
-
-        class BrushPen : public Brush
-        {
-            friend class BrushFactory;
-
-        private:
-            void _drawTile(const UInt32Point& pos);
-            void _drawAutoTile(const UInt32Point& pos);
-            void _drawTileSet(const UInt32Point& pos);
-
-        protected:
-            BrushPen(const DATABASE::DatabaseMgr& DBMgr, LayerContainer &mapLayer, uint32 ID, SelectionType selectionType, LayerType layerType, uint32 layerIndex);
-
-        public:
-            void draw(const UInt32Point& pos);
+            REVERT::BrushRevert m_RevertInfo;
         };
 
-        class BrushFill : public Brush
-        {
-            friend class BrushFactory;
-
-        private:
-            void _drawTile(const UInt32Point& pos);
-            void _drawAutoTile(const UInt32Point& pos);
-            void _drawTileSet(const UInt32Point& pos);
-            
-            bool _getPosition(uint32 i, UInt32Point &checkPos) const;
-
-        protected:
-            BrushFill(const DATABASE::DatabaseMgr& DBMgr, LayerContainer &mapLayer, uint32 ID, SelectionType selectionType, LayerType layerType, uint32 layerIndex);
-
-        public:
-            void draw(const UInt32Point& pos);
-        };
-
-        /*#####
-        # BrushFactory
-        #####*/
-        class BrushFactory
-        {
-        public:
-            static BrushPtr createBrush(const DATABASE::DatabaseMgr& DBMgr, LayerContainer &mapLayer, const BrushInfo& info, LayerType layerType, uint32 layerIndex);
-        };
+        typedef std::unique_ptr<Brush> Brush2Ptr;
     }
 }
-
 #endif
+

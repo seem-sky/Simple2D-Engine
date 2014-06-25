@@ -1,6 +1,7 @@
 #include "TileMappingMode.h"
 #include "MapViewer.h"
 #include "MapEditorWidgetBrush.h"
+#include "MapException.h"
 
 namespace MAPPING_MODE
 {
@@ -10,10 +11,18 @@ namespace MAPPING_MODE
     void Tile::_finishBrush()
     {
         // push only if there are changes
-        if (m_pCurrentBrush && m_pCurrentBrush->getRevertInfo().hasChanges() && m_pMapViewer)
-            m_pMapViewer->addRevertInfo(m_pCurrentBrush->getRevertInfo());
+        if (m_pCurrentBrush && m_pCurrentBrush->getBrushRevert().hasChanges() && m_pMapViewer)
+            m_pMapViewer->addBrushRevert(m_pCurrentBrush->getBrushRevert());
         m_pCurrentBrush.reset();
         m_pMapViewer = nullptr;
+    }
+
+    BRUSH::BrushIndex Tile::brushIndexFromMouseButton(Qt::MouseButton button)
+    {
+        auto brush = BRUSH::BrushIndex::BRUSH_LEFT;
+        if (button == Qt::RightButton)
+            brush = BRUSH::BrushIndex::BRUSH_RIGHT;
+        return brush;
     }
 
     void Tile::press(MapViewer* pViewer, const QMouseEvent* pEvent)
@@ -24,20 +33,34 @@ namespace MAPPING_MODE
         if (pEvent->button() == Qt::RightButton || pEvent->button() == Qt::LeftButton)
         {
             // create brush
-            auto brush = BRUSH::BrushIndex::BRUSH_LEFT;
-            if (pEvent->button() == Qt::RightButton)
-                brush = BRUSH::BrushIndex::BRUSH_RIGHT;
+            auto brush = brushIndexFromMouseButton(pEvent->button());
 
             // if there is an old brush, release it
-            if (m_pCurrentBrush)
-                _finishBrush();
-            m_pCurrentBrush = m_pBrushWidget->createBrush(brush, pViewer->getScene()->getMapData().getMapLayer(), pViewer->getScene()->getLayerType(),
-                pViewer->getScene()->getLayerIndex());
+            _finishBrush();
+            auto& layer = pViewer->getScene()->getMapData().getMapLayer().getLayer(pViewer->getScene()->getLayerType(), pViewer->getScene()->getLayerIndex() - 1);
+            m_pCurrentBrush = m_pBrushWidget->createBrush(brush, layer);
             auto pos = pViewer->mapToScene(pEvent->pos());
-            m_pCurrentBrush->draw(UInt32Point(pos.x() / TILE_SIZE, pos.y() / TILE_SIZE));
+            UInt32Point tilePos(pos.x() / TILE_SIZE, pos.y() / TILE_SIZE);
+
+            // if already same tile, return
+            if (_isTileAlreadySet(layer, tilePos, brush))
+                return;
+
+            m_pCurrentBrush->start(tilePos);
             pViewer->getScene()->update();
             m_pMapViewer = pViewer;
         }
+    }
+
+    bool Tile::_isTileAlreadySet(const MAP::Layer &layer, const UInt32Point& tilePos, BRUSH::BrushIndex brush)
+    {
+        try
+        {
+            auto tileInfo = layer.getMapTile(tilePos).getMapTile();
+            return !tileInfo.isValid() || (!tileInfo.isAutoTile() && tileInfo.m_uiTileID == m_pBrushWidget->getBrushInfo(brush).getID());
+        }
+        catch (const MAP::EXCEPTION::TileRangeException&) {}
+        return true;
     }
 
     void Tile::release(MapViewer* pViewer, const QMouseEvent* pEvent)
@@ -49,8 +72,18 @@ namespace MAPPING_MODE
     {
         if (m_pCurrentBrush && pViewer && pViewer->getScene())
         {
+            auto& layer = pViewer->getScene()->getMapData().getMapLayer().getLayer(pViewer->getScene()->getLayerType(), pViewer->getScene()->getLayerIndex() - 1);
             auto pos = pViewer->mapToScene(pEvent->pos());
-            m_pCurrentBrush->draw(UInt32Point(pos.x() / TILE_SIZE, pos.y() / TILE_SIZE));
+            UInt32Point tilePos(pos.x() / TILE_SIZE, pos.y() / TILE_SIZE);
+
+            // create brush
+            auto brush = brushIndexFromMouseButton(pEvent->button());
+
+            // if already same tile, return
+            if (_isTileAlreadySet(layer, tilePos, brush))
+                return;
+
+            m_pCurrentBrush->start(UInt32Point(pos.x() / TILE_SIZE, pos.y() / TILE_SIZE));
             pViewer->getScene()->update();
         }
     }

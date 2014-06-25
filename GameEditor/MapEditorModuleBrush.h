@@ -4,7 +4,7 @@
 #include <QtWidgets/QWidget>
 #include "UI/UI_MapEditorModuleBrush.h"
 #include "DatabaseMgr.h"
-#include "Brush.h"
+#include <BrushInfo.h>
 
 namespace BRUSH
 {

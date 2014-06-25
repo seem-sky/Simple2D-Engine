@@ -21,7 +21,7 @@ class MapEditorModuleTiles : public AbstractPrototypeTable
 private:
     void _setup();
 
-    MAP::BRUSH::SelectionType getType() const { return MAP::BRUSH::SelectionType::TILES; }
+    MAP::BRUSH::BrushInfo::Type getType() const { return MAP::BRUSH::BrushInfo::Type::TILE; }
 
 public:
     MapEditorModuleTiles(const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent = nullptr);
@@ -45,7 +45,7 @@ class MapEditorModuleAutoTiles : public AbstractPrototypeTable
 private:
     void _setup();
 
-    MAP::BRUSH::SelectionType getType() const { return MAP::BRUSH::SelectionType::AUTO_TILES; }
+    MAP::BRUSH::BrushInfo::Type getType() const { return MAP::BRUSH::BrushInfo::Type::AUTO_TILE; }
 
 public:
     MapEditorModuleAutoTiles(const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent = nullptr);

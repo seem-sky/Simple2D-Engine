@@ -3,6 +3,7 @@
 
 #include <QtWidgets/QWidget>
 #include "MapEditorModuleBrush.h"
+#include "Brush.h"
 
 namespace BRUSH
 {
@@ -27,10 +28,11 @@ namespace BRUSH
         const MAP::BRUSH::BrushInfo& getBrushInfo(BrushIndex brush) const;
         void setBrushInfo(BrushIndex brush, const MAP::BRUSH::BrushInfo& brushInfo);
 
-        MAP::BRUSH::BrushPtr createBrush(BrushIndex brushIndex, MAP::LayerContainer& mapData, MAP::LayerType type, uint32 index) const;
+        MAP::BRUSH::Brush2Ptr createBrush(BrushIndex brushIndex, MAP::Layer& layer) const;
+
 
     public slots:
-        void onSelectionChanged(BRUSH::BrushIndex brush, MAP::BRUSH::SelectionType selectioType, uint32 ID);
+        void onSelectionChanged(BRUSH::BrushIndex brush, MAP::BRUSH::BrushInfo::Type type, uint32 ID);
         void onBrushInfoRequested(BRUSH::BrushIndex brush, MAP::BRUSH::BrushInfo& brushInfo);
 
     private:

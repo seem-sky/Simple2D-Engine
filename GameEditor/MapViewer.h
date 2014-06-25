@@ -12,7 +12,7 @@ namespace MAP
     {
         namespace REVERT
         {
-            class RevertInfo;
+            class BrushRevert;
         }
     }
 }
@@ -94,9 +94,9 @@ public:
 
     QString getMapName() const;
 
-    void addRevertInfo(const MAP::BRUSH::REVERT::RevertInfo& info);
+    void addBrushRevert(MAP::BRUSH::REVERT::BrushRevert revert);
     void revertLast();
-    inline bool hasChanges() const { return !m_RevertInfos.empty(); }
+    inline bool hasChanges() const { return !m_Reverts.empty(); }
 
     MapViewerScene* getScene() const { return dynamic_cast<MapViewerScene*>(scene()); }
 
@@ -105,7 +105,7 @@ signals:
 
 private:
     const DATABASE::DatabaseMgr& m_DBMgr;
-    std::vector<MAP::BRUSH::REVERT::RevertInfo> m_RevertInfos;
+    std::vector<MAP::BRUSH::REVERT::BrushRevert> m_Reverts;
 };
 
 #endif

@@ -58,6 +58,18 @@
     <Filter Include="Database\Protoype\Modules">
       <UniqueIdentifier>{d6cf38e5-65e5-44b1-b2f8-4d52cb2ab0c6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Map\Brush\Area">
+      <UniqueIdentifier>{f1baa1fb-c374-4a20-a096-618e96d1ed9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map\Brush\Type">
+      <UniqueIdentifier>{ff18ba2a-600d-4f4f-8d97-d760a9518ee3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map\Brush\BrushFactory">
+      <UniqueIdentifier>{979049b9-6edc-405b-82f6-e9c4833f9c3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map\Brush\Revert">
+      <UniqueIdentifier>{ae44bf70-50b9-4110-86ef-279d1258b33b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Simple2D-GameEditor\include\Game.cpp">
@@ -153,12 +165,6 @@
     <ClCompile Include="MapData.cpp">
       <Filter>Map\IO</Filter>
     </ClCompile>
-    <ClCompile Include="Brush.cpp">
-      <Filter>Map\Brush</Filter>
-    </ClCompile>
-    <ClCompile Include="RevertInfo.cpp">
-      <Filter>Map\Brush</Filter>
-    </ClCompile>
     <ClCompile Include="VisualViewer.cpp">
       <Filter>Core</Filter>
     </ClCompile>
@@ -179,6 +185,21 @@
     </ClCompile>
     <ClCompile Include="MapViewScene.cpp">
       <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="BrushAreaSingle.cpp">
+      <Filter>Map\Brush\Area</Filter>
+    </ClCompile>
+    <ClCompile Include="BrushTypeTile.cpp">
+      <Filter>Map\Brush\Type</Filter>
+    </ClCompile>
+    <ClCompile Include="BrushFactory.cpp">
+      <Filter>Map\Brush\BrushFactory</Filter>
+    </ClCompile>
+    <ClCompile Include="Brush.cpp">
+      <Filter>Map\Brush</Filter>
+    </ClCompile>
+    <ClCompile Include="BrushRevert.cpp">
+      <Filter>Map\Brush\Revert</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -287,12 +308,6 @@
     <ClInclude Include="MapData.h">
       <Filter>Map\IO</Filter>
     </ClInclude>
-    <ClInclude Include="Brush.h">
-      <Filter>Map\Brush</Filter>
-    </ClInclude>
-    <ClInclude Include="RevertInfo.h">
-      <Filter>Map\Brush</Filter>
-    </ClInclude>
     <ClInclude Include="MapException.h">
       <Filter>Map\Exceptions</Filter>
     </ClInclude>
@@ -315,6 +330,39 @@
       <Filter>Database\Protoype\Modules</Filter>
     </ClInclude>
     <ClInclude Include="MapViewScene.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="BrushAreaInterface.h">
+      <Filter>Map\Brush\Area</Filter>
+    </ClInclude>
+    <ClInclude Include="BrushException.h">
+      <Filter>Map\Brush</Filter>
+    </ClInclude>
+    <ClInclude Include="BrushAreaSingle.h">
+      <Filter>Map\Brush\Area</Filter>
+    </ClInclude>
+    <ClInclude Include="BrushTypeInterface.h">
+      <Filter>Map\Brush\Type</Filter>
+    </ClInclude>
+    <ClInclude Include="BrushTypeTile.h">
+      <Filter>Map\Brush\Type</Filter>
+    </ClInclude>
+    <ClInclude Include="BrushInfo.h">
+      <Filter>Map\Brush</Filter>
+    </ClInclude>
+    <ClInclude Include="BrushFactory.h">
+      <Filter>Map\Brush\BrushFactory</Filter>
+    </ClInclude>
+    <ClInclude Include="Brush.h">
+      <Filter>Map\Brush</Filter>
+    </ClInclude>
+    <ClInclude Include="BrushRevert.h">
+      <Filter>Map\Brush\Revert</Filter>
+    </ClInclude>
+    <ClInclude Include="BrushRevertInfo.h">
+      <Filter>Map\Brush\Revert</Filter>
+    </ClInclude>
+    <ClInclude Include="Simple2D-Global.h">
       <Filter>Map</Filter>
     </ClInclude>
   </ItemGroup>

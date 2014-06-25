@@ -3,7 +3,7 @@
 #include "GraphicsTextureItem.h"
 #include "moc_MapViewer.h"
 #include "MappingObject.h"
-#include "RevertInfo.h"
+#include "BrushRevert.h"
 
 /*#####
 # MapViewerScene
@@ -218,15 +218,15 @@ QString MapViewer::getMapName() const
 
 void MapViewer::revertLast()
 {
-    if (m_RevertInfos.empty())
+    if (m_Reverts.empty())
         return;
 
     if (auto pScene = dynamic_cast<MapViewerScene*>(scene()))
     {
-        m_RevertInfos.at(m_RevertInfos.size()-1).revert(pScene->getMapData().getMapLayer());
+        m_Reverts.back().revert(pScene->getMapData().getMapLayer());
         pScene->update();
     }
-    m_RevertInfos.pop_back();
+    m_Reverts.pop_back();
     emit changed(this);
 }
 
@@ -248,8 +248,10 @@ void MapViewer::mousePressEvent(QMouseEvent* pEvent)
         pMappingObject->press(this, pEvent);
 }
 
-void MapViewer::addRevertInfo(const MAP::BRUSH::REVERT::RevertInfo& info)
+void MapViewer::addBrushRevert(MAP::BRUSH::REVERT::BrushRevert revert)
 {
-    m_RevertInfos.push_back(info);
+    MAP::BRUSH::REVERT::BrushRevertInfo info(getLayerType(), getLayerIndex()-1);
+    revert.setBrushRevertInfo(info);
+    m_Reverts.push_back(revert);
     emit changed(this);
 }

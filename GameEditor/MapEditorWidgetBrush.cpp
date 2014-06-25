@@ -2,6 +2,7 @@
 #include <QtWidgets/QHBoxLayout>
 #include <QtCore/QEvent>
 #include "moc_MapEditorWidgetBrush.h"
+#include <BrushFactory.h>
 
 using namespace BRUSH;
 using namespace MAP::BRUSH;
@@ -45,13 +46,13 @@ const MAP::BRUSH::BrushInfo& MapEditorWidgetBrush::getBrushInfo(BrushIndex brush
     return m_pBrushes.at(static_cast<uint32>(brush))->getBrushInfo();
 }
 
-void MapEditorWidgetBrush::onSelectionChanged(BrushIndex brush, SelectionType selectionType, uint32 ID)
+void MapEditorWidgetBrush::onSelectionChanged(BrushIndex brush, MAP::BRUSH::BrushInfo::Type type, uint32 ID)
 {
     if (auto pBrush = m_pBrushes.at(static_cast<uint32>(brush)))
     {
         auto brushInfo = pBrush->getBrushInfo();
-        brushInfo.m_ID = ID;
-        brushInfo.m_SelectionType = selectionType;
+        brushInfo.setID(ID);
+        brushInfo.setType(type);
         pBrush->setBrushInfo(brushInfo);
     }
 }
@@ -66,7 +67,7 @@ void MapEditorWidgetBrush::onBrushInfoRequested(BRUSH::BrushIndex brush, MAP::BR
     brushInfo = m_pBrushes.at(static_cast<uint32>(brush))->getBrushInfo();
 }
 
-BrushPtr MapEditorWidgetBrush::createBrush(BrushIndex brushIndex, MAP::LayerContainer& mapData, MAP::LayerType type, uint32 index) const
+MAP::BRUSH::Brush2Ptr MapEditorWidgetBrush::createBrush(BrushIndex brushIndex, MAP::Layer& layer) const
 {
-    return BrushFactory::createBrush(m_DBMgr, mapData, m_pBrushes.at(static_cast<uint32>(brushIndex))->getBrushInfo(), type, index - 1);
+    return MAP::BRUSH::BrushFactory::createBrush(getBrushInfo(brushIndex), layer);
 }
