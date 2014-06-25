@@ -16,7 +16,7 @@ Layer::Layer(const UInt32Point& size)
 void Layer::_resize(const UInt32Point& size)
 {
     m_Size = size;
-    m_Layer.resize(boost::extents[m_Size.x][m_Size.y]);
+    m_Layer.resize(size.x, MapTileVec(size.y, MapTile(0, 0)));
 }
 
 void Layer::_clear()
@@ -27,16 +27,16 @@ void Layer::_clear()
 MapTileInfo Layer::getMapTile(const UInt32Point& at) const
 {
     if (isInMap(at))
-        return MapTileInfo(m_Layer[at.x][at.y], at);
-    throw EXCEPTION::TileRangeException(nullptr);
+        return MapTileInfo(m_Layer.at(at.x).at(at.y), at);
+    throw EXCEPTION::TileOutOfRangeException(nullptr);
 }
 
 void Layer::setMapTile(const UInt32Point& at, MapTile tile)
 {
     if (isInMap(at))
-        m_Layer[at.x][at.y] = tile;
+        m_Layer.at(at.x).at(at.y) = tile;
     else
-        throw EXCEPTION::TileRangeException(nullptr);
+        throw EXCEPTION::TileOutOfRangeException(nullptr);
 }
 
 void Layer::setMapTile(const MapTileInfo& tileInfo)
@@ -124,9 +124,7 @@ uint32 Layer::checkAutoTiles(uint32 uiID, const UInt32Point& pos, UInt32PointVec
         {
             uiBorderCheck += curTileCheck;
             if (resultFlag & FLAG_OTHER)
-            {
                 result.push_back(checkPos);
-            }
         }
         // if same
         else if (resultFlag & FLAG_SAME)
@@ -211,7 +209,7 @@ const Layer& LayerContainer::getLayer(LayerType layer, uint8 index) const
         case LayerType::LAYER_FOREGROUND: return m_ForegroundLayer.at(index);
         }
     }
-    throw std::out_of_range(nullptr);
+    throw EXCEPTION::LayerOutOfRangeException(nullptr);
 }
 
 Layer& LayerContainer::getLayer(LayerType layer, uint8 index)

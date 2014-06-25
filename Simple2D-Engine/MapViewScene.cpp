@@ -9,8 +9,8 @@ MapViewScene::MapViewScene(uint32 mapID, const DATABASE::DatabaseMgr& DBMgr) : Q
 
 UInt32Point MapViewScene::calculateEndTile(const QRect &rect, const UInt32Point& startTile) const
 {
-    return UInt32Point(qMin<uint32>(ceil(rect.width() / TILE_SIZE) + startTile.x + 1, m_MapData.getMapLayer().getSize().x),
-        qMin<uint32>(ceil(rect.height() / TILE_SIZE) + startTile.y + 1, m_MapData.getMapLayer().getSize().y));
+    return UInt32Point(qMin<uint32>(ceil(rect.x() % TILE_SIZE + rect.width() / TILE_SIZE) + startTile.x + 1, m_MapData.getMapLayer().getSize().x),
+        qMin<uint32>(ceil(rect.y() % TILE_SIZE + rect.height() / TILE_SIZE) + startTile.y + 1, m_MapData.getMapLayer().getSize().y));
 }
 
 UInt32Point MapViewScene::calculateStartTile(const QRect &rect) const

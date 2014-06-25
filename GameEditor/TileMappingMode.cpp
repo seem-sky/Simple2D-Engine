@@ -37,18 +37,22 @@ namespace MAPPING_MODE
 
             // if there is an old brush, release it
             _finishBrush();
-            auto& layer = pViewer->getScene()->getMapData().getMapLayer().getLayer(pViewer->getScene()->getLayerType(), pViewer->getScene()->getLayerIndex() - 1);
-            m_pCurrentBrush = m_pBrushWidget->createBrush(brush, layer);
-            auto pos = pViewer->mapToScene(pEvent->pos());
-            UInt32Point tilePos(pos.x() / TILE_SIZE, pos.y() / TILE_SIZE);
+            try
+            {
+                auto& layer = pViewer->getScene()->getMapData().getMapLayer().getLayer(pViewer->getScene()->getLayerType(), pViewer->getScene()->getLayerIndex() - 1);
+                m_pCurrentBrush = m_pBrushWidget->createBrush(brush, layer);
+                auto pos = pViewer->mapToScene(pEvent->pos());
+                UInt32Point tilePos(pos.x() / TILE_SIZE, pos.y() / TILE_SIZE);
 
-            // if already same tile, return
-            if (_isTileAlreadySet(layer, tilePos, brush))
-                return;
+                // if already same tile, return
+                if (_isTileAlreadySet(layer, tilePos, brush))
+                    return;
 
-            m_pCurrentBrush->start(tilePos);
-            pViewer->getScene()->update();
-            m_pMapViewer = pViewer;
+                m_pCurrentBrush->start(tilePos);
+                pViewer->getScene()->update();
+                m_pMapViewer = pViewer;
+            }
+            catch (const MAP::EXCEPTION::LayerOutOfRangeException&) {}
         }
     }
 
@@ -59,7 +63,7 @@ namespace MAPPING_MODE
             auto tileInfo = layer.getMapTile(tilePos).getMapTile();
             return !tileInfo.isValid() || (!tileInfo.isAutoTile() && tileInfo.m_uiTileID == m_pBrushWidget->getBrushInfo(brush).getID());
         }
-        catch (const MAP::EXCEPTION::TileRangeException&) {}
+        catch (const MAP::EXCEPTION::TileOutOfRangeException&) {}
         return true;
     }
 
@@ -72,19 +76,20 @@ namespace MAPPING_MODE
     {
         if (m_pCurrentBrush && pViewer && pViewer->getScene())
         {
-            auto& layer = pViewer->getScene()->getMapData().getMapLayer().getLayer(pViewer->getScene()->getLayerType(), pViewer->getScene()->getLayerIndex() - 1);
-            auto pos = pViewer->mapToScene(pEvent->pos());
-            UInt32Point tilePos(pos.x() / TILE_SIZE, pos.y() / TILE_SIZE);
+            try
+            {
+                auto& layer = pViewer->getScene()->getMapData().getMapLayer().getLayer(pViewer->getScene()->getLayerType(), pViewer->getScene()->getLayerIndex() - 1);
+                auto pos = pViewer->mapToScene(pEvent->pos());
+                UInt32Point tilePos(pos.x() / TILE_SIZE, pos.y() / TILE_SIZE);
 
-            // create brush
-            auto brush = brushIndexFromMouseButton(pEvent->button());
+                // if already same tile, return
+                if (_isTileAlreadySet(layer, tilePos, brushIndexFromMouseButton(pEvent->button())))
+                    return;
 
-            // if already same tile, return
-            if (_isTileAlreadySet(layer, tilePos, brush))
-                return;
-
-            m_pCurrentBrush->start(UInt32Point(pos.x() / TILE_SIZE, pos.y() / TILE_SIZE));
-            pViewer->getScene()->update();
+                m_pCurrentBrush->start(tilePos);
+                pViewer->getScene()->update();
+            }
+            catch (const MAP::EXCEPTION::LayerOutOfRangeException&) {}
         }
     }
 }

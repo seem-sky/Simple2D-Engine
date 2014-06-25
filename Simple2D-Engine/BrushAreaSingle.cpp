@@ -24,7 +24,7 @@ namespace MAP
                     bitset.set(getStartPosition());
                     storeBorder(getStartPosition(), borderTiles, bitset);
                 }
-                catch (const MAP::EXCEPTION::TileRangeException&) {}
+                catch (const MAP::EXCEPTION::TileOutOfRangeException&) {}
             }
 
             void Single::storeBorder(const UInt32Point& pos, MapTileInfoVec& borderTiles, Bitset2D& bitset)
@@ -42,9 +42,7 @@ namespace MAP
                             borderTiles.push_back(mapTileInfo);
                         bitset.set(mapTileInfo.getPosition());
                     }
-                    catch (const EXCEPTION::TileRangeException&)
-                    {
-                    }
+                    catch (const EXCEPTION::TileOutOfRangeException&) {}
                 }
             }
         }

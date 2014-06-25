@@ -15,7 +15,7 @@ void BrushRevert::revert(LayerContainer& mapLayer)
         {
             layer.setMapTile(info);
         }
-        catch (const MAP::EXCEPTION::TileRangeException&)
+        catch (const MAP::EXCEPTION::TileOutOfRangeException&)
         {
         }
     }

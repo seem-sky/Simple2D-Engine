@@ -2,7 +2,6 @@
 #define MAP_LAYER_H
 
 #include "MapTile.h"
-#include <boost/multi_array.hpp>
 
 namespace MAP
 {
@@ -37,7 +36,7 @@ namespace MAP
         MapTileInfo getBorderTileInfo(const UInt32Point& pos, BorderTile borderTile) const;
 
     private:
-        boost::multi_array<MapTile, 2> m_Layer;
+        std::vector<MapTileVec> m_Layer;
         UInt32Point m_Size;
     };
 

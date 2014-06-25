@@ -22,7 +22,7 @@ namespace MAP
                         info.getMapTile().m_uiTileID = getTileID();
                         m_Layer.setMapTile(info);
                     }
-                    catch (const MAP::EXCEPTION::TileRangeException&) {}
+                    catch (const MAP::EXCEPTION::TileOutOfRangeException&) {}
                 }
             }
 
@@ -35,7 +35,7 @@ namespace MAP
                     {
                         m_Layer.setMapTile(info);
                     }
-                    catch (const MAP::EXCEPTION::TileRangeException&) {}
+                    catch (const MAP::EXCEPTION::TileOutOfRangeException&) {}
                 }
             }
 
@@ -53,7 +53,7 @@ namespace MAP
 
                         check |= borderTileToTileCheck(borderTile);
                     }
-                    catch (const EXCEPTION::TileRangeException&) {}
+                    catch (const EXCEPTION::TileOutOfRangeException&) {}
                 }
                 info.getMapTile().m_uiTileID = DATABASE::PROTOTYPE::AUTO_TILE::getAutoTileIndexForTileCheck(check);
             }

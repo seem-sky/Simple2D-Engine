@@ -31,6 +31,8 @@ namespace MAP
         inline bool isValid() const { return m_uiTileID != MATH::maximum<DATABASE::PROTOTYPE::TILE_INDEX>() &&
             m_uiAutoTileSetID != MATH::maximum<DATABASE::PROTOTYPE::AUTO_TILE_INDEX>(); }
     };
+    typedef std::vector<MapTile> MapTileVec;
+
     static bool operator==(const MapTile& lhs, const MapTile& rhs)
     {
         if (lhs.isAutoTile() && rhs.isAutoTile())
