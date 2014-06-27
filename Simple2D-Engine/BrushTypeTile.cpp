@@ -1,6 +1,7 @@
 #include "BrushTypeTile.h"
 #include "MapException.h"
 #include "BrushRevert.h"
+#include "MapLayer.h"
 
 namespace MAP
 {
@@ -8,7 +9,7 @@ namespace MAP
     {
         namespace TYPE
         {
-            Tile::Tile(uint32 tileID, Layer& layer, const UInt32Point& pos) : Type(tileID, layer, pos)
+            Tile::Tile(uint32 tileID, const DATABASE::DatabaseMgr& DBMgr, Layer& layer, const UInt32Point& pos) : Type(tileID, DBMgr, layer, pos)
             {
             }
 
@@ -20,7 +21,7 @@ namespace MAP
                     {
                         revert.addTile(info);
                         info.getMapTile().m_uiAutoTileSetID = 0;
-                        info.getMapTile().m_uiTileID = getTileID();
+                        info.getMapTile().m_uiTileID = getID();
                         m_Layer.setMapTile(info);
                     }
                     catch (const MAP::EXCEPTION::TileOutOfRangeException&) {}

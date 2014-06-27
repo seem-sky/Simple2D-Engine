@@ -135,8 +135,8 @@ namespace DATABASE
             public:
                 TileSetPrototype(uint32 ID = 0);
 
-                void resizeTiles(UInt32Point size);
-                inline UInt32Point getTileCount() const { return m_Size; }
+                void resizeTileSet(UInt32Point size);
+                inline UInt32Point getTileSetSize() const { return m_Size; }
                 void clear();
 
                 void setTileID(UInt32Point pos, uint32 ID);

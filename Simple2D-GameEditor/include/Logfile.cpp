@@ -29,5 +29,10 @@ void Logfile::WriteMessage(const QString& msg, bool append)
 
 void Logfile::WriteErrorMessage(const QString& msg)
 {
-    WriteMessage("###ERROR### " + msg);
+    WriteMessage("### ERROR ### " + msg);
+}
+
+void Logfile::WriteWarningMessage(const QString& msg)
+{
+    WriteMessage("### Warning ### " + msg);
 }

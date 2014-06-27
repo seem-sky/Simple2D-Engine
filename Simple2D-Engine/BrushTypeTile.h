@@ -5,9 +5,6 @@
 
 namespace MAP
 {
-    class MapTileInfo;
-    class Layer;
-
     namespace BRUSH
     {
         namespace TYPE
@@ -15,7 +12,7 @@ namespace MAP
             class Tile : public Type
             {
             public:
-                Tile(uint32 tileID, Layer& layer, const UInt32Point& pos);
+                Tile(uint32 tileID, const DATABASE::DatabaseMgr& DBMgr, Layer& layer, const UInt32Point& pos);
 
                 void setTiles(const MapTileInfoVec& tiles, REVERT::BrushRevert& revert);
             };

@@ -44,7 +44,7 @@ void DatabaseWidgetTileSet::setupWidgetsFromPrototype(const Prototype* pPrototyp
 {
     if (auto pProto = dynamic_cast<const TILE_SET::TileSetPrototype*>(pPrototype))
     {
-        auto size = pProto->getTileCount();
+        auto size = pProto->getTileSetSize();
         m_pModuleTileSet->resizeTileSetTableColumns(size.x);
         m_pModuleTileSet->resizeTileSetTableRows(size.y);
         for (uint32 row = 0; row < size.y; ++row)
@@ -61,7 +61,7 @@ void DatabaseWidgetTileSet::setupPrototypeFromWidgets(Prototype* pPrototype)
     if (auto pProto = dynamic_cast<TILE_SET::TileSetPrototype*>(pPrototype))
     {
         UInt32Point size(m_pModuleTileSet->getTileSetTableColumnCount(), m_pModuleTileSet->getTileSetTableColumnCount());
-        pProto->resizeTiles(size);
+        pProto->resizeTileSet(size);
         for (uint32 row = 0; row < size.y; ++row)
         {
             for (uint32 column = 0; column < size.x; ++column)

@@ -2,6 +2,7 @@
 #include "MapException.h"
 #include "DatabasePrototypes.h"
 #include "BrushRevert.h"
+#include "MapLayer.h"
 
 namespace MAP
 {
@@ -9,7 +10,7 @@ namespace MAP
     {
         namespace TYPE
         {
-            AutoTile::AutoTile(uint32 tileID, Layer& layer, const UInt32Point& pos) : Type(tileID, layer, pos)
+            AutoTile::AutoTile(uint32 tileID, const DATABASE::DatabaseMgr& DBMgr, Layer& layer, const UInt32Point& pos) : Type(tileID, DBMgr, layer, pos)
             {
             }
 
@@ -20,7 +21,7 @@ namespace MAP
                     try
                     {
                         revert.addTile(info);
-                        info.getMapTile().m_uiAutoTileSetID = getTileID();
+                        info.getMapTile().m_uiAutoTileSetID = getID();
                         info.getMapTile().m_uiTileID = DATABASE::PROTOTYPE::AUTO_TILE::INDEX_CENTER;
                         m_Layer.setMapTile(info);
                     }

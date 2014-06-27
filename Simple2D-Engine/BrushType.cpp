@@ -2,6 +2,7 @@
 #include "MapException.h"
 #include "DatabasePrototypes.h"
 #include "BrushRevert.h"
+#include "MapLayer.h"
 
 namespace MAP
 {
@@ -9,8 +10,12 @@ namespace MAP
     {
         namespace TYPE
         {
+            Type::Type(uint32 tileID, const DATABASE::DatabaseMgr& DBMgr, Layer& layer, const UInt32Point& pos)
+                : m_Layer(layer), m_StartPosition(pos), m_DBMgr(DBMgr), m_TileID(tileID)
+            {}
+
             void Type::setBorderTiles(const UInt32PointVec& tiles, REVERT::BrushRevert& revert)
-{
+            {
                 for (auto pos : tiles)
                 {
                     try

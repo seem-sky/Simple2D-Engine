@@ -1,11 +1,17 @@
 #ifndef BRUSH_TYPE_H
 #define BRUSH_TYPE_H
 
-#include "MapLayer.h"
 #include "BrushTypeInterface.h"
+
+namespace DATABASE
+{
+    class DatabaseMgr;
+}
 
 namespace MAP
 {
+    class Layer;
+
     namespace BRUSH
     {
         namespace TYPE
@@ -13,11 +19,11 @@ namespace MAP
             class Type : public Interface
             {
             public:
-                Type(uint32 tileID, Layer& layer, const UInt32Point& pos) : m_Layer(layer), m_StartPosition(pos), m_TileID(tileID)
-                {}
+                Type(uint32 tileID, const DATABASE::DatabaseMgr& DBMgr, Layer& layer, const UInt32Point& pos);
 
+                void setStartPosition(const UInt32Point& pos) { m_StartPosition = pos; }
                 const UInt32Point& getStartPosition() const { return m_StartPosition; }
-                uint32 getTileID() const { return m_TileID; }
+                uint32 getID() const { return m_TileID; }
 
                 void setBorderTiles(const UInt32PointVec& tiles, REVERT::BrushRevert& revert);
 
@@ -27,6 +33,7 @@ namespace MAP
 
             protected:
                 Layer& m_Layer;
+                const DATABASE::DatabaseMgr& m_DBMgr;
             };
         }
     }

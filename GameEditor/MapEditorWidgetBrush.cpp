@@ -69,5 +69,5 @@ void MapEditorWidgetBrush::onBrushInfoRequested(BRUSH::BrushIndex brush, MAP::BR
 
 MAP::BRUSH::Brush2Ptr MapEditorWidgetBrush::createBrush(BrushIndex brushIndex, MAP::Layer& layer) const
 {
-    return MAP::BRUSH::BrushFactory::createBrush(getBrushInfo(brushIndex), layer);
+    return MAP::BRUSH::BrushFactory::createBrush(getBrushInfo(brushIndex), getDatabaseMgr(), layer);
 }

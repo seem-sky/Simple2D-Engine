@@ -7,6 +7,7 @@
 
 #include "BrushTypeTile.h"
 #include "BrushTypeAutoTile.h"
+#include "BrushTypeTileSet.h"
 
 namespace MAP
 {
@@ -15,7 +16,7 @@ namespace MAP
         /*#####
         # BrushFactory
         #####*/
-        Brush2Ptr BrushFactory::createBrush(const BrushInfo& info, Layer& mapLayer, const UInt32Point& pos)
+        Brush2Ptr BrushFactory::createBrush(const BrushInfo& info, const DATABASE::DatabaseMgr& DBMgr, Layer& mapLayer, const UInt32Point& pos)
         {
             // create area
             AREA::AreaPtr pArea;
@@ -34,12 +35,13 @@ namespace MAP
             switch (info.getType())
             {
             case BrushInfo::Type::TILE:
-                pType = TYPE::TypePtr(new TYPE::Tile(info.getID(), mapLayer, pos));
+                pType = TYPE::TypePtr(new TYPE::Tile(info.getID(), DBMgr, mapLayer, pos));
                 break;
             case BrushInfo::Type::AUTO_TILE:
-                pType = TYPE::TypePtr(new TYPE::AutoTile(info.getID(), mapLayer, pos));
+                pType = TYPE::TypePtr(new TYPE::AutoTile(info.getID(), DBMgr, mapLayer, pos));
                 break;
             case BrushInfo::Type::TILE_SET:
+                pType = TYPE::TypePtr(new TYPE::TileSet(info.getID(), DBMgr, mapLayer, pos));
                 break;
             }
             

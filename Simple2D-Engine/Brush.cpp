@@ -51,6 +51,7 @@ namespace MAP
         {
             _checkValidation();
             m_pArea->setStartPosition(pos);
+            m_pType->setStartPosition(pos);
         }
 
         REVERT::BrushRevert Brush::getBrushRevert() const
@@ -61,6 +62,11 @@ namespace MAP
         void Brush::resetRevertInfo()
         {
             m_RevertInfo.clear();
+        }
+
+        void Brush::setBrushSize(const UInt32Point& size)
+        {
+            m_pArea->setBrushSize(size);
         }
     }
 }

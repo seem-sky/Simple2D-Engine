@@ -44,9 +44,19 @@ namespace MAPPING_MODE
                 auto pos = pViewer->mapToScene(pEvent->pos());
                 UInt32Point tilePos(pos.x() / TILE_SIZE, pos.y() / TILE_SIZE);
 
-                // if already same tile, return
-                if (_isTileAlreadySet(layer, tilePos, m_pBrushWidget->getBrushInfo(brush)))
-                    return;
+                auto brushInfo = m_pBrushWidget->getBrushInfo(brush);
+
+                // if tileSet mapping, set brush size equal tileSet size
+                if (brushInfo.getType() == MAP::BRUSH::BrushInfo::Type::TILE_SET)
+                {
+                    if (auto pTileSet = m_pBrushWidget->getDatabaseMgr().getTileSetDatabase()->getOriginalPrototype(brushInfo.getID()))
+                        m_pCurrentBrush->setBrushSize(pTileSet->getTileSetSize());
+                }
+
+                // think thats not so good ?!
+                //// if already same tile, return
+                //if (_isTileAlreadySet(layer, tilePos, m_pBrushWidget->getBrushInfo(brush)))
+                //    return;
 
                 m_pCurrentBrush->start(tilePos);
                 pViewer->getScene()->update();
@@ -83,9 +93,10 @@ namespace MAPPING_MODE
                 auto pos = pViewer->mapToScene(pEvent->pos());
                 UInt32Point tilePos(pos.x() / TILE_SIZE, pos.y() / TILE_SIZE);
 
-                // if already same tile, return
-                if (_isTileAlreadySet(layer, tilePos, m_pBrushWidget->getBrushInfo(brushIndexFromMouseButton(pEvent->button()))))
-                    return;
+                // think thats not so good ?!
+                //// if already same tile, return
+                //if (_isTileAlreadySet(layer, tilePos, m_pBrushWidget->getBrushInfo(brushIndexFromMouseButton(pEvent->button()))))
+                //    return;
 
                 m_pCurrentBrush->start(tilePos);
                 pViewer->getScene()->update();

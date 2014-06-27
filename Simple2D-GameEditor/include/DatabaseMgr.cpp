@@ -131,13 +131,13 @@ QPixmap PROTOTYPE::TILE_SET::createTileSetPixmap(const QString& path, const Tile
     if (!pSet || !pTileDB)
         return std::move(QPixmap());
 
-    QPixmap pixmap(pSet->getTileCount().x*TILE_SIZE, pSet->getTileCount().y*TILE_SIZE);
+    QPixmap pixmap(pSet->getTileSetSize().x*TILE_SIZE, pSet->getTileSetSize().y*TILE_SIZE);
     pixmap.fill();
     QPainter painter(&pixmap);
     UInt32Point pos;
-    for (pos.x = 0; pos.x < pSet->getTileCount().x; ++pos.x)
+    for (pos.x = 0; pos.x < pSet->getTileSetSize().x; ++pos.x)
     {
-        for (pos.y = 0; pos.y < pSet->getTileCount().y; ++pos.y)
+        for (pos.y = 0; pos.y < pSet->getTileSetSize().y; ++pos.y)
         {
             auto pTileProto = pTileDB->getOriginalPrototype(pSet->getTileID(pos));
             QPixmap tempPixmap;

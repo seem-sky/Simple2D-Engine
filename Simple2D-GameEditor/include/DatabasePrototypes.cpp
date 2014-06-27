@@ -153,10 +153,10 @@ namespace DATABASE
         #####*/
         TILE_SET::TileSetPrototype::TileSetPrototype(uint32 uiID) : Prototype(uiID)
         {
-            resizeTiles(UInt32Point(DEFAULT_COLUMN_COUNT, DEFAULT_ROW_COUNT));
+            resizeTileSet(UInt32Point(DEFAULT_COLUMN_COUNT, DEFAULT_ROW_COUNT));
         }
 
-        void TILE_SET::TileSetPrototype::resizeTiles(UInt32Point size)
+        void TILE_SET::TileSetPrototype::resizeTileSet(UInt32Point size)
         {
             m_Tiles.resize(boost::extents[size.x][size.y]);
             m_Size = size;
@@ -189,18 +189,18 @@ namespace DATABASE
             if (size.y > newSize.y)
                 newSize.y = size.y;
             if (newSize != m_Size)
-                resizeTiles(newSize);
+                resizeTileSet(newSize);
         }
 
         QPixmap TILE_SET::createPixmap(const TileSetPrototype& tileSet)
         {
-            QPixmap pixmap(tileSet.getTileCount().x*TILE_SIZE, tileSet.getTileCount().y*TILE_SIZE);
+            QPixmap pixmap(tileSet.getTileSetSize().x*TILE_SIZE, tileSet.getTileSetSize().y*TILE_SIZE);
             pixmap.fill();
             QPainter painter(&pixmap);
             UInt32Point pos;
-            for (pos.x = 0; pos.x < tileSet.getTileCount().x; ++pos.x)
+            for (pos.x = 0; pos.x < tileSet.getTileSetSize().x; ++pos.x)
             {
-                for (pos.y = 0; pos.y < tileSet.getTileCount().y; ++pos.y)
+                for (pos.y = 0; pos.y < tileSet.getTileSetSize().y; ++pos.y)
                 {
                     if (auto pTilePixmap = GTileCache::get()->getItem(tileSet.getTileID(pos)))
                         painter.drawTiledPixmap(pos.x*TILE_SIZE, pos.y*TILE_SIZE, TILE_SIZE, TILE_SIZE,* pTilePixmap);

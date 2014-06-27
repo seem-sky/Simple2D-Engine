@@ -38,6 +38,7 @@
     <ClCompile Include="BrushType.cpp" />
     <ClCompile Include="BrushTypeAutoTile.cpp" />
     <ClCompile Include="BrushTypeTile.cpp" />
+    <ClCompile Include="BrushTypeTileSet.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="Database.cpp" />
@@ -91,6 +92,7 @@
     <ClInclude Include="BrushTypeAutoTile.h" />
     <ClInclude Include="BrushTypeInterface.h" />
     <ClInclude Include="BrushTypeTile.h" />
+    <ClInclude Include="BrushTypeTileSet.h" />
     <ClInclude Include="Simple2D-Global.h" />
     <ClInclude Include="MapViewScene.h" />
     <ClInclude Include="PrototypeAnimationModule.h" />

@@ -17,8 +17,9 @@ namespace MAP
             class Interface
             {
             public:
+                virtual void setStartPosition(const UInt32Point& pos) = 0;
                 virtual const UInt32Point& getStartPosition() const = 0;
-                virtual uint32 getTileID() const = 0;
+                virtual uint32 getID() const = 0;
 
                 virtual void setTiles(const MapTileInfoVec& tiles, REVERT::BrushRevert& revert) = 0;
                 virtual void setBorderTiles(const UInt32PointVec& tiles, REVERT::BrushRevert& revert) = 0;

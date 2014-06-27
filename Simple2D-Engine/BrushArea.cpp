@@ -1,5 +1,7 @@
 #include "BrushArea.h"
 #include "DatabasePrototypes.h"
+#include "MapException.h"
+#include "MapLayer.h"
 
 namespace MAP
 {
@@ -11,13 +13,23 @@ namespace MAP
             {
                 tiles.clear();
                 borderTiles.clear();
-                auto info = m_Layer.getMapTile(getStartPosition());
-                m_OldTile = info.getMapTile();
                 try
                 {
+                    auto info = m_Layer.getMapTile(getStartPosition());
+                    m_OldTile = info.getMapTile();
                     _do(info, tiles, borderTiles);
                 }
                 catch (const MAP::EXCEPTION::TileOutOfRangeException&) {}
+            }
+
+            void Area::setBrushSize(const UInt32Point& size)
+            {
+                m_BrushSize = size;
+            }
+
+            UInt32Point Area::getBrushSize() const
+            {
+                return m_BrushSize;
             }
         }
     }

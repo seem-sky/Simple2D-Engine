@@ -130,7 +130,7 @@ void TILE_SET::TileSetPrototype::fromXML(const QXmlStreamAttributes& attributes)
     Prototype::fromXML(attributes);
 
     UInt32Point size(attributes.value("columns").toUInt(), attributes.value("rows").toUInt());
-    resizeTiles(size);
+    resizeTileSet(size);
     if (attributes.hasAttribute("tiles"))
     {
         QStringList tileList = attributes.value("tiles").toString().split(",");
@@ -141,15 +141,15 @@ void TILE_SET::TileSetPrototype::fromXML(const QXmlStreamAttributes& attributes)
 
 void TILE_SET::TileSetPrototype::toXML(QXmlStreamWriter& writer) const
 {
-    writer.writeAttribute("columns", QString::number(getTileCount().x));
-    writer.writeAttribute("rows", QString::number(getTileCount().y));
+    writer.writeAttribute("columns", QString::number(getTileSetSize().x));
+    writer.writeAttribute("rows", QString::number(getTileSetSize().y));
     Prototype::toXML(writer);
 
     //get tile IDs
     QString tiles;
-    for (uint32 x = 0; x < getTileCount().x; ++x)
+    for (uint32 x = 0; x < getTileSetSize().x; ++x)
     {
-        for (uint32 y = 0; y < getTileCount().y; ++y)
+        for (uint32 y = 0; y < getTileSetSize().y; ++y)
         {
             if (x || y)
                 tiles.append(",");

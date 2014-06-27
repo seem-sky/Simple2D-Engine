@@ -35,6 +35,8 @@ namespace BRUSH
 
         MAP::BRUSH::Brush2Ptr createBrush(BrushIndex brushIndex, MAP::Layer& layer) const;
 
+        const DATABASE::DatabaseMgr& getDatabaseMgr() const { return m_DBMgr; }
+
 
     public slots:
         void onSelectionChanged(BRUSH::BrushIndex brush, MAP::BRUSH::BrushInfo::Type type, uint32 ID);

@@ -25,6 +25,8 @@ namespace MAP
             REVERT::BrushRevert getBrushRevert() const;
             void resetRevertInfo();
 
+            void setBrushSize(const UInt32Point& size);
+
             void start();
             void start(const UInt32Point& pos);
 
