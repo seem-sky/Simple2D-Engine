@@ -45,7 +45,7 @@ namespace MAPPING_MODE
                 UInt32Point tilePos(pos.x() / TILE_SIZE, pos.y() / TILE_SIZE);
 
                 // if already same tile, return
-                if (_isTileAlreadySet(layer, tilePos, brush))
+                if (_isTileAlreadySet(layer, tilePos, m_pBrushWidget->getBrushInfo(brush)))
                     return;
 
                 m_pCurrentBrush->start(tilePos);
@@ -56,12 +56,13 @@ namespace MAPPING_MODE
         }
     }
 
-    bool Tile::_isTileAlreadySet(const MAP::Layer &layer, const UInt32Point& tilePos, BRUSH::BrushIndex brush)
+    bool Tile::_isTileAlreadySet(const MAP::Layer &layer, const UInt32Point& tilePos, const MAP::BRUSH::BrushInfo& brushInfo)
     {
         try
         {
             auto tileInfo = layer.getMapTile(tilePos).getMapTile();
-            return !tileInfo.isValid() || (!tileInfo.isAutoTile() && tileInfo.m_uiTileID == m_pBrushWidget->getBrushInfo(brush).getID());
+            return !tileInfo.isValid() || brushInfo.getType() == MAP::BRUSH::BrushInfo::Type::TILE && tileInfo.m_uiTileID == brushInfo.getID() ||
+                brushInfo.getType() == MAP::BRUSH::BrushInfo::Type::AUTO_TILE && tileInfo.m_uiAutoTileSetID == brushInfo.getID();
         }
         catch (const MAP::EXCEPTION::TileOutOfRangeException&) {}
         return true;
@@ -83,7 +84,7 @@ namespace MAPPING_MODE
                 UInt32Point tilePos(pos.x() / TILE_SIZE, pos.y() / TILE_SIZE);
 
                 // if already same tile, return
-                if (_isTileAlreadySet(layer, tilePos, brushIndexFromMouseButton(pEvent->button())))
+                if (_isTileAlreadySet(layer, tilePos, m_pBrushWidget->getBrushInfo(brushIndexFromMouseButton(pEvent->button()))))
                     return;
 
                 m_pCurrentBrush->start(tilePos);

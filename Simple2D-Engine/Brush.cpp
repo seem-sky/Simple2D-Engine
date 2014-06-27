@@ -38,17 +38,13 @@ namespace MAP
         void Brush::start()
         {
             _checkValidation();
-            MapTileInfoVec tiles, borderTiles;
+            MapTileInfoVec tiles;
+            UInt32PointVec borderTiles;
             m_pArea->start(tiles, borderTiles);
-            m_pType->setTiles(tiles);
+            m_pType->setTiles(tiles, m_RevertInfo);
 
             // check border tiles
-            m_pType->setBorderTiles(borderTiles);
-
-            // init RevertInfo
-            
-            m_RevertInfo.addTiles(tiles);
-            m_RevertInfo.addTiles(borderTiles);
+            m_pType->setBorderTiles(borderTiles, m_RevertInfo);
         }
 
         void Brush::setPosition(const UInt32Point& pos)

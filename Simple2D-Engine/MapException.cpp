@@ -36,6 +36,17 @@ TileException::TileException(const char* what_arg) : std::runtime_error(what_arg
 }
 
 /*#####
+# IncorrectTileException
+#####*/
+IncorrectTileException::IncorrectTileException(const std::string& what_arg) : TileException(what_arg)
+{
+}
+
+IncorrectTileException::IncorrectTileException(const char* what_arg) : TileException(what_arg)
+{
+}
+
+/*#####
 # TileRangeException
 #####*/
 TileOutOfRangeException::TileOutOfRangeException(const std::string& what_arg) : TileException(what_arg)

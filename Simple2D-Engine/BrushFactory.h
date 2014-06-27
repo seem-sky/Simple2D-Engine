@@ -2,12 +2,15 @@
 #define BRUSH_FACTORY_H
 
 #include "Brush.h"
-#include "BrushInfo.h"
 
 namespace MAP
 {
+    class Layer;
+
     namespace BRUSH
     {
+        class BrushInfo;
+
         class BrushFactory
         {
         public:

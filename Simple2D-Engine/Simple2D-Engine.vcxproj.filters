@@ -201,6 +201,18 @@
     <ClCompile Include="BrushRevert.cpp">
       <Filter>Map\Brush\Revert</Filter>
     </ClCompile>
+    <ClCompile Include="BrushAreaFill.cpp">
+      <Filter>Map\Brush\Area</Filter>
+    </ClCompile>
+    <ClCompile Include="BrushType.cpp">
+      <Filter>Map\Brush\Type</Filter>
+    </ClCompile>
+    <ClCompile Include="BrushArea.cpp">
+      <Filter>Map\Brush\Area</Filter>
+    </ClCompile>
+    <ClCompile Include="BrushTypeAutoTile.cpp">
+      <Filter>Map\Brush\Type</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Simple2D-GameEditor\include\Application.h">
@@ -364,6 +376,18 @@
     </ClInclude>
     <ClInclude Include="Simple2D-Global.h">
       <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="BrushArea.h">
+      <Filter>Map\Brush\Area</Filter>
+    </ClInclude>
+    <ClInclude Include="BrushAreaFill.h">
+      <Filter>Map\Brush\Area</Filter>
+    </ClInclude>
+    <ClInclude Include="BrushType.h">
+      <Filter>Map\Brush\Type</Filter>
+    </ClInclude>
+    <ClInclude Include="BrushTypeAutoTile.h">
+      <Filter>Map\Brush\Type</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -38,6 +38,16 @@ namespace MAP
         };
 
         /*#####
+        # IncorrectTileException
+        #####*/
+        class IncorrectTileException : public TileException
+        {
+        public:
+            IncorrectTileException(const std::string& what_arg);
+            IncorrectTileException(const char* what_arg);
+        };
+
+        /*#####
         # TileRangeException
         #####*/
         class TileOutOfRangeException : public TileException

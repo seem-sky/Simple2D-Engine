@@ -10,13 +10,23 @@ namespace BRUSH
     enum class BrushIndex;
 }
 
+namespace MAP
+{
+    class Layer;
+
+    namespace BRUSH
+    {
+        class BrushInfo;
+    }
+}
+
 namespace MAPPING_MODE
 {
     class Tile : public Interface
     {
     private:
         void _finishBrush();
-        bool _isTileAlreadySet(const MAP::Layer &layer, const UInt32Point& tilePos, BRUSH::BrushIndex brush);
+        bool _isTileAlreadySet(const MAP::Layer &layer, const UInt32Point& tilePos, const MAP::BRUSH::BrushInfo& brushInfo);
 
     public:
         Tile(const BRUSH::MapEditorWidgetBrush* pBrushWidget);

@@ -44,7 +44,7 @@ void Layer::setMapTile(const MapTileInfo& tileInfo)
     setMapTile(tileInfo.getPosition(), tileInfo.getMapTile());
 }
 
-uint32 Layer::checkAutoTiles(uint32 uiID, const UInt32Point& pos, UInt32PointVector& result, uint32 resultFlag)
+uint32 Layer::checkAutoTiles(uint32 uiID, const UInt32Point& pos, UInt32PointVec& result, uint32 resultFlag)
 {
     uint32 uiBorderCheck = 0;
     for (uint32 i = 0; i < 8; ++i)
@@ -175,6 +175,29 @@ MapTileInfo Layer::getBorderTileInfo(const UInt32Point& pos, BorderTile borderTi
         break;
     }
     return getMapTile(checkPos);
+}
+
+uint32 Layer::checkAutoTile(const UInt32Point& pos) const
+{
+    auto info = getMapTile(pos);
+    if (!info.isAutoTile())
+        throw EXCEPTION::IncorrectTileException("Is no auto tile.");
+
+    uint32 check = 0;
+    for (uint32 i = 0; i < 8; ++i)
+    {
+        auto borderTile = static_cast<BorderTile>(i);
+        try
+        {
+            auto mapTileInfo = getBorderTileInfo(info.getPosition(), borderTile);
+            if (!mapTileInfo.isValid() || info.getMapTile().m_uiAutoTileSetID == mapTileInfo.getMapTile().m_uiAutoTileSetID)
+                continue;
+
+            check |= borderTileToTileCheck(borderTile);
+        }
+        catch (const EXCEPTION::TileOutOfRangeException&) {}
+    }
+    return check;
 }
 
 /*#####

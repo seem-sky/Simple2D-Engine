@@ -21,7 +21,8 @@ namespace MAP
                 FILL
             };
 
-            BrushInfo(uint32 ID = 0, Type type = Type::TILE, Mode mode = Mode::PEN);
+            BrushInfo(uint32 ID = 0, Type type = Type::TILE, Mode mode = Mode::PEN) : m_Type(type), m_Mode(mode), m_ID(ID) 
+            {}
 
             inline Type getType() const { return m_Type; }
             inline void setType(Type type) { m_Type = type; }

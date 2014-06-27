@@ -5,6 +5,11 @@
 #include "MapEditorModuleBrush.h"
 #include "Brush.h"
 
+namespace MAP
+{
+    class Layer;
+}
+
 namespace BRUSH
 {
     enum class BrushIndex

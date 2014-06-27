@@ -1,7 +1,8 @@
-#ifndef BRUSH_AREA_PEN_H
-#define BRUSH_AREA_PEN_H
+#ifndef BRUSH_AREA_SINGLE_H
+#define BRUSH_AREA_SINGLE_H
 
-#include "BrushAreaInterface.h"
+#include "BrushArea.h"
+#include <Bitset2D.h>
 
 namespace MAP
 {
@@ -9,18 +10,14 @@ namespace MAP
     {
         namespace AREA
         {
-            class Single : public Interface
+            class Single : public Area
             {
-            protected:
-                void storeBorder(const UInt32Point& pos, MapTileInfoVec& borderTiles, Bitset2D& bitset);
+            private:
+                void _do(const MapTileInfo& info, MapTileInfoVec& tiles, UInt32PointVec& borderTiles);
+                void _storeBorder(const UInt32Point& pos, UInt32PointVec& borderTiles);
 
             public:
                 Single(Layer& layer, const UInt32Point& pos);
-
-                void start(MapTileInfoVec& tiles, MapTileInfoVec& borderTiles);
-
-            private:
-                MapTile m_OldTile;
             };
         }
     }

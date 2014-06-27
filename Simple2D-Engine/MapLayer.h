@@ -31,9 +31,10 @@ namespace MAP
             FLAG_OTHER      = 0x2,
             FLAG_ALL        = FLAG_SAME | FLAG_OTHER
         };
-        uint32 checkAutoTiles(uint32 uiID, const UInt32Point& pos, UInt32PointVector& result, uint32 resultFlag);
+        uint32 checkAutoTiles(uint32 uiID, const UInt32Point& pos, UInt32PointVec& result, uint32 resultFlag);
 
         MapTileInfo getBorderTileInfo(const UInt32Point& pos, BorderTile borderTile) const;
+        uint32 checkAutoTile(const UInt32Point& pos) const;
 
     private:
         std::vector<MapTileVec> m_Layer;
