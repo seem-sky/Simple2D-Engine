@@ -2,6 +2,7 @@
 #include "moc_MapEditorWidgetEditor.h"
 #include "AutoTileCache.h"
 #include "MapViewer.h"
+#include <QtWidgets/QComboBox>
 
 MapEditorWidgetEditor::MapEditorWidgetEditor(DATABASE::DatabaseMgr& databaseMgr, QWidget* pParent) : QWidget(pParent), m_DatabaseMgr(databaseMgr),
     // modules

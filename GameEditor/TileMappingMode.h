@@ -42,7 +42,7 @@ namespace MAPPING_MODE
         static BRUSH::BrushIndex brushIndexFromMouseButton(Qt::MouseButton button);
 
     private:
-        MAP::BRUSH::Brush2Ptr m_pCurrentBrush;
+        MAP::BRUSH::BrushPtr m_pCurrentBrush;
         MapViewer* m_pMapViewer = nullptr;
         const BRUSH::MapEditorWidgetBrush* m_pBrushWidget;
     };

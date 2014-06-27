@@ -16,7 +16,7 @@ namespace MAP
         /*#####
         # BrushFactory
         #####*/
-        Brush2Ptr BrushFactory::createBrush(const BrushInfo& info, const DATABASE::DatabaseMgr& DBMgr, Layer& mapLayer, const UInt32Point& pos)
+        BrushPtr BrushFactory::createBrush(const BrushInfo& info, const DATABASE::DatabaseMgr& DBMgr, Layer& mapLayer, const UInt32Point& pos)
         {
             // create area
             AREA::AreaPtr pArea;
@@ -45,7 +45,7 @@ namespace MAP
                 break;
             }
             
-            return Brush2Ptr(new Brush(pArea.release(), pType.release()));
+            return BrushPtr(new Brush(pArea.release(), pType.release()));
         }
     }
 }

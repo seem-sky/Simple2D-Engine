@@ -3,6 +3,7 @@
 #include "Project.h"
 #include <QtWidgets/QMessageBox>
 #include "MapViewer.h"
+#include <DatabaseMgr.h>
 
 MapEditorModuleContent::MapEditorModuleContent(DATABASE::DatabaseMgr& databaseMgr, QWidget* pWidget) : QWidget(pWidget), Ui_MapEditorModuleContent(),
     m_DBMgr(databaseMgr)

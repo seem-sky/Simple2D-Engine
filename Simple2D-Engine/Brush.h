@@ -36,7 +36,7 @@ namespace MAP
 
             REVERT::BrushRevert m_RevertInfo;
         };
-        typedef std::unique_ptr<Brush> Brush2Ptr;
+        typedef std::unique_ptr<Brush> BrushPtr;
     }
 }
 #endif

@@ -2,9 +2,14 @@
 #define MAP_VIEWER_H
 
 #include <QtWidgets/QGraphicsView>
-#include "DatabaseMgr.h"
 #include <QtWidgets/QGraphicsItem>
 #include <MapViewScene.h>
+#include <Global.h>
+
+namespace DATABASE
+{
+    class DatabaseMgr;
+}
 
 namespace MAP
 {

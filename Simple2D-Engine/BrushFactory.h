@@ -19,7 +19,7 @@ namespace MAP
         class BrushFactory
         {
         public:
-            static Brush2Ptr createBrush(const BrushInfo& info, const DATABASE::DatabaseMgr& DBMgr , Layer& mapLayer, const UInt32Point& pos = UInt32Point());
+            static BrushPtr createBrush(const BrushInfo& info, const DATABASE::DatabaseMgr& DBMgr , Layer& mapLayer, const UInt32Point& pos = UInt32Point());
         };
     }
 }

@@ -2,16 +2,23 @@
 #define MAP_EDITOR_WIDGET_BRUSH_H
 
 #include <QtWidgets/QWidget>
-#include "MapEditorModuleBrush.h"
-#include "Brush.h"
+#include <Brush.h>
+#include <BrushInfo.h>
 
 namespace MAP
 {
     class Layer;
 }
 
+namespace DATABASE
+{
+    class DatabaseMgr;
+}
+
 namespace BRUSH
 {
+    class MapEditorModuleBrush;
+
     enum class BrushIndex
     {
         BRUSH_LEFT,
@@ -33,7 +40,7 @@ namespace BRUSH
         const MAP::BRUSH::BrushInfo& getBrushInfo(BrushIndex brush) const;
         void setBrushInfo(BrushIndex brush, const MAP::BRUSH::BrushInfo& brushInfo);
 
-        MAP::BRUSH::Brush2Ptr createBrush(BrushIndex brushIndex, MAP::Layer& layer) const;
+        MAP::BRUSH::BrushPtr createBrush(BrushIndex brushIndex, MAP::Layer& layer) const;
 
         const DATABASE::DatabaseMgr& getDatabaseMgr() const { return m_DBMgr; }
 

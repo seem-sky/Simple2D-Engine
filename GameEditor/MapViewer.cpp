@@ -4,6 +4,7 @@
 #include "moc_MapViewer.h"
 #include "MappingObject.h"
 #include "BrushRevert.h"
+#include "DatabaseMgr.h"
 
 /*#####
 # MapViewerScene

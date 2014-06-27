@@ -3,8 +3,12 @@
 
 #include <QtWidgets/QWidget>
 #include "UI/UI_MapEditorModuleContent.h"
-#include <unordered_map>
-#include <DatabaseMgr.h>
+#include <Global.h>
+
+namespace DATABASE
+{
+    class DatabaseMgr;
+}
 
 class MapViewer;
 

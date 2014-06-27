@@ -3,6 +3,7 @@
 #include <QtCore/QEvent>
 #include "moc_MapEditorWidgetBrush.h"
 #include <BrushFactory.h>
+#include "MapEditorModuleBrush.h"
 
 using namespace BRUSH;
 using namespace MAP::BRUSH;
@@ -67,7 +68,7 @@ void MapEditorWidgetBrush::onBrushInfoRequested(BRUSH::BrushIndex brush, MAP::BR
     brushInfo = m_pBrushes.at(static_cast<uint32>(brush))->getBrushInfo();
 }
 
-MAP::BRUSH::Brush2Ptr MapEditorWidgetBrush::createBrush(BrushIndex brushIndex, MAP::Layer& layer) const
+MAP::BRUSH::BrushPtr MapEditorWidgetBrush::createBrush(BrushIndex brushIndex, MAP::Layer& layer) const
 {
     return MAP::BRUSH::BrushFactory::createBrush(getBrushInfo(brushIndex), getDatabaseMgr(), layer);
 }
