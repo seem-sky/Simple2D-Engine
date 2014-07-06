@@ -54,11 +54,10 @@ namespace MAP
                             !getOldMapTile().isAutoTile() && !mapTileInfo.isAutoTile() && getOldMapTile().m_uiTileID != mapTileInfo.getMapTile().m_uiTileID)
                         {
                             check = true;
-                            if (!borderBitset.get(mapTileInfo.getPosition()))
+                            if (mapTileInfo.isAutoTile() && !borderBitset.get(mapTileInfo.getPosition()))
                             {
                                 borderBitset.set(mapTileInfo.getPosition());
-                                if (mapTileInfo.isAutoTile())
-                                    borderTiles.push_back(mapTileInfo.getPosition());
+                                borderTiles.push_back(mapTileInfo.getPosition());
                             }
                         }
                         else  if (borderTile == MAP::BorderTile::LEFT || borderTile == MAP::BorderTile::RIGHT || borderTile == MAP::BorderTile::BOTTOM ||

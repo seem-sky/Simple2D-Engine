@@ -45,11 +45,11 @@ void DatabaseWidgetTileSet::setupWidgetsFromPrototype(const Prototype* pPrototyp
     if (auto pProto = dynamic_cast<const TILE_SET::TileSetPrototype*>(pPrototype))
     {
         auto size = pProto->getTileSetSize();
-        m_pModuleTileSet->resizeTileSetTableColumns(size.x);
-        m_pModuleTileSet->resizeTileSetTableRows(size.y);
-        for (uint32 row = 0; row < size.y; ++row)
+        m_pModuleTileSet->resizeTileSetTableColumns(size.getX());
+        m_pModuleTileSet->resizeTileSetTableRows(size.getY());
+        for (uint32 row = 0; row < size.getY(); ++row)
         {
-            for (uint32 column = 0; column < size.x; ++column)
+            for (uint32 column = 0; column < size.getX(); ++column)
                 m_pModuleTileSet->setTileID(row, column, pProto->getTileID(UInt32Point(column, row)));
         }
     }
@@ -62,9 +62,9 @@ void DatabaseWidgetTileSet::setupPrototypeFromWidgets(Prototype* pPrototype)
     {
         UInt32Point size(m_pModuleTileSet->getTileSetTableColumnCount(), m_pModuleTileSet->getTileSetTableColumnCount());
         pProto->resizeTileSet(size);
-        for (uint32 row = 0; row < size.y; ++row)
+        for (uint32 row = 0; row < size.getY(); ++row)
         {
-            for (uint32 column = 0; column < size.x; ++column)
+            for (uint32 column = 0; column < size.getX(); ++column)
                 pProto->setTileID(UInt32Point(column, row), m_pModuleTileSet->getTileID(row, column));
         }
     }

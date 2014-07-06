@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameLauncher", "GameLauncher\GameLauncher.vcxproj", "{052F0CF2-EF76-4237-B6C7-6376736E64F6}"
 	ProjectSection(ProjectDependencies) = postProject
 		{37D8C7EC-10AA-433F-82C0-DBE8EF36ABCC} = {37D8C7EC-10AA-433F-82C0-DBE8EF36ABCC}
@@ -14,6 +16,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D56BF584-2715-4EF3-BD77-CA351D0A7E82}"
 	ProjectSection(SolutionItems) = preProject
 		Performance1.psess = Performance1.psess
+		Performance2.psess = Performance2.psess
+		Performance3.psess = Performance3.psess
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Simple2D-Engine", "Simple2D-Engine\Simple2D-Engine.vcxproj", "{37D8C7EC-10AA-433F-82C0-DBE8EF36ABCC}"
@@ -53,5 +57,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal

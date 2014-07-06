@@ -1,7 +1,7 @@
 #ifndef SIMPLE_2D_GLOBAL_H
 #define SIMPLE_2D_GLOBAL_H
 
-#include <Global.h>
+#include <Typedefs.h>
 
 namespace DATABASE
 {

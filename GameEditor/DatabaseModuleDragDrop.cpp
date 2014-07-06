@@ -3,6 +3,8 @@
 #include <QtCore/QMimeData>
 #include <QtGui/QDragMoveEvent>
 #include <QtGui/QPainter>
+#include <math_extensions.h>
+#include <Global.h>
 #include "moc_DatabaseModuleDragDrop.h"
 #include "QtGlobal.h"
 #include "Config.h"
@@ -81,11 +83,19 @@ void DatabaseModuleTooltipList::_onItemEntered(const QModelIndex& index)
     }
 }
 
+uint32 DatabaseModuleTooltipList::getSelectedID() const
+{
+    auto pModel = currentIndex();
+    if (pModel.isValid())
+        return pModel.row() + 1;
+    return 0;
+}
+
 void DatabaseModuleTooltipList::_showTooltip()
 {
     if (m_CurrentRow != MATH::maximum<uint32>())
     {
-        if (m_pToolTip = _setupTooltipWidget(m_CurrentRow+1))
+        if (m_pToolTip = _setupTooltipWidget(m_CurrentRow + 1))
         {
             m_pToolTip->setMouseTracking(false);
             m_pToolTip->setWindowFlags(Qt::ToolTip);

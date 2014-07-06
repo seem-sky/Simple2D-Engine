@@ -3,9 +3,11 @@
 
 #include <QtCore/QObject>
 #include <QtGui/QMouseEvent>
+#include <memory>
 #include "MappingModeInterface.h"
 #include <QtCore/QStringList>
 
+class MapEditorModuleWorldObjects;
 class MapViewer;
 namespace BRUSH
 {
@@ -19,7 +21,7 @@ private:
     MAPPING_MODE::Interface* _getMode(MAPPING_MODE::Type mode);
 
 public:
-    MappingObject(QWidget* pParent, const BRUSH::MapEditorWidgetBrush* pBrushWidget);
+    MappingObject(QWidget* pParent, const BRUSH::MapEditorWidgetBrush& brushWidget, const MapEditorModuleWorldObjects& objectWidget);
 
     void setMappingMode(MAPPING_MODE::Type mode);
     MAPPING_MODE::Type getMappingModeType() const;

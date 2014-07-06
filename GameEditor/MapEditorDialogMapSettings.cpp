@@ -22,8 +22,8 @@ void MapEditorDialogMapSettings::_setup()
     m_pName->setText(m_pPrototype->getName());
     m_pScriptName->setText(m_pPrototype->getScriptName());
     m_pFileName->setText(m_pPrototype->getFileName());
-    m_pSizeX->setValue(m_pPrototype->getSize().x);
-    m_pSizeY->setValue(m_pPrototype->getSize().y);
+    m_pSizeX->setValue(m_pPrototype->getSize().getX());
+    m_pSizeY->setValue(m_pPrototype->getSize().getY());
     m_pBackgroundLayer->setValue(m_pPrototype->getLayerSize(MAP::LayerType::LAYER_BACKGROUND));
     m_pForegroundLayer->setValue(m_pPrototype->getLayerSize(MAP::LayerType::LAYER_FOREGROUND));
 }

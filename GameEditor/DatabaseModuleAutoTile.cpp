@@ -41,6 +41,7 @@ TileDropLabel* DatabaseModuleAutoTile::_getLabel(AUTO_TILE_INDEX index) const
 TileArray DatabaseModuleAutoTile::getTiles() const
 {
     TileArray tiles;
+    tiles.fill(0);
     for (uint32 i = 0; i < AUTO_TILE_SET_COUNT; ++i)
     {
         if (TileDropLabel* pLabel = _getLabel(static_cast<AUTO_TILE_INDEX>(i)))

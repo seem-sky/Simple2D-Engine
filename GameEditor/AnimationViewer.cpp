@@ -185,7 +185,7 @@ void AnimationViewer::_setupFrame(const Frame& frame)
         pItem->setZValue(z);
         pItem->setScale(sprite.m_Scale);
         pItem->setOpacity(sprite.m_Opacity);
-        pItem->setPos(sprite.m_Pos.x, sprite.m_Pos.y);
+        pItem->setPos(sprite.m_Pos.getX(), sprite.m_Pos.getY());
         pItem->setRotation(sprite.m_uiRotation);
 
         addGraphicsSpriteItem(pItem);

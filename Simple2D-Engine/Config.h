@@ -2,8 +2,9 @@
 #define CONFIG_H
 
 #include "Singleton.h"
-#include <Global.h>
+#include <Typedefs.h>
 #include <QtCore/QString>
+#include <unordered_set>
 
 class Config : public TSingleton<Config>
 {
@@ -20,7 +21,7 @@ public:
 
     inline void addOpenMap(const uint32& uiMapID) { m_openMaps.insert(uiMapID); saveConfig(); }
     void removeOpenMap(const uint32& uiMapID);
-    inline const UInt32UnorderedSet getOpenMaps() const { return m_openMaps; }
+    inline const std::unordered_set<uint32> getOpenMaps() const { return m_openMaps; }
 
     inline UInt32Point getMainWindowSize() const { return m_MainWindowSize; }
     inline void setMainWindowSize(UInt32Point size) { m_MainWindowSize = size; saveConfig(); }
@@ -31,7 +32,7 @@ public:
 
 private:
     QString m_projectDirectory;
-    UInt32UnorderedSet m_openMaps;
+    std::unordered_set<uint32> m_openMaps;
     UInt32Point m_MainWindowSize;
     UInt32Point m_MainWindowPos;
 };

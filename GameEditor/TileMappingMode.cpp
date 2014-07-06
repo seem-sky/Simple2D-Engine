@@ -2,10 +2,11 @@
 #include "MapViewer.h"
 #include "MapEditorWidgetBrush.h"
 #include "MapException.h"
+#include <DatabaseMgr.h>
 
 namespace MAPPING_MODE
 {
-    Tile::Tile(const BRUSH::MapEditorWidgetBrush* pBrushWidget) : m_pBrushWidget(pBrushWidget)
+    Tile::Tile(const BRUSH::MapEditorWidgetBrush& brushWidget) : m_BrushWidget(brushWidget)
     {}
 
     void Tile::_finishBrush()
@@ -40,16 +41,16 @@ namespace MAPPING_MODE
             try
             {
                 auto& layer = pViewer->getScene()->getMapData().getMapLayer().getLayer(pViewer->getScene()->getLayerType(), pViewer->getScene()->getLayerIndex() - 1);
-                m_pCurrentBrush = m_pBrushWidget->createBrush(brush, layer);
+                m_pCurrentBrush = m_BrushWidget.createBrush(brush, layer);
                 auto pos = pViewer->mapToScene(pEvent->pos());
                 UInt32Point tilePos(pos.x() / TILE_SIZE, pos.y() / TILE_SIZE);
 
-                auto brushInfo = m_pBrushWidget->getBrushInfo(brush);
+                auto brushInfo = m_BrushWidget.getBrushInfo(brush);
 
                 // if tileSet mapping, set brush size equal tileSet size
                 if (brushInfo.getType() == MAP::BRUSH::BrushInfo::Type::TILE_SET)
                 {
-                    if (auto pTileSet = m_pBrushWidget->getDatabaseMgr().getTileSetDatabase()->getOriginalPrototype(brushInfo.getID()))
+                    if (auto pTileSet = m_BrushWidget.getDatabaseMgr().getTileSetDatabase()->getOriginalPrototype(brushInfo.getID()))
                         m_pCurrentBrush->setBrushSize(pTileSet->getTileSetSize());
                 }
 

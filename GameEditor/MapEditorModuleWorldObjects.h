@@ -2,7 +2,11 @@
 #define MAP_EDITOR_MODULE_WORLD_OBJECTS_H
 
 #include "DatabaseModuleDragDrop.h"
-#include "DatabaseMgr.h"
+
+namespace DATABASE
+{
+    class DatabaseMgr;
+}
 
 class MapEditorModuleWorldObjects : public DatabaseModuleTooltipList
 {

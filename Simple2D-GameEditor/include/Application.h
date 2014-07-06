@@ -3,6 +3,7 @@
 
 #include <Global.h>
 #include <QtWidgets/QWidget>
+#include <memory>
 
 typedef std::unique_ptr<QWidget> QWidgetPtr;
 

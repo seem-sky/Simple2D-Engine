@@ -131,18 +131,18 @@ QPixmap PROTOTYPE::TILE_SET::createTileSetPixmap(const QString& path, const Tile
     if (!pSet || !pTileDB)
         return std::move(QPixmap());
 
-    QPixmap pixmap(pSet->getTileSetSize().x*TILE_SIZE, pSet->getTileSetSize().y*TILE_SIZE);
+    QPixmap pixmap(pSet->getTileSetSize().getX()*TILE_SIZE, pSet->getTileSetSize().getY()*TILE_SIZE);
     pixmap.fill();
     QPainter painter(&pixmap);
     UInt32Point pos;
-    for (pos.x = 0; pos.x < pSet->getTileSetSize().x; ++pos.x)
+    for (pos.getX() = 0; pos.getX() < pSet->getTileSetSize().getX(); ++pos.getX())
     {
-        for (pos.y = 0; pos.y < pSet->getTileSetSize().y; ++pos.y)
+        for (pos.getY() = 0; pos.getY() < pSet->getTileSetSize().getY(); ++pos.getY())
         {
             auto pTileProto = pTileDB->getOriginalPrototype(pSet->getTileID(pos));
             QPixmap tempPixmap;
             if (pTileProto && createPixmapFromTexturePrototype(path, pTileProto, tempPixmap))
-                painter.drawTiledPixmap(pos.x*TILE_SIZE, pos.y*TILE_SIZE, TILE_SIZE, TILE_SIZE, tempPixmap);
+                painter.drawTiledPixmap(pos.getX()*TILE_SIZE, pos.getY()*TILE_SIZE, TILE_SIZE, TILE_SIZE, tempPixmap);
         }
     }
     return pixmap;

@@ -29,8 +29,8 @@ namespace MAP
 
         void update(uint32 uiDiff);
 
-        inline uint32 getWidth() const { return getSize().x; }
-        inline uint32 getHeight() const { return getSize().y; }
+        inline uint32 getWidth() const { return getSize().getX(); }
+        inline uint32 getHeight() const { return getSize().getY(); }
         inline UInt32Point getSize() const { return m_Layer.getSize(); }
         inline uint8 getLayerSize(LayerType layer) const { return m_Layer.getLayerSize(layer); }
 

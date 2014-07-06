@@ -4,6 +4,7 @@
 #include "Keyboard.h"
 #include <unordered_map>
 #include <functional>
+#include <memory>
 
 namespace PLAYER
 {

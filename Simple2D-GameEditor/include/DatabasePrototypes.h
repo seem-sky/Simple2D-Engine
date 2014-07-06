@@ -437,16 +437,16 @@ namespace DATABASE
 				inline const FlagManager<Flags>& getFlagManager() const { return m_Flags; }
 				inline FlagManager<Flags>& getFlagManager() { return m_Flags; }
 
-                inline int32 getBoundingX() const { return m_BoundingRect.getPositionX(); }
-                inline void setBoundingX(int32 x) { m_BoundingRect.setPositionX(x); }
-                inline int32 getBoundingY() const { return m_BoundingRect.getPositionY(); }
-                inline void setBoundingY(int32 y) { m_BoundingRect.setPositionY(y); }
-                inline uint32 getBoundingWidth() const { return m_BoundingRect.getWidth(); }
-                inline void setBoundingWidth(uint32 width) { m_BoundingRect.setWidth(width); }
-                inline uint32 getBoundingHeight() const { return m_BoundingRect.getHeight(); }
-                inline void setBoundingHeight(uint32 height) { m_BoundingRect.setHeight(height); }
+                inline int32 getBoundingLeft() const { return m_BoundingRect.getLeft(); }
+                inline void setBoundingLeft(int32 x) { m_BoundingRect.setLeft(x); }
+                inline int32 getBoundingTop() const { return m_BoundingRect.getTop(); }
+                inline void setBoundingTop(int32 y) { m_BoundingRect.setTop(y); }
+                inline uint32 getBoundingRight() const { return m_BoundingRect.getRight(); }
+                inline void setBoundingRight(uint32 width) { m_BoundingRect.setRight(width); }
+                inline uint32 getBoundingBottom() const { return m_BoundingRect.getBottom(); }
+                inline void setBoundingBottom(uint32 height) { m_BoundingRect.setBottom(height); }
                 inline Int32Rect getBoundingRect() const { return m_BoundingRect; }
-                inline void setBoundingRect(Int32Rect rect) { m_BoundingRect = std::move(rect); }
+                inline void setBoundingRect(Int32Rect rect) { m_BoundingRect = rect; }
 
                 inline void setAnimationSpeed(uint16 uiSpeed) { m_uiAnimationSpeed = uiSpeed; }
                 inline uint16 getAnimationSpeed() const { return m_uiAnimationSpeed; }
@@ -569,6 +569,7 @@ namespace DATABASE
 
                 bool isValid();
 
+                QString getFilePath() const;
                 inline QString getFileName() const { return m_FileName; }
                 inline void setFileName(const QString& sFileName) { m_FileName = sFileName; }
                 inline void setScriptName(const QString& sScriptName) { m_ScriptName = sScriptName; }
@@ -584,15 +585,6 @@ namespace DATABASE
                 inline uint32 getParentID() const { return m_uiParentID; }
                 inline void setParentID(uint32 uiParentID) { m_uiParentID = uiParentID; }
 
-                // ToDo: remove following
-                void addMapObject(MapObject* pObject);
-                MapObject* addMapObject(uint32 ID, Int32Point pos);
-                inline uint32 getMapObjectCount() const { return m_Objects.getSize(); }
-                inline const MapObject* getMapObject(uint32 GUID) const { return m_Objects.getItem(GUID); }
-                inline MapObject* getMapObject(uint32 GUID)  { return m_Objects.getItem(GUID); }
-                void removeMapObject(uint32 GUID);
-                inline const MapObjectContainer& getMapObjects() const { return m_Objects; }
-
                 // XML IO
                 void toXML(QXmlStreamWriter& writer) const;
                 void fromXML(const QXmlStreamAttributes& attributes);
@@ -601,8 +593,6 @@ namespace DATABASE
                 uint32 m_uiParentID = 0;
                 QString m_FileName;
                 QString m_ScriptName;
-
-                MapObjectContainer m_Objects;
 
                 UInt32Point m_Size;
                 std::array<uint8, 2> m_Layer;

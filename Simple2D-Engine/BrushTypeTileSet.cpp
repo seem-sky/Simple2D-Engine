@@ -25,16 +25,16 @@ namespace MAP
                     revert.addTile(info);
                     info.getMapTile().m_uiAutoTileSetID = 0;
                     UInt32Point diff;
-                    if (info.getPosition().x > getStartPosition().x)
-                        diff.x = info.getPosition().x - getStartPosition().x;
+                    if (info.getPosition().getX() > getStartPosition().getX())
+                        diff.getX() = info.getPosition().getX() - getStartPosition().getX();
                     else
-                        diff.x = getStartPosition().x - info.getPosition().x;
+                        diff.getX() = getStartPosition().getX() - info.getPosition().getX();
 
-                    if (info.getPosition().y > getStartPosition().y)
-                        diff.y = info.getPosition().y - getStartPosition().y;
+                    if (info.getPosition().getY() > getStartPosition().getY())
+                        diff.getY() = info.getPosition().getY() - getStartPosition().getY();
                     else
-                        diff.y = getStartPosition().y - info.getPosition().y;
-                    info.getMapTile().m_uiTileID = pTileSet->getTileID(UInt32Point(diff.x % size.x, diff.y % size.y));
+                        diff.getY() = getStartPosition().getY() - info.getPosition().getY();
+                    info.getMapTile().m_uiTileID = pTileSet->getTileID(UInt32Point(diff.getX() % size.getX(), diff.getY() % size.getY()));
                     try
                     {
                         m_Layer.setMapTile(info);

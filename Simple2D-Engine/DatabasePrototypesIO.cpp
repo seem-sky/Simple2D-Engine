@@ -135,21 +135,21 @@ void TILE_SET::TileSetPrototype::fromXML(const QXmlStreamAttributes& attributes)
     {
         QStringList tileList = attributes.value("tiles").toString().split(",");
         for (int32 i = 0; i < tileList.size(); ++i)
-            setTileID(UInt32Point(i/size.x, i%size.y), tileList.at(i).toUInt());
+            setTileID(UInt32Point(i/size.getX(), i%size.getY()), tileList.at(i).toUInt());
     }
 }
 
 void TILE_SET::TileSetPrototype::toXML(QXmlStreamWriter& writer) const
 {
-    writer.writeAttribute("columns", QString::number(getTileSetSize().x));
-    writer.writeAttribute("rows", QString::number(getTileSetSize().y));
+    writer.writeAttribute("columns", QString::number(getTileSetSize().getX()));
+    writer.writeAttribute("rows", QString::number(getTileSetSize().getY()));
     Prototype::toXML(writer);
 
     //get tile IDs
     QString tiles;
-    for (uint32 x = 0; x < getTileSetSize().x; ++x)
+    for (uint32 x = 0; x < getTileSetSize().getX(); ++x)
     {
-        for (uint32 y = 0; y < getTileSetSize().y; ++y)
+        for (uint32 y = 0; y < getTileSetSize().getY(); ++y)
         {
             if (x || y)
                 tiles.append(",");
@@ -181,8 +181,8 @@ void ANIMATION::AnimationPrototype::toXML(QXmlStreamWriter& writer) const
             writer.writeEmptyElement("sprite");
             ANIMATION::Sprite sprite = frame.getSprite(j);
             writer.writeAttribute("ID", QString::number(sprite.m_uiSpriteID));
-            writer.writeAttribute("x", QString::number(sprite.m_Pos.x));
-            writer.writeAttribute("y", QString::number(sprite.m_Pos.y));
+            writer.writeAttribute("x", QString::number(sprite.m_Pos.getX()));
+            writer.writeAttribute("y", QString::number(sprite.m_Pos.getY()));
             if (sprite.m_Scale != 100)
                 writer.writeAttribute("scale", QString::number(sprite.m_Scale));
             if (sprite.m_uiRotation)
@@ -211,8 +211,8 @@ void ANIMATION::AnimationPrototype::insertChildren(const QXmlStreamReader& reade
             ANIMATION::Sprite newSprite;
             QXmlStreamAttributes attributes = reader.attributes();
             newSprite.m_uiSpriteID = attributes.value("ID").toUInt();
-            newSprite.m_Pos.x = attributes.value("x").toInt();
-            newSprite.m_Pos.y = attributes.value("y").toInt();
+            newSprite.m_Pos.getX() = attributes.value("x").toInt();
+            newSprite.m_Pos.getY() = attributes.value("y").toInt();
             if (attributes.hasAttribute("scale"))
                 newSprite.m_Scale = attributes.value("scale").toFloat();
 
@@ -266,10 +266,10 @@ void WORLD_OBJECT::WorldObjectPrototype::fromXML(const QXmlStreamAttributes& att
     Prototype::fromXML(attributes);
 
     // bounding rect
-    setBoundingX(attributes.value("boundingX").toInt());
-    setBoundingY(attributes.value("boundingY").toInt());
-    setBoundingWidth(attributes.value("boundingWidth").toUInt());
-    setBoundingHeight(attributes.value("boundingHeight").toUInt());
+    setBoundingLeft(attributes.value("boundingX").toInt());
+    setBoundingTop(attributes.value("boundingY").toInt());
+    setBoundingRight(attributes.value("boundingWidth").toUInt());
+    setBoundingBottom(attributes.value("boundingHeight").toUInt());
 
     setAnimationSpeed(attributes.value("animationSpeed").toUShort());
     setScriptName(attributes.value("script").toString());
@@ -279,10 +279,10 @@ void WORLD_OBJECT::WorldObjectPrototype::fromXML(const QXmlStreamAttributes& att
 
 void WORLD_OBJECT::WorldObjectPrototype::toXML(QXmlStreamWriter& writer) const
 {
-    writer.writeAttribute("boundingX", QString::number(getBoundingX()));
-    writer.writeAttribute("boundingY", QString::number(getBoundingY()));
-    writer.writeAttribute("boundingWidth", QString::number(getBoundingWidth()));
-    writer.writeAttribute("boundingHeight", QString::number(getBoundingHeight()));
+    writer.writeAttribute("boundingX", QString::number(getBoundingLeft()));
+    writer.writeAttribute("boundingY", QString::number(getBoundingTop()));
+    writer.writeAttribute("boundingWidth", QString::number(getBoundingRight()));
+    writer.writeAttribute("boundingHeight", QString::number(getBoundingBottom()));
     writer.writeAttribute("animationSpeed", QString::number(getAnimationSpeed()));
 	writer.writeAttribute("flags", QString::number(getFlagManager().getFlag()));
 
@@ -343,8 +343,8 @@ void MAP_STRUCTURE::MapPrototype::fromXML(const QXmlStreamAttributes& attributes
 
 void MAP_STRUCTURE::MapPrototype::toXML(QXmlStreamWriter& writer) const
 {
-    writer.writeAttribute("sizeX", QString::number(getSize().x));
-    writer.writeAttribute("sizeY", QString::number(getSize().y));
+    writer.writeAttribute("sizeX", QString::number(getSize().getX()));
+    writer.writeAttribute("sizeY", QString::number(getSize().getY()));
     writer.writeAttribute("backLayer", QString::number(getLayerSize(MAP::LayerType::LAYER_BACKGROUND)));
     writer.writeAttribute("foreLayer", QString::number(getLayerSize(MAP::LayerType::LAYER_FOREGROUND)));
     if (getParentID())

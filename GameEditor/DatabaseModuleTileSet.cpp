@@ -1,5 +1,6 @@
 #include "DatabaseModuleTileSet.h"
 #include "moc_DatabaseModuleTileSet.h"
+#include <math_extensions.h>
 
 const uint32 MIN_COLUMN_COUNT = 1;
 const uint32 MIN_ROW_COUNT = 1;

@@ -53,6 +53,7 @@
     <ClCompile Include="MapData.cpp" />
     <ClCompile Include="MapLayer.cpp" />
     <ClCompile Include="MapMgr.cpp" />
+    <ClCompile Include="MapViewItem.cpp" />
     <ClCompile Include="MapViewScene.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="ObjectAnimationWidget.cpp" />
@@ -67,6 +68,8 @@
     <ClCompile Include="MapException.cpp" />
     <ClCompile Include="TransformationHolder.cpp" />
     <ClCompile Include="VisualViewer.cpp" />
+    <ClCompile Include="WorldObjectInfo.cpp" />
+    <ClCompile Include="WorldObjectInfoData.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Simple2D-GameEditor\include\Application.h" />
@@ -93,6 +96,8 @@
     <ClInclude Include="BrushTypeInterface.h" />
     <ClInclude Include="BrushTypeTile.h" />
     <ClInclude Include="BrushTypeTileSet.h" />
+    <ClInclude Include="Colission.h" />
+    <ClInclude Include="MapViewItem.h" />
     <ClInclude Include="Simple2D-Global.h" />
     <ClInclude Include="MapViewScene.h" />
     <ClInclude Include="PrototypeAnimationModule.h" />
@@ -128,6 +133,8 @@
     <ClInclude Include="TileCache.h" />
     <ClInclude Include="MapException.h" />
     <ClInclude Include="TransformationHolder.h" />
+    <ClInclude Include="WorldObjectInfo.h" />
+    <ClInclude Include="WorldObjectInfoData.h" />
     <moc_header Include="VisualViewer.h" />
   </ItemGroup>
   <ItemGroup>

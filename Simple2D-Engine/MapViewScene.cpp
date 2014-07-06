@@ -4,13 +4,13 @@
 #include <QtGui/QPainter>
 #include "AutoTileCache.h"
 
-MapViewScene::MapViewScene(uint32 mapID, const DATABASE::DatabaseMgr& DBMgr) : QGraphicsScene(), m_MapData(DBMgr, mapID)
+MapViewScene::MapViewScene(uint32 mapID, const DATABASE::DatabaseMgr& DBMgr) : QGraphicsScene(), m_MapData(DBMgr, mapID), m_DBMgr(DBMgr)
 {}
 
 UInt32Point MapViewScene::calculateEndTile(const QRect &rect, const UInt32Point& startTile) const
 {
-    return UInt32Point(qMin<uint32>(ceil(rect.x() % TILE_SIZE + rect.width() / TILE_SIZE) + startTile.x + 1, m_MapData.getMapLayer().getSize().x),
-        qMin<uint32>(ceil(rect.y() % TILE_SIZE + rect.height() / TILE_SIZE) + startTile.y + 1, m_MapData.getMapLayer().getSize().y));
+    return UInt32Point(qMin<uint32>(ceil(rect.x() % TILE_SIZE + rect.width() / TILE_SIZE) + startTile.getX() + 1, m_MapData.getMapLayer().getSize().getX()),
+        qMin<uint32>(ceil(rect.y() % TILE_SIZE + rect.height() / TILE_SIZE) + startTile.getY() + 1, m_MapData.getMapLayer().getSize().getY()));
 }
 
 UInt32Point MapViewScene::calculateStartTile(const QRect &rect) const
@@ -45,9 +45,9 @@ void MapViewScene::drawLayer(QPainter* painter, const UInt32Point startTile, con
     // ToDo: DrawPixmapFragments is an improvement, perhaps.
     // std::vector<std::vector<QPainter::PixmapFragment>> fragments;
     UInt32Point currentTile;
-    for (currentTile.x = startTile.x; currentTile.x < endTile.x; ++currentTile.x)
+    for (currentTile.getX() = startTile.getX(); currentTile.getX() < endTile.getX(); ++currentTile.getX())
     {
-        for (currentTile.y = startTile.y; currentTile.y < endTile.y; ++currentTile.y)
+        for (currentTile.getY() = startTile.getY(); currentTile.getY() < endTile.getY(); ++currentTile.getY())
         {
             auto& tileObj = mapLayer.getMapTile(currentTile);
             if (tileObj.getMapTile().isEmpty())      // ignore tile ID 0; empty tile
@@ -56,7 +56,7 @@ void MapViewScene::drawLayer(QPainter* painter, const UInt32Point startTile, con
             if (tileObj.getMapTile().m_uiAutoTileSetID == 0)
             {
                 if (auto pPixmap = GTileCache::get()->getItem(tileObj.getMapTile().m_uiTileID))
-                    painter->drawPixmap(currentTile.x*TILE_SIZE, currentTile.y*TILE_SIZE, TILE_SIZE, TILE_SIZE, *pPixmap);
+                    painter->drawPixmap(currentTile.getX()*TILE_SIZE, currentTile.getY()*TILE_SIZE, TILE_SIZE, TILE_SIZE, *pPixmap);
                 //if (fragments.size() < tileObj.m_uiTileID)
                 //    fragments.resize(tileObj.m_uiTileID);
                 //fragments.at(tileObj.m_uiTileID-1).push_back(QPainter::PixmapFragment::create(QPoint(x*TILE_SIZE + TILE_SIZE/2, y*TILE_SIZE + TILE_SIZE/2),
@@ -68,7 +68,7 @@ void MapViewScene::drawLayer(QPainter* painter, const UInt32Point startTile, con
                 if (auto pAutoTile = GAutoTileCache::get()->getItem(tileObj.getMapTile().m_uiAutoTileSetID))
                 {
                     if (auto pPixmap = pAutoTile->getPixmap(static_cast<DATABASE::PROTOTYPE::AUTO_TILE::AUTO_TILE_INDEX>(tileObj.getMapTile().m_uiTileID)))
-                        painter->drawPixmap(currentTile.x*TILE_SIZE, currentTile.y*TILE_SIZE, TILE_SIZE, TILE_SIZE, *pPixmap);
+                        painter->drawPixmap(currentTile.getX()*TILE_SIZE, currentTile.getY()*TILE_SIZE, TILE_SIZE, TILE_SIZE, *pPixmap);
                 }
             }
         }

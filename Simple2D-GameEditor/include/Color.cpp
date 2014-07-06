@@ -1,4 +1,5 @@
 #include "Color.h"
+#include <string>
 
 Color::Color(const std::string& colorText)
 {

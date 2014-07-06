@@ -3,6 +3,7 @@
 
 #include <Global.h>
 #include <QtCore/QString>
+#include <map>
 
 typedef std::multimap<QString, QString> DataMultimap;
 typedef std::map<QString, DataMultimap> SectorData;

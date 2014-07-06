@@ -2,6 +2,7 @@
 #define MAP_TILE_H
 
 #include "Simple2D-Global.h"
+#include <math_extensions.h>
 
 namespace MAP
 {

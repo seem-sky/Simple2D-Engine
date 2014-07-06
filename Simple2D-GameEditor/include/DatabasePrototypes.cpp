@@ -2,6 +2,7 @@
 #include <QtGui/QPixmap>
 #include <QtGui/QPainter>
 #include "TileCache.h"
+#include "Config.h"
 
 namespace DATABASE
 {
@@ -158,7 +159,7 @@ namespace DATABASE
 
         void TILE_SET::TileSetPrototype::resizeTileSet(UInt32Point size)
         {
-            m_Tiles.resize(boost::extents[size.x][size.y]);
+            m_Tiles.resize(boost::extents[size.getX()][size.getY()]);
             m_Size = size;
         }
 
@@ -170,40 +171,40 @@ namespace DATABASE
 
         void TILE_SET::TileSetPrototype::setTileID(UInt32Point pos, uint32 ID)
         {
-            _resizeIfNeeded(UInt32Point(pos.x+1, pos.y+1));
-            m_Tiles[pos.x][pos.y] = ID;
+            _resizeIfNeeded(UInt32Point(pos.getX()+1, pos.getY()+1));
+            m_Tiles[pos.getX()][pos.getY()] = ID;
         }
 
         uint32 TILE_SET::TileSetPrototype::getTileID(UInt32Point pos) const
         {
-            if (pos.x < m_Size.x && pos.y < m_Size.y)
-                return m_Tiles[pos.x][pos.y];
+            if (pos.getX() < m_Size.getX() && pos.getY() < m_Size.getY())
+                return m_Tiles[pos.getX()][pos.getY()];
             return 0;
         }
 
         void TILE_SET::TileSetPrototype::_resizeIfNeeded(UInt32Point size)
         {
             UInt32Point newSize(m_Size);
-            if (size.x > newSize.x)
-                newSize.x = size.x;
-            if (size.y > newSize.y)
-                newSize.y = size.y;
+            if (size.getX() > newSize.getX())
+                newSize.getX() = size.getX();
+            if (size.getY() > newSize.getY())
+                newSize.getY() = size.getY();
             if (newSize != m_Size)
                 resizeTileSet(newSize);
         }
 
         QPixmap TILE_SET::createPixmap(const TileSetPrototype& tileSet)
         {
-            QPixmap pixmap(tileSet.getTileSetSize().x*TILE_SIZE, tileSet.getTileSetSize().y*TILE_SIZE);
+            QPixmap pixmap(tileSet.getTileSetSize().getX()*TILE_SIZE, tileSet.getTileSetSize().getY()*TILE_SIZE);
             pixmap.fill();
             QPainter painter(&pixmap);
             UInt32Point pos;
-            for (pos.x = 0; pos.x < tileSet.getTileSetSize().x; ++pos.x)
+            for (pos.getX() = 0; pos.getX() < tileSet.getTileSetSize().getX(); ++pos.getX())
             {
-                for (pos.y = 0; pos.y < tileSet.getTileSetSize().y; ++pos.y)
+                for (pos.getY() = 0; pos.getY() < tileSet.getTileSetSize().getY(); ++pos.getY())
                 {
                     if (auto pTilePixmap = GTileCache::get()->getItem(tileSet.getTileID(pos)))
-                        painter.drawTiledPixmap(pos.x*TILE_SIZE, pos.y*TILE_SIZE, TILE_SIZE, TILE_SIZE,* pTilePixmap);
+                        painter.drawTiledPixmap(pos.getX()*TILE_SIZE, pos.getY()*TILE_SIZE, TILE_SIZE, TILE_SIZE, *pTilePixmap);
                 }
             }
             return pixmap;
@@ -243,14 +244,14 @@ namespace DATABASE
 
             void Frame::calculateOffset()
             {
-                m_FrameOffset.x = 0;
-                m_FrameOffset.y = 0;
+                m_FrameOffset.getX() = 0;
+                m_FrameOffset.getY() = 0;
                 for (auto& sprite : m_Sprites)
                 {
-                    if (sprite.m_Pos.x < m_FrameOffset.x)
-                        m_FrameOffset.x = sprite.m_Pos.x;
-                    if (sprite.m_Pos.y < m_FrameOffset.y)
-                        m_FrameOffset.y = sprite.m_Pos.y;
+                    if (sprite.m_Pos.getX() < m_FrameOffset.getX())
+                        m_FrameOffset.getX() = sprite.m_Pos.getX();
+                    if (sprite.m_Pos.getY() < m_FrameOffset.getY())
+                        m_FrameOffset.getY() = sprite.m_Pos.getY();
                 }
             }
 
@@ -277,10 +278,8 @@ namespace DATABASE
 
             void Frame::setOffsetIfNeeded(const Int32Point& offset)
             {
-                if (m_FrameOffset.x > offset.x)
-                    m_FrameOffset.x = offset.x;
-                if (m_FrameOffset.y > offset.y)
-                    m_FrameOffset.y = offset.y;
+                m_FrameOffset.getX() = std::min(m_FrameOffset.getX(), offset.getX());
+                m_FrameOffset.getY() = std::min(m_FrameOffset.getY(), offset.getY());
             }
         }
 
@@ -299,28 +298,6 @@ namespace DATABASE
                 m_Layer.at(static_cast<uint32>(MAP::LayerType::LAYER_FOREGROUND)) = 0;
             }
 
-            void MapPrototype::addMapObject(MapObject* pObject)
-            {
-                if (pObject)
-                    m_Objects.setItem(pObject->m_GUID, pObject);
-            }
-
-            void MapPrototype::removeMapObject(uint32 GUID)
-            {
-                if (GUID <= getMapObjectCount())
-                    m_Objects.setItem(GUID, nullptr);
-            }
-
-            MapObject* MapPrototype::addMapObject(uint32 uiID, Int32Point pos)
-            {
-                auto newObject = new MapObject();
-                newObject->m_ObjectID = uiID;
-                newObject->m_Position = pos;
-                newObject->m_GUID = m_Objects.getSize()+1;
-                m_Objects.setItem(newObject->m_GUID, newObject);
-                return newObject;
-            }
-
             bool MapPrototype::isValid()
             {
                 return !m_FileName.isEmpty();
@@ -328,12 +305,12 @@ namespace DATABASE
 
             void MapPrototype::setSizeX(uint32 x)
             {
-                setSize(UInt32Point(x, getSize().y), getLayerSize(MAP::LayerType::LAYER_FOREGROUND), getLayerSize(MAP::LayerType::LAYER_BACKGROUND));
+                setSize(UInt32Point(x, getSize().getY()), getLayerSize(MAP::LayerType::LAYER_FOREGROUND), getLayerSize(MAP::LayerType::LAYER_BACKGROUND));
             }
 
             void MapPrototype::setSizeY(uint32 y)
             {
-                setSize(UInt32Point(getSize().x, y), getLayerSize(MAP::LayerType::LAYER_FOREGROUND), getLayerSize(MAP::LayerType::LAYER_BACKGROUND));
+                setSize(UInt32Point(getSize().getX(), y), getLayerSize(MAP::LayerType::LAYER_FOREGROUND), getLayerSize(MAP::LayerType::LAYER_BACKGROUND));
             }
 
             void MapPrototype::setLayerSize(uint8 size, MAP::LayerType layer)
@@ -347,6 +324,11 @@ namespace DATABASE
                 m_Size = size;
                 m_Layer.at(static_cast<uint32>(MAP::LayerType::LAYER_BACKGROUND)) = uiBackgroundLayerSize;
                 m_Layer.at(static_cast<uint32>(MAP::LayerType::LAYER_FOREGROUND)) = uiForegroundLayerSize;
+            }
+
+            QString MapPrototype::getFilePath() const
+            {
+                return Config::get()->getProjectDirectory() + MAP_FOLDER + getFileName();
             }
         }
     }

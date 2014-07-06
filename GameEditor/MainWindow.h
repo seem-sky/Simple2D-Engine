@@ -2,7 +2,6 @@
 #define MAIN_WINDOW_H
 
 #include "UI/UI_MainWindow.h"
-#include "Point.h"
 #include "MapDatabase.h"
 #include "Config.h"
 #include "Project.h"

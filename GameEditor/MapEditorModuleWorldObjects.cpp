@@ -1,5 +1,6 @@
 #include "MapEditorModuleWorldObjects.h"
 #include "VisualViewer.h"
+#include "DatabaseMgr.h"
 
 using namespace DATABASE::PROTOTYPE::WORLD_OBJECT;
 

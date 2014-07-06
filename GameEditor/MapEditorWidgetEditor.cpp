@@ -13,7 +13,7 @@ MapEditorWidgetEditor::MapEditorWidgetEditor(DATABASE::DatabaseMgr& databaseMgr,
 
     // others
     m_pMappingMode(new QComboBox(this)),
-    m_MappingObject(this, m_pModuleTileSelection->getBrushWidget())
+    m_MappingObject(this, *m_pModuleTileSelection->getBrushWidget(), *m_pModuleWorldObjects)
 {
     // setup mapping mode QComboBox
     m_pMappingMode->addItems(m_MappingObject.getMappingModeNames());

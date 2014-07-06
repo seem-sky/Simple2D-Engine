@@ -186,7 +186,7 @@ int VisualViewer::_setupAnimationFrame(uint32 frameIndex)
                 pItem->setZValue(z);
                 pItem->setScale(sprite.m_Scale);
                 pItem->setOpacity(sprite.m_Opacity);
-                pItem->setPos(sprite.m_Pos.x, sprite.m_Pos.y);
+                pItem->setPos(sprite.m_Pos.getX(), sprite.m_Pos.getY());
                 pItem->setRotation(sprite.m_uiRotation);
 
                 scene()->addItem(pItem);
@@ -281,4 +281,14 @@ void VisualViewer::setAnimation(uint32 animationEntry, MODULE::ANIMATION::Visual
 void VisualViewer::setAnimation(const DATABASE::PROTOTYPE::MODULE::ANIMATION::AnimationInfo& info)
 {
 	setAnimation(info.m_ID, info.m_VisualType);
+}
+
+void VisualViewer::resizeToContent()
+{
+    if (auto pScene = scene())
+    {
+        auto rect = scene()->itemsBoundingRect();
+        resize(rect.size().toSize());
+        ensureVisible(rect);
+    }
 }

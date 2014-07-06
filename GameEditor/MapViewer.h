@@ -38,6 +38,8 @@ protected:
 
     void drawTiles(QPainter* painter, const QRectF& rect, MAP::LayerType currentLayer) const;
 
+    void keyPressEvent(QKeyEvent* pKeyEvent);
+
 public:
     MapViewerScene(uint32 mapID, const DATABASE::DatabaseMgr& DBMgr);
 
@@ -51,6 +53,9 @@ public:
 
     inline void setMappingObject(MappingObject* pMappingObject) { m_pMappingObject = pMappingObject; }
     inline MappingObject* getMappingObject() const { return m_pMappingObject; }
+
+    // WorldObjects
+    void addWorldObject(const QPoint pos, uint32 ID);
 
 private:
     bool m_ShowGrid;
@@ -104,6 +109,9 @@ public:
     inline bool hasChanges() const { return !m_Reverts.empty(); }
 
     MapViewerScene* getScene() const { return dynamic_cast<MapViewerScene*>(scene()); }
+
+    // WorldObjects
+    void addWorldObject(const QPoint pos, uint32 ID);
 
 signals:
     void changed(MapViewer* pViewer);

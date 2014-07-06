@@ -17,17 +17,17 @@ namespace MAP
             {
                 // first set complete brush size -> bitset is checked
                 Bitset2D bitset;
-                for (UInt32Point pos; pos.x < getBrushSize().x; ++pos.x)
+                for (UInt32Point pos; pos.getX() < getBrushSize().getX(); ++pos.getX())
                 {
-                    for (pos.y = 0; pos.y < getBrushSize().y; ++pos.y)
+                    for (pos.getY() = 0; pos.getY() < getBrushSize().getY(); ++pos.getY())
                     {
                         try
                         {
                             auto mapTileInfo = m_Layer.getMapTile(pos + getStartPosition());
                             tiles.push_back(mapTileInfo);
-                            if (pos.x == 0 || pos.x + 1 == getBrushSize().x)
+                            if (pos.getX() == 0 || pos.getX() + 1 == getBrushSize().getX())
                             {
-                                if (pos.y == 0 || pos.y + 1 == getBrushSize().y)
+                                if (pos.getY() == 0 || pos.getY() + 1 == getBrushSize().getY())
                                     borderTiles.push_back(mapTileInfo.getPosition());
                             }
                             bitset.set(pos + mapTileInfo.getPosition());
@@ -37,12 +37,10 @@ namespace MAP
                 }
 
                 // after that, we can really check borders
-                for (UInt32Point pos; pos.x < getBrushSize().x; ++pos.x)
+                for (UInt32Point pos; pos.getX() < getBrushSize().getX(); ++pos.getX())
                 {
-                    for (pos.y = 0; pos.y < getBrushSize().y; ++pos.y)
-                    {
+                    for (pos.getY() = 0; pos.getY() < getBrushSize().getY(); ++pos.getY())
                         _storeBorder(getStartPosition() + pos, borderTiles, bitset);
-                    }
                 }
                 
             }

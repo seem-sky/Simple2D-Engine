@@ -1,46 +1,19 @@
 #ifndef MAP_DATA_H
 #define MAP_DATA_H
 
-#include "DatabaseMgr.h"
 #include "MapLayer.h"
+#include "WorldObjectInfoData.h"
+#include <QtCore/QString>
+
+namespace DATABASE
+{
+    class DatabaseMgr;
+}
 
 namespace MAP
 {
     namespace MAP_DATA
     {
-        enum class MapDirection
-        {
-            UP,
-            RIGHT,
-            DOWN,
-            LEFT
-        };
-
-        enum class MapObjectLayer
-        {
-            BELOW_BACKGROUND,
-            LOWER,
-            MIDDLE,
-            UPPER,
-            ABOVE_FOREGROUND
-        };
-        const uint32 MAX_OBJECT_LAYER = 5;
-
-        // map objects
-        struct MapObject
-        {
-            MapObject() : m_ObjectID(0), m_GUID(0), m_Direction(MapDirection::DOWN), m_Layer(MapObjectLayer::MIDDLE) {}
-
-            bool isEmpty() const { return !m_GUID || !m_ObjectID; }
-
-            uint32 m_ObjectID;
-            uint32 m_GUID;
-            Int32Point m_Position;
-            MapDirection m_Direction;
-            MapObjectLayer m_Layer;
-        };
-        typedef Container<MapObject> MapObjectContainer;
-
         class MapData
         {
         public:
@@ -48,6 +21,9 @@ namespace MAP
 
             inline LayerContainer& getMapLayer() { return m_Layer; }
             inline const LayerContainer& getMapLayer() const { return m_Layer; }
+
+            WorldObjectInfoData& getWorldObjectInfoData() { return m_Objects; }
+            const WorldObjectInfoData& getWorldObjectInfoData() const { return m_Objects; }
 
             inline uint32 getMapID() const { return m_MapID; }
 
@@ -62,11 +38,9 @@ namespace MAP
             const DATABASE::DatabaseMgr& m_DBMgr;
             const uint32 m_MapID;
             LayerContainer m_Layer;
-            MapObjectContainer m_Objects;
+            WorldObjectInfoData m_Objects;
         };
     }
-
-    QString getFilePath(const DATABASE::PROTOTYPE::MAP_STRUCTURE::MapPrototype& map);
 }
 
 #endif

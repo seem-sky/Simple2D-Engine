@@ -1,7 +1,8 @@
 #ifndef TRANSFORMATION_HOLDER_H
 #define TRANSFORMATION_HOLDER_H
 
-#include <Global.h>
+#include <Typedefs.h>
+#include <memory>
 
 namespace TRANSFORMATION
 {

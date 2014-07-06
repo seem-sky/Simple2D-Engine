@@ -22,7 +22,7 @@ namespace MAP
         void setMapTile(const UInt32Point& at, MapTile tile);
         void setMapTile(const MapTileInfo& tileInfo);
 
-        inline bool isInMap(const UInt32Point& at) const { return at.x < getSize().x && at.y < getSize().y; }
+        inline bool isInMap(const UInt32Point& at) const { return at.getX() < getSize().getX() && at.getY() < getSize().getY(); }
 
         enum RESULT_FLAG
         {
@@ -53,7 +53,7 @@ namespace MAP
         const Layer& getLayer(LayerType layer, uint8 index) const;
         Layer& getLayer(LayerType layer, uint8 index);
 
-        inline bool isInMap(const UInt32Point& at) const { return at.x < getSize().x && at.y < getSize().y; }
+        inline bool isInMap(const UInt32Point& at) const { return at.getX() < getSize().getX() && at.getY() < getSize().getY(); }
 
     private:
         typedef std::vector<Layer> LayerVector;

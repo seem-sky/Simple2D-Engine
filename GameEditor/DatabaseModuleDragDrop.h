@@ -36,6 +36,8 @@ public:
     };
     void setToolTipPosition(ToolTipPosition pos) { m_ToolTipPos = pos; }
 
+    uint32 getSelectedID() const;
+
 private slots:
     void _showTooltip();
     void _onItemEntered(const QModelIndex& index);

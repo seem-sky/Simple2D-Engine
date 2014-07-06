@@ -76,6 +76,8 @@ public:
 
 	void showGrid(bool show = true);
 
+    void resizeToContent();
+
 private slots:
     void _onFrameExpired();
 

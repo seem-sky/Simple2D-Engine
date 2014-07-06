@@ -2,6 +2,7 @@
 #define BRUSH_TYPE_INTERFACE_H
 
 #include "MapTile.h"
+#include <memory>
 
 namespace MAP
 {

@@ -2,6 +2,7 @@
 #define MANAGER_H
 
 #include <Global.h>
+#include <memory>
 
 template <class T>
 class Manager

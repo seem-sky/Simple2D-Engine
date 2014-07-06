@@ -4,10 +4,11 @@
 #include "ObjectMappingMode.h"
 #include "PresentationMappingMode.h"
 
-MappingObject::MappingObject(QWidget* pParent, const BRUSH::MapEditorWidgetBrush* pBrushWidget) : QObject(pParent)
+MappingObject::MappingObject(QWidget* pParent, const BRUSH::MapEditorWidgetBrush& brushWidget, const MapEditorModuleWorldObjects& objectWidget)
+    : QObject(pParent)
 {
-    m_MappingModes.push_back(MappingModePtr(new MAPPING_MODE::Tile(pBrushWidget)));
-    m_MappingModes.push_back(MappingModePtr(new MAPPING_MODE::Object()));
+    m_MappingModes.push_back(MappingModePtr(new MAPPING_MODE::Tile(brushWidget)));
+    m_MappingModes.push_back(MappingModePtr(new MAPPING_MODE::Object(objectWidget)));
     m_MappingModes.push_back(MappingModePtr(new MAPPING_MODE::Presentation()));
     setMappingMode(MAPPING_MODE::Type::TILE_MAPPING);
 }

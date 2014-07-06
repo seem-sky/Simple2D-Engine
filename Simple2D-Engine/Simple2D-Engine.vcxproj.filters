@@ -70,6 +70,12 @@
     <Filter Include="Map\Brush\Revert">
       <UniqueIdentifier>{ae44bf70-50b9-4110-86ef-279d1258b33b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Map\IO\WorldObjectInfo">
+      <UniqueIdentifier>{339abe00-83dc-42c5-a6dc-94c671b07815}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Colission">
+      <UniqueIdentifier>{3d5d863b-98c3-4e67-bff7-dc7b57f326c3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Simple2D-GameEditor\include\Game.cpp">
@@ -216,6 +222,13 @@
     <ClCompile Include="BrushTypeTileSet.cpp">
       <Filter>Map\Brush\Type</Filter>
     </ClCompile>
+    <ClCompile Include="WorldObjectInfoData.cpp">
+      <Filter>Map\IO\WorldObjectInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldObjectInfo.cpp">
+      <Filter>Map\IO\WorldObjectInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="MapViewItem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Simple2D-GameEditor\include\Application.h">
@@ -394,6 +407,16 @@
     </ClInclude>
     <ClInclude Include="BrushTypeTileSet.h">
       <Filter>Map\Brush\Type</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldObjectInfoData.h">
+      <Filter>Map\IO\WorldObjectInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldObjectInfo.h">
+      <Filter>Map\IO\WorldObjectInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="MapViewItem.h" />
+    <ClInclude Include="Colission.h">
+      <Filter>Core\Colission</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

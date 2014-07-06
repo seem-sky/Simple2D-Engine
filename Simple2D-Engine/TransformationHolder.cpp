@@ -31,8 +31,8 @@ TransformationProcess Transformation::update(uint32 uiDiff)
 Move::Move(uint32 uiTime, Int32Point range, Int32Point& position) : m_Range(range), m_Position(position),
     Transformation(uiTime, TRANSFORMATION_MOVE)
 {
-    m_RangePerMSEC.x = static_cast<double>(m_Range.x) / getTimeRemain();
-    m_RangePerMSEC.y = static_cast<double>(m_Range.y) / getTimeRemain();
+    m_RangePerMSEC.getX() = static_cast<double>(m_Range.getX()) / getTimeRemain();
+    m_RangePerMSEC.getY() = static_cast<double>(m_Range.getY()) / getTimeRemain();
 }
 
 void Move::_update(uint32 uiDiff)
@@ -40,12 +40,12 @@ void Move::_update(uint32 uiDiff)
     Int32Point temp;
     if (getTimeRemain())
     {
-        m_RangeBuffer.x += m_RangePerMSEC.x*uiDiff;
-        m_RangeBuffer.y += m_RangePerMSEC.y*uiDiff;
-        temp.x = static_cast<int32>(m_RangeBuffer.x);
-        temp.y = static_cast<int32>(m_RangeBuffer.y);
-        m_RangeBuffer.x -= temp.x;
-        m_RangeBuffer.y -= temp.y;
+        m_RangeBuffer.getX() = m_RangeBuffer.getX() + m_RangePerMSEC.getX() * uiDiff;
+        m_RangeBuffer.getY() = m_RangeBuffer.getY() + m_RangePerMSEC.getY() * uiDiff;
+        temp.getX() = static_cast<int32>(m_RangeBuffer.getX());
+        temp.getY() = static_cast<int32>(m_RangeBuffer.getY());
+        m_RangeBuffer.getX() = m_RangeBuffer.getX() - temp.getX();
+        m_RangeBuffer.getY() = m_RangeBuffer.getY() - temp.getY();
         m_Range -= temp;
     }
     else

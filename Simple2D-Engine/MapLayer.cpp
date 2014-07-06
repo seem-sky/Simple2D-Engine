@@ -16,7 +16,7 @@ Layer::Layer(const UInt32Point& size)
 void Layer::_resize(const UInt32Point& size)
 {
     m_Size = size;
-    m_Layer.resize(size.x, MapTileVec(size.y, MapTile(0, 0)));
+    m_Layer.resize(size.getX(), MapTileVec(size.getY(), MapTile(0, 0)));
 }
 
 void Layer::_clear()
@@ -26,17 +26,26 @@ void Layer::_clear()
 
 MapTileInfo Layer::getMapTile(const UInt32Point& at) const
 {
-    if (isInMap(at))
-        return MapTileInfo(m_Layer.at(at.x).at(at.y), at);
-    throw EXCEPTION::TileOutOfRangeException(nullptr);
+    try
+    {
+        return MapTileInfo(m_Layer.at(at.getX()).at(at.getY()), at);
+    }
+    catch (std::out_of_range&)
+    {
+        throw EXCEPTION::TileOutOfRangeException(nullptr);
+    }
 }
 
 void Layer::setMapTile(const UInt32Point& at, MapTile tile)
 {
-    if (isInMap(at))
-        m_Layer.at(at.x).at(at.y) = tile;
-    else
+    try
+    {
+        m_Layer.at(at.getX()).at(at.getY()) = tile;
+    }
+    catch (std::out_of_range&)
+    {
         throw EXCEPTION::TileOutOfRangeException(nullptr);
+    }
 }
 
 void Layer::setMapTile(const MapTileInfo& tileInfo)
@@ -47,131 +56,131 @@ void Layer::setMapTile(const MapTileInfo& tileInfo)
 uint32 Layer::checkAutoTiles(uint32 uiID, const UInt32Point& pos, UInt32PointVec& result, uint32 resultFlag)
 {
     uint32 uiBorderCheck = 0;
-    for (uint32 i = 0; i < 8; ++i)
-    {
-        TILE_CHECK curTileCheck = SAME_AROUND;
-        // set position check
-        UInt32Point3D checkPos = pos;
-        switch (i)
-        {
-        case 0: // top-left
-            if (!checkPos.x || !checkPos.y)
-                continue;
-            --checkPos.x;
-            --checkPos.y;
-            curTileCheck = OTHER_TOP_LEFT;
-            break;
+    //for (uint32 i = 0; i < 8; ++i)
+    //{
+    //    TILE_CHECK curTileCheck = SAME_AROUND;
+    //    // set position check
+    //    UInt32Point checkPos = pos;
+    //    switch (i)
+    //    {
+    //    case 0: // top-left
+    //        if (!checkPos.getX() || !checkPos.y)
+    //            continue;
+    //        --checkPos.x;
+    //        --checkPos.y;
+    //        curTileCheck = OTHER_TOP_LEFT;
+    //        break;
 
-        case 1: // top
-            if (!checkPos.y)
-                continue;
-            --checkPos.y;
-            curTileCheck = OTHER_TOP;
-            break;
+    //    case 1: // top
+    //        if (!checkPos.y)
+    //            continue;
+    //        --checkPos.y;
+    //        curTileCheck = OTHER_TOP;
+    //        break;
 
-        case 2: // top-right
-            if (!checkPos.y || checkPos.x+1 >= getSize().x)
-                continue;
-            ++checkPos.x;
-            --checkPos.y;
-            curTileCheck = OTHER_TOP_RIGHT;
-            break;
+    //    case 2: // top-right
+    //        if (!checkPos.y || checkPos.x+1 >= getSize().x)
+    //            continue;
+    //        ++checkPos.x;
+    //        --checkPos.y;
+    //        curTileCheck = OTHER_TOP_RIGHT;
+    //        break;
 
-        case 3: // left
-            if (!checkPos.x)
-                continue;
-            --checkPos.x;
-            curTileCheck = OTHER_LEFT;
-            break;
+    //    case 3: // left
+    //        if (!checkPos.x)
+    //            continue;
+    //        --checkPos.x;
+    //        curTileCheck = OTHER_LEFT;
+    //        break;
 
-        case 4: // right
-            if (checkPos.x+1 >= getSize().x)
-                continue;
-            ++checkPos.x;
-            curTileCheck = OTHER_RIGHT;
-            break;
+    //    case 4: // right
+    //        if (checkPos.x+1 >= getSize().x)
+    //            continue;
+    //        ++checkPos.x;
+    //        curTileCheck = OTHER_RIGHT;
+    //        break;
 
-        case 5: // bottom-left
-            if (!checkPos.x || checkPos.y+1 >= getSize().y)
-                continue;
-            --checkPos.x;
-            ++checkPos.y;
-            curTileCheck = OTHER_BOTTOM_LEFT;
-            break;
+    //    case 5: // bottom-left
+    //        if (!checkPos.x || checkPos.y+1 >= getSize().y)
+    //            continue;
+    //        --checkPos.x;
+    //        ++checkPos.y;
+    //        curTileCheck = OTHER_BOTTOM_LEFT;
+    //        break;
 
-        case 6: // bottom
-            if (checkPos.y+1 >= getSize().y)
-                continue;
-            ++checkPos.y;
-            curTileCheck = OTHER_BOTTOM;
-            break;
+    //    case 6: // bottom
+    //        if (checkPos.y+1 >= getSize().y)
+    //            continue;
+    //        ++checkPos.y;
+    //        curTileCheck = OTHER_BOTTOM;
+    //        break;
 
-        case 7: // bottom-right
-            if (checkPos.x+1 >= getSize().x || checkPos.y+1 >= getSize().y)
-                continue;
-            ++checkPos.x;
-            ++checkPos.y;
-            curTileCheck = OTHER_BOTTOM_RIGHT;
-            break;
-        }
-        auto mapTile = getMapTile(checkPos);
-        // if bad object, continue
-        if (!mapTile.getMapTile().isValid())
-            continue;
+    //    case 7: // bottom-right
+    //        if (checkPos.x+1 >= getSize().x || checkPos.y+1 >= getSize().y)
+    //            continue;
+    //        ++checkPos.x;
+    //        ++checkPos.y;
+    //        curTileCheck = OTHER_BOTTOM_RIGHT;
+    //        break;
+    //    }
+    //    auto mapTile = getMapTile(checkPos);
+    //    // if bad object, continue
+    //    if (!mapTile.getMapTile().isValid())
+    //        continue;
 
-        // if not same
-        if (mapTile.getMapTile().m_uiAutoTileSetID != uiID)
-        {
-            uiBorderCheck += curTileCheck;
-            if (resultFlag & FLAG_OTHER)
-                result.push_back(checkPos);
-        }
-        // if same
-        else if (resultFlag & FLAG_SAME)
-            result.push_back(checkPos);
-    }
+    //    // if not same
+    //    if (mapTile.getMapTile().m_uiAutoTileSetID != uiID)
+    //    {
+    //        uiBorderCheck += curTileCheck;
+    //        if (resultFlag & FLAG_OTHER)
+    //            result.push_back(checkPos);
+    //    }
+    //    // if same
+    //    else if (resultFlag & FLAG_SAME)
+    //        result.push_back(checkPos);
+    //}
     return uiBorderCheck;
 }
 
 MapTileInfo Layer::getBorderTileInfo(const UInt32Point& pos, BorderTile borderTile) const
 {
-    UInt32Point3D checkPos = pos;
+    UInt32Point checkPos = pos;
     switch (borderTile)
     {
     case BorderTile::TOP_LEFT:
-        --checkPos.x;
-        --checkPos.y;
+        --checkPos.getX();
+        --checkPos.getY();
         break;
 
     case BorderTile::TOP:
-        --checkPos.y;
+        --checkPos.getY();
         break;
 
     case BorderTile::TOP_RIGHT:
-        ++checkPos.x;
-        --checkPos.y;
+        ++checkPos.getX();
+        --checkPos.getY();
         break;
 
     case BorderTile::LEFT:
-        --checkPos.x;
+        --checkPos.getX();
         break;
 
     case BorderTile::RIGHT:
-        ++checkPos.x;
+        ++checkPos.getX();
         break;
 
     case BorderTile::BOTTOM_LEFT:
-        --checkPos.x;
-        ++checkPos.y;
+        --checkPos.getX();
+        ++checkPos.getY();
         break;
 
     case BorderTile::BOTTOM:
-        ++checkPos.y;
+        ++checkPos.getY();
         break;
 
     case BorderTile::BOTTOM_RIGHT:
-        ++checkPos.x;
-        ++checkPos.y;
+        ++checkPos.getX();
+        ++checkPos.getY();
         break;
     }
     return getMapTile(checkPos);

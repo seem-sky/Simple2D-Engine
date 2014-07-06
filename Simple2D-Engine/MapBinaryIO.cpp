@@ -58,16 +58,16 @@ void INPUT::MapBinaryReader::_readObjects(QDataStream& in, MapPrototype* pMap, u
 void INPUT::MapBinaryReader::_readLayerV1(QDataStream& in, MAP::LayerContainer& mapLayer, LayerType layer)
 {
     UInt32Point3D pos;
-    for (pos.z = 0; pos.z < mapLayer.getLayerSize(layer); ++pos.z)
+    for (pos.getZ() = 0; pos.getZ() < mapLayer.getLayerSize(layer); ++pos.getZ())
     {
-        for (pos.y = 0; pos.y < mapLayer.getSize().y; ++pos.y)
+        for (pos.getY() = 0; pos.getY() < mapLayer.getSize().getY(); ++pos.getY())
         {
-            for (pos.x = 0; pos.x < mapLayer.getSize().x; ++pos.x)
+            for (pos.getX() = 0; pos.getX() < mapLayer.getSize().getX(); ++pos.getX())
             {
                 uint32 uiTile, uiAutoTile;
                 in >> uiTile >> uiAutoTile;
                 MapTile tile(uiTile, uiAutoTile);
-                mapLayer.getLayer(layer, pos.z).setMapTile(pos, tile);
+                mapLayer.getLayer(layer, pos.getZ()).setMapTile(pos.toPoint(), tile);
             }
         }
     }
@@ -77,15 +77,15 @@ void INPUT::MapBinaryReader::_readLayerV1(QDataStream& in, MAP::LayerContainer& 
 void INPUT::MapBinaryReader::_readLayerV2(QDataStream& in, LayerContainer& mapLayer, LayerType layer)
 {
     UInt32Point3D pos;
-    for (pos.z = 0; pos.z < mapLayer.getLayerSize(layer); ++pos.z)
+    for (pos.getZ() = 0; pos.getZ() < mapLayer.getLayerSize(layer); ++pos.getZ())
     {
-        for (pos.y = 0; pos.y < mapLayer.getSize().y; ++pos.y)
+        for (pos.getY() = 0; pos.getY() < mapLayer.getSize().getY(); ++pos.getY())
         {
-            for (pos.x = 0; pos.x < mapLayer.getSize().x; ++pos.x)
+            for (pos.getX() = 0; pos.getX() < mapLayer.getSize().getX(); ++pos.getX())
             {
                 MapTile tile;
                 in >> tile.m_uiTileID >> tile.m_uiAutoTileSetID;
-                mapLayer.getLayer(layer, pos.z).setMapTile(pos, tile);
+                mapLayer.getLayer(layer, pos.getZ()).setMapTile(pos.toPoint(), tile);
             }
         }
     }
@@ -148,13 +148,13 @@ void OUTPUT::MapBinaryWriter::writeFile(const QString& fileName, const MAP_DATA:
 void OUTPUT::MapBinaryWriter::_writeLayer(QDataStream& out, const LayerContainer& mapLayer, LayerType layer)
 {
     UInt32Point3D pos;
-    for (pos.z = 0; pos.z < mapLayer.getLayerSize(layer); ++pos.z)
+    for (pos.getZ() = 0; pos.getZ() < mapLayer.getLayerSize(layer); ++pos.getZ())
     {
-        for (pos.y = 0; pos.y < mapLayer.getSize().y; ++pos.y)
+        for (pos.getY() = 0; pos.getY() < mapLayer.getSize().getY(); ++pos.getY())
         {
-            for (pos.x = 0; pos.x < mapLayer.getSize().x; ++pos.x)
+            for (pos.getX() = 0; pos.getX() < mapLayer.getSize().getX(); ++pos.getX())
             {
-                auto& tile = mapLayer.getLayer(layer, pos.z).getMapTile(pos);
+                auto& tile = mapLayer.getLayer(layer, pos.getZ()).getMapTile(pos.toPoint());
                 out << tile.getMapTile().m_uiTileID << tile.getMapTile().m_uiAutoTileSetID;
             }
         }
@@ -163,11 +163,11 @@ void OUTPUT::MapBinaryWriter::_writeLayer(QDataStream& out, const LayerContainer
 
 void OUTPUT::MapBinaryWriter::_writeObjects(QDataStream& out, const MapPrototype* pMap)
 {
-    out << pMap->getMapObjectCount();
-    for (uint32 i = 1; i <= pMap->getMapObjectCount(); ++i)
-    {
-        auto pObj = pMap->getMapObject(i);
-        if (pObj && !pObj->isEmpty())
-            out << pObj->m_GUID << pObj->m_ObjectID << pObj->m_Position.x << pObj->m_Position.y << pObj->m_Layer << pObj->m_GUID;
-    }
+    //out << pMap->getMapObjectCount();
+    //for (uint32 i = 1; i <= pMap->getMapObjectCount(); ++i)
+    //{
+    //    auto pObj = pMap->getMapObject(i);
+    //    if (pObj && !pObj->isEmpty())
+    //        out << pObj->m_GUID << pObj->m_ObjectID << pObj->m_Position.x << pObj->m_Position.y << pObj->m_Layer << pObj->m_GUID;
+    //}
 }

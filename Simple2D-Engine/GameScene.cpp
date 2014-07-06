@@ -44,7 +44,7 @@ void GameScene::playerChangesMap(MAP::MapPtr pMap)
 MapItem* GameScene::createNewWorldObject(MAP::OBJECT::WorldObject* pObject)
 {
     MapItem* pItem = new MapItem(pObject, m_DatabaseMgr);
-    pItem->setPos(pObject->getPosition().x, pObject->getPosition().y);
+    pItem->setPos(pObject->getPosition().getX(), pObject->getPosition().getX());
     return pItem;
 }
 
@@ -123,13 +123,13 @@ void MapItem::syncWithWorldObject()
         {
             DATABASE::PROTOTYPE::ANIMATION::Frame frame;
             m_pCurrentAnimation->getFrame(m_uiCurrentFrame, frame);
-            m_PixmapPos = QPoint(frame.getOffset().x, frame.getOffset().y);
+            m_PixmapPos = QPoint(frame.getOffset().getX(), frame.getOffset().getY());
             m_PixmapIdentify = "Animation" + QString::number(m_pCurrentAnimation->getID()) + "/" + QString::number(m_uiCurrentFrame);
         }
         else
             m_PixmapIdentify.clear();
     }
-    setPos(m_pWorldObject->getPosition().x, m_pWorldObject->getPosition().y);
+    setPos(m_pWorldObject->getPosition().getX(), m_pWorldObject->getPosition().getY());
     setZValue(pos().y()+m_BoundingRect.height());
 }
 
@@ -157,38 +157,38 @@ void GameSceneView::drawTiles(QPainter* painter, const QRectF& rect, MAP::LayerT
     if (!pScene)
         return;
 
-    const PLAYER::GamePlayer& player = pScene->getPlayer();
-    auto pMap = player.getMap();
-    if (!pMap)
-        return;
-    const UInt32Point startTile(rect.x() <= 0 ? 0 : (uint32)rect.x() / TILE_SIZE, rect.y() <= 0 ? 0 : (uint32)rect.y() / TILE_SIZE);
-    const UInt32Point endTile(qMin<uint32>(ceil(rect.width() / TILE_SIZE) + startTile.x + 1, pMap->getWidth()),
-        qMin<uint32>(ceil(rect.height() / TILE_SIZE) + startTile.y + 1, pMap->getHeight()));
-    for (uint32 layer = 0; layer < pMap->getLayerSize(layerType); ++layer)
-    {
-        auto& mapLayer = pMap->getLayer(layerType, layer);
-        UInt32Point pos;
-        for (pos.x = startTile.x; pos.x < endTile.x; ++pos.x)
-        {
-            for (pos.y = startTile.y; pos.y < endTile.y; ++pos.y)
-            {
-                auto tileObj = mapLayer.getMapTile(pos);
-                if (tileObj.getMapTile().isEmpty())
-                    continue;
-                if (!tileObj.getMapTile().isAutoTile())
-                {
-                    if (auto pPixmap = m_TileCache.getItem(tileObj.getMapTile().m_uiTileID))
-                        painter->drawTiledPixmap(pos.x*TILE_SIZE, pos.y*TILE_SIZE, TILE_SIZE, TILE_SIZE,* pPixmap);
-                }
-                else
-                {
-                    if (auto pAutoTile = m_AutoTileCache.getItem(tileObj.getMapTile().m_uiAutoTileSetID))
-                    {
-                        if (auto pPixmap = pAutoTile->getPixmap(static_cast<DATABASE::PROTOTYPE::AUTO_TILE::AUTO_TILE_INDEX>(tileObj.getMapTile().m_uiTileID)))
-                            painter->drawTiledPixmap(pos.x*TILE_SIZE, pos.y*TILE_SIZE, TILE_SIZE, TILE_SIZE,* pPixmap);
-                    }
-                }
-            }
-        }
-    }
+    //const PLAYER::GamePlayer& player = pScene->getPlayer();
+    //auto pMap = player.getMap();
+    //if (!pMap)
+    //    return;
+    //const UInt32Point startTile(rect.x() <= 0 ? 0 : (uint32)rect.x() / TILE_SIZE, rect.y() <= 0 ? 0 : (uint32)rect.y() / TILE_SIZE);
+    //const UInt32Point endTile(qMin<uint32>(ceil(rect.width() / TILE_SIZE) + startTile.getX() + 1, pMap->getWidth()),
+    //    qMin<uint32>(ceil(rect.height() / TILE_SIZE) + startTile.getY() + 1, pMap->getHeight()));
+    //for (uint32 layer = 0; layer < pMap->getLayerSize(layerType); ++layer)
+    //{
+    //    auto& mapLayer = pMap->getLayer(layerType, layer);
+    //    UInt32Point pos;
+    //    for (pos.x = startTile.x; pos.x < endTile.x; ++pos.x)
+    //    {
+    //        for (pos.y = startTile.y; pos.y < endTile.y; ++pos.y)
+    //        {
+    //            auto tileObj = mapLayer.getMapTile(pos);
+    //            if (tileObj.getMapTile().isEmpty())
+    //                continue;
+    //            if (!tileObj.getMapTile().isAutoTile())
+    //            {
+    //                if (auto pPixmap = m_TileCache.getItem(tileObj.getMapTile().m_uiTileID))
+    //                    painter->drawTiledPixmap(pos.x*TILE_SIZE, pos.y*TILE_SIZE, TILE_SIZE, TILE_SIZE,* pPixmap);
+    //            }
+    //            else
+    //            {
+    //                if (auto pAutoTile = m_AutoTileCache.getItem(tileObj.getMapTile().m_uiAutoTileSetID))
+    //                {
+    //                    if (auto pPixmap = pAutoTile->getPixmap(static_cast<DATABASE::PROTOTYPE::AUTO_TILE::AUTO_TILE_INDEX>(tileObj.getMapTile().m_uiTileID)))
+    //                        painter->drawTiledPixmap(pos.x*TILE_SIZE, pos.y*TILE_SIZE, TILE_SIZE, TILE_SIZE,* pPixmap);
+    //                }
+    //            }
+    //        }
+    //    }
+    //}
 }

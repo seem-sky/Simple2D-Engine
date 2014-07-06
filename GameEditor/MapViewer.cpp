@@ -5,6 +5,9 @@
 #include "MappingObject.h"
 #include "BrushRevert.h"
 #include "DatabaseMgr.h"
+#include "VisualViewer.h"
+#include "MapViewItem.h"
+#include "DelayedDeleteObject.h"
 
 /*#####
 # MapViewerScene
@@ -85,8 +88,8 @@ void MapViewerScene::_drawDarkRect(QPainter* painter, const QRectF& rect) const
     painter->setBrush(Qt::SolidPattern);
     auto size = getMapData().getMapLayer().getSize();
     painter->drawRect(rect.x() < 0 ? 0 : rect.x(), rect.y() < 0 ? 0 : rect.y(),
-        rect.width() > size.x*TILE_SIZE ? size.x*TILE_SIZE : rect.width(),
-        rect.height() > size.y*TILE_SIZE ? size.y*TILE_SIZE : rect.height());
+        rect.width() > size.getX()*TILE_SIZE ? size.getX()*TILE_SIZE : rect.width(),
+        rect.height() > size.getY()*TILE_SIZE ? size.getY()*TILE_SIZE : rect.height());
 }
 
 void MapViewerScene::_drawGrid(QPainter* painter, const QRectF& rect) const
@@ -94,17 +97,89 @@ void MapViewerScene::_drawGrid(QPainter* painter, const QRectF& rect) const
     const UInt32Point startTile(calculateStartTile(rect.toRect()) * TILE_SIZE);
     const UInt32Point endTile(calculateEndTile(rect.toRect(), startTile) * TILE_SIZE);
     QVector<QPoint> pointPairs;
-    for (uint32 x = startTile.x; x < endTile.x; x += TILE_SIZE)
+    for (uint32 x = startTile.getX(); x < endTile.getX(); x += TILE_SIZE)
     {
-        pointPairs.push_back(QPoint(x, startTile.y));
-        pointPairs.push_back(QPoint(x, endTile.y));
+        pointPairs.push_back(QPoint(x, startTile.getY()));
+        pointPairs.push_back(QPoint(x, endTile.getY()));
     }
-    for (uint32 y = startTile.y; y < endTile.y; y += TILE_SIZE)
+    for (uint32 y = startTile.getY(); y < endTile.getY(); y += TILE_SIZE)
     {
-        pointPairs.push_back(QPoint(startTile.x, y));
-        pointPairs.push_back(QPoint(endTile.x, y));
+        pointPairs.push_back(QPoint(startTile.getX(), y));
+        pointPairs.push_back(QPoint(endTile.getX(), y));
     }
     painter->drawLines(pointPairs);
+}
+
+void MapViewerScene::addWorldObject(const QPoint pos, uint32 ID)
+{
+    if (auto pWorldObject = getDatabaseMgr().getWorldObjectDatabase()->getOriginalPrototype(ID))
+    {
+        // push into ObjectContainer
+        auto pInfo = getMapData().getWorldObjectInfoData().addWorldObject(ID, Int32Point(pos.x(), pos.y()), MAP::MAP_DATA::MapObjectLayer::MIDDLE);
+
+        // setup viewer
+        VisualViewer viewer;
+        viewer.setFrameShape(QFrame::NoFrame);
+        viewer.showGrid(false);
+        viewer.setDatabaseManager(&getDatabaseMgr());
+        viewer.setAnimation(pWorldObject->getAnimationModule().getAnimationInfo(2));
+        viewer.stopAnimation();
+        viewer.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        viewer.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+        // set transparent background
+        viewer.setStyleSheet("background:transparent;");
+        viewer.setAttribute(Qt::WA_TranslucentBackground);
+        viewer.setWindowFlags(Qt::FramelessWindowHint);
+
+        auto rect = viewer.scene()->itemsBoundingRect();
+        viewer.resizeToContent();
+
+        auto pItem = new MapViewItem(*pInfo, viewer.grab());
+        pItem->setWorldObjectBoundingRect(pWorldObject->getBoundingRect());
+        pItem->setCenterPos(pos.x(), pos.y());
+        addItem(pItem);
+    }
+}
+
+void MapViewerScene::keyPressEvent(QKeyEvent* pKeyEvent)
+{
+    if (m_pMappingObject->getMappingModeType() != MAPPING_MODE::Type::OBJECT_MAPPING)
+        return;
+
+    auto selectedObjects = selectedItems();
+    for (auto pItem : selectedObjects)
+    {
+        switch (pKeyEvent->key())
+        {
+        case Qt::Key_Delete:
+            if (auto pWorldObject = dynamic_cast<MapViewItem*>(pItem))
+            {
+                removeItem(pWorldObject);
+                getMapData().getWorldObjectInfoData().removeWorldObject(pWorldObject->getWorldObjectInfo().getGUID());
+                new DelayedDeleteObject<MapViewItem>(pWorldObject);
+                break;
+            }
+
+        case Qt::Key_Escape:
+            pItem->setSelected(false);
+            break;
+
+        case Qt::Key_Up:
+            pItem->moveBy(0, -1);
+            break;
+        case Qt::Key_Left:
+            pItem->moveBy(-1, 0);
+            break;
+        case Qt::Key_Down:
+            pItem->moveBy(0, 1);
+            break;
+        case Qt::Key_Right:
+            pItem->moveBy(1, 0);
+            break;
+        default: break;
+        }
+    }
 }
 
 /*#####
@@ -118,13 +193,19 @@ MapViewer::MapViewer(uint32 mapID, const DATABASE::DatabaseMgr& DBMgr, QWidget* 
 	setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 }
 
+void MapViewer::addWorldObject(const QPoint pos, uint32 ID)
+{
+    if (auto pScene = getScene())
+        pScene->addWorldObject(pos, ID);
+}
+
 void MapViewer::loadMap()
 {
     if (auto pScene = dynamic_cast<MapViewerScene*>(scene()))
     {
         pScene->getMapData().load();
         auto mapSize = pScene->getMapData().getMapLayer().getSize();
-        pScene->setSceneRect(0, 0, mapSize.x*TILE_SIZE, mapSize.y*TILE_SIZE);
+        pScene->setSceneRect(0, 0, mapSize.getX()*TILE_SIZE, mapSize.getY()*TILE_SIZE);
         pScene->update();
     }
 }
@@ -141,7 +222,7 @@ void MapViewer::updateMap()
     {
         pScene->getMapData().reload();
         auto mapSize = pScene->getMapData().getMapLayer().getSize();
-        pScene->setSceneRect(0, 0, mapSize.x*TILE_SIZE, mapSize.y*TILE_SIZE);
+        pScene->setSceneRect(0, 0, mapSize.getX()*TILE_SIZE, mapSize.getY()*TILE_SIZE);
         pScene->update();
     }
 }
@@ -235,18 +316,24 @@ void MapViewer::mouseReleaseEvent(QMouseEvent* pEvent)
 {
     if (auto pMappingObject = getScene()->getMappingObject())
         pMappingObject->release(this, pEvent);
+
+    QGraphicsView::mouseReleaseEvent(pEvent);
 }
 
 void MapViewer::mouseMoveEvent(QMouseEvent* pEvent)
 {
     if (auto pMappingObject = getScene()->getMappingObject())
         pMappingObject->move(this, pEvent);
+
+    QGraphicsView::mouseMoveEvent(pEvent);
 }
 
 void MapViewer::mousePressEvent(QMouseEvent* pEvent)
 {
     if (auto pMappingObject = getScene()->getMappingObject())
         pMappingObject->press(this, pEvent);
+
+    QGraphicsView::mousePressEvent(pEvent);
 }
 
 void MapViewer::addBrushRevert(MAP::BRUSH::REVERT::BrushRevert revert)
