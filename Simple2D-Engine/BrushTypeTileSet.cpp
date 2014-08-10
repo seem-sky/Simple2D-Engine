@@ -10,7 +10,7 @@ namespace MAP
     {
         namespace TYPE
         {
-            TileSet::TileSet(uint32 tileID, const DATABASE::DatabaseMgr& DBMgr, Layer& layer, const UInt32Point& pos) : Type(tileID, DBMgr, layer, pos)
+            TileSet::TileSet(uint32 tileID, const DATABASE::DatabaseMgr& DBMgr, Layer& layer, const GEOMETRY::Point<uint32>& pos) : Type(tileID, DBMgr, layer, pos)
             {}
 
             void TileSet::setTiles(const MapTileInfoVec& tiles, REVERT::BrushRevert& revert)
@@ -24,7 +24,7 @@ namespace MAP
                 {
                     revert.addTile(info);
                     info.getMapTile().m_uiAutoTileSetID = 0;
-                    UInt32Point diff;
+                    GEOMETRY::Point<uint32> diff;
                     if (info.getPosition().getX() > getStartPosition().getX())
                         diff.getX() = info.getPosition().getX() - getStartPosition().getX();
                     else
@@ -34,7 +34,7 @@ namespace MAP
                         diff.getY() = info.getPosition().getY() - getStartPosition().getY();
                     else
                         diff.getY() = getStartPosition().getY() - info.getPosition().getY();
-                    info.getMapTile().m_uiTileID = pTileSet->getTileID(UInt32Point(diff.getX() % size.getX(), diff.getY() % size.getY()));
+                    info.getMapTile().m_uiTileID = pTileSet->getTileID(GEOMETRY::Point<uint32>(diff.getX() % size.getX(), diff.getY() % size.getY()));
                     try
                     {
                         m_Layer.setMapTile(info);

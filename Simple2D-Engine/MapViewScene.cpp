@@ -7,15 +7,15 @@
 MapViewScene::MapViewScene(uint32 mapID, const DATABASE::DatabaseMgr& DBMgr) : QGraphicsScene(), m_MapData(DBMgr, mapID), m_DBMgr(DBMgr)
 {}
 
-UInt32Point MapViewScene::calculateEndTile(const QRect &rect, const UInt32Point& startTile) const
+GEOMETRY::Point<uint32> MapViewScene::calculateEndTile(const QRect &rect, const GEOMETRY::Point<uint32>& startTile) const
 {
-    return UInt32Point(qMin<uint32>(ceil(rect.x() % TILE_SIZE + rect.width() / TILE_SIZE) + startTile.getX() + 1, m_MapData.getMapLayer().getSize().getX()),
+    return GEOMETRY::Point<uint32>(qMin<uint32>(ceil(rect.x() % TILE_SIZE + rect.width() / TILE_SIZE) + startTile.getX() + 1, m_MapData.getMapLayer().getSize().getX()),
         qMin<uint32>(ceil(rect.y() % TILE_SIZE + rect.height() / TILE_SIZE) + startTile.getY() + 1, m_MapData.getMapLayer().getSize().getY()));
 }
 
-UInt32Point MapViewScene::calculateStartTile(const QRect &rect) const
+GEOMETRY::Point<uint32> MapViewScene::calculateStartTile(const QRect &rect) const
 {
-    return UInt32Point(rect.x() <= 0 ? 0 : (uint32)rect.x() / TILE_SIZE, rect.y() <= 0 ? 0 : (uint32)rect.y() / TILE_SIZE);
+    return GEOMETRY::Point<uint32>(rect.x() <= 0 ? 0 : (uint32)rect.x() / TILE_SIZE, rect.y() <= 0 ? 0 : (uint32)rect.y() / TILE_SIZE);
 }
 
 void MapViewScene::drawBackground(QPainter* painter, const QRectF& rect)
@@ -33,18 +33,18 @@ void MapViewScene::drawForeground(QPainter* painter, const QRectF& rect)
 
 void MapViewScene::drawTiles(QPainter* painter, const QRectF& rect, MAP::LayerType currentLayer) const
 {
-    const UInt32Point startTile(calculateStartTile(rect.toRect()));
-    const UInt32Point endTile(calculateEndTile(rect.toRect(), startTile));
+    const GEOMETRY::Point<uint32> startTile(calculateStartTile(rect.toRect()));
+    const GEOMETRY::Point<uint32> endTile(calculateEndTile(rect.toRect(), startTile));
 
     for (uint32 layerIndex = 0; layerIndex < m_MapData.getMapLayer().getLayerSize(currentLayer); ++layerIndex)
         drawLayer(painter, startTile, endTile, m_MapData.getMapLayer().getLayer(currentLayer, layerIndex));
 }
 
-void MapViewScene::drawLayer(QPainter* painter, const UInt32Point startTile, const UInt32Point endTile, const MAP::Layer& mapLayer) const
+void MapViewScene::drawLayer(QPainter* painter, const GEOMETRY::Point<uint32> startTile, const GEOMETRY::Point<uint32> endTile, const MAP::Layer& mapLayer) const
 {
     // ToDo: DrawPixmapFragments is an improvement, perhaps.
     // std::vector<std::vector<QPainter::PixmapFragment>> fragments;
-    UInt32Point currentTile;
+    GEOMETRY::Point<uint32> currentTile;
     for (currentTile.getX() = startTile.getX(); currentTile.getX() < endTile.getX(); ++currentTile.getX())
     {
         for (currentTile.getY() = startTile.getY(); currentTile.getY() < endTile.getY(); ++currentTile.getY())

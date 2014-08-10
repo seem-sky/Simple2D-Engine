@@ -13,11 +13,11 @@ namespace MAP
             class Single : public Area
             {
             private:
-                void _do(const MapTileInfo& info, MapTileInfoVec& tiles, UInt32PointVec& borderTiles);
-                void _storeBorder(const UInt32Point& pos, UInt32PointVec& borderTiles, Bitset2D& bitset);
+                void _do(const MapTileInfo& info, MapTileInfoVec& tiles, PointVec<uint32>& borderTiles);
+                void _storeBorder(const GEOMETRY::Point<uint32>& pos, PointVec<uint32>& borderTiles, Bitset2D& bitset);
 
             public:
-                Single(Layer& layer, const UInt32Point& pos);
+                Single(Layer& layer, const GEOMETRY::Point<uint32>& pos);
             };
         }
     }

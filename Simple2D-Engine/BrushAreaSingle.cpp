@@ -9,15 +9,15 @@ namespace MAP
     {
         namespace AREA
         {
-            Single::Single(Layer& layer, const UInt32Point& pos) : Area(layer, pos)
+            Single::Single(Layer& layer, const GEOMETRY::Point<uint32>& pos) : Area(layer, pos)
             {
             }
 
-            void Single::_do(const MapTileInfo& info, MapTileInfoVec& tiles, UInt32PointVec& borderTiles)
+            void Single::_do(const MapTileInfo& info, MapTileInfoVec& tiles, PointVec<uint32>& borderTiles)
             {
                 // first set complete brush size -> bitset is checked
                 Bitset2D bitset;
-                for (UInt32Point pos; pos.getX() < getBrushSize().getX(); ++pos.getX())
+                for (GEOMETRY::Point<uint32> pos; pos.getX() < getBrushSize().getX(); ++pos.getX())
                 {
                     for (pos.getY() = 0; pos.getY() < getBrushSize().getY(); ++pos.getY())
                     {
@@ -37,7 +37,7 @@ namespace MAP
                 }
 
                 // after that, we can really check borders
-                for (UInt32Point pos; pos.getX() < getBrushSize().getX(); ++pos.getX())
+                for (GEOMETRY::Point<uint32> pos; pos.getX() < getBrushSize().getX(); ++pos.getX())
                 {
                     for (pos.getY() = 0; pos.getY() < getBrushSize().getY(); ++pos.getY())
                         _storeBorder(getStartPosition() + pos, borderTiles, bitset);
@@ -45,7 +45,7 @@ namespace MAP
                 
             }
 
-            void Single::_storeBorder(const UInt32Point& pos, UInt32PointVec& borderTiles, Bitset2D& bitset)
+            void Single::_storeBorder(const GEOMETRY::Point<uint32>& pos, PointVec<uint32>& borderTiles, Bitset2D& bitset)
             {
                 for (uint32 i = 0; i < 8; ++i)
                 {

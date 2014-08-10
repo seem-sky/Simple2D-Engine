@@ -20,15 +20,15 @@ namespace MAP
             void setArea(AREA::Interface* pArea);
             void setType(TYPE::Interface* pType);
 
-            void setPosition(const UInt32Point& pos);
+            void setPosition(const GEOMETRY::Point<uint32>& pos);
 
             REVERT::BrushRevert getBrushRevert() const;
             void resetRevertInfo();
 
-            void setBrushSize(const UInt32Point& size);
+            void setBrushSize(const GEOMETRY::Point<uint32>& size);
 
             void start();
-            void start(const UInt32Point& pos);
+            void start(const GEOMETRY::Point<uint32>& pos);
 
         private:
             AREA::AreaPtr m_pArea;

@@ -2,6 +2,7 @@
 #define ENTITY_H
 
 #include <Global.h>
+#include <string>
 
 namespace ENTITY
 {

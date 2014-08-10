@@ -197,7 +197,7 @@ void TileDropLabel::dropEvent(QDropEvent* pEvent)
         if (ID && DBtype == DATABASE::DatabaseType::TILE_DATABASE)
         {
             setCurrentTileID(ID);
-            emit onDrop(getCurrentTileID(), Int32Point(pEvent->pos().x(), pEvent->pos().y()));
+            emit onDrop(getCurrentTileID(), GEOMETRY::Point<int32>(pEvent->pos().x(), pEvent->pos().y()));
         }
     }
 }

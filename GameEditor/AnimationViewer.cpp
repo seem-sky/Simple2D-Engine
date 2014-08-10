@@ -63,7 +63,7 @@ QVariant AnimationSpriteItem::itemChange(GraphicsItemChange change, const QVaria
 Sprite AnimationSpriteItem::toSprite() const
 {
     Sprite sprite;
-    sprite.m_Pos = Int32Point(x(), y());
+    sprite.m_Pos = GEOMETRY::Point<int32>(x(), y());
     sprite.m_uiSpriteID = getID();
     sprite.m_uiRotation = rotation();
     sprite.m_Scale = scale();

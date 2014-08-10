@@ -84,7 +84,7 @@ public:
     inline void setTileDatabase(const DATABASE::TileDatabase* pDB) { m_pTileDB = pDB; }
 
 signals:
-    void onDrop(uint32 uiID, const Int32Point& pos);
+    void onDrop(uint32 uiID, const GEOMETRY::Point<int32>& pos);
 
 private:
     uint32 m_uiCurrentTileID;

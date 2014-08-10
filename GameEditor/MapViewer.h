@@ -5,6 +5,7 @@
 #include <QtWidgets/QGraphicsItem>
 #include <MapViewScene.h>
 #include <Global.h>
+#include <array>
 
 namespace DATABASE
 {
@@ -75,7 +76,7 @@ class MapViewer : public QGraphicsView
 private:
     void _drawTiles(const QPoint& pos);
     void _drawLayer() const;
-    UInt32Point _calculateStartTile();
+    GEOMETRY::Point<uint32> _calculateStartTile();
 
 protected:
     void mousePressEvent(QMouseEvent* pEvent);

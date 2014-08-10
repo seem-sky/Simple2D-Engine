@@ -12,7 +12,7 @@ namespace MAP
             class Tile : public Type
             {
             public:
-                Tile(uint32 tileID, const DATABASE::DatabaseMgr& DBMgr, Layer& layer, const UInt32Point& pos);
+                Tile(uint32 tileID, const DATABASE::DatabaseMgr& DBMgr, Layer& layer, const GEOMETRY::Point<uint32>& pos);
 
                 void setTiles(const MapTileInfoVec& tiles, REVERT::BrushRevert& revert);
             };

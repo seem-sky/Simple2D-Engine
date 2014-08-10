@@ -161,13 +161,13 @@ void GameSceneView::drawTiles(QPainter* painter, const QRectF& rect, MAP::LayerT
     //auto pMap = player.getMap();
     //if (!pMap)
     //    return;
-    //const UInt32Point startTile(rect.x() <= 0 ? 0 : (uint32)rect.x() / TILE_SIZE, rect.y() <= 0 ? 0 : (uint32)rect.y() / TILE_SIZE);
-    //const UInt32Point endTile(qMin<uint32>(ceil(rect.width() / TILE_SIZE) + startTile.getX() + 1, pMap->getWidth()),
+    //const GEOMETRY::Point<uint32> startTile(rect.x() <= 0 ? 0 : (uint32)rect.x() / TILE_SIZE, rect.y() <= 0 ? 0 : (uint32)rect.y() / TILE_SIZE);
+    //const GEOMETRY::Point<uint32> endTile(qMin<uint32>(ceil(rect.width() / TILE_SIZE) + startTile.getX() + 1, pMap->getWidth()),
     //    qMin<uint32>(ceil(rect.height() / TILE_SIZE) + startTile.getY() + 1, pMap->getHeight()));
     //for (uint32 layer = 0; layer < pMap->getLayerSize(layerType); ++layer)
     //{
     //    auto& mapLayer = pMap->getLayer(layerType, layer);
-    //    UInt32Point pos;
+    //    GEOMETRY::Point<uint32> pos;
     //    for (pos.x = startTile.x; pos.x < endTile.x; ++pos.x)
     //    {
     //        for (pos.y = startTile.y; pos.y < endTile.y; ++pos.y)

@@ -52,7 +52,7 @@ QVariant MapViewItem::itemChange(GraphicsItemChange change, const QVariant& valu
     //    return QVariant(_checkMove(diff));
 
     case ItemPositionHasChanged:
-        auto pos = Int32Point(value.toPoint().x(), value.toPoint().y());
+        auto pos = GEOMETRY::Point<int32>(value.toPoint().x(), value.toPoint().y());
         m_WorldObjectInfo.setPosition(pos);
         setZValue(m_BoundingRect.getBottom() + pos.getY());
         return value;
@@ -90,12 +90,12 @@ void MapViewItem::keyPressEvent(QKeyEvent* pEvent)
     //}
 }
 
-Int32Point MapViewItem::getTopLeftPos() const
+GEOMETRY::Point<int32> MapViewItem::getTopLeftPos() const
 {
-    return Int32Point(x(), y());
+    return GEOMETRY::Point<int32>(x(), y());
 }
 
-void MapViewItem::setTopLeftPos(Int32Point pos)
+void MapViewItem::setTopLeftPos(GEOMETRY::Point<int32> pos)
 {
     setPos(pos.getX(), pos.getY());
 }
@@ -105,12 +105,12 @@ void MapViewItem::setTopLeftPos(int32 x, int32 y)
     setPos(x, y);
 }
 
-Int32Point MapViewItem::getBottomRightPos() const
+GEOMETRY::Point<int32> MapViewItem::getBottomRightPos() const
 {
-    return Int32Point(pos().x() + pixmap().width(), pos().y() + pixmap().height());
+    return GEOMETRY::Point<int32>(pos().x() + pixmap().width(), pos().y() + pixmap().height());
 }
 
-void MapViewItem::setBottomRightPos(Int32Point pos)
+void MapViewItem::setBottomRightPos(GEOMETRY::Point<int32> pos)
 {
     setBottomRightPos(pos.getX(), pos.getY());
 }
@@ -120,12 +120,12 @@ void MapViewItem::setBottomRightPos(int32 x, int32 y)
     setPos(x - pixmap().width(), y - pixmap().height());
 }
 
-Int32Point MapViewItem::getCenterPos() const
+GEOMETRY::Point<int32> MapViewItem::getCenterPos() const
 {
-    return Int32Point(pos().y() + pixmap().height()/2, pos().x() + pixmap().width()/2);
+    return GEOMETRY::Point<int32>(pos().y() + pixmap().height()/2, pos().x() + pixmap().width()/2);
 }
 
-void MapViewItem::setCenterPos(Int32Point pos)
+void MapViewItem::setCenterPos(GEOMETRY::Point<int32> pos)
 {
     setCenterPos(pos.getX(), pos.getY());
 }

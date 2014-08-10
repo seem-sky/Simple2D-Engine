@@ -33,7 +33,7 @@ namespace MAP
             ANIMATION::AnimationHolder m_AnimationHolder;
             UInt32UInt32UMap m_Animations;
             DATABASE::PROTOTYPE::MAP_STRUCTURE::MapDirection m_Direction;
-            Int32Rect m_BoundingRect;
+            GEOMETRY::Rectangle<int32> m_BoundingRect;
             const DATABASE::DatabaseMgr& m_DBMgr;
         };
     }

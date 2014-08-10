@@ -134,7 +134,7 @@ QPixmap PROTOTYPE::TILE_SET::createTileSetPixmap(const QString& path, const Tile
     QPixmap pixmap(pSet->getTileSetSize().getX()*TILE_SIZE, pSet->getTileSetSize().getY()*TILE_SIZE);
     pixmap.fill();
     QPainter painter(&pixmap);
-    UInt32Point pos;
+    GEOMETRY::Point<uint32> pos;
     for (pos.getX() = 0; pos.getX() < pSet->getTileSetSize().getX(); ++pos.getX())
     {
         for (pos.getY() = 0; pos.getY() < pSet->getTileSetSize().getY(); ++pos.getY())

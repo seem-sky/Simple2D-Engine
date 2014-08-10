@@ -17,7 +17,7 @@ namespace MAP
             bool isEmpty() const;
             void clear();
 
-            WorldObjectInfo* addWorldObject(uint32 ID, const Int32Point& pos, MapObjectLayer layer, MapDirection direction = MapDirection::DOWN);
+            WorldObjectInfo* addWorldObject(uint32 ID, const GEOMETRY::Point<int32>& pos, MapObjectLayer layer, MapDirection direction = MapDirection::DOWN);
             WorldObjectInfo* getWorldObject(GUID guid);
             const WorldObjectInfo* getWorldObject(GUID guid) const;
             void setWorldObject(GUID guid, const WorldObjectInfo& info);

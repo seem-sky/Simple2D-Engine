@@ -42,12 +42,12 @@ namespace MAP
             return m_Direction;
         }
 
-        void WorldObjectInfo::setPosition(Int32Point position)
+        void WorldObjectInfo::setPosition(GEOMETRY::Point<int32> position)
         {
             m_Position = position;
         }
 
-        Int32Point WorldObjectInfo::getPosition() const
+        GEOMETRY::Point<int32> WorldObjectInfo::getPosition() const
         {
             return m_Position;
         }

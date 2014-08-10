@@ -9,7 +9,7 @@ namespace MAP
     {
         namespace AREA
         {
-            void Area::start(MapTileInfoVec& tiles, UInt32PointVec& borderTiles)
+            void Area::start(MapTileInfoVec& tiles, PointVec<uint32>& borderTiles)
             {
                 tiles.clear();
                 borderTiles.clear();
@@ -22,12 +22,12 @@ namespace MAP
                 catch (const MAP::EXCEPTION::TileOutOfRangeException&) {}
             }
 
-            void Area::setBrushSize(const UInt32Point& size)
+            void Area::setBrushSize(const GEOMETRY::Point<uint32>& size)
             {
                 m_BrushSize = size;
             }
 
-            UInt32Point Area::getBrushSize() const
+            GEOMETRY::Point<uint32> Area::getBrushSize() const
             {
                 return m_BrushSize;
             }

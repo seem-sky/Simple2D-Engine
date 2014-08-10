@@ -23,17 +23,17 @@ public:
     void removeOpenMap(const uint32& uiMapID);
     inline const std::unordered_set<uint32> getOpenMaps() const { return m_openMaps; }
 
-    inline UInt32Point getMainWindowSize() const { return m_MainWindowSize; }
-    inline void setMainWindowSize(UInt32Point size) { m_MainWindowSize = size; saveConfig(); }
-    inline UInt32Point getMainWindowPos() const { return m_MainWindowPos; }
-    inline void setMainWindowPos(UInt32Point pos) { m_MainWindowPos = pos; saveConfig(); }
+    inline GEOMETRY::Point<uint32> getMainWindowSize() const { return m_MainWindowSize; }
+    inline void setMainWindowSize(GEOMETRY::Point<uint32> size) { m_MainWindowSize = size; saveConfig(); }
+    inline GEOMETRY::Point<uint32> getMainWindowPos() const { return m_MainWindowPos; }
+    inline void setMainWindowPos(GEOMETRY::Point<uint32> pos) { m_MainWindowPos = pos; saveConfig(); }
 
     inline static QString getConfigDefaultPath() { return "Config.ini"; }
 
 private:
     QString m_projectDirectory;
     std::unordered_set<uint32> m_openMaps;
-    UInt32Point m_MainWindowSize;
-    UInt32Point m_MainWindowPos;
+    GEOMETRY::Point<uint32> m_MainWindowSize;
+    GEOMETRY::Point<uint32> m_MainWindowPos;
 };
 #endif

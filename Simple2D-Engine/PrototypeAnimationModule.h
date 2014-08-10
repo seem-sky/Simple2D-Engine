@@ -2,6 +2,7 @@
 #define ANIMATION_MODULE_H
 
 #include <Global.h>
+#include <vector>
 
 namespace DATABASE
 {

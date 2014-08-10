@@ -6,8 +6,11 @@
 #include <QtCore/QString>
 #include <QtCore/QXmlStreamReader>
 #include <QtCore/QXmlStreamWriter>
+#include <array>
 #include "Container.h"
 #include <FlagManager.h>
+#include <geometry/Rectangle.h>
+#include <geometry/Point.h>
 #include "PrototypeAnimationModule.h"
 #include "Simple2D-Global.h"
 
@@ -130,24 +133,24 @@ namespace DATABASE
             class TileSetPrototype : public Prototype
             {
             private:
-                void _resizeIfNeeded(UInt32Point size);
+                void _resizeIfNeeded(GEOMETRY::Point<uint32> size);
 
             public:
                 TileSetPrototype(uint32 ID = 0);
 
-                void resizeTileSet(UInt32Point size);
-                inline UInt32Point getTileSetSize() const { return m_Size; }
+                void resizeTileSet(GEOMETRY::Point<uint32> size);
+                inline GEOMETRY::Point<uint32> getTileSetSize() const { return m_Size; }
                 void clear();
 
-                void setTileID(UInt32Point pos, uint32 ID);
-                uint32 getTileID(UInt32Point pos) const;
+                void setTileID(GEOMETRY::Point<uint32> pos, uint32 ID);
+                uint32 getTileID(GEOMETRY::Point<uint32> pos) const;
 
                 // IO
                 void toXML(QXmlStreamWriter& writer) const;
                 void fromXML(const QXmlStreamAttributes& attributes);
 
             private:
-                UInt32Point m_Size;
+                GEOMETRY::Point<uint32> m_Size;
                 UInt32Multiarray2D m_Tiles;
             };
         
@@ -356,7 +359,7 @@ namespace DATABASE
             class Sprite
             {
             public:
-                Int32Point m_Pos;
+                GEOMETRY::Point<int32> m_Pos;
                 uint32 m_uiSpriteID = 0;
                 uint16 m_uiRotation = 0;
                 float m_Scale = 100;
@@ -378,9 +381,9 @@ namespace DATABASE
                 inline void setSpriteCount(uint32 size) { m_Sprites.resize(size); calculateOffset(); }
                 inline const SpriteVector& getSprites() const { return m_Sprites; }
 
-                inline const Int32Point& getOffset() const { return m_FrameOffset; }
+                inline const GEOMETRY::Point<int32>& getOffset() const { return m_FrameOffset; }
                 void calculateOffset();
-                void setOffsetIfNeeded(const Int32Point& offset);
+                void setOffsetIfNeeded(const GEOMETRY::Point<int32>& offset);
 
                 inline uint32 getTimeInMsec() const { return m_uiMsecTime; }
                 inline void setTimeInMsec(uint32 time) { m_uiMsecTime = time; }
@@ -388,7 +391,7 @@ namespace DATABASE
                 inline bool isEmpty() const { return m_Sprites.empty() && !m_uiMsecTime; }
 
             private:
-                Int32Point m_FrameOffset;
+                GEOMETRY::Point<int32> m_FrameOffset;
                 SpriteVector m_Sprites;
                 uint32 m_uiMsecTime = 0;
             };
@@ -445,8 +448,8 @@ namespace DATABASE
                 inline void setBoundingRight(uint32 width) { m_BoundingRect.setRight(width); }
                 inline uint32 getBoundingBottom() const { return m_BoundingRect.getBottom(); }
                 inline void setBoundingBottom(uint32 height) { m_BoundingRect.setBottom(height); }
-                inline Int32Rect getBoundingRect() const { return m_BoundingRect; }
-                inline void setBoundingRect(Int32Rect rect) { m_BoundingRect = rect; }
+                inline GEOMETRY::Rectangle<int32> getBoundingRect() const { return m_BoundingRect; }
+                inline void setBoundingRect(GEOMETRY::Rectangle<int32> rect) { m_BoundingRect = rect; }
 
                 inline void setAnimationSpeed(uint16 uiSpeed) { m_uiAnimationSpeed = uiSpeed; }
                 inline uint16 getAnimationSpeed() const { return m_uiAnimationSpeed; }
@@ -466,7 +469,7 @@ namespace DATABASE
                 virtual void insertChildren(const QXmlStreamReader& reader);
 
             private:
-                Int32Rect m_BoundingRect;
+                GEOMETRY::Rectangle<int32> m_BoundingRect;
 				uint16 m_uiAnimationSpeed = 100;
                 QString m_ScriptName;
 
@@ -548,7 +551,7 @@ namespace DATABASE
 
                 uint32 m_ObjectID;
                 uint32 m_GUID;
-                Int32Point m_Position;
+                GEOMETRY::Point<int32> m_Position;
                 MapDirection m_Direction;
                 MapObjectLayer m_Layer;
             };
@@ -578,8 +581,8 @@ namespace DATABASE
                 void setSizeX(uint32 x);
                 void setSizeY(uint32 y);
                 void setLayerSize(uint8 size, MAP::LayerType layer);
-                void setSize(const UInt32Point& size, uint8 uiForegroundLayerSize, uint8 uiBackgroundLayerSize);
-                inline UInt32Point getSize() const { return m_Size; }
+                void setSize(const GEOMETRY::Point<uint32>& size, uint8 uiForegroundLayerSize, uint8 uiBackgroundLayerSize);
+                inline GEOMETRY::Point<uint32> getSize() const { return m_Size; }
                 inline uint8 getLayerSize(MAP::LayerType layer) const { return m_Layer.at(static_cast<uint32>(layer)); };
 
                 inline uint32 getParentID() const { return m_uiParentID; }
@@ -594,7 +597,7 @@ namespace DATABASE
                 QString m_FileName;
                 QString m_ScriptName;
 
-                UInt32Point m_Size;
+                GEOMETRY::Point<uint32> m_Size;
                 std::array<uint8, 2> m_Layer;
             };
         }

@@ -1,8 +1,11 @@
 #ifndef TRANSFORMATION_HOLDER_H
 #define TRANSFORMATION_HOLDER_H
 
-#include <Typedefs.h>
+#include <Global.h>
 #include <memory>
+#include <array>
+#include <list>
+#include <geometry/Point.h>
 
 namespace TRANSFORMATION
 {
@@ -48,13 +51,13 @@ namespace TRANSFORMATION
         void _update(uint32 uiDiff);
 
     public:
-        Move(uint32 uiTime, Int32Point range, Int32Point& position);
+        Move(uint32 uiTime, GEOMETRY::Point<int32> range, GEOMETRY::Point<int32>& position);
 
     private:
-        DoublePoint m_RangePerMSEC;
-        DoublePoint m_RangeBuffer;
-        Int32Point m_Range;
-        Int32Point& m_Position;
+        GEOMETRY::Point<double> m_RangePerMSEC;
+        GEOMETRY::Point<double> m_RangeBuffer;
+        GEOMETRY::Point<int32> m_Range;
+        GEOMETRY::Point<int32>& m_Position;
     };
 
     /*#####

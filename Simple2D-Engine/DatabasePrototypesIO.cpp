@@ -129,13 +129,13 @@ void TILE_SET::TileSetPrototype::fromXML(const QXmlStreamAttributes& attributes)
 {
     Prototype::fromXML(attributes);
 
-    UInt32Point size(attributes.value("columns").toUInt(), attributes.value("rows").toUInt());
+    GEOMETRY::Point<uint32> size(attributes.value("columns").toUInt(), attributes.value("rows").toUInt());
     resizeTileSet(size);
     if (attributes.hasAttribute("tiles"))
     {
         QStringList tileList = attributes.value("tiles").toString().split(",");
         for (int32 i = 0; i < tileList.size(); ++i)
-            setTileID(UInt32Point(i/size.getX(), i%size.getY()), tileList.at(i).toUInt());
+            setTileID(GEOMETRY::Point<uint32>(i/size.getX(), i%size.getY()), tileList.at(i).toUInt());
     }
 }
 
@@ -153,7 +153,7 @@ void TILE_SET::TileSetPrototype::toXML(QXmlStreamWriter& writer) const
         {
             if (x || y)
                 tiles.append(",");
-            tiles.append(QString::number(getTileID(UInt32Point(x, y))));
+            tiles.append(QString::number(getTileID(GEOMETRY::Point<uint32>(x, y))));
         }
     }
     if (!tiles.isEmpty())
@@ -333,7 +333,7 @@ void MAP_STRUCTURE::MapPrototype::fromXML(const QXmlStreamAttributes& attributes
     Prototype::fromXML(attributes);
 
     // setup map size
-    setSize(UInt32Point(attributes.value("sizeX").toUInt(), attributes.value("sizeY").toUInt()), attributes.value("foreLayer").toUInt(),
+    setSize(GEOMETRY::Point<uint32>(attributes.value("sizeX").toUInt(), attributes.value("sizeY").toUInt()), attributes.value("foreLayer").toUInt(),
         attributes.value("backLayer").toUInt());
 
     setParentID(attributes.value("parentID").toUInt());

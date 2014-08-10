@@ -28,7 +28,7 @@ TransformationProcess Transformation::update(uint32 uiDiff)
 /*#####
 # Move
 #####*/
-Move::Move(uint32 uiTime, Int32Point range, Int32Point& position) : m_Range(range), m_Position(position),
+Move::Move(uint32 uiTime, GEOMETRY::Point<int32> range, GEOMETRY::Point<int32>& position) : m_Range(range), m_Position(position),
     Transformation(uiTime, TRANSFORMATION_MOVE)
 {
     m_RangePerMSEC.getX() = static_cast<double>(m_Range.getX()) / getTimeRemain();
@@ -37,7 +37,7 @@ Move::Move(uint32 uiTime, Int32Point range, Int32Point& position) : m_Range(rang
 
 void Move::_update(uint32 uiDiff)
 {
-    Int32Point temp;
+    GEOMETRY::Point<int32> temp;
     if (getTimeRemain())
     {
         m_RangeBuffer.getX() = m_RangeBuffer.getX() + m_RangePerMSEC.getX() * uiDiff;

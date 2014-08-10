@@ -10,7 +10,7 @@ namespace MAP
     {
         namespace TYPE
         {
-            AutoTile::AutoTile(uint32 tileID, const DATABASE::DatabaseMgr& DBMgr, Layer& layer, const UInt32Point& pos) : Type(tileID, DBMgr, layer, pos)
+            AutoTile::AutoTile(uint32 tileID, const DATABASE::DatabaseMgr& DBMgr, Layer& layer, const GEOMETRY::Point<uint32>& pos) : Type(tileID, DBMgr, layer, pos)
             {
             }
 

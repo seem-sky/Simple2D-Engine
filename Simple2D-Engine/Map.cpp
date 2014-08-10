@@ -56,17 +56,17 @@ void Map::addWorldObject(OBJECT::WorldObject* pWorldObject)
 //BitsetVector MAP::generatePassabilityMap(DATABASE::ConstDatabaseMgrPtr pDBMgr, const MapLayer& mapLayer)
 //{
 //    BitsetVector passabilityMap;
-//    //UInt32Point size = mapLayer.getSize();
+//    //GEOMETRY::Point<uint32> size = mapLayer.getSize();
 //    //passabilityMap.resize(size.x, boost::dynamic_bitset<>(size.y));
 //    //for (uint32 x = 0; x < size.x; ++x)
 //    //{
 //    //    for (uint32 y = 0; y < size.y; ++y)
-//    //        passabilityMap.at(x)[y] = isLayerPassable(pDBMgr, mapLayer, UInt32Point(x, y), Layer::LAYER_BACKGROUND) && isLayerPassable(pDBMgr, mapLayer, UInt32Point(x, y), Layer::LAYER_FOREGROUND);
+//    //        passabilityMap.at(x)[y] = isLayerPassable(pDBMgr, mapLayer, GEOMETRY::Point<uint32>(x, y), Layer::LAYER_BACKGROUND) && isLayerPassable(pDBMgr, mapLayer, GEOMETRY::Point<uint32>(x, y), Layer::LAYER_FOREGROUND);
 //    //}
 //    return std::move(passabilityMap);
 //}
 //
-//bool MAP::isLayerPassable(DATABASE::ConstDatabaseMgrPtr pDBMgr, const MapLayer& mapLayer, UInt32Point pos, Layer layer)
+//bool MAP::isLayerPassable(DATABASE::ConstDatabaseMgrPtr pDBMgr, const MapLayer& mapLayer, GEOMETRY::Point<uint32> pos, Layer layer)
 //{
 //    //DATABASE::ConstTileDatabasePtr pTileDB;
 //    //DATABASE::ConstAutoTileDatabasePtr pAutoTileDB;

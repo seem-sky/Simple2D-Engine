@@ -41,14 +41,14 @@ namespace MAP
             MapObjectLayer getLayer() const;
             void setDirection(MapDirection direction);
             MapDirection getDirection() const;
-            void setPosition(Int32Point position);
-            Int32Point getPosition() const;
+            void setPosition(GEOMETRY::Point<int32> position);
+            GEOMETRY::Point<int32> getPosition() const;
             GUID getGUID() const;
 
         private:
             uint32 m_ObjectID = 0;
             GUID m_GUID = 0;
-            Int32Point m_Position;
+            GEOMETRY::Point<int32> m_Position;
             MapDirection m_Direction = MapDirection::DOWN;
             MapObjectLayer m_Layer = MapObjectLayer::MIDDLE;
         };

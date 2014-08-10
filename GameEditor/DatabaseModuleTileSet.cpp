@@ -95,7 +95,7 @@ TileDropLabel* DatabaseModuleTileSet::_getNewTileDropLabel() const
 {
     TileDropLabel* pLabel = new TileDropLabel(m_pTileSetTable);
     pLabel->setTileDatabase(m_pTileDB);
-    //connect(pLabel, SIGNAL(onDrop(uint32, Int32Point)), this, SLOT(_onTileDrop(uint32, Int32Point)));
+    //connect(pLabel, SIGNAL(onDrop(uint32, GEOMETRY::Point<int32>)), this, SLOT(_onTileDrop(uint32, GEOMETRY::Point<int32>)));
     return pLabel;
 }
 

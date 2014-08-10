@@ -5,6 +5,7 @@
 #include "WorldObject.h"
 #include <boost/multi_array.hpp>
 #include <unordered_set>
+#include <geometry/Point3D.h>
 
 const uint32 GRID_SIZE = 10; // in tiles
 
@@ -17,15 +18,15 @@ namespace MAP
         class MapGrid
         {
         private:
-            //void _resizeGrid(const UInt32Point3D& size);
+            //void _resizeGrid(const GEOMETRY::Point<uint32>3D& size);
 
-            //bool _isValidGrid(const UInt32Point3D& grid);
+            //bool _isValidGrid(const GEOMETRY::Point<uint32>3D& grid);
 
         public:
-            //static UInt32Point3D getGridFromMapPos(const UInt32Point3D& mapPos);
+            //static GEOMETRY::Point<uint32>3D getGridFromMapPos(const GEOMETRY::Point<uint32>3D& mapPos);
 
-            //void updateGridSize(UInt32Point3D mapSize);
-            //inline void clearGrid() { _resizeGrid(UInt32Point3D()); }
+            //void updateGridSize(GEOMETRY::Point<uint32>3D mapSize);
+            //inline void clearGrid() { _resizeGrid(GEOMETRY::Point<uint32>3D()); }
 
             void addObject(OBJECT::WorldObject* pObject);
             void removeObject(OBJECT::WorldObject* pObject);
@@ -34,7 +35,7 @@ namespace MAP
 
         private:
             WorldObjectContainer m_WorldObjects;
-            UInt32Point3D m_GridSize;
+            GEOMETRY::Point3D<uint32> m_GridSize;
         };
     }
 }

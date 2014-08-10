@@ -9,7 +9,7 @@ namespace MAP
     {
         namespace TYPE
         {
-            Tile::Tile(uint32 tileID, const DATABASE::DatabaseMgr& DBMgr, Layer& layer, const UInt32Point& pos) : Type(tileID, DBMgr, layer, pos)
+            Tile::Tile(uint32 tileID, const DATABASE::DatabaseMgr& DBMgr, Layer& layer, const GEOMETRY::Point<uint32>& pos) : Type(tileID, DBMgr, layer, pos)
             {
             }
 

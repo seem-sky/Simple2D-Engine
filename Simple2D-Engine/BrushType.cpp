@@ -10,11 +10,11 @@ namespace MAP
     {
         namespace TYPE
         {
-            Type::Type(uint32 tileID, const DATABASE::DatabaseMgr& DBMgr, Layer& layer, const UInt32Point& pos)
+            Type::Type(uint32 tileID, const DATABASE::DatabaseMgr& DBMgr, Layer& layer, const GEOMETRY::Point<uint32>& pos)
                 : m_Layer(layer), m_StartPosition(pos), m_DBMgr(DBMgr), m_TileID(tileID)
             {}
 
-            void Type::setBorderTiles(const UInt32PointVec& tiles, REVERT::BrushRevert& revert)
+            void Type::setBorderTiles(const PointVec<uint32>& tiles, REVERT::BrushRevert& revert)
             {
                 for (auto pos : tiles)
                 {

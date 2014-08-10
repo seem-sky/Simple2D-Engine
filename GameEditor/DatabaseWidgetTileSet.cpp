@@ -50,7 +50,7 @@ void DatabaseWidgetTileSet::setupWidgetsFromPrototype(const Prototype* pPrototyp
         for (uint32 row = 0; row < size.getY(); ++row)
         {
             for (uint32 column = 0; column < size.getX(); ++column)
-                m_pModuleTileSet->setTileID(row, column, pProto->getTileID(UInt32Point(column, row)));
+                m_pModuleTileSet->setTileID(row, column, pProto->getTileID(GEOMETRY::Point<uint32>(column, row)));
         }
     }
     DatabaseWidgetBase::setupWidgetsFromPrototype(pPrototype);
@@ -60,12 +60,12 @@ void DatabaseWidgetTileSet::setupPrototypeFromWidgets(Prototype* pPrototype)
 {
     if (auto pProto = dynamic_cast<TILE_SET::TileSetPrototype*>(pPrototype))
     {
-        UInt32Point size(m_pModuleTileSet->getTileSetTableColumnCount(), m_pModuleTileSet->getTileSetTableColumnCount());
+        GEOMETRY::Point<uint32> size(m_pModuleTileSet->getTileSetTableColumnCount(), m_pModuleTileSet->getTileSetTableColumnCount());
         pProto->resizeTileSet(size);
         for (uint32 row = 0; row < size.getY(); ++row)
         {
             for (uint32 column = 0; column < size.getX(); ++column)
-                pProto->setTileID(UInt32Point(column, row), m_pModuleTileSet->getTileID(row, column));
+                pProto->setTileID(GEOMETRY::Point<uint32>(column, row), m_pModuleTileSet->getTileID(row, column));
         }
     }
     DatabaseWidgetBase::setupPrototypeFromWidgets(pPrototype);

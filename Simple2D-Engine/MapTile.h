@@ -3,6 +3,8 @@
 
 #include "Simple2D-Global.h"
 #include <math_extensions.h>
+#include <vector>
+#include <geometry/Point.h>
 
 namespace MAP
 {
@@ -47,18 +49,18 @@ namespace MAP
     class MapTileInfo
     {
     public:
-        MapTileInfo(const MapTile& tile = MapTile(), UInt32Point at = UInt32Point()) : m_Tile(tile), m_Position(at) {}
+        MapTileInfo(const MapTile& tile = MapTile(), GEOMETRY::Point<uint32> at = GEOMETRY::Point<uint32>()) : m_Tile(tile), m_Position(at) {}
 
         inline const MapTile& getMapTile() const { return m_Tile; }
         inline MapTile& getMapTile() { return m_Tile; }
-        inline UInt32Point getPosition() const { return m_Position; }
+        inline GEOMETRY::Point<uint32> getPosition() const { return m_Position; }
 
         inline bool isValid() const { return m_Tile.isValid(); }
         inline bool isAutoTile() const { return m_Tile.isAutoTile(); }
 
     private:
         MapTile m_Tile;
-        UInt32Point m_Position;
+        GEOMETRY::Point<uint32> m_Position;
     };
     typedef std::vector<MapTileInfo> MapTileInfoVec;
 

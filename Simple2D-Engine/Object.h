@@ -14,8 +14,8 @@ namespace MAP
         public:
             Object(uint32 GUID, uint32 ID = 0, const std::string& name = "", const std::string& script = "");
 
-            inline Int32Point getPosition() const { return m_Position; }
-            inline void setPosition(const Int32Point& newPos) { m_Position = newPos; }
+            inline GEOMETRY::Point<int32> getPosition() const { return m_Position; }
+            inline void setPosition(const GEOMETRY::Point<int32>& newPos) { m_Position = newPos; }
 
             inline void setMap(Map* pMap) { m_pMap = pMap; }
             inline const Map* getMap() const { return m_pMap; }
@@ -28,7 +28,7 @@ namespace MAP
             Map* m_pMap;
 
         protected:
-            Int32Point m_Position;
+            GEOMETRY::Point<int32> m_Position;
             TRANSFORMATION::TransformationHolder m_TransformationHolder;
         };
     }

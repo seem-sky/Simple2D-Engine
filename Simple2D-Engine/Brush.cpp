@@ -29,7 +29,7 @@ namespace MAP
             m_pType = TYPE::TypePtr(pType);
         }
 
-        void Brush::start(const UInt32Point& pos)
+        void Brush::start(const GEOMETRY::Point<uint32>& pos)
         {
             setPosition(pos);
             return start();
@@ -39,7 +39,7 @@ namespace MAP
         {
             _checkValidation();
             MapTileInfoVec tiles;
-            UInt32PointVec borderTiles;
+            PointVec<uint32> borderTiles;
             m_pArea->start(tiles, borderTiles);
             m_pType->setTiles(tiles, m_RevertInfo);
 
@@ -47,7 +47,7 @@ namespace MAP
             m_pType->setBorderTiles(borderTiles, m_RevertInfo);
         }
 
-        void Brush::setPosition(const UInt32Point& pos)
+        void Brush::setPosition(const GEOMETRY::Point<uint32>& pos)
         {
             _checkValidation();
             m_pArea->setStartPosition(pos);
@@ -64,7 +64,7 @@ namespace MAP
             m_RevertInfo.clear();
         }
 
-        void Brush::setBrushSize(const UInt32Point& size)
+        void Brush::setBrushSize(const GEOMETRY::Point<uint32>& size)
         {
             m_pArea->setBrushSize(size);
         }

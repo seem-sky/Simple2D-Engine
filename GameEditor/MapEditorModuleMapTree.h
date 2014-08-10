@@ -40,7 +40,7 @@ signals:
 
 private:
     DATABASE::DatabaseMgr& m_DBMgr;
-    UInt32List m_DeletedMaps;
+    std::list<uint32> m_DeletedMaps;
 };
 
 #endif

@@ -31,7 +31,7 @@ namespace MAP
 
         inline uint32 getWidth() const { return getSize().getX(); }
         inline uint32 getHeight() const { return getSize().getY(); }
-        inline UInt32Point getSize() const { return m_Layer.getSize(); }
+        inline GEOMETRY::Point<uint32> getSize() const { return m_Layer.getSize(); }
         inline uint8 getLayerSize(LayerType layer) const { return m_Layer.getLayerSize(layer); }
 
         inline const Layer& getLayer(LayerType layer, uint8 index) const { return m_Layer.getLayer(layer, index); }
@@ -51,7 +51,7 @@ namespace MAP
     typedef std::shared_ptr<Map> MapPtr;
     typedef std::shared_ptr<const Map> ConstMapPtr;
 
-    //bool isLayerPassable(DATABASE::ConstDatabaseMgrPtr pDBMgr, const MapLayer& mapLayer, UInt32Point pos, Layer layer);
+    //bool isLayerPassable(DATABASE::ConstDatabaseMgrPtr pDBMgr, const MapLayer& mapLayer, GEOMETRY::Point<uint32> pos, Layer layer);
     //BitsetVector generatePassabilityMap(DATABASE::ConstDatabaseMgrPtr pDBMgr, const MapLayer& mapLayer);
 }
 #endif

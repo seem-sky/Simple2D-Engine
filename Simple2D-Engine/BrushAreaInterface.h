@@ -3,6 +3,7 @@
 
 #include "MapTile.h"
 #include <memory>
+#include <Typedefs.h>
 
 namespace MAP
 {
@@ -13,13 +14,13 @@ namespace MAP
             class Interface
             {
             public:
-                virtual const UInt32Point& getStartPosition() const = 0;
-                virtual void setStartPosition(const UInt32Point& pos) = 0;
+                virtual const GEOMETRY::Point<uint32>& getStartPosition() const = 0;
+                virtual void setStartPosition(const GEOMETRY::Point<uint32>& pos) = 0;
 
-                virtual void start(MapTileInfoVec& tiles, UInt32PointVec& borderTiles) = 0;
+                virtual void start(MapTileInfoVec& tiles, PointVec<uint32>& borderTiles) = 0;
 
-                virtual void setBrushSize(const UInt32Point& size) = 0;
-                virtual UInt32Point getBrushSize() const = 0;
+                virtual void setBrushSize(const GEOMETRY::Point<uint32>& size) = 0;
+                virtual GEOMETRY::Point<uint32> getBrushSize() const = 0;
             };
             typedef std::unique_ptr<Interface> AreaPtr;
         }

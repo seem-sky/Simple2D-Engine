@@ -1,5 +1,6 @@
 #include "MapBinaryIO.h"
 #include <QtCore/QFile>
+#include <geometry/Point3D.h>
 
 using namespace MAP;
 using namespace DATABASE::PROTOTYPE::MAP_STRUCTURE;
@@ -57,7 +58,7 @@ void INPUT::MapBinaryReader::_readObjects(QDataStream& in, MapPrototype* pMap, u
 // Tile = uint32; AutoTile = uint32
 void INPUT::MapBinaryReader::_readLayerV1(QDataStream& in, MAP::LayerContainer& mapLayer, LayerType layer)
 {
-    UInt32Point3D pos;
+    GEOMETRY::Point3D<uint32> pos;
     for (pos.getZ() = 0; pos.getZ() < mapLayer.getLayerSize(layer); ++pos.getZ())
     {
         for (pos.getY() = 0; pos.getY() < mapLayer.getSize().getY(); ++pos.getY())
@@ -76,7 +77,7 @@ void INPUT::MapBinaryReader::_readLayerV1(QDataStream& in, MAP::LayerContainer& 
 // Tile = uint16; AutoTile = uint8
 void INPUT::MapBinaryReader::_readLayerV2(QDataStream& in, LayerContainer& mapLayer, LayerType layer)
 {
-    UInt32Point3D pos;
+    GEOMETRY::Point3D<uint32> pos;
     for (pos.getZ() = 0; pos.getZ() < mapLayer.getLayerSize(layer); ++pos.getZ())
     {
         for (pos.getY() = 0; pos.getY() < mapLayer.getSize().getY(); ++pos.getY())
@@ -147,7 +148,7 @@ void OUTPUT::MapBinaryWriter::writeFile(const QString& fileName, const MAP_DATA:
 
 void OUTPUT::MapBinaryWriter::_writeLayer(QDataStream& out, const LayerContainer& mapLayer, LayerType layer)
 {
-    UInt32Point3D pos;
+    GEOMETRY::Point3D<uint32> pos;
     for (pos.getZ() = 0; pos.getZ() < mapLayer.getLayerSize(layer); ++pos.getZ())
     {
         for (pos.getY() = 0; pos.getY() < mapLayer.getSize().getY(); ++pos.getY())

@@ -19,7 +19,7 @@ namespace MAP
             m_WorldObjectInfos.clear();
         }
 
-        WorldObjectInfo* WorldObjectInfoData::addWorldObject(uint32 ID, const Int32Point& pos, MapObjectLayer layer, MapDirection direction)
+        WorldObjectInfo* WorldObjectInfoData::addWorldObject(uint32 ID, const GEOMETRY::Point<int32>& pos, MapObjectLayer layer, MapDirection direction)
         {
             WorldObjectInfo info(_getNewGUID());
             info.setWorldObjectID(ID);

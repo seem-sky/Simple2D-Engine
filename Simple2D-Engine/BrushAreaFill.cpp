@@ -9,20 +9,20 @@ namespace MAP
     {
         namespace AREA
         {
-            Fill::Fill(Layer& layer, const UInt32Point& pos) : Area(layer, pos)
+            Fill::Fill(Layer& layer, const GEOMETRY::Point<uint32>& pos) : Area(layer, pos)
             {
             }
 
-            void Fill::_do(const MapTileInfo& info, MapTileInfoVec& tiles, UInt32PointVec& borderTiles)
+            void Fill::_do(const MapTileInfo& info, MapTileInfoVec& tiles, PointVec<uint32>& borderTiles)
             {
-                if (getBrushSize() != UInt32Point(1, 1))
+                if (getBrushSize() != GEOMETRY::Point<uint32>(1, 1))
                     WARNING_LOG("Brush size other then 1/1 has no effect in fill mode.");
 
                 tiles.push_back(info);
                 Bitset2D tileBitset, borderBitset;
                 tileBitset.set(getStartPosition());
 
-                UInt32PointVec openPositions{ getStartPosition() };
+                PointVec<uint32> openPositions{ getStartPosition() };
                 while (!openPositions.empty())
                 {
                     auto position = openPositions.back();
@@ -35,8 +35,8 @@ namespace MAP
                 }
             }
 
-            void Fill::_checkTile(const UInt32Point& pos, Bitset2D& bitset, Bitset2D& borderBitset,
-                UInt32PointVec& openPositions, MapTileInfoVec& tileInfos, UInt32PointVec& borderTiles)
+            void Fill::_checkTile(const GEOMETRY::Point<uint32>& pos, Bitset2D& bitset, Bitset2D& borderBitset,
+                PointVec<uint32>& openPositions, MapTileInfoVec& tileInfos, PointVec<uint32>& borderTiles)
             {
                 auto mapTileInfo = m_Layer.getMapTile(pos);
                 bool check = false;

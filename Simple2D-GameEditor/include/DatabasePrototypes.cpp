@@ -154,10 +154,10 @@ namespace DATABASE
         #####*/
         TILE_SET::TileSetPrototype::TileSetPrototype(uint32 uiID) : Prototype(uiID)
         {
-            resizeTileSet(UInt32Point(DEFAULT_COLUMN_COUNT, DEFAULT_ROW_COUNT));
+            resizeTileSet(GEOMETRY::Point<uint32>(DEFAULT_COLUMN_COUNT, DEFAULT_ROW_COUNT));
         }
 
-        void TILE_SET::TileSetPrototype::resizeTileSet(UInt32Point size)
+        void TILE_SET::TileSetPrototype::resizeTileSet(GEOMETRY::Point<uint32> size)
         {
             m_Tiles.resize(boost::extents[size.getX()][size.getY()]);
             m_Size = size;
@@ -166,25 +166,25 @@ namespace DATABASE
         void TILE_SET::TileSetPrototype::clear()
         {
             m_Tiles.resize(boost::extents[0][0]);
-            m_Size = UInt32Point(0, 0);
+            m_Size = GEOMETRY::Point<uint32>(0, 0);
         }
 
-        void TILE_SET::TileSetPrototype::setTileID(UInt32Point pos, uint32 ID)
+        void TILE_SET::TileSetPrototype::setTileID(GEOMETRY::Point<uint32> pos, uint32 ID)
         {
-            _resizeIfNeeded(UInt32Point(pos.getX()+1, pos.getY()+1));
+            _resizeIfNeeded(GEOMETRY::Point<uint32>(pos.getX()+1, pos.getY()+1));
             m_Tiles[pos.getX()][pos.getY()] = ID;
         }
 
-        uint32 TILE_SET::TileSetPrototype::getTileID(UInt32Point pos) const
+        uint32 TILE_SET::TileSetPrototype::getTileID(GEOMETRY::Point<uint32> pos) const
         {
             if (pos.getX() < m_Size.getX() && pos.getY() < m_Size.getY())
                 return m_Tiles[pos.getX()][pos.getY()];
             return 0;
         }
 
-        void TILE_SET::TileSetPrototype::_resizeIfNeeded(UInt32Point size)
+        void TILE_SET::TileSetPrototype::_resizeIfNeeded(GEOMETRY::Point<uint32> size)
         {
-            UInt32Point newSize(m_Size);
+            GEOMETRY::Point<uint32> newSize(m_Size);
             if (size.getX() > newSize.getX())
                 newSize.getX() = size.getX();
             if (size.getY() > newSize.getY())
@@ -198,7 +198,7 @@ namespace DATABASE
             QPixmap pixmap(tileSet.getTileSetSize().getX()*TILE_SIZE, tileSet.getTileSetSize().getY()*TILE_SIZE);
             pixmap.fill();
             QPainter painter(&pixmap);
-            UInt32Point pos;
+            GEOMETRY::Point<uint32> pos;
             for (pos.getX() = 0; pos.getX() < tileSet.getTileSetSize().getX(); ++pos.getX())
             {
                 for (pos.getY() = 0; pos.getY() < tileSet.getTileSetSize().getY(); ++pos.getY())
@@ -276,7 +276,7 @@ namespace DATABASE
                 setOffsetIfNeeded(sprite.m_Pos);
             }
 
-            void Frame::setOffsetIfNeeded(const Int32Point& offset)
+            void Frame::setOffsetIfNeeded(const GEOMETRY::Point<int32>& offset)
             {
                 m_FrameOffset.getX() = std::min(m_FrameOffset.getX(), offset.getX());
                 m_FrameOffset.getY() = std::min(m_FrameOffset.getY(), offset.getY());
@@ -305,12 +305,12 @@ namespace DATABASE
 
             void MapPrototype::setSizeX(uint32 x)
             {
-                setSize(UInt32Point(x, getSize().getY()), getLayerSize(MAP::LayerType::LAYER_FOREGROUND), getLayerSize(MAP::LayerType::LAYER_BACKGROUND));
+                setSize(GEOMETRY::Point<uint32>(x, getSize().getY()), getLayerSize(MAP::LayerType::LAYER_FOREGROUND), getLayerSize(MAP::LayerType::LAYER_BACKGROUND));
             }
 
             void MapPrototype::setSizeY(uint32 y)
             {
-                setSize(UInt32Point(getSize().getX(), y), getLayerSize(MAP::LayerType::LAYER_FOREGROUND), getLayerSize(MAP::LayerType::LAYER_BACKGROUND));
+                setSize(GEOMETRY::Point<uint32>(getSize().getX(), y), getLayerSize(MAP::LayerType::LAYER_FOREGROUND), getLayerSize(MAP::LayerType::LAYER_BACKGROUND));
             }
 
             void MapPrototype::setLayerSize(uint8 size, MAP::LayerType layer)
@@ -319,7 +319,7 @@ namespace DATABASE
                     layer == MAP::LayerType::LAYER_BACKGROUND ? size : getLayerSize(MAP::LayerType::LAYER_BACKGROUND));
             }
 
-            void MapPrototype::setSize(const UInt32Point& size, uint8 uiForegroundLayerSize, uint8 uiBackgroundLayerSize)
+            void MapPrototype::setSize(const GEOMETRY::Point<uint32>& size, uint8 uiForegroundLayerSize, uint8 uiBackgroundLayerSize)
             {
                 m_Size = size;
                 m_Layer.at(static_cast<uint32>(MAP::LayerType::LAYER_BACKGROUND)) = uiBackgroundLayerSize;

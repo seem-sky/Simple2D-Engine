@@ -44,8 +44,8 @@ void MapViewerScene::setLayerType(MAP::LayerType layerType)
 
 void MapViewerScene::drawTiles(QPainter* painter, const QRectF& rect, MAP::LayerType currentLayer) const
 {
-    const UInt32Point startTile(calculateStartTile(rect.toRect()));
-    const UInt32Point endTile(calculateEndTile(rect.toRect(), startTile));
+    const GEOMETRY::Point<uint32> startTile(calculateStartTile(rect.toRect()));
+    const GEOMETRY::Point<uint32> endTile(calculateEndTile(rect.toRect(), startTile));
 
     for (uint32 layerIndex = 0; layerIndex < getMapData().getMapLayer().getLayerSize(currentLayer); ++layerIndex)
     {
@@ -94,8 +94,8 @@ void MapViewerScene::_drawDarkRect(QPainter* painter, const QRectF& rect) const
 
 void MapViewerScene::_drawGrid(QPainter* painter, const QRectF& rect) const
 {
-    const UInt32Point startTile(calculateStartTile(rect.toRect()) * TILE_SIZE);
-    const UInt32Point endTile(calculateEndTile(rect.toRect(), startTile) * TILE_SIZE);
+    const GEOMETRY::Point<uint32> startTile(calculateStartTile(rect.toRect()) * TILE_SIZE);
+    const GEOMETRY::Point<uint32> endTile(calculateEndTile(rect.toRect(), startTile) * TILE_SIZE);
     QVector<QPoint> pointPairs;
     for (uint32 x = startTile.getX(); x < endTile.getX(); x += TILE_SIZE)
     {
@@ -115,7 +115,7 @@ void MapViewerScene::addWorldObject(const QPoint pos, uint32 ID)
     if (auto pWorldObject = getDatabaseMgr().getWorldObjectDatabase()->getOriginalPrototype(ID))
     {
         // push into ObjectContainer
-        auto pInfo = getMapData().getWorldObjectInfoData().addWorldObject(ID, Int32Point(pos.x(), pos.y()), MAP::MAP_DATA::MapObjectLayer::MIDDLE);
+        auto pInfo = getMapData().getWorldObjectInfoData().addWorldObject(ID, GEOMETRY::Point<int32>(pos.x(), pos.y()), MAP::MAP_DATA::MapObjectLayer::MIDDLE);
 
         // setup viewer
         VisualViewer viewer;

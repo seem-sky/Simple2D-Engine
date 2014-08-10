@@ -16,7 +16,7 @@ namespace MAP
         /*#####
         # BrushFactory
         #####*/
-        BrushPtr BrushFactory::createBrush(const BrushInfo& info, const DATABASE::DatabaseMgr& DBMgr, Layer& mapLayer, const UInt32Point& pos)
+        BrushPtr BrushFactory::createBrush(const BrushInfo& info, const DATABASE::DatabaseMgr& DBMgr, Layer& mapLayer, const GEOMETRY::Point<uint32>& pos)
         {
             // create area
             AREA::AreaPtr pArea;

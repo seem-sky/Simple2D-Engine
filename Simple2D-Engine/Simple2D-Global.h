@@ -1,7 +1,7 @@
 #ifndef SIMPLE_2D_GLOBAL_H
 #define SIMPLE_2D_GLOBAL_H
 
-#include <Typedefs.h>
+#include <Global.h>
 
 namespace DATABASE
 {
@@ -37,4 +37,7 @@ namespace MAP
         LAYER_FOREGROUND
     };
 }
+
+const uint32 TILE_SIZE = 32;
+
 #endif

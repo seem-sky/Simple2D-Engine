@@ -11,10 +11,10 @@ protected:
     virtual void drawForeground(QPainter* painter, const QRectF& rect);
 
     virtual void drawTiles(QPainter* painter, const QRectF& rect, MAP::LayerType layer) const;
-    void drawLayer(QPainter* painter, const UInt32Point startTile, const UInt32Point endTile, const MAP::Layer& mapLayer) const;
+    void drawLayer(QPainter* painter, const GEOMETRY::Point<uint32> startTile, const GEOMETRY::Point<uint32> endTile, const MAP::Layer& mapLayer) const;
 
-    UInt32Point calculateStartTile(const QRect& rect) const;
-    UInt32Point calculateEndTile(const QRect& rect, const UInt32Point& startTile) const;
+    GEOMETRY::Point<uint32> calculateStartTile(const QRect& rect) const;
+    GEOMETRY::Point<uint32> calculateEndTile(const QRect& rect, const GEOMETRY::Point<uint32>& startTile) const;
 
 public:
     MapViewScene(uint32 mapID, const DATABASE::DatabaseMgr& DBMgr);

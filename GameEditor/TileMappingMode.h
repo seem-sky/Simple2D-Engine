@@ -26,7 +26,7 @@ namespace MAPPING_MODE
     {
     private:
         void _finishBrush();
-        bool _isTileAlreadySet(const MAP::Layer &layer, const UInt32Point& tilePos, const MAP::BRUSH::BrushInfo& brushInfo);
+        bool _isTileAlreadySet(const MAP::Layer &layer, const GEOMETRY::Point<uint32>& tilePos, const MAP::BRUSH::BrushInfo& brushInfo);
 
     public:
         Tile(const BRUSH::MapEditorWidgetBrush& brushWidget);

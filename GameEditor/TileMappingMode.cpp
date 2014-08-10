@@ -43,7 +43,7 @@ namespace MAPPING_MODE
                 auto& layer = pViewer->getScene()->getMapData().getMapLayer().getLayer(pViewer->getScene()->getLayerType(), pViewer->getScene()->getLayerIndex() - 1);
                 m_pCurrentBrush = m_BrushWidget.createBrush(brush, layer);
                 auto pos = pViewer->mapToScene(pEvent->pos());
-                UInt32Point tilePos(pos.x() / TILE_SIZE, pos.y() / TILE_SIZE);
+                GEOMETRY::Point<uint32> tilePos(pos.x() / TILE_SIZE, pos.y() / TILE_SIZE);
 
                 auto brushInfo = m_BrushWidget.getBrushInfo(brush);
 
@@ -67,7 +67,7 @@ namespace MAPPING_MODE
         }
     }
 
-    bool Tile::_isTileAlreadySet(const MAP::Layer &layer, const UInt32Point& tilePos, const MAP::BRUSH::BrushInfo& brushInfo)
+    bool Tile::_isTileAlreadySet(const MAP::Layer &layer, const GEOMETRY::Point<uint32>& tilePos, const MAP::BRUSH::BrushInfo& brushInfo)
     {
         try
         {
@@ -92,7 +92,7 @@ namespace MAPPING_MODE
             {
                 auto& layer = pViewer->getScene()->getMapData().getMapLayer().getLayer(pViewer->getScene()->getLayerType(), pViewer->getScene()->getLayerIndex() - 1);
                 auto pos = pViewer->mapToScene(pEvent->pos());
-                UInt32Point tilePos(pos.x() / TILE_SIZE, pos.y() / TILE_SIZE);
+                GEOMETRY::Point<uint32> tilePos(pos.x() / TILE_SIZE, pos.y() / TILE_SIZE);
 
                 // think thats not so good ?!
                 //// if already same tile, return

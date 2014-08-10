@@ -4,6 +4,7 @@
 #include <QtWidgets/QWidget>
 #include <Brush.h>
 #include <BrushInfo.h>
+#include <array>
 
 namespace MAP
 {
