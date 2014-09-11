@@ -42,8 +42,7 @@ MapEditorModuleTileSelection::MapEditorModuleTileSelection(DATABASE::DatabaseMgr
 void MapEditorModuleTileSelection::clearSelection()
 {
     m_SelectedItems.fill(nullptr);
-    m_pWidgetBrush->setBrushInfo(BRUSH::BrushIndex::BRUSH_LEFT, MAP::BRUSH::BrushInfo());
-    m_pWidgetBrush->setBrushInfo(BRUSH::BrushIndex::BRUSH_RIGHT, MAP::BRUSH::BrushInfo());
+    m_pWidgetBrush->clear();
 }
 
 void MapEditorModuleTileSelection::setup()

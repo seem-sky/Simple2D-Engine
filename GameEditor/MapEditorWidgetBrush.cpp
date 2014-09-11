@@ -23,11 +23,9 @@ MapEditorWidgetBrush::MapEditorWidgetBrush(const DATABASE::DatabaseMgr& DBMgr, Q
 
     m_pBrushes.at(static_cast<uint32>(BrushIndex::BRUSH_LEFT))->setText("left brush");
     m_pBrushes.at(static_cast<uint32>(BrushIndex::BRUSH_RIGHT))->setText("right brush");
-}
 
-const MAP::BRUSH::BrushInfo& MapEditorWidgetBrush::getBrushInfo(BrushIndex brush) const
-{
-    return m_pBrushes.at(static_cast<uint32>(brush))->getBrushInfo();
+    for (auto pModule : m_pBrushes)
+        connect(pModule, SIGNAL(changeBrush(const MapEditorModuleBrush*)), this, SLOT(onBrushChanged(const MapEditorModuleBrush*)));
 }
 
 void MapEditorWidgetBrush::onSelectionChanged(BrushIndex brush, MAP::BRUSH::BrushInfo::Type type, uint32 ID)
@@ -41,17 +39,17 @@ void MapEditorWidgetBrush::onSelectionChanged(BrushIndex brush, MAP::BRUSH::Brus
     }
 }
 
-void MapEditorWidgetBrush::setBrushInfo(BrushIndex brush, const MAP::BRUSH::BrushInfo& brushInfo)
+void MapEditorWidgetBrush::onBrushChanged(const MapEditorModuleBrush* pModule)
 {
-    m_pBrushes.at(static_cast<uint32>(brush))->setBrushInfo(brushInfo);
+    for (uint8 i = 0; i < m_pBrushes.size(); ++i)
+    {
+        if (m_pBrushes.at(i) == pModule)
+            emit changeBrushInfo(static_cast<BRUSH::BrushIndex>(i), m_pBrushes.at(i)->getBrushInfo());
+    }
 }
 
-void MapEditorWidgetBrush::onBrushInfoRequested(BRUSH::BrushIndex brush, MAP::BRUSH::BrushInfo& brushInfo)
+void MapEditorWidgetBrush::clear()
 {
-    brushInfo = m_pBrushes.at(static_cast<uint32>(brush))->getBrushInfo();
-}
-
-MAP::BRUSH::BrushPtr MapEditorWidgetBrush::createBrush(BrushIndex brushIndex, MAP::Layer& layer) const
-{
-    return MAP::BRUSH::BrushFactory::createBrush(getBrushInfo(brushIndex), getDatabaseMgr(), layer);
+    for (auto pModule : m_pBrushes)
+        pModule->clear();
 }

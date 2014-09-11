@@ -3,33 +3,35 @@
 
 #include "MappingModeInterface.h"
 #include "Brush.h"
+#include "BrushInfo.h"
+#include <array>
 
 namespace BRUSH
 {
-    class MapEditorWidgetBrush;
     enum class BrushIndex;
 }
 
 namespace MAP
 {
     class Layer;
+}
 
-    namespace BRUSH
-    {
-        class BrushInfo;
-    }
+namespace DATABASE
+{
+    class DatabaseMgr;
 }
 
 namespace MAPPING_MODE
 {
     class Tile : public Interface
     {
+        Q_OBJECT
     private:
         void _finishBrush();
         bool _isTileAlreadySet(const MAP::Layer &layer, const GEOMETRY::Point<uint32>& tilePos, const MAP::BRUSH::BrushInfo& brushInfo);
 
     public:
-        Tile(const BRUSH::MapEditorWidgetBrush& brushWidget);
+        Tile(const DATABASE::DatabaseMgr& DBMgr, QObject* pParent = nullptr);
 
         void press(MapViewerScene* pScene, QPoint pos, Qt::MouseButton button);
         void release(MapViewerScene* pScene, QPoint pos, Qt::MouseButton button);
@@ -40,10 +42,16 @@ namespace MAPPING_MODE
 
         static BRUSH::BrushIndex brushIndexFromMouseButton(Qt::MouseButton button);
 
+    public slots:
+        void onBrushInfoChanged(BRUSH::BrushIndex brush, MAP::BRUSH::BrushInfo info);
+
     private:
+        const DATABASE::DatabaseMgr& m_DBMgr;
+
         MAP::BRUSH::BrushPtr m_pCurrentBrush;
         MapViewerScene* m_pCurrentScene = nullptr;
-        const BRUSH::MapEditorWidgetBrush& m_BrushWidget;
+
+        std::array<MAP::BRUSH::BrushInfo, 2> m_BrushInfos;
     };
 }
 #endif

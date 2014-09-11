@@ -5,10 +5,10 @@
 #include "PresentationMappingMode.h"
 #include "moc_MappingObject.h"
 
-MappingObject::MappingObject(QWidget* pParent, const BRUSH::MapEditorWidgetBrush& brushWidget, const MapEditorModuleWorldObjects& objectWidget)
+MappingObject::MappingObject(const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent)
     : QObject(pParent)
 {
-    m_MappingModes.push_back(MappingModePtr(new MAPPING_MODE::Tile(brushWidget)));
+    m_MappingModes.push_back(MappingModePtr(new MAPPING_MODE::Tile(DBMgr)));
     m_MappingModes.push_back(MappingModePtr(new MAPPING_MODE::Object()));
     m_MappingModes.push_back(MappingModePtr(new MAPPING_MODE::Presentation()));
     setMappingMode(MAPPING_MODE::Type::TILE_MAPPING);

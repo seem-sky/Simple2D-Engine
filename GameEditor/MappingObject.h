@@ -6,18 +6,17 @@
 #include "MappingModeInterface.h"
 #include <QtCore/QStringList>
 
-class MapEditorModuleWorldObjects;
 class MapViewerScene;
-namespace BRUSH
+namespace DATABASE
 {
-    class MapEditorWidgetBrush;
+    class DatabaseMgr;
 }
 
 class MappingObject : public QObject
 {
     Q_OBJECT
 public:
-    MappingObject(QWidget* pParent, const BRUSH::MapEditorWidgetBrush& brushWidget, const MapEditorModuleWorldObjects& objectWidget);
+    MappingObject(const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent);
 
     void setMappingMode(MAPPING_MODE::Type mode);
     MAPPING_MODE::Type getMappingModeType() const;

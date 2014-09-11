@@ -16,6 +16,13 @@ MapEditorModuleBrush::MapEditorModuleBrush(const DATABASE::DatabaseMgr& DBMgr, Q
     connect(m_pBrushType, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(_onBrushTypeChanged(const QString&)));
 }
 
+void MapEditorModuleBrush::clear()
+{
+    m_BrushInfo = MAP::BRUSH::BrushInfo();
+    _update();
+    emit changeBrush(this);
+}
+
 void MapEditorModuleBrush::setText(const QString& text)
 {
     m_pText->setText(text);
@@ -74,6 +81,7 @@ void MapEditorModuleBrush::setBrushInfo(const BrushInfo& brushInfo)
 {
     m_BrushInfo = brushInfo;
     _update();
+    emit changeBrush(this);
 }
 
 void MapEditorModuleBrush::_onBrushTypeChanged(const QString& text)
@@ -82,4 +90,5 @@ void MapEditorModuleBrush::_onBrushTypeChanged(const QString& text)
         m_BrushInfo.setMode(MAP::BRUSH::BrushInfo::Mode::FILL);
     else
         m_BrushInfo.setMode(MAP::BRUSH::BrushInfo::Mode::PEN);
+    emit changeBrush(this);
 }

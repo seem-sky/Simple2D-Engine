@@ -312,7 +312,7 @@
     <moc_header Include="MapViewerScene.h" />
     <moc_header Include="MapEditorWidgetObjectMapping.h" />
     <ClInclude Include="PresentationMappingMode.h" />
-    <ClInclude Include="TileMappingMode.h" />
+    <moc_header Include="TileMappingMode.h" />
     <moc_header Include="ObjectMappingMode.h" />
     <moc_header Include="AbstractPrototypeTable.h" />
     <moc_header Include="MapEditorDialogMapSettings.h" />

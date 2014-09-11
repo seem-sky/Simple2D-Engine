@@ -1,12 +1,14 @@
 #include "TileMappingMode.h"
+#include "moc_TileMappingMode.h"
 #include "MapViewerScene.h"
-#include "MapEditorWidgetBrush.h"
 #include "MapException.h"
 #include <DatabaseMgr.h>
+#include <BrushFactory.h>
+#include "MapEditorWidgetBrush.h"
 
 namespace MAPPING_MODE
 {
-    Tile::Tile(const BRUSH::MapEditorWidgetBrush& brushWidget) : m_BrushWidget(brushWidget)
+    Tile::Tile(const DATABASE::DatabaseMgr& DBMgr, QObject* pParent) : m_DBMgr(DBMgr), Interface(pParent)
     {}
 
     void Tile::_finishBrush()
@@ -41,15 +43,13 @@ namespace MAPPING_MODE
             try
             {
                 auto& layer = pScene->getMapData().getMapLayer().getLayer(pScene->getLayerType(), pScene->getLayerIndex() - 1);
-                m_pCurrentBrush = m_BrushWidget.createBrush(brush, layer);
+                m_pCurrentBrush = MAP::BRUSH::BrushFactory::createBrush(m_BrushInfos.at(static_cast<std::size_t>(brush)), m_DBMgr, layer);
                 GEOMETRY::Point<uint32> tilePos(pos.x() / TILE_SIZE, pos.y() / TILE_SIZE);
 
-                auto brushInfo = m_BrushWidget.getBrushInfo(brush);
-
                 // if tileSet mapping, set brush size equal tileSet size
-                if (brushInfo.getType() == MAP::BRUSH::BrushInfo::Type::TILE_SET)
+                if (m_BrushInfos.at(static_cast<std::size_t>(brush)).getType() == MAP::BRUSH::BrushInfo::Type::TILE_SET)
                 {
-                    if (auto pTileSet = m_BrushWidget.getDatabaseMgr().getTileSetDatabase()->getOriginalPrototype(brushInfo.getID()))
+                    if (auto pTileSet = m_DBMgr.getTileSetDatabase()->getOriginalPrototype(m_BrushInfos.at(static_cast<std::size_t>(brush)).getID()))
                         m_pCurrentBrush->setBrushSize(pTileSet->getTileSetSize());
                 }
 
@@ -94,5 +94,10 @@ namespace MAPPING_MODE
         }
         else
             _finishBrush();
+    }
+
+    void Tile::onBrushInfoChanged(BRUSH::BrushIndex brush, MAP::BRUSH::BrushInfo info)
+    {
+        m_BrushInfos.at(static_cast<std::size_t>(brush)) = info;
     }
 }

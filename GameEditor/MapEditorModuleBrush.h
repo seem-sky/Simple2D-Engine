@@ -16,6 +16,7 @@ namespace BRUSH
     public:
         MapEditorModuleBrush(const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent = nullptr);
 
+        void clear();
         void setText(const QString& text);
 
         void setBrushInfo(const MAP::BRUSH::BrushInfo& brushInfo);
@@ -23,6 +24,9 @@ namespace BRUSH
 
     private slots:
         void _onBrushTypeChanged(const QString& text);
+
+    signals:
+        void changeBrush(const MapEditorModuleBrush* module);
 
     private:
         const DATABASE::DatabaseMgr& m_DBMgr;

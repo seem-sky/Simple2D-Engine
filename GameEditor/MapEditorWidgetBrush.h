@@ -32,16 +32,14 @@ namespace BRUSH
     public:
         MapEditorWidgetBrush(const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent = nullptr);
 
-        const MAP::BRUSH::BrushInfo& getBrushInfo(BrushIndex brush) const;
-        void setBrushInfo(BrushIndex brush, const MAP::BRUSH::BrushInfo& brushInfo);
-
-        MAP::BRUSH::BrushPtr createBrush(BrushIndex brushIndex, MAP::Layer& layer) const;
-
-        const DATABASE::DatabaseMgr& getDatabaseMgr() const { return m_DBMgr; }
+        void clear();
 
     public slots:
         void onSelectionChanged(BRUSH::BrushIndex brush, MAP::BRUSH::BrushInfo::Type type, uint32 ID);
-        void onBrushInfoRequested(BRUSH::BrushIndex brush, MAP::BRUSH::BrushInfo& brushInfo);
+        void onBrushChanged(const MapEditorModuleBrush* pModule);
+
+    signals:
+        void changeBrushInfo(BRUSH::BrushIndex brush, MAP::BRUSH::BrushInfo info);
 
     private:
         std::array<MapEditorModuleBrush*, 2> m_pBrushes;

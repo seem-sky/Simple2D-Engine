@@ -3,8 +3,8 @@
 #include "AutoTileCache.h"
 #include "MapViewer.h"
 #include <QtWidgets/QComboBox>
-#include "MapEditorWidgetObjectMapping.h"
 #include <WorldObjectInfo.h>
+#include "MapEditorWidgetObjectMapping.h"
 
 MapEditorWidgetEditor::MapEditorWidgetEditor(DATABASE::DatabaseMgr& databaseMgr, QWidget* pParent) : QWidget(pParent), m_DatabaseMgr(databaseMgr),
     // modules
@@ -15,7 +15,7 @@ MapEditorWidgetEditor::MapEditorWidgetEditor(DATABASE::DatabaseMgr& databaseMgr,
 
     // others
     m_pMappingMode(new QComboBox(this)),
-    m_MappingObject(this, *m_pModuleTileSelection->getBrushWidget(), *m_pModuleWorldObjects)
+    m_MappingObject(databaseMgr, this)
 {
     // setup mapping mode QComboBox
     m_pMappingMode->addItems(m_MappingObject.getMappingModeNames());
@@ -45,6 +45,10 @@ MapEditorWidgetEditor::MapEditorWidgetEditor(DATABASE::DatabaseMgr& databaseMgr,
     connect(m_pModuleMapTree, SIGNAL(editMap(uint32)), m_pModuleContent, SLOT(onMapEdited(uint32)));
 
     connect(this, SIGNAL(changeMappingMode(MAPPING_MODE::Type)), m_pModuleContent, SLOT(onMappingModeChanged(MAPPING_MODE::Type)));
+
+    // connect Tiles
+    connect(m_pModuleTileSelection->getBrushWidget(), SIGNAL(changeBrushInfo(BRUSH::BrushIndex, MAP::BRUSH::BrushInfo)),
+        m_MappingObject.getMappingMode(MAPPING_MODE::Type::TILE_MAPPING), SLOT(onBrushInfoChanged(BRUSH::BrushIndex, MAP::BRUSH::BrushInfo)));
 
     // connect WorldObject
     connect(m_pModuleWorldObjects, SIGNAL(changeIndex(int32)), this, SLOT(onWorldObjectIndexChanged(int32)));

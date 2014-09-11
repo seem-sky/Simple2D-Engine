@@ -4,9 +4,6 @@
 #include "MappingModeInterface.h"
 #include <WorldObjectInfo.h>
 
-class MapEditorModuleWorldObjects;
-class MapViewItem;
-
 namespace MAPPING_MODE
 {
     class Object : public Interface
