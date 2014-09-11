@@ -13,6 +13,7 @@
 #include <geometry/Point.h>
 #include "PrototypeAnimationModule.h"
 #include "Simple2D-Global.h"
+#include "WorldObjectInfo.h"
 
 namespace DATABASE
 {
@@ -527,14 +528,6 @@ namespace DATABASE
             const char MAP_FILE_ENDING[] = ".map";
             const char MAP_FOLDER[] = "/Maps/";
 
-            enum MapDirection
-            {
-                DIRECTION_UP,
-                DIRECTION_RIGHT,
-                DIRECTION_DOWN,
-                DIRECTION_LEFT
-            };
-
             enum MapObjectLayer
             {
                 LAYER_LOWER,
@@ -545,14 +538,14 @@ namespace DATABASE
             // map objects
             struct MapObject
             {
-                MapObject() : m_ObjectID(0), m_GUID(0), m_Direction(DIRECTION_DOWN), m_Layer(LAYER_MIDDLE) {}
+                MapObject() : m_ObjectID(0), m_GUID(0), m_Direction(MAP::MAP_DATA::MapDirection::DOWN), m_Layer(LAYER_MIDDLE) {}
 
                 bool isEmpty() const { return !m_GUID && !m_ObjectID; }
 
                 uint32 m_ObjectID;
                 uint32 m_GUID;
                 GEOMETRY::Point<int32> m_Position;
-                MapDirection m_Direction;
+                MAP::MAP_DATA::MapDirection m_Direction;
                 MapObjectLayer m_Layer;
             };
             typedef Container<MapObject> MapObjectContainer;
@@ -560,10 +553,6 @@ namespace DATABASE
 
             class MapPrototype : public Prototype
             {
-                //friend class MapDatabase;
-                //friend class MAP::MapMgr;
-                //friend class MapDatabaseXMLReader;
-
             private:
                 void _clearTiles();
 

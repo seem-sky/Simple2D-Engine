@@ -31,10 +31,9 @@ namespace MAPPING_MODE
     public:
         Tile(const BRUSH::MapEditorWidgetBrush& brushWidget);
 
-        void press(MapViewer* pViewer, const QMouseEvent* pEvent);
-
-        void release(MapViewer* pViewer, const QMouseEvent* pEvent);
-        void move(MapViewer* pViewer, const QMouseEvent* pEvent);
+        void press(MapViewerScene* pScene, QPoint pos, Qt::MouseButton button);
+        void release(MapViewerScene* pScene, QPoint pos, Qt::MouseButton button);
+        void move(MapViewerScene* pScene, QPoint pos);
 
         Type getModeType() const { return Type::TILE_MAPPING; }
         QString getModeName() const { return "tile mapping"; }
@@ -43,7 +42,7 @@ namespace MAPPING_MODE
 
     private:
         MAP::BRUSH::BrushPtr m_pCurrentBrush;
-        MapViewer* m_pMapViewer = nullptr;
+        MapViewerScene* m_pCurrentScene = nullptr;
         const BRUSH::MapEditorWidgetBrush& m_BrushWidget;
     };
 }

@@ -119,6 +119,14 @@ void DatabaseModuleTooltipList::leaveEvent(QEvent* pEvent)
     pEvent->accept();
 }
 
+void DatabaseModuleTooltipList::currentChanged(const QModelIndex& current, const QModelIndex& previous)
+{
+    QTreeView::currentChanged(current, previous);
+    if (!current.isValid())
+        emit changeIndex(-1);
+    emit changeIndex(current.row());
+}
+
 
 /*#####
 # Tile drag&drop

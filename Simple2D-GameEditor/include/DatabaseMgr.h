@@ -32,7 +32,7 @@ namespace DATABASE
         "/Game/AutoTileDatabase.xml",
         "/Game/SpriteDatabase.xml",
         "/Game/AnimationDatabase.xml",
-        "/Game/ObjectAnimationTypeDatabase.xml",
+        "/Game/AnimationTypeDatabase.xml",
         "/Game/WorldObjectDatabase.xml",
         "/Game/LocalsDatabase.xml",
         "/Game/MapDatabase.xml"

@@ -120,3 +120,12 @@
 /*.suo
 /GameEditor/x64/Release
 /GameLauncher/x64/Release
+/GameEditor/UI/UI_MapEditorWidgetObjectMapping.h
+/GameEditor/moc_MapEditorWidgetObjectMapping.h
+/GameEditor/moc_MapViewerScene.h
+/GameEditor/moc_ObjectMappingMode.h
+/GameEditor64-1.psess
+/GameEditor64.psess
+/Performance2.psess
+/Performance3.psess
+/Simple2D-GameEditor/*.lastcodeanalysissucceeded

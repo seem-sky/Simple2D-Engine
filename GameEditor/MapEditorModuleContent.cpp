@@ -3,10 +3,11 @@
 #include "Project.h"
 #include <QtWidgets/QMessageBox>
 #include "MapViewer.h"
+#include "MapViewerScene.h"
 #include <DatabaseMgr.h>
 
-MapEditorModuleContent::MapEditorModuleContent(DATABASE::DatabaseMgr& databaseMgr, QWidget* pWidget) : QWidget(pWidget), Ui_MapEditorModuleContent(),
-    m_DBMgr(databaseMgr)
+MapEditorModuleContent::MapEditorModuleContent(const MappingObject& mappingObject, DATABASE::DatabaseMgr& databaseMgr, QWidget* pWidget) : QWidget(pWidget),
+m_DBMgr(databaseMgr), m_MappingObject(mappingObject), Ui_MapEditorModuleContent()
 {
     setupUi(this);
 
@@ -27,14 +28,17 @@ void MapEditorModuleContent::_onTabCloseRequested(int index)
     if (auto pTab = dynamic_cast<MapViewer*>(m_pMapTabs->widget(index)))
     {
         // ask for saving before closing tab
-        if (pTab->hasChanges())
+        if (pTab->hasChanged())
         {
-            QString mapName = pTab->getMapName();
-            switch (QMessageBox::question(this, "close " + mapName, mapName + " has been changed. Do you want to save changes?",
-                QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Yes))
+            if (auto pMap = m_DBMgr.getMapDatabase()->getOriginalPrototype(pTab->getMapID()))
             {
-            case QMessageBox::Yes: pTab->saveMap(); break;  // save map
-            case QMessageBox::Cancel: return;               // do nothing
+                QString mapName = pMap->getName();
+                switch (QMessageBox::question(this, "close " + mapName, mapName + " has been changed. Do you want to save changes?",
+                    QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Yes))
+                {
+                case QMessageBox::Yes: pTab->saveMap(); break;  // save map
+                case QMessageBox::Cancel: return;               // do nothing
+                }
             }
         }
         m_pMapTabs->removeTab(index);
@@ -56,7 +60,7 @@ void MapEditorModuleContent::_onCurrentChanged(int index)
         m_pZoom->setValue(pTab->getZoom());
         m_pZoomLabel->setText("zoom: " + QString::number(pTab->getZoom()) + "%");
 
-        m_pRevert->setEnabled(pTab->hasChanges());
+        m_pRevert->setEnabled(pTab->hasChanged());
 
         m_pShowGrid->setCheckState(pTab->isGridActive() ? Qt::Checked : Qt::Unchecked);
         pTab->getLayerType() == MAP::LayerType::LAYER_BACKGROUND ? m_pLayerBackground->setChecked(true) : m_pLayerForeground->setChecked(true);
@@ -102,14 +106,18 @@ void MapEditorModuleContent::onMapOpened(uint32 mapID)
     if (auto pTab = getTab(mapID))
         return;
 
-    auto pNewMapViewer = new MapViewer(mapID, m_DBMgr, this);
+    auto pNewMapViewer = new MapViewer(mapID, m_MappingObject, m_DBMgr, this);
     try
     {
         pNewMapViewer->loadMap();
-        m_pMapTabs->addTab(pNewMapViewer, pNewMapViewer->getMapName());
+        m_pMapTabs->addTab(pNewMapViewer, m_DBMgr.getMapDatabase()->getOriginalPrototype(mapID)->getName());
         m_pMapTabs->setCurrentWidget(pNewMapViewer);
-        emit registerTab(pNewMapViewer);
-
+        connect(pNewMapViewer->scene(), SIGNAL(onMousePress(MapViewerScene*, QPoint, Qt::MouseButton)), &m_MappingObject,
+            SLOT(press(MapViewerScene*, QPoint, Qt::MouseButton)));
+        connect(pNewMapViewer->scene(), SIGNAL(onMouseRelease(MapViewerScene*, QPoint, Qt::MouseButton)), &m_MappingObject,
+            SLOT(release(MapViewerScene*, QPoint, Qt::MouseButton)));
+        connect(pNewMapViewer->scene(), SIGNAL(onMouseMove(MapViewerScene*, QPoint)), &m_MappingObject,
+            SLOT(move(MapViewerScene*, QPoint)));
         connect(pNewMapViewer, SIGNAL(changed(MapViewer*)), this, SLOT(_onMapChanged(MapViewer*)));
     }
     catch (const std::bad_alloc& e)
@@ -133,10 +141,15 @@ void MapEditorModuleContent::onMapEdited(uint32 mapID)
 {
     if (auto pTab = getTab(mapID))
     {
-        pTab->updateMap();
+        pTab->reloadMap();
         // get new maximum layer size
         _onLayerTypeChanged();
     }
+}
+
+void MapEditorModuleContent::onMappingModeChanged(MAPPING_MODE::Type mode)
+{
+    m_pLayer->setEnabled(mode == MAPPING_MODE::Type::TILE_MAPPING);
 }
 
 MapViewer* MapEditorModuleContent::getTab(uint32 mapID)
@@ -154,6 +167,7 @@ MapViewer* MapEditorModuleContent::getTab(uint32 mapID)
 
 void MapEditorModuleContent::_onMapChanged(MapViewer* pMapViewer)
 {
-    m_pMapTabs->setTabText(m_pMapTabs->indexOf(pMapViewer), pMapViewer->getMapName() + (pMapViewer->hasChanges() ? "*" : ""));
-    m_pRevert->setEnabled(pMapViewer->hasChanges());
+    m_pMapTabs->setTabText(m_pMapTabs->indexOf(pMapViewer), m_DBMgr.getMapDatabase()->getOriginalPrototype(pMapViewer->getMapID())->getName()
+        + (pMapViewer->hasChanged() ? "*" : ""));
+    m_pRevert->setEnabled(pMapViewer->hasChanged());
 }

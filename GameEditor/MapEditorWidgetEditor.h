@@ -21,7 +21,11 @@ private slots:
     void _onMappingModeChanged(int index);
 
 public slots:
-    void onRegisterTab(MapViewer* pTab);
+    void onWorldObjectIndexChanged(int32 index);
+
+signals:
+    void changeMappingMode(MAPPING_MODE::Type mode);
+    void changeWorldObjectID(uint32 ID);
 
 private:
     DATABASE::DatabaseMgr& m_DatabaseMgr;
@@ -32,10 +36,10 @@ private:
     MapEditorModuleMapTree* m_pModuleMapTree = nullptr;
     MapEditorModuleWorldObjects* m_pModuleWorldObjects = nullptr;
 
-    MappingObject m_MappingObject;
-
     // others
     QComboBox* m_pMappingMode = nullptr;
+
+    MappingObject m_MappingObject;
 };
 
 #endif

@@ -4,11 +4,11 @@ using namespace MAP;
 using namespace OBJECT;
 using namespace DATABASE::PROTOTYPE;
 
-WorldObject::WorldObject(const DATABASE::DatabaseMgr& DBMgr, uint32 GUID, uint32 ID) : Object(GUID), m_Direction(MAP_STRUCTURE::DIRECTION_DOWN), m_DBMgr(DBMgr)
+WorldObject::WorldObject(const DATABASE::DatabaseMgr& DBMgr, uint32 GUID, uint32 ID) : Object(GUID), m_Direction(MAP::MAP_DATA::MapDirection::DOWN), m_DBMgr(DBMgr)
 {
 }
 
-void WorldObject::_setupFromPrototype(const WORLD_OBJECT::WorldObjectPrototype* pWorldObject)
+void WorldObject::_setupFromPrototype(const DATABASE::PROTOTYPE::WORLD_OBJECT::WorldObjectPrototype* pWorldObject)
 {
     if (!pWorldObject)
         assert("No empty prototypes allowed!");
@@ -19,7 +19,7 @@ void WorldObject::_setupFromPrototype(const WORLD_OBJECT::WorldObjectPrototype* 
         auto& info = pWorldObject->getAnimationModule().getAnimationInfo(i);
         m_Animations.insert(std::make_pair(info.m_AnimationTypeID, info.m_ID));
     }
-    _setCurrentAnimation(m_Direction);
+    _setCurrentAnimation(static_cast<uint32>(m_Direction));
 
     //other infos
     m_BoundingRect = pWorldObject->getBoundingRect();

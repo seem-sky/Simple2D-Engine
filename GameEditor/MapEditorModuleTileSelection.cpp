@@ -58,7 +58,7 @@ void MapEditorModuleTileSelection::setup()
 
 void MapEditorModuleTileSelection::onItemClicked(BRUSH::BrushIndex brush, AbstractPixmapWidget* pWidget)
 {
-    // move selection from previosu selected widget to new one;
+    // move selection from previous selected widget to new one;
     // items in m_pModuleTileSets doesn´t have a AbstractPixmapWidget, so only store nullptr
     auto selection = AbstractPixmapWidget::SELECTION_LEFT;
     if (brush == BRUSH::BrushIndex::BRUSH_RIGHT)
@@ -71,3 +71,14 @@ void MapEditorModuleTileSelection::onItemClicked(BRUSH::BrushIndex brush, Abstra
     m_SelectedItems.at(static_cast<uint32>(brush)) = pWidget;
 }
 
+void MapEditorModuleTileSelection::hideEvent(QHideEvent* pEvent)
+{
+    m_pWidgetBrush->hide();
+    QWidget::hideEvent(pEvent);
+}
+
+void MapEditorModuleTileSelection::showEvent(QShowEvent* pEvent)
+{
+    m_pWidgetBrush->show();
+    QWidget::showEvent(pEvent);
+}

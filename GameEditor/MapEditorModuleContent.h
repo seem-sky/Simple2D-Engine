@@ -4,6 +4,7 @@
 #include <QtWidgets/QWidget>
 #include "UI/UI_MapEditorModuleContent.h"
 #include <Global.h>
+#include "MappingObject.h"
 
 namespace DATABASE
 {
@@ -16,7 +17,7 @@ class MapEditorModuleContent : public QWidget, Ui_MapEditorModuleContent
 {
     Q_OBJECT
 public:
-    MapEditorModuleContent(DATABASE::DatabaseMgr& databaseMgr, QWidget* pWidget = nullptr);
+    MapEditorModuleContent(const MappingObject& mappingObject, DATABASE::DatabaseMgr& databaseMgr, QWidget* pWidget = nullptr);
 
     MapViewer* getTab(uint32 mapID);
 
@@ -36,11 +37,11 @@ public slots:
     void onMapClosed(uint32 mapID);
     void onMapEdited(uint32 mapID);
 
-signals:
-    void registerTab(MapViewer* pTab);
+    void onMappingModeChanged(MAPPING_MODE::Type mode);
 
 private:
     DATABASE::DatabaseMgr& m_DBMgr;
+    const MappingObject& m_MappingObject;
 };
 
 #endif

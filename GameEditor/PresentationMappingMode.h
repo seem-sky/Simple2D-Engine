@@ -8,9 +8,9 @@ namespace MAPPING_MODE
     class Presentation : public Interface
     {
     public:
-        void press(MapViewer* pViewer, const QMouseEvent* pEvent) {}
-        void release(MapViewer* pViewer, const QMouseEvent* pEvent) {}
-        void move(MapViewer* pViewer, const QMouseEvent* pEvent) {}
+        void press(MapViewerScene* pScene, QPoint pos, Qt::MouseButton button) {}
+        void release(MapViewerScene* pScene, QPoint pos, Qt::MouseButton button) {}
+        void move(MapViewerScene* pScene, QPoint pos) {}
 
         Type getModeType() const { return Type::PRESENTATION; }
 

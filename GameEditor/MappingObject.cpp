@@ -3,22 +3,23 @@
 #include "TileMappingMode.h"
 #include "ObjectMappingMode.h"
 #include "PresentationMappingMode.h"
+#include "moc_MappingObject.h"
 
 MappingObject::MappingObject(QWidget* pParent, const BRUSH::MapEditorWidgetBrush& brushWidget, const MapEditorModuleWorldObjects& objectWidget)
     : QObject(pParent)
 {
     m_MappingModes.push_back(MappingModePtr(new MAPPING_MODE::Tile(brushWidget)));
-    m_MappingModes.push_back(MappingModePtr(new MAPPING_MODE::Object(objectWidget)));
+    m_MappingModes.push_back(MappingModePtr(new MAPPING_MODE::Object()));
     m_MappingModes.push_back(MappingModePtr(new MAPPING_MODE::Presentation()));
     setMappingMode(MAPPING_MODE::Type::TILE_MAPPING);
 }
 
-const MAPPING_MODE::Interface* MappingObject::_getMode(MAPPING_MODE::Type mode) const
+const MAPPING_MODE::Interface* MappingObject::getMappingMode(MAPPING_MODE::Type mode) const
 {
     return m_MappingModes.at(static_cast<std::size_t>(mode)).get();
 }
 
-MAPPING_MODE::Interface* MappingObject::_getMode(MAPPING_MODE::Type mode)
+MAPPING_MODE::Interface* MappingObject::getMappingMode(MAPPING_MODE::Type mode)
 {
     return m_MappingModes.at(static_cast<std::size_t>(mode)).get();
 }
@@ -46,17 +47,17 @@ QStringList MappingObject::getMappingModeNames() const
     return list;
 }
 
-void MappingObject::press(MapViewer* pViewer, const QMouseEvent* pEvent)
+void MappingObject::press(MapViewerScene* pScene, QPoint pos, Qt::MouseButton button)
 {
-    m_pCurrentMappingMode->press(pViewer, pEvent);
+    m_pCurrentMappingMode->press(pScene, pos, button);
 }
 
-void MappingObject::release(MapViewer* pViewer, const QMouseEvent* pEvent)
+void MappingObject::release(MapViewerScene* pScene, QPoint pos, Qt::MouseButton button)
 {
-    m_pCurrentMappingMode->release(pViewer, pEvent);
+    m_pCurrentMappingMode->release(pScene, pos, button);
 }
 
-void MappingObject::move(MapViewer* pViewer, const QMouseEvent* pEvent)
+void MappingObject::move(MapViewerScene* pScene, QPoint pos)
 {
-    m_pCurrentMappingMode->move(pViewer, pEvent);
+    m_pCurrentMappingMode->move(pScene, pos);
 }

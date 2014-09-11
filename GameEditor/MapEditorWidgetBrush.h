@@ -1,7 +1,7 @@
 #ifndef MAP_EDITOR_WIDGET_BRUSH_H
 #define MAP_EDITOR_WIDGET_BRUSH_H
 
-#include <QtWidgets/QWidget>
+#include "ToolWidget.h"
 #include <Brush.h>
 #include <BrushInfo.h>
 #include <array>
@@ -26,15 +26,9 @@ namespace BRUSH
         BRUSH_RIGHT
     };
 
-    class MapEditorWidgetBrush : public QWidget
+    class MapEditorWidgetBrush : public ToolWidget
     {
         Q_OBJECT
-    private:
-        void _updateOpacity();
-
-    protected:
-        void changeEvent(QEvent* pEvent);
-
     public:
         MapEditorWidgetBrush(const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent = nullptr);
 
@@ -44,7 +38,6 @@ namespace BRUSH
         MAP::BRUSH::BrushPtr createBrush(BrushIndex brushIndex, MAP::Layer& layer) const;
 
         const DATABASE::DatabaseMgr& getDatabaseMgr() const { return m_DBMgr; }
-
 
     public slots:
         void onSelectionChanged(BRUSH::BrushIndex brush, MAP::BRUSH::BrushInfo::Type type, uint32 ID);

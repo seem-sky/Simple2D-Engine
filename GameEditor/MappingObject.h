@@ -2,13 +2,12 @@
 #define MAPPING_OBJECT_H
 
 #include <QtCore/QObject>
-#include <QtGui/QMouseEvent>
 #include <memory>
 #include "MappingModeInterface.h"
 #include <QtCore/QStringList>
 
 class MapEditorModuleWorldObjects;
-class MapViewer;
+class MapViewerScene;
 namespace BRUSH
 {
     class MapEditorWidgetBrush;
@@ -16,21 +15,21 @@ namespace BRUSH
 
 class MappingObject : public QObject
 {
-private:
-    const MAPPING_MODE::Interface* _getMode(MAPPING_MODE::Type mode) const;
-    MAPPING_MODE::Interface* _getMode(MAPPING_MODE::Type mode);
-
+    Q_OBJECT
 public:
     MappingObject(QWidget* pParent, const BRUSH::MapEditorWidgetBrush& brushWidget, const MapEditorModuleWorldObjects& objectWidget);
 
     void setMappingMode(MAPPING_MODE::Type mode);
     MAPPING_MODE::Type getMappingModeType() const;
-
-    void press(MapViewer* pViewer, const QMouseEvent* pEvent);
-    void release(MapViewer* pViewer, const QMouseEvent* pEvent);
-    void move(MapViewer* pViewer, const QMouseEvent* pEvent);
-
     QStringList getMappingModeNames() const;
+
+    const MAPPING_MODE::Interface* getMappingMode(MAPPING_MODE::Type mode) const;
+    MAPPING_MODE::Interface* getMappingMode(MAPPING_MODE::Type mode);
+
+public slots:
+    void press(MapViewerScene* pScene, QPoint pos, Qt::MouseButton button);
+    void release(MapViewerScene* pScene, QPoint pos, Qt::MouseButton button);
+    void move(MapViewerScene* pScene, QPoint pos);
 
 private:
     typedef std::unique_ptr<MAPPING_MODE::Interface> MappingModePtr;

@@ -257,12 +257,15 @@
     <ClCompile Include="MapEditorModuleWorldObjects.cpp" />
     <ClCompile Include="MapEditorWidgetBrush.cpp" />
     <ClCompile Include="MapEditorWidgetEditor.cpp" />
+    <ClCompile Include="MapEditorWidgetObjectMapping.cpp" />
     <ClCompile Include="MappingObject.cpp" />
     <ClCompile Include="MapViewer.cpp" />
+    <ClCompile Include="MapViewerScene.cpp" />
     <ClCompile Include="Project.cpp" />
     <ClCompile Include="TexturePrototypeFrame.cpp" />
     <ClCompile Include="TileMappingMode.cpp" />
     <ClCompile Include="ObjectMappingMode.cpp" />
+    <ClCompile Include="ToolWidget.cpp" />
   </ItemGroup>
   <ItemGroup>
     <moc_header Include="MainWindow.h">
@@ -302,11 +305,15 @@
     <compile_QT_Files Include="UI\MapEditorDialogMapSettings.ui" />
     <compile_QT_Files Include="UI\MapEditorModuleBrush.ui" />
     <compile_QT_Files Include="UI\MapEditorModuleContent.ui" />
+    <compile_QT_Files Include="UI\MapEditorWidgetObjectMapping.ui" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ToolWidget.h" />
+    <moc_header Include="MapViewerScene.h" />
+    <moc_header Include="MapEditorWidgetObjectMapping.h" />
     <ClInclude Include="PresentationMappingMode.h" />
     <ClInclude Include="TileMappingMode.h" />
-    <ClInclude Include="ObjectMappingMode.h" />
+    <moc_header Include="ObjectMappingMode.h" />
     <moc_header Include="AbstractPrototypeTable.h" />
     <moc_header Include="MapEditorDialogMapSettings.h" />
     <moc_header Include="MapEditorModuleContent.h" />
@@ -321,9 +328,9 @@
     <moc_header Include="MapEditorModuleTileSelection.h" />
     <moc_header Include="MapEditorModuleTileSets.h" />
     <moc_header Include="MapEditorWidgetBrush.h" />
-    <moc_header Include="MapViewer.h" />
+    <ClInclude Include="MapViewer.h" />
     <ClInclude Include="MapEditorModuleWorldObjects.h" />
-    <ClInclude Include="MappingObject.h" />
+    <moc_header Include="MappingObject.h" />
     <ClInclude Include="MappingModeInterface.h" />
     <ClInclude Include="TexturePrototypeFrame.h" />
     <moc_header Include="DatabaseDialogResize.h" />

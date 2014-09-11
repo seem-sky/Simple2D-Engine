@@ -2,93 +2,33 @@
 #define MAP_VIEWER_H
 
 #include <QtWidgets/QGraphicsView>
-#include <QtWidgets/QGraphicsItem>
-#include <MapViewScene.h>
 #include <Global.h>
 #include <array>
+#include <geometry/Point.h>
+#include <Simple2D-Global.h>
+
+class MappingObject;
+class MapViewerScene;
 
 namespace DATABASE
 {
     class DatabaseMgr;
 }
 
-namespace MAP
-{
-    namespace BRUSH
-    {
-        namespace REVERT
-        {
-            class BrushRevert;
-        }
-    }
-}
-
-class MappingObject;
-
-/*#####
-# MapViewerScene
-#####*/
-class MapViewerScene : public MapViewScene
-{
-private:
-    void _drawGrid(QPainter* painter, const QRectF& rect) const;
-    void _drawDarkRect(QPainter* painter, const QRectF& rect) const;
-
-protected:
-    void drawForeground(QPainter* painter, const QRectF& rect);
-
-    void drawTiles(QPainter* painter, const QRectF& rect, MAP::LayerType currentLayer) const;
-
-    void keyPressEvent(QKeyEvent* pKeyEvent);
-
-public:
-    MapViewerScene(uint32 mapID, const DATABASE::DatabaseMgr& DBMgr);
-
-    void showGrid(bool show);
-    bool isGridActive() const { return m_ShowGrid; }
-
-    void setLayerIndex(uint32 layerIndex);
-    uint32 getLayerIndex() const { return m_LayerIndex.at(static_cast<uint32>(m_LayerType)); }
-    void setLayerType(MAP::LayerType layerType);
-    MAP::LayerType getLayerType() const { return m_LayerType; }
-
-    inline void setMappingObject(MappingObject* pMappingObject) { m_pMappingObject = pMappingObject; }
-    inline MappingObject* getMappingObject() const { return m_pMappingObject; }
-
-    // WorldObjects
-    void addWorldObject(const QPoint pos, uint32 ID);
-
-private:
-    bool m_ShowGrid;
-
-    std::array<uint32, 2> m_LayerIndex;
-    MAP::LayerType m_LayerType;
-
-    MappingObject* m_pMappingObject = nullptr;
-};
-
 /*#####
 # MapViewer
 #####*/
 class MapViewer : public QGraphicsView
 {
-    Q_OBJECT
-private:
-    void _drawTiles(const QPoint& pos);
-    void _drawLayer() const;
-    GEOMETRY::Point<uint32> _calculateStartTile();
-
-protected:
-    void mousePressEvent(QMouseEvent* pEvent);
-    void mouseReleaseEvent(QMouseEvent* pEvent);
-    void mouseMoveEvent(QMouseEvent* pEvent);
-
 public:
-    MapViewer(uint32 mapID, const DATABASE::DatabaseMgr& DBMgr, QWidget* pWidget = nullptr);
+    MapViewer(uint32 mapID, const MappingObject& mappingObject, const DATABASE::DatabaseMgr& DBMgr, QWidget* pWidget = nullptr);
+
+    bool hasChanged() const;
+    void revertLast() const;
 
     void saveMap();
     void loadMap();
-    void updateMap();
+    void reloadMap();
 
     void setZoom(uint32 zoom);
     uint32 getZoom() const;
@@ -103,23 +43,8 @@ public:
 
     uint32 getMapID() const;
 
-    QString getMapName() const;
-
-    void addBrushRevert(MAP::BRUSH::REVERT::BrushRevert revert);
-    void revertLast();
-    inline bool hasChanges() const { return !m_Reverts.empty(); }
-
-    MapViewerScene* getScene() const { return dynamic_cast<MapViewerScene*>(scene()); }
-
     // WorldObjects
     void addWorldObject(const QPoint pos, uint32 ID);
-
-signals:
-    void changed(MapViewer* pViewer);
-
-private:
-    const DATABASE::DatabaseMgr& m_DBMgr;
-    std::vector<MAP::BRUSH::REVERT::BrushRevert> m_Reverts;
 };
 
 #endif

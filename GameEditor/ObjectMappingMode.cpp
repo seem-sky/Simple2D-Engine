@@ -1,43 +1,33 @@
 #include "ObjectMappingMode.h"
-#include "MapViewer.h"
-#include "MapEditorModuleWorldObjects.h"
-#include <MapViewItem.h>
+#include "MapViewerScene.h"
+#include "moc_ObjectMappingMode.h"
 
 namespace MAPPING_MODE
 {
-    Object::Object(const MapEditorModuleWorldObjects& objectWidget) : m_ObjectWidget(objectWidget)
-    {}
-
-    void Object::press(MapViewer* pViewer, const QMouseEvent* pEvent)
+    void Object::press(MapViewerScene* pScene, QPoint pos, Qt::MouseButton button)
     {
-        //_deselectItem();
-        //if (!pViewer || !pEvent)
-        //    return;
-
-        //auto pScene = pViewer->getScene();
-        //if (!pScene)
-        //    return;
-
-        //auto scenePos = pViewer->mapToScene(pEvent->pos());
-        //if (auto pItem = dynamic_cast<MapViewItem*>(pScene->itemAt(scenePos, QTransform())))
-        //{
-        //    m_pSelectedItem = pItem;
-        //    m_pSelectedItem->setSelected(true);
-        //    m_pSelectedItem->setFocus(Qt::MouseFocusReason);
-        //}
     }
 
-    void Object::release(MapViewer* pViewer, const QMouseEvent* pEvent)
+    void Object::release(MapViewerScene* pScene, QPoint pos, Qt::MouseButton button)
     {
-        if (!pViewer || !pEvent)
+        if (!pScene)
             return;
 
-        auto selectedItems = pViewer->getScene()->selectedItems();
-        if (selectedItems.isEmpty())
-            pViewer->addWorldObject(pViewer->mapToScene(pEvent->pos()).toPoint(), m_ObjectWidget.getSelectedID());
+        if (pScene->selectedItems().isEmpty())
+            pScene->addWorldObject(m_ID, pos);
     }
 
-    void Object::move(MapViewer* pViewer, const QMouseEvent* pEvent)
+    void Object::move(MapViewerScene* pScene, QPoint pos)
     {
+    }
+
+    void Object::onDirectionChanged(MAP::MAP_DATA::MapDirection dir)
+    {
+        m_Direction = dir;
+    }
+
+    void Object::onIDChanged(uint32 ID)
+    {
+        m_ID = ID;
     }
 }

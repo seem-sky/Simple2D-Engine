@@ -58,7 +58,7 @@ protected:
 
 public:
     VisualViewer(QWidget *pParent = nullptr);
-    void setDatabaseManager(const DATABASE::DatabaseMgr* pDBMgr);
+    void setDatabaseMgr(const DATABASE::DatabaseMgr* pDBMgr);
 
     void clear();
 

@@ -16,6 +16,7 @@ private:
 
 protected:
     virtual void leaveEvent(QEvent* pEvent);
+    virtual void currentChanged(const QModelIndex& current, const QModelIndex& previous);
 
 public:
     DatabaseModuleTooltipList(QWidget* pParent = nullptr);
@@ -41,6 +42,9 @@ public:
 private slots:
     void _showTooltip();
     void _onItemEntered(const QModelIndex& index);
+
+signals:
+    void changeIndex(int32 index);
 
 private:
     QWidget* m_pToolTip;

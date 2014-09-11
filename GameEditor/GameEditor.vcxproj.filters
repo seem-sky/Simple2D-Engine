@@ -106,9 +106,6 @@
     <Filter Include="Map Editor\Modules\Brush">
       <UniqueIdentifier>{3df57d72-18f0-4b1c-96db-af0c1afedba2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Map Editor\Widgets\Brush">
-      <UniqueIdentifier>{e558ed2b-bf3d-4d95-ae22-bb9d7ddb7e5b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Map Editor\Modules\ObjectSelection">
       <UniqueIdentifier>{ee79f19d-d553-4603-92ab-bc4e9aaec55c}</UniqueIdentifier>
     </Filter>
@@ -141,6 +138,15 @@
     </Filter>
     <Filter Include="Map Editor\Modules\MappingObject\MappingMode">
       <UniqueIdentifier>{2dcc81c1-1e0d-4112-92c0-6b1bc3cee911}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map Editor\Widgets\Tools">
+      <UniqueIdentifier>{8a040b4d-8e72-4eb0-9d18-e716753d5250}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map Editor\Widgets\Tools\Brush">
+      <UniqueIdentifier>{e558ed2b-bf3d-4d95-ae22-bb9d7ddb7e5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map Editor\Widgets\Tools\WorldObject">
+      <UniqueIdentifier>{2e4e8f22-21f1-465a-8ae8-d2fdea9d353f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -244,7 +250,7 @@
       <Filter>EditorCore\GraphicsSpriteItem</Filter>
     </ClCompile>
     <ClCompile Include="MapEditorWidgetBrush.cpp">
-      <Filter>Map Editor\Widgets\Brush</Filter>
+      <Filter>Map Editor\Widgets\Tools\Brush</Filter>
     </ClCompile>
     <ClCompile Include="MapEditorModuleBrush.cpp">
       <Filter>Map Editor\Modules\Brush</Filter>
@@ -284,6 +290,15 @@
     </ClCompile>
     <ClCompile Include="ObjectMappingMode.cpp">
       <Filter>Map Editor\Modules\MappingObject\MappingMode</Filter>
+    </ClCompile>
+    <ClCompile Include="MapViewerScene.cpp">
+      <Filter>Map Editor\Modules\Content</Filter>
+    </ClCompile>
+    <ClCompile Include="MapEditorWidgetObjectMapping.cpp">
+      <Filter>Map Editor\Widgets\Tools\WorldObject</Filter>
+    </ClCompile>
+    <ClCompile Include="ToolWidget.cpp">
+      <Filter>Map Editor\Widgets\Tools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -325,6 +340,9 @@
     </compile_QT_Files>
     <compile_QT_Files Include="UI\MapEditorModuleBrush.ui">
       <Filter>Map Editor\Modules\Brush</Filter>
+    </compile_QT_Files>
+    <compile_QT_Files Include="UI\MapEditorWidgetObjectMapping.ui">
+      <Filter>Map Editor\Widgets\Tools\WorldObject</Filter>
     </compile_QT_Files>
   </ItemGroup>
   <ItemGroup>
@@ -385,7 +403,7 @@
       <Filter>Map Editor\Modules\MapTree</Filter>
     </moc_header>
     <moc_header Include="MapEditorWidgetBrush.h">
-      <Filter>Map Editor\Widgets\Brush</Filter>
+      <Filter>Map Editor\Widgets\Tools\Brush</Filter>
     </moc_header>
     <moc_header Include="MapEditorModuleTileSets.h">
       <Filter>Map Editor\Modules\TileTabs</Filter>
@@ -476,6 +494,15 @@
     </ClInclude>
     <ClInclude Include="PresentationMappingMode.h">
       <Filter>Map Editor\Modules\MappingObject\MappingMode</Filter>
+    </ClInclude>
+    <ClInclude Include="MapViewerScene.h">
+      <Filter>Map Editor\Modules\Content</Filter>
+    </ClInclude>
+    <ClInclude Include="MapEditorWidgetObjectMapping.h">
+      <Filter>Map Editor\Widgets\Tools\WorldObject</Filter>
+    </ClInclude>
+    <ClInclude Include="ToolWidget.h">
+      <Filter>Map Editor\Widgets\Tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -2,6 +2,7 @@
 #define OBJECT_MAPPING_MODE_H
 
 #include "MappingModeInterface.h"
+#include <WorldObjectInfo.h>
 
 class MapEditorModuleWorldObjects;
 class MapViewItem;
@@ -10,21 +11,25 @@ namespace MAPPING_MODE
 {
     class Object : public Interface
     {
+        Q_OBJECT
     private:
         void _deselectItem();
 
     public:
-        Object(const MapEditorModuleWorldObjects& objectWidget);
-
-        void press(MapViewer* pViewer, const QMouseEvent* pEvent);
-        void release(MapViewer* pViewer, const QMouseEvent* pEvent);
-        void move(MapViewer* pViewer, const QMouseEvent* pEvent);
+        void press(MapViewerScene* pScene, QPoint pos, Qt::MouseButton button);
+        void release(MapViewerScene* pScene, QPoint pos, Qt::MouseButton button);
+        void move(MapViewerScene* pScene, QPoint pos);
 
         Type getModeType() const { return Type::OBJECT_MAPPING; }
         QString getModeName() const { return "object mapping"; }
 
+    public slots:
+        void onDirectionChanged(MAP::MAP_DATA::MapDirection dir);
+        void onIDChanged(uint32 ID);
+
     private:
-        const MapEditorModuleWorldObjects& m_ObjectWidget;
+        uint32 m_ID = 0;
+        MAP::MAP_DATA::MapDirection m_Direction = MAP::MAP_DATA::MapDirection::DOWN;
     };
 }
 #endif

@@ -2,12 +2,25 @@
 #include <QtGui/QKeyEvent>
 #include <QtWidgets/QGraphicsSceneMouseEvent>
 #include <QtWidgets/QGraphicsScene>
+#include <QtGui/QPainter>
 
 MapViewItem::MapViewItem(MAP::MAP_DATA::WorldObjectInfo& info, const QPixmap& pixmap) : QGraphicsPixmapItem(pixmap), m_WorldObjectInfo(info)
 {
     setFlag(ItemSendsScenePositionChanges);
     setFlag(ItemIsMovable);
     setFlag(ItemIsSelectable);
+
+    m_Flags.setFlag(Flags::DRAW_BOUNDING_RECT);
+}
+
+void MapViewItem::paint(QPainter* pPainter, const QStyleOptionGraphicsItem* pOption, QWidget* pWidget /* = 0 */)
+{
+    QGraphicsPixmapItem::paint(pPainter, pOption, pWidget);
+    if (m_Flags.hasFlag(Flags::DRAW_BOUNDING_RECT))
+    {
+        pPainter->setPen(Qt::red);
+        pPainter->drawRect(m_BoundingRect.getLeft(), m_BoundingRect.getTop(), m_BoundingRect.getWidth(), m_BoundingRect.getHeight());
+    }
 }
 
 QPoint MapViewItem::_checkMove(QPoint moveTo) const

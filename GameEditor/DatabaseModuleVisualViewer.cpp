@@ -101,7 +101,7 @@ void DatabaseModuleVisualViewer::setDatabaseMgr(const DATABASE::DatabaseMgr* pDB
         {
             pViewerItem->setAnimationTypeModel(m_pAnimationTypeModel);
             if (auto pViewer = pViewerItem->getVisualViewer())
-                pViewer->setDatabaseManager(pDBMgr);
+                pViewer->setDatabaseMgr(pDBMgr);
         }
     }
 }
@@ -112,7 +112,7 @@ void DatabaseModuleVisualViewer::insertVisualViewer(uint32 index)
     m_pVisualViewerList->setRowHeight(index, 180);
     auto pViewer = new VisualViewerItem(m_pVisualViewerList, index < MIN_WORLD_OBJECT_POSE);
     m_pVisualViewerList->setCellWidget(index, 0, pViewer);
-    pViewer->getVisualViewer()->setDatabaseManager(m_pDBMgr);
+    pViewer->getVisualViewer()->setDatabaseMgr(m_pDBMgr);
     if (m_pAnimationTypeModel)
         pViewer->setAnimationTypeModel(m_pAnimationTypeModel);
 }

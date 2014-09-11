@@ -3,6 +3,7 @@
 
 #include <QtWidgets/QGraphicsPixmapItem>
 #include <geometry/Rectangle.h>
+#include <FlagManager.h>
 #include "WorldObjectInfo.h"
 
 class MapViewItem : public QGraphicsPixmapItem
@@ -32,8 +33,21 @@ public:
     GEOMETRY::Rectangle<int32> getWorldObjectBoundingRect() const { return m_BoundingRect; }
     void setWorldObjectBoundingRect(const GEOMETRY::Rectangle<int32>& rect) { m_BoundingRect = rect; }
 
+    void paint(QPainter* pPainter, const QStyleOptionGraphicsItem* pOption, QWidget* pWidget = 0);
+
+    // flags
+    enum class Flags
+    {
+        NONE,
+        DRAW_BOUNDING_RECT
+    };
+
+    FlagManager<Flags>& getFlags() { return m_Flags; }
+    const FlagManager<Flags>& getFlags() const { return m_Flags; }
+
 private:
     MAP::MAP_DATA::WorldObjectInfo& m_WorldObjectInfo;
     GEOMETRY::Rectangle<int32> m_BoundingRect;
+    FlagManager<Flags> m_Flags;
 };
 #endif

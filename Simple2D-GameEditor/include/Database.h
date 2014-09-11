@@ -24,6 +24,8 @@ namespace DATABASE
         virtual uint32 getSize() const = 0;
         virtual void resize(uint32 newSize) = 0;
         virtual uint32 getMaximumSize() const = 0;
+
+        virtual void setupStandardEntrys() = 0;
     };
     typedef std::unique_ptr<IDatabase> IDatabasePtr;
 
@@ -46,6 +48,7 @@ namespace DATABASE
             }
         }
 
+        virtual void setupStandardEntrys() {}
         inline void clear() { Container::clear(); }
 
         void resize(uint32 uiSize)
@@ -157,6 +160,7 @@ namespace DATABASE
         AnimationTypeDatabase(const AnimationTypeDatabase& other);
 
         void clear();
+        void setupStandardEntrys();
 
         //void setPrototype(AnimationTypePrototype* pItem);
         //const AnimationTypePrototype* getPrototype(uint32 ID) const;

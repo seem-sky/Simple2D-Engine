@@ -3,12 +3,14 @@
 #include "AutoTileCache.h"
 #include "MapViewer.h"
 #include <QtWidgets/QComboBox>
+#include "MapEditorWidgetObjectMapping.h"
+#include <WorldObjectInfo.h>
 
 MapEditorWidgetEditor::MapEditorWidgetEditor(DATABASE::DatabaseMgr& databaseMgr, QWidget* pParent) : QWidget(pParent), m_DatabaseMgr(databaseMgr),
     // modules
     m_pModuleTileSelection(new MapEditorModuleTileSelection(m_DatabaseMgr, this)),
     m_pModuleMapTree(new MapEditorModuleMapTree(m_DatabaseMgr, pParent)),
-    m_pModuleContent(new MapEditorModuleContent(m_DatabaseMgr, this)),
+    m_pModuleContent(new MapEditorModuleContent(m_MappingObject, m_DatabaseMgr, this)),
     m_pModuleWorldObjects(new MapEditorModuleWorldObjects(m_DatabaseMgr, this)),
 
     // others
@@ -42,7 +44,14 @@ MapEditorWidgetEditor::MapEditorWidgetEditor(DATABASE::DatabaseMgr& databaseMgr,
     connect(m_pModuleMapTree, SIGNAL(openMap(uint32)), m_pModuleContent, SLOT(onMapOpened(uint32)));
     connect(m_pModuleMapTree, SIGNAL(editMap(uint32)), m_pModuleContent, SLOT(onMapEdited(uint32)));
 
-    connect(m_pModuleContent, SIGNAL(registerTab(MapViewer*)), this, SLOT(onRegisterTab(MapViewer*)));
+    connect(this, SIGNAL(changeMappingMode(MAPPING_MODE::Type)), m_pModuleContent, SLOT(onMappingModeChanged(MAPPING_MODE::Type)));
+
+    // connect WorldObject
+    connect(m_pModuleWorldObjects, SIGNAL(changeIndex(int32)), this, SLOT(onWorldObjectIndexChanged(int32)));
+    connect(m_pModuleWorldObjects->getWorldObjectWidget(), SIGNAL(changeDirection(MAP::MAP_DATA::MapDirection)),
+        m_MappingObject.getMappingMode(MAPPING_MODE::Type::OBJECT_MAPPING), SLOT(onDirectionChanged(MAP::MAP_DATA::MapDirection)));
+    connect(this, SIGNAL(changeWorldObjectID(uint32)),
+        m_MappingObject.getMappingMode(MAPPING_MODE::Type::OBJECT_MAPPING), SLOT(onIDChanged(uint32)));
 }
 
 void MapEditorWidgetEditor::_onMappingModeChanged(int index)
@@ -50,9 +59,7 @@ void MapEditorWidgetEditor::_onMappingModeChanged(int index)
     auto mode = static_cast<MAPPING_MODE::Type>(index);
 
     // first hide all
-    m_pModuleTileSelection->getBrushWidget()->hide();
     m_pModuleTileSelection->hide();
-
     m_pModuleWorldObjects->hide();
 
     // show only the needed widgets
@@ -60,7 +67,6 @@ void MapEditorWidgetEditor::_onMappingModeChanged(int index)
     {
     case MAPPING_MODE::Type::TILE_MAPPING:
         m_pModuleTileSelection->show();
-        m_pModuleTileSelection->getBrushWidget()->show();
         break;
 
     case MAPPING_MODE::Type::OBJECT_MAPPING:
@@ -74,6 +80,7 @@ void MapEditorWidgetEditor::_onMappingModeChanged(int index)
     }
 
     m_MappingObject.setMappingMode(mode);
+    emit changeMappingMode(mode);
 }
 
 void MapEditorWidgetEditor::setup()
@@ -95,7 +102,7 @@ void MapEditorWidgetEditor::projectOpened()
     m_pModuleMapTree->reload();
 }
 
-void MapEditorWidgetEditor::onRegisterTab(MapViewer* pTab)
+void MapEditorWidgetEditor::onWorldObjectIndexChanged(int32 index)
 {
-    pTab->getScene()->setMappingObject(&m_MappingObject);
+    emit changeWorldObjectID(index < 0 ? 0 : index+1);
 }

@@ -9,9 +9,9 @@ namespace MAP
     {
         enum class MapDirection
         {
-            UP,
-            LEFT,
             DOWN,
+            LEFT,
+            UP,
             RIGHT
         };
 

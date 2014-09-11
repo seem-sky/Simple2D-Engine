@@ -157,14 +157,20 @@ AnimationTypeDatabase::AnimationTypeDatabase(const AnimationTypeDatabase& other)
 void AnimationTypeDatabase::clear()
 {
     Database::clear();
-    Database::setPrototype(new ANIMATION::AnimationTypePrototype(MAP_STRUCTURE::DIRECTION_UP+1, "STAND_UP"));
-    Database::setPrototype(new ANIMATION::AnimationTypePrototype(MAP_STRUCTURE::DIRECTION_RIGHT+1, "STAND_RIGHT"));
-    Database::setPrototype(new ANIMATION::AnimationTypePrototype(MAP_STRUCTURE::DIRECTION_DOWN+1, "STAND_DOWN"));
-    Database::setPrototype(new ANIMATION::AnimationTypePrototype(MAP_STRUCTURE::DIRECTION_LEFT+1, "STAND_LEFT"));
-    Database::setPrototype(new ANIMATION::AnimationTypePrototype(5, "WALK_UP"));
-    Database::setPrototype(new ANIMATION::AnimationTypePrototype(6, "WALK_RIGHT"));
-    Database::setPrototype(new ANIMATION::AnimationTypePrototype(7, "WALK_DOWN"));
-    Database::setPrototype(new ANIMATION::AnimationTypePrototype(8, "WALK_LEFT"));
+    setupStandardEntrys();
+}
+
+void AnimationTypeDatabase::setupStandardEntrys()
+{
+    Database::setPrototype(new ANIMATION::AnimationTypePrototype(static_cast<uint32>(MAP::MAP_DATA::MapDirection::DOWN) + 1, "STAND_DOWN"));
+    Database::setPrototype(new ANIMATION::AnimationTypePrototype(static_cast<uint32>(MAP::MAP_DATA::MapDirection::LEFT) + 1, "STAND_LEFT"));
+    Database::setPrototype(new ANIMATION::AnimationTypePrototype(static_cast<uint32>(MAP::MAP_DATA::MapDirection::UP) + 1, "STAND_UP"));
+    Database::setPrototype(new ANIMATION::AnimationTypePrototype(static_cast<uint32>(MAP::MAP_DATA::MapDirection::RIGHT) + 1, "STAND_RIGHT"));
+
+    Database::setPrototype(new ANIMATION::AnimationTypePrototype(5, "WALK_DOWN"));
+    Database::setPrototype(new ANIMATION::AnimationTypePrototype(6, "WALK_LEFT"));
+    Database::setPrototype(new ANIMATION::AnimationTypePrototype(7, "WALK_UP"));
+    Database::setPrototype(new ANIMATION::AnimationTypePrototype(8, "WALK_RIGHT"));
 }
 
 //void AnimationTypeDatabase::setPrototype(AnimationTypePrototype* pItem)

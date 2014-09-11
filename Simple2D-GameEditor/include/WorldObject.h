@@ -5,13 +5,13 @@
 #include "DatabaseMgr.h"
 #include <unordered_map>
 #include "AnimationHolder.h"
+#include "WorldObjectInfo.h"
 
 namespace MAP
 {
     namespace OBJECT
     {
         typedef std::unordered_map<uint32, uint32> UInt32UInt32UMap;
-        typedef DATABASE::PROTOTYPE::MAP_STRUCTURE::MapDirection MapDirection;
         class WorldObject : public Object
         {
         private:
@@ -24,15 +24,15 @@ namespace MAP
             inline const DATABASE::PROTOTYPE::ANIMATION::AnimationPrototype* getCurrentAnimation() const { return m_AnimationHolder.getCurrentAnimation(); }
             inline uint32 getCurrentFrame() const { return m_AnimationHolder.getCurrentFrame(); }
 
-            inline void setDirection(MapDirection direction) { m_Direction = direction; }
-            inline MapDirection getDirection() const { return m_Direction; }
+            inline void setDirection(MAP_DATA::MapDirection direction) { m_Direction = direction; }
+            inline MAP_DATA::MapDirection getDirection() const { return m_Direction; }
 
             virtual void update(uint32 uiDiff);
 
         private:
             ANIMATION::AnimationHolder m_AnimationHolder;
             UInt32UInt32UMap m_Animations;
-            DATABASE::PROTOTYPE::MAP_STRUCTURE::MapDirection m_Direction;
+            MAP_DATA::MapDirection m_Direction;
             GEOMETRY::Rectangle<int32> m_BoundingRect;
             const DATABASE::DatabaseMgr& m_DBMgr;
         };

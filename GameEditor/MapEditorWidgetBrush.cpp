@@ -1,6 +1,5 @@
 #include "MapEditorWidgetBrush.h"
 #include <QtWidgets/QHBoxLayout>
-#include <QtCore/QEvent>
 #include "moc_MapEditorWidgetBrush.h"
 #include <BrushFactory.h>
 #include "MapEditorModuleBrush.h"
@@ -8,15 +7,10 @@
 using namespace BRUSH;
 using namespace MAP::BRUSH;
 
-const qreal INACTIVE_OPACITY = 0.5;
-
-MapEditorWidgetBrush::MapEditorWidgetBrush(const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent) : QWidget(pParent), m_DBMgr(DBMgr)
+MapEditorWidgetBrush::MapEditorWidgetBrush(const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent) : ToolWidget(pParent), m_DBMgr(DBMgr)
 {
-    setWindowFlags(Qt::Tool | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::MSWindowsFixedSizeDialogHint);
+    setWindowFlags(windowFlags() | Qt::MSWindowsFixedSizeDialogHint);
     setWindowTitle("map editor brush");
-
-    setFocusPolicy(Qt::ClickFocus);
-    setWindowOpacity(INACTIVE_OPACITY);
 
     auto pLayout = new QHBoxLayout(this);
     setLayout(pLayout);
@@ -29,17 +23,6 @@ MapEditorWidgetBrush::MapEditorWidgetBrush(const DATABASE::DatabaseMgr& DBMgr, Q
 
     m_pBrushes.at(static_cast<uint32>(BrushIndex::BRUSH_LEFT))->setText("left brush");
     m_pBrushes.at(static_cast<uint32>(BrushIndex::BRUSH_RIGHT))->setText("right brush");
-}
-
-void MapEditorWidgetBrush::changeEvent(QEvent* pEvent)
-{
-    if (pEvent->type() == QEvent::ActivationChange)
-        _updateOpacity();
-}
-
-void MapEditorWidgetBrush::_updateOpacity()
-{
-    setWindowOpacity(isActiveWindow() ? 1 : INACTIVE_OPACITY); 
 }
 
 const MAP::BRUSH::BrushInfo& MapEditorWidgetBrush::getBrushInfo(BrushIndex brush) const

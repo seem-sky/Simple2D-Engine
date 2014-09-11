@@ -119,7 +119,7 @@ void VisualViewer::showGrid(bool show /* = true */)
 		pScene->showGrid(show);
 }
 
-void VisualViewer::setDatabaseManager(const DATABASE::DatabaseMgr* pDBMgr)
+void VisualViewer::setDatabaseMgr(const DATABASE::DatabaseMgr* pDBMgr)
 {
     m_pDBMgr = pDBMgr;
     if (m_pDBMgr)
@@ -132,7 +132,7 @@ void VisualViewer::clear()
     m_AnimationEntry = 0;
 	m_VisualType = MODULE::ANIMATION::VisualType::SPRITE;
     m_uiCurrentFrameIndex = 0;
-    m_DoAnimation = false;
+    stopAnimation();
 }
 
 void VisualViewer::showVisual()
@@ -203,9 +203,9 @@ void VisualViewer::startAnimation()
 {
 	if (m_VisualType == MODULE::ANIMATION::VisualType::ANIMATION)
     {
-        connect(&m_AnimationTimer, SIGNAL(timeout()), this, SLOT(_onFrameExpired()));
         m_DoAnimation = true;
         m_uiCurrentFrameIndex = 0;
+        connect(&m_AnimationTimer, SIGNAL(timeout()), this, SLOT(_onFrameExpired()));
     }
     else
         stopAnimation();

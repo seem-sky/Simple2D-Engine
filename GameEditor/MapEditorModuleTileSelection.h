@@ -10,6 +10,10 @@
 class MapEditorModuleTileSelection : public QTabWidget
 {
     Q_OBJECT
+protected:
+    void hideEvent(QHideEvent* pEvent);
+    void showEvent(QShowEvent* pEvent);
+
 public:
     MapEditorModuleTileSelection(DATABASE::DatabaseMgr& databaseMgr, QWidget* pParent = nullptr);
 

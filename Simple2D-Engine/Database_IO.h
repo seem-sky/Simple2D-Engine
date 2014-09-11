@@ -56,6 +56,7 @@ namespace DATABASE
                         break;
                     }
                 }
+                m_pDB->setupStandardEntrys();
             }
 
         private:
