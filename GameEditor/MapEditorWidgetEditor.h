@@ -22,6 +22,7 @@ private slots:
 
 public slots:
     void onWorldObjectIndexChanged(int32 index);
+    void onSaveChanges();
 
 signals:
     void changeMappingMode(MAPPING_MODE::Type mode);

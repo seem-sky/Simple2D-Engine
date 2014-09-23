@@ -25,6 +25,7 @@ public:
 
     bool hasChanged() const;
     void revertLast() const;
+    void clearReverts() const;
 
     void saveMap();
     void loadMap();

@@ -21,7 +21,7 @@ MainWindow::MainWindow(QMainWindow* pParent) : QMainWindow(pParent), Ui_MainWind
 
     connect(this, SIGNAL(projectLoadDone()), m_pMapEditor, SLOT(_projectOpened()));
     connect(openDatabase, SIGNAL(triggered()), this, SLOT(_openDatabase()));
-    connect(this, SIGNAL(saveProject()), m_pMapEditor, SLOT(_saveChanges()));
+    connect(this, SIGNAL(saveProject()), m_pMapEditor, SLOT(onSaveChanges()));
     connect(actionNew, SIGNAL(triggered()), this, SLOT(_newProject()));
     connect(actionLoad, SIGNAL(triggered()), this, SLOT(_loadProject()));
     connect(actionSave, SIGNAL(triggered()), this, SLOT(_saveProject()));

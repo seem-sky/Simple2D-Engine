@@ -110,3 +110,8 @@ void MapEditorWidgetEditor::onWorldObjectIndexChanged(int32 index)
 {
     emit changeWorldObjectID(index < 0 ? 0 : index+1);
 }
+
+void MapEditorWidgetEditor::onSaveChanges()
+{
+    m_pModuleContent->saveMaps();
+}

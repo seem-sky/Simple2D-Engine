@@ -35,6 +35,12 @@ void MapViewer::revertLast() const
         return pScene->revertLast();
 }
 
+void MapViewer::clearReverts() const
+{
+    if (auto pScene = dynamic_cast<MapViewerScene*>(scene()))
+        return pScene->clearReverts();
+}
+
 void MapViewer::loadMap()
 {
     if (auto pScene = dynamic_cast<MapViewerScene*>(scene()))
@@ -49,7 +55,10 @@ void MapViewer::loadMap()
 void MapViewer::saveMap()
 {
     if (auto pScene = dynamic_cast<MapViewerScene*>(scene()))
+    {
         pScene->getMapData().save();
+        pScene->clearReverts();
+    }
 }
 
 void MapViewer::reloadMap()

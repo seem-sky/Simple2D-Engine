@@ -21,6 +21,8 @@ public:
 
     MapViewer* getTab(uint32 mapID);
 
+    void saveMaps();
+
 private slots:
     void _onCurrentChanged(int index);
     void _onLayerChanged(int value);
@@ -29,7 +31,7 @@ private slots:
     void _onGridShowChanged(int state);
     void _onRevertPressed();
 
-    void _onMapChanged(MapViewer* pMapViewer);
+    void _onMapChanged(uint32 mapID);
     void _onTabCloseRequested(int index);
 
 public slots:

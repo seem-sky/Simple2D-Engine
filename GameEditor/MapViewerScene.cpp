@@ -274,6 +274,15 @@ void MapViewerScene::revertLast()
     emit changed(getMapData().getMapID());
 }
 
+void MapViewerScene::clearReverts()
+{
+    if (!hasChanged())
+        return;
+
+    m_Reverts.clear();
+    emit changed(getMapData().getMapID());
+}
+
 void MapViewerScene::addBrushRevert(MAP::BRUSH::REVERT::BrushRevert revert)
 {
     MAP::BRUSH::REVERT::BrushRevertInfo info(getLayerType(), getLayerIndex() - 1);

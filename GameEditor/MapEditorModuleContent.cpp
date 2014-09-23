@@ -118,7 +118,7 @@ void MapEditorModuleContent::onMapOpened(uint32 mapID)
             SLOT(release(MapViewerScene*, QPoint, Qt::MouseButton)));
         connect(pNewMapViewer->scene(), SIGNAL(onMouseMove(MapViewerScene*, QPoint)), &m_MappingObject,
             SLOT(move(MapViewerScene*, QPoint)));
-        connect(pNewMapViewer, SIGNAL(changed(MapViewer*)), this, SLOT(_onMapChanged(MapViewer*)));
+        connect(pNewMapViewer->scene(), SIGNAL(changed(uint32)), this, SLOT(_onMapChanged(uint32)));
     }
     catch (const std::bad_alloc& e)
     {
@@ -165,9 +165,24 @@ MapViewer* MapEditorModuleContent::getTab(uint32 mapID)
     return nullptr;
 }
 
-void MapEditorModuleContent::_onMapChanged(MapViewer* pMapViewer)
+void MapEditorModuleContent::_onMapChanged(uint32 mapID)
 {
-    m_pMapTabs->setTabText(m_pMapTabs->indexOf(pMapViewer), m_DBMgr.getMapDatabase()->getOriginalPrototype(pMapViewer->getMapID())->getName()
-        + (pMapViewer->hasChanged() ? "*" : ""));
-    m_pRevert->setEnabled(pMapViewer->hasChanged());
+    if (auto pViewer = getTab(mapID))
+    {
+        m_pMapTabs->setTabText(m_pMapTabs->indexOf(pViewer), m_DBMgr.getMapDatabase()->getOriginalPrototype(pViewer->getMapID())->getName()
+            + (pViewer->hasChanged() ? "*" : ""));
+        m_pRevert->setEnabled(pViewer->hasChanged());
+    }
+}
+
+void MapEditorModuleContent::saveMaps()
+{
+    for (int32 i = 0; i < m_pMapTabs->count(); ++i)
+    {
+        if (auto pTab = dynamic_cast<MapViewer*>(m_pMapTabs->widget(i)))
+        {
+            if (pTab->hasChanged())
+                pTab->saveMap();
+        }
+    }
 }

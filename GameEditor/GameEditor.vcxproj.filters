@@ -414,9 +414,6 @@
     <moc_header Include="MapEditorModuleBrush.h">
       <Filter>Map Editor\Modules\Brush</Filter>
     </moc_header>
-    <moc_header Include="MapViewer.h">
-      <Filter>Map Editor\Modules\Content</Filter>
-    </moc_header>
     <moc_header Include="MapEditorWidgetEditor.h">
       <Filter>Map Editor\Widgets\MapEditor</Filter>
     </moc_header>
@@ -431,6 +428,13 @@
     </moc_header>
     <moc_header Include="DeactivatedTabWidget.h">
       <Filter>EditorCore\DeactivatedTab</Filter>
+    </moc_header>
+    <moc_header Include="MapEditorWidgetObjectMapping.h" />
+    <moc_header Include="TileMappingMode.h" />
+    <moc_header Include="ObjectMappingMode.h" />
+    <moc_header Include="MappingObject.h" />
+    <moc_header Include="MapViewerScene.h">
+      <Filter>Map Editor\Modules\Content</Filter>
     </moc_header>
   </ItemGroup>
   <ItemGroup>
@@ -480,29 +484,17 @@
     <ClInclude Include="DatabaseDialogChoseColor.h">
       <Filter>Database\Dialogs\ChoseColor</Filter>
     </ClInclude>
-    <ClInclude Include="MappingObject.h">
-      <Filter>Map Editor\Modules\MappingObject</Filter>
-    </ClInclude>
     <ClInclude Include="MappingModeInterface.h">
-      <Filter>Map Editor\Modules\MappingObject\MappingMode</Filter>
-    </ClInclude>
-    <ClInclude Include="TileMappingMode.h">
-      <Filter>Map Editor\Modules\MappingObject\MappingMode</Filter>
-    </ClInclude>
-    <ClInclude Include="ObjectMappingMode.h">
       <Filter>Map Editor\Modules\MappingObject\MappingMode</Filter>
     </ClInclude>
     <ClInclude Include="PresentationMappingMode.h">
       <Filter>Map Editor\Modules\MappingObject\MappingMode</Filter>
     </ClInclude>
-    <ClInclude Include="MapViewerScene.h">
-      <Filter>Map Editor\Modules\Content</Filter>
-    </ClInclude>
-    <ClInclude Include="MapEditorWidgetObjectMapping.h">
-      <Filter>Map Editor\Widgets\Tools\WorldObject</Filter>
-    </ClInclude>
     <ClInclude Include="ToolWidget.h">
       <Filter>Map Editor\Widgets\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="MapViewer.h">
+      <Filter>Map Editor\Modules\Content</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

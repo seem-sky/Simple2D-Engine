@@ -63,6 +63,7 @@ public:
     void addWorldObject(uint32 ID, QPoint pos);
 
     // revert
+    void clearReverts();
     bool hasChanged() const { return !m_Reverts.empty(); }
     void revertLast();
     void addBrushRevert(MAP::BRUSH::REVERT::BrushRevert revert);
