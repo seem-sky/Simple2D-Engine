@@ -14,7 +14,7 @@ namespace MAPPING_MODE
             return;
 
         if (pScene->selectedItems().isEmpty())
-            pScene->addWorldObject(m_ID, pos);
+            pScene->addWorldObject(m_ID, pos, MAP::MAP_DATA::MapObjectLayer::MIDDLE, m_Direction);
     }
 
     void Object::move(MapViewerScene* pScene, QPoint pos)

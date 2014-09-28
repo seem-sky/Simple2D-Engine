@@ -4,6 +4,7 @@
 #include "DatabaseMgr.h"
 #include "MapViewerScene.h"
 #include "BrushRevert.h"
+#include "WorldObjectInfo.h"
 
 /*#####
 # MapViewer
@@ -16,10 +17,10 @@ MapViewer::MapViewer(uint32 mapID, const MappingObject& mappingObject, const DAT
 	setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 }
 
-void MapViewer::addWorldObject(const QPoint pos, uint32 ID)
+void MapViewer::addWorldObject(uint32 ID, const QPoint& pos, MAP::MAP_DATA::MapObjectLayer layer, MAP::MAP_DATA::MapDirection direction)
 {
     if (auto pScene = dynamic_cast<MapViewerScene*>(scene()))
-        pScene->addWorldObject(ID, pos);
+        pScene->addWorldObject(ID, pos, layer, direction);
 }
 
 bool MapViewer::hasChanged() const

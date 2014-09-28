@@ -150,6 +150,8 @@ void MapEditorModuleContent::onMapEdited(uint32 mapID)
 void MapEditorModuleContent::onMappingModeChanged(MAPPING_MODE::Type mode)
 {
     m_pLayer->setEnabled(mode == MAPPING_MODE::Type::TILE_MAPPING);
+    if (auto pTab = dynamic_cast<MapViewer*>(m_pMapTabs->currentWidget()))
+        pTab->scene()->update();
 }
 
 MapViewer* MapEditorModuleContent::getTab(uint32 mapID)

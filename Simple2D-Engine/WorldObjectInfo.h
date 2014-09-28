@@ -35,8 +35,8 @@ namespace MAP
 
             bool isValid() const;
 
-            void setWorldObjectID(uint32 ID);
-            uint32 getWorldObjectID() const;
+            void setID(uint32 ID);
+            uint32 getID() const;
             void setLayer(MapObjectLayer layer);
             MapObjectLayer getLayer() const;
             void setDirection(MapDirection direction);

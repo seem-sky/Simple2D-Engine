@@ -12,12 +12,12 @@ namespace MAP
             return !m_GUID || !m_ObjectID;
         }
 
-        void WorldObjectInfo::setWorldObjectID(uint32 ID)
+        void WorldObjectInfo::setID(uint32 ID)
         {
             m_ObjectID = ID;
         }
 
-        uint32 WorldObjectInfo::getWorldObjectID() const
+        uint32 WorldObjectInfo::getID() const
         {
             return m_ObjectID;
         }

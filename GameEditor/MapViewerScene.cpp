@@ -129,19 +129,29 @@ void MapViewerScene::_drawGrid(QPainter* painter, const QRectF& rect) const
     painter->drawLines(pointPairs);
 }
 
-void MapViewerScene::addWorldObject(uint32 ID, QPoint pos)
+void MapViewerScene::addWorldObject(uint32 ID, const QPoint& pos, MAP::MAP_DATA::MapObjectLayer layer, MAP::MAP_DATA::MapDirection direction)
 {
     if (auto pWorldObject = getDatabaseMgr().getWorldObjectDatabase()->getOriginalPrototype(ID))
     {
         // push into ObjectContainer
-        auto pInfo = getMapData().getWorldObjectInfoData().addWorldObject(ID, GEOMETRY::Point<int32>(pos.x(), pos.y()), MAP::MAP_DATA::MapObjectLayer::MIDDLE);
+        auto pInfo = getMapData().getWorldObjectInfoData().addWorldObject(ID, GEOMETRY::Point<int32>(pos.x(), pos.y()), layer, direction);
 
         // setup viewer
         VisualViewer viewer;
         viewer.setFrameShape(QFrame::NoFrame);
         viewer.showGrid(false);
         viewer.setDatabaseMgr(&getDatabaseMgr());
-        viewer.setAnimation(pWorldObject->getAnimationModule().getAnimationInfo(2));
+        auto &animationModule = pWorldObject->getAnimationModule();
+        for (uint32 i = 0; i < animationModule.getAnimationCount(); ++i)
+        {
+            auto info = animationModule.getAnimationInfo(i);
+            if (info.m_AnimationTypeID-1 == static_cast<uint32>(direction))
+            {
+                viewer.setAnimation(info);
+                break;
+            }
+        }
+        
         viewer.stopAnimation();
         viewer.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         viewer.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
