@@ -61,3 +61,18 @@ void MappingObject::move(MapViewerScene* pScene, QPoint pos)
 {
     m_pCurrentMappingMode->move(pScene, pos);
 }
+
+void MappingObject::copy(MapViewerScene* pScene, QPoint pos)
+{
+    m_pCurrentMappingMode->copy(pScene, pos);
+}
+
+void MappingObject::insert(MapViewerScene* pScene, QPoint pos)
+{
+    m_pCurrentMappingMode->insert(pScene, pos);
+}
+
+void MappingObject::cutOut(MapViewerScene* pScene, QPoint pos)
+{
+    m_pCurrentMappingMode->cutOut(pScene, pos);
+}

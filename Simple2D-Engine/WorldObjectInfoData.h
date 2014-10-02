@@ -2,6 +2,7 @@
 #define WORLD_OBJECT_DATA_H
 
 #include "WorldObjectInfo.h"
+#include <memory>
 
 namespace MAP
 {
@@ -11,6 +12,9 @@ namespace MAP
         {
         private:
             GUID _getNewGUID() const;
+
+            WorldObjectInfoData(const WorldObjectInfoData& other) = delete;
+            WorldObjectInfoData& operator=(const WorldObjectInfoData& other) = delete;
 
         public:
             uint32 count() const;
@@ -24,7 +28,7 @@ namespace MAP
             void removeWorldObject(GUID guid);
 
         private:
-            std::list<WorldObjectInfo> m_WorldObjectInfos;
+            std::vector<std::unique_ptr<WorldObjectInfo>> m_WorldObjectInfos;
         };
     }
 }

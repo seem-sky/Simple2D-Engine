@@ -300,6 +300,9 @@
     <ClCompile Include="ToolWidget.cpp">
       <Filter>Map Editor\Widgets\Tools</Filter>
     </ClCompile>
+    <ClCompile Include="MapViewItem.cpp">
+      <Filter>Map Editor\Modules\Content</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <compile_QT_Files Include="UI\MainWindow.ui">
@@ -502,6 +505,9 @@
       <Filter>Map Editor\Widgets\Tools</Filter>
     </ClInclude>
     <ClInclude Include="MapViewer.h">
+      <Filter>Map Editor\Modules\Content</Filter>
+    </ClInclude>
+    <ClInclude Include="MapViewItem.h">
       <Filter>Map Editor\Modules\Content</Filter>
     </ClInclude>
   </ItemGroup>

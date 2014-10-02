@@ -10,7 +10,7 @@ namespace MAPPING_MODE
 
     void Object::release(MapViewerScene* pScene, QPoint pos, Qt::MouseButton button)
     {
-        if (!pScene)
+        if (!pScene || button != Qt::LeftButton)
             return;
 
         if (pScene->selectedItems().isEmpty())
@@ -19,6 +19,21 @@ namespace MAPPING_MODE
 
     void Object::move(MapViewerScene* pScene, QPoint pos)
     {
+    }
+
+    void Object::copy(MapViewerScene* pScene, QPoint pos)
+    {
+
+    }
+
+    void Object::insert(MapViewerScene* pScene, QPoint pos)
+    {
+
+    }
+
+    void Object::cutOut(MapViewerScene* pScene, QPoint pos)
+    {
+
     }
 
     void Object::onDirectionChanged(MAP::MAP_DATA::MapDirection dir)

@@ -21,14 +21,14 @@ namespace MAP
 
         WorldObjectInfo* WorldObjectInfoData::addWorldObject(uint32 ID, const GEOMETRY::Point<int32>& pos, MapObjectLayer layer, MapDirection direction)
         {
-            WorldObjectInfo info(_getNewGUID());
-            info.setID(ID);
-            info.setPosition(pos);
-            info.setLayer(layer);
-            info.setDirection(direction);
+            std::unique_ptr<WorldObjectInfo> info(new WorldObjectInfo(_getNewGUID()));
+            info->setID(ID);
+            info->setPosition(pos);
+            info->setLayer(layer);
+            info->setDirection(direction);
             
-            m_WorldObjectInfos.push_back(info);
-            return &m_WorldObjectInfos.back();
+            m_WorldObjectInfos.push_back(std::move(info));
+            return m_WorldObjectInfos.back().get();
         }
 
         void WorldObjectInfoData::setWorldObject(GUID guid, const WorldObjectInfo& info)
@@ -41,8 +41,8 @@ namespace MAP
         {
             for (auto& info : m_WorldObjectInfos)
             {
-                if (guid == info.getGUID())
-                    return &info;
+                if (guid == info->getGUID())
+                    return info.get();
             }
             return nullptr;
         }
@@ -56,7 +56,7 @@ namespace MAP
         {
             for (auto itr = m_WorldObjectInfos.begin(); itr != m_WorldObjectInfos.end(); ++itr)
             {
-                if (guid == itr->getGUID())
+                if (guid == (*itr)->getGUID())
                 {
                     m_WorldObjectInfos.erase(itr);
                     break;
@@ -68,7 +68,7 @@ namespace MAP
         {
             if (isEmpty())
                 return 1;
-            return m_WorldObjectInfos.back().getGUID() + 1;
+            return m_WorldObjectInfos.back()->getGUID() + 1;
         }
     }
 }

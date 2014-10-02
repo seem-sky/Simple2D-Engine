@@ -1,20 +1,28 @@
 #include "MapViewer.h"
+#include "moc_MapViewer.h"
 #include "QtGlobal.h"
 #include "MappingObject.h"
 #include "DatabaseMgr.h"
 #include "MapViewerScene.h"
 #include "BrushRevert.h"
 #include "WorldObjectInfo.h"
+#include <QtGui/QCursor>
 
 /*#####
 # MapViewer
 #####*/
-MapViewer::MapViewer(uint32 mapID, const MappingObject& mappingObject, const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent) : QGraphicsView(pParent)
+MapViewer::MapViewer(uint32 mapID, const MappingObject& mappingObject, const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent) : QGraphicsView(pParent),
+m_pActionCopy(new QShortcut(QKeySequence(tr("Ctrl+C", "Action|Copy")), this)), m_pActionInsert(new QShortcut(QKeySequence(tr("Ctrl+V", "Action|Insert")), this)),
+m_pActionCutOut(new QShortcut(QKeySequence(tr("Ctrl+X", "Action|CutOut")), this))
 {
     setScene(new MapViewerScene(mapID, mappingObject, DBMgr));
     scene()->setParent(this);
     setFrameShape(QFrame::NoFrame);
 	setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+
+    connect(m_pActionCopy, SIGNAL(activated()), this, SLOT(_onCopy()));
+    connect(m_pActionInsert, SIGNAL(activated()), this, SLOT(_onInsert()));
+    connect(m_pActionCutOut, SIGNAL(activated()), this, SLOT(_onCutOut()));
 }
 
 void MapViewer::addWorldObject(uint32 ID, const QPoint& pos, MAP::MAP_DATA::MapObjectLayer layer, MAP::MAP_DATA::MapDirection direction)
@@ -135,4 +143,25 @@ uint32 MapViewer::getMaximumLayerIndex(MAP::LayerType layerType) const
     if (auto pScene = dynamic_cast<MapViewerScene*>(scene()))
         return pScene->getMapData().getMapLayer().getLayerSize(layerType);
     return 0;
+}
+
+void MapViewer::_onCopy()
+{
+    auto posWidget(mapFromGlobal(QCursor::pos()));
+    if (rect().contains(posWidget))
+        emit onCopy(dynamic_cast<MapViewerScene*>(scene()), mapToScene(posWidget).toPoint());
+}
+
+void MapViewer::_onInsert()
+{
+    auto posWidget(mapFromGlobal(QCursor::pos()));
+    if (rect().contains(posWidget))
+        emit onInsert(dynamic_cast<MapViewerScene*>(scene()), mapToScene(posWidget).toPoint());
+}
+
+void MapViewer::_onCutOut()
+{
+    auto posWidget(mapFromGlobal(QCursor::pos()));
+    if (rect().contains(posWidget))
+        emit onCutOut(dynamic_cast<MapViewerScene*>(scene()), mapToScene(posWidget).toPoint());
 }

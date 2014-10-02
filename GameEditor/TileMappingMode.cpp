@@ -100,4 +100,19 @@ namespace MAPPING_MODE
     {
         m_BrushInfos.at(static_cast<std::size_t>(brush)) = info;
     }
+
+    void Tile::copy(MapViewerScene* pScene, QPoint pos)
+    {
+        int x = 0;
+    }
+
+    void Tile::insert(MapViewerScene* pScene, QPoint pos)
+    {
+
+    }
+
+    void Tile::cutOut(MapViewerScene* pScene, QPoint pos)
+    {
+
+    }
 }

@@ -195,7 +195,8 @@ void DatabaseModuleAnimation::_setupFrame(uint32 index)
     m_LastActions.clear();
 
     m_pAniViewer->showFrame(index);
-    m_pFrameTime->setValue(m_Animation.at(m_pAniViewer->getCurrentFrame()).getTimeInMsec());
+    if (!m_Animation.empty())
+        m_pFrameTime->setValue(m_Animation.at(m_pAniViewer->getCurrentFrame()).getTimeInMsec());
 }
 
 void DatabaseModuleAnimation::_onPlayStopButtonClicked()

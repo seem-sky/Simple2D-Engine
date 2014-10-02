@@ -21,6 +21,8 @@ m_DBMgr(databaseMgr), m_MappingObject(mappingObject), Ui_MapEditorModuleContent(
     connect(m_pMapTabs, (SIGNAL(tabCloseRequested(int))), this, SLOT(_onTabCloseRequested(int)));
 
     _onZoomChanged(m_pZoom->value());
+
+    m_pRevert->setShortcut(QKeySequence(tr("Ctrl+Z", "Action|Revert")));
 }
 
 void MapEditorModuleContent::_onTabCloseRequested(int index)
@@ -112,12 +114,14 @@ void MapEditorModuleContent::onMapOpened(uint32 mapID)
         pNewMapViewer->loadMap();
         m_pMapTabs->addTab(pNewMapViewer, m_DBMgr.getMapDatabase()->getOriginalPrototype(mapID)->getName());
         m_pMapTabs->setCurrentWidget(pNewMapViewer);
+        connect(pNewMapViewer, SIGNAL(onCopy(MapViewerScene*, QPoint)), &m_MappingObject, SLOT(copy(MapViewerScene*, QPoint)));
+        connect(pNewMapViewer, SIGNAL(onInsert(MapViewerScene*, QPoint)), &m_MappingObject, SLOT(insert(MapViewerScene*, QPoint)));
+        connect(pNewMapViewer, SIGNAL(onCutOut(MapViewerScene*, QPoint)), &m_MappingObject, SLOT(cutOut(MapViewerScene*, QPoint)));
         connect(pNewMapViewer->scene(), SIGNAL(onMousePress(MapViewerScene*, QPoint, Qt::MouseButton)), &m_MappingObject,
             SLOT(press(MapViewerScene*, QPoint, Qt::MouseButton)));
         connect(pNewMapViewer->scene(), SIGNAL(onMouseRelease(MapViewerScene*, QPoint, Qt::MouseButton)), &m_MappingObject,
             SLOT(release(MapViewerScene*, QPoint, Qt::MouseButton)));
-        connect(pNewMapViewer->scene(), SIGNAL(onMouseMove(MapViewerScene*, QPoint)), &m_MappingObject,
-            SLOT(move(MapViewerScene*, QPoint)));
+        connect(pNewMapViewer->scene(), SIGNAL(onMouseMove(MapViewerScene*, QPoint)), &m_MappingObject, SLOT(move(MapViewerScene*, QPoint)));
         connect(pNewMapViewer->scene(), SIGNAL(changed(uint32)), this, SLOT(_onMapChanged(uint32)));
     }
     catch (const std::bad_alloc& e)

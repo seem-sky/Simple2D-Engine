@@ -5,6 +5,19 @@
 #include <geometry/Rectangle.h>
 #include <FlagManager.h>
 #include "WorldObjectInfo.h"
+#include <QtWidgets/QMenu>
+
+class MapViewItemMenu : public QMenu
+{
+    Q_OBJECT
+public:
+    MapViewItemMenu();
+
+private slots:
+    void _onActionEdit();
+    void _onActionCopy();
+    void _onActionDelete();
+};
 
 class MapViewItem : public QGraphicsPixmapItem
 {
@@ -14,6 +27,7 @@ private:
 protected:
     QVariant itemChange(GraphicsItemChange change, const QVariant& value);
     void keyPressEvent(QKeyEvent* pEvent);
+    void contextMenuEvent(QGraphicsSceneContextMenuEvent* pEvent);
 
 public:
     MapViewItem(MAP::MAP_DATA::WorldObjectInfo& info, const QPixmap& pixmap);

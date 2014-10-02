@@ -11,8 +11,6 @@ namespace MAP
     {
         MapData::MapData(const DATABASE::DatabaseMgr& DBMgr, uint32 mapID) : m_DBMgr(DBMgr), m_MapID(mapID)
         {
-            if (!m_MapID)
-                assert("mapID can not be 0!");
         }
 
         void MapData::reload()
