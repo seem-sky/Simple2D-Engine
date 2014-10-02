@@ -3,6 +3,7 @@
 
 #include "MappingModeInterface.h"
 #include <WorldObjectInfo.h>
+#include <memory>
 
 namespace MAPPING_MODE
 {
@@ -30,6 +31,9 @@ namespace MAPPING_MODE
     private:
         uint32 m_ID = 0;
         MAP::MAP_DATA::MapDirection m_Direction = MAP::MAP_DATA::MapDirection::DOWN;
+
+        bool m_CutOut = false;
+        std::unique_ptr<MAP::MAP_DATA::WorldObjectInfo> m_pWorldObjectInfo;
     };
 }
 #endif

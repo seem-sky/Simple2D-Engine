@@ -172,6 +172,24 @@ void MapViewerScene::addWorldObject(uint32 ID, const QPoint& pos, MAP::MAP_DATA:
         addItem(pItem);
     }
 }
+
+void MapViewerScene::removeWorldObject(MAP::MAP_DATA::GUID guid)
+{
+    auto pItems = items();
+    for (auto itr = pItems.begin(); itr != pItems.end(); ++itr)
+    {
+        if (auto pWorldObject = dynamic_cast<MapViewItem*>(*itr))
+        {
+            if (pWorldObject->getWorldObjectInfo().getGUID() == guid)
+            {
+                removeItem(pWorldObject);
+                getMapData().getWorldObjectInfoData().removeWorldObject(guid);
+                new DelayedDeleteObject<MapViewItem>(pWorldObject);
+            }
+        }
+    }
+}
+
 //
 //namespace
 //{

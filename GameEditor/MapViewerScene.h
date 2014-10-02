@@ -4,6 +4,7 @@
 #include <MapViewScene.h>
 #include <Global.h>
 #include <array>
+#include "WorldObjectInfo.h"
 
 namespace MAP
 {
@@ -61,6 +62,7 @@ public:
 
     // WorldObjects
     void addWorldObject(uint32 ID, const QPoint& pos, MAP::MAP_DATA::MapObjectLayer layer, MAP::MAP_DATA::MapDirection direction);
+    void removeWorldObject(MAP::MAP_DATA::GUID guid);
 
     // revert
     void clearReverts();
