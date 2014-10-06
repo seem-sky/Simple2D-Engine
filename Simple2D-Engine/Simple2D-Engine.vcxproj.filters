@@ -386,9 +386,6 @@
     <ClInclude Include="BrushRevert.h">
       <Filter>Map\Brush\Revert</Filter>
     </ClInclude>
-    <ClInclude Include="BrushRevertInfo.h">
-      <Filter>Map\Brush\Revert</Filter>
-    </ClInclude>
     <ClInclude Include="Simple2D-Global.h">
       <Filter>Map</Filter>
     </ClInclude>
@@ -415,6 +412,9 @@
     </ClInclude>
     <ClInclude Include="Colission.h">
       <Filter>Core\Colission</Filter>
+    </ClInclude>
+    <ClInclude Include="RevertInterface.h">
+      <Filter>Map\Brush\Revert</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

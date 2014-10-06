@@ -296,7 +296,7 @@ void MapViewerScene::revertLast()
     if (!hasChanged())
         return;
 
-    m_Reverts.back().revert(getMapData().getMapLayer());
+    m_Reverts.back()->revert();
     update();
     m_Reverts.pop_back();
     emit changed(getMapData().getMapID());
@@ -311,10 +311,8 @@ void MapViewerScene::clearReverts()
     emit changed(getMapData().getMapID());
 }
 
-void MapViewerScene::addBrushRevert(MAP::BRUSH::REVERT::BrushRevert revert)
+void MapViewerScene::addRevert(MAP::REVERT::Interface* revert)
 {
-    MAP::BRUSH::REVERT::BrushRevertInfo info(getLayerType(), getLayerIndex() - 1);
-    revert.setBrushRevertInfo(info);
-    m_Reverts.push_back(revert);
+    m_Reverts.push_back(std::unique_ptr<MAP::REVERT::Interface>(revert));
     emit changed(getMapData().getMapID());
 }

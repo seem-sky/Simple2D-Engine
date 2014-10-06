@@ -6,7 +6,8 @@ namespace MAP
 {
     namespace BRUSH
     {
-        Brush::Brush(AREA::Interface* pArea, TYPE::Interface* pType) : m_pArea(AREA::AreaPtr(pArea)), m_pType(TYPE::TypePtr(pType))
+        Brush::Brush(LayerContainer& mapLayer, LayerType layerType, uint8 layerIndex, AREA::Interface* pArea, TYPE::Interface* pType) :
+            m_pArea(AREA::AreaPtr(pArea)), m_pType(TYPE::TypePtr(pType)), m_RevertInfo(new REVERT::BrushRevert(layerIndex, layerType, mapLayer))
         {
         }
 
@@ -41,10 +42,10 @@ namespace MAP
             MapTileInfoVec tiles;
             PointVec<uint32> borderTiles;
             m_pArea->start(tiles, borderTiles);
-            m_pType->setTiles(tiles, m_RevertInfo);
+            m_pType->setTiles(tiles, *m_RevertInfo);
 
             // check border tiles
-            m_pType->setBorderTiles(borderTiles, m_RevertInfo);
+            m_pType->setBorderTiles(borderTiles, *m_RevertInfo);
         }
 
         void Brush::setPosition(const GEOMETRY::Point<uint32>& pos)
@@ -54,14 +55,14 @@ namespace MAP
             m_pType->setStartPosition(pos);
         }
 
-        REVERT::BrushRevert Brush::getBrushRevert() const
+        REVERT::BrushRevert* Brush::takeBrushRevert()
         {
-            return m_RevertInfo;
+            return m_RevertInfo.release();
         }
 
-        void Brush::resetRevertInfo()
+        bool Brush::hasChanges() const
         {
-            m_RevertInfo.clear();
+            return m_RevertInfo && m_RevertInfo->hasChanges();
         }
 
         void Brush::setBrushSize(const GEOMETRY::Point<uint32>& size)

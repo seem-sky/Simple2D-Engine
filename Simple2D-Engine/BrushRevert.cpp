@@ -3,12 +3,15 @@
 #include "MapLayer.h"
 
 using namespace MAP;
-using namespace BRUSH;
-using namespace REVERT;
+using namespace BRUSH::REVERT;
 
-void BrushRevert::revert(LayerContainer& mapLayer)
+BrushRevert::BrushRevert(uint8 layerIndex, LayerType layerType, LayerContainer& layer) : m_MapLayer(layer), m_LayerIndex(layerIndex), m_LayerType(layerType),
+    MAP::REVERT::Interface()
+{}
+
+void BrushRevert::revert()
 {
-    auto& layer = mapLayer.getLayer(m_Info.getLayerType(), m_Info.getLayerIndex());
+    auto& layer = m_MapLayer.getLayer(m_LayerType, m_LayerIndex);
     for (auto& info : m_Tiles)
     {
         try
@@ -39,5 +42,6 @@ void BrushRevert::clear()
 {
     m_Tiles.clear();
     m_Check = Bitset2D();
-    m_Info = BrushRevertInfo();
+    m_LayerIndex = 0;
+    m_LayerType = LayerType::LAYER_BACKGROUND;
 }

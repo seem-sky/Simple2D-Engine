@@ -8,12 +8,9 @@
 
 namespace MAP
 {
-    namespace BRUSH
+    namespace REVERT
     {
-        namespace REVERT
-        {
-            class BrushRevert;
-        }
+        class Interface;
     }
 }
 
@@ -68,7 +65,7 @@ public:
     void clearReverts();
     bool hasChanged() const { return !m_Reverts.empty(); }
     void revertLast();
-    void addBrushRevert(MAP::BRUSH::REVERT::BrushRevert revert);
+    void addRevert(MAP::REVERT::Interface* revert);
 
 signals:
     void onMousePress(MapViewerScene* pScene, QPoint pos, Qt::MouseButton button);
@@ -84,6 +81,6 @@ private:
 
     const MappingObject& m_MappingObject;
 
-    std::vector<MAP::BRUSH::REVERT::BrushRevert> m_Reverts;
+    std::vector<std::unique_ptr<MAP::REVERT::Interface>> m_Reverts;
 };
 #endif

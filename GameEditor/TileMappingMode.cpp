@@ -14,8 +14,9 @@ namespace MAPPING_MODE
     void Tile::_finishBrush()
     {
         // push only if there are changes
-        if (m_pCurrentBrush && m_pCurrentBrush->getBrushRevert().hasChanges() && m_pCurrentScene)
-            m_pCurrentScene->addBrushRevert(m_pCurrentBrush->getBrushRevert());
+        if (m_pCurrentBrush && m_pCurrentBrush->hasChanges() && m_pCurrentScene)
+            m_pCurrentScene->addRevert(m_pCurrentBrush->takeBrushRevert());
+
         m_pCurrentScene = nullptr;
         m_pCurrentBrush.reset();
     }
@@ -42,8 +43,8 @@ namespace MAPPING_MODE
             _finishBrush();
             try
             {
-                auto& layer = pScene->getMapData().getMapLayer().getLayer(pScene->getLayerType(), pScene->getLayerIndex() - 1);
-                m_pCurrentBrush = MAP::BRUSH::BrushFactory::createBrush(m_BrushInfos.at(static_cast<std::size_t>(brush)), m_DBMgr, layer);
+                m_pCurrentBrush = MAP::BRUSH::BrushFactory::createBrush(m_BrushInfos.at(static_cast<std::size_t>(brush)), m_DBMgr, pScene->getMapData().getMapLayer(),
+                    pScene->getLayerType(), pScene->getLayerIndex() - 1);
                 GEOMETRY::Point<uint32> tilePos(pos.x() / TILE_SIZE, pos.y() / TILE_SIZE);
 
                 // if tileSet mapping, set brush size equal tileSet size
@@ -84,7 +85,6 @@ namespace MAPPING_MODE
         {
             try
             {
-                auto& layer = pScene->getMapData().getMapLayer().getLayer(pScene->getLayerType(), pScene->getLayerIndex() - 1);
                 GEOMETRY::Point<uint32> tilePos(pos.x() / TILE_SIZE, pos.y() / TILE_SIZE);
 
                 m_pCurrentBrush->start(tilePos);
@@ -103,7 +103,6 @@ namespace MAPPING_MODE
 
     void Tile::copy(MapViewerScene* pScene, QPoint pos)
     {
-        int x = 0;
     }
 
     void Tile::insert(MapViewerScene* pScene, QPoint pos)

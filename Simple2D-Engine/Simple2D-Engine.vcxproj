@@ -89,13 +89,13 @@
     <ClInclude Include="BrushException.h" />
     <ClInclude Include="BrushFactory.h" />
     <ClInclude Include="BrushInfo.h" />
-    <ClInclude Include="BrushRevertInfo.h" />
     <ClInclude Include="BrushType.h" />
     <ClInclude Include="BrushTypeAutoTile.h" />
     <ClInclude Include="BrushTypeInterface.h" />
     <ClInclude Include="BrushTypeTile.h" />
     <ClInclude Include="BrushTypeTileSet.h" />
     <ClInclude Include="Colission.h" />
+    <ClInclude Include="RevertInterface.h" />
     <ClInclude Include="Simple2D-Global.h" />
     <ClInclude Include="MapViewScene.h" />
     <ClInclude Include="PrototypeAnimationModule.h" />

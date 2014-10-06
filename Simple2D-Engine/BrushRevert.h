@@ -3,7 +3,7 @@
 
 #include <Bitset2D.h>
 #include "MapTile.h"
-#include "BrushRevertInfo.h"
+#include "RevertInterface.h"
 
 namespace MAP
 {
@@ -16,18 +16,17 @@ namespace MAP
             /*#####
             # Revert
             #####*/
-            class BrushRevert
+            class BrushRevert : public MAP::REVERT::Interface
             {
             public:
-                void revert(LayerContainer& mapLayer);
+                BrushRevert(uint8 layerIndex, LayerType layerType, LayerContainer& layer);
+
+                void revert();
 
                 void addTile(const MapTileInfo& info);
                 void addTiles(const MapTileInfoVec& tileInfos);
 
                 inline bool hasChanges() const { return !m_Tiles.empty(); }
-
-                void setBrushRevertInfo(const BrushRevertInfo& info) { m_Info = info; }
-                BrushRevertInfo getBrushRevertInfo() const { return m_Info; }
 
                 void clear();
 
@@ -35,7 +34,9 @@ namespace MAP
                 MapTileInfoVec m_Tiles;
                 Bitset2D m_Check;
 
-                BrushRevertInfo m_Info;
+                uint8 m_LayerIndex;
+                LayerType m_LayerType;
+                LayerContainer& m_MapLayer;
             };
         }
     }

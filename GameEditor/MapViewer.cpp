@@ -96,7 +96,7 @@ void MapViewer::setZoom( uint32 zoom )
 
 uint32 MapViewer::getZoom() const
 {
-    return transform().m11()*  100;       // get zoom
+    return transform().m11() * 100;       // get zoom
 }
 
 void MapViewer::showGrid(bool show)

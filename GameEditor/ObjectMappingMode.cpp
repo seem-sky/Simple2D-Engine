@@ -51,7 +51,7 @@ namespace MAPPING_MODE
     {
         copy(pScene, pos);
         if (m_pWorldObjectInfo)
-        m_CutOut = true;
+            m_CutOut = true;
     }
 
     void Object::onDirectionChanged(MAP::MAP_DATA::MapDirection dir)
