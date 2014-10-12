@@ -14,6 +14,7 @@ namespace MAPPING_MODE
         void copy(MapViewerScene* pScene, QPoint pos) {}
         void insert(MapViewerScene* pScene, QPoint pos) {}
         void cutOut(MapViewerScene* pScene, QPoint pos) {}
+        void keyPress(MapViewerScene* pScene, int32 key) {}
 
         Type getModeType() const { return Type::PRESENTATION; }
 

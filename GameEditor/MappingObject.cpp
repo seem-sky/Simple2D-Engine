@@ -76,3 +76,8 @@ void MappingObject::cutOut(MapViewerScene* pScene, QPoint pos)
 {
     m_pCurrentMappingMode->cutOut(pScene, pos);
 }
+
+void MappingObject::keyPress(MapViewerScene* pScene, int32 key)
+{
+    m_pCurrentMappingMode->keyPress(pScene, key);
+}

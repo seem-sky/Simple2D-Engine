@@ -1,7 +1,9 @@
 #include "ObjectMappingMode.h"
+#include "moc_ObjectMappingMode.h"
 #include "MapViewerScene.h"
 #include "MapViewItem.h"
-#include "moc_ObjectMappingMode.h"
+#include "DelayedDeleteObject.h"
+#include "ObjectMappingRevert.h"
 
 namespace MAPPING_MODE
 {
@@ -15,7 +17,14 @@ namespace MAPPING_MODE
             return;
 
         if (pScene->selectedItems().isEmpty())
-            pScene->addWorldObject(m_ID, pos, MAP::MAP_DATA::MapObjectLayer::MIDDLE, m_Direction);
+        {
+            if (auto pWorldObject = pScene->addWorldObject(m_ID, GEOMETRY::Point<int32>(pos.x(), pos.y()), MAP::MAP_DATA::MapObjectLayer::MIDDLE, m_Direction))
+            {
+                // add revert
+                std::unique_ptr<MAPPING_MODE::REVERT::ObjectAdd> pRevert(new MAPPING_MODE::REVERT::ObjectAdd(pWorldObject->getWorldObjectInfo().getGUID(), *pScene));
+                pScene->addRevert(pRevert.release());
+            }
+        }
     }
 
     void Object::move(MapViewerScene* pScene, QPoint pos)
@@ -38,12 +47,31 @@ namespace MAPPING_MODE
     {
         if (m_pWorldObjectInfo)
         {
+            std::unique_ptr<MAPPING_MODE::REVERT::ObjectAdd> pInsertRevert;
+            std::unique_ptr<MAPPING_MODE::REVERT::ObjectRemove> pCutOutRevert;
             if (m_CutOut)
             {
+                pCutOutRevert = std::unique_ptr<MAPPING_MODE::REVERT::ObjectRemove>(new MAPPING_MODE::REVERT::ObjectRemove(*m_pWorldObjectInfo, *pScene));
                 pScene->removeWorldObject(m_pWorldObjectInfo->getGUID());
+            }
+
+            if (auto pWorldObject = pScene->addWorldObject(m_pWorldObjectInfo->getID(), GEOMETRY::Point<int32>(pos.x(), pos.y()), m_pWorldObjectInfo->getLayer(),
+                m_pWorldObjectInfo->getDirection()))
+            {
+                pInsertRevert = std::unique_ptr<MAPPING_MODE::REVERT::ObjectAdd>(new MAPPING_MODE::REVERT::ObjectAdd(pWorldObject->getWorldObjectInfo().getGUID(), *pScene));
+                if (!m_CutOut)
+                    pScene->addRevert(pInsertRevert.release());
+            }
+
+            // add revert
+            if (m_CutOut)
+            {
+                std::unique_ptr<MAP::REVERT::RevertContainer> pRevertContainer(new MAP::REVERT::RevertContainer());
+                pRevertContainer->addRevert(pInsertRevert.release());
+                pRevertContainer->addRevert(pCutOutRevert.release());
+                pScene->addRevert(pRevertContainer.release());
                 m_CutOut = false;
             }
-            pScene->addWorldObject(m_pWorldObjectInfo->getID(), pos, m_pWorldObjectInfo->getLayer(), m_pWorldObjectInfo->getDirection());
         }
     }
 
@@ -52,6 +80,48 @@ namespace MAPPING_MODE
         copy(pScene, pos);
         if (m_pWorldObjectInfo)
             m_CutOut = true;
+    }
+
+    void Object::keyPress(MapViewerScene* pScene, int32 key)
+    {
+        auto selectedObjects = pScene->selectedItems();
+        for (auto pItem : selectedObjects)
+        {
+            switch (key)
+            {
+            case Qt::Key_Delete:
+                if (auto pWorldObject = dynamic_cast<MapViewItem*>(pItem))
+                {
+                    // add revert
+                    std::unique_ptr<MAPPING_MODE::REVERT::ObjectRemove> pRevert(new MAPPING_MODE::REVERT::ObjectRemove(pWorldObject->getWorldObjectInfo(), *pScene));
+                    pScene->addRevert(pRevert.release());
+
+                    // remove object from scene and delete it later
+                    pScene->removeItem(pWorldObject);
+                    pScene->getMapData().getWorldObjectInfoData().removeWorldObject(pWorldObject->getWorldObjectInfo().getGUID());
+                    new DelayedDeleteObject<MapViewItem>(pWorldObject);
+                    break;
+                }
+
+            case Qt::Key_Escape:
+                pItem->setSelected(false);
+                break;
+
+            case Qt::Key_Up:
+                pItem->moveBy(0, -1);
+                break;
+            case Qt::Key_Left:
+                pItem->moveBy(-1, 0);
+                break;
+            case Qt::Key_Down:
+                pItem->moveBy(0, 1);
+                break;
+            case Qt::Key_Right:
+                pItem->moveBy(1, 0);
+                break;
+            default: break;
+            }
+        }
     }
 
     void Object::onDirectionChanged(MAP::MAP_DATA::MapDirection dir)

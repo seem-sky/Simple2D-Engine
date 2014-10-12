@@ -123,6 +123,7 @@ void MapEditorModuleContent::onMapOpened(uint32 mapID)
             SLOT(release(MapViewerScene*, QPoint, Qt::MouseButton)));
         connect(pNewMapViewer->scene(), SIGNAL(onMouseMove(MapViewerScene*, QPoint)), &m_MappingObject, SLOT(move(MapViewerScene*, QPoint)));
         connect(pNewMapViewer->scene(), SIGNAL(changed(uint32)), this, SLOT(_onMapChanged(uint32)));
+        connect(pNewMapViewer->scene(), SIGNAL(onKeyPress(MapViewerScene*, int32)), &m_MappingObject, SLOT(keyPress(MapViewerScene*, int32)));
     }
     catch (const std::bad_alloc& e)
     {

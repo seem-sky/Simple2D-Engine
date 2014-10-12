@@ -4,6 +4,12 @@ namespace MAP
 {
     namespace MAP_DATA
     {
+        WorldObjectException::WorldObjectException(const std::string& msg) : std::runtime_error(msg)
+        {}
+
+        WorldObjectException::WorldObjectException(const char* msg) : std::runtime_error(msg)
+        {}
+
         uint32 WorldObjectInfoData::count() const
         {
             return static_cast<uint32>(m_WorldObjectInfos.size());
@@ -19,6 +25,16 @@ namespace MAP
             m_WorldObjectInfos.clear();
         }
 
+        WorldObjectInfo* WorldObjectInfoData::addWorldObject(const WorldObjectInfo& info)
+        {
+            if (info.getGUID() == 0)
+                throw WorldObjectException("GUID can not be 0!");
+            if (auto pObj = getWorldObject(info.getGUID()))
+                throw WorldObjectException("GUID already exists.");
+            m_WorldObjectInfos.push_back(std::unique_ptr<WorldObjectInfo>(new WorldObjectInfo(info)));
+            return m_WorldObjectInfos.back().get();
+        }
+
         WorldObjectInfo* WorldObjectInfoData::addWorldObject(uint32 ID, const GEOMETRY::Point<int32>& pos, MapObjectLayer layer, MapDirection direction)
         {
             std::unique_ptr<WorldObjectInfo> info(new WorldObjectInfo(_getNewGUID()));
@@ -26,15 +42,9 @@ namespace MAP
             info->setPosition(pos);
             info->setLayer(layer);
             info->setDirection(direction);
-            
+
             m_WorldObjectInfos.push_back(std::move(info));
             return m_WorldObjectInfos.back().get();
-        }
-
-        void WorldObjectInfoData::setWorldObject(GUID guid, const WorldObjectInfo& info)
-        {
-            if (auto pInfo = getWorldObject(guid))
-                *pInfo = info;
         }
 
         const WorldObjectInfo* WorldObjectInfoData::getWorldObject(GUID guid) const

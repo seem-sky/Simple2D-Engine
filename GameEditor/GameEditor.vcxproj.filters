@@ -148,6 +148,12 @@
     <Filter Include="Map Editor\Widgets\Tools\WorldObject">
       <UniqueIdentifier>{2e4e8f22-21f1-465a-8ae8-d2fdea9d353f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Map Editor\Modules\MappingObject\MappingMode\ObjectMapping">
+      <UniqueIdentifier>{4ef08543-fe81-491b-9841-4994f1318592}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map Editor\Modules\MappingObject\MappingMode\ObjectMapping\Revert">
+      <UniqueIdentifier>{a189cbbd-72be-4f54-b120-3ef69cb1caae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainWindow.cpp">
@@ -288,9 +294,6 @@
     <ClCompile Include="TileMappingMode.cpp">
       <Filter>Map Editor\Modules\MappingObject\MappingMode</Filter>
     </ClCompile>
-    <ClCompile Include="ObjectMappingMode.cpp">
-      <Filter>Map Editor\Modules\MappingObject\MappingMode</Filter>
-    </ClCompile>
     <ClCompile Include="MapViewerScene.cpp">
       <Filter>Map Editor\Modules\Content</Filter>
     </ClCompile>
@@ -302,6 +305,12 @@
     </ClCompile>
     <ClCompile Include="MapViewItem.cpp">
       <Filter>Map Editor\Modules\Content</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectMappingMode.cpp">
+      <Filter>Map Editor\Modules\MappingObject\MappingMode\ObjectMapping</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectMappingRevert.cpp">
+      <Filter>Map Editor\Modules\MappingObject\MappingMode\ObjectMapping\Revert</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -432,9 +441,6 @@
     <moc_header Include="MapViewerScene.h">
       <Filter>Map Editor\Modules\Content</Filter>
     </moc_header>
-    <moc_header Include="ObjectMappingMode.h">
-      <Filter>Map Editor\Modules\MappingObject\MappingMode</Filter>
-    </moc_header>
     <moc_header Include="TileMappingMode.h">
       <Filter>Map Editor\Modules\MappingObject\MappingMode</Filter>
     </moc_header>
@@ -446,6 +452,9 @@
     </moc_header>
     <moc_header Include="MapEditorWidgetObjectMapping.h">
       <Filter>Map Editor\Widgets\Tools\WorldObject</Filter>
+    </moc_header>
+    <moc_header Include="ObjectMappingMode.h">
+      <Filter>Map Editor\Modules\MappingObject\MappingMode\ObjectMapping</Filter>
     </moc_header>
   </ItemGroup>
   <ItemGroup>
@@ -509,6 +518,9 @@
     </ClInclude>
     <ClInclude Include="MapViewItem.h">
       <Filter>Map Editor\Modules\Content</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectMappingRevert.h">
+      <Filter>Map Editor\Modules\MappingObject\MappingMode\ObjectMapping\Revert</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -262,6 +262,7 @@
     <ClCompile Include="MapViewer.cpp" />
     <ClCompile Include="MapViewerScene.cpp" />
     <ClCompile Include="MapViewItem.cpp" />
+    <ClCompile Include="ObjectMappingRevert.cpp" />
     <ClCompile Include="Project.cpp" />
     <ClCompile Include="TexturePrototypeFrame.cpp" />
     <ClCompile Include="TileMappingMode.cpp" />
@@ -310,6 +311,7 @@
   </ItemGroup>
   <ItemGroup>
     <moc_header Include="MapViewItem.h" />
+    <ClInclude Include="ObjectMappingRevert.h" />
     <ClInclude Include="ToolWidget.h" />
     <moc_header Include="MapViewerScene.h" />
     <moc_header Include="MapEditorWidgetObjectMapping.h" />

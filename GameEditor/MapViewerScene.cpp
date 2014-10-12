@@ -129,47 +129,93 @@ void MapViewerScene::_drawGrid(QPainter* painter, const QRectF& rect) const
     painter->drawLines(pointPairs);
 }
 
-void MapViewerScene::addWorldObject(uint32 ID, const QPoint& pos, MAP::MAP_DATA::MapObjectLayer layer, MAP::MAP_DATA::MapDirection direction)
+MapViewItem* MapViewerScene::_addWorldObject(const DATABASE::PROTOTYPE::WORLD_OBJECT::WorldObjectPrototype* pWorldObject, MAP::MAP_DATA::WorldObjectInfo& info)
+{
+    // setup viewer
+    auto pItem = new MapViewItem(info);
+    addItem(pItem);
+    return _setupWorldObject(pWorldObject, pItem, info);
+}
+
+MapViewItem* MapViewerScene::_setupWorldObject(const DATABASE::PROTOTYPE::WORLD_OBJECT::WorldObjectPrototype* pWorldObject,
+    MapViewItem* pItem, const MAP::MAP_DATA::WorldObjectInfo& info)
+{
+    pItem->setWorldObjectBoundingRect(pWorldObject->getBoundingRect());
+
+    VisualViewer viewer;
+    viewer.setFrameShape(QFrame::NoFrame);
+    viewer.showGrid(false);
+    viewer.setDatabaseMgr(&getDatabaseMgr());
+    auto &animationModule = pWorldObject->getAnimationModule();
+    for (uint32 i = 0; i < animationModule.getAnimationCount(); ++i)
+    {
+        auto animationInfo = animationModule.getAnimationInfo(i);
+        if (animationInfo.m_AnimationTypeID - 1 == static_cast<uint32>(info.getDirection()))
+        {
+            viewer.setAnimation(animationInfo);
+            break;
+        }
+    }
+
+    viewer.stopAnimation();
+    viewer.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    viewer.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    // set transparent background
+    viewer.setStyleSheet("background:transparent;");
+    viewer.setAttribute(Qt::WA_TranslucentBackground);
+    viewer.setWindowFlags(Qt::FramelessWindowHint);
+
+    auto rect = viewer.scene()->itemsBoundingRect();
+    viewer.resizeToContent();
+    pItem->setPixmap(viewer.grab());
+
+    // setup position
+    //pos = _getNearestAvailablePosition(QPoint(pos.x() - viewer.size().width() / 2, pos.y() - viewer.size().height() / 2), pWorldObject->getBoundingRect());
+    pItem->setPos(info.getPosition().getX(), info.getPosition().getY());
+    return pItem;
+}
+
+MapViewItem* MapViewerScene::addWorldObject(uint32 ID, const GEOMETRY::Point<int32>& pos, MAP::MAP_DATA::MapObjectLayer layer, MAP::MAP_DATA::MapDirection direction)
 {
     if (auto pWorldObject = getDatabaseMgr().getWorldObjectDatabase()->getOriginalPrototype(ID))
     {
         // push into ObjectContainer
-        auto pInfo = getMapData().getWorldObjectInfoData().addWorldObject(ID, GEOMETRY::Point<int32>(pos.x(), pos.y()), layer, direction);
+        auto pInfo = getMapData().getWorldObjectInfoData().addWorldObject(ID, pos, layer, direction);
+        return _addWorldObject(pWorldObject, *pInfo);
+    }
+    return nullptr;
+}
 
-        // setup viewer
-        VisualViewer viewer;
-        viewer.setFrameShape(QFrame::NoFrame);
-        viewer.showGrid(false);
-        viewer.setDatabaseMgr(&getDatabaseMgr());
-        auto &animationModule = pWorldObject->getAnimationModule();
-        for (uint32 i = 0; i < animationModule.getAnimationCount(); ++i)
+MapViewItem* MapViewerScene::addWorldObject(const MAP::MAP_DATA::WorldObjectInfo& info)
+{
+    if (auto pWorldObject = getDatabaseMgr().getWorldObjectDatabase()->getOriginalPrototype(info.getID()))
+    {
+        try
         {
-            auto info = animationModule.getAnimationInfo(i);
-            if (info.m_AnimationTypeID-1 == static_cast<uint32>(direction))
+            // push into ObjectContainer
+            auto pInfo = getMapData().getWorldObjectInfoData().addWorldObject(info);
+            return _addWorldObject(pWorldObject, *pInfo);
+        }
+        catch (const MAP::MAP_DATA::WorldObjectException&)
+        {}
+    }
+    return nullptr;
+}
+
+void MapViewerScene::setWorldObject(const MAP::MAP_DATA::WorldObjectInfo& info)
+{
+    if (auto pProto = getDatabaseMgr().getWorldObjectDatabase()->getOriginalPrototype(info.getID()))
+    {
+        auto pItems = items();
+        for (auto itr = pItems.begin(); itr != pItems.end(); ++itr)
+        {
+            if (auto pWorldObject = dynamic_cast<MapViewItem*>(*itr))
             {
-                viewer.setAnimation(info);
-                break;
+                if (pWorldObject->getWorldObjectInfo().getGUID() == info.getGUID())
+                    _setupWorldObject(pProto, pWorldObject, info);
             }
         }
-        
-        viewer.stopAnimation();
-        viewer.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        viewer.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
-        // set transparent background
-        viewer.setStyleSheet("background:transparent;");
-        viewer.setAttribute(Qt::WA_TranslucentBackground);
-        viewer.setWindowFlags(Qt::FramelessWindowHint);
-
-        auto rect = viewer.scene()->itemsBoundingRect();
-        viewer.resizeToContent();
-
-        auto pItem = new MapViewItem(*pInfo, viewer.grab());
-        pItem->setWorldObjectBoundingRect(pWorldObject->getBoundingRect());
-        // setup position
-        //pos = _getNearestAvailablePosition(QPoint(pos.x() - viewer.size().width() / 2, pos.y() - viewer.size().height() / 2), pWorldObject->getBoundingRect());
-        pItem->setPos(pos);
-        addItem(pItem);
     }
 }
 
@@ -253,42 +299,7 @@ void MapViewerScene::removeWorldObject(MAP::MAP_DATA::GUID guid)
 void MapViewerScene::keyPressEvent(QKeyEvent* pKeyEvent)
 {
     MapViewScene::keyPressEvent(pKeyEvent);
-    if (m_MappingObject.getMappingModeType() != MAPPING_MODE::Type::OBJECT_MAPPING)
-        return;
-
-    auto selectedObjects = selectedItems();
-    for (auto pItem : selectedObjects)
-    {
-        switch (pKeyEvent->key())
-        {
-        case Qt::Key_Delete:
-            if (auto pWorldObject = dynamic_cast<MapViewItem*>(pItem))
-            {
-                removeItem(pWorldObject);
-                getMapData().getWorldObjectInfoData().removeWorldObject(pWorldObject->getWorldObjectInfo().getGUID());
-                new DelayedDeleteObject<MapViewItem>(pWorldObject);
-                break;
-            }
-
-        case Qt::Key_Escape:
-            pItem->setSelected(false);
-            break;
-
-        case Qt::Key_Up:
-            pItem->moveBy(0, -1);
-            break;
-        case Qt::Key_Left:
-            pItem->moveBy(-1, 0);
-            break;
-        case Qt::Key_Down:
-            pItem->moveBy(0, 1);
-            break;
-        case Qt::Key_Right:
-            pItem->moveBy(1, 0);
-            break;
-        default: break;
-        }
-    }
+    emit onKeyPress(this, pKeyEvent->key());
 }
 
 void MapViewerScene::revertLast()

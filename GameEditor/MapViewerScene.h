@@ -16,10 +16,17 @@ namespace MAP
 
 namespace DATABASE
 {
-    class DatabaseMgr;
+    namespace PROTOTYPE
+    {
+        namespace WORLD_OBJECT
+        {
+            class WorldObjectPrototype;
+        }
+    }
 }
 
 class MappingObject;
+class MapViewItem;
 
 /*#####
 # MapViewerScene
@@ -28,6 +35,9 @@ class MapViewerScene : public MapViewScene
 {
     Q_OBJECT
 private:
+    MapViewItem* _addWorldObject(const DATABASE::PROTOTYPE::WORLD_OBJECT::WorldObjectPrototype* pWorldObject, MAP::MAP_DATA::WorldObjectInfo& info);
+    MapViewItem* _setupWorldObject(const DATABASE::PROTOTYPE::WORLD_OBJECT::WorldObjectPrototype* pWorldObject, MapViewItem* pItem, const MAP::MAP_DATA::WorldObjectInfo& info);
+
     void _drawGrid(QPainter* painter, const QRectF& rect) const;
     void _drawDarkRect(QPainter* painter, const QRectF& rect) const;
     //QPoint _getNearestAvailablePosition(QPoint pos, const GEOMETRY::Rectangle<int32>& boundingRect) const;
@@ -58,7 +68,9 @@ public:
     const MappingObject& getMappingObject() const { return m_MappingObject; }
 
     // WorldObjects
-    void addWorldObject(uint32 ID, const QPoint& pos, MAP::MAP_DATA::MapObjectLayer layer, MAP::MAP_DATA::MapDirection direction);
+    MapViewItem* addWorldObject(uint32 ID, const GEOMETRY::Point<int32>& pos, MAP::MAP_DATA::MapObjectLayer layer, MAP::MAP_DATA::MapDirection direction);
+    MapViewItem* addWorldObject(const MAP::MAP_DATA::WorldObjectInfo& info);
+    void setWorldObject(const MAP::MAP_DATA::WorldObjectInfo& info);
     void removeWorldObject(MAP::MAP_DATA::GUID guid);
 
     // revert
@@ -72,6 +84,7 @@ signals:
     void onMouseRelease(MapViewerScene* pScene, QPoint pos, Qt::MouseButton button);
     void onMouseMove(MapViewerScene* pScene, QPoint pos);
     void changed(uint32 mapID);
+    void onKeyPress(MapViewerScene* pScene, int32 key);
 
 private:
     bool m_ShowGrid;

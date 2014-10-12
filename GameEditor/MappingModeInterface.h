@@ -27,6 +27,7 @@ namespace MAPPING_MODE
         virtual void copy(MapViewerScene* pScene, QPoint pos) = 0;
         virtual void insert(MapViewerScene* pScene, QPoint pos) = 0;
         virtual void cutOut(MapViewerScene* pScene, QPoint pos) = 0;
+        virtual void keyPress(MapViewerScene* pScene, int32 key) = 0;
 
         virtual Type getModeType() const = 0;
         virtual QString getModeName() const = 0;

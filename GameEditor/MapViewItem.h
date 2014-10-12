@@ -26,11 +26,10 @@ private:
 
 protected:
     QVariant itemChange(GraphicsItemChange change, const QVariant& value);
-    void keyPressEvent(QKeyEvent* pEvent);
     void contextMenuEvent(QGraphicsSceneContextMenuEvent* pEvent);
 
 public:
-    MapViewItem(MAP::MAP_DATA::WorldObjectInfo& info, const QPixmap& pixmap);
+    MapViewItem(MAP::MAP_DATA::WorldObjectInfo& info);
 
     void setTopLeftPos(GEOMETRY::Point<int32> pos);
     void setTopLeftPos(int32 x, int32 y);
@@ -52,8 +51,8 @@ public:
     // flags
     enum class Flags
     {
-        NONE,
-        DRAW_BOUNDING_RECT
+        NONE                    = 0x00,
+        DRAW_BOUNDING_RECT      = 0x01
     };
 
     FlagManager<Flags>& getFlags() { return m_Flags; }

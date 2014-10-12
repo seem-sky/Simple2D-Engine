@@ -8,6 +8,13 @@ namespace MAP
 {
     namespace MAP_DATA
     {
+        class WorldObjectException : public std::runtime_error
+        {
+        public:
+            WorldObjectException(const std::string& msg);
+            WorldObjectException(const char* msg);
+        };
+
         class WorldObjectInfoData
         {
         private:
@@ -17,14 +24,17 @@ namespace MAP
             WorldObjectInfoData& operator=(const WorldObjectInfoData& other) = delete;
 
         public:
+            WorldObjectInfoData() = default;
+
             uint32 count() const;
             bool isEmpty() const;
             void clear();
 
+            WorldObjectInfo* addWorldObject(const WorldObjectInfo& info);
             WorldObjectInfo* addWorldObject(uint32 ID, const GEOMETRY::Point<int32>& pos, MapObjectLayer layer, MapDirection direction = MapDirection::DOWN);
             WorldObjectInfo* getWorldObject(GUID guid);
             const WorldObjectInfo* getWorldObject(GUID guid) const;
-            void setWorldObject(GUID guid, const WorldObjectInfo& info);
+            bool hasWorldObject(GUID guid) const;
             void removeWorldObject(GUID guid);
 
         private:

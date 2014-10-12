@@ -56,7 +56,7 @@ public:
     uint32 getMapID() const;
 
     // WorldObjects
-    void addWorldObject(uint32 ID, const QPoint& pos, MAP::MAP_DATA::MapObjectLayer layer, MAP::MAP_DATA::MapDirection direction);
+    void addWorldObject(uint32 ID, const GEOMETRY::Point<int32>& pos, MAP::MAP_DATA::MapObjectLayer layer, MAP::MAP_DATA::MapDirection direction);
 
 private slots:
     void _onCopy();

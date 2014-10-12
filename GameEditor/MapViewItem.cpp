@@ -37,7 +37,7 @@ void MapViewItemMenu::_onActionEdit()
 /*#####
 # MapViewItem
 #####*/
-MapViewItem::MapViewItem(MAP::MAP_DATA::WorldObjectInfo& info, const QPixmap& pixmap) : QGraphicsPixmapItem(pixmap), m_WorldObjectInfo(info)
+MapViewItem::MapViewItem(MAP::MAP_DATA::WorldObjectInfo& info) : m_WorldObjectInfo(info)
 {
     setFlag(ItemSendsScenePositionChanges);
     setFlag(ItemIsMovable);
@@ -105,35 +105,6 @@ QVariant MapViewItem::itemChange(GraphicsItemChange change, const QVariant& valu
     }
 
     return QGraphicsPixmapItem::itemChange(change, value);
-}
-
-void MapViewItem::keyPressEvent(QKeyEvent* pEvent)
-{
-    //switch (pEvent->key())
-    //{
-    //case Qt::Key_Delete:
-    //    if (auto* pScene = dynamic_cast<MapViewScene*>(scene()))
-    //    {
-    //        pScene->removeItem(this);
-    //        pScene->getMapData().getWorldObjectInfoData().removeWorldObject(m_WorldObjectInfo.getGUID());
-    //    }
-    //    new DelayedDeleteObject<MapViewItem>(this);
-    //    break;
-
-    //case Qt::Key_Up:
-    //    moveBy(0, -1);
-    //    break;
-    //case Qt::Key_Left:
-    //    moveBy(-1, 0);
-    //    break;
-    //case Qt::Key_Down:
-    //    moveBy(0, 1);
-    //    break;
-    //case Qt::Key_Right:
-    //    moveBy(1, 0);
-    //    break;
-    //default: QGraphicsPixmapItem::keyPressEvent(pEvent);
-    //}
 }
 
 void MapViewItem::contextMenuEvent(QGraphicsSceneContextMenuEvent* pEvent)
