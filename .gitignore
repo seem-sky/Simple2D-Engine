@@ -131,3 +131,5 @@
 /Simple2D-GameEditor/*.lastcodeanalysissucceeded
 /GameEditor/moc_TileMappingMode.h
 /GameEditor/moc_MapViewItem.h
+/GameEditor/moc_MapEditor.h
+/GameEditor/moc_MapEditorScene.h

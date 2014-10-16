@@ -1,11 +1,11 @@
 #ifndef MAPPING_MODE_INTERFACE_H
 #define MAPPING_MODE_INTERFACE_H
 
-#include <QtGui/QMouseEvent>
+#include <QtGui/QKeySequence>
 #include <QtCore/QObject>
 #include <Global.h>
 
-class MapViewerScene;
+class MapEditor;
 
 namespace MAPPING_MODE
 {
@@ -21,13 +21,13 @@ namespace MAPPING_MODE
     public:
         Interface(QObject* pParent = nullptr) : QObject(pParent) {}
 
-        virtual void press(MapViewerScene* pScene, QPoint pos, Qt::MouseButton button) = 0;
-        virtual void release(MapViewerScene* pScene, QPoint pos, Qt::MouseButton button) = 0;
-        virtual void move(MapViewerScene* pScene, QPoint pos) = 0;
-        virtual void copy(MapViewerScene* pScene, QPoint pos) = 0;
-        virtual void insert(MapViewerScene* pScene, QPoint pos) = 0;
-        virtual void cutOut(MapViewerScene* pScene, QPoint pos) = 0;
-        virtual void keyPress(MapViewerScene* pScene, int32 key) = 0;
+        virtual void press(MapEditor& editor, const QPoint& pos, Qt::MouseButton button) = 0;
+        virtual void release(MapEditor& editor, const QPoint& pos, Qt::MouseButton button) = 0;
+        virtual void move(MapEditor& editor, const QPoint& pos) = 0;
+        virtual void copy(const MapEditor& editor) = 0;
+        virtual void cut(const MapEditor& editor) = 0;
+        virtual void paste(MapEditor& editor, const QPoint& pos) = 0;
+        virtual void remove(MapEditor& editor) = 0;
 
         virtual Type getModeType() const = 0;
         virtual QString getModeName() const = 0;

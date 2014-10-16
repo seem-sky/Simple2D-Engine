@@ -1,5 +1,5 @@
 #include "MappingObject.h"
-#include "MapViewer.h"
+#include "MapEditor.h"
 #include "TileMappingMode.h"
 #include "ObjectMappingMode.h"
 #include "PresentationMappingMode.h"
@@ -47,37 +47,37 @@ QStringList MappingObject::getMappingModeNames() const
     return list;
 }
 
-void MappingObject::press(MapViewerScene* pScene, QPoint pos, Qt::MouseButton button)
+void MappingObject::press(MapEditor& editor, const QPoint& pos, Qt::MouseButton button)
 {
-    m_pCurrentMappingMode->press(pScene, pos, button);
+    m_pCurrentMappingMode->press(editor, pos, button);
 }
 
-void MappingObject::release(MapViewerScene* pScene, QPoint pos, Qt::MouseButton button)
+void MappingObject::release(MapEditor& editor, const QPoint& pos, Qt::MouseButton button)
 {
-    m_pCurrentMappingMode->release(pScene, pos, button);
+    m_pCurrentMappingMode->release(editor, pos, button);
 }
 
-void MappingObject::move(MapViewerScene* pScene, QPoint pos)
+void MappingObject::move(MapEditor& editor, const QPoint& pos)
 {
-    m_pCurrentMappingMode->move(pScene, pos);
+    m_pCurrentMappingMode->move(editor, pos);
 }
 
-void MappingObject::copy(MapViewerScene* pScene, QPoint pos)
+void MappingObject::onActionCopy(const MapEditor& editor)
 {
-    m_pCurrentMappingMode->copy(pScene, pos);
+    m_pCurrentMappingMode->copy(editor);
 }
 
-void MappingObject::insert(MapViewerScene* pScene, QPoint pos)
+void MappingObject::onActionCut(const MapEditor& editor)
 {
-    m_pCurrentMappingMode->insert(pScene, pos);
+    m_pCurrentMappingMode->cut(editor);
 }
 
-void MappingObject::cutOut(MapViewerScene* pScene, QPoint pos)
+void MappingObject::onActionDelete(MapEditor& editor)
 {
-    m_pCurrentMappingMode->cutOut(pScene, pos);
+    m_pCurrentMappingMode->remove(editor);
 }
 
-void MappingObject::keyPress(MapViewerScene* pScene, int32 key)
+void MappingObject::onActionPaste(MapEditor& editor, const QPoint& pos)
 {
-    m_pCurrentMappingMode->keyPress(pScene, key);
+    m_pCurrentMappingMode->paste(editor, pos);
 }

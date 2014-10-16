@@ -33,13 +33,14 @@ namespace MAPPING_MODE
     public:
         Tile(const DATABASE::DatabaseMgr& DBMgr, QObject* pParent = nullptr);
 
-        void press(MapViewerScene* pScene, QPoint pos, Qt::MouseButton button);
-        void release(MapViewerScene* pScene, QPoint pos, Qt::MouseButton button);
-        void move(MapViewerScene* pScene, QPoint pos);
-        void copy(MapViewerScene* pScene, QPoint pos);
-        void insert(MapViewerScene* pScene, QPoint pos);
-        void cutOut(MapViewerScene* pScene, QPoint pos);
-        void keyPress(MapViewerScene* pScene, int32 key) {}
+        void press(MapEditor& editor, const QPoint& pos, Qt::MouseButton button);
+        void release(MapEditor& editor, const QPoint& pos, Qt::MouseButton button);
+        void move(MapEditor& editor, const QPoint& pos);
+
+        void copy(const MapEditor& editor) {}
+        void cut(const MapEditor& editor) {}
+        void paste(MapEditor& editor, const QPoint& pos) {}
+        void remove(MapEditor& editor) {}
 
         Type getModeType() const { return Type::TILE_MAPPING; }
         QString getModeName() const { return "tile mapping"; }
@@ -53,7 +54,7 @@ namespace MAPPING_MODE
         const DATABASE::DatabaseMgr& m_DBMgr;
 
         MAP::BRUSH::BrushPtr m_pCurrentBrush;
-        MapViewerScene* m_pCurrentScene = nullptr;
+        MapEditor* m_pCurrentEditor = nullptr;
 
         std::array<MAP::BRUSH::BrushInfo, 2> m_BrushInfos;
     };

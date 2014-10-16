@@ -1,6 +1,6 @@
 #include "TileMappingMode.h"
 #include "moc_TileMappingMode.h"
-#include "MapViewerScene.h"
+#include "MapEditor.h"
 #include "MapException.h"
 #include <DatabaseMgr.h>
 #include <BrushFactory.h>
@@ -14,10 +14,10 @@ namespace MAPPING_MODE
     void Tile::_finishBrush()
     {
         // push only if there are changes
-        if (m_pCurrentBrush && m_pCurrentBrush->hasChanges() && m_pCurrentScene)
-            m_pCurrentScene->addRevert(m_pCurrentBrush->takeBrushRevert());
+        if (m_pCurrentBrush && m_pCurrentBrush->hasChanges() && m_pCurrentEditor)
+            m_pCurrentEditor->addRevert(m_pCurrentBrush->takeBrushRevert());
 
-        m_pCurrentScene = nullptr;
+        m_pCurrentEditor = nullptr;
         m_pCurrentBrush.reset();
     }
 
@@ -29,11 +29,8 @@ namespace MAPPING_MODE
         return brush;
     }
 
-    void Tile::press(MapViewerScene* pScene, QPoint pos, Qt::MouseButton button)
+    void Tile::press(MapEditor& editor, const QPoint& pos, Qt::MouseButton button)
     {
-        if (!pScene)
-            return;
-
         if (button == Qt::RightButton || button == Qt::LeftButton)
         {
             // create brush
@@ -43,8 +40,8 @@ namespace MAPPING_MODE
             _finishBrush();
             try
             {
-                m_pCurrentBrush = MAP::BRUSH::BrushFactory::createBrush(m_BrushInfos.at(static_cast<std::size_t>(brush)), m_DBMgr, pScene->getMapData().getMapLayer(),
-                    pScene->getLayerType(), pScene->getLayerIndex() - 1);
+                m_pCurrentBrush = MAP::BRUSH::BrushFactory::createBrush(m_BrushInfos.at(static_cast<std::size_t>(brush)), m_DBMgr, editor.getMapData().getMapLayer(),
+                    editor.getLayerType(), editor.getLayerIndex() - 1);
                 GEOMETRY::Point<uint32> tilePos(pos.x() / TILE_SIZE, pos.y() / TILE_SIZE);
 
                 // if tileSet mapping, set brush size equal tileSet size
@@ -55,8 +52,8 @@ namespace MAPPING_MODE
                 }
 
                 m_pCurrentBrush->start(tilePos);
-                pScene->update();
-                m_pCurrentScene = pScene;
+                editor.scene()->update();
+                m_pCurrentEditor = &editor;
             }
             catch (const MAP::EXCEPTION::LayerOutOfRangeException&) {}
         }
@@ -74,21 +71,21 @@ namespace MAPPING_MODE
         return true;
     }
 
-    void Tile::release(MapViewerScene* pScene, QPoint pos, Qt::MouseButton button)
+    void Tile::release(MapEditor& editor, const QPoint& pos, Qt::MouseButton button)
     {
         _finishBrush();
     }
 
-    void Tile::move(MapViewerScene* pScene, QPoint pos)
+    void Tile::move(MapEditor& editor, const QPoint& pos)
     {
-        if (m_pCurrentScene && pScene == m_pCurrentScene)
+        if (m_pCurrentEditor && &editor == m_pCurrentEditor)
         {
             try
             {
                 GEOMETRY::Point<uint32> tilePos(pos.x() / TILE_SIZE, pos.y() / TILE_SIZE);
 
                 m_pCurrentBrush->start(tilePos);
-                m_pCurrentScene->update();
+                m_pCurrentEditor->scene()->update();
             }
             catch (const MAP::EXCEPTION::LayerOutOfRangeException&) {}
         }
@@ -99,19 +96,5 @@ namespace MAPPING_MODE
     void Tile::onBrushInfoChanged(BRUSH::BrushIndex brush, MAP::BRUSH::BrushInfo info)
     {
         m_BrushInfos.at(static_cast<std::size_t>(brush)) = info;
-    }
-
-    void Tile::copy(MapViewerScene* pScene, QPoint pos)
-    {
-    }
-
-    void Tile::insert(MapViewerScene* pScene, QPoint pos)
-    {
-
-    }
-
-    void Tile::cutOut(MapViewerScene* pScene, QPoint pos)
-    {
-
     }
 }

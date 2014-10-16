@@ -11,7 +11,7 @@ namespace DATABASE
     class DatabaseMgr;
 }
 
-class MapViewer;
+class MapEditor;
 
 class MapEditorModuleContent : public QWidget, Ui_MapEditorModuleContent
 {
@@ -19,7 +19,7 @@ class MapEditorModuleContent : public QWidget, Ui_MapEditorModuleContent
 public:
     MapEditorModuleContent(const MappingObject& mappingObject, DATABASE::DatabaseMgr& databaseMgr, QWidget* pWidget = nullptr);
 
-    MapViewer* getTab(uint32 mapID);
+    MapEditor* getTab(uint32 mapID);
 
     void saveMaps();
 

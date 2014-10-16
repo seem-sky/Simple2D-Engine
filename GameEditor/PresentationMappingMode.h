@@ -8,13 +8,14 @@ namespace MAPPING_MODE
     class Presentation : public Interface
     {
     public:
-        void press(MapViewerScene* pScene, QPoint pos, Qt::MouseButton button) {}
-        void release(MapViewerScene* pScene, QPoint pos, Qt::MouseButton button) {}
-        void move(MapViewerScene* pScene, QPoint pos) {}
-        void copy(MapViewerScene* pScene, QPoint pos) {}
-        void insert(MapViewerScene* pScene, QPoint pos) {}
-        void cutOut(MapViewerScene* pScene, QPoint pos) {}
-        void keyPress(MapViewerScene* pScene, int32 key) {}
+        void press(MapEditor& editor, const QPoint& pos, Qt::MouseButton button) {}
+        void release(MapEditor& editor, const QPoint& pos, Qt::MouseButton button) {}
+        void move(MapEditor& editor, const QPoint& pos) {}
+
+        void copy(const MapEditor& editor) {}
+        void cut(const MapEditor& editor) {}
+        void paste(MapEditor& editor, const QPoint& pos) {}
+        void remove(MapEditor& editor) {}
 
         Type getModeType() const { return Type::PRESENTATION; }
 

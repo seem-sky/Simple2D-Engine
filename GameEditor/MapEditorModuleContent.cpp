@@ -2,9 +2,9 @@
 #include "moc_MapEditorModuleContent.h"
 #include "Project.h"
 #include <QtWidgets/QMessageBox>
-#include "MapViewer.h"
-#include "MapViewerScene.h"
+#include "MapEditor.h"
 #include <DatabaseMgr.h>
+#include <QtWidgets/QGraphicsItem>
 
 MapEditorModuleContent::MapEditorModuleContent(const MappingObject& mappingObject, DATABASE::DatabaseMgr& databaseMgr, QWidget* pWidget) : QWidget(pWidget),
 m_DBMgr(databaseMgr), m_MappingObject(mappingObject), Ui_MapEditorModuleContent()
@@ -27,7 +27,7 @@ m_DBMgr(databaseMgr), m_MappingObject(mappingObject), Ui_MapEditorModuleContent(
 
 void MapEditorModuleContent::_onTabCloseRequested(int index)
 {
-    if (auto pTab = dynamic_cast<MapViewer*>(m_pMapTabs->widget(index)))
+    if (auto pTab = dynamic_cast<MapEditor*>(m_pMapTabs->widget(index)))
     {
         // ask for saving before closing tab
         if (pTab->hasChanged())
@@ -50,13 +50,13 @@ void MapEditorModuleContent::_onTabCloseRequested(int index)
 
 void MapEditorModuleContent::_onRevertPressed()
 {
-    if (auto pTab = dynamic_cast<MapViewer*>(m_pMapTabs->currentWidget()))
+    if (auto pTab = dynamic_cast<MapEditor*>(m_pMapTabs->currentWidget()))
         pTab->revertLast();
 }
 
 void MapEditorModuleContent::_onCurrentChanged(int index)
 {
-    if (auto pTab = dynamic_cast<MapViewer*>(m_pMapTabs->widget(index)))
+    if (auto pTab = dynamic_cast<MapEditor*>(m_pMapTabs->widget(index)))
     {
         // setup zoom
         m_pZoom->setValue(pTab->getZoom());
@@ -72,20 +72,20 @@ void MapEditorModuleContent::_onCurrentChanged(int index)
 
 void MapEditorModuleContent::_onZoomChanged(int value)
 {
-    if (auto pTab = dynamic_cast<MapViewer*>(m_pMapTabs->currentWidget()))
+    if (auto pTab = dynamic_cast<MapEditor*>(m_pMapTabs->currentWidget()))
         pTab->setZoom(value);
     m_pZoomLabel->setText("zoom: " + QString::number(value) + "%");
 }
 
 void MapEditorModuleContent::_onLayerChanged(int value)
 {
-    if (auto pTab = dynamic_cast<MapViewer*>(m_pMapTabs->currentWidget()))
+    if (auto pTab = dynamic_cast<MapEditor*>(m_pMapTabs->currentWidget()))
         pTab->setLayerIndex(value);
 }
 
 void MapEditorModuleContent::_onLayerTypeChanged()
 {
-    if (auto pTab = dynamic_cast<MapViewer*>(m_pMapTabs->currentWidget()))
+    if (auto pTab = dynamic_cast<MapEditor*>(m_pMapTabs->currentWidget()))
     {
         auto layerType = m_pLayerBackground->isChecked() ? MAP::LayerType::LAYER_BACKGROUND : MAP::LayerType::LAYER_FOREGROUND;
         pTab->setLayerType(layerType);
@@ -99,7 +99,7 @@ void MapEditorModuleContent::_onLayerTypeChanged()
 
 void MapEditorModuleContent::_onGridShowChanged(int state)
 {
-    if (auto pTab = dynamic_cast<MapViewer*>(m_pMapTabs->currentWidget()))
+    if (auto pTab = dynamic_cast<MapEditor*>(m_pMapTabs->currentWidget()))
         pTab->showGrid(state == Qt::Checked);
 }
 
@@ -108,22 +108,24 @@ void MapEditorModuleContent::onMapOpened(uint32 mapID)
     if (auto pTab = getTab(mapID))
         return;
 
-    auto pNewMapViewer = new MapViewer(mapID, m_MappingObject, m_DBMgr, this);
+    auto pNewMapViewer = new MapEditor(mapID, m_MappingObject, m_DBMgr, this);
     try
     {
         pNewMapViewer->loadMap();
         m_pMapTabs->addTab(pNewMapViewer, m_DBMgr.getMapDatabase()->getOriginalPrototype(mapID)->getName());
         m_pMapTabs->setCurrentWidget(pNewMapViewer);
-        connect(pNewMapViewer, SIGNAL(onCopy(MapViewerScene*, QPoint)), &m_MappingObject, SLOT(copy(MapViewerScene*, QPoint)));
-        connect(pNewMapViewer, SIGNAL(onInsert(MapViewerScene*, QPoint)), &m_MappingObject, SLOT(insert(MapViewerScene*, QPoint)));
-        connect(pNewMapViewer, SIGNAL(onCutOut(MapViewerScene*, QPoint)), &m_MappingObject, SLOT(cutOut(MapViewerScene*, QPoint)));
-        connect(pNewMapViewer->scene(), SIGNAL(onMousePress(MapViewerScene*, QPoint, Qt::MouseButton)), &m_MappingObject,
-            SLOT(press(MapViewerScene*, QPoint, Qt::MouseButton)));
-        connect(pNewMapViewer->scene(), SIGNAL(onMouseRelease(MapViewerScene*, QPoint, Qt::MouseButton)), &m_MappingObject,
-            SLOT(release(MapViewerScene*, QPoint, Qt::MouseButton)));
-        connect(pNewMapViewer->scene(), SIGNAL(onMouseMove(MapViewerScene*, QPoint)), &m_MappingObject, SLOT(move(MapViewerScene*, QPoint)));
-        connect(pNewMapViewer->scene(), SIGNAL(changed(uint32)), this, SLOT(_onMapChanged(uint32)));
-        connect(pNewMapViewer->scene(), SIGNAL(onKeyPress(MapViewerScene*, int32)), &m_MappingObject, SLOT(keyPress(MapViewerScene*, int32)));
+        connect(pNewMapViewer, SIGNAL(actionMousePress(MapEditor&, const QPoint&, Qt::MouseButton)), &m_MappingObject,
+            SLOT(press(MapEditor&, const QPoint&, Qt::MouseButton)));
+        connect(pNewMapViewer, SIGNAL(actionMouseRelease(MapEditor&, const QPoint&, Qt::MouseButton)), &m_MappingObject,
+            SLOT(release(MapEditor&, const QPoint&, Qt::MouseButton)));
+        connect(pNewMapViewer, SIGNAL(actionMouseMove(MapEditor&, const QPoint&)), &m_MappingObject, SLOT(move(MapEditor&, const QPoint&)));
+
+        connect(pNewMapViewer, SIGNAL(actionCopy(const MapEditor&)), &m_MappingObject, SLOT(onActionCopy(const MapEditor&)));
+        connect(pNewMapViewer, SIGNAL(actionCut(const MapEditor&)), &m_MappingObject, SLOT(onActionCut(const MapEditor&)));
+        connect(pNewMapViewer, SIGNAL(actionDelete(MapEditor&)), &m_MappingObject, SLOT(onActionDelete(MapEditor&)));
+        connect(pNewMapViewer, SIGNAL(actionPaste(MapEditor&, const QPoint&)), &m_MappingObject, SLOT(onActionPaste(MapEditor&, const QPoint&)));
+
+        connect(pNewMapViewer, SIGNAL(changed(uint32)), this, SLOT(_onMapChanged(uint32)));
     }
     catch (const std::bad_alloc& e)
     {
@@ -155,15 +157,26 @@ void MapEditorModuleContent::onMapEdited(uint32 mapID)
 void MapEditorModuleContent::onMappingModeChanged(MAPPING_MODE::Type mode)
 {
     m_pLayer->setEnabled(mode == MAPPING_MODE::Type::TILE_MAPPING);
-    if (auto pTab = dynamic_cast<MapViewer*>(m_pMapTabs->currentWidget()))
+    for (int32 i = 0; i < m_pMapTabs->count(); ++i)
+    {
+        if (auto pTab = dynamic_cast<MapEditor*>(m_pMapTabs->currentWidget()))
+        {
+            for (auto pItem : pTab->items())
+            {
+                pItem->setFlag(QGraphicsItem::ItemIsMovable, mode == MAPPING_MODE::Type::OBJECT_MAPPING);
+                pItem->setFlag(QGraphicsItem::ItemIsSelectable, mode == MAPPING_MODE::Type::OBJECT_MAPPING);
+            }
+        }
+    }
+    if (auto pTab = dynamic_cast<MapEditor*>(m_pMapTabs->currentWidget()))
         pTab->scene()->update();
 }
 
-MapViewer* MapEditorModuleContent::getTab(uint32 mapID)
+MapEditor* MapEditorModuleContent::getTab(uint32 mapID)
 {
     for (int32 i = 0; i < m_pMapTabs->count(); ++i)
     {
-        if (auto pTab = dynamic_cast<MapViewer*>(m_pMapTabs->widget(i)))
+        if (auto pTab = dynamic_cast<MapEditor*>(m_pMapTabs->widget(i)))
         {
             if (pTab->getMapID() == mapID)
                 return pTab;
@@ -186,7 +199,7 @@ void MapEditorModuleContent::saveMaps()
 {
     for (int32 i = 0; i < m_pMapTabs->count(); ++i)
     {
-        if (auto pTab = dynamic_cast<MapViewer*>(m_pMapTabs->widget(i)))
+        if (auto pTab = dynamic_cast<MapEditor*>(m_pMapTabs->widget(i)))
         {
             if (pTab->hasChanged())
                 pTab->saveMap();

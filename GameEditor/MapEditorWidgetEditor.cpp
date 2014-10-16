@@ -1,7 +1,7 @@
 #include "MapEditorWidgetEditor.h"
 #include "moc_MapEditorWidgetEditor.h"
 #include "AutoTileCache.h"
-#include "MapViewer.h"
+#include "MapEditor.h"
 #include <QtWidgets/QComboBox>
 #include <WorldObjectInfo.h>
 #include "MapEditorWidgetObjectMapping.h"

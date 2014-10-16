@@ -7,26 +7,13 @@
 #include "WorldObjectInfo.h"
 #include <QtWidgets/QMenu>
 
-class MapViewItemMenu : public QMenu
-{
-    Q_OBJECT
-public:
-    MapViewItemMenu();
-
-private slots:
-    void _onActionEdit();
-    void _onActionCopy();
-    void _onActionDelete();
-};
-
-class MapViewItem : public QGraphicsPixmapItem
+class MapViewItem : public QGraphicsPixmapItem, public QObject
 {
 private:
     QPoint _checkMove(QPoint moveTo) const;
 
 protected:
     QVariant itemChange(GraphicsItemChange change, const QVariant& value);
-    void contextMenuEvent(QGraphicsSceneContextMenuEvent* pEvent);
 
 public:
     MapViewItem(MAP::MAP_DATA::WorldObjectInfo& info);

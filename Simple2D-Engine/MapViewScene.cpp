@@ -4,7 +4,7 @@
 #include <QtGui/QPainter>
 #include "AutoTileCache.h"
 
-MapViewScene::MapViewScene(uint32 mapID, const DATABASE::DatabaseMgr& DBMgr) : QGraphicsScene(), m_MapData(DBMgr, mapID), m_DBMgr(DBMgr)
+MapViewScene::MapViewScene(const MAP::MAP_DATA::MapData& mapData, const DATABASE::DatabaseMgr& DBMgr) : QGraphicsScene(), m_MapData(mapData), m_DBMgr(DBMgr)
 {}
 
 GEOMETRY::Point<uint32> MapViewScene::calculateEndTile(const QRect &rect, const GEOMETRY::Point<uint32>& startTile) const
@@ -22,12 +22,14 @@ void MapViewScene::drawBackground(QPainter* painter, const QRectF& rect)
 {
     QTime time;
     time.start();
+    QGraphicsScene::drawBackground(painter, rect);
     drawTiles(painter, rect, MAP::LayerType::LAYER_BACKGROUND);
     qDebug() << "Background draw finishes after " << time.elapsed() << "msec.";
 }
 
 void MapViewScene::drawForeground(QPainter* painter, const QRectF& rect)
 {
+    QGraphicsScene::drawForeground(painter, rect);
     drawTiles(painter, rect, MAP::LayerType::LAYER_FOREGROUND);
 }
 

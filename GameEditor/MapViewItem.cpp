@@ -1,43 +1,10 @@
 #include "MapViewItem.h"
-#include "moc_MapViewItem.h"
 #include <QtGui/QKeyEvent>
 #include <QtWidgets/QGraphicsSceneMouseEvent>
 #include <QtWidgets/QGraphicsScene>
 #include <QtGui/QPainter>
 
-/*#####
-# MapViewItemMenu
-#####*/
-MapViewItemMenu::MapViewItemMenu() : QMenu()
-{
-    auto pEdit = addAction("edit");
-    auto pCopy = addAction("copy");
-    auto pDelete = addAction("delete");
-
-    connect(pEdit, SIGNAL(trigger()), this, SLOT(_onActionEdit()));
-    connect(pCopy, SIGNAL(trigger()), this, SLOT(_onActionCopy()));
-    connect(pDelete, SIGNAL(trigger()), this, SLOT(_onActionDelete()));
-}
-
-void MapViewItemMenu::_onActionCopy()
-{
-
-}
-
-void MapViewItemMenu::_onActionDelete()
-{
-
-}
-
-void MapViewItemMenu::_onActionEdit()
-{
-
-}
-
-/*#####
-# MapViewItem
-#####*/
-MapViewItem::MapViewItem(MAP::MAP_DATA::WorldObjectInfo& info) : m_WorldObjectInfo(info)
+MapViewItem::MapViewItem(MAP::MAP_DATA::WorldObjectInfo& info) : QGraphicsPixmapItem(), QObject(), m_WorldObjectInfo(info)
 {
     setFlag(ItemSendsScenePositionChanges);
     setFlag(ItemIsMovable);
@@ -105,12 +72,6 @@ QVariant MapViewItem::itemChange(GraphicsItemChange change, const QVariant& valu
     }
 
     return QGraphicsPixmapItem::itemChange(change, value);
-}
-
-void MapViewItem::contextMenuEvent(QGraphicsSceneContextMenuEvent* pEvent)
-{
-    MapViewItemMenu menu;
-    menu.exec(pEvent->screenPos());
 }
 
 GEOMETRY::Point<int32> MapViewItem::getTopLeftPos() const

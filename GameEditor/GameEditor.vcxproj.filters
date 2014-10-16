@@ -249,9 +249,6 @@
     <ClCompile Include="MapEditorModuleMapTree.cpp">
       <Filter>Map Editor\Modules\MapTree</Filter>
     </ClCompile>
-    <ClCompile Include="MapViewer.cpp">
-      <Filter>Map Editor\Modules\Content</Filter>
-    </ClCompile>
     <ClCompile Include="GraphicsTextureItem.cpp">
       <Filter>EditorCore\GraphicsSpriteItem</Filter>
     </ClCompile>
@@ -294,9 +291,6 @@
     <ClCompile Include="TileMappingMode.cpp">
       <Filter>Map Editor\Modules\MappingObject\MappingMode</Filter>
     </ClCompile>
-    <ClCompile Include="MapViewerScene.cpp">
-      <Filter>Map Editor\Modules\Content</Filter>
-    </ClCompile>
     <ClCompile Include="MapEditorWidgetObjectMapping.cpp">
       <Filter>Map Editor\Widgets\Tools\WorldObject</Filter>
     </ClCompile>
@@ -311,6 +305,12 @@
     </ClCompile>
     <ClCompile Include="ObjectMappingRevert.cpp">
       <Filter>Map Editor\Modules\MappingObject\MappingMode\ObjectMapping\Revert</Filter>
+    </ClCompile>
+    <ClCompile Include="MapEditor.cpp">
+      <Filter>Map Editor\Modules\Content</Filter>
+    </ClCompile>
+    <ClCompile Include="MapEditorScene.cpp">
+      <Filter>Map Editor\Modules\Content</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -438,9 +438,6 @@
     <moc_header Include="DeactivatedTabWidget.h">
       <Filter>EditorCore\DeactivatedTab</Filter>
     </moc_header>
-    <moc_header Include="MapViewerScene.h">
-      <Filter>Map Editor\Modules\Content</Filter>
-    </moc_header>
     <moc_header Include="TileMappingMode.h">
       <Filter>Map Editor\Modules\MappingObject\MappingMode</Filter>
     </moc_header>
@@ -455,6 +452,9 @@
     </moc_header>
     <moc_header Include="ObjectMappingMode.h">
       <Filter>Map Editor\Modules\MappingObject\MappingMode\ObjectMapping</Filter>
+    </moc_header>
+    <moc_header Include="MapEditorScene.h">
+      <Filter>Map Editor\Modules\Content</Filter>
     </moc_header>
   </ItemGroup>
   <ItemGroup>

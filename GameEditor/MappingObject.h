@@ -2,11 +2,12 @@
 #define MAPPING_OBJECT_H
 
 #include <QtCore/QObject>
+#include <QtCore/QStringList>
+#include <QtGui/QKeySequence>
 #include <memory>
 #include "MappingModeInterface.h"
-#include <QtCore/QStringList>
 
-class MapViewerScene;
+class MapEditor;
 namespace DATABASE
 {
     class DatabaseMgr;
@@ -26,13 +27,13 @@ public:
     MAPPING_MODE::Interface* getMappingMode(MAPPING_MODE::Type mode);
 
 public slots:
-    void press(MapViewerScene* pScene, QPoint pos, Qt::MouseButton button);
-    void release(MapViewerScene* pScene, QPoint pos, Qt::MouseButton button);
-    void move(MapViewerScene* pScene, QPoint pos);
-    void copy(MapViewerScene* pScene, QPoint pos);
-    void insert(MapViewerScene* pScene, QPoint pos);
-    void cutOut(MapViewerScene* pScene, QPoint pos);
-    void keyPress(MapViewerScene* pScene, int32 key);
+    void press(MapEditor& editor, const QPoint& pos, Qt::MouseButton button);
+    void release(MapEditor& editor, const QPoint& pos, Qt::MouseButton button);
+    void move(MapEditor& editor, const QPoint& pos);
+    void onActionCopy(const MapEditor& editor);
+    void onActionCut(const MapEditor& editor);
+    void onActionPaste(MapEditor& editor, const QPoint& pos);
+    void onActionDelete(MapEditor& editor);
 
 private:
     typedef std::unique_ptr<MAPPING_MODE::Interface> MappingModePtr;

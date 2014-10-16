@@ -118,6 +118,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <DisableSpecificWarnings>4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <PreprocessorDefinitions>DEBUG;GAME_EDITOR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <AdditionalDependencies>Qt5Widgetsd.lib;Qt5Xmld.lib;QT5Guid.lib;QT5Cored.lib;Simple2D-Engine_d.lib;SimpleLib_d.lib</AdditionalDependencies>
@@ -147,6 +148,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <DisableSpecificWarnings>4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <PreprocessorDefinitions>DEBUG;GAME_EDITOR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <AdditionalDependencies>Qt5Widgetsd.lib;Qt5Xmld.lib;QT5Guid.lib;QT5Cored.lib;Simple2D-Engine64_d.lib;SimpleLib64_d.lib</AdditionalDependencies>
@@ -175,6 +177,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <PreprocessorDefinitions>GAME_EDITOR;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <AdditionalDependencies>Qt5Widgets.lib;Qt5Xml.lib;QT5Gui.lib;QT5Core.lib;Simple2D-Engine.lib;SimpleLib.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -206,6 +209,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <PreprocessorDefinitions>GAME_EDITOR;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <AdditionalDependencies>Qt5Widgets.lib;Qt5Xml.lib;QT5Gui.lib;QT5Core.lib;Simple2D-Engine64.lib;SimpleLib64.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -259,8 +263,8 @@
     <ClCompile Include="MapEditorWidgetEditor.cpp" />
     <ClCompile Include="MapEditorWidgetObjectMapping.cpp" />
     <ClCompile Include="MappingObject.cpp" />
-    <ClCompile Include="MapViewer.cpp" />
-    <ClCompile Include="MapViewerScene.cpp" />
+    <ClCompile Include="MapEditor.cpp" />
+    <ClCompile Include="MapEditorScene.cpp" />
     <ClCompile Include="MapViewItem.cpp" />
     <ClCompile Include="ObjectMappingRevert.cpp" />
     <ClCompile Include="Project.cpp" />
@@ -310,10 +314,10 @@
     <compile_QT_Files Include="UI\MapEditorWidgetObjectMapping.ui" />
   </ItemGroup>
   <ItemGroup>
-    <moc_header Include="MapViewItem.h" />
+    <ClInclude Include="MapViewItem.h" />
     <ClInclude Include="ObjectMappingRevert.h" />
     <ClInclude Include="ToolWidget.h" />
-    <moc_header Include="MapViewerScene.h" />
+    <ClInclude Include="MapEditorScene.h" />
     <moc_header Include="MapEditorWidgetObjectMapping.h" />
     <ClInclude Include="PresentationMappingMode.h" />
     <moc_header Include="TileMappingMode.h" />
@@ -332,7 +336,7 @@
     <moc_header Include="MapEditorModuleTileSelection.h" />
     <moc_header Include="MapEditorModuleTileSets.h" />
     <moc_header Include="MapEditorWidgetBrush.h" />
-    <moc_header Include="MapViewer.h" />
+    <moc_header Include="MapEditor.h" />
     <ClInclude Include="MapEditorModuleWorldObjects.h" />
     <moc_header Include="MappingObject.h" />
     <ClInclude Include="MappingModeInterface.h" />
