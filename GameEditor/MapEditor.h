@@ -54,17 +54,21 @@ private:
     MapViewItem* _addWorldObject(const DATABASE::PROTOTYPE::WORLD_OBJECT::WorldObjectPrototype* pWorldObject, MAP::MAP_DATA::WorldObjectInfo& info);
     MapViewItem* _setupWorldObject(const DATABASE::PROTOTYPE::WORLD_OBJECT::WorldObjectPrototype* pWorldObject, MapViewItem* pItem, const MAP::MAP_DATA::WorldObjectInfo& info);
 
+    void _loadMap();
+    void _setupShortcuts();
+
 protected:
     void contextMenuEvent(QContextMenuEvent* pEvent);
     void mousePressEvent(QMouseEvent* pEvent);
     void mouseReleaseEvent(QMouseEvent* pEvent);
     void mouseMoveEvent(QMouseEvent* pEvent);
+    void keyPressEvent(QKeyEvent* pEvent);
+    void keyReleaseEvent(QKeyEvent* pEvent);
 
 public:
     MapEditor(uint32 mapID, const MappingObject& mappingObject, const DATABASE::DatabaseMgr& DBMgr, QWidget* pWidget = nullptr);
 
     void saveMap();
-    void loadMap();
     void reloadMap();
 
     void setZoom(uint32 zoom);
@@ -94,6 +98,7 @@ public:
     void addRevert(MAP::REVERT::Interface* pRevert);
 
 private slots:
+    void _onSave();
     void _onActionCopy();
     void _onActionPaste();
     void _onActionCut();
@@ -109,14 +114,13 @@ signals:
     void actionMouseRelease(MapEditor& editor, const QPoint& pos, Qt::MouseButton button);
     void actionMouseMove(MapEditor& editor, const QPoint& pos);
 
+    void actionKeyPress(MapEditor& editor, const QPoint& pos, QKeyEvent* pEvent);
+    void actionKeyRelease(MapEditor& editor, const QPoint& pos, QKeyEvent* pEvent);
+
     void changed(uint32 mapID);
 
 private:
-    QShortcut* m_pActionCopy;
-    QShortcut* m_pActionPaste;
-    QShortcut* m_pActionCut;
-    QShortcut* m_pActionDelete;
-
+    const MappingObject& m_MappingObject;
     const DATABASE::DatabaseMgr& m_DBMgr;
     MAP::MAP_DATA::MapData m_MapData;
     std::vector<std::unique_ptr<MAP::REVERT::Interface>> m_Reverts;

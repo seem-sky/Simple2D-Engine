@@ -33,6 +33,7 @@ namespace MAP
             WorldObjectInfo* addWorldObject(const WorldObjectInfo& info);
             WorldObjectInfo* addWorldObject(uint32 ID, const GEOMETRY::Point<int32>& pos, MapObjectLayer layer, MapDirection direction = MapDirection::DOWN);
             WorldObjectInfo* getWorldObject(GUID guid);
+            const std::vector<std::unique_ptr<WorldObjectInfo>>& getWorldObjects() const;
             const WorldObjectInfo* getWorldObject(GUID guid) const;
             bool hasWorldObject(GUID guid) const;
             void removeWorldObject(GUID guid);

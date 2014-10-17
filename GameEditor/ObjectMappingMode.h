@@ -10,10 +10,16 @@ namespace MAPPING_MODE
     class Object : public Interface
     {
         Q_OBJECT
+    private:
+        void _storeMoveoInfoReverts(MapEditor& editor);
+
     public:
         void press(MapEditor& editor, const QPoint& pos, Qt::MouseButton button);
         void release(MapEditor& editor, const QPoint& pos, Qt::MouseButton button);
         void move(MapEditor& editor, const QPoint& pos);
+
+        void keyPress(MapEditor& editor, const QPoint& pos, QKeyEvent* pEvent);
+        void keyRelease(MapEditor& editor, const QPoint& pos, QKeyEvent* pEvent);
 
         void copy(const MapEditor& editor);
         void cut(const MapEditor& editor);

@@ -18,6 +18,8 @@ protected:
 public:
     MapViewItem(MAP::MAP_DATA::WorldObjectInfo& info);
 
+    void setEditable(bool editable = true);
+
     void setTopLeftPos(GEOMETRY::Point<int32> pos);
     void setTopLeftPos(int32 x, int32 y);
     GEOMETRY::Point<int32> getTopLeftPos() const;

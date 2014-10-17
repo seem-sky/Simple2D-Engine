@@ -453,7 +453,7 @@
     <moc_header Include="ObjectMappingMode.h">
       <Filter>Map Editor\Modules\MappingObject\MappingMode\ObjectMapping</Filter>
     </moc_header>
-    <moc_header Include="MapEditorScene.h">
+    <moc_header Include="MapEditor.h">
       <Filter>Map Editor\Modules\Content</Filter>
     </moc_header>
   </ItemGroup>
@@ -513,14 +513,14 @@
     <ClInclude Include="ToolWidget.h">
       <Filter>Map Editor\Widgets\Tools</Filter>
     </ClInclude>
-    <ClInclude Include="MapViewer.h">
-      <Filter>Map Editor\Modules\Content</Filter>
-    </ClInclude>
     <ClInclude Include="MapViewItem.h">
       <Filter>Map Editor\Modules\Content</Filter>
     </ClInclude>
     <ClInclude Include="ObjectMappingRevert.h">
       <Filter>Map Editor\Modules\MappingObject\MappingMode\ObjectMapping\Revert</Filter>
+    </ClInclude>
+    <ClInclude Include="MapEditorScene.h">
+      <Filter>Map Editor\Modules\Content</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

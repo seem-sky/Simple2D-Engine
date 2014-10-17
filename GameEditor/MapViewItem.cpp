@@ -7,10 +7,13 @@
 MapViewItem::MapViewItem(MAP::MAP_DATA::WorldObjectInfo& info) : QGraphicsPixmapItem(), QObject(), m_WorldObjectInfo(info)
 {
     setFlag(ItemSendsScenePositionChanges);
-    setFlag(ItemIsMovable);
-    setFlag(ItemIsSelectable);
-
     m_Flags.setFlag(Flags::DRAW_BOUNDING_RECT);
+}
+
+void MapViewItem::setEditable(bool editable)
+{
+    setFlag(ItemIsMovable, editable);
+    setFlag(ItemIsSelectable, editable);
 }
 
 void MapViewItem::paint(QPainter* pPainter, const QStyleOptionGraphicsItem* pOption, QWidget* pWidget /* = 0 */)

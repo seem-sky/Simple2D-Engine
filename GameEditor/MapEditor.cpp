@@ -19,9 +19,7 @@
 # MapViewer
 #####*/
 MapEditor::MapEditor(uint32 mapID, const MappingObject& mappingObject, const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent) : QGraphicsView(pParent),
-m_MapData(DBMgr, mapID), m_DBMgr(DBMgr),
-m_pActionCopy(new QShortcut(QKeySequence(QKeySequence::Copy), this)), m_pActionPaste(new QShortcut(QKeySequence(QKeySequence::Paste), this)),
-m_pActionCut(new QShortcut(QKeySequence(QKeySequence::Cut), this)), m_pActionDelete(new QShortcut(QKeySequence(QKeySequence::Delete), this))
+m_MapData(DBMgr, mapID), m_DBMgr(DBMgr), m_MappingObject(mappingObject)
 {
     setScene(new MapEditorScene(mappingObject, m_MapData, DBMgr));
     scene()->setParent(this);
@@ -30,10 +28,26 @@ m_pActionCut(new QShortcut(QKeySequence(QKeySequence::Cut), this)), m_pActionDel
 
 	setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 
-    connect(m_pActionCopy, SIGNAL(activated()), this, SLOT(_onActionCopy()));
-    connect(m_pActionPaste, SIGNAL(activated()), this, SLOT(_onActionPaste()));
-    connect(m_pActionCut, SIGNAL(activated()), this, SLOT(_onActionCut()));
-    connect(m_pActionDelete, SIGNAL(activated()), this, SLOT(_onActionDelete()));
+    _loadMap();
+    _setupShortcuts();
+}
+
+void MapEditor::_setupShortcuts()
+{
+    QShortcut* pActionCopy(new QShortcut(QKeySequence(QKeySequence::Copy), this));
+    QShortcut* pActionPaste(new QShortcut(QKeySequence(QKeySequence::Paste), this));
+    QShortcut* pActionCut(new QShortcut(QKeySequence(QKeySequence::Cut), this));
+    QShortcut* pActionDelete(new QShortcut(QKeySequence(QKeySequence::Delete), this));
+
+    connect(pActionCopy, SIGNAL(activated()), this, SLOT(_onActionCopy()));
+    connect(pActionPaste, SIGNAL(activated()), this, SLOT(_onActionPaste()));
+    connect(pActionCut, SIGNAL(activated()), this, SLOT(_onActionCut()));
+    connect(pActionDelete, SIGNAL(activated()), this, SLOT(_onActionDelete()));
+
+    pActionCopy->setAutoRepeat(false);
+    pActionPaste->setAutoRepeat(false);
+    pActionCut->setAutoRepeat(false);
+    pActionDelete->setAutoRepeat(false);
 }
 
 MapViewItem* MapEditor::_addWorldObject(const DATABASE::PROTOTYPE::WORLD_OBJECT::WorldObjectPrototype* pWorldObject, MAP::MAP_DATA::WorldObjectInfo& info)
@@ -76,6 +90,10 @@ MapViewItem* MapEditor::_setupWorldObject(const DATABASE::PROTOTYPE::WORLD_OBJEC
     auto rect = viewer.scene()->itemsBoundingRect();
     viewer.resizeToContent();
     pItem->setPixmap(viewer.grab());
+
+    // set flags
+    if (m_MappingObject.getMappingModeType() != MAPPING_MODE::Type::OBJECT_MAPPING)
+        pItem->setEditable(false);
 
     // setup position
     //pos = _getNearestAvailablePosition(QPoint(pos.x() - viewer.size().width() / 2, pos.y() - viewer.size().height() / 2), pWorldObject->getBoundingRect());
@@ -147,21 +165,28 @@ MapViewItem* MapEditor::getWorldObject(MAP::MAP_DATA::GUID guid)
     return nullptr;
 }
 
-void MapEditor::loadMap()
+void MapEditor::_loadMap()
 {
     m_MapData.load();
+    // setup scene
     auto mapSize = m_MapData.getMapLayer().getSize();
     scene()->setSceneRect(0, 0, mapSize.getX()*TILE_SIZE, mapSize.getY()*TILE_SIZE);
+
+    for (auto& info : m_MapData.getWorldObjectInfoData().getWorldObjects())
+    {
+        if (auto pWorldObject = m_DBMgr.getWorldObjectDatabase()->getOriginalPrototype(info->getID()))
+            _addWorldObject(pWorldObject, *info);
+    }
     scene()->update();
 }
 
 void MapEditor::saveMap()
 {
-    if (auto pScene = dynamic_cast<MapEditorScene*>(scene()))
-    {
-        m_MapData.save();
-        clearReverts();
-    }
+    if (!hasChanged())
+        return;
+
+    m_MapData.save();
+    clearReverts();
 }
 
 void MapEditor::reloadMap()
@@ -294,6 +319,25 @@ void MapEditor::mouseMoveEvent(QMouseEvent* pEvent)
     emit actionMouseMove(*this, mapToScene(pEvent->pos()).toPoint());
 }
 
+void MapEditor::keyPressEvent(QKeyEvent* pEvent)
+{
+    emit actionKeyPress(*this, mapToScene(mapFromGlobal(QCursor::pos())).toPoint(), pEvent);
+    if (pEvent->isAccepted())
+        QGraphicsView::keyPressEvent(pEvent);
+}
+
+void MapEditor::keyReleaseEvent(QKeyEvent* pEvent)
+{
+    emit actionKeyRelease(*this, mapToScene(mapFromGlobal(QCursor::pos())).toPoint(), pEvent);
+    if (pEvent->isAccepted())
+        QGraphicsView::keyPressEvent(pEvent);
+}
+
+void MapEditor::_onSave()
+{
+    saveMap();
+}
+
 void MapEditor::_onActionCopy()
 {
     emit actionCopy(*this);
@@ -320,7 +364,7 @@ void MapEditor::revertLast()
         return;
 
     m_Reverts.back()->revert();
-    update();
+    scene()->update();
     m_Reverts.pop_back();
     emit changed(m_MapData.getMapID());
 }

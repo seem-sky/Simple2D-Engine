@@ -3,6 +3,7 @@
 #include "Project.h"
 #include <QtWidgets/QMessageBox>
 #include "MapEditor.h"
+#include "MapViewItem.h"
 #include <DatabaseMgr.h>
 #include <QtWidgets/QGraphicsItem>
 
@@ -108,28 +109,32 @@ void MapEditorModuleContent::onMapOpened(uint32 mapID)
     if (auto pTab = getTab(mapID))
         return;
 
-    auto pNewMapViewer = new MapEditor(mapID, m_MappingObject, m_DBMgr, this);
+    auto pEditor = new MapEditor(mapID, m_MappingObject, m_DBMgr, this);
     try
     {
-        pNewMapViewer->loadMap();
-        m_pMapTabs->addTab(pNewMapViewer, m_DBMgr.getMapDatabase()->getOriginalPrototype(mapID)->getName());
-        m_pMapTabs->setCurrentWidget(pNewMapViewer);
-        connect(pNewMapViewer, SIGNAL(actionMousePress(MapEditor&, const QPoint&, Qt::MouseButton)), &m_MappingObject,
+        m_pMapTabs->addTab(pEditor, m_DBMgr.getMapDatabase()->getOriginalPrototype(mapID)->getName());
+        m_pMapTabs->setCurrentWidget(pEditor);
+        connect(this, SIGNAL(save()), pEditor, SLOT(_onSave()));
+        connect(pEditor, SIGNAL(actionMousePress(MapEditor&, const QPoint&, Qt::MouseButton)), &m_MappingObject,
             SLOT(press(MapEditor&, const QPoint&, Qt::MouseButton)));
-        connect(pNewMapViewer, SIGNAL(actionMouseRelease(MapEditor&, const QPoint&, Qt::MouseButton)), &m_MappingObject,
+        connect(pEditor, SIGNAL(actionMouseRelease(MapEditor&, const QPoint&, Qt::MouseButton)), &m_MappingObject,
             SLOT(release(MapEditor&, const QPoint&, Qt::MouseButton)));
-        connect(pNewMapViewer, SIGNAL(actionMouseMove(MapEditor&, const QPoint&)), &m_MappingObject, SLOT(move(MapEditor&, const QPoint&)));
+        connect(pEditor, SIGNAL(actionMouseMove(MapEditor&, const QPoint&)), &m_MappingObject, SLOT(move(MapEditor&, const QPoint&)));
+        connect(pEditor, SIGNAL(actionKeyPress(MapEditor&, const QPoint&, QKeyEvent*)),
+            &m_MappingObject, SLOT(onActionKeyPressed(MapEditor&, const QPoint&, QKeyEvent*)));
+        connect(pEditor, SIGNAL(actionKeyRelease(MapEditor&, const QPoint&, QKeyEvent*)),
+            &m_MappingObject, SLOT(onActionKeyReleased(MapEditor&, const QPoint&, QKeyEvent*)));
 
-        connect(pNewMapViewer, SIGNAL(actionCopy(const MapEditor&)), &m_MappingObject, SLOT(onActionCopy(const MapEditor&)));
-        connect(pNewMapViewer, SIGNAL(actionCut(const MapEditor&)), &m_MappingObject, SLOT(onActionCut(const MapEditor&)));
-        connect(pNewMapViewer, SIGNAL(actionDelete(MapEditor&)), &m_MappingObject, SLOT(onActionDelete(MapEditor&)));
-        connect(pNewMapViewer, SIGNAL(actionPaste(MapEditor&, const QPoint&)), &m_MappingObject, SLOT(onActionPaste(MapEditor&, const QPoint&)));
+        connect(pEditor, SIGNAL(actionCopy(const MapEditor&)), &m_MappingObject, SLOT(onActionCopy(const MapEditor&)));
+        connect(pEditor, SIGNAL(actionCut(const MapEditor&)), &m_MappingObject, SLOT(onActionCut(const MapEditor&)));
+        connect(pEditor, SIGNAL(actionDelete(MapEditor&)), &m_MappingObject, SLOT(onActionDelete(MapEditor&)));
+        connect(pEditor, SIGNAL(actionPaste(MapEditor&, const QPoint&)), &m_MappingObject, SLOT(onActionPaste(MapEditor&, const QPoint&)));
 
-        connect(pNewMapViewer, SIGNAL(changed(uint32)), this, SLOT(_onMapChanged(uint32)));
+        connect(pEditor, SIGNAL(changed(uint32)), this, SLOT(_onMapChanged(uint32)));
     }
     catch (const std::bad_alloc& e)
     {
-        pNewMapViewer->deleteLater();
+        pEditor->deleteLater();
         QMessageBox::information(0, "Memory Error.", QString("It looks as if the map is too large.\n") +
             QString("The Error-Message is: ") + QString(e.what()), QMessageBox::Ok, QMessageBox::Ok);
     }
@@ -163,8 +168,8 @@ void MapEditorModuleContent::onMappingModeChanged(MAPPING_MODE::Type mode)
         {
             for (auto pItem : pTab->items())
             {
-                pItem->setFlag(QGraphicsItem::ItemIsMovable, mode == MAPPING_MODE::Type::OBJECT_MAPPING);
-                pItem->setFlag(QGraphicsItem::ItemIsSelectable, mode == MAPPING_MODE::Type::OBJECT_MAPPING);
+                if (auto pWO = dynamic_cast<MapViewItem*>(pItem))
+                    pWO->setEditable(mode == MAPPING_MODE::Type::OBJECT_MAPPING);
             }
         }
     }
@@ -197,12 +202,5 @@ void MapEditorModuleContent::_onMapChanged(uint32 mapID)
 
 void MapEditorModuleContent::saveMaps()
 {
-    for (int32 i = 0; i < m_pMapTabs->count(); ++i)
-    {
-        if (auto pTab = dynamic_cast<MapEditor*>(m_pMapTabs->widget(i)))
-        {
-            if (pTab->hasChanged())
-                pTab->saveMap();
-        }
-    }
+    emit save();
 }

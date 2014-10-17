@@ -81,3 +81,13 @@ void MappingObject::onActionPaste(MapEditor& editor, const QPoint& pos)
 {
     m_pCurrentMappingMode->paste(editor, pos);
 }
+
+void MappingObject::onActionKeyPressed(MapEditor& editor, const QPoint& pos, QKeyEvent* pEvent)
+{
+    m_pCurrentMappingMode->keyPress(editor, pos, pEvent);
+}
+
+void MappingObject::onActionKeyReleased(MapEditor& editor, const QPoint& pos, QKeyEvent* pEvent)
+{
+    m_pCurrentMappingMode->keyRelease(editor, pos, pEvent);
+}

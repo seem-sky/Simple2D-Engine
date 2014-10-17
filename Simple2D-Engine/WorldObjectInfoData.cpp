@@ -62,6 +62,11 @@ namespace MAP
             return const_cast<WorldObjectInfo*>(const_cast<const WorldObjectInfoData&>(*this).getWorldObject(guid));
         }
 
+        const std::vector<std::unique_ptr<WorldObjectInfo>>& WorldObjectInfoData::getWorldObjects() const
+        {
+            return m_WorldObjectInfos;
+        }
+
         void WorldObjectInfoData::removeWorldObject(GUID guid)
         {
             for (auto itr = m_WorldObjectInfos.begin(); itr != m_WorldObjectInfos.end(); ++itr)

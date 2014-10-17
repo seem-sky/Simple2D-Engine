@@ -1,6 +1,8 @@
 #include "MapBinaryIO.h"
 #include <QtCore/QFile>
 #include <geometry/Point3D.h>
+#include "WorldObjectInfoData.h"
+#include "MapData.h"
 
 using namespace MAP;
 using namespace DATABASE::PROTOTYPE::MAP_STRUCTURE;
@@ -25,8 +27,8 @@ void INPUT::MapBinaryReader::readFile(const QString& fileName, MAP_DATA::MapData
     _readLayer(in, data.getMapLayer(), LayerType::LAYER_BACKGROUND, version);
     _readLayer(in, data.getMapLayer(), LayerType::LAYER_FOREGROUND, version);
 
-    //// load objects
-    //_readObjects(in, pMap, version);
+    // load objects
+    _readObjects(in, data.getWorldObjectInfoData(), version);
 }
 
 void INPUT::MapBinaryReader::_readLayer(QDataStream& in, LayerContainer& mapLayer, LayerType layer, uint16 version)
@@ -41,15 +43,14 @@ void INPUT::MapBinaryReader::_readLayer(QDataStream& in, LayerContainer& mapLaye
     }
 }
 
-void INPUT::MapBinaryReader::_readObjects(QDataStream& in, MapPrototype* pMap, uint16 version)
+void INPUT::MapBinaryReader::_readObjects(QDataStream& in, MAP::MAP_DATA::WorldObjectInfoData& data, uint16 version)
 {
     switch(version)
     {
     case 1:
     case 2:
-        _readObjectsV1(in, pMap);
     case 3:
-        _readObjectsV2(in, pMap);
+        _readObjectsV1(in, data);
         break;
     default: throw std::ios::failure("No valid file version."); break;
     }
@@ -92,37 +93,26 @@ void INPUT::MapBinaryReader::_readLayerV2(QDataStream& in, LayerContainer& mapLa
     }
 }
 
-void INPUT::MapBinaryReader::_readObjectsV1(QDataStream& in, MapPrototype* pMap)
+void INPUT::MapBinaryReader::_readObjectsV1(QDataStream& in, MAP::MAP_DATA::WorldObjectInfoData& data)
 {
-    // ToDo: add fill into ObjectContainer
-    //uint32 objectCount = 0;
-    //in >> objectCount;
-    //for (uint32 i = 0; i < objectCount; ++i)
-    //{
-    //    auto pObj = new MapObject();
-    //    uint32 type = 0, layer = 0;
-    //    in >> pObj->m_GUID >> pObj->m_ObjectID >> type >> pObj->m_Position.x >> pObj->m_Position.y >> layer >> pObj->m_GUID;
-    //    pObj->m_Type = static_cast<MAP_OBJECT::ObjectType>(type);
-    //    pObj->m_Layer = static_cast<MapObjectLayer>(layer);
-    //    pMap->addMapObject(pObj);
-    //}
-}
-
-// without world_object type (there is only one type left)
-void INPUT::MapBinaryReader::_readObjectsV2(QDataStream& in, MapPrototype* pMap)
-{
-    // ToDo: add fill into ObjectContainer
-    //uint32 objectCount = 0;
-    //in >> objectCount;
-    //for (uint32 i = 0; i < objectCount; ++i)
-    //{
-    //    auto pObj = new MapObject();
-    //    uint32 type = 0, layer = 0;
-    //    in >> pObj->m_GUID >> pObj->m_ObjectID >> type >> pObj->m_Position.x >> pObj->m_Position.y >> layer >> pObj->m_GUID;
-    //    pObj->m_Type = static_cast<MAP_OBJECT::ObjectType>(type);
-    //    pObj->m_Layer = static_cast<MapObjectLayer>(layer);
-    //    pMap->addMapObject(pObj);
-    //}
+    uint32 objectCount = 0;
+    in >> objectCount;
+    for (uint32 i = 0; i < objectCount; ++i)
+    {
+        MAP::MAP_DATA::GUID guid;
+        in >> guid;
+        MAP::MAP_DATA::WorldObjectInfo info(guid);
+        uint32 id = 0;
+        uint8 layer = 0, direction = 0;
+        GEOMETRY::Point<int32> pos;
+        in >> id >> layer >> direction >> pos.getX() >> pos.getY();
+        info.setID(id);
+        info.setLayer(static_cast<MAP_DATA::MapObjectLayer>(layer));
+        info.setDirection(static_cast<MAP_DATA::MapDirection>(direction));
+        info.setPosition(pos);
+        if (info.isValid())
+            data.addWorldObject(info);
+    }
 }
 
 /*#####
@@ -142,8 +132,8 @@ void OUTPUT::MapBinaryWriter::writeFile(const QString& fileName, const MAP_DATA:
     _writeLayer(out, data.getMapLayer(), MAP::LayerType::LAYER_BACKGROUND);
     _writeLayer(out, data.getMapLayer(), MAP::LayerType::LAYER_FOREGROUND);
 
-    //// store objects
-    //_writeObjects(out, pMap);
+    // store objects
+    _writeObjects(out, data.getWorldObjectInfoData());
 }
 
 void OUTPUT::MapBinaryWriter::_writeLayer(QDataStream& out, const LayerContainer& mapLayer, LayerType layer)
@@ -162,13 +152,20 @@ void OUTPUT::MapBinaryWriter::_writeLayer(QDataStream& out, const LayerContainer
     }
 }
 
-void OUTPUT::MapBinaryWriter::_writeObjects(QDataStream& out, const MapPrototype* pMap)
+void OUTPUT::MapBinaryWriter::_writeObjects(QDataStream& out, const MAP::MAP_DATA::WorldObjectInfoData& data)
 {
-    //out << pMap->getMapObjectCount();
-    //for (uint32 i = 1; i <= pMap->getMapObjectCount(); ++i)
-    //{
-    //    auto pObj = pMap->getMapObject(i);
-    //    if (pObj && !pObj->isEmpty())
-    //        out << pObj->m_GUID << pObj->m_ObjectID << pObj->m_Position.x << pObj->m_Position.y << pObj->m_Layer << pObj->m_GUID;
-    //}
+    auto& objects = data.getWorldObjects();
+    out << uint32(objects.size());
+    for (auto& info : objects)
+    {
+        if (!info->isValid())
+            continue;
+        out <<
+            info->getGUID() <<
+            info->getID() <<
+            static_cast<uint8>(info->getLayer()) <<
+            static_cast<uint8>(info->getDirection()) <<
+            info->getPosition().getX() <<
+            info->getPosition().getY();
+    }
 }

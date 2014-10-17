@@ -7,6 +7,23 @@
 
 namespace MAPPING_MODE
 {
+    void Object::_storeMoveoInfoReverts(MapEditor& editor)
+    {
+        std::unique_ptr<MAP::REVERT::RevertContainer> pRevertContainer(new MAP::REVERT::RevertContainer());
+        for (auto& info : m_MoveInfos)
+        {
+            if (auto pItem = editor.getWorldObject(info.getGUID()))
+            {
+                if (pItem->getWorldObjectInfo().getPosition() != info.getPosition())
+                    pRevertContainer->addRevert(new MAPPING_MODE::REVERT::ObjectModify(info, editor));
+            }
+        }
+
+        if (!pRevertContainer->isEmpty())
+            editor.addRevert(pRevertContainer.release());
+        m_MoveInfos.clear();
+    }
+
     void Object::press(MapEditor& editor, const QPoint& pos, Qt::MouseButton button)
     {
         if (button != Qt::LeftButton)
@@ -36,19 +53,7 @@ namespace MAPPING_MODE
         if (button != Qt::LeftButton)
             return;
 
-        std::unique_ptr<MAP::REVERT::RevertContainer> pRevertContainer(new MAP::REVERT::RevertContainer());
-        for (auto& info : m_MoveInfos)
-        {
-            if (auto pItem = editor.getWorldObject(info.getGUID()))
-            {
-                if (pItem->getWorldObjectInfo().getPosition() != info.getPosition())
-                    pRevertContainer->addRevert(new MAPPING_MODE::REVERT::ObjectModify(info, editor));
-            }
-        }
-
-        if (!pRevertContainer->isEmpty())
-            editor.addRevert(pRevertContainer.release());
-        m_MoveInfos.clear();
+        _storeMoveoInfoReverts(editor);
     }
 
     void Object::move(MapEditor& editor, const QPoint& pos)
@@ -129,6 +134,51 @@ namespace MAPPING_MODE
 
         if (!pRevertContainer->isEmpty())
             editor.addRevert(pRevertContainer.release());
+    }
+
+    void Object::keyPress(MapEditor& editor, const QPoint& pos, QKeyEvent* pEvent)
+    {
+        switch (pEvent->key())
+        {
+        case Qt::Key_Left:
+        case Qt::Key_Right:
+        case Qt::Key_Up:
+        case Qt::Key_Down:
+            pEvent->setAccepted(false);
+            bool fill = m_MoveInfos.empty();
+
+            for (auto pItem : editor.scene()->items())
+            {
+                if (fill)
+                {
+                    if (auto pWO = dynamic_cast<MapViewItem*>(pItem))
+                        m_MoveInfos.push_back(pWO->getWorldObjectInfo());
+                }
+
+                switch (pEvent->key())
+                {
+                case Qt::Key_Left: pItem->moveBy(-1, 0); break;
+                case Qt::Key_Right: pItem->moveBy(1, 0); break;
+                case Qt::Key_Up: pItem->moveBy(0, -1); break;
+                case Qt::Key_Down: pItem->moveBy(0, 1); break;
+                }
+            }
+            break;
+        }
+    }
+
+    void Object::keyRelease(MapEditor& editor, const QPoint& pos, QKeyEvent* pEvent)
+    {
+        switch (pEvent->key())
+        {
+        case Qt::Key_Left:
+        case Qt::Key_Right:
+        case Qt::Key_Up:
+        case Qt::Key_Down:
+            pEvent->setAccepted(false);
+            _storeMoveoInfoReverts(editor);
+            break;
+        }
     }
 
     void Object::onDirectionChanged(MAP::MAP_DATA::MapDirection dir)

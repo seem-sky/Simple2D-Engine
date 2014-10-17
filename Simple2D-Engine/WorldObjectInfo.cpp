@@ -9,7 +9,7 @@ namespace MAP
 
         bool WorldObjectInfo::isValid() const
         {
-            return !m_GUID || !m_ObjectID;
+            return m_GUID && m_ObjectID;
         }
 
         void WorldObjectInfo::setID(uint32 ID)

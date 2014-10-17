@@ -3,7 +3,7 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QStringList>
-#include <QtGui/QKeySequence>
+#include <QtGui/QKeyEvent>
 #include <memory>
 #include "MappingModeInterface.h"
 
@@ -34,6 +34,8 @@ public slots:
     void onActionCut(const MapEditor& editor);
     void onActionPaste(MapEditor& editor, const QPoint& pos);
     void onActionDelete(MapEditor& editor);
+    void onActionKeyPressed(MapEditor& editor, const QPoint& pos, QKeyEvent* pEvent);
+    void onActionKeyReleased(MapEditor& editor, const QPoint& pos, QKeyEvent* pEvent);
 
 private:
     typedef std::unique_ptr<MAPPING_MODE::Interface> MappingModePtr;

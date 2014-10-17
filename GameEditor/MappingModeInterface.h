@@ -1,7 +1,7 @@
 #ifndef MAPPING_MODE_INTERFACE_H
 #define MAPPING_MODE_INTERFACE_H
 
-#include <QtGui/QKeySequence>
+#include <QtGui/QKeyEvent>
 #include <QtCore/QObject>
 #include <Global.h>
 
@@ -28,6 +28,8 @@ namespace MAPPING_MODE
         virtual void cut(const MapEditor& editor) = 0;
         virtual void paste(MapEditor& editor, const QPoint& pos) = 0;
         virtual void remove(MapEditor& editor) = 0;
+        virtual void keyPress(MapEditor& editor, const QPoint& pos, QKeyEvent* pEvent) = 0;
+        virtual void keyRelease(MapEditor& editor, const QPoint& pos, QKeyEvent* pEvent) = 0;
 
         virtual Type getModeType() const = 0;
         virtual QString getModeName() const = 0;

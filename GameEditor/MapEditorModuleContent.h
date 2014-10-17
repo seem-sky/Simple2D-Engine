@@ -41,6 +41,9 @@ public slots:
 
     void onMappingModeChanged(MAPPING_MODE::Type mode);
 
+signals:
+    void save();
+
 private:
     DATABASE::DatabaseMgr& m_DBMgr;
     const MappingObject& m_MappingObject;
