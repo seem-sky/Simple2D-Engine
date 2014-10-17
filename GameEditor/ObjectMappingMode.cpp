@@ -147,20 +147,23 @@ namespace MAPPING_MODE
             pEvent->setAccepted(false);
             bool fill = m_MoveInfos.empty();
 
-            for (auto pItem : editor.scene()->items())
+            for (auto pItem : editor.scene()->selectedItems())
             {
-                if (fill)
+                if (!pEvent->isAutoRepeat())
                 {
                     if (auto pWO = dynamic_cast<MapViewItem*>(pItem))
                         m_MoveInfos.push_back(pWO->getWorldObjectInfo());
                 }
 
+                int32 move = 1;
+                if (pEvent->modifiers() & Qt::ShiftModifier)
+                    move = TILE_SIZE;
                 switch (pEvent->key())
                 {
-                case Qt::Key_Left: pItem->moveBy(-1, 0); break;
-                case Qt::Key_Right: pItem->moveBy(1, 0); break;
-                case Qt::Key_Up: pItem->moveBy(0, -1); break;
-                case Qt::Key_Down: pItem->moveBy(0, 1); break;
+                case Qt::Key_Left: pItem->moveBy(-move, 0); break;
+                case Qt::Key_Right: pItem->moveBy(move, 0); break;
+                case Qt::Key_Up: pItem->moveBy(0, -move); break;
+                case Qt::Key_Down: pItem->moveBy(0, move); break;
                 }
             }
             break;
@@ -176,7 +179,8 @@ namespace MAPPING_MODE
         case Qt::Key_Up:
         case Qt::Key_Down:
             pEvent->setAccepted(false);
-            _storeMoveoInfoReverts(editor);
+            if (!pEvent->isAutoRepeat())
+                _storeMoveoInfoReverts(editor);
             break;
         }
     }
