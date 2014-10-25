@@ -63,6 +63,8 @@
     <ClCompile Include="BrushRevert.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneMgr.cpp" />
+    <ClCompile Include="ScriptArea.cpp" />
+    <ClCompile Include="ScriptAreaData.cpp" />
     <ClCompile Include="TileCache.cpp" />
     <ClCompile Include="MapException.cpp" />
     <ClCompile Include="TransformationHolder.cpp" />
@@ -96,6 +98,8 @@
     <ClInclude Include="BrushTypeTileSet.h" />
     <ClInclude Include="Colission.h" />
     <ClInclude Include="RevertInterface.h" />
+    <ClInclude Include="ScriptArea.h" />
+    <ClInclude Include="ScriptAreaData.h" />
     <ClInclude Include="Simple2D-Global.h" />
     <ClInclude Include="MapViewScene.h" />
     <ClInclude Include="PrototypeAnimationModule.h" />

@@ -22,12 +22,12 @@ namespace MAPPING_MODE
         class ObjectAdd : public ObjectBase
         {
         public:
-            ObjectAdd(MAP::MAP_DATA::GUID guid, MapEditor& editor);
+            ObjectAdd(MAP::GUID guid, MapEditor& editor);
 
             void revert();
 
         private:
-            MAP::MAP_DATA::GUID m_GUID;
+            MAP::GUID m_GUID;
         };
 
         class ObjectModify : public ObjectBase

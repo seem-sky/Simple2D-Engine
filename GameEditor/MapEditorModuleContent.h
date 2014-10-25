@@ -43,6 +43,7 @@ public slots:
 
 signals:
     void save();
+    void changeMappingMode(MAPPING_MODE::Type mode);
 
 private:
     DATABASE::DatabaseMgr& m_DBMgr;

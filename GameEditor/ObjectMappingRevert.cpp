@@ -12,7 +12,7 @@ ObjectBase::ObjectBase(MapEditor& editor) : m_Editor(editor), MAP::REVERT::Inter
 /*#####
 # ObjectAdd
 #####*/
-ObjectAdd::ObjectAdd(MAP::MAP_DATA::GUID guid, MapEditor& editor) : ObjectBase(editor), m_GUID(guid)
+ObjectAdd::ObjectAdd(MAP::GUID guid, MapEditor& editor) : ObjectBase(editor), m_GUID(guid)
 {}
 
 void ObjectAdd::revert()

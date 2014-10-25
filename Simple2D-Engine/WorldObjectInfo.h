@@ -2,6 +2,7 @@
 #define WORLD_OBJECT_INFO_H
 
 #include <Typedefs.h>
+#include <Simple2D-Global.h>
 
 namespace MAP
 {
@@ -24,8 +25,6 @@ namespace MAP
             ABOVE_FOREGROUND
         };
         const uint32 MAX_OBJECT_LAYER = 5;
-
-        typedef uint32 GUID;
 
         // map objects
         class WorldObjectInfo

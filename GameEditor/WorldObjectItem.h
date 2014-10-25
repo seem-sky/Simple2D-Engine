@@ -1,5 +1,5 @@
-#ifndef MAP_VIEW_ITEM_H
-#define MAP_VIEW_ITEM_H
+#ifndef WORLD_OBJECT_ITEM_H
+#define WORLD_OBJECT_ITEM_H
 
 #include <QtWidgets/QGraphicsPixmapItem>
 #include <geometry/Rectangle.h>
@@ -7,7 +7,7 @@
 #include "WorldObjectInfo.h"
 #include <QtWidgets/QMenu>
 
-class MapViewItem : public QGraphicsPixmapItem, public QObject
+class WorldObjectItem : public QGraphicsPixmapItem, public QObject
 {
 private:
     QPoint _checkMove(QPoint moveTo) const;
@@ -16,7 +16,7 @@ protected:
     QVariant itemChange(GraphicsItemChange change, const QVariant& value);
 
 public:
-    MapViewItem(MAP::MAP_DATA::WorldObjectInfo& info);
+    WorldObjectItem(MAP::MAP_DATA::WorldObjectInfo& info);
 
     void setEditable(bool editable = true);
 
@@ -46,6 +46,8 @@ public:
 
     FlagManager<Flags>& getFlags() { return m_Flags; }
     const FlagManager<Flags>& getFlags() const { return m_Flags; }
+
+    int type() const { return QGraphicsItem::UserType + 1; }
 
 private:
     MAP::MAP_DATA::WorldObjectInfo& m_WorldObjectInfo;

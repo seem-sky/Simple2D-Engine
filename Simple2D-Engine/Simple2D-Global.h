@@ -36,8 +36,8 @@ namespace MAP
         LAYER_BACKGROUND,
         LAYER_FOREGROUND
     };
+
+    typedef uint32 GUID;
+    const uint32 TILE_SIZE = 32;
 }
-
-const uint32 TILE_SIZE = 32;
-
 #endif

@@ -77,6 +77,7 @@ void MapEditorWidgetEditor::_onMappingModeChanged(int index)
         m_pModuleWorldObjects->show();
         break;
 
+    case MAPPING_MODE::Type::SCRIPT_AREA_MAPPING:
     case MAPPING_MODE::Type::PRESENTATION:
         break;
     default:

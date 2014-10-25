@@ -79,7 +79,7 @@ namespace MAP
             }
         }
 
-        uint32 WorldObjectInfoData::_getNewGUID() const
+        GUID WorldObjectInfoData::_getNewGUID() const
         {
             if (isEmpty())
                 return 1;

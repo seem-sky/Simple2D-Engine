@@ -27,9 +27,9 @@ public:
     MAPPING_MODE::Interface* getMappingMode(MAPPING_MODE::Type mode);
 
 public slots:
-    void press(MapEditor& editor, const QPoint& pos, Qt::MouseButton button);
-    void release(MapEditor& editor, const QPoint& pos, Qt::MouseButton button);
-    void move(MapEditor& editor, const QPoint& pos);
+    void press(MapEditor& editor, QMouseEvent* pEvent);
+    void release(MapEditor& editor, QMouseEvent* pEvent);
+    void move(MapEditor& editor, QMouseEvent* pEvent);
     void onActionCopy(const MapEditor& editor);
     void onActionCut(const MapEditor& editor);
     void onActionPaste(MapEditor& editor, const QPoint& pos);

@@ -8,8 +8,11 @@
 #include "WorldObjectInfo.h"
 #include "BrushRevert.h"
 #include "VisualViewer.h"
-#include "MapViewItem.h"
+#include "WorldObjectItem.h"
 #include "DelayedDeleteObject.h"
+#include "EditorGlobal.h"
+#include "ScriptAreaItem.h"
+#include <geometry/algorithm.h>
 #include <QtGui/QCursor>
 #include <QtWidgets/QAction>
 #include <QtWidgets/QMenu>
@@ -50,16 +53,16 @@ void MapEditor::_setupShortcuts()
     pActionDelete->setAutoRepeat(false);
 }
 
-MapViewItem* MapEditor::_addWorldObject(const DATABASE::PROTOTYPE::WORLD_OBJECT::WorldObjectPrototype* pWorldObject, MAP::MAP_DATA::WorldObjectInfo& info)
+WorldObjectItem* MapEditor::_addWorldObject(const DATABASE::PROTOTYPE::WORLD_OBJECT::WorldObjectPrototype* pWorldObject, MAP::MAP_DATA::WorldObjectInfo& info)
 {
     // setup viewer
-    auto pItem = new MapViewItem(info);
+    auto pItem = new WorldObjectItem(info);
     scene()->addItem(pItem);
     return _setupWorldObject(pWorldObject, pItem, info);
 }
 
-MapViewItem* MapEditor::_setupWorldObject(const DATABASE::PROTOTYPE::WORLD_OBJECT::WorldObjectPrototype* pWorldObject,
-    MapViewItem* pItem, const MAP::MAP_DATA::WorldObjectInfo& info)
+WorldObjectItem* MapEditor::_setupWorldObject(const DATABASE::PROTOTYPE::WORLD_OBJECT::WorldObjectPrototype* pWorldObject,
+    WorldObjectItem* pItem, const MAP::MAP_DATA::WorldObjectInfo& info)
 {
     pItem->setWorldObjectBoundingRect(pWorldObject->getBoundingRect());
 
@@ -101,7 +104,15 @@ MapViewItem* MapEditor::_setupWorldObject(const DATABASE::PROTOTYPE::WORLD_OBJEC
     return pItem;
 }
 
-MapViewItem* MapEditor::addWorldObject(uint32 ID, const GEOMETRY::Point<int32>& pos, MAP::MAP_DATA::MapObjectLayer layer, MAP::MAP_DATA::MapDirection direction)
+ScriptAreaItem* MapEditor::_setupScriptArea(MAP::SCRIPT_AREA::ScriptArea* scriptArea)
+{
+    auto pItem = new ScriptAreaItem();
+    scene()->addItem(pItem);
+    pItem->setup(scriptArea);
+    return pItem;
+}
+
+WorldObjectItem* MapEditor::addWorldObject(uint32 ID, const GEOMETRY::Point<int32>& pos, MAP::MAP_DATA::MapObjectLayer layer, MAP::MAP_DATA::MapDirection direction)
 {
     if (auto pWorldObject = m_DBMgr.getWorldObjectDatabase()->getOriginalPrototype(ID))
     {
@@ -112,7 +123,7 @@ MapViewItem* MapEditor::addWorldObject(uint32 ID, const GEOMETRY::Point<int32>& 
     return nullptr;
 }
 
-MapViewItem* MapEditor::addWorldObject(const MAP::MAP_DATA::WorldObjectInfo& info)
+WorldObjectItem* MapEditor::addWorldObject(const MAP::MAP_DATA::WorldObjectInfo& info)
 {
     if (auto pWorldObject = m_DBMgr.getWorldObjectDatabase()->getOriginalPrototype(info.getID()))
     {
@@ -133,7 +144,7 @@ void MapEditor::setWorldObject(const MAP::MAP_DATA::WorldObjectInfo& info)
     {
         for (auto pItem : scene()->items())
         {
-            if (auto pWorldObject = dynamic_cast<MapViewItem*>(pItem))
+            if (auto pWorldObject = dynamic_cast<WorldObjectItem*>(pItem))
             {
                 if (pWorldObject->getWorldObjectInfo().getGUID() == info.getGUID())
                     _setupWorldObject(pProto, pWorldObject, info);
@@ -142,21 +153,21 @@ void MapEditor::setWorldObject(const MAP::MAP_DATA::WorldObjectInfo& info)
     }
 }
 
-void MapEditor::removeWorldObject(MAP::MAP_DATA::GUID guid)
+void MapEditor::removeWorldObject(MAP::GUID guid)
 {
     if (auto pItem = getWorldObject(guid))
     {
         scene()->removeItem(pItem);
         getMapData().getWorldObjectInfoData().removeWorldObject(guid);
-        new DelayedDeleteObject<MapViewItem>(pItem);
+        new DelayedDeleteObject<WorldObjectItem>(pItem);
     }
 }
 
-MapViewItem* MapEditor::getWorldObject(MAP::MAP_DATA::GUID guid)
+WorldObjectItem* MapEditor::getWorldObject(MAP::GUID guid)
 {
     for (auto pItem : scene()->items())
     {
-        if (auto pWorldObject = dynamic_cast<MapViewItem*>(pItem))
+        if (auto pWorldObject = dynamic_cast<WorldObjectItem*>(pItem))
         {
             if (pWorldObject->getWorldObjectInfo().getGUID() == guid)
                 return pWorldObject;
@@ -165,12 +176,60 @@ MapViewItem* MapEditor::getWorldObject(MAP::MAP_DATA::GUID guid)
     return nullptr;
 }
 
+ScriptAreaItem* MapEditor::addScriptArea(GEOMETRY::ComplexGeometricShape<int32>* pArea)
+{
+    if (!pArea)
+        return nullptr;
+    
+    return _setupScriptArea(m_MapData.getScriptAreaData().addScriptArea(pArea));
+}
+
+ScriptAreaItem* MapEditor::addScriptArea(MAP::SCRIPT_AREA::ScriptArea* pScript)
+{
+    if (!pScript)
+        return nullptr;
+
+    try
+    {
+        m_MapData.getScriptAreaData().addScriptArea(pScript);
+        _setupScriptArea(pScript);
+    }
+    catch (const std::runtime_error&) {}
+    return nullptr;
+}
+
+ScriptAreaItem* MapEditor::getScriptArea(MAP::GUID guid)
+{
+    for (auto pItem : scene()->items())
+    {
+        if (auto pScriptArea = dynamic_cast<ScriptAreaItem*>(pItem))
+        {
+            if (auto pArea = pScriptArea->getScriptArea())
+            {
+                if (pArea->getGUID() == guid)
+                    return pScriptArea;
+            }
+        }
+    }
+    return nullptr;
+}
+
+void MapEditor::removeScriptArea(MAP::GUID guid)
+{
+    if (auto pItem = getScriptArea(guid))
+    {
+        scene()->removeItem(pItem);
+        m_MapData.getScriptAreaData().removeScriptArea(guid);
+        new DelayedDeleteObject<ScriptAreaItem>(pItem);
+    }
+}
+
 void MapEditor::_loadMap()
 {
     m_MapData.load();
     // setup scene
     auto mapSize = m_MapData.getMapLayer().getSize();
-    scene()->setSceneRect(0, 0, mapSize.getX()*TILE_SIZE, mapSize.getY()*TILE_SIZE);
+    scene()->setSceneRect(0, 0, mapSize.getX()*MAP::TILE_SIZE, mapSize.getY()*MAP::TILE_SIZE);
 
     for (auto& info : m_MapData.getWorldObjectInfoData().getWorldObjects())
     {
@@ -195,16 +254,14 @@ void MapEditor::reloadMap()
     {
         m_MapData.reload();
         auto mapSize = pScene->getMapData().getMapLayer().getSize();
-        pScene->setSceneRect(0, 0, mapSize.getX()*TILE_SIZE, mapSize.getY()*TILE_SIZE);
+        pScene->setSceneRect(0, 0, mapSize.getX()*MAP::TILE_SIZE, mapSize.getY()*MAP::TILE_SIZE);
         pScene->update();
     }
 }
 
 uint32 MapEditor::getMapID() const
 {
-    if (auto pScene = dynamic_cast<MapEditorScene*>(scene()))
-        return pScene->getMapData().getMapID();
-    return 0;
+    return m_MapData.getMapID();
 }
 
 void MapEditor::setZoom( uint32 zoom )
@@ -304,19 +361,19 @@ void MapEditor::contextMenuEvent(QContextMenuEvent* pEvent)
 void MapEditor::mousePressEvent(QMouseEvent* pEvent)
 {
     QGraphicsView::mousePressEvent(pEvent);
-    emit actionMousePress(*this, mapToScene(pEvent->pos()).toPoint(), pEvent->button());
+    emit actionMousePress(*this, pEvent);
 }
 
 void MapEditor::mouseReleaseEvent(QMouseEvent* pEvent)
 {
     QGraphicsView::mouseReleaseEvent(pEvent);
-    emit actionMouseRelease(*this, mapToScene(pEvent->pos()).toPoint(), pEvent->button());
+    emit actionMouseRelease(*this, pEvent);
 }
 
 void MapEditor::mouseMoveEvent(QMouseEvent* pEvent)
 {
     QGraphicsView::mouseMoveEvent(pEvent);
-    emit actionMouseMove(*this, mapToScene(pEvent->pos()).toPoint());
+    emit actionMouseMove(*this, pEvent);
 }
 
 void MapEditor::keyPressEvent(QKeyEvent* pEvent)
@@ -356,6 +413,18 @@ void MapEditor::_onActionPaste()
 void MapEditor::_onActionDelete()
 {
     emit actionDelete(*this);
+}
+
+void MapEditor::onMappingModeChanged(MAPPING_MODE::Type mode)
+{
+    for (auto pItem : scene()->items())
+    {
+        if (auto pWO = dynamic_cast<WorldObjectItem*>(pItem))
+            pWO->setEditable(mode == MAPPING_MODE::Type::OBJECT_MAPPING);
+        
+        else if (auto pSA = dynamic_cast<ScriptAreaItem*>(pItem))
+            pSA->setEditable(mode == MAPPING_MODE::Type::SCRIPT_AREA_MAPPING);
+    }
 }
 
 void MapEditor::revertLast()

@@ -8,9 +8,9 @@ namespace MAPPING_MODE
     class Presentation : public Interface
     {
     public:
-        void press(MapEditor& editor, const QPoint& pos, Qt::MouseButton button) {}
-        void release(MapEditor& editor, const QPoint& pos, Qt::MouseButton button) {}
-        void move(MapEditor& editor, const QPoint& pos) {}
+        void press(MapEditor& editor, QMouseEvent* pEvent) {}
+        void release(MapEditor& editor, QMouseEvent* pEvent) {}
+        void move(MapEditor& editor, QMouseEvent* pEvent) {}
 
         void keyPress(MapEditor& editor, const QPoint& pos, QKeyEvent* pEvent) {}
         void keyRelease(MapEditor& editor, const QPoint& pos, QKeyEvent* pEvent) {}

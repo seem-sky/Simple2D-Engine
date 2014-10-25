@@ -29,20 +29,20 @@ namespace MAPPING_MODE
         return brush;
     }
 
-    void Tile::press(MapEditor& editor, const QPoint& pos, Qt::MouseButton button)
+    void Tile::press(MapEditor& editor, QMouseEvent* pEvent)
     {
-        if (button == Qt::RightButton || button == Qt::LeftButton)
+        if (pEvent->button() == Qt::RightButton || pEvent->button() == Qt::LeftButton)
         {
             // create brush
-            auto brush = brushIndexFromMouseButton(button);
-
+            auto brush = brushIndexFromMouseButton(pEvent->button());
+            auto pos = editor.mapToScene(pEvent->pos()).toPoint();
             // if there is an old brush, release it
             _finishBrush();
             try
             {
                 m_pCurrentBrush = MAP::BRUSH::BrushFactory::createBrush(m_BrushInfos.at(static_cast<std::size_t>(brush)), m_DBMgr, editor.getMapData().getMapLayer(),
                     editor.getLayerType(), editor.getLayerIndex() - 1);
-                GEOMETRY::Point<uint32> tilePos(pos.x() / TILE_SIZE, pos.y() / TILE_SIZE);
+                GEOMETRY::Point<uint32> tilePos(pos.x() / MAP::TILE_SIZE, pos.y() / MAP::TILE_SIZE);
 
                 // if tileSet mapping, set brush size equal tileSet size
                 if (m_BrushInfos.at(static_cast<std::size_t>(brush)).getType() == MAP::BRUSH::BrushInfo::Type::TILE_SET)
@@ -71,18 +71,19 @@ namespace MAPPING_MODE
         return true;
     }
 
-    void Tile::release(MapEditor& editor, const QPoint& pos, Qt::MouseButton button)
+    void Tile::release(MapEditor& editor, QMouseEvent* pEvent)
     {
         _finishBrush();
     }
 
-    void Tile::move(MapEditor& editor, const QPoint& pos)
+    void Tile::move(MapEditor& editor, QMouseEvent* pEvent)
     {
         if (m_pCurrentEditor && &editor == m_pCurrentEditor)
         {
             try
             {
-                GEOMETRY::Point<uint32> tilePos(pos.x() / TILE_SIZE, pos.y() / TILE_SIZE);
+                auto pos = editor.mapToScene(pEvent->pos()).toPoint();
+                GEOMETRY::Point<uint32> tilePos(pos.x() / MAP::TILE_SIZE, pos.y() / MAP::TILE_SIZE);
 
                 m_pCurrentBrush->start(tilePos);
                 m_pCurrentEditor->scene()->update();

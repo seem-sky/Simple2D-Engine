@@ -99,7 +99,7 @@ void INPUT::MapBinaryReader::_readObjectsV1(QDataStream& in, MAP::MAP_DATA::Worl
     in >> objectCount;
     for (uint32 i = 0; i < objectCount; ++i)
     {
-        MAP::MAP_DATA::GUID guid;
+        MAP::GUID guid;
         in >> guid;
         MAP::MAP_DATA::WorldObjectInfo info(guid);
         uint32 id = 0;

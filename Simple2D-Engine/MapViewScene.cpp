@@ -9,13 +9,14 @@ MapViewScene::MapViewScene(const MAP::MAP_DATA::MapData& mapData, const DATABASE
 
 GEOMETRY::Point<uint32> MapViewScene::calculateEndTile(const QRect &rect, const GEOMETRY::Point<uint32>& startTile) const
 {
-    return GEOMETRY::Point<uint32>(qMin<uint32>(ceil(rect.x() % TILE_SIZE + rect.width() / TILE_SIZE) + startTile.getX() + 1, m_MapData.getMapLayer().getSize().getX()),
-        qMin<uint32>(ceil(rect.y() % TILE_SIZE + rect.height() / TILE_SIZE) + startTile.getY() + 1, m_MapData.getMapLayer().getSize().getY()));
+    return GEOMETRY::Point<uint32>(qMin<uint32>(ceil(rect.x() % MAP::TILE_SIZE + rect.width() / MAP::TILE_SIZE) + startTile.getX() + 1,
+        m_MapData.getMapLayer().getSize().getX()),
+        qMin<uint32>(ceil(rect.y() % MAP::TILE_SIZE + rect.height() / MAP::TILE_SIZE) + startTile.getY() + 1, m_MapData.getMapLayer().getSize().getY()));
 }
 
 GEOMETRY::Point<uint32> MapViewScene::calculateStartTile(const QRect &rect) const
 {
-    return GEOMETRY::Point<uint32>(rect.x() <= 0 ? 0 : (uint32)rect.x() / TILE_SIZE, rect.y() <= 0 ? 0 : (uint32)rect.y() / TILE_SIZE);
+    return GEOMETRY::Point<uint32>(rect.x() <= 0 ? 0 : (uint32)rect.x() / MAP::TILE_SIZE, rect.y() <= 0 ? 0 : (uint32)rect.y() / MAP::TILE_SIZE);
 }
 
 void MapViewScene::drawBackground(QPainter* painter, const QRectF& rect)
@@ -58,7 +59,7 @@ void MapViewScene::drawLayer(QPainter* painter, const GEOMETRY::Point<uint32> st
             if (tileObj.getMapTile().m_uiAutoTileSetID == 0)
             {
                 if (auto pPixmap = GTileCache::get()->getItem(tileObj.getMapTile().m_uiTileID))
-                    painter->drawPixmap(currentTile.getX()*TILE_SIZE, currentTile.getY()*TILE_SIZE, TILE_SIZE, TILE_SIZE, *pPixmap);
+                    painter->drawPixmap(currentTile.getX()*MAP::TILE_SIZE, currentTile.getY()*MAP::TILE_SIZE, MAP::TILE_SIZE, MAP::TILE_SIZE, *pPixmap);
                 //if (fragments.size() < tileObj.m_uiTileID)
                 //    fragments.resize(tileObj.m_uiTileID);
                 //fragments.at(tileObj.m_uiTileID-1).push_back(QPainter::PixmapFragment::create(QPoint(x*TILE_SIZE + TILE_SIZE/2, y*TILE_SIZE + TILE_SIZE/2),
@@ -70,7 +71,7 @@ void MapViewScene::drawLayer(QPainter* painter, const GEOMETRY::Point<uint32> st
                 if (auto pAutoTile = GAutoTileCache::get()->getItem(tileObj.getMapTile().m_uiAutoTileSetID))
                 {
                     if (auto pPixmap = pAutoTile->getPixmap(static_cast<DATABASE::PROTOTYPE::AUTO_TILE::AUTO_TILE_INDEX>(tileObj.getMapTile().m_uiTileID)))
-                        painter->drawPixmap(currentTile.getX()*TILE_SIZE, currentTile.getY()*TILE_SIZE, TILE_SIZE, TILE_SIZE, *pPixmap);
+                        painter->drawPixmap(currentTile.getX()*MAP::TILE_SIZE, currentTile.getY()*MAP::TILE_SIZE, MAP::TILE_SIZE, MAP::TILE_SIZE, *pPixmap);
                 }
             }
         }

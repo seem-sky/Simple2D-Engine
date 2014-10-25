@@ -5,6 +5,7 @@
 #include "DatabaseMgr.h"
 #include <QtGui/QKeyEvent>
 #include <QtGui/QPainter>
+#include <QtGui/QPainterPath>
 
 /*#####
 # MapViewerScene
@@ -61,21 +62,21 @@ void MapEditorScene::_drawDarkRect(QPainter* painter, const QRectF& rect) const
     painter->setBrush(Qt::SolidPattern);
     auto size = getMapData().getMapLayer().getSize();
     painter->drawRect(rect.x() < 0 ? 0 : rect.x(), rect.y() < 0 ? 0 : rect.y(),
-        rect.width() > size.getX()*TILE_SIZE ? size.getX()*TILE_SIZE : rect.width(),
-        rect.height() > size.getY()*TILE_SIZE ? size.getY()*TILE_SIZE : rect.height());
+        rect.width() > size.getX()*MAP::TILE_SIZE ? size.getX()*MAP::TILE_SIZE : rect.width(),
+        rect.height() > size.getY()*MAP::TILE_SIZE ? size.getY()*MAP::TILE_SIZE : rect.height());
 }
 
 void MapEditorScene::_drawGrid(QPainter* painter, const QRectF& rect) const
 {
-    const GEOMETRY::Point<uint32> startTile(calculateStartTile(rect.toRect()) * TILE_SIZE);
-    const GEOMETRY::Point<uint32> endTile(calculateEndTile(rect.toRect(), startTile) * TILE_SIZE);
+    const GEOMETRY::Point<uint32> startTile(calculateStartTile(rect.toRect()) * MAP::TILE_SIZE);
+    const GEOMETRY::Point<uint32> endTile(calculateEndTile(rect.toRect(), startTile) * MAP::TILE_SIZE);
     QVector<QPoint> pointPairs;
-    for (uint32 x = startTile.getX(); x < endTile.getX(); x += TILE_SIZE)
+    for (uint32 x = startTile.getX(); x < endTile.getX(); x += MAP::TILE_SIZE)
     {
         pointPairs.push_back(QPoint(x, startTile.getY()));
         pointPairs.push_back(QPoint(x, endTile.getY()));
     }
-    for (uint32 y = startTile.getY(); y < endTile.getY(); y += TILE_SIZE)
+    for (uint32 y = startTile.getY(); y < endTile.getY(); y += MAP::TILE_SIZE)
     {
         pointPairs.push_back(QPoint(startTile.getX(), y));
         pointPairs.push_back(QPoint(endTile.getX(), y));

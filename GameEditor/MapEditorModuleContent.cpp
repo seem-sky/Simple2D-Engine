@@ -3,7 +3,7 @@
 #include "Project.h"
 #include <QtWidgets/QMessageBox>
 #include "MapEditor.h"
-#include "MapViewItem.h"
+#include "WorldObjectItem.h"
 #include <DatabaseMgr.h>
 #include <QtWidgets/QGraphicsItem>
 
@@ -115,11 +115,12 @@ void MapEditorModuleContent::onMapOpened(uint32 mapID)
         m_pMapTabs->addTab(pEditor, m_DBMgr.getMapDatabase()->getOriginalPrototype(mapID)->getName());
         m_pMapTabs->setCurrentWidget(pEditor);
         connect(this, SIGNAL(save()), pEditor, SLOT(_onSave()));
-        connect(pEditor, SIGNAL(actionMousePress(MapEditor&, const QPoint&, Qt::MouseButton)), &m_MappingObject,
-            SLOT(press(MapEditor&, const QPoint&, Qt::MouseButton)));
-        connect(pEditor, SIGNAL(actionMouseRelease(MapEditor&, const QPoint&, Qt::MouseButton)), &m_MappingObject,
-            SLOT(release(MapEditor&, const QPoint&, Qt::MouseButton)));
-        connect(pEditor, SIGNAL(actionMouseMove(MapEditor&, const QPoint&)), &m_MappingObject, SLOT(move(MapEditor&, const QPoint&)));
+        connect(this, SIGNAL(changeMappingMode(MAPPING_MODE::Type)), pEditor, SLOT(onMappingModeChanged(MAPPING_MODE::Type)));
+        connect(pEditor, SIGNAL(actionMousePress(MapEditor&, QMouseEvent*)), &m_MappingObject,
+            SLOT(press(MapEditor&, QMouseEvent*)));
+        connect(pEditor, SIGNAL(actionMouseRelease(MapEditor&, QMouseEvent*)), &m_MappingObject,
+            SLOT(release(MapEditor&, QMouseEvent*)));
+        connect(pEditor, SIGNAL(actionMouseMove(MapEditor&, QMouseEvent*)), &m_MappingObject, SLOT(move(MapEditor&, QMouseEvent*)));
         connect(pEditor, SIGNAL(actionKeyPress(MapEditor&, const QPoint&, QKeyEvent*)),
             &m_MappingObject, SLOT(onActionKeyPressed(MapEditor&, const QPoint&, QKeyEvent*)));
         connect(pEditor, SIGNAL(actionKeyRelease(MapEditor&, const QPoint&, QKeyEvent*)),
@@ -161,18 +162,8 @@ void MapEditorModuleContent::onMapEdited(uint32 mapID)
 
 void MapEditorModuleContent::onMappingModeChanged(MAPPING_MODE::Type mode)
 {
+    emit changeMappingMode(mode);
     m_pLayer->setEnabled(mode == MAPPING_MODE::Type::TILE_MAPPING);
-    for (int32 i = 0; i < m_pMapTabs->count(); ++i)
-    {
-        if (auto pTab = dynamic_cast<MapEditor*>(m_pMapTabs->currentWidget()))
-        {
-            for (auto pItem : pTab->items())
-            {
-                if (auto pWO = dynamic_cast<MapViewItem*>(pItem))
-                    pWO->setEditable(mode == MAPPING_MODE::Type::OBJECT_MAPPING);
-            }
-        }
-    }
     if (auto pTab = dynamic_cast<MapEditor*>(m_pMapTabs->currentWidget()))
         pTab->scene()->update();
 }

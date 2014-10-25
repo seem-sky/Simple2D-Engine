@@ -33,7 +33,7 @@ void MapEditorModuleTiles::_setup()
     if (!pTileDB)
         return;
 
-    const uint32 tilesPerRow = width()/(TILE_SIZE+2);
+    const uint32 tilesPerRow = width() / (MAP::TILE_SIZE + 2);
     setColumnCount(tilesPerRow);
     setRowCount(std::ceil(double(pTileDB->getSize()+1)/tilesPerRow));
 
@@ -64,7 +64,7 @@ void AutoTilePixmapWidget::drawPixmap()
         if (auto pPixmap = pAutoTile->getPixmap(DATABASE::PROTOTYPE::AUTO_TILE::INDEX_INNER_CENTER))
         {
             QPainter painter(this);
-            painter.drawPixmap(0, 0,* pPixmap);
+            painter.drawPixmap(0, 0, *pPixmap);
         }
     }
 }
@@ -83,7 +83,7 @@ void MapEditorModuleAutoTiles::_setup()
 
     if (!pAutoTileDB || !pTileDB)
         return;
-    const uint32 tilesPerRow = width()/(TILE_SIZE+2);
+    const uint32 tilesPerRow = width() / (MAP::TILE_SIZE + 2);
     setColumnCount(tilesPerRow);
     setRowCount(std::ceil(double(pAutoTileDB->getSize())/tilesPerRow));
     for (uint32 i = 0; i < pAutoTileDB->getSize(); ++i)

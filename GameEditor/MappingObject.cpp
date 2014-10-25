@@ -2,6 +2,7 @@
 #include "MapEditor.h"
 #include "TileMappingMode.h"
 #include "ObjectMappingMode.h"
+#include "ScriptAreaMappingMode.h"
 #include "PresentationMappingMode.h"
 #include "moc_MappingObject.h"
 
@@ -10,6 +11,7 @@ MappingObject::MappingObject(const DATABASE::DatabaseMgr& DBMgr, QWidget* pParen
 {
     m_MappingModes.push_back(MappingModePtr(new MAPPING_MODE::Tile(DBMgr)));
     m_MappingModes.push_back(MappingModePtr(new MAPPING_MODE::Object()));
+    m_MappingModes.push_back(MappingModePtr(new MAPPING_MODE::ScriptArea()));
     m_MappingModes.push_back(MappingModePtr(new MAPPING_MODE::Presentation()));
     setMappingMode(MAPPING_MODE::Type::TILE_MAPPING);
 }
@@ -47,19 +49,19 @@ QStringList MappingObject::getMappingModeNames() const
     return list;
 }
 
-void MappingObject::press(MapEditor& editor, const QPoint& pos, Qt::MouseButton button)
+void MappingObject::press(MapEditor& editor, QMouseEvent* pEvent)
 {
-    m_pCurrentMappingMode->press(editor, pos, button);
+    m_pCurrentMappingMode->press(editor, pEvent);
 }
 
-void MappingObject::release(MapEditor& editor, const QPoint& pos, Qt::MouseButton button)
+void MappingObject::release(MapEditor& editor, QMouseEvent* pEvent)
 {
-    m_pCurrentMappingMode->release(editor, pos, button);
+    m_pCurrentMappingMode->release(editor, pEvent);
 }
 
-void MappingObject::move(MapEditor& editor, const QPoint& pos)
+void MappingObject::move(MapEditor& editor, QMouseEvent* pEvent)
 {
-    m_pCurrentMappingMode->move(editor, pos);
+    m_pCurrentMappingMode->move(editor, pEvent);
 }
 
 void MappingObject::onActionCopy(const MapEditor& editor)

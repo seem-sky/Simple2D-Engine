@@ -19,7 +19,7 @@ MapEditorModuleTileSets::MapEditorModuleTileSets(QWidget* pParent) : DatabaseMod
 QWidget* MapEditorModuleTileSets::_setupTooltipWidget(uint32 uiPrototypeID)
 {
     auto pLabel = new QLabel(this);
-    pLabel->resize(TILE_SIZE, TILE_SIZE);
+    pLabel->resize(MAP::TILE_SIZE, MAP::TILE_SIZE);
     if (auto pModel = dynamic_cast<DatabaseModel*>(model()))
     {
         if (auto pPrototype = dynamic_cast<TileSetPrototype*>(pModel->getDatabase()->getPrototype(uiPrototypeID)))

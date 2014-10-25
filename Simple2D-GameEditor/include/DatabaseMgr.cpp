@@ -131,7 +131,7 @@ QPixmap PROTOTYPE::TILE_SET::createTileSetPixmap(const QString& path, const Tile
     if (!pSet || !pTileDB)
         return std::move(QPixmap());
 
-    QPixmap pixmap(pSet->getTileSetSize().getX()*TILE_SIZE, pSet->getTileSetSize().getY()*TILE_SIZE);
+    QPixmap pixmap(pSet->getTileSetSize().getX()*MAP::TILE_SIZE, pSet->getTileSetSize().getY()*MAP::TILE_SIZE);
     pixmap.fill();
     QPainter painter(&pixmap);
     GEOMETRY::Point<uint32> pos;
@@ -142,7 +142,7 @@ QPixmap PROTOTYPE::TILE_SET::createTileSetPixmap(const QString& path, const Tile
             auto pTileProto = pTileDB->getOriginalPrototype(pSet->getTileID(pos));
             QPixmap tempPixmap;
             if (pTileProto && createPixmapFromTexturePrototype(path, pTileProto, tempPixmap))
-                painter.drawTiledPixmap(pos.getX()*TILE_SIZE, pos.getY()*TILE_SIZE, TILE_SIZE, TILE_SIZE, tempPixmap);
+                painter.drawTiledPixmap(pos.getX()*MAP::TILE_SIZE, pos.getY()*MAP::TILE_SIZE, MAP::TILE_SIZE, MAP::TILE_SIZE, tempPixmap);
         }
     }
     return pixmap;

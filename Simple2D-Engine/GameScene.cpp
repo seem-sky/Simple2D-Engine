@@ -32,7 +32,7 @@ void GameScene::playerChangesMap(MAP::MapPtr pMap)
     if (pMap)
     {
         m_Player.setMapGUID(pMap->getGUID());
-        m_pSceneView->setSceneRect(0,0,pMap->getWidth()*TILE_SIZE, pMap->getHeight()*TILE_SIZE);
+        m_pSceneView->setSceneRect(0, 0, pMap->getWidth()*MAP::TILE_SIZE, pMap->getHeight()*MAP::TILE_SIZE);
     }
     else
     {

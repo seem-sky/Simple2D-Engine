@@ -1,13 +1,13 @@
 #include "ObjectMappingMode.h"
 #include "moc_ObjectMappingMode.h"
 #include "MapEditor.h"
-#include "MapViewItem.h"
+#include "WorldObjectItem.h"
 #include "DelayedDeleteObject.h"
 #include "ObjectMappingRevert.h"
 
 namespace MAPPING_MODE
 {
-    void Object::_storeMoveoInfoReverts(MapEditor& editor)
+    void Object::_storeMoveInfoReverts(MapEditor& editor)
     {
         std::unique_ptr<MAP::REVERT::RevertContainer> pRevertContainer(new MAP::REVERT::RevertContainer());
         for (auto& info : m_MoveInfos)
@@ -24,17 +24,18 @@ namespace MAPPING_MODE
         m_MoveInfos.clear();
     }
 
-    void Object::press(MapEditor& editor, const QPoint& pos, Qt::MouseButton button)
+    void Object::press(MapEditor& editor, QMouseEvent* pEvent)
     {
-        if (button != Qt::LeftButton)
+        if (pEvent->button() != Qt::LeftButton)
             return;
 
+        auto pos = editor.mapToScene(pEvent->pos()).toPoint();
         auto selected = editor.scene()->selectedItems();
         if (!selected.isEmpty())
         {
             for (auto pItem : selected)
             {
-                if (auto pWO = dynamic_cast<MapViewItem*>(pItem))
+                if (auto pWO = dynamic_cast<WorldObjectItem*>(pItem))
                     m_MoveInfos.push_back(pWO->getWorldObjectInfo());
             }
         }
@@ -48,15 +49,15 @@ namespace MAPPING_MODE
         }
     }
 
-    void Object::release(MapEditor& editor, const QPoint& pos, Qt::MouseButton button)
+    void Object::release(MapEditor& editor, QMouseEvent* pEvent)
     {
-        if (button != Qt::LeftButton)
+        if (pEvent->button() != Qt::LeftButton)
             return;
 
-        _storeMoveoInfoReverts(editor);
+        _storeMoveInfoReverts(editor);
     }
 
-    void Object::move(MapEditor& editor, const QPoint& pos)
+    void Object::move(MapEditor& editor, QMouseEvent* pEvent)
     {
     }
 
@@ -66,7 +67,7 @@ namespace MAPPING_MODE
         m_Cut = false;
         for (auto pItem : editor.scene()->selectedItems())
         {
-            if (auto pWO = dynamic_cast<MapViewItem*>(pItem))
+            if (auto pWO = dynamic_cast<WorldObjectItem*>(pItem))
                 m_CopyInfos.push_back(pWO->getWorldObjectInfo());
         }
     }
@@ -120,7 +121,7 @@ namespace MAPPING_MODE
 
         for (auto pItem : editor.scene()->selectedItems())
         {
-            if (auto pWO = dynamic_cast<MapViewItem*>(pItem))
+            if (auto pWO = dynamic_cast<WorldObjectItem*>(pItem))
             {
                 // add revert
                 pRevertContainer->addRevert(new MAPPING_MODE::REVERT::ObjectRemove(pWO->getWorldObjectInfo(), editor));
@@ -128,7 +129,7 @@ namespace MAPPING_MODE
                 // remove object from scene and delete it later
                 editor.scene()->removeItem(pItem);
                 editor.getMapData().getWorldObjectInfoData().removeWorldObject(pWO->getWorldObjectInfo().getGUID());
-                new DelayedDeleteObject<MapViewItem>(pWO);
+                new DelayedDeleteObject<WorldObjectItem>(pWO);
             }
         }
 
@@ -151,13 +152,13 @@ namespace MAPPING_MODE
             {
                 if (!pEvent->isAutoRepeat())
                 {
-                    if (auto pWO = dynamic_cast<MapViewItem*>(pItem))
+                    if (auto pWO = dynamic_cast<WorldObjectItem*>(pItem))
                         m_MoveInfos.push_back(pWO->getWorldObjectInfo());
                 }
 
                 int32 move = 1;
                 if (pEvent->modifiers() & Qt::ShiftModifier)
-                    move = TILE_SIZE;
+                    move = MAP::TILE_SIZE;
                 switch (pEvent->key())
                 {
                 case Qt::Key_Left: pItem->moveBy(-move, 0); break;
@@ -180,7 +181,7 @@ namespace MAPPING_MODE
         case Qt::Key_Down:
             pEvent->setAccepted(false);
             if (!pEvent->isAutoRepeat())
-                _storeMoveoInfoReverts(editor);
+                _storeMoveInfoReverts(editor);
             break;
         }
     }

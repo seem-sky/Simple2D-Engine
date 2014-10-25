@@ -195,7 +195,7 @@ namespace DATABASE
 
         QPixmap TILE_SET::createPixmap(const TileSetPrototype& tileSet)
         {
-            QPixmap pixmap(tileSet.getTileSetSize().getX()*TILE_SIZE, tileSet.getTileSetSize().getY()*TILE_SIZE);
+            QPixmap pixmap(tileSet.getTileSetSize().getX()*MAP::TILE_SIZE, tileSet.getTileSetSize().getY()*MAP::TILE_SIZE);
             pixmap.fill();
             QPainter painter(&pixmap);
             GEOMETRY::Point<uint32> pos;
@@ -204,7 +204,7 @@ namespace DATABASE
                 for (pos.getY() = 0; pos.getY() < tileSet.getTileSetSize().getY(); ++pos.getY())
                 {
                     if (auto pTilePixmap = GTileCache::get()->getItem(tileSet.getTileID(pos)))
-                        painter.drawTiledPixmap(pos.getX()*TILE_SIZE, pos.getY()*TILE_SIZE, TILE_SIZE, TILE_SIZE, *pTilePixmap);
+                        painter.drawTiledPixmap(pos.getX()*MAP::TILE_SIZE, pos.getY()*MAP::TILE_SIZE, MAP::TILE_SIZE, MAP::TILE_SIZE, *pTilePixmap);
                 }
             }
             return pixmap;

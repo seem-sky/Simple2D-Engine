@@ -9,8 +9,10 @@
 #include <QtWidgets/QShortcut>
 #include "MapData.h"
 
-class MappingObject;
-class MapEditorScene;
+namespace MAPPING_MODE
+{
+    enum class Type;
+}
 
 namespace DATABASE
 {
@@ -32,17 +34,26 @@ namespace MAP
         enum class MapObjectLayer;
         enum class MapDirection;
     }
-}
 
-namespace MAP
-{
+    namespace SCRIPT_AREA
+    {
+        class ScriptArea;
+        namespace AREA
+        {
+            class Interface;
+        }
+    }
+
     namespace REVERT
     {
         class Interface;
     }
 }
 
-class MapViewItem;
+class WorldObjectItem;
+class ScriptAreaItem;
+class MappingObject;
+class MapEditorScene;
 
 /*#####
 # MapViewer
@@ -51,8 +62,10 @@ class MapEditor : public QGraphicsView
 {
     Q_OBJECT
 private:
-    MapViewItem* _addWorldObject(const DATABASE::PROTOTYPE::WORLD_OBJECT::WorldObjectPrototype* pWorldObject, MAP::MAP_DATA::WorldObjectInfo& info);
-    MapViewItem* _setupWorldObject(const DATABASE::PROTOTYPE::WORLD_OBJECT::WorldObjectPrototype* pWorldObject, MapViewItem* pItem, const MAP::MAP_DATA::WorldObjectInfo& info);
+    WorldObjectItem* _addWorldObject(const DATABASE::PROTOTYPE::WORLD_OBJECT::WorldObjectPrototype* pWorldObject, MAP::MAP_DATA::WorldObjectInfo& info);
+    WorldObjectItem* _setupWorldObject(const DATABASE::PROTOTYPE::WORLD_OBJECT::WorldObjectPrototype* pWorldObject, WorldObjectItem* pItem, const MAP::MAP_DATA::WorldObjectInfo& info);
+
+    ScriptAreaItem* _setupScriptArea(MAP::SCRIPT_AREA::ScriptArea* scriptArea);
 
     void _loadMap();
     void _setupShortcuts();
@@ -85,11 +98,17 @@ public:
     MAP::MAP_DATA::MapData& getMapData() { return m_MapData; }
 
     // WorldObjects
-    MapViewItem* addWorldObject(uint32 ID, const GEOMETRY::Point<int32>& pos, MAP::MAP_DATA::MapObjectLayer layer, MAP::MAP_DATA::MapDirection direction);
-    MapViewItem* addWorldObject(const MAP::MAP_DATA::WorldObjectInfo& info);
+    WorldObjectItem* addWorldObject(uint32 ID, const GEOMETRY::Point<int32>& pos, MAP::MAP_DATA::MapObjectLayer layer, MAP::MAP_DATA::MapDirection direction);
+    WorldObjectItem* addWorldObject(const MAP::MAP_DATA::WorldObjectInfo& info);
     void setWorldObject(const MAP::MAP_DATA::WorldObjectInfo& info);
-    void removeWorldObject(MAP::MAP_DATA::GUID guid);
-    MapViewItem* getWorldObject(MAP::MAP_DATA::GUID guid);
+    void removeWorldObject(MAP::GUID guid);
+    WorldObjectItem* getWorldObject(MAP::GUID guid);
+
+    // ScriptAreas
+    ScriptAreaItem* addScriptArea(GEOMETRY::ComplexGeometricShape<int32>* pArea);
+    ScriptAreaItem* addScriptArea(MAP::SCRIPT_AREA::ScriptArea* pScript);
+    ScriptAreaItem* getScriptArea(MAP::GUID guid);
+    void removeScriptArea(MAP::GUID guid);
 
     // revert
     void clearReverts();
@@ -104,15 +123,18 @@ private slots:
     void _onActionCut();
     void _onActionDelete();
 
+public slots:
+    void onMappingModeChanged(MAPPING_MODE::Type mode);
+
 signals:
     void actionCopy(const MapEditor& editor);
     void actionCut(const MapEditor& editor);
     void actionPaste(MapEditor& editor, const QPoint& pos);
     void actionDelete(MapEditor& editor);
 
-    void actionMousePress(MapEditor& editor, const QPoint& pos, Qt::MouseButton button);
-    void actionMouseRelease(MapEditor& editor, const QPoint& pos, Qt::MouseButton button);
-    void actionMouseMove(MapEditor& editor, const QPoint& pos);
+    void actionMousePress(MapEditor& editor, QMouseEvent* pEvent);
+    void actionMouseRelease(MapEditor& editor, QMouseEvent* pEvent);
+    void actionMouseMove(MapEditor& editor, QMouseEvent* pEvent);
 
     void actionKeyPress(MapEditor& editor, const QPoint& pos, QKeyEvent* pEvent);
     void actionKeyRelease(MapEditor& editor, const QPoint& pos, QKeyEvent* pEvent);

@@ -154,6 +154,12 @@
     <Filter Include="Map Editor\Modules\MappingObject\MappingMode\ObjectMapping\Revert">
       <UniqueIdentifier>{a189cbbd-72be-4f54-b120-3ef69cb1caae}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Map Editor\Modules\MappingObject\MappingMode\ScriptAreaMapping">
+      <UniqueIdentifier>{a79af0c2-e6df-4230-a1ef-3a26514dede1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map Editor\Modules\Content\Items">
+      <UniqueIdentifier>{ce85aaef-470b-4e0e-ac2c-502ab7c82008}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainWindow.cpp">
@@ -297,9 +303,6 @@
     <ClCompile Include="ToolWidget.cpp">
       <Filter>Map Editor\Widgets\Tools</Filter>
     </ClCompile>
-    <ClCompile Include="MapViewItem.cpp">
-      <Filter>Map Editor\Modules\Content</Filter>
-    </ClCompile>
     <ClCompile Include="ObjectMappingMode.cpp">
       <Filter>Map Editor\Modules\MappingObject\MappingMode\ObjectMapping</Filter>
     </ClCompile>
@@ -311,6 +314,15 @@
     </ClCompile>
     <ClCompile Include="MapEditorScene.cpp">
       <Filter>Map Editor\Modules\Content</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptAreaMappingMode.cpp">
+      <Filter>Map Editor\Modules\MappingObject\MappingMode\ScriptAreaMapping</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldObjectItem.cpp">
+      <Filter>Map Editor\Modules\Content\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptAreaItem.cpp">
+      <Filter>Map Editor\Modules\Content\Items</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -513,14 +525,23 @@
     <ClInclude Include="ToolWidget.h">
       <Filter>Map Editor\Widgets\Tools</Filter>
     </ClInclude>
-    <ClInclude Include="MapViewItem.h">
-      <Filter>Map Editor\Modules\Content</Filter>
-    </ClInclude>
     <ClInclude Include="ObjectMappingRevert.h">
       <Filter>Map Editor\Modules\MappingObject\MappingMode\ObjectMapping\Revert</Filter>
     </ClInclude>
     <ClInclude Include="MapEditorScene.h">
       <Filter>Map Editor\Modules\Content</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptAreaMappingMode.h">
+      <Filter>Map Editor\Modules\MappingObject\MappingMode\ScriptAreaMapping</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldObjectItem.h">
+      <Filter>Map Editor\Modules\Content\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptAreaItem.h">
+      <Filter>Map Editor\Modules\Content\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorGlobal.h">
+      <Filter>EditorCore</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

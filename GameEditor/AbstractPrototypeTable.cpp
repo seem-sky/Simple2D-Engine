@@ -9,7 +9,7 @@
 #####*/
 AbstractPixmapWidget::AbstractPixmapWidget(uint32 ID, QWidget* pParent) : QWidget(pParent), m_Selection(0), m_ID(ID)
 {
-    resize(TILE_SIZE, TILE_SIZE);
+    resize(MAP::TILE_SIZE, MAP::TILE_SIZE);
 }
 
 void AbstractPixmapWidget::addSelection(Selection selection)
@@ -46,7 +46,7 @@ void AbstractPixmapWidget::paintEvent(QPaintEvent* pEvent)
 void AbstractPixmapWidget::drawSelection()
 {
     QPainter painter(this);
-    const uint32 SIZE = TILE_SIZE-1;
+    const uint32 SIZE = MAP::TILE_SIZE - 1;
 
     QPen pen;
     pen.setWidth(5);
@@ -92,11 +92,11 @@ AbstractPrototypeTable::AbstractPrototypeTable(const DATABASE::DatabaseMgr& DBMg
 {
     // setup header
     auto hHeader = horizontalHeader();
-    hHeader->setDefaultSectionSize(TILE_SIZE+1);
+    hHeader->setDefaultSectionSize(MAP::TILE_SIZE + 1);
     hHeader->setSectionResizeMode(QHeaderView::Fixed);
     hHeader->setVisible(false);
     auto vHeader = verticalHeader();
-    vHeader->setDefaultSectionSize(TILE_SIZE+1);
+    vHeader->setDefaultSectionSize(MAP::TILE_SIZE + 1);
     vHeader->setSectionResizeMode(QHeaderView::Fixed);
     vHeader->setVisible(false);
 

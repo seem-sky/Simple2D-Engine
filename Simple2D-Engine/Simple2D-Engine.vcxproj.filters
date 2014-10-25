@@ -76,6 +76,9 @@
     <Filter Include="Core\Colission">
       <UniqueIdentifier>{3d5d863b-98c3-4e67-bff7-dc7b57f326c3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Map\ScriptArea">
+      <UniqueIdentifier>{6eac2946-fdd9-4657-9a61-d5ba5dfb3a55}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Simple2D-GameEditor\include\Game.cpp">
@@ -227,6 +230,12 @@
     </ClCompile>
     <ClCompile Include="WorldObjectInfo.cpp">
       <Filter>Map\IO\WorldObjectInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptArea.cpp">
+      <Filter>Map\ScriptArea</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptAreaData.cpp">
+      <Filter>Map\ScriptArea</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -415,6 +424,12 @@
     </ClInclude>
     <ClInclude Include="RevertInterface.h">
       <Filter>Map\Brush\Revert</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptArea.h">
+      <Filter>Map\ScriptArea</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptAreaData.h">
+      <Filter>Map\ScriptArea</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -265,9 +265,11 @@
     <ClCompile Include="MappingObject.cpp" />
     <ClCompile Include="MapEditor.cpp" />
     <ClCompile Include="MapEditorScene.cpp" />
-    <ClCompile Include="MapViewItem.cpp" />
+    <ClCompile Include="ScriptAreaItem.cpp" />
+    <ClCompile Include="WorldObjectItem.cpp" />
     <ClCompile Include="ObjectMappingRevert.cpp" />
     <ClCompile Include="Project.cpp" />
+    <ClCompile Include="ScriptAreaMappingMode.cpp" />
     <ClCompile Include="TexturePrototypeFrame.cpp" />
     <ClCompile Include="TileMappingMode.cpp" />
     <ClCompile Include="ObjectMappingMode.cpp" />
@@ -314,8 +316,11 @@
     <compile_QT_Files Include="UI\MapEditorWidgetObjectMapping.ui" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MapViewItem.h" />
+    <ClInclude Include="EditorGlobal.h" />
+    <ClInclude Include="ScriptAreaItem.h" />
+    <ClInclude Include="WorldObjectItem.h" />
     <ClInclude Include="ObjectMappingRevert.h" />
+    <ClInclude Include="ScriptAreaMappingMode.h" />
     <ClInclude Include="ToolWidget.h" />
     <ClInclude Include="MapEditorScene.h" />
     <moc_header Include="MapEditorWidgetObjectMapping.h" />
