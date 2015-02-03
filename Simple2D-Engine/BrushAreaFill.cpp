@@ -2,6 +2,7 @@
 #include "MapException.h"
 #include "MapLayer.h"
 #include "Logfile.h"
+#include <algorithm>
 
 namespace MAP
 {
@@ -20,6 +21,9 @@ namespace MAP
 
                 tiles.push_back(info);
                 Bitset2D tileBitset, borderBitset;
+                // resize bitset if needed
+                tileBitset.resize(std::max(tileBitset.width(), getStartPosition().getX() + 1),
+                    std::max(tileBitset.height(), getStartPosition().getY() + 1));
                 tileBitset.set(getStartPosition());
 
                 PointVec<uint32> openPositions{ getStartPosition() };
@@ -46,6 +50,10 @@ namespace MAP
                     {
                         auto borderTile = static_cast<BorderTile>(i);
                         auto mapTileInfo = m_Layer.getBorderTileInfo(pos, borderTile);
+                        // resize bitset if needed
+                        bitset.resize(std::max(bitset.width(), mapTileInfo.getPosition().getX() + 1),
+                            std::max(bitset.height(), mapTileInfo.getPosition().getY() + 1));
+
                         if (!mapTileInfo.isValid() || bitset.get(mapTileInfo.getPosition()))
                             continue;
 
@@ -54,6 +62,9 @@ namespace MAP
                             !getOldMapTile().isAutoTile() && !mapTileInfo.isAutoTile() && getOldMapTile().m_uiTileID != mapTileInfo.getMapTile().m_uiTileID)
                         {
                             check = true;
+                            // resize bitset if needed
+                            borderBitset.resize(std::max(borderBitset.width(), mapTileInfo.getPosition().getX() + 1),
+                                std::max(borderBitset.height(), mapTileInfo.getPosition().getY() + 1));
                             if (mapTileInfo.isAutoTile() && !borderBitset.get(mapTileInfo.getPosition()))
                             {
                                 borderBitset.set(mapTileInfo.getPosition());
@@ -72,10 +83,16 @@ namespace MAP
                 }
 
                 // push if border tile
-                if (check && !borderBitset.get(mapTileInfo.getPosition()))
+                if (check)
                 {
-                    borderBitset.set(mapTileInfo.getPosition());
-                    borderTiles.push_back(mapTileInfo.getPosition());
+                    // resize bitset if needed
+                    borderBitset.resize(std::max(borderBitset.width(), mapTileInfo.getPosition().getX() + 1),
+                        std::max(borderBitset.height(), mapTileInfo.getPosition().getY() + 1));
+                    if (!borderBitset.get(mapTileInfo.getPosition()))
+                    {
+                        borderBitset.set(mapTileInfo.getPosition());
+                        borderTiles.push_back(mapTileInfo.getPosition());
+                    }
                 }
             }
         }

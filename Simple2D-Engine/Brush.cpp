@@ -62,7 +62,7 @@ namespace MAP
 
         bool Brush::hasChanges() const
         {
-            return m_RevertInfo && m_RevertInfo->isEmpty();
+            return m_RevertInfo && !m_RevertInfo->isEmpty();
         }
 
         void Brush::setBrushSize(const GEOMETRY::Point<uint32>& size)

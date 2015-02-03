@@ -1,6 +1,7 @@
 #include "BrushRevert.h"
 #include "MapException.h"
 #include "MapLayer.h"
+#include <algorithm>
 
 using namespace MAP;
 using namespace BRUSH::REVERT;
@@ -24,6 +25,10 @@ void BrushRevert::revert()
 
 void BrushRevert::addTile(const MapTileInfo& info)
 {
+    // resize bitset if needed
+    m_Check.resize(std::max(m_Check.width(), info.getPosition().getX() + 1),
+        std::max(m_Check.height(), info.getPosition().getY() + 1));
+
     if (m_Check.get(info.getPosition()))
         return;
     m_Check.set(info.getPosition());
@@ -39,7 +44,7 @@ void BrushRevert::addTiles(const MapTileInfoVec& tileInfos)
 void BrushRevert::clear()
 {
     m_Tiles.clear();
-    m_Check = Bitset2D();
+    m_Check.clear();
     m_LayerIndex = 0;
     m_LayerType = LayerType::LAYER_BACKGROUND;
 }

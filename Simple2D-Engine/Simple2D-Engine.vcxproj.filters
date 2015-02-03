@@ -79,6 +79,12 @@
     <Filter Include="Map\ScriptArea">
       <UniqueIdentifier>{6eac2946-fdd9-4657-9a61-d5ba5dfb3a55}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\Cache">
+      <UniqueIdentifier>{05ee87d0-48ab-4728-85c0-6dc1165368b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Cache\Texture">
+      <UniqueIdentifier>{18dc7a90-8bd5-40aa-adc4-5015abd490f1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Simple2D-GameEditor\include\Game.cpp">
@@ -239,6 +245,12 @@
     </ClCompile>
     <ClCompile Include="QtGlobal.cpp">
       <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Cache\Tiles.cpp">
+      <Filter>Core\Cache\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Cache\Cache.cpp">
+      <Filter>Core\Cache</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -433,6 +445,12 @@
     </ClInclude>
     <ClInclude Include="ScriptAreaData.h">
       <Filter>Map\ScriptArea</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Cache\Tiles.h">
+      <Filter>Core\Cache\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Cache\Cache.h">
+      <Filter>Core\Cache</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

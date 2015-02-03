@@ -41,6 +41,8 @@
     <ClCompile Include="BrushTypeTileSet.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Config.cpp" />
+    <ClCompile Include="Core\Cache\Cache.cpp" />
+    <ClCompile Include="Core\Cache\Tiles.cpp" />
     <ClCompile Include="Database.cpp" />
     <ClCompile Include="DatabasePrototypesIO.cpp" />
     <ClCompile Include="Entity.cpp" />
@@ -98,6 +100,8 @@
     <ClInclude Include="BrushTypeTile.h" />
     <ClInclude Include="BrushTypeTileSet.h" />
     <ClInclude Include="Colission.h" />
+    <ClInclude Include="Core\Cache\Cache.h" />
+    <ClInclude Include="Core\Cache\Tiles.h" />
     <ClInclude Include="RevertInterface.h" />
     <ClInclude Include="ScriptArea.h" />
     <ClInclude Include="ScriptAreaData.h" />
