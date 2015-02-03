@@ -33,8 +33,13 @@ void MapEditorScene::drawTiles(QPainter* painter, const QRectF& rect, MAP::Layer
             painter->setOpacity(m_EditorInfo.m_LayerIndex.at(static_cast<uint8>(currentLayer)) - 1 < layerIndex ? 0.4 : 1);
             break;
 
-            // draw only foreground opaque
+            // draw foreground opaque
         case MAPPING_MODE::Type::OBJECT_MAPPING:
+            painter->setOpacity(currentLayer == MAP::LayerType::LAYER_FOREGROUND ? 0.5 : 1);
+            break;
+
+            // draw foreground opaque
+        case MAPPING_MODE::Type::SCRIPT_AREA_MAPPING:
             painter->setOpacity(currentLayer == MAP::LayerType::LAYER_FOREGROUND ? 0.5 : 1);
             break;
         }

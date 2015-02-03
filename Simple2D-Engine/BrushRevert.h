@@ -26,7 +26,7 @@ namespace MAP
                 void addTile(const MapTileInfo& info);
                 void addTiles(const MapTileInfoVec& tileInfos);
 
-                inline bool hasChanges() const { return !m_Tiles.empty(); }
+                inline bool isEmpty() const { return !m_Tiles.empty(); }
 
                 void clear();
 

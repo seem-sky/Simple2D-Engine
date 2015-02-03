@@ -108,6 +108,7 @@ public:
     ScriptAreaItem* addScriptArea(GEOMETRY::ComplexGeometricShape<int32>* pArea);
     ScriptAreaItem* addScriptArea(MAP::SCRIPT_AREA::ScriptArea* pScript);
     ScriptAreaItem* getScriptArea(MAP::GUID guid);
+    ScriptAreaItem* takeScriptArea(MAP::GUID guid);
     void removeScriptArea(MAP::GUID guid);
 
     // revert

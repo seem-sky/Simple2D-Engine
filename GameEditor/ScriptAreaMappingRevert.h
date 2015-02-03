@@ -1,14 +1,14 @@
-#ifndef OBJECT_MAPPING_REVERT_H
-#define OBJECT_MAPPING_REVERT_H
+#ifndef SCRIPT_AREA_MAPPING_REVERT_H
+#define SCRIPT_AREA_MAPPING_REVERT_H
 
 #include <RevertInterface.h>
-#include "WorldObjectInfo.h"
+#include <ScriptArea.h>
 
 class MapEditor;
 
 namespace MAPPING_MODE
 {
-    namespace OBJECT
+    namespace SCRIPT_AREA
     {
         namespace REVERT
         {
@@ -36,25 +36,25 @@ namespace MAPPING_MODE
             class Modify : public Base
             {
             public:
-                Modify(const MAP::MAP_DATA::WorldObjectInfo& info, MapEditor& editor);
+                Modify(MAP::SCRIPT_AREA::ScriptArea* pArea, MapEditor& editor);
 
                 void revert();
-                bool isEmpty() const { return !m_Info.isValid(); }
+                bool isEmpty() const { return !m_pArea; }
 
             private:
-                MAP::MAP_DATA::WorldObjectInfo m_Info;
+                std::unique_ptr<MAP::SCRIPT_AREA::ScriptArea> m_pArea;
             };
 
             class Remove : public Base
             {
             public:
-                Remove(const MAP::MAP_DATA::WorldObjectInfo& info, MapEditor& editor);
+                Remove(MAP::SCRIPT_AREA::ScriptArea* pArea, MapEditor& editor);
 
                 void revert();
-                bool isEmpty() const { return !m_Info.isValid(); }
 
             private:
-                MAP::MAP_DATA::WorldObjectInfo m_Info;
+                std::unique_ptr<MAP::SCRIPT_AREA::ScriptArea> m_pArea;
+                bool isEmpty() const { return !m_pArea; }
             };
         }
     }

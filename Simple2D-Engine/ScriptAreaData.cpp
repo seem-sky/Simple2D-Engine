@@ -54,6 +54,20 @@ const std::vector<std::unique_ptr<ScriptArea>>& ScriptAreaData::getScriptAreas()
     return m_pScriptAreas;
 }
 
+ScriptArea* ScriptAreaData::takeScriptArea(MAP::GUID guid)
+{
+    for (auto itr = m_pScriptAreas.begin(); itr != m_pScriptAreas.end(); ++itr)
+    {
+        if ((*itr)->getGUID() == guid)
+        {
+            auto pScript = std::move(*itr);
+            m_pScriptAreas.erase(itr);
+            return pScript.release();
+        }
+    }
+    return nullptr;
+}
+
 bool ScriptAreaData::hasScriptArea(MAP::GUID guid) const
 {
     for (auto& pScript : m_pScriptAreas)

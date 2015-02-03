@@ -1,43 +1,43 @@
 #include "ObjectMappingRevert.h"
 #include "MapEditor.h"
 
-using namespace MAPPING_MODE::REVERT;
+using namespace MAPPING_MODE::OBJECT::REVERT;
 
 /*#####
-# ObjectBase
+# Base
 #####*/
-ObjectBase::ObjectBase(MapEditor& editor) : m_Editor(editor), MAP::REVERT::Interface()
+Base::Base(MapEditor& editor) : m_Editor(editor), MAP::REVERT::Interface()
 {}
 
 /*#####
-# ObjectAdd
+# Add
 #####*/
-ObjectAdd::ObjectAdd(MAP::GUID guid, MapEditor& editor) : ObjectBase(editor), m_GUID(guid)
+Add::Add(MAP::GUID guid, MapEditor& editor) : Base(editor), m_GUID(guid)
 {}
 
-void ObjectAdd::revert()
+void Add::revert()
 {
     m_Editor.removeWorldObject(m_GUID);
 }
 
 /*#####
-# ObjectModify
+# Modify
 #####*/
-ObjectModify::ObjectModify(const MAP::MAP_DATA::WorldObjectInfo& info, MapEditor& editor) : ObjectBase(editor), m_Info(info)
+Modify::Modify(const MAP::MAP_DATA::WorldObjectInfo& info, MapEditor& editor) : Base(editor), m_Info(info)
 {}
 
-void ObjectModify::revert()
+void Modify::revert()
 {
     m_Editor.setWorldObject(m_Info);
 }
 
 /*#####
-# ObjectRemove
+# Remove
 #####*/
-ObjectRemove::ObjectRemove(const MAP::MAP_DATA::WorldObjectInfo& info, MapEditor& editor) : ObjectBase(editor), m_Info(info)
+Remove::Remove(const MAP::MAP_DATA::WorldObjectInfo& info, MapEditor& editor) : Base(editor), m_Info(info)
 {}
 
-void ObjectRemove::revert()
+void Remove::revert()
 {
     m_Editor.addWorldObject(m_Info);
 }

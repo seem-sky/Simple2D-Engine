@@ -47,7 +47,7 @@ public:
     FlagManager<Flags>& getFlags() { return m_Flags; }
     const FlagManager<Flags>& getFlags() const { return m_Flags; }
 
-    int type() const { return QGraphicsItem::UserType + 1; }
+    int type() const;
 
 private:
     MAP::MAP_DATA::WorldObjectInfo& m_WorldObjectInfo;

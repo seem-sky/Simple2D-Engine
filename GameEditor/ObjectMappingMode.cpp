@@ -15,12 +15,10 @@ namespace MAPPING_MODE
             if (auto pItem = editor.getWorldObject(info.getGUID()))
             {
                 if (pItem->getWorldObjectInfo().getPosition() != info.getPosition())
-                    pRevertContainer->addRevert(new MAPPING_MODE::REVERT::ObjectModify(info, editor));
+                    pRevertContainer->addRevert(new OBJECT::REVERT::Modify(info, editor));
             }
         }
-
-        if (!pRevertContainer->isEmpty())
-            editor.addRevert(pRevertContainer.release());
+        editor.addRevert(pRevertContainer.release());
         m_MoveInfos.clear();
     }
 
@@ -44,7 +42,7 @@ namespace MAPPING_MODE
         else if (auto pWorldObject = editor.addWorldObject(m_ID, GEOMETRY::Point<int32>(pos.x(), pos.y()), MAP::MAP_DATA::MapObjectLayer::MIDDLE, m_Direction))
         {
             // add revert
-            std::unique_ptr<MAPPING_MODE::REVERT::ObjectAdd> pRevert(new MAPPING_MODE::REVERT::ObjectAdd(pWorldObject->getWorldObjectInfo().getGUID(), editor));
+            std::unique_ptr<OBJECT::REVERT::Add> pRevert(new OBJECT::REVERT::Add(pWorldObject->getWorldObjectInfo().getGUID(), editor));
             editor.addRevert(pRevert.release());
         }
     }
@@ -95,24 +93,22 @@ namespace MAPPING_MODE
 
         for (auto& info : m_CopyInfos)
         {
-            std::unique_ptr<MAPPING_MODE::REVERT::ObjectRemove> pCutRevert;
+            std::unique_ptr<OBJECT::REVERT::Remove> pCutRevert;
             if (m_Cut)
             {
-                pCutRevert = std::unique_ptr<MAPPING_MODE::REVERT::ObjectRemove>(new MAPPING_MODE::REVERT::ObjectRemove(info, editor));
+                pCutRevert = std::unique_ptr<OBJECT::REVERT::Remove>(new OBJECT::REVERT::Remove(info, editor));
                 editor.removeWorldObject(info.getGUID());
                 m_Cut = false;
             }
 
             if (auto pWorldObject = editor.addWorldObject(info.getID(), GEOMETRY::Point<int32>(pos.x() + info.getPosition().getX() - offset.getX(),
                 pos.y() + info.getPosition().getY() - offset.getY()), info.getLayer(), info.getDirection()))
-                pRevertContainer->addRevert(new MAPPING_MODE::REVERT::ObjectAdd(pWorldObject->getWorldObjectInfo().getGUID(), editor));
+                pRevertContainer->addRevert(new OBJECT::REVERT::Add(pWorldObject->getWorldObjectInfo().getGUID(), editor));
 
             if (pCutRevert)
                 pRevertContainer->addRevert(pCutRevert.release());
         }
-
-        if (!pRevertContainer->isEmpty())
-            editor.addRevert(pRevertContainer.release());
+        editor.addRevert(pRevertContainer.release());
     }
 
     void Object::remove(MapEditor& editor)
@@ -124,7 +120,7 @@ namespace MAPPING_MODE
             if (auto pWO = dynamic_cast<WorldObjectItem*>(pItem))
             {
                 // add revert
-                pRevertContainer->addRevert(new MAPPING_MODE::REVERT::ObjectRemove(pWO->getWorldObjectInfo(), editor));
+                pRevertContainer->addRevert(new OBJECT::REVERT::Remove(pWO->getWorldObjectInfo(), editor));
 
                 // remove object from scene and delete it later
                 editor.scene()->removeItem(pItem);
@@ -132,9 +128,7 @@ namespace MAPPING_MODE
                 new DelayedDeleteObject<WorldObjectItem>(pWO);
             }
         }
-
-        if (!pRevertContainer->isEmpty())
-            editor.addRevert(pRevertContainer.release());
+        editor.addRevert(pRevertContainer.release());
     }
 
     void Object::keyPress(MapEditor& editor, const QPoint& pos, QKeyEvent* pEvent)

@@ -1,51 +1,17 @@
 #include "ScriptAreaItem.h"
+#include "EditorGlobal.h"
 #include <DelayedDeleteObject.h>
 #include <ScriptArea_AreaRect.h>
 #include <ScriptArea.h>
-#include <QtGui/QPainter>
-#include <QtWidgets/QStyleOptionGraphicsItem>
 #include <QtWidgets/QGraphicsScene>
 #include <QtWidgets/QGraphicsSceneMouseEvent>
-
-static void highlightSelection(const QGraphicsItem& item, QPainter* pPainter, const QStyleOptionGraphicsItem* pOption)
-{
-    // from QGraphicsItem.cpp
-    const QRectF murect = pPainter->transform().mapRect(QRectF(0, 0, 1, 1));
-    if (qFuzzyCompare(qMax(murect.width(), murect.height()) + 1, 1))
-        return;
-
-    const QRectF mbrect = pPainter->transform().mapRect(item.boundingRect());
-    if (qMin(mbrect.width(), mbrect.height()) < qreal(1.0))
-        return;
-
-    qreal itemPenWidth = 1.0;
-    const qreal pad = itemPenWidth / 2;
-
-    const qreal penWidth = 0; // cosmetic pen
-
-    const QColor fgcolor = pOption->palette.windowText().color();
-    const QColor bgcolor( // ensure good contrast against fgcolor
-        fgcolor.red() > 127 ? 0 : 255,
-        fgcolor.green() > 127 ? 0 : 255,
-        fgcolor.blue() > 127 ? 0 : 255);
-
-    pPainter->setPen(QPen(bgcolor, penWidth, Qt::SolidLine));
-    pPainter->setBrush(Qt::NoBrush);
-    pPainter->drawRect(item.boundingRect().adjusted(pad, pad, -pad, -pad));
-
-    pPainter->setPen(QPen(pOption->palette.windowText(), 0, Qt::DashLine));
-    pPainter->setBrush(Qt::NoBrush);
-}
+#include <QtGlobal.h>
 
 /*#####
 # PointMoveItem
 #####*/
 PointMoveItem::PointMoveItem(uint32 index, QGraphicsItem* pItem) : QGraphicsItem(pItem), m_Index(index)
 {
-    setFlag(QGraphicsItem::ItemIsMovable);
-    setFlag(QGraphicsItem::ItemIsSelectable);
-    setFlag(QGraphicsItem::ItemIsFocusable);
-    setFlag(QGraphicsItem::ItemIgnoresTransformations);
     setFlag(QGraphicsItem::ItemIgnoresParentOpacity);
 }
 
@@ -73,7 +39,7 @@ void PointMoveItem::paint(QPainter* pPainter, const QStyleOptionGraphicsItem* pO
 
 int PointMoveItem::type() const
 {
-    return UserType + 2;
+    return MAPPING_MODE::ITEM_MOVE_POINT;
 }
 
 /*#####
@@ -103,7 +69,7 @@ void ScriptAreaItem::setup(MAP::SCRIPT_AREA::ScriptArea* pScriptArea)
 
 int ScriptAreaItem::type() const
 {
-    return UserType + 3;
+    return MAPPING_MODE::ITEM_SCRIPT_AREA;
 }
 
 void ScriptAreaItem::_setupPointMoveItem(uint32 index)
@@ -167,12 +133,25 @@ QRectF ScriptAreaItem::boundingRect() const
 
 void ScriptAreaItem::setEditable(bool editable /* = true */)
 {
-    //setFlag(ItemIsMovable, editable);
-    //setFlag(ItemIsSelectable, editable);
+    setFlag(ItemIsSelectable, editable);
+    setFlag(ItemIsFocusable, editable);
     setVisible(editable);
+
+    for (auto pItem : childItems())
+    {
+        pItem->setFlag(ItemIsMovable, editable);
+        pItem->setFlag(ItemIsSelectable, editable);
+        pItem->setFlag(ItemIsFocusable, editable);
+        pItem->setVisible(editable);
+    }
 }
 
 const MAP::SCRIPT_AREA::ScriptArea* ScriptAreaItem::getScriptArea() const
+{
+    return m_pScriptArea;
+}
+
+MAP::SCRIPT_AREA::ScriptArea* ScriptAreaItem::getScriptArea()
 {
     return m_pScriptArea;
 }

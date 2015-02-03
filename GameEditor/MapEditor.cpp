@@ -95,8 +95,7 @@ WorldObjectItem* MapEditor::_setupWorldObject(const DATABASE::PROTOTYPE::WORLD_O
     pItem->setPixmap(viewer.grab());
 
     // set flags
-    if (m_MappingObject.getMappingModeType() != MAPPING_MODE::Type::OBJECT_MAPPING)
-        pItem->setEditable(false);
+    pItem->setEditable(m_MappingObject.getMappingModeType() == MAPPING_MODE::Type::OBJECT_MAPPING);
 
     // setup position
     //pos = _getNearestAvailablePosition(QPoint(pos.x() - viewer.size().width() / 2, pos.y() - viewer.size().height() / 2), pWorldObject->getBoundingRect());
@@ -109,6 +108,7 @@ ScriptAreaItem* MapEditor::_setupScriptArea(MAP::SCRIPT_AREA::ScriptArea* script
     auto pItem = new ScriptAreaItem();
     scene()->addItem(pItem);
     pItem->setup(scriptArea);
+    pItem->setEditable(m_MappingObject.getMappingModeType() == MAPPING_MODE::Type::SCRIPT_AREA_MAPPING);
     return pItem;
 }
 
@@ -210,6 +210,17 @@ ScriptAreaItem* MapEditor::getScriptArea(MAP::GUID guid)
                     return pScriptArea;
             }
         }
+    }
+    return nullptr;
+}
+
+ScriptAreaItem* MapEditor::takeScriptArea(MAP::GUID guid)
+{
+    if (auto pAreaItem = getScriptArea(guid))
+    {
+        scene()->removeItem(pAreaItem);
+        m_MapData.getScriptAreaData().takeScriptArea(guid);
+        return pAreaItem;
     }
     return nullptr;
 }
@@ -449,6 +460,8 @@ void MapEditor::clearReverts()
 
 void MapEditor::addRevert(MAP::REVERT::Interface* pRevert)
 {
+    if (!pRevert || pRevert->isEmpty())
+        return;
     m_Reverts.push_back(std::unique_ptr<MAP::REVERT::Interface>(pRevert));
     emit changed(m_MapData.getMapID());
 }

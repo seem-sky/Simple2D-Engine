@@ -19,7 +19,7 @@ namespace MAPPING_MODE
         void copy(const MapEditor& editor) {}
         void cut(const MapEditor& editor) {}
         void paste(MapEditor& editor, const QPoint& pos) {}
-        void remove(MapEditor& editor) {}
+        void remove(MapEditor& editor);
 
         Type getModeType() const { return Type::SCRIPT_AREA_MAPPING; }
         QString getModeName() const { return "script area mapping"; }

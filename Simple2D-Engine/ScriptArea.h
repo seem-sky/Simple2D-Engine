@@ -11,11 +11,26 @@ namespace MAP
 {
     namespace SCRIPT_AREA
     {
-        const uint32 MINIMUM_SIZE = TILE_SIZE;
+        const uint32 MINIMUM_SIZE = TILE_SIZE/2;
+
+        enum class TriggerType
+        {
+            TOUCH,
+            CONTAIN
+        };
+
+        enum class RepeatType
+        {
+            SINGLE,
+            STEPWISE
+        };
+
         class ScriptArea
         {
         public:
             ScriptArea(MAP::GUID guid);
+            ScriptArea(const ScriptArea& other) = delete;
+            ScriptArea& operator=(const ScriptArea& other) = delete;
 
             void setArea(GEOMETRY::ComplexGeometricShape<int32>* pArea);
             GEOMETRY::ComplexGeometricShape<int32>* getArea();

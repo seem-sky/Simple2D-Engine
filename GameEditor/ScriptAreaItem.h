@@ -50,6 +50,7 @@ public:
     void setup(MAP::SCRIPT_AREA::ScriptArea* scriptArea);
 
     const MAP::SCRIPT_AREA::ScriptArea* getScriptArea() const;
+    MAP::SCRIPT_AREA::ScriptArea* getScriptArea();
     void setEditable(bool editable = true);
 
     PointMoveItem* getPointItem(uint32 index) const;

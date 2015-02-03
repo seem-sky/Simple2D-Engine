@@ -237,6 +237,9 @@
     <ClCompile Include="ScriptAreaData.cpp">
       <Filter>Map\ScriptArea</Filter>
     </ClCompile>
+    <ClCompile Include="QtGlobal.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Simple2D-GameEditor\include\Application.h">

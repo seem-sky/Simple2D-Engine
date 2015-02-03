@@ -1,6 +1,8 @@
 #ifndef EDITOR_GLOBAL_H
 #define EDITOR_GLOBAL_H
 
+#include <QtWidgets/QGraphicsItem>
+
 namespace MAPPING_MODE
 {
     enum class Type
@@ -9,6 +11,13 @@ namespace MAPPING_MODE
         OBJECT_MAPPING,
         SCRIPT_AREA_MAPPING,
         PRESENTATION
+    };
+
+    enum QGraphicsItemType
+    {
+        ITEM_WORLD_OBJECT = QGraphicsItem::UserType + 1,
+        ITEM_SCRIPT_AREA = QGraphicsItem::UserType + 2,
+        ITEM_MOVE_POINT = QGraphicsItem::UserType + 3
     };
 }
 #endif

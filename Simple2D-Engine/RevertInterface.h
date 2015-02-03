@@ -12,6 +12,7 @@ namespace MAP
         {
         public:
             virtual void revert() = 0;
+            virtual bool isEmpty() const = 0;
         };
 
         class RevertContainer : public Interface

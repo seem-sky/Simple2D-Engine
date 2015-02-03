@@ -20,6 +20,7 @@ namespace MAP
             ScriptArea* getScriptArea(GUID guid);
             const ScriptArea* getScriptArea(GUID guid) const;
             const std::vector<std::unique_ptr<ScriptArea>>& getScriptAreas() const;
+            ScriptArea* takeScriptArea(GUID guid);
             bool hasScriptArea(GUID guid) const;
             void removeScriptArea(GUID guid);
 

@@ -61,6 +61,7 @@
     <ClCompile Include="PrototypeAnimationModule.cpp" />
     <ClCompile Include="PrototypeModuleManager.cpp" />
     <ClCompile Include="BrushRevert.cpp" />
+    <ClCompile Include="QtGlobal.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneMgr.cpp" />
     <ClCompile Include="ScriptArea.cpp" />

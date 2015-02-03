@@ -1,4 +1,5 @@
 #include "WorldObjectItem.h"
+#include "EditorGlobal.h"
 #include <QtGui/QKeyEvent>
 #include <QtWidgets/QGraphicsSceneMouseEvent>
 #include <QtWidgets/QGraphicsScene>
@@ -120,4 +121,9 @@ void WorldObjectItem::setCenterPos(GEOMETRY::Point<int32> pos)
 void WorldObjectItem::setCenterPos(int32 x, int32 y)
 {
     setPos(x - pixmap().width() / 2, y - pixmap().height() / 2);
+}
+
+int WorldObjectItem::type() const
+{
+    return MAPPING_MODE::ITEM_WORLD_OBJECT;
 }

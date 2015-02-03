@@ -160,6 +160,12 @@
     <Filter Include="Map Editor\Modules\Content\Items">
       <UniqueIdentifier>{ce85aaef-470b-4e0e-ac2c-502ab7c82008}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Map Editor\Modules\MappingObject\MappingMode\ScriptAreaMapping\Revert">
+      <UniqueIdentifier>{bd60fd7b-389f-4ccd-8680-d4119a2aa342}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map Editor\Widgets\Tools\ScriptArea">
+      <UniqueIdentifier>{c6bc637c-7fa8-44a2-b564-8541e9a3148d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainWindow.cpp">
@@ -324,6 +330,12 @@
     <ClCompile Include="ScriptAreaItem.cpp">
       <Filter>Map Editor\Modules\Content\Items</Filter>
     </ClCompile>
+    <ClCompile Include="ScriptAreaMappingRevert.cpp">
+      <Filter>Map Editor\Modules\MappingObject\MappingMode\ScriptAreaMapping\Revert</Filter>
+    </ClCompile>
+    <ClCompile Include="MapEditorWidgetScriptAreaMapping.cpp">
+      <Filter>Map Editor\Widgets\Tools\ScriptArea</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <compile_QT_Files Include="UI\MainWindow.ui">
@@ -367,6 +379,9 @@
     </compile_QT_Files>
     <compile_QT_Files Include="UI\MapEditorWidgetObjectMapping.ui">
       <Filter>Map Editor\Widgets\Tools\WorldObject</Filter>
+    </compile_QT_Files>
+    <compile_QT_Files Include="UI\MapEditorWidgetScriptAreaMapping.ui">
+      <Filter>Map Editor\Widgets\Tools\ScriptArea</Filter>
     </compile_QT_Files>
   </ItemGroup>
   <ItemGroup>
@@ -542,6 +557,12 @@
     </ClInclude>
     <ClInclude Include="EditorGlobal.h">
       <Filter>EditorCore</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptAreaMappingRevert.h">
+      <Filter>Map Editor\Modules\MappingObject\MappingMode\ScriptAreaMapping\Revert</Filter>
+    </ClInclude>
+    <ClInclude Include="MapEditorWidgetScriptAreaMapping.h">
+      <Filter>Map Editor\Widgets\Tools\ScriptArea</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

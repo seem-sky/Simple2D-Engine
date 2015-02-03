@@ -133,3 +133,4 @@
 /GameEditor/moc_MapViewItem.h
 /GameEditor/moc_MapEditor.h
 /GameEditor/moc_MapEditorScene.h
+/GameEditor/UI/UI_MapEditorWidgetScriptAreaMapping.h
