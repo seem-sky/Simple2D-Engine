@@ -4,8 +4,6 @@
 #include "Scene.h"
 #include "MapMgr.h"
 #include "DatabaseMgr.h"
-#include "AutoTileCache.h"
-#include "TileCache.h"
 #include "WorldObject.h"
 #include <QtWidgets/QGraphicsItem>
 #include <QtGui/QPixmapCache>
@@ -82,8 +80,6 @@ namespace GAME_LOGIC
 
         private:
             const DATABASE::DatabaseMgr& m_DatabaseMgr;
-            AutoTileCache m_AutoTileCache;
-            TileCache m_TileCache;
         };
     }
 }

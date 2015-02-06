@@ -6,6 +6,11 @@
 #include <array>
 #include "WorldObjectInfo.h"
 
+namespace CACHE
+{
+    class Manager;
+}
+
 class MappingObject;
 
 struct MapEditorInfo
@@ -38,7 +43,7 @@ protected:
     void keyPressEvent(QKeyEvent *event);
 
 public:
-    MapEditorScene(const MappingObject& mappingObject, const MAP::MAP_DATA::MapData& mapData, const DATABASE::DatabaseMgr& DBMgr);
+    MapEditorScene(CACHE::Manager& cacheMgr, const MappingObject& mappingObject, const MAP::MAP_DATA::MapData& mapData, const DATABASE::DatabaseMgr& DBMgr);
 
     const MapEditorInfo& getMapEditorInfo() const;
     void setMapEditorInfo(const MapEditorInfo& info);

@@ -7,7 +7,6 @@
 #include <QtWidgets/QErrorMessage>
 #include "Logfile.h"
 #include <QtCore/QTime>
-#include "AutoTileCache.h"
 
 using namespace DATABASE;
 
@@ -32,8 +31,8 @@ MainWindow::MainWindow(QMainWindow* pParent) : QMainWindow(pParent), Ui_MainWind
     actionNew->setShortcut(QKeySequence(tr("Ctrl+N", "File|New")));
 
     // setup caches
-    GTileCache::get()->setDBMgr(&m_Project.getDatabaseMgr());
-    GAutoTileCache::get()->setDBMgr(&m_Project.getDatabaseMgr());
+    //GTileCache::get()->setDBMgr(&m_Project.getDatabaseMgr());
+    //GAutoTileCache::get()->setDBMgr(&m_Project.getDatabaseMgr());
 
     // load old config data and open last project
     Config::get()->loadConfig();

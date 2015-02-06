@@ -4,6 +4,11 @@
 #include "MapData.h"
 #include <QtWidgets/QGraphicsScene>
 
+namespace CACHE
+{
+    class Manager;
+}
+
 class MapViewScene : public QGraphicsScene
 {
 protected:
@@ -17,7 +22,7 @@ protected:
     GEOMETRY::Point<uint32> calculateEndTile(const QRect& rect, const GEOMETRY::Point<uint32>& startTile) const;
 
 public:
-    MapViewScene(const MAP::MAP_DATA::MapData& mapData, const DATABASE::DatabaseMgr& DBMgr);
+    MapViewScene(CACHE::Manager& cacheMgr, const MAP::MAP_DATA::MapData& mapData, const DATABASE::DatabaseMgr& DBMgr);
 
     const MAP::MAP_DATA::MapData& getMapData() const { return m_MapData; }
     const DATABASE::DatabaseMgr& getDatabaseMgr() const { return m_DBMgr; }
@@ -25,5 +30,6 @@ public:
 private:
     const MAP::MAP_DATA::MapData& m_MapData;
     const DATABASE::DatabaseMgr& m_DBMgr;
+    CACHE::Manager& m_CacheMgr;
 };
 #endif

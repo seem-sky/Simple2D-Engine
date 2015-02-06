@@ -1,29 +1,30 @@
 #include "MapEditorModuleTiles.h"
 #include "QtGlobal.h"
 #include "Config.h"
-#include "AutoTileCache.h"
-#include "TileCache.h"
 #include <QtGui/QPainter>
+#include <Core/Cache/Manager.h>
 
 /*#####
 # tile module
 #####*/
-TilePixmapWidget::TilePixmapWidget(uint32 ID, QWidget* pParent) : AbstractPixmapWidget(ID, pParent)
-{
-}
+TilePixmapWidget::TilePixmapWidget(uint32 ID, CACHE::Manager& cacheMgr, QWidget* pParent)
+    : AbstractPixmapWidget(ID, pParent), m_CacheMgr(cacheMgr)
+{}
 
 void TilePixmapWidget::drawPixmap()
 {
-    if (auto pPixmap = GTileCache::get()->getItem(getID()))
-    {
-        QPainter painter(this);
-        painter.drawPixmap(0, 0,* pPixmap);
-    }
+    if (!getID())
+        return;
+    auto info = m_CacheMgr.getTileCache().get(getID());
+    if (!info.isValid())
+        return;
+    QPainter painter(this);
+    painter.drawPixmap(0, 0, *info.getPixmap(), info.getPosition().getX(), info.getPosition().getY(), MAP::TILE_SIZE, MAP::TILE_SIZE);
 }
 
-MapEditorModuleTiles::MapEditorModuleTiles(const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent) : AbstractPrototypeTable(DBMgr, pParent)
-{
-}
+MapEditorModuleTiles::MapEditorModuleTiles(CACHE::Manager& cacheMgr, const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent)
+    : AbstractPrototypeTable(DBMgr, pParent), m_CacheMgr(cacheMgr)
+{}
 
 void MapEditorModuleTiles::_setup()
 {
@@ -39,7 +40,7 @@ void MapEditorModuleTiles::_setup()
 
     for (uint32 i = 0; i <= pTileDB->getSize(); ++i)
     {
-        auto pItem = new TilePixmapWidget(i, this);
+        auto pItem = new TilePixmapWidget(i, m_CacheMgr, this);
         // click first item, so border will be visible
         if (i == 0)
         {
@@ -59,14 +60,14 @@ AutoTilePixmapWidget::AutoTilePixmapWidget(uint32 ID, QWidget* pParent) : Abstra
 
 void AutoTilePixmapWidget::drawPixmap()
 {
-    if (auto pAutoTile = GAutoTileCache::get()->getItem(getID()))
-    {
-        if (auto pPixmap = pAutoTile->getPixmap(DATABASE::PROTOTYPE::AUTO_TILE::INDEX_INNER_CENTER))
-        {
-            QPainter painter(this);
-            painter.drawPixmap(0, 0, *pPixmap);
-        }
-    }
+    //if (auto pAutoTile = GAutoTileCache::get()->getItem(getID()))
+    //{
+    //    if (auto pPixmap = pAutoTile->getPixmap(DATABASE::PROTOTYPE::AUTO_TILE::INDEX_INNER_CENTER))
+    //    {
+    //        QPainter painter(this);
+    //        painter.drawPixmap(0, 0, *pPixmap);
+    //    }
+    //}
 }
 
 MapEditorModuleAutoTiles::MapEditorModuleAutoTiles(const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent) : AbstractPrototypeTable(DBMgr, pParent)

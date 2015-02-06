@@ -50,6 +50,11 @@ namespace MAP
     }
 }
 
+namespace CACHE
+{
+    class Manager;
+}
+
 class WorldObjectItem;
 class ScriptAreaItem;
 class MappingObject;
@@ -79,7 +84,7 @@ protected:
     void keyReleaseEvent(QKeyEvent* pEvent);
 
 public:
-    MapEditor(uint32 mapID, const MappingObject& mappingObject, const DATABASE::DatabaseMgr& DBMgr, QWidget* pWidget = nullptr);
+    MapEditor(uint32 mapID, CACHE::Manager& cacheMgr, const MappingObject& mappingObject, const DATABASE::DatabaseMgr& DBMgr, QWidget* pWidget = nullptr);
 
     void saveMap();
     void reloadMap();

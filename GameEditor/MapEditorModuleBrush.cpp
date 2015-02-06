@@ -1,5 +1,4 @@
 #include "MapEditorModuleBrush.h"
-#include "AutoTileCache.h"
 #include <QtGui/QPainter>
 #include <QtGui/QTextOption>
 #include "moc_MapEditorModuleBrush.h"
@@ -41,16 +40,16 @@ void MapEditorModuleBrush::_update()
     {
     case MAP::BRUSH::BrushInfo::Type::TILE:
         text = "tile";
-        if (auto pPixmap = GTileCache::get()->getItem(m_BrushInfo.getID()))
-            pixmap =* pPixmap;
+        //if (auto pPixmap = GTileCache::get()->getItem(m_BrushInfo.getID()))
+        //    pixmap =* pPixmap;
         break;
     case MAP::BRUSH::BrushInfo::Type::AUTO_TILE:
         text = "auto tile";
-        if (auto pAutoTile = GAutoTileCache::get()->getItem(m_BrushInfo.getID()))
-        {
-            if (auto pPixmap = pAutoTile->getPixmap(AUTO_TILE::INDEX_INNER_CENTER))
-                pixmap =* pPixmap;
-        }
+        //if (auto pAutoTile = GAutoTileCache::get()->getItem(m_BrushInfo.getID()))
+        //{
+        //    if (auto pPixmap = pAutoTile->getPixmap(AUTO_TILE::INDEX_INNER_CENTER))
+        //        pixmap =* pPixmap;
+        //}
         break;
     case MAP::BRUSH::BrushInfo::Type::TILE_SET:
         text = "tile set";

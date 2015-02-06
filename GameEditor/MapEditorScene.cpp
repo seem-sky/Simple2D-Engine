@@ -6,12 +6,13 @@
 #include <QtGui/QKeyEvent>
 #include <QtGui/QPainter>
 #include <QtGui/QPainterPath>
+#include <Core/Cache/Manager.h>
 
 /*#####
 # MapViewerScene
 #####*/
-MapEditorScene::MapEditorScene(const MappingObject& mappingObject, const MAP::MAP_DATA::MapData& mapData, const DATABASE::DatabaseMgr& DBMgr) : MapViewScene(mapData, DBMgr),
-m_MappingObject(mappingObject)
+MapEditorScene::MapEditorScene(CACHE::Manager& cacheMgr, const MappingObject& mappingObject, const MAP::MAP_DATA::MapData& mapData, const DATABASE::DatabaseMgr& DBMgr)
+    : MapViewScene(cacheMgr, mapData, DBMgr), m_MappingObject(mappingObject)
 {}
 
 void MapEditorScene::drawTiles(QPainter* painter, const QRectF& rect, MAP::LayerType currentLayer) const

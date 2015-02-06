@@ -6,9 +6,10 @@
 #include "WorldObjectItem.h"
 #include <DatabaseMgr.h>
 #include <QtWidgets/QGraphicsItem>
+#include <Core/Cache/Manager.h>
 
-MapEditorModuleContent::MapEditorModuleContent(const MappingObject& mappingObject, DATABASE::DatabaseMgr& databaseMgr, QWidget* pWidget) : QWidget(pWidget),
-m_DBMgr(databaseMgr), m_MappingObject(mappingObject), Ui_MapEditorModuleContent()
+MapEditorModuleContent::MapEditorModuleContent(CACHE::Manager& cacheMgr, const MappingObject& mappingObject, DATABASE::DatabaseMgr& databaseMgr, QWidget* pWidget) :
+    QWidget(pWidget), m_CacheMgr(cacheMgr), m_DBMgr(databaseMgr), m_MappingObject(mappingObject), Ui_MapEditorModuleContent()
 {
     setupUi(this);
 
@@ -109,7 +110,7 @@ void MapEditorModuleContent::onMapOpened(uint32 mapID)
     if (auto pTab = getTab(mapID))
         return;
 
-    auto pEditor = new MapEditor(mapID, m_MappingObject, m_DBMgr, this);
+    auto pEditor = new MapEditor(mapID, m_CacheMgr, m_MappingObject, m_DBMgr, this);
     try
     {
         m_pMapTabs->addTab(pEditor, m_DBMgr.getMapDatabase()->getOriginalPrototype(mapID)->getName());

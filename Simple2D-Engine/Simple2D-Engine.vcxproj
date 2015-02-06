@@ -28,8 +28,6 @@
     <ClCompile Include="..\Simple2D-GameEditor\include\MapGrid.cpp" />
     <ClCompile Include="..\Simple2D-GameEditor\include\WorldObject.cpp" />
     <ClCompile Include="AnimationHolder.cpp" />
-    <ClCompile Include="AutoTile.cpp" />
-    <ClCompile Include="AutoTileCache.cpp" />
     <ClCompile Include="Brush.cpp" />
     <ClCompile Include="BrushArea.cpp" />
     <ClCompile Include="BrushAreaFill.cpp" />
@@ -41,7 +39,9 @@
     <ClCompile Include="BrushTypeTileSet.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Config.cpp" />
-    <ClCompile Include="Core\Cache\Cache.cpp" />
+    <ClCompile Include="Core\Cache\AutoTiles.cpp" />
+    <ClCompile Include="Core\Cache\Manager.cpp" />
+    <ClCompile Include="Core\Cache\TileCacheInfo.cpp" />
     <ClCompile Include="Core\Cache\Tiles.cpp" />
     <ClCompile Include="Database.cpp" />
     <ClCompile Include="DatabasePrototypesIO.cpp" />
@@ -68,7 +68,6 @@
     <ClCompile Include="SceneMgr.cpp" />
     <ClCompile Include="ScriptArea.cpp" />
     <ClCompile Include="ScriptAreaData.cpp" />
-    <ClCompile Include="TileCache.cpp" />
     <ClCompile Include="MapException.cpp" />
     <ClCompile Include="TransformationHolder.cpp" />
     <ClCompile Include="VisualViewer.cpp" />
@@ -100,7 +99,10 @@
     <ClInclude Include="BrushTypeTile.h" />
     <ClInclude Include="BrushTypeTileSet.h" />
     <ClInclude Include="Colission.h" />
-    <ClInclude Include="Core\Cache\Cache.h" />
+    <ClInclude Include="Core\Cache\AutoTiles.h" />
+    <ClInclude Include="Core\Cache\Manager.h" />
+    <ClInclude Include="Core\Cache\TextureAtlas.h" />
+    <ClInclude Include="Core\Cache\TileCacheInfo.h" />
     <ClInclude Include="Core\Cache\Tiles.h" />
     <ClInclude Include="RevertInterface.h" />
     <ClInclude Include="ScriptArea.h" />
@@ -109,8 +111,6 @@
     <ClInclude Include="MapViewScene.h" />
     <ClInclude Include="PrototypeAnimationModule.h" />
     <ClInclude Include="AnimationHolder.h" />
-    <ClInclude Include="AutoTile.h" />
-    <ClInclude Include="AutoTileCache.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="Database_IO.h" />
@@ -137,7 +137,6 @@
     <ClInclude Include="GameWindow.h" />
     <ClInclude Include="QtGlobal.h" />
     <ClInclude Include="SceneMgr.h" />
-    <ClInclude Include="TileCache.h" />
     <ClInclude Include="MapException.h" />
     <ClInclude Include="TransformationHolder.h" />
     <ClInclude Include="WorldObjectInfo.h" />

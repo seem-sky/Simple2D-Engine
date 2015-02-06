@@ -17,14 +17,15 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QMenu>
 #include <QtGui/QMouseEvent>
+#include <Core/Cache/Manager.h>
 
 /*#####
 # MapViewer
 #####*/
-MapEditor::MapEditor(uint32 mapID, const MappingObject& mappingObject, const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent) : QGraphicsView(pParent),
-m_MapData(DBMgr, mapID), m_DBMgr(DBMgr), m_MappingObject(mappingObject)
+MapEditor::MapEditor(uint32 mapID, CACHE::Manager& cacheMgr, const MappingObject& mappingObject, const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent) :
+    QGraphicsView(pParent), m_MapData(DBMgr, mapID), m_DBMgr(DBMgr), m_MappingObject(mappingObject)
 {
-    setScene(new MapEditorScene(mappingObject, m_MapData, DBMgr));
+    setScene(new MapEditorScene(cacheMgr, mappingObject, m_MapData, DBMgr));
     scene()->setParent(this);
     scene()->setBackgroundBrush(QBrush(Qt::cyan));
     setFrameShape(QFrame::NoFrame);

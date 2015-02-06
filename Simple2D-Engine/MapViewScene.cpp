@@ -2,9 +2,10 @@
 #include <QtCore/QTime>
 #include <QtCore/QDebug>
 #include <QtGui/QPainter>
-#include "AutoTileCache.h"
+#include <Core/Cache/Manager.h>
 
-MapViewScene::MapViewScene(const MAP::MAP_DATA::MapData& mapData, const DATABASE::DatabaseMgr& DBMgr) : QGraphicsScene(), m_MapData(mapData), m_DBMgr(DBMgr)
+MapViewScene::MapViewScene(CACHE::Manager& cacheMgr, const MAP::MAP_DATA::MapData& mapData, const DATABASE::DatabaseMgr& DBMgr)
+    : QGraphicsScene(), m_MapData(mapData), m_DBMgr(DBMgr), m_CacheMgr(cacheMgr)
 {}
 
 GEOMETRY::Point<uint32> MapViewScene::calculateEndTile(const QRect &rect, const GEOMETRY::Point<uint32>& startTile) const
@@ -45,9 +46,38 @@ void MapViewScene::drawTiles(QPainter* painter, const QRectF& rect, MAP::LayerTy
 
 void MapViewScene::drawLayer(QPainter* painter, const GEOMETRY::Point<uint32> startTile, const GEOMETRY::Point<uint32> endTile, const MAP::Layer& mapLayer) const
 {
-    // ToDo: DrawPixmapFragments is an improvement, perhaps.
-    // std::vector<std::vector<QPainter::PixmapFragment>> fragments;
+    class PaintInfo
+    {
+    public:
+        void addFragment(const GEOMETRY::Point<uint32>& currentPos, const CACHE::TileCacheInfo& info)
+        {
+            if (!info.isValid())
+                return;
+
+            auto itr = m_Fragments.find(info.getPixmap());
+            if (itr == m_Fragments.cend())
+            {
+                auto pair = std::make_pair(info.getPixmap(), std::vector<QPainter::PixmapFragment>());
+                itr = m_Fragments.insert(pair).first;
+            }
+
+            itr->second.push_back(QPainter::PixmapFragment::create(
+                QPoint(currentPos.getX() * MAP::TILE_SIZE + MAP::TILE_SIZE / 2, currentPos.getY() * MAP::TILE_SIZE + MAP::TILE_SIZE / 2),
+                QRect(info.getPosition().getX(), info.getPosition().getY(), MAP::TILE_SIZE, MAP::TILE_SIZE)));
+        }
+
+        void paint(QPainter* painter) const
+        {
+            for (auto& fragments : m_Fragments)
+                painter->drawPixmapFragments(&*fragments.second.begin(), static_cast<int>(fragments.second.size()), *fragments.first, QPainter::OpaqueHint);
+        }
+
+    private:
+        std::map<const QPixmap*, std::vector<QPainter::PixmapFragment>> m_Fragments;
+    };
+
     GEOMETRY::Point<uint32> currentTile;
+    PaintInfo paintInfo;
     for (currentTile.getX() = startTile.getX(); currentTile.getX() < endTile.getX(); ++currentTile.getX())
     {
         for (currentTile.getY() = startTile.getY(); currentTile.getY() < endTile.getY(); ++currentTile.getY())
@@ -57,32 +87,14 @@ void MapViewScene::drawLayer(QPainter* painter, const GEOMETRY::Point<uint32> st
                 continue;
             // is no auto tile
             if (tileObj.getMapTile().m_uiAutoTileSetID == 0)
-            {
-                if (auto pPixmap = GTileCache::get()->getItem(tileObj.getMapTile().m_uiTileID))
-                    painter->drawPixmap(currentTile.getX()*MAP::TILE_SIZE, currentTile.getY()*MAP::TILE_SIZE, MAP::TILE_SIZE, MAP::TILE_SIZE, *pPixmap);
-                //if (fragments.size() < tileObj.m_uiTileID)
-                //    fragments.resize(tileObj.m_uiTileID);
-                //fragments.at(tileObj.m_uiTileID-1).push_back(QPainter::PixmapFragment::create(QPoint(x*TILE_SIZE + TILE_SIZE/2, y*TILE_SIZE + TILE_SIZE/2),
-                //    QRect(0, 0, TILE_SIZE, TILE_SIZE)));
-            }
+                paintInfo.addFragment(currentTile, m_CacheMgr.getTileCache().get(tileObj.getMapTile().m_uiTileID));
             // autotiles
             else
-            {
-                if (auto pAutoTile = GAutoTileCache::get()->getItem(tileObj.getMapTile().m_uiAutoTileSetID))
-                {
-                    if (auto pPixmap = pAutoTile->getPixmap(static_cast<DATABASE::PROTOTYPE::AUTO_TILE::AUTO_TILE_INDEX>(tileObj.getMapTile().m_uiTileID)))
-                        painter->drawPixmap(currentTile.getX()*MAP::TILE_SIZE, currentTile.getY()*MAP::TILE_SIZE, MAP::TILE_SIZE, MAP::TILE_SIZE, *pPixmap);
-                }
-            }
+                paintInfo.addFragment(currentTile, m_CacheMgr.getAutoTileCache().get(tileObj.getMapTile().m_uiAutoTileSetID,
+                    static_cast<DATABASE::PROTOTYPE::AUTO_TILE::AUTO_TILE_INDEX>(tileObj.getMapTile().m_uiTileID)));
         }
     }
 
-    //// draw fragments
-    //for (uint32 i = 0; i < fragments.size(); ++i)
-    //{
-    //    if (fragments.at(i).empty())
-    //        continue;
-    //    if (auto pPixmap = GTileCache::get()->getItem(i+1))
-    //        painter->drawPixmapFragments(&*fragments.at(i).begin(), fragments.at(i).size(), *pPixmap, QPainter::OpaqueHint);
-    //}
+    // draw fragments
+    paintInfo.paint(painter);
 }

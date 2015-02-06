@@ -11,13 +11,18 @@ namespace DATABASE
     class DatabaseMgr;
 }
 
+namespace CACHE
+{
+    class Manager;
+}
+
 class MapEditor;
 
 class MapEditorModuleContent : public QWidget, Ui_MapEditorModuleContent
 {
     Q_OBJECT
 public:
-    MapEditorModuleContent(const MappingObject& mappingObject, DATABASE::DatabaseMgr& databaseMgr, QWidget* pWidget = nullptr);
+    MapEditorModuleContent(CACHE::Manager& cacheMgr, const MappingObject& mappingObject, DATABASE::DatabaseMgr& databaseMgr, QWidget* pWidget = nullptr);
 
     MapEditor* getTab(uint32 mapID);
 
@@ -47,6 +52,7 @@ signals:
 
 private:
     DATABASE::DatabaseMgr& m_DBMgr;
+    CACHE::Manager& m_CacheMgr;
     const MappingObject& m_MappingObject;
 };
 

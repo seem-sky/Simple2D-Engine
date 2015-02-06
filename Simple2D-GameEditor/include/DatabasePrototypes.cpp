@@ -1,7 +1,6 @@
 #include "DatabasePrototypes.h"
 #include <QtGui/QPixmap>
 #include <QtGui/QPainter>
-#include "TileCache.h"
 #include "Config.h"
 
 namespace DATABASE
@@ -203,8 +202,8 @@ namespace DATABASE
             {
                 for (pos.getY() = 0; pos.getY() < tileSet.getTileSetSize().getY(); ++pos.getY())
                 {
-                    if (auto pTilePixmap = GTileCache::get()->getItem(tileSet.getTileID(pos)))
-                        painter.drawTiledPixmap(pos.getX()*MAP::TILE_SIZE, pos.getY()*MAP::TILE_SIZE, MAP::TILE_SIZE, MAP::TILE_SIZE, *pTilePixmap);
+                    //if (auto pTilePixmap = GTileCache::get()->getItem(tileSet.getTileID(pos)))
+                    //    painter.drawPixmap(pos.getX()*MAP::TILE_SIZE, pos.getY()*MAP::TILE_SIZE, *pTilePixmap);
                 }
             }
             return pixmap;

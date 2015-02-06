@@ -4,6 +4,11 @@
 #include <QtWidgets/QTableWidget>
 #include "AbstractPrototypeTable.h"
 
+namespace CACHE
+{
+    class Manager;
+}
+
 /*#####
 # tile module
 #####*/
@@ -13,7 +18,10 @@ protected:
     void drawPixmap();
 
 public:
-    TilePixmapWidget(uint32 ID, QWidget* pParent = nullptr);
+    TilePixmapWidget(uint32 ID, CACHE::Manager& cacheMgr, QWidget* pParent = nullptr);
+
+private:
+    CACHE::Manager& m_CacheMgr;
 };
 
 class MapEditorModuleTiles : public AbstractPrototypeTable
@@ -24,7 +32,10 @@ private:
     MAP::BRUSH::BrushInfo::Type getType() const { return MAP::BRUSH::BrushInfo::Type::TILE; }
 
 public:
-    MapEditorModuleTiles(const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent = nullptr);
+    MapEditorModuleTiles(CACHE::Manager& cacheMgr, const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent = nullptr);
+
+private:
+    CACHE::Manager& m_CacheMgr;
 };
 
 /*#####

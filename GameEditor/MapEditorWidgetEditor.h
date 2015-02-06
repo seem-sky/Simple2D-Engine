@@ -1,6 +1,7 @@
 #ifndef MAP_EDITOR_WIDGET_EDITOR_H
 #define MAP_EDITOR_WIDGET_EDITOR_H
 
+#include <Core/Cache/Manager.h>
 #include "MapEditorModuleTiles.h"
 #include "MapEditorModuleContent.h"
 #include "MapEditorModuleTileSelection.h"
@@ -30,6 +31,9 @@ signals:
 
 private:
     DATABASE::DatabaseMgr& m_DatabaseMgr;
+
+    // cache
+    CACHE::Manager m_CacheMgr;
 
     // modules
     MapEditorModuleContent* m_pModuleContent = nullptr;

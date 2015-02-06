@@ -1,6 +1,7 @@
 #include "Logfile.h"
 #include <QtCore/QTextStream>
 #include <QtCore/QTime>
+#include <QtCore/QDebug>
 
 const QString LOGFILE_FILENAME               = "Logfile.log";
 const QString LOGFILE_OPENING_MESSAGE        = "Logfile open and ready to write in.";
@@ -23,7 +24,10 @@ void Logfile::WriteMessage(const QString& msg, bool append)
     {
         QTextStream out(&file);
         QTime curTime = QTime::currentTime();
-        out << curTime.hour() << "h " << curTime.minute() << "min " << curTime.second() << "sec " << curTime.msec() << "msec >>> " << msg << "\n";
+        QString finalMsg = QString::number(curTime.hour()) + "h " + QString::number(curTime.minute()) + "min " + QString::number(curTime.second()) + "sec " +
+            QString::number(curTime.msec()) + "msec >>> " + msg + " >>>";
+        out << finalMsg + "\n";
+        qDebug() << finalMsg;
     }
 }
 

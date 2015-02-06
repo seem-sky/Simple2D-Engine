@@ -1,16 +1,15 @@
 #include "MapEditorWidgetEditor.h"
 #include "moc_MapEditorWidgetEditor.h"
-#include "AutoTileCache.h"
 #include "MapEditor.h"
 #include <QtWidgets/QComboBox>
 #include <WorldObjectInfo.h>
 #include "MapEditorWidgetObjectMapping.h"
 
-MapEditorWidgetEditor::MapEditorWidgetEditor(DATABASE::DatabaseMgr& databaseMgr, QWidget* pParent) : QWidget(pParent), m_DatabaseMgr(databaseMgr),
+MapEditorWidgetEditor::MapEditorWidgetEditor(DATABASE::DatabaseMgr& databaseMgr, QWidget* pParent) : QWidget(pParent), m_DatabaseMgr(databaseMgr), m_CacheMgr(databaseMgr),
     // modules
-    m_pModuleTileSelection(new MapEditorModuleTileSelection(m_DatabaseMgr, this)),
+    m_pModuleTileSelection(new MapEditorModuleTileSelection(m_CacheMgr, m_DatabaseMgr, this)),
     m_pModuleMapTree(new MapEditorModuleMapTree(m_DatabaseMgr, pParent)),
-    m_pModuleContent(new MapEditorModuleContent(m_MappingObject, m_DatabaseMgr, this)),
+    m_pModuleContent(new MapEditorModuleContent(m_CacheMgr, m_MappingObject, m_DatabaseMgr, this)),
     m_pModuleWorldObjects(new MapEditorModuleWorldObjects(m_DatabaseMgr, this)),
 
     // others
@@ -91,8 +90,7 @@ void MapEditorWidgetEditor::_onMappingModeChanged(int index)
 void MapEditorWidgetEditor::setup()
 {
     // clear cache first
-    GAutoTileCache::get()->clear();
-    GTileCache::get()->clear();
+    m_CacheMgr.clear();
 
     m_pModuleTileSelection->clearSelection();
     m_pModuleTileSelection->setup();

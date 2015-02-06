@@ -22,12 +22,6 @@
     <Filter Include="Game\Scene">
       <UniqueIdentifier>{31d97a38-a802-46d7-b54a-b183c5072188}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Map\Tiles">
-      <UniqueIdentifier>{ccb885bc-9232-4f8b-a7c1-f110bbcfabec}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Map\Tiles\AutoTiles">
-      <UniqueIdentifier>{dcf521e5-0af4-42f0-ae22-4c34a68b66ef}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Map\MapObjects">
       <UniqueIdentifier>{42e367d7-7966-43f9-bccf-dbdf54b71d3a}</UniqueIdentifier>
     </Filter>
@@ -82,7 +76,7 @@
     <Filter Include="Core\Cache">
       <UniqueIdentifier>{05ee87d0-48ab-4728-85c0-6dc1165368b3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Core\Cache\Texture">
+    <Filter Include="Core\Cache\Tiles">
       <UniqueIdentifier>{18dc7a90-8bd5-40aa-adc4-5015abd490f1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -119,15 +113,6 @@
     </ClCompile>
     <ClCompile Include="Map.cpp">
       <Filter>Map</Filter>
-    </ClCompile>
-    <ClCompile Include="AutoTile.cpp">
-      <Filter>Map\Tiles\AutoTiles</Filter>
-    </ClCompile>
-    <ClCompile Include="AutoTileCache.cpp">
-      <Filter>Map\Tiles\AutoTiles</Filter>
-    </ClCompile>
-    <ClCompile Include="TileCache.cpp">
-      <Filter>Map\Tiles</Filter>
     </ClCompile>
     <ClCompile Include="Scene.cpp">
       <Filter>Game\Scene</Filter>
@@ -247,10 +232,16 @@
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="Core\Cache\Tiles.cpp">
-      <Filter>Core\Cache\Texture</Filter>
+      <Filter>Core\Cache\Tiles</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Cache\Cache.cpp">
+    <ClCompile Include="Core\Cache\AutoTiles.cpp">
+      <Filter>Core\Cache\Tiles</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Cache\Manager.cpp">
       <Filter>Core\Cache</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Cache\TileCacheInfo.cpp">
+      <Filter>Core\Cache\Tiles</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -301,15 +292,6 @@
     </ClInclude>
     <ClInclude Include="Manager.h">
       <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="AutoTile.h">
-      <Filter>Map\Tiles\AutoTiles</Filter>
-    </ClInclude>
-    <ClInclude Include="AutoTileCache.h">
-      <Filter>Map\Tiles\AutoTiles</Filter>
-    </ClInclude>
-    <ClInclude Include="TileCache.h">
-      <Filter>Map\Tiles</Filter>
     </ClInclude>
     <ClInclude Include="MapMgr.h">
       <Filter>Map</Filter>
@@ -410,9 +392,6 @@
     <ClInclude Include="BrushRevert.h">
       <Filter>Map\Brush\Revert</Filter>
     </ClInclude>
-    <ClInclude Include="Simple2D-Global.h">
-      <Filter>Map</Filter>
-    </ClInclude>
     <ClInclude Include="BrushArea.h">
       <Filter>Map\Brush\Area</Filter>
     </ClInclude>
@@ -447,10 +426,22 @@
       <Filter>Map\ScriptArea</Filter>
     </ClInclude>
     <ClInclude Include="Core\Cache\Tiles.h">
-      <Filter>Core\Cache\Texture</Filter>
+      <Filter>Core\Cache\Tiles</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Cache\Cache.h">
+    <ClInclude Include="Core\Cache\AutoTiles.h">
+      <Filter>Core\Cache\Tiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Cache\TextureAtlas.h">
+      <Filter>Core\Cache\Tiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Cache\TileCacheInfo.h">
+      <Filter>Core\Cache\Tiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Cache\Manager.h">
       <Filter>Core\Cache</Filter>
+    </ClInclude>
+    <ClInclude Include="Simple2D-Global.h">
+      <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
