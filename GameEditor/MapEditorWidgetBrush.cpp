@@ -7,7 +7,7 @@
 using namespace BRUSH;
 using namespace MAP::BRUSH;
 
-MapEditorWidgetBrush::MapEditorWidgetBrush(const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent) : ToolWidget(pParent), m_DBMgr(DBMgr)
+MapEditorWidgetBrush::MapEditorWidgetBrush(CACHE::Manager& cacheMgr, const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent) : ToolWidget(pParent), m_DBMgr(DBMgr)
 {
     setWindowFlags(windowFlags() | Qt::MSWindowsFixedSizeDialogHint);
     setWindowTitle("map editor brush");
@@ -17,7 +17,7 @@ MapEditorWidgetBrush::MapEditorWidgetBrush(const DATABASE::DatabaseMgr& DBMgr, Q
     pLayout->setContentsMargins(0, 0, 0, 0);
     for (uint32 i = 0; i < 2; ++i)
     {
-        m_pBrushes.at(i) = new MapEditorModuleBrush(m_DBMgr, this);
+        m_pBrushes.at(i) = new MapEditorModuleBrush(cacheMgr, m_DBMgr, this);
         pLayout->addWidget(m_pBrushes.at(i));
     }
 

@@ -47,7 +47,10 @@ protected:
     void drawPixmap();
 
 public:
-    AutoTilePixmapWidget(uint32 ID, QWidget* pParent = nullptr);
+    AutoTilePixmapWidget(uint32 ID, CACHE::Manager& cacheMgr, QWidget* pParent = nullptr);
+
+private:
+    CACHE::Manager& m_CacheMgr;
 };
 
 
@@ -59,7 +62,10 @@ private:
     MAP::BRUSH::BrushInfo::Type getType() const { return MAP::BRUSH::BrushInfo::Type::AUTO_TILE; }
 
 public:
-    MapEditorModuleAutoTiles(const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent = nullptr);
+    MapEditorModuleAutoTiles(CACHE::Manager& cacheMgr, const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent = nullptr);
+
+private:
+    CACHE::Manager& m_CacheMgr;
 };
 
 #endif

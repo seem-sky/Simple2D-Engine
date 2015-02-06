@@ -54,25 +54,23 @@ void MapEditorModuleTiles::_setup()
 /*#####
 # auto tile module
 #####*/
-AutoTilePixmapWidget::AutoTilePixmapWidget(uint32 ID, QWidget* pParent) : AbstractPixmapWidget(ID, pParent)
-{
-}
+AutoTilePixmapWidget::AutoTilePixmapWidget(uint32 ID, CACHE::Manager& cacheMgr, QWidget* pParent)
+    : AbstractPixmapWidget(ID, pParent), m_CacheMgr(cacheMgr)
+{}
 
 void AutoTilePixmapWidget::drawPixmap()
 {
-    //if (auto pAutoTile = GAutoTileCache::get()->getItem(getID()))
-    //{
-    //    if (auto pPixmap = pAutoTile->getPixmap(DATABASE::PROTOTYPE::AUTO_TILE::INDEX_INNER_CENTER))
-    //    {
-    //        QPainter painter(this);
-    //        painter.drawPixmap(0, 0, *pPixmap);
-    //    }
-    //}
+    auto info = m_CacheMgr.getAutoTileCache().get(getID(), DATABASE::PROTOTYPE::AUTO_TILE::INDEX_INNER_CENTER);
+    if (info.isValid())
+    {
+        QPainter painter(this);
+        painter.drawPixmap(0, 0, *info.getPixmap(), info.getPosition().getX(), info.getPosition().getY(), MAP::TILE_SIZE, MAP::TILE_SIZE);
+    }
 }
 
-MapEditorModuleAutoTiles::MapEditorModuleAutoTiles(const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent) : AbstractPrototypeTable(DBMgr, pParent)
-{
-}
+MapEditorModuleAutoTiles::MapEditorModuleAutoTiles(CACHE::Manager& cacheMgr, const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent)
+    : AbstractPrototypeTable(DBMgr, pParent), m_CacheMgr(cacheMgr)
+{}
 
 
 void MapEditorModuleAutoTiles::_setup()
@@ -88,5 +86,5 @@ void MapEditorModuleAutoTiles::_setup()
     setColumnCount(tilesPerRow);
     setRowCount(std::ceil(double(pAutoTileDB->getSize())/tilesPerRow));
     for (uint32 i = 0; i < pAutoTileDB->getSize(); ++i)
-        setCellWidget(i/tilesPerRow, i%tilesPerRow, new AutoTilePixmapWidget(i+1, this));
+        setCellWidget(i/tilesPerRow, i%tilesPerRow, new AutoTilePixmapWidget(i+1, m_CacheMgr, this));
 }

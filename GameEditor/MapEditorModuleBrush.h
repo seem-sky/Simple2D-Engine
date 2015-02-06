@@ -6,6 +6,11 @@
 #include "DatabaseMgr.h"
 #include <BrushInfo.h>
 
+namespace CACHE
+{
+    class Manager;
+}
+
 namespace BRUSH
 {
     class MapEditorModuleBrush : public QWidget, Ui_MapEditorModuleBrush
@@ -14,7 +19,7 @@ namespace BRUSH
         void _update();
 
     public:
-        MapEditorModuleBrush(const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent = nullptr);
+        MapEditorModuleBrush(CACHE::Manager& cacheMgr, const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent = nullptr);
 
         void clear();
         void setText(const QString& text);
@@ -30,6 +35,7 @@ namespace BRUSH
 
     private:
         const DATABASE::DatabaseMgr& m_DBMgr;
+        CACHE::Manager& m_CacheMgr;
         MAP::BRUSH::BrushInfo m_BrushInfo;
     };
 }

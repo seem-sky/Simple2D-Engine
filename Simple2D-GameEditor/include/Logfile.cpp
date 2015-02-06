@@ -25,7 +25,7 @@ void Logfile::WriteMessage(const QString& msg, bool append)
         QTextStream out(&file);
         QTime curTime = QTime::currentTime();
         QString finalMsg = QString::number(curTime.hour()) + "h " + QString::number(curTime.minute()) + "min " + QString::number(curTime.second()) + "sec " +
-            QString::number(curTime.msec()) + "msec >>> " + msg + " >>>";
+            QString::number(curTime.msec()) + "msec >>> " + msg + " <<<";
         out << finalMsg + "\n";
         qDebug() << finalMsg;
     }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <DB>
     <p columns="2" rows="2" ID="1" name="Gras" tiles="1,1,1,2"/>
-    <p columns="3" rows="2" ID="2" name="forest" tiles="0,56,0,0,0,0"/>
+    <p columns="3" rows="3" ID="2" name="forest" tiles="55,56,4294967295,53,54,4294967295,51,52,4294967295"/>
 </DB>

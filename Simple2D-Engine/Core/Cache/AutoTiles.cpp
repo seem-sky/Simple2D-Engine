@@ -468,7 +468,12 @@ TileCacheInfo AutoTiles::get(uint32 ID, AUTO_TILE_INDEX index) const
             return m_TileCache.get(pAutoTile->getTileID(index));
 
         if (m_Atlas.isEmpty(ID))
+        {
             const_cast<AutoTiles&>(*this)._setupAutoTile(ID);
+            auto pos = m_Atlas.get(ID);
+            BASIC_LOG(QString("AutoTileCache: ID: ") + QString::number(pAutoTile->getID()) + " // name: " + pAutoTile->getName() + "\n" +
+                "Added into texture atlas at position " + QString::number(pos.getX()) + "/" + QString::number(pos.getY()) + ".");
+        }
 
         auto pos = m_Atlas.get(ID);
         pos.getX() *= ATLAS_WIDTH * TILE_SIZE;

@@ -1,13 +1,15 @@
 #include "MapEditorModuleBrush.h"
 #include <QtGui/QPainter>
 #include <QtGui/QTextOption>
+#include <Core/Cache/Manager.h>
 #include "moc_MapEditorModuleBrush.h"
 
 using namespace BRUSH;
 using namespace MAP::BRUSH;
 using namespace DATABASE::PROTOTYPE;
 
-MapEditorModuleBrush::MapEditorModuleBrush(const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent) : QWidget(), Ui_MapEditorModuleBrush(), m_DBMgr(DBMgr)
+MapEditorModuleBrush::MapEditorModuleBrush(CACHE::Manager& cacheMgr, const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent)
+    : QWidget(), Ui_MapEditorModuleBrush(), m_DBMgr(DBMgr), m_CacheMgr(cacheMgr)
 {
     setupUi(this);
     _update();
@@ -34,27 +36,32 @@ void MapEditorModuleBrush::_update()
     newPixmap.fill(Qt::transparent);
     QPainter painter(&newPixmap);
 
-    QPixmap pixmap;
+    QPixmap pixmap(MAP::TILE_SIZE, MAP::TILE_SIZE);
+    pixmap.fill(Qt::transparent);
+    QPainter pixPainter(&pixmap);
     QString text;
     switch (m_BrushInfo.getType())
     {
     case MAP::BRUSH::BrushInfo::Type::TILE:
+    {
         text = "tile";
-        //if (auto pPixmap = GTileCache::get()->getItem(m_BrushInfo.getID()))
-        //    pixmap =* pPixmap;
+        auto info = m_CacheMgr.getTileCache().get(m_BrushInfo.getID());
+        if (info.isValid())
+            pixPainter.drawPixmap(0, 0, *info.getPixmap(), info.getPosition().getX(), info.getPosition().getY(), MAP::TILE_SIZE, MAP::TILE_SIZE);
         break;
+    }
     case MAP::BRUSH::BrushInfo::Type::AUTO_TILE:
+    {
         text = "auto tile";
-        //if (auto pAutoTile = GAutoTileCache::get()->getItem(m_BrushInfo.getID()))
-        //{
-        //    if (auto pPixmap = pAutoTile->getPixmap(AUTO_TILE::INDEX_INNER_CENTER))
-        //        pixmap =* pPixmap;
-        //}
+        auto info = m_CacheMgr.getAutoTileCache().get(m_BrushInfo.getID(), AUTO_TILE::INDEX_INNER_CENTER);
+        if (info.isValid())
+            pixPainter.drawPixmap(0, 0, *info.getPixmap(), info.getPosition().getX(), info.getPosition().getY(), MAP::TILE_SIZE, MAP::TILE_SIZE);
         break;
+    }
     case MAP::BRUSH::BrushInfo::Type::TILE_SET:
         text = "tile set";
         if (auto pTileSet = m_DBMgr.getTileSetDatabase()->getOriginalPrototype(m_BrushInfo.getID()))
-            pixmap = TILE_SET::createPixmap(*pTileSet);
+            pixmap = TILE_SET::createPixmap(*pTileSet, m_CacheMgr.getTileCache());
         break;
     }
 

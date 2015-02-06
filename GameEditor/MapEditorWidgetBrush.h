@@ -16,6 +16,11 @@ namespace DATABASE
     class DatabaseMgr;
 }
 
+namespace CACHE
+{
+    class Manager;
+}
+
 namespace BRUSH
 {
     class MapEditorModuleBrush;
@@ -30,7 +35,7 @@ namespace BRUSH
     {
         Q_OBJECT
     public:
-        MapEditorWidgetBrush(const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent = nullptr);
+        MapEditorWidgetBrush(CACHE::Manager& cacheMgr, const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent = nullptr);
 
         void clear();
 

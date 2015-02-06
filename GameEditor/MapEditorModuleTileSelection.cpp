@@ -2,11 +2,11 @@
 #include "moc_MapEditorModuleTileSelection.h"
 
 MapEditorModuleTileSelection::MapEditorModuleTileSelection(CACHE::Manager& cacheMgr, const DATABASE::DatabaseMgr& databaseMgr, QWidget* pParent)
-    : QTabWidget(pParent), m_CacheMgr(cacheMgr), m_DatabaseMgr(databaseMgr), m_pWidgetBrush(new BRUSH::MapEditorWidgetBrush(m_DatabaseMgr, this)),
+    : QTabWidget(pParent), m_CacheMgr(cacheMgr), m_DatabaseMgr(databaseMgr), m_pWidgetBrush(new BRUSH::MapEditorWidgetBrush(cacheMgr, m_DatabaseMgr, this)),
     // tabs
     m_pModuleTiles(new MapEditorModuleTiles(m_CacheMgr, m_DatabaseMgr, this)),
-    m_pModuleAutoTiles(new MapEditorModuleAutoTiles(m_DatabaseMgr, this)),
-    m_pModuleTileSets(new MapEditorModuleTileSets(pParent))
+    m_pModuleAutoTiles(new MapEditorModuleAutoTiles(m_CacheMgr, m_DatabaseMgr, this)),
+    m_pModuleTileSets(new MapEditorModuleTileSets(m_CacheMgr, pParent))
 {
     m_SelectedItems.fill(nullptr);
 

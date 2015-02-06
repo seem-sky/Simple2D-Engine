@@ -15,6 +15,11 @@
 #include "Simple2D-Global.h"
 #include "WorldObjectInfo.h"
 
+namespace CACHE
+{
+    class Tiles;
+}
+
 namespace DATABASE
 {
     namespace PROTOTYPE
@@ -155,7 +160,7 @@ namespace DATABASE
                 UInt32Multiarray2D m_Tiles;
             };
         
-            QPixmap createPixmap(const TileSetPrototype& tileSet);
+            QPixmap createPixmap(const TileSetPrototype& tileSet, CACHE::Tiles& tileCache);
         }
 
         /*#####

@@ -1,4 +1,5 @@
 #include "DatabasePrototypes.h"
+#include "Core/Cache/Tiles.h"
 #include <QtGui/QPixmap>
 #include <QtGui/QPainter>
 #include "Config.h"
@@ -192,7 +193,7 @@ namespace DATABASE
                 resizeTileSet(newSize);
         }
 
-        QPixmap TILE_SET::createPixmap(const TileSetPrototype& tileSet)
+        QPixmap TILE_SET::createPixmap(const TileSetPrototype& tileSet, CACHE::Tiles& tileCache)
         {
             QPixmap pixmap(tileSet.getTileSetSize().getX()*MAP::TILE_SIZE, tileSet.getTileSetSize().getY()*MAP::TILE_SIZE);
             pixmap.fill();
@@ -202,8 +203,10 @@ namespace DATABASE
             {
                 for (pos.getY() = 0; pos.getY() < tileSet.getTileSetSize().getY(); ++pos.getY())
                 {
-                    //if (auto pTilePixmap = GTileCache::get()->getItem(tileSet.getTileID(pos)))
-                    //    painter.drawPixmap(pos.getX()*MAP::TILE_SIZE, pos.getY()*MAP::TILE_SIZE, *pTilePixmap);
+                    auto info = tileCache.get(tileSet.getTileID(pos));
+                    if (info.isValid())
+                        painter.drawPixmap(pos.getX()*MAP::TILE_SIZE, pos.getY()*MAP::TILE_SIZE, *info.getPixmap(), info.getPosition().getX(), info.getPosition().getY(),
+                        MAP::TILE_SIZE, MAP::TILE_SIZE);
                 }
             }
             return pixmap;
