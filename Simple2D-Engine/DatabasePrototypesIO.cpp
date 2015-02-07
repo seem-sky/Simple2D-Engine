@@ -135,7 +135,7 @@ void TILE_SET::TileSetPrototype::fromXML(const QXmlStreamAttributes& attributes)
     {
         QStringList tileList = attributes.value("tiles").toString().split(",");
         for (int32 i = 0; i < tileList.size(); ++i)
-            setTileID(GEOMETRY::Point<uint32>(i/size.getX(), i%size.getY()), tileList.at(i).toUInt());
+            setTileID(GEOMETRY::Point<uint32>(i/size.getY(), i%size.getY()), tileList.at(i).toUInt());
     }
 }
 

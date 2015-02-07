@@ -60,7 +60,7 @@ void DatabaseWidgetTileSet::setupPrototypeFromWidgets(Prototype* pPrototype)
 {
     if (auto pProto = dynamic_cast<TILE_SET::TileSetPrototype*>(pPrototype))
     {
-        GEOMETRY::Point<uint32> size(m_pModuleTileSet->getTileSetTableColumnCount(), m_pModuleTileSet->getTileSetTableColumnCount());
+        GEOMETRY::Point<uint32> size(m_pModuleTileSet->getTileSetTableColumnCount(), m_pModuleTileSet->getTileSetTableRowCount());
         pProto->resizeTileSet(size);
         for (uint32 row = 0; row < size.getY(); ++row)
         {

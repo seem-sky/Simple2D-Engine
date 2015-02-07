@@ -184,11 +184,9 @@ namespace DATABASE
 
         void TILE_SET::TileSetPrototype::_resizeIfNeeded(GEOMETRY::Point<uint32> size)
         {
-            GEOMETRY::Point<uint32> newSize(m_Size);
-            if (size.getX() > newSize.getX())
-                newSize.getX() = size.getX();
-            if (size.getY() > newSize.getY())
-                newSize.getY() = size.getY();
+            GEOMETRY::Point<uint32> newSize;
+            newSize.getX() = std::max(m_Size.getX(), size.getX());
+            newSize.getY() = std::max(m_Size.getY(), size.getY());
             if (newSize != m_Size)
                 resizeTileSet(newSize);
         }
