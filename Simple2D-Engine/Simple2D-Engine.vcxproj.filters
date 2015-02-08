@@ -240,11 +240,11 @@
     <ClCompile Include="Core\Cache\Manager.cpp">
       <Filter>Core\Cache</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Cache\TileCacheInfo.cpp">
-      <Filter>Core\Cache\Tiles</Filter>
-    </ClCompile>
     <ClCompile Include="ConsoleOutput.cpp">
       <Filter>Core\Log</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Cache\TileCacheInfo.cpp">
+      <Filter>Core\Cache\Tiles</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -445,6 +445,9 @@
     </ClInclude>
     <ClInclude Include="ConsoleOutput.h">
       <Filter>Core\Log</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Cache\TileBase.h">
+      <Filter>Core\Cache\Tiles</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

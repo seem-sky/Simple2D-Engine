@@ -1,5 +1,4 @@
 #include "TileCacheInfo.h"
-#include <math_extensions.h>
 
 using namespace CACHE;
 
@@ -19,5 +18,5 @@ const QPixmap* TileCacheInfo::getPixmap() const
 
 bool TileCacheInfo::isValid() const
 {
-    return m_pPixmap && m_Pos != GEOMETRY::Point<uint32>(MATH::maximum<uint32>(), MATH::maximum<uint32>());
+    return m_pPixmap && m_Pos != GEOMETRY::Point<uint32>::maximum();
 }

@@ -1,28 +1,16 @@
 #ifndef CACHE_TILES_H
 #define CACHE_TILES_H
 
-#include "TextureAtlas.h"
-#include "TileCacheInfo.h"
-#include "Simple2D-Global.h"
-
-namespace DATABASE
-{
-    class DatabaseMgr;
-}
+#include "TileBase.h"
 
 namespace CACHE
 {
-    class Tiles
+    class Tiles : public TileBase<MAP::TILE_SIZE, MAP::TILE_SIZE, 1024, 1024>
     {
     public:
         Tiles(const DATABASE::DatabaseMgr& DBMgr);
 
         TileCacheInfo get(uint32 ID) const;
-        void clear();
-
-    private:
-        const DATABASE::DatabaseMgr& m_DBMgr;
-        TextureAtlas<MAP::TILE_SIZE, MAP::TILE_SIZE> m_Atlas;
     };
 }
 #endif

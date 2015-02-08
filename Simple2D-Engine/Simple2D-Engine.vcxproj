@@ -103,6 +103,7 @@
     <ClInclude Include="Core\Cache\Manager.h" />
     <ClInclude Include="Core\Cache\TextureAtlas.h" />
     <ClInclude Include="Core\Cache\TileCacheInfo.h" />
+    <ClInclude Include="Core\Cache\TileBase.h" />
     <ClInclude Include="Core\Cache\Tiles.h" />
     <ClInclude Include="RevertInterface.h" />
     <ClInclude Include="ScriptArea.h" />

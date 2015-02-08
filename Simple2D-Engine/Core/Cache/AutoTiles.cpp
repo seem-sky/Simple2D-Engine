@@ -451,47 +451,47 @@ void setupSideEnds(QPainter& painter, const AutoTilePrototype* pAutoTile, CACHE:
 /*#####
 # AutoTiles
 #####*/
-AutoTiles::AutoTiles(Tiles& tileCache, const DATABASE::DatabaseMgr& DBMgr) : m_DBMgr(DBMgr), m_Atlas(1024, 1024), m_TileCache(tileCache)
+AutoTiles::AutoTiles(Tiles& tileCache, const DATABASE::DatabaseMgr& DBMgr)
+    : m_TileCache(tileCache), TileBase(DBMgr)
 {}
-
-void AutoTiles::clear()
-{
-    m_Atlas.clear();
-}
 
 TileCacheInfo AutoTiles::get(uint32 ID, AUTO_TILE_INDEX index) const
 {
-    if (auto pAutoTile = m_DBMgr.getAutoTileDatabase()->getOriginalPrototype(ID))
+    try
     {
-        // if basic texture return from tile cache
-        if (index < AUTO_TILE_SET_COUNT)
-            return m_TileCache.get(pAutoTile->getTileID(index));
-
-        if (m_Atlas.isEmpty(ID))
+        if (auto pAutoTile = m_DBMgr.getAutoTileDatabase()->getOriginalPrototype(ID))
         {
-            const_cast<AutoTiles&>(*this)._setupAutoTile(ID);
-            auto pos = m_Atlas.get(ID);
-            STANDARD_MESSAGE(std::string("AutoTileCache: ID: ") + std::to_string(pAutoTile->getID()) + " // name: " + pAutoTile->getName().toStdString() + "\n" +
-                "Added into texture atlas at position " + std::to_string(pos.getX()) + "/" + std::to_string(pos.getY()) + ".");
-        }
+            // if basic texture return from tile cache
+            if (index < AUTO_TILE_SET_COUNT)
+                return m_TileCache.get(pAutoTile->getTileID(index));
 
-        auto pos = m_Atlas.get(ID);
-        pos.getX() *= ATLAS_WIDTH * TILE_SIZE;
-        pos.getY() *= ATLAS_HEIGHT * TILE_SIZE;
-        return TileCacheInfo(&m_Atlas.getTexture(),
-            GEOMETRY::Point<uint32>(pos.getX() + (index - AUTO_TILE_SET_COUNT) % ATLAS_WIDTH * TILE_SIZE, pos.getY() + (index - AUTO_TILE_SET_COUNT) / ATLAS_WIDTH * TILE_SIZE));
+            if (isEmpty(ID))
+            {
+                auto info = const_cast<AutoTiles&>(*this)._setupAutoTile(ID);
+                STANDARD_MESSAGE(std::string("AutoTileCache: ID: ") + std::to_string(pAutoTile->getID()) + " // name: " + pAutoTile->getName().toStdString() + "\n" +
+                    "Added into texture atlas at position " + std::to_string(info.getPosition().getX()) + "/" + std::to_string(info.getPosition().getY()) + ".");
+            }
+
+
+            TileCacheInfo info(m_Positions.at(ID - 1).getPixmap(), GEOMETRY::Point<uint32>(m_Positions.at(ID - 1).getPosition().getX() * ATLAS_WIDTH * TILE_SIZE,
+                m_Positions.at(ID - 1).getPosition().getY() * ATLAS_HEIGHT * TILE_SIZE));
+            return TileCacheInfo(info.getPixmap(),
+                GEOMETRY::Point<uint32>(info.getPosition().getX() + (index - AUTO_TILE_SET_COUNT) % ATLAS_WIDTH * TILE_SIZE, info.getPosition().getY() +
+                (index - AUTO_TILE_SET_COUNT) / ATLAS_WIDTH * TILE_SIZE));
+        }
     }
+    catch (const std::runtime_error&) {}
 
     WARNING_MESSAGE(std::string("AutoTileCache: ID: ") + std::to_string(ID) + "\n" +
         "Unable to add tile to texture atlas.");
     return TileCacheInfo(nullptr, GEOMETRY::Point<uint32>(MATH::maximum<uint32>(), MATH::maximum<uint32>()));
 }
 
-void AutoTiles::_setupAutoTile(uint32 ID)
+TileCacheInfo AutoTiles::_setupAutoTile(uint32 ID)
 {
     auto pAutoTile = m_DBMgr.getAutoTileDatabase()->getOriginalPrototype(ID);
     if (!pAutoTile)
-        return;
+        throw std::runtime_error("Unable to get AutoTilePrototype.");
 
     QPixmap atlas(ATLAS_WIDTH * TILE_SIZE, ATLAS_HEIGHT * TILE_SIZE);
     atlas.fill(Qt::transparent);
@@ -509,5 +509,5 @@ void AutoTiles::_setupAutoTile(uint32 ID)
     setupSideEnds(painter, pAutoTile, m_TileCache);
     setupCurves(painter, pAutoTile, m_TileCache);
 
-    m_Atlas.add(ID, atlas);
+    return add(ID, atlas);
 }

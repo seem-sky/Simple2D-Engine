@@ -12,7 +12,7 @@ namespace CACHE
     class TileCacheInfo
     {
     public:
-        TileCacheInfo(const QPixmap* pPixmap = nullptr, const GEOMETRY::Point<uint32>& pos = GEOMETRY::Point<uint32>(MATH::maximum<uint32>(), MATH::maximum<uint32>()));
+        TileCacheInfo(const QPixmap* pPixmap = nullptr, const GEOMETRY::Point<uint32>& pos = GEOMETRY::Point<uint32>::maximum());
 
         const GEOMETRY::Point<uint32>& getPosition() const;
         const QPixmap* getPixmap() const;
@@ -21,7 +21,7 @@ namespace CACHE
 
     private:
         const QPixmap* m_pPixmap;
-        const GEOMETRY::Point<uint32> m_Pos;
+        GEOMETRY::Point<uint32> m_Pos;
     };
 }
 #endif
