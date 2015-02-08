@@ -1,7 +1,7 @@
 #include "BrushAreaFill.h"
 #include "MapException.h"
 #include "MapLayer.h"
-#include "Logfile.h"
+#include <log/Log.h>
 #include <algorithm>
 
 namespace MAP
@@ -17,7 +17,7 @@ namespace MAP
             void Fill::_do(const MapTileInfo& info, MapTileInfoVec& tiles, PointVec<uint32>& borderTiles)
             {
                 if (getBrushSize() != GEOMETRY::Point<uint32>(1, 1))
-                    WARNING_LOG("Brush size other then 1/1 has no effect in fill mode.");
+                    WARNING_MESSAGE("Brush size other then 1/1 has no effect in fill mode.");
 
                 tiles.push_back(info);
                 Bitset2D tileBitset, borderBitset;

@@ -5,7 +5,7 @@
 #include "Config.h"
 #include "QtGlobal.h"
 #include "DatabaseMgr.h"
-#include "Logfile.h"
+#include <log/Log.h>
 
 using namespace CACHE;
 
@@ -24,13 +24,13 @@ TileCacheInfo Tiles::get(uint32 ID) const
         {
             const_cast<CACHE::TextureAtlas<MAP::TILE_SIZE, MAP::TILE_SIZE>&>(m_Atlas).add(ID, pixmap);
             auto pos = m_Atlas.get(ID);
-            BASIC_LOG(QString("TileCache: ID: ") + QString::number(pTexture->getID()) + " // name: " + pTexture->getName() + " // path: " + pTexture->getPath() + "\n" +
-                "Added into texture atlas at position " + QString::number(pos.getX()) + "/" + QString::number(pos.getY()) + ".");
+            STANDARD_MESSAGE(std::string("TileCache: ID: ") + std::to_string(pTexture->getID()) + " // name: " + pTexture->getName().toStdString() + " // path: " +
+                pTexture->getPath().toStdString() + "\n" + "Added into texture atlas at position " + std::to_string(pos.getX()) + "/" + std::to_string(pos.getY()) + ".");
             return TileCacheInfo(&m_Atlas.getTexture(), pos * MAP::TILE_SIZE);
         }
     }
-    ERROR_LOG(QString("TileCache: ID: ") + QString::number(ID) + "\n" +
-        "Unable to add tile to texture atlas.");
+    if (ID)
+        WARNING_MESSAGE(std::string("TileCache: ID: ") + std::to_string(ID) + "\nUnable to add tile to texture atlas.");
     return TileCacheInfo(nullptr, GEOMETRY::Point<uint32>(MATH::maximum<uint32>(), MATH::maximum<uint32>()));
 }
 

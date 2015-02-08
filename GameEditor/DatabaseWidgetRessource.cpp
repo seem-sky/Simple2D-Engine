@@ -1,7 +1,7 @@
 #include "DatabaseWidgetRessource.h"
 #include "moc_DatabaseWidgetRessource.h"
 #include <QtCore/QFileInfo>
-#include "Logfile.h"
+#include <Log/Log.h>
 
 using namespace DATABASE;
 using namespace PROTOTYPE;
@@ -86,7 +86,7 @@ void DatabaseWidgetRessource::_onClickMassFileImportButton()
                 pPrototype->setFileName(fileInfo.fileName());
                 pPrototype->setName(fileInfo.fileName());
                 pModel->resize(currentID);
-                BASIC_LOG("File import succeeded: ID: " + QString::number(currentID) + "; file name: " + pPrototype->getPathName());
+                STANDARD_MESSAGE("File import succeeded: ID: " + std::to_string(currentID) + "; file name: " + pPrototype->getPathName().toStdString());
 
                 pDatabase->setPrototype(pPrototype.release());
             }
@@ -123,7 +123,8 @@ void DatabaseWidgetRessource::_import(uint32 uiID, const QString& fileNamePath)
         // if name is empty fill with filename
         if (m_pModuleList->getDataName().isEmpty())
             m_pModuleList->setDataName(fileInfo.fileName());
-        BASIC_LOG("File import succeeded: ID: " + QString::number(m_pModuleList->getDataID()) + "; file name: " + path+fileInfo.fileName());
+        STANDARD_MESSAGE("File import succeeded: ID: " + std::to_string(m_pModuleList->getDataID()) + "; file name: " +
+            path.toStdString() + fileInfo.fileName().toStdString());
 
         saveCurrent();
         emit fileImport(m_pModuleList->getDataID());

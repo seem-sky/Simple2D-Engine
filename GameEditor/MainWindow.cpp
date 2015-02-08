@@ -5,14 +5,15 @@
 #include <QtCore/QDir>
 #include <QtCore/QTimer>
 #include <QtWidgets/QErrorMessage>
-#include "Logfile.h"
+#include <log/Log.h>
+#include <log/FileOutput.h>
 #include <QtCore/QTime>
 
 using namespace DATABASE;
 
 MainWindow::MainWindow(QMainWindow* pParent) : QMainWindow(pParent), Ui_MainWindow(), m_pMapEditor(new MapEditorWidgetEditor(m_Project.getDatabaseMgr(), this))
 {
-    Logfile::get();
+    LOG::GlobalLog::get()->setFileOutput(new LOG::FileOutput("Logfile"));
     setupUi(this);
 
     // setup map editor widget
@@ -53,7 +54,6 @@ void MainWindow::_setDBs()
 MainWindow::~MainWindow(void)
 {
     Config::get()->del();
-    Logfile::get()->del();
 }
 
 void MainWindow::_mapScreenshot()
@@ -84,14 +84,14 @@ void MainWindow::_newProject()
     {
         if (m_Project.createNew(dir))
         {
-            BASIC_LOG("Successfully create project at " + dir);
+            STANDARD_MESSAGE("Successfully create project at " + dir.toStdString());
             _loadProject(dir);
         }
         else
-            ERROR_LOG("Unable to create project at " + dir);
+            ERROR_MESSAGE("Unable to create project at " + dir.toStdString());
     }
     else
-        ERROR_LOG("Unable to create project at " + dir + ". It already exists!");
+        ERROR_MESSAGE("Unable to create project at " + dir.toStdString() + ". It already exists!");
 }
 
 void MainWindow::_loadProject()
@@ -108,19 +108,19 @@ bool MainWindow::_loadProject(const QString& dir)
 {
     QTime time;
     time.start();
-    BASIC_LOG("Begin project load: " + dir);
+    STANDARD_MESSAGE("Begin project load: " + dir.toStdString());
     if (m_Project.load(dir))
     {
         _setDBs();
         Config::get()->setProjectDirectory(dir);
-        BASIC_LOG("Project load successfully ends after " + QString::number(time.elapsed()) + "msec.");
+        STANDARD_MESSAGE("Project load successfully ends after " + std::to_string(time.elapsed()) + "msec.");
         m_pMapEditor->projectOpened();
         emit projectLoadDone();
         return true;
     }
     QErrorMessage* pMsg = new QErrorMessage(this);
     pMsg->showMessage(dir + " is no valid project directory.");
-    ERROR_LOG("Unable to load " + dir + ". Corrupt project or no such directory.");
+    ERROR_MESSAGE("Unable to load " + dir.toStdString() + ". Corrupt project or no such directory.");
     Config::get()->clear();
     return false;
 }
@@ -129,7 +129,7 @@ void MainWindow::_closeProject()
 {
     if (m_Project.isOpen())
     {
-        BASIC_LOG("Close project " + m_Project.getPath());
+        STANDARD_MESSAGE("Close project " + m_Project.getPath().toStdString());
         //m_pMapEditor->clearWidgets();
         m_Project.close();
         Config::get()->clear();

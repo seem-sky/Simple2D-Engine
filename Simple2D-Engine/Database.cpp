@@ -1,5 +1,5 @@
 #include "Database.h"
-#include "Logfile.h"
+#include <log/Log.h>
 #include <math_extensions.h>
 
 using namespace DATABASE;

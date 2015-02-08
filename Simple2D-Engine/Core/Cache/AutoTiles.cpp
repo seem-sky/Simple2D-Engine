@@ -4,7 +4,7 @@
 #include <QtGui/QPainter>
 #include "DatabaseMgr.h"
 #include "Tiles.h"
-#include "Logfile.h"
+#include <log/Log.h>
 
 using namespace CACHE;
 using namespace MAP;
@@ -471,8 +471,8 @@ TileCacheInfo AutoTiles::get(uint32 ID, AUTO_TILE_INDEX index) const
         {
             const_cast<AutoTiles&>(*this)._setupAutoTile(ID);
             auto pos = m_Atlas.get(ID);
-            BASIC_LOG(QString("AutoTileCache: ID: ") + QString::number(pAutoTile->getID()) + " // name: " + pAutoTile->getName() + "\n" +
-                "Added into texture atlas at position " + QString::number(pos.getX()) + "/" + QString::number(pos.getY()) + ".");
+            STANDARD_MESSAGE(std::string("AutoTileCache: ID: ") + std::to_string(pAutoTile->getID()) + " // name: " + pAutoTile->getName().toStdString() + "\n" +
+                "Added into texture atlas at position " + std::to_string(pos.getX()) + "/" + std::to_string(pos.getY()) + ".");
         }
 
         auto pos = m_Atlas.get(ID);
@@ -482,7 +482,7 @@ TileCacheInfo AutoTiles::get(uint32 ID, AUTO_TILE_INDEX index) const
             GEOMETRY::Point<uint32>(pos.getX() + (index - AUTO_TILE_SET_COUNT) % ATLAS_WIDTH * TILE_SIZE, pos.getY() + (index - AUTO_TILE_SET_COUNT) / ATLAS_WIDTH * TILE_SIZE));
     }
 
-    ERROR_LOG(QString("AutoTileCache: ID: ") + QString::number(ID) + "\n" +
+    WARNING_MESSAGE(std::string("AutoTileCache: ID: ") + std::to_string(ID) + "\n" +
         "Unable to add tile to texture atlas.");
     return TileCacheInfo(nullptr, GEOMETRY::Point<uint32>(MATH::maximum<uint32>(), MATH::maximum<uint32>()));
 }

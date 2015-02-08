@@ -23,7 +23,6 @@
     <ClCompile Include="..\Simple2D-GameEditor\include\DatabaseMgr.cpp" />
     <ClCompile Include="..\Simple2D-GameEditor\include\DatabasePrototypes.cpp" />
     <ClCompile Include="..\Simple2D-GameEditor\include\Game.cpp" />
-    <ClCompile Include="..\Simple2D-GameEditor\include\Logfile.cpp" />
     <ClCompile Include="..\Simple2D-GameEditor\include\MapDatabase.cpp" />
     <ClCompile Include="..\Simple2D-GameEditor\include\MapGrid.cpp" />
     <ClCompile Include="..\Simple2D-GameEditor\include\WorldObject.cpp" />
@@ -81,7 +80,6 @@
     <ClInclude Include="..\Simple2D-GameEditor\include\DatabaseMgr.h" />
     <ClInclude Include="..\Simple2D-GameEditor\include\DatabasePrototypes.h" />
     <ClInclude Include="..\Simple2D-GameEditor\include\Game.h" />
-    <ClInclude Include="..\Simple2D-GameEditor\include\Logfile.h" />
     <ClInclude Include="..\Simple2D-GameEditor\include\MapDatabase.h" />
     <ClInclude Include="..\Simple2D-GameEditor\include\MapGrid.h" />
     <ClInclude Include="..\Simple2D-GameEditor\include\WorldObject.h" />
@@ -198,23 +196,23 @@
     <OutDir>$(SolutionDir)\Simple2D-GameEditor\lib\</OutDir>
     <TargetName>$(ProjectName)_d</TargetName>
     <IncludePath>$(SimpleLib)\include;$(QtDir)\include;$(BoostDir);$(SolutionDir)\Simple2D-GameEditor\include;$(SolutionDir)\Simple2D-Engine;$(IncludePath)</IncludePath>
-    <LibraryPath>$(QtDir)\lib;$(SolutionDir);$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(QtDir)\lib;$(SolutionDir);$(LibraryPath);$(BoostBin)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <TargetName>$(ProjectName)64_d</TargetName>
     <IncludePath>$(SimpleLib)\include;$(QtDir)\include;$(BoostDir);$(SolutionDir)\Simple2D-GameEditor\include;$(SolutionDir)\Simple2D-Engine;$(IncludePath)</IncludePath>
-    <LibraryPath>$(QtDir)\lib;$(SolutionDir);$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(QtDir)\lib;$(SolutionDir);$(LibraryPath);$(BoostBin_64)</LibraryPath>
     <OutDir>$(SolutionDir)\Simple2D-GameEditor\lib\</OutDir>
     <IntDir>x64\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)\Simple2D-GameEditor\lib\</OutDir>
     <IncludePath>$(SimpleLib)\include;$(QtDir)\include;$(BoostDir);$(SolutionDir)\Simple2D-GameEditor\include;$(SolutionDir)\Simple2D-Engine;$(IncludePath)</IncludePath>
-    <LibraryPath>$(QtDir)\lib;$(SolutionDir);$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(QtDir)\lib;$(SolutionDir);$(LibraryPath);$(BoostBin)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>$(SimpleLib)\include;$(QtDir)\include;$(BoostDir);$(SolutionDir)\Simple2D-GameEditor\include;$(SolutionDir)\Simple2D-Engine;$(IncludePath)</IncludePath>
-    <LibraryPath>$(QtDir)\lib;$(SolutionDir);$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(QtDir)\lib;$(SolutionDir);$(LibraryPath);$(BoostBin_64)</LibraryPath>
     <OutDir>$(SolutionDir)\Simple2D-GameEditor\lib\</OutDir>
     <IntDir>x64\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)64</TargetName>

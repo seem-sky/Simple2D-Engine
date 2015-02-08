@@ -87,9 +87,6 @@
     <ClCompile Include="..\Simple2D-GameEditor\include\Color.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="..\Simple2D-GameEditor\include\Logfile.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
     <ClCompile Include="..\Simple2D-GameEditor\include\MapDatabase.cpp">
       <Filter>Database\Map</Filter>
     </ClCompile>
@@ -256,9 +253,6 @@
     </ClInclude>
     <ClInclude Include="..\Simple2D-GameEditor\include\Database.h">
       <Filter>Database</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Simple2D-GameEditor\include\Logfile.h">
-      <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="..\Simple2D-GameEditor\include\MapDatabase.h">
       <Filter>Database\Map</Filter>
