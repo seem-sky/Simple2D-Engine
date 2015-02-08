@@ -38,6 +38,7 @@
     <ClCompile Include="BrushTypeTileSet.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Config.cpp" />
+    <ClCompile Include="ConsoleOutput.cpp" />
     <ClCompile Include="Core\Cache\AutoTiles.cpp" />
     <ClCompile Include="Core\Cache\Manager.cpp" />
     <ClCompile Include="Core\Cache\TileCacheInfo.cpp" />
@@ -97,6 +98,7 @@
     <ClInclude Include="BrushTypeTile.h" />
     <ClInclude Include="BrushTypeTileSet.h" />
     <ClInclude Include="Colission.h" />
+    <ClInclude Include="ConsoleOutput.h" />
     <ClInclude Include="Core\Cache\AutoTiles.h" />
     <ClInclude Include="Core\Cache\Manager.h" />
     <ClInclude Include="Core\Cache\TextureAtlas.h" />

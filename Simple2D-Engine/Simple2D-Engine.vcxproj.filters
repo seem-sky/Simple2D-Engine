@@ -79,6 +79,9 @@
     <Filter Include="Core\Cache\Tiles">
       <UniqueIdentifier>{18dc7a90-8bd5-40aa-adc4-5015abd490f1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\Log">
+      <UniqueIdentifier>{4994a2d4-1591-4228-b948-0f7b88a31822}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Simple2D-GameEditor\include\Game.cpp">
@@ -239,6 +242,9 @@
     </ClCompile>
     <ClCompile Include="Core\Cache\TileCacheInfo.cpp">
       <Filter>Core\Cache\Tiles</Filter>
+    </ClCompile>
+    <ClCompile Include="ConsoleOutput.cpp">
+      <Filter>Core\Log</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -436,6 +442,9 @@
     </ClInclude>
     <ClInclude Include="Simple2D-Global.h">
       <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="ConsoleOutput.h">
+      <Filter>Core\Log</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

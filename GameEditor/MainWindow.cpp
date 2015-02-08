@@ -7,13 +7,16 @@
 #include <QtWidgets/QErrorMessage>
 #include <log/Log.h>
 #include <log/FileOutput.h>
+#include <ConsoleOutput.h>
 #include <QtCore/QTime>
 
 using namespace DATABASE;
 
 MainWindow::MainWindow(QMainWindow* pParent) : QMainWindow(pParent), Ui_MainWindow(), m_pMapEditor(new MapEditorWidgetEditor(m_Project.getDatabaseMgr(), this))
 {
-    LOG::GlobalLog::get()->setFileOutput(new LOG::FileOutput("Logfile"));
+    LOG::GlobalLog::get()->setOutputCount(2);
+    LOG::GlobalLog::get()->setOutput(0, new LOG::FileOutput("Logfile"));
+    LOG::GlobalLog::get()->setOutput(1, new ConsoleOutput());
     setupUi(this);
 
     // setup map editor widget
