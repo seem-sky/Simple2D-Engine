@@ -1,7 +1,7 @@
-#ifndef SCRIPT_AREA_AREA_BASE_H
-#define SCRIPT_AREA_AREA_BASE_H
+#ifndef MAP_SCRIPT_AREA_AREA_BASE_H
+#define MAP_SCRIPT_AREA_AREA_BASE_H
 
-#include "ScriptArea_AreaInterface.h"
+#include "AreaInterface.h"
 #include <geometry/algorithm.h>
 #include <geometry/Triangle.h>
 
@@ -49,6 +49,26 @@ namespace MAP
                 std::vector<GEOMETRY::Point<int32>> getPoints() const
                 {
                     return std::vector<GEOMETRY::Point<int32>>(m_Area.pointBegin(), m_Area.pointEnd());
+                }
+
+                GEOMETRY::Point<int32> getPoint(uint32 i) const
+                {
+                    return m_Area.getPoint(i);
+                }
+
+                void setPoint(uint32 i, const GEOMETRY::Point<int32>& p)
+                {
+                    m_Area.setPoint(i, p);
+                }
+
+                uint32 pointCount() const
+                {
+                    return m_Area.pointCount();
+                }
+
+                Data getData() const
+                {
+                    return Data(getType(), getPoints());
                 }
 
             protected:

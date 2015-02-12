@@ -1,7 +1,7 @@
-#ifndef SCRIPT_AREA_AREA_RECT_H
-#define SCRIPT_AREA_AREA_RECT_H
+#ifndef MAP_SCRIPT_AREA_AREA_RECT_H
+#define MAP_SCRIPT_AREA_AREA_RECT_H
 
-#include "ScriptArea_AreaBase.h"
+#include "AreaBase.h"
 
 namespace MAP
 {
@@ -19,7 +19,7 @@ namespace MAP
 
                 GEOMETRY::Rectangle<int32> getBoundingRect() const;
 
-                Type getType() const { return Type::RECT; }
+                Type getType() const { return Type::rect; }
             };
         }
     }

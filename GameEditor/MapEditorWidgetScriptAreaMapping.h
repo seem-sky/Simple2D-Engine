@@ -3,7 +3,7 @@
 
 #include "ToolWidget.h"
 #include "UI/UI_MapEditorWidgetScriptAreaMapping.h"
-#include <ScriptArea.h>
+#include <Map/ScriptArea/ScriptArea.h>
 
 class MapEditorWidgetScriptAreaMapping : public ToolWidget, Ui_MapEditorWidgetScriptAreaMapping
 {

@@ -1,5 +1,5 @@
 #include "ScriptAreaMappingMode.h"
-#include "ScriptArea_AreaRect.h"
+#include <Map/ScriptArea/ScriptArea.h>
 #include "MapEditor.h"
 #include "ScriptAreaMappingRevert.h"
 #include <DelayedDeleteObject.h>
@@ -14,13 +14,13 @@ void MAPPING_MODE::ScriptArea::press(MapEditor& editor, QMouseEvent* pEvent)
     auto pos = editor.mapToScene(pEvent->pos()).toPoint();
     if (auto pItem = editor.scene()->itemAt(pos, QTransform()))
     {
-        if (pItem->type() == QGraphicsItem::UserType + 2 ||
-            pItem->type() == QGraphicsItem::UserType + 3)
+        if (pItem->type() == MAPPING_MODE::ITEM_MOVE_POINT)
             return;
     }
 
-    auto pItem = editor.addScriptArea(new GEOMETRY::Rectangle<int32>(
-        GEOMETRY::Point<int32>(pos.x(), pos.y()), GEOMETRY::Point<int32>(pos.x() + MAP::SCRIPT_AREA::MINIMUM_SIZE, pos.y() + MAP::SCRIPT_AREA::MINIMUM_SIZE)));
+    Data scriptData(editor.getMapData().getScriptAreaData().getNewGUID(), AREA::Data(AREA::Type::rect, PointVec<int32> {GEOMETRY::Point<int32>(pos.x(), pos.y())}),
+        ACTION::Data("test"));
+    auto pItem = editor.addScriptArea(scriptData);
     editor.addRevert(new MAPPING_MODE::SCRIPT_AREA::REVERT::Add(pItem->getScriptArea()->getGUID(), editor));
 }
 

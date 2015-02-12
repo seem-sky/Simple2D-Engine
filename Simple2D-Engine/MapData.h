@@ -3,7 +3,7 @@
 
 #include "MapLayer.h"
 #include "WorldObjectInfoData.h"
-#include "ScriptAreaData.h"
+#include "Map/ScriptArea/Manager.h"
 #include <QtCore/QString>
 
 namespace DATABASE
@@ -26,8 +26,8 @@ namespace MAP
             WorldObjectInfoData& getWorldObjectInfoData() { return m_Objects; }
             const WorldObjectInfoData& getWorldObjectInfoData() const { return m_Objects; }
 
-            SCRIPT_AREA::ScriptAreaData& getScriptAreaData() { return m_ScriptAreas; }
-            const SCRIPT_AREA::ScriptAreaData& getScriptAreaData() const { return m_ScriptAreas; }
+            SCRIPT_AREA::Manager& getScriptAreaData() { return m_ScriptAreas; }
+            const SCRIPT_AREA::Manager& getScriptAreaData() const { return m_ScriptAreas; }
 
             inline uint32 getMapID() const { return m_MapID; }
 
@@ -41,7 +41,7 @@ namespace MAP
         private:
             const DATABASE::DatabaseMgr& m_DBMgr;
             const uint32 m_MapID;
-            SCRIPT_AREA::ScriptAreaData m_ScriptAreas;
+            SCRIPT_AREA::Manager m_ScriptAreas;
             LayerContainer m_Layer;
             WorldObjectInfoData m_Objects;
         };

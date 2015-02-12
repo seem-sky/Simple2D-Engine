@@ -2,7 +2,7 @@
 #define SCRIPT_AREA_MAPPING_REVERT_H
 
 #include <RevertInterface.h>
-#include <ScriptArea.h>
+#include <Map/ScriptArea/ScriptArea.h>
 
 class MapEditor;
 
@@ -33,16 +33,18 @@ namespace MAPPING_MODE
                 MAP::GUID m_GUID;
             };
 
-            class Modify : public Base
+            class Move : public Base
             {
             public:
-                Modify(MAP::SCRIPT_AREA::ScriptArea* pArea, MapEditor& editor);
+                Move(MAP::SCRIPT_AREA::ScriptArea* pScriptArea, uint32 index, const GEOMETRY::Point<int32>& pos, MapEditor& editor);
 
                 void revert();
-                bool isEmpty() const { return !m_pArea; }
+                bool isEmpty() const { return !m_pScriptArea; }
 
             private:
-                std::unique_ptr<MAP::SCRIPT_AREA::ScriptArea> m_pArea;
+                uint32 m_Index;
+                GEOMETRY::Point<int32> m_Pos;
+                MAP::SCRIPT_AREA::ScriptArea* m_pScriptArea = nullptr;
             };
 
             class Remove : public Base
@@ -51,10 +53,10 @@ namespace MAPPING_MODE
                 Remove(MAP::SCRIPT_AREA::ScriptArea* pArea, MapEditor& editor);
 
                 void revert();
+                bool isEmpty() const { return !m_pArea; }
 
             private:
                 std::unique_ptr<MAP::SCRIPT_AREA::ScriptArea> m_pArea;
-                bool isEmpty() const { return !m_pArea; }
             };
         }
     }

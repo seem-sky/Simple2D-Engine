@@ -1,4 +1,4 @@
-#include "ScriptArea_AreaRect.h"
+#include "Map/ScriptArea/AreaRect.h"
 
 using namespace MAP::SCRIPT_AREA::AREA;
 

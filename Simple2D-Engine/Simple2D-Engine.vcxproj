@@ -66,9 +66,14 @@
     <ClCompile Include="QtGlobal.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneMgr.cpp" />
-    <ClCompile Include="ScriptArea.cpp" />
-    <ClCompile Include="ScriptAreaData.cpp" />
     <ClCompile Include="MapException.cpp" />
+    <ClCompile Include="ScriptAreaActionData.cpp" />
+    <ClCompile Include="ScriptAreaActions.cpp" />
+    <ClCompile Include="ScriptAreaAreaData.cpp" />
+    <ClCompile Include="ScriptAreaAreaRect.cpp" />
+    <ClCompile Include="ScriptAreaData.cpp" />
+    <ClCompile Include="ScriptAreaManager.cpp" />
+    <ClCompile Include="ScriptAreaScriptArea.cpp" />
     <ClCompile Include="TransformationHolder.cpp" />
     <ClCompile Include="VisualViewer.cpp" />
     <ClCompile Include="WorldObjectInfo.cpp" />
@@ -105,9 +110,17 @@
     <ClInclude Include="Core\Cache\TileCacheInfo.h" />
     <ClInclude Include="Core\Cache\TileBase.h" />
     <ClInclude Include="Core\Cache\Tiles.h" />
+    <ClInclude Include="Map\ScriptArea\ActionData.h" />
+    <ClInclude Include="Map\ScriptArea\ActionInterface.h" />
+    <ClInclude Include="Map\ScriptArea\Actions.h" />
+    <ClInclude Include="Map\ScriptArea\AreaData.h" />
+    <ClInclude Include="Map\ScriptArea\Data.h" />
+    <ClInclude Include="Map\ScriptArea\Manager.h" />
+    <ClInclude Include="Map\ScriptArea\ScriptArea.h" />
+    <ClInclude Include="Map\ScriptArea\AreaBase.h" />
+    <ClInclude Include="Map\ScriptArea\AreaInterface.h" />
+    <ClInclude Include="Map\ScriptArea\AreaRect.h" />
     <ClInclude Include="RevertInterface.h" />
-    <ClInclude Include="ScriptArea.h" />
-    <ClInclude Include="ScriptAreaData.h" />
     <ClInclude Include="Simple2D-Global.h" />
     <ClInclude Include="MapViewScene.h" />
     <ClInclude Include="PrototypeAnimationModule.h" />
@@ -226,6 +239,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -241,6 +255,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -258,6 +273,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -277,6 +293,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

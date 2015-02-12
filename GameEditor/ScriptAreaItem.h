@@ -1,9 +1,11 @@
 #ifndef SCRIPT_AREA_ITEM_H
 #define SCRIPT_AREA_ITEM_H
 
-#include <QtWidgets/QGraphicsItem>
+#include <QtWidgets/QGraphicsObject>
 #include <QtGui/QPen>
 #include <Typedefs.h>
+#include <map>
+#include "Simple2D-Global.h"
 
 namespace MAP
 {
@@ -13,8 +15,20 @@ namespace MAP
     }
 }
 
-class PointMoveItem : public QGraphicsItem
+class PointMoveItem : public QGraphicsObject
 {
+    Q_OBJECT
+private:
+    void _posModifyStart(int key);
+    void _posModifyEnd(int key);
+
+protected:
+    void keyPressEvent(QKeyEvent *pEvent);
+    void keyReleaseEvent(QKeyEvent *pEvent);
+    void mousePressEvent(QGraphicsSceneMouseEvent *pEvent);
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *pEvent);
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *pEvent);
+
 public:
     PointMoveItem(uint32 index, QGraphicsItem* pItem = nullptr);
 
@@ -27,19 +41,22 @@ public:
     int type() const;
     uint32 getIndex() const { return m_Index; }
 
+signals:
+    void positionChanged(uint32 index, QPoint m_Pos);
+    void positionChanged(uint32 index);
+
 private:
     QPen m_Pen;
     uint32 m_Index = 0;
+    std::map<int, QPoint> m_Pos;
 };
 
-class ScriptAreaItem : public QGraphicsItem
+class ScriptAreaItem : public QGraphicsObject
 {
+    Q_OBJECT
 private:
     void _setupPointMoveItem(uint32 index);
     void _updateEdgePositions();
-
-protected:
-    bool sceneEventFilter(QGraphicsItem* pItem, QEvent* pEvent);
 
 public:
     ScriptAreaItem();
@@ -54,8 +71,16 @@ public:
     void setEditable(bool editable = true);
 
     PointMoveItem* getPointItem(uint32 index) const;
+    void setPoint(uint32 index, const GEOMETRY::Point<int32>& pos);
 
     int type() const;
+
+private slots:
+    void _childPositionChanged(uint32 index, QPoint pos);
+    void _childPositionChanged(uint32 index);
+
+signals:
+    void modified(MAP::GUID guid, uint32 index, QPoint pos);
 
 private:
     MAP::SCRIPT_AREA::ScriptArea* m_pScriptArea = nullptr;

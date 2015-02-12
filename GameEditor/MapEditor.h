@@ -38,10 +38,7 @@ namespace MAP
     namespace SCRIPT_AREA
     {
         class ScriptArea;
-        namespace AREA
-        {
-            class Interface;
-        }
+        class Data;
     }
 
     namespace REVERT
@@ -110,7 +107,7 @@ public:
     WorldObjectItem* getWorldObject(MAP::GUID guid);
 
     // ScriptAreas
-    ScriptAreaItem* addScriptArea(GEOMETRY::ComplexGeometricShape<int32>* pArea);
+    ScriptAreaItem* addScriptArea(const MAP::SCRIPT_AREA::Data& data);
     ScriptAreaItem* addScriptArea(MAP::SCRIPT_AREA::ScriptArea* pScript);
     ScriptAreaItem* getScriptArea(MAP::GUID guid);
     ScriptAreaItem* takeScriptArea(MAP::GUID guid);
@@ -128,6 +125,7 @@ private slots:
     void _onActionPaste();
     void _onActionCut();
     void _onActionDelete();
+    void _scriptAreaPointModified(MAP::GUID guid, uint32 index, QPoint pos);
 
 public slots:
     void onMappingModeChanged(MAPPING_MODE::Type mode);

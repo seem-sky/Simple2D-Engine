@@ -82,6 +82,12 @@
     <Filter Include="Core\Log">
       <UniqueIdentifier>{4994a2d4-1591-4228-b948-0f7b88a31822}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Map\ScriptArea\Action">
+      <UniqueIdentifier>{a502cf94-8f26-424f-b096-5e92d23bbc06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map\ScriptArea\Area">
+      <UniqueIdentifier>{8ee5ce9e-726d-42f9-8fc2-a851b5ba0c48}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Simple2D-GameEditor\include\Game.cpp">
@@ -222,12 +228,6 @@
     <ClCompile Include="WorldObjectInfo.cpp">
       <Filter>Map\IO\WorldObjectInfo</Filter>
     </ClCompile>
-    <ClCompile Include="ScriptArea.cpp">
-      <Filter>Map\ScriptArea</Filter>
-    </ClCompile>
-    <ClCompile Include="ScriptAreaData.cpp">
-      <Filter>Map\ScriptArea</Filter>
-    </ClCompile>
     <ClCompile Include="QtGlobal.cpp">
       <Filter>Core</Filter>
     </ClCompile>
@@ -245,6 +245,27 @@
     </ClCompile>
     <ClCompile Include="Core\Cache\TileCacheInfo.cpp">
       <Filter>Core\Cache\Tiles</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptAreaActionData.cpp">
+      <Filter>Map\ScriptArea\Action</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptAreaActions.cpp">
+      <Filter>Map\ScriptArea\Action</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptAreaAreaData.cpp">
+      <Filter>Map\ScriptArea\Area</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptAreaAreaRect.cpp">
+      <Filter>Map\ScriptArea\Area</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptAreaManager.cpp">
+      <Filter>Map\ScriptArea</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptAreaScriptArea.cpp">
+      <Filter>Map\ScriptArea</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptAreaData.cpp">
+      <Filter>Map\ScriptArea</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -419,12 +440,6 @@
     <ClInclude Include="RevertInterface.h">
       <Filter>Map\Brush\Revert</Filter>
     </ClInclude>
-    <ClInclude Include="ScriptArea.h">
-      <Filter>Map\ScriptArea</Filter>
-    </ClInclude>
-    <ClInclude Include="ScriptAreaData.h">
-      <Filter>Map\ScriptArea</Filter>
-    </ClInclude>
     <ClInclude Include="Core\Cache\Tiles.h">
       <Filter>Core\Cache\Tiles</Filter>
     </ClInclude>
@@ -448,6 +463,36 @@
     </ClInclude>
     <ClInclude Include="Core\Cache\TileBase.h">
       <Filter>Core\Cache\Tiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Map\ScriptArea\ActionInterface.h">
+      <Filter>Map\ScriptArea\Action</Filter>
+    </ClInclude>
+    <ClInclude Include="Map\ScriptArea\Actions.h">
+      <Filter>Map\ScriptArea\Action</Filter>
+    </ClInclude>
+    <ClInclude Include="Map\ScriptArea\ScriptArea.h">
+      <Filter>Map\ScriptArea</Filter>
+    </ClInclude>
+    <ClInclude Include="Map\ScriptArea\AreaRect.h">
+      <Filter>Map\ScriptArea\Area</Filter>
+    </ClInclude>
+    <ClInclude Include="Map\ScriptArea\AreaInterface.h">
+      <Filter>Map\ScriptArea\Area</Filter>
+    </ClInclude>
+    <ClInclude Include="Map\ScriptArea\AreaBase.h">
+      <Filter>Map\ScriptArea\Area</Filter>
+    </ClInclude>
+    <ClInclude Include="Map\ScriptArea\Manager.h">
+      <Filter>Map\ScriptArea</Filter>
+    </ClInclude>
+    <ClInclude Include="Map\ScriptArea\ActionData.h">
+      <Filter>Map\ScriptArea\Action</Filter>
+    </ClInclude>
+    <ClInclude Include="Map\ScriptArea\AreaData.h">
+      <Filter>Map\ScriptArea\Area</Filter>
+    </ClInclude>
+    <ClInclude Include="Map\ScriptArea\Data.h">
+      <Filter>Map\ScriptArea</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

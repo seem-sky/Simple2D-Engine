@@ -1,5 +1,5 @@
-#ifndef SCRIPT_AREA_DATA
-#define SCRIPT_AREA_DATA
+#ifndef MAP_SCRIPT_AREA_MANAGER_H
+#define MAP_SCRIPT_AREA_MANAGER_H
 
 #include "ScriptArea.h"
 
@@ -7,22 +7,20 @@ namespace MAP
 {
     namespace SCRIPT_AREA
     {
-        class ScriptAreaData
+        class Manager
         {
-        private:
-            GUID _getNewGUID() const;
-
         public:
-            ScriptAreaData() = default;
+            Manager() = default;
 
             ScriptArea* addScriptArea(ScriptArea* pScript);
-            ScriptArea* addScriptArea(GEOMETRY::ComplexGeometricShape<int32>* pArea);
-            ScriptArea* getScriptArea(GUID guid);
+            ScriptArea* addScriptArea(const Data& data);
             const ScriptArea* getScriptArea(GUID guid) const;
+            ScriptArea* getScriptArea(GUID guid);
             const std::vector<std::unique_ptr<ScriptArea>>& getScriptAreas() const;
             ScriptArea* takeScriptArea(GUID guid);
             bool hasScriptArea(GUID guid) const;
             void removeScriptArea(GUID guid);
+            GUID getNewGUID() const;
 
             uint32 count() const;
             bool isEmpty() const;

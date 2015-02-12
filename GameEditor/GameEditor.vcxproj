@@ -321,7 +321,7 @@
   <ItemGroup>
     <ClInclude Include="EditorGlobal.h" />
     <ClInclude Include="MapEditorWidgetScriptAreaMapping.h" />
-    <ClInclude Include="ScriptAreaItem.h" />
+    <moc_header Include="ScriptAreaItem.h" />
     <ClInclude Include="ScriptAreaMappingRevert.h" />
     <ClInclude Include="WorldObjectItem.h" />
     <ClInclude Include="ObjectMappingRevert.h" />

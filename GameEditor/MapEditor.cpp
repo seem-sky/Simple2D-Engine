@@ -18,6 +18,8 @@
 #include <QtWidgets/QMenu>
 #include <QtGui/QMouseEvent>
 #include <Core/Cache/Manager.h>
+#include <Map/ScriptArea/AreaData.h>
+#include "ScriptAreaMappingRevert.h"
 
 /*#####
 # MapViewer
@@ -110,6 +112,7 @@ ScriptAreaItem* MapEditor::_setupScriptArea(MAP::SCRIPT_AREA::ScriptArea* script
     scene()->addItem(pItem);
     pItem->setup(scriptArea);
     pItem->setEditable(m_MappingObject.getMappingModeType() == MAPPING_MODE::Type::SCRIPT_AREA_MAPPING);
+    connect(pItem, SIGNAL(modified(MAP::GUID, uint32, QPoint)), this, SLOT(_scriptAreaPointModified(MAP::GUID, uint32, QPoint)));
     return pItem;
 }
 
@@ -177,12 +180,9 @@ WorldObjectItem* MapEditor::getWorldObject(MAP::GUID guid)
     return nullptr;
 }
 
-ScriptAreaItem* MapEditor::addScriptArea(GEOMETRY::ComplexGeometricShape<int32>* pArea)
+ScriptAreaItem* MapEditor::addScriptArea(const MAP::SCRIPT_AREA::Data& data)
 {
-    if (!pArea)
-        return nullptr;
-    
-    return _setupScriptArea(m_MapData.getScriptAreaData().addScriptArea(pArea));
+    return _setupScriptArea(m_MapData.getScriptAreaData().addScriptArea(data));
 }
 
 ScriptAreaItem* MapEditor::addScriptArea(MAP::SCRIPT_AREA::ScriptArea* pScript)
@@ -243,10 +243,17 @@ void MapEditor::_loadMap()
     auto mapSize = m_MapData.getMapLayer().getSize();
     scene()->setSceneRect(0, 0, mapSize.getX()*MAP::TILE_SIZE, mapSize.getY()*MAP::TILE_SIZE);
 
+    // world objects
     for (auto& info : m_MapData.getWorldObjectInfoData().getWorldObjects())
     {
         if (auto pWorldObject = m_DBMgr.getWorldObjectDatabase()->getOriginalPrototype(info->getID()))
             _addWorldObject(pWorldObject, *info);
+    }
+
+    // script areas
+    for (auto& data : m_MapData.getScriptAreaData().getScriptAreas())
+    {
+        _setupScriptArea(data.get());
     }
     scene()->update();
 }
@@ -465,4 +472,13 @@ void MapEditor::addRevert(MAP::REVERT::Interface* pRevert)
         return;
     m_Reverts.push_back(std::unique_ptr<MAP::REVERT::Interface>(pRevert));
     emit changed(m_MapData.getMapID());
+}
+
+void MapEditor::_scriptAreaPointModified(MAP::GUID guid, uint32 index, QPoint pos)
+{
+    if (auto pArea = m_MapData.getScriptAreaData().getScriptArea(guid))
+    {
+        std::unique_ptr<MAP::REVERT::Interface> pRevert(new MAPPING_MODE::SCRIPT_AREA::REVERT::Move(pArea, index, GEOMETRY::Point<int32>(pos.x(), pos.y()), *this));
+        addRevert(pRevert.release());
+    }
 }

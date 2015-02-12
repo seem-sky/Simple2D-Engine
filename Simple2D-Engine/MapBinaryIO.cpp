@@ -22,13 +22,29 @@ void INPUT::MapBinaryReader::readFile(const QString& fileName, MAP_DATA::MapData
     // load file version
     uint16 version;
     in >> version;
+    in.setVersion(version);
 
     // load layer data
     _readLayer(in, data.getMapLayer(), LayerType::LAYER_BACKGROUND, version);
     _readLayer(in, data.getMapLayer(), LayerType::LAYER_FOREGROUND, version);
 
+    // load script areas
+    _readScriptAreas(in, data.getScriptAreaData(), version);
+
     // load objects
     _readObjects(in, data.getWorldObjectInfoData(), version);
+}
+
+void INPUT::MapBinaryReader::_readScriptAreas(QDataStream& in, SCRIPT_AREA::Manager& areas, uint16 version)
+{
+    uint32 size;
+    in >> size;
+    for (uint32 i = 0; i < size; ++i)
+    {
+        SCRIPT_AREA::Data data;
+        in >> data;
+        areas.addScriptArea(data);
+    }
 }
 
 void INPUT::MapBinaryReader::_readLayer(QDataStream& in, LayerContainer& mapLayer, LayerType layer, uint16 version)
@@ -127,10 +143,14 @@ void OUTPUT::MapBinaryWriter::writeFile(const QString& fileName, const MAP_DATA:
     QDataStream out(&mapFile);
     // store current version
     out << CURRENT_VERSION;
+    out.setVersion(CURRENT_VERSION);
 
     // store layer data
     _writeLayer(out, data.getMapLayer(), MAP::LayerType::LAYER_BACKGROUND);
     _writeLayer(out, data.getMapLayer(), MAP::LayerType::LAYER_FOREGROUND);
+
+    // store script areas
+    _writeScriptAreas(out, data.getScriptAreaData());
 
     // store objects
     _writeObjects(out, data.getWorldObjectInfoData());
@@ -150,6 +170,13 @@ void OUTPUT::MapBinaryWriter::_writeLayer(QDataStream& out, const LayerContainer
             }
         }
     }
+}
+
+void OUTPUT::MapBinaryWriter::_writeScriptAreas(QDataStream& out, const SCRIPT_AREA::Manager& areas)
+{
+    out << areas.count();
+    for (auto& area : areas.getScriptAreas())
+        out << area->getData();
 }
 
 void OUTPUT::MapBinaryWriter::_writeObjects(QDataStream& out, const MAP::MAP_DATA::WorldObjectInfoData& data)
