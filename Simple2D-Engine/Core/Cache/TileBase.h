@@ -53,6 +53,7 @@ namespace CACHE
         virtual void clear()
         {
             m_Atlas.clear();
+            m_Positions.clear();
         }
 
     protected:

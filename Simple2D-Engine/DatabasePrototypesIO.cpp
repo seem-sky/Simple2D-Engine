@@ -266,10 +266,8 @@ void WORLD_OBJECT::WorldObjectPrototype::fromXML(const QXmlStreamAttributes& att
     Prototype::fromXML(attributes);
 
     // bounding rect
-    setBoundingLeft(attributes.value("boundingX").toInt());
-    setBoundingTop(attributes.value("boundingY").toInt());
-    setBoundingRight(attributes.value("boundingWidth").toUInt());
-    setBoundingBottom(attributes.value("boundingHeight").toUInt());
+    setBoundingRect(GEOMETRY::Rectangle<int32>(attributes.value("boundingX").toInt(), attributes.value("boundingY").toInt(),
+        attributes.value("boundingWidth").toUInt(), attributes.value("boundingHeight").toUInt()));
 
     setAnimationSpeed(attributes.value("animationSpeed").toUShort());
     setScriptName(attributes.value("script").toString());
@@ -279,10 +277,10 @@ void WORLD_OBJECT::WorldObjectPrototype::fromXML(const QXmlStreamAttributes& att
 
 void WORLD_OBJECT::WorldObjectPrototype::toXML(QXmlStreamWriter& writer) const
 {
-    writer.writeAttribute("boundingX", QString::number(getBoundingLeft()));
-    writer.writeAttribute("boundingY", QString::number(getBoundingTop()));
-    writer.writeAttribute("boundingWidth", QString::number(getBoundingRight()));
-    writer.writeAttribute("boundingHeight", QString::number(getBoundingBottom()));
+    writer.writeAttribute("boundingX", QString::number(getBoundingRect().getX()));
+    writer.writeAttribute("boundingY", QString::number(getBoundingRect().getY()));
+    writer.writeAttribute("boundingWidth", QString::number(getBoundingRect().getWidth()));
+    writer.writeAttribute("boundingHeight", QString::number(getBoundingRect().getHeight()));
     writer.writeAttribute("animationSpeed", QString::number(getAnimationSpeed()));
 	writer.writeAttribute("flags", QString::number(getFlagManager().getFlag()));
 

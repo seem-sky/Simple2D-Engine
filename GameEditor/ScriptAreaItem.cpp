@@ -156,7 +156,7 @@ void ScriptAreaItem::setup(MAP::SCRIPT_AREA::ScriptArea* pScriptArea)
     if (!m_pScriptArea)
         return;
     auto rect = m_pScriptArea->getArea()->getBoundingRect();
-    setPos(QPoint(rect.getLeft(), rect.getTop()));
+    setPos(QPoint(rect.getX(), rect.getY()));
     for (uint32 i = 0; i < rect.pointCount(); ++i)
         _setupPointMoveItem(i);
 }
@@ -224,7 +224,7 @@ QRectF ScriptAreaItem::boundingRect() const
     if (!m_pScriptArea)
         return QRectF();
     auto rect = m_pScriptArea->getArea()->getBoundingRect();
-    return QRectF(rect.getLeft() - x() - 2, rect.getTop() - y() - 2, rect.getWidth() + 4, rect.getHeight() + 4);
+    return QRectF(rect.getX() - x() - 2, rect.getY() - y() - 2, rect.getWidth() + 4, rect.getHeight() + 4);
 }
 
 void ScriptAreaItem::setEditable(bool editable /* = true */)

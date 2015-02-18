@@ -18,7 +18,8 @@ void MAPPING_MODE::ScriptArea::press(MapEditor& editor, QMouseEvent* pEvent)
             return;
     }
 
-    Data scriptData(editor.getMapData().getScriptAreaData().getNewGUID(), AREA::Data(AREA::Type::rect, PointVec<int32> {GEOMETRY::Point<int32>(pos.x(), pos.y())}),
+    Data scriptData(editor.getMapData().getScriptAreaData().getNewGUID(),
+        AREA::Data(GEOMETRY::Rectangle<int32>(GEOMETRY::Point<int32>(pos.x(), pos.y()), GEOMETRY::Size<int32>())),
         ACTION::Data("test"));
     auto pItem = editor.addScriptArea(scriptData);
     editor.addRevert(new MAPPING_MODE::SCRIPT_AREA::REVERT::Add(pItem->getScriptArea()->getGUID(), editor));

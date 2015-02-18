@@ -306,15 +306,8 @@ namespace DATABASE
 				inline const FlagManager<Flags>& getFlagManager() const { return m_Flags; }
 				inline FlagManager<Flags>& getFlagManager() { return m_Flags; }
 
-                inline int32 getBoundingLeft() const { return m_BoundingRect.getLeft(); }
-                inline void setBoundingLeft(int32 x) { m_BoundingRect.setLeft(x); }
-                inline int32 getBoundingTop() const { return m_BoundingRect.getTop(); }
-                inline void setBoundingTop(int32 y) { m_BoundingRect.setTop(y); }
-                inline uint32 getBoundingRight() const { return m_BoundingRect.getRight(); }
-                inline void setBoundingRight(uint32 width) { m_BoundingRect.setRight(width); }
-                inline uint32 getBoundingBottom() const { return m_BoundingRect.getBottom(); }
-                inline void setBoundingBottom(uint32 height) { m_BoundingRect.setBottom(height); }
-                inline GEOMETRY::Rectangle<int32> getBoundingRect() const { return m_BoundingRect; }
+                inline GEOMETRY::Rectangle<int32> getBoundingRect() { return m_BoundingRect; }
+                inline const GEOMETRY::Rectangle<int32>& getBoundingRect() const { return m_BoundingRect; }
                 inline void setBoundingRect(GEOMETRY::Rectangle<int32> rect) { m_BoundingRect = rect; }
 
                 inline void setAnimationSpeed(uint16 uiSpeed) { m_uiAnimationSpeed = uiSpeed; }

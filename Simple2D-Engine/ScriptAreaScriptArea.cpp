@@ -60,8 +60,7 @@ AREA::Interface* AREA::create(const AREA::Data& data)
         }
         
         // resize to at least minimum size
-        rect.setRight(rect.getLeft() + std::max(rect.getWidth(), static_cast<int32>(MINIMUM_SIZE)));
-        rect.setBottom(rect.getTop() + std::max(rect.getHeight(), static_cast<int32>(MINIMUM_SIZE)));
+        rect.setSize(MINIMUM_SIZE, MINIMUM_SIZE);
         pArea = std::unique_ptr<AREA::Interface>(new AREA::AreaRect(rect));
         break;
     }

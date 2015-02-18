@@ -23,7 +23,7 @@ void WorldObjectItem::paint(QPainter* pPainter, const QStyleOptionGraphicsItem* 
     if (m_Flags.hasFlag(Flags::DRAW_BOUNDING_RECT))
     {
         pPainter->setPen(Qt::red);
-        pPainter->drawRect(m_BoundingRect.getLeft(), m_BoundingRect.getTop(), m_BoundingRect.getWidth(), m_BoundingRect.getHeight());
+        pPainter->drawRect(m_BoundingRect.getX(), m_BoundingRect.getY(), m_BoundingRect.getWidth(), m_BoundingRect.getHeight());
     }
 }
 
@@ -71,7 +71,7 @@ QVariant WorldObjectItem::itemChange(GraphicsItemChange change, const QVariant& 
     case ItemPositionHasChanged:
         auto pos = GEOMETRY::Point<int32>(value.toPoint().x(), value.toPoint().y());
         m_WorldObjectInfo.setPosition(pos);
-        setZValue(m_BoundingRect.getBottom() + pos.getY());
+        setZValue(m_BoundingRect.getY() + m_BoundingRect.getHeight() + pos.getY());
         return value;
     }
 

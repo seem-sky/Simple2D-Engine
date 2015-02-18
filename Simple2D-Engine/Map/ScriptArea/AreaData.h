@@ -3,6 +3,7 @@
 
 #include <Typedefs.h>
 #include <QtCore/QDataStream>
+#include <geometry/Rectangle.h>
 
 namespace MAP
 {
@@ -21,14 +22,18 @@ namespace MAP
             {
             public:
                 Data() = default;
-                Data(Type type, const PointVec<int32>& points);
+                Data(const GEOMETRY::Rectangle<int32>& rect);
+                Data(const PointVec<int32>& points);
 
                 Type getType() const;
                 const PointVec<int32>& getPoints() const;
+                const GEOMETRY::Rectangle<int32>& getRectangle() const;
 
             private:
                 Type m_Type = Type::none;
+
                 PointVec<int32> m_Points;
+                GEOMETRY::Rectangle<int32> m_Rectangle;
             };
         }
     }

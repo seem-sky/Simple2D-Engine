@@ -1,4 +1,5 @@
 #include "Manager.h"
+#include <log/Log.h>
 
 using namespace CACHE;
 
@@ -10,6 +11,8 @@ void Manager::clear()
 {
     m_TileCache.clear();
     m_AutoTileCache.clear();
+
+    STANDARD_MESSAGE(std::string("CacheManager: Caches cleared."));
 }
 
 Tiles& Manager::getTileCache()

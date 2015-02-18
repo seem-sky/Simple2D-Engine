@@ -16,19 +16,19 @@ namespace PLAYER
 
             // camera positions
             inline GEOMETRY::Point<int32> getPosition() const { return GEOMETRY::Point<int32>(getPositionX(), getPositionY()); }
-            inline int32 getPositionX() const { return m_SceneRect.getLeft() + m_SceneRect.getWidth()/2; }
-            inline int32 getPositionY() const { return m_SceneRect.getTop() + m_SceneRect.getHeight()/2; }
+            inline int32 getPositionX() const { return m_SceneRect.getX() + m_SceneRect.getWidth()/2; }
+            inline int32 getPositionY() const { return m_SceneRect.getY() + m_SceneRect.getHeight()/2; }
             virtual void move(GEOMETRY::Point<int32> about, uint32 uiTime);
             void stopMoving();
             void setPosition(GEOMETRY::Point<int32> newPos);
 
             void setSize(GEOMETRY::Point<uint32> newSize);
-            inline GEOMETRY::Point<uint32> getSize() const { return GEOMETRY::static_point_cast<uint32>(m_SceneRect.getSize()); }
+            inline GEOMETRY::Size<uint32> getSize() const { return GEOMETRY::static_size_cast<uint32>(m_SceneRect.getSize()); }
             inline uint32 getWidth() const { return m_SceneRect.getWidth(); }
             inline uint32 getHeight() const { return m_SceneRect.getHeight(); }
-            inline GEOMETRY::Point<int32> getScreenPos() const { return m_SceneRect.getTopLeft(); }
-            inline int32 getScreenPosX() const { return m_SceneRect.getLeft(); }
-            inline int32 getScreenPosY() const { return m_SceneRect.getTop(); }
+            inline GEOMETRY::Point<int32> getScreenPos() const { return m_SceneRect.getPosition(); }
+            inline int32 getScreenPosX() const { return m_SceneRect.getX(); }
+            inline int32 getScreenPosY() const { return m_SceneRect.getY(); }
 
             virtual void update(uint32 uiDiff);
 

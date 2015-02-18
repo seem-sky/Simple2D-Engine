@@ -66,10 +66,7 @@ namespace MAP
                     return m_Area.pointCount();
                 }
 
-                Data getData() const
-                {
-                    return Data(getType(), getPoints());
-                }
+                virtual Data getData() const = 0;
 
             protected:
                 T m_Area;

@@ -17,12 +17,12 @@ void Camera::update(uint32 uiDiff)
 
 void Camera::setPosition(GEOMETRY::Point<int32> newPos)
 {
-    m_SceneRect.setTopLeft(GEOMETRY::Point<int32>(newPos.getX() - m_SceneRect.getWidth(), newPos.getY() - m_SceneRect.getHeight()));
+    m_SceneRect.setPosition(GEOMETRY::Point<int32>(newPos.getX() - m_SceneRect.getWidth(), newPos.getY() - m_SceneRect.getHeight()));
 }
 
 void Camera::move(GEOMETRY::Point<int32> range, uint32 uiTime)
 {
-    m_TransformationHolder.addTransformation(new TRANSFORMATION::Move(uiTime, range, m_SceneRect.getTopLeft()));
+    m_TransformationHolder.addTransformation(new TRANSFORMATION::Move(uiTime, range, m_SceneRect.getPosition()));
 }
 
 void Camera::stopMoving()
