@@ -2,6 +2,7 @@
 #include <QtGui/QPainter>
 #include <QtGui/QTextOption>
 #include <Core/Cache/Manager.h>
+#include <QtWidgets/QGraphicsItem>
 #include "moc_MapEditorModuleBrush.h"
 
 using namespace BRUSH;
@@ -12,6 +13,7 @@ MapEditorModuleBrush::MapEditorModuleBrush(CACHE::Manager& cacheMgr, const DATAB
     : QWidget(), Ui_MapEditorModuleBrush(), m_DBMgr(DBMgr), m_CacheMgr(cacheMgr)
 {
     setupUi(this);
+    m_pCurrentTile->setScene(new QGraphicsScene(m_pCurrentTile));
     _update();
 
     connect(m_pBrushType, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(_onBrushTypeChanged(const QString&)));
@@ -32,55 +34,61 @@ void MapEditorModuleBrush::setText(const QString& text)
 void MapEditorModuleBrush::_update()
 {
     auto labelSize = m_pCurrentTile->size();
-    QPixmap newPixmap(labelSize);
-    newPixmap.fill(Qt::transparent);
-    QPainter painter(&newPixmap);
-
-    QPixmap pixmap(MAP::TILE_SIZE, MAP::TILE_SIZE);
-    pixmap.fill(Qt::transparent);
-    QPainter pixPainter(&pixmap);
-    QString text;
-    switch (m_BrushInfo.getType())
-    {
-    case MAP::BRUSH::BrushInfo::Type::TILE:
-    {
-        text = "tile";
-        auto info = m_CacheMgr.getTileCache().get(m_BrushInfo.getID());
-        if (info.isValid())
-            pixPainter.drawPixmap(0, 0, *info.getPixmap(), info.getPosition().getX(), info.getPosition().getY(), MAP::TILE_SIZE, MAP::TILE_SIZE);
-        break;
-    }
-    case MAP::BRUSH::BrushInfo::Type::AUTO_TILE:
-    {
-        text = "auto tile";
-        auto info = m_CacheMgr.getAutoTileCache().get(m_BrushInfo.getID(), AUTO_TILE::INDEX_INNER_CENTER);
-        if (info.isValid())
-            pixPainter.drawPixmap(0, 0, *info.getPixmap(), info.getPosition().getX(), info.getPosition().getY(), MAP::TILE_SIZE, MAP::TILE_SIZE);
-        break;
-    }
-    case MAP::BRUSH::BrushInfo::Type::TILE_SET:
-        text = "tile set";
-        if (auto pTileSet = m_DBMgr.getTileSetDatabase()->getOriginalPrototype(m_BrushInfo.getID()))
-            pixmap = TILE_SET::createPixmap(*pTileSet, m_CacheMgr.getTileCache());
-        break;
-    }
-
-    // draw pixmap
-    if (!pixmap.isNull())
-        painter.drawPixmap((labelSize.width() - pixmap.size().width()) / 2, (labelSize.height() - pixmap.size().height()) / 2,
-            pixmap.size().width(), pixmap.size().height(), pixmap);
+    m_pCurrentTile->scene()->clear();
 
     // draw text
     QTextOption textOption(Qt::AlignHCenter | Qt::AlignVCenter);
     textOption.setWrapMode(QTextOption::WordWrap);
-    auto font = painter.font();
+    QFont font;
     font.setPointSize(16);
-    painter.setFont(font);
-    painter.setPen(QPen(QColor(Qt::blue)));
-    painter.setOpacity(0.7);
-    painter.drawText(newPixmap.rect(), text, textOption);
 
-    m_pCurrentTile->setPixmap(newPixmap);
+    switch (m_BrushInfo.getType())
+    {
+    case MAP::BRUSH::BrushInfo::Type::TILE:
+    {
+        auto info = m_CacheMgr.getTileCache().get(m_BrushInfo.getID());
+        if (info.isValid())
+        {
+            QPixmap pixmap(MAP::TILE_SIZE, MAP::TILE_SIZE);
+            pixmap.fill(Qt::transparent);
+            QPainter pixPainter(&pixmap);
+            pixPainter.drawPixmap(0, 0, *info.getPixmap(), info.getPosition().getX(), info.getPosition().getY(), MAP::TILE_SIZE, MAP::TILE_SIZE);
+            m_pCurrentTile->scene()->addPixmap(pixmap);
+        }
+        m_pCurrentTile->scene()->addText("tile", font);
+        break;
+    }
+    case MAP::BRUSH::BrushInfo::Type::AUTO_TILE:
+    {
+        auto info = m_CacheMgr.getAutoTileCache().get(m_BrushInfo.getID(), AUTO_TILE::INDEX_INNER_CENTER);
+        if (info.isValid())
+        {
+            QPixmap pixmap(MAP::TILE_SIZE, MAP::TILE_SIZE);
+            pixmap.fill(Qt::transparent);
+            QPainter pixPainter(&pixmap);
+            pixPainter.drawPixmap(0, 0, *info.getPixmap(), info.getPosition().getX(), info.getPosition().getY(), MAP::TILE_SIZE, MAP::TILE_SIZE);
+            m_pCurrentTile->scene()->addPixmap(pixmap);
+        }
+        m_pCurrentTile->scene()->addText("auto tile", font);
+        break;
+    }
+    case MAP::BRUSH::BrushInfo::Type::TILE_SET:
+        if (auto pTileSet = m_DBMgr.getTileSetDatabase()->getOriginalPrototype(m_BrushInfo.getID()))
+        {
+            auto pixmap = TILE_SET::createPixmap(*pTileSet, m_CacheMgr.getTileCache());
+            m_pCurrentTile->scene()->addPixmap(pixmap);
+        }
+        m_pCurrentTile->scene()->addText("tile set", font);
+        break;
+    }
+
+    // center items
+    for (auto pItem : m_pCurrentTile->scene()->items())
+    {
+        auto rect = pItem->boundingRect();
+        auto center = rect.center();
+        pItem->moveBy(-center.x(), -center.y());
+    }
 }
 
 void MapEditorModuleBrush::setBrushInfo(const BrushInfo& brushInfo)

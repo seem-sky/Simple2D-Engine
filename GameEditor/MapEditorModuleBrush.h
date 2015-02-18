@@ -39,5 +39,4 @@ namespace BRUSH
         MAP::BRUSH::BrushInfo m_BrushInfo;
     };
 }
-
 #endif

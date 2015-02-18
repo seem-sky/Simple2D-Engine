@@ -254,6 +254,7 @@
     <ClCompile Include="MapEditorDialogMapSettings.cpp" />
     <ClCompile Include="MapEditorModuleBrush.cpp" />
     <ClCompile Include="MapEditorModuleContent.cpp" />
+    <ClCompile Include="MapEditorModuleMappingMode.cpp" />
     <ClCompile Include="MapEditorModuleMapTree.cpp" />
     <ClCompile Include="MapEditorModuleTiles.cpp" />
     <ClCompile Include="MapEditorModuleTileSelection.cpp" />
@@ -320,6 +321,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EditorGlobal.h" />
+    <moc_header Include="MapEditorModuleMappingMode.h" />
     <ClInclude Include="MapEditorWidgetScriptAreaMapping.h" />
     <moc_header Include="ScriptAreaItem.h" />
     <ClInclude Include="ScriptAreaMappingRevert.h" />

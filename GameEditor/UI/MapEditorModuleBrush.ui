@@ -29,20 +29,6 @@
    <property name="verticalSpacing">
     <number>3</number>
    </property>
-   <item row="2" column="0">
-    <widget class="QComboBox" name="m_pBrushType">
-     <item>
-      <property name="text">
-       <string>pen</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>fill</string>
-      </property>
-     </item>
-    </widget>
-   </item>
    <item row="0" column="0">
     <widget class="QLabel" name="m_pText">
      <property name="font">
@@ -59,47 +45,36 @@
      </property>
     </widget>
    </item>
+   <item row="2" column="0">
+    <widget class="QComboBox" name="m_pBrushType">
+     <item>
+      <property name="text">
+       <string>pen</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>fill</string>
+      </property>
+     </item>
+    </widget>
+   </item>
    <item row="1" column="0">
-    <widget class="QLabel" name="m_pCurrentTile">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
+    <widget class="QGraphicsView" name="m_pCurrentTile">
+     <property name="verticalScrollBarPolicy">
+      <enum>Qt::ScrollBarAlwaysOff</enum>
      </property>
-     <property name="minimumSize">
-      <size>
-       <width>96</width>
-       <height>96</height>
-      </size>
+     <property name="horizontalScrollBarPolicy">
+      <enum>Qt::ScrollBarAlwaysOff</enum>
      </property>
-     <property name="maximumSize">
-      <size>
-       <width>96</width>
-       <height>96</height>
-      </size>
+     <property name="sizeAdjustPolicy">
+      <enum>QAbstractScrollArea::AdjustToContents</enum>
      </property>
-     <property name="font">
-      <font>
-       <pointsize>16</pointsize>
-       <weight>50</weight>
-       <bold>false</bold>
-      </font>
+     <property name="interactive">
+      <bool>false</bool>
      </property>
-     <property name="frameShape">
-      <enum>QFrame::Box</enum>
-     </property>
-     <property name="text">
-      <string>tile</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-     <property name="wordWrap">
-      <bool>true</bool>
-     </property>
-     <property name="textInteractionFlags">
-      <set>Qt::NoTextInteraction</set>
+     <property name="resizeAnchor">
+      <enum>QGraphicsView::NoAnchor</enum>
      </property>
     </widget>
    </item>
