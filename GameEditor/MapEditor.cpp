@@ -354,27 +354,21 @@ uint8 MapEditor::getMaximumLayerIndex(MAP::LayerType layerType) const
 
 void MapEditor::contextMenuEvent(QContextMenuEvent* pEvent)
 {
-    if (!scene())
+    if (m_MappingObject.getMappingModeType() != MAPPING_MODE::Type::OBJECT_MAPPING || !scene())
         return;
+
+    QMenu menu;
+    connect(menu.addAction("paste"), SIGNAL(triggered()), this, SLOT(_onActionPaste()));
 
     auto selected = scene()->selectedItems();
     if (!selected.isEmpty())
     {
-        QMenu menu;
-        QAction* pCopy(new QAction("copy", &menu));
-        QAction* pInsert(new QAction("paste", &menu));
-        QAction* pCut(new QAction("cut", &menu));
-        QAction* pDelete(new QAction("delete", &menu));
-        menu.addAction(pCopy);
-        menu.addAction(pInsert);
-        menu.addAction(pCut);
-        menu.addAction(pDelete);
-        connect(pCopy, SIGNAL(triggered()), this, SLOT(_onActionCopy()));
-        connect(pInsert, SIGNAL(triggered()), this, SLOT(_onActionPaste()));
-        connect(pCut, SIGNAL(triggered()), this, SLOT(_onActionCut()));
-        connect(pDelete, SIGNAL(triggered()), this, SLOT(_onActionDelete()));
-        menu.exec(pEvent->globalPos());
+        connect(menu.addAction("copy"), SIGNAL(triggered()), this, SLOT(_onActionCopy()));
+        connect(menu.addAction("cut"), SIGNAL(triggered()), this, SLOT(_onActionCut()));
+        connect(menu.addAction("delete"), SIGNAL(triggered()), this, SLOT(_onActionDelete()));
     }
+
+    menu.exec(pEvent->globalPos());
 }
 
 void MapEditor::mousePressEvent(QMouseEvent* pEvent)
