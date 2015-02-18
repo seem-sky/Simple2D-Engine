@@ -1,4 +1,5 @@
 - animation revert actions
 - animation system redesign
 - database ui redesign
-- mapping selection refactoring
+- script area widget
+- world object mapping

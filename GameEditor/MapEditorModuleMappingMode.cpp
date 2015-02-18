@@ -2,6 +2,7 @@
 #include "moc_MapEditorModuleMappingMode.h"
 #include "MapEditorModuleWorldObjects.h"
 #include "MapEditorModuleTileSelection.h"
+#include "MapEditorModuleScriptArea.h"
 #include "MapEditorWidgetObjectMapping.h"
 #include <QtWidgets/QGridLayout>
 
@@ -9,6 +10,7 @@ MapEditorModuleMappingMode::MapEditorModuleMappingMode(CACHE::Manager& cacheMgr,
     : QWidget(pParent), m_DBMgr(DBMgr), m_CacheMgr(cacheMgr),
     m_pModuleTileSelection(new MapEditorModuleTileSelection(cacheMgr, DBMgr, this)),
     m_pModuleWorldObjects(new MapEditorModuleWorldObjects(DBMgr, this)),
+    m_pModuleScriptArea(new MapEditorModuleScriptArea(this)),
 
     // others
     m_pMappingMode(new QComboBox(this)),
@@ -27,7 +29,7 @@ MapEditorModuleMappingMode::MapEditorModuleMappingMode(CACHE::Manager& cacheMgr,
 
     // connect WorldObject
     connect(m_pModuleWorldObjects, SIGNAL(changeIndex(int32)), this, SLOT(_onWorldObjectIndexChanged(int32)));
-    connect(m_pModuleWorldObjects->getWorldObjectWidget(), SIGNAL(changeDirection(MAP::MAP_DATA::MapDirection)),
+    connect(m_pModuleWorldObjects->getToolWidget(), SIGNAL(changeDirection(MAP::MAP_DATA::MapDirection)),
         m_MappingObject.getMappingMode(MAPPING_MODE::Type::OBJECT_MAPPING), SLOT(onDirectionChanged(MAP::MAP_DATA::MapDirection)));
     connect(this, SIGNAL(changeWorldObjectID(uint32)), m_MappingObject.getMappingMode(MAPPING_MODE::Type::OBJECT_MAPPING), SLOT(onIDChanged(uint32)));
 
@@ -62,6 +64,7 @@ void MapEditorModuleMappingMode::_onMappingModeChanged(int index)
     // first hide all
     m_pModuleTileSelection->hide();
     m_pModuleWorldObjects->hide();
+    m_pModuleScriptArea->hide();
 
     // show only the needed widgets
     switch (mode)
@@ -75,6 +78,9 @@ void MapEditorModuleMappingMode::_onMappingModeChanged(int index)
         break;
 
     case MAPPING_MODE::Type::SCRIPT_AREA_MAPPING:
+        m_pModuleScriptArea->show();
+        break;
+
     case MAPPING_MODE::Type::PRESENTATION:
         break;
     default:

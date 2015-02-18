@@ -145,9 +145,6 @@
     <Filter Include="Map Editor\Modules\MappingMode\TileTabs\Tiles">
       <UniqueIdentifier>{03aa08c8-2b2f-4fbb-bccb-b1acd26492bf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Map Editor\Modules\MappingMode\Object">
-      <UniqueIdentifier>{ee79f19d-d553-4603-92ab-bc4e9aaec55c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Map Editor\Modules\MappingMode\Brush">
       <UniqueIdentifier>{3df57d72-18f0-4b1c-96db-af0c1afedba2}</UniqueIdentifier>
     </Filter>
@@ -168,6 +165,12 @@
     </Filter>
     <Filter Include="Map Editor\Modules\MappingMode\MappingObject\MappingMode\ScriptAreaMapping\Revert">
       <UniqueIdentifier>{bd60fd7b-389f-4ccd-8680-d4119a2aa342}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map Editor\Modules\MappingMode\ScriptArea">
+      <UniqueIdentifier>{3a2e5587-102b-4073-9246-884eaefd712d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map Editor\Modules\MappingMode\WorldObject">
+      <UniqueIdentifier>{ee79f19d-d553-4603-92ab-bc4e9aaec55c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -277,7 +280,7 @@
       <Filter>Map Editor\Modules\MappingMode\TileTabs</Filter>
     </ClCompile>
     <ClCompile Include="MapEditorModuleWorldObjects.cpp">
-      <Filter>Map Editor\Modules\MappingMode\Object</Filter>
+      <Filter>Map Editor\Modules\MappingMode\WorldObject</Filter>
     </ClCompile>
     <ClCompile Include="MapEditorWidgetEditor.cpp">
       <Filter>Map Editor\Widgets\MapEditor</Filter>
@@ -336,11 +339,14 @@
     <ClCompile Include="ScriptAreaMappingRevert.cpp">
       <Filter>Map Editor\Modules\MappingMode\MappingObject\MappingMode\ScriptAreaMapping\Revert</Filter>
     </ClCompile>
-    <ClCompile Include="MapEditorWidgetScriptAreaMapping.cpp">
-      <Filter>Map Editor\Widgets\Tools\ScriptArea</Filter>
-    </ClCompile>
     <ClCompile Include="MapEditorModuleMappingMode.cpp">
       <Filter>Map Editor\Modules\MappingMode</Filter>
+    </ClCompile>
+    <ClCompile Include="MapEditorModuleScriptArea.cpp">
+      <Filter>Map Editor\Modules\MappingMode\ScriptArea</Filter>
+    </ClCompile>
+    <ClCompile Include="MapEditorWidgetScriptArea.cpp">
+      <Filter>Map Editor\Widgets\Tools\ScriptArea</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -529,7 +535,7 @@
       <Filter>EditorCore\GraphicsSpriteItem</Filter>
     </ClInclude>
     <ClInclude Include="MapEditorModuleWorldObjects.h">
-      <Filter>Map Editor\Modules\MappingMode\Object</Filter>
+      <Filter>Map Editor\Modules\MappingMode\WorldObject</Filter>
     </ClInclude>
     <ClInclude Include="DatabaseModel.h">
       <Filter>EditorCore\DatabaseModel</Filter>
@@ -567,11 +573,14 @@
     <ClInclude Include="ScriptAreaMappingRevert.h">
       <Filter>Map Editor\Modules\MappingMode\MappingObject\MappingMode\ScriptAreaMapping\Revert</Filter>
     </ClInclude>
-    <ClInclude Include="MapEditorWidgetScriptAreaMapping.h">
-      <Filter>Map Editor\Widgets\Tools\ScriptArea</Filter>
-    </ClInclude>
     <ClInclude Include="MapEditorModuleMappingMode.h">
       <Filter>Map Editor\Modules\MappingMode</Filter>
+    </ClInclude>
+    <ClInclude Include="MapEditorModuleScriptArea.h">
+      <Filter>Map Editor\Modules\MappingMode\ScriptArea</Filter>
+    </ClInclude>
+    <ClInclude Include="MapEditorWidgetScriptArea.h">
+      <Filter>Map Editor\Widgets\Tools\ScriptArea</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

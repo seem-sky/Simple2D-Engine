@@ -16,6 +16,7 @@ namespace CACHE
 
 class MapEditorModuleTileSelection;
 class MapEditorModuleWorldObjects;
+class MapEditorModuleScriptArea;
 
 class MapEditorModuleMappingMode : public QWidget
 {
@@ -38,6 +39,7 @@ signals:
 private:
     MapEditorModuleTileSelection* m_pModuleTileSelection = nullptr;
     MapEditorModuleWorldObjects* m_pModuleWorldObjects = nullptr;
+    MapEditorModuleScriptArea* m_pModuleScriptArea = nullptr;
     QComboBox* m_pMappingMode = nullptr;
 
     CACHE::Manager& m_CacheMgr;

@@ -5,8 +5,8 @@
 
 using namespace DATABASE::PROTOTYPE::WORLD_OBJECT;
 
-MapEditorModuleWorldObjects::MapEditorModuleWorldObjects(const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent) :
-DatabaseModuleTooltipList(pParent), m_DBMgr(DBMgr), m_pObjectWidget(new MapEditorWidgetObjectMapping(DBMgr, this))
+MapEditorModuleWorldObjects::MapEditorModuleWorldObjects(const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent)
+    : DatabaseModuleTooltipList(pParent), m_DBMgr(DBMgr), m_pObjectWidget(new MapEditorWidgetObjectMapping(DBMgr, this))
 {
     setMaximumWidth(200);
     setDragEnabled(false);
