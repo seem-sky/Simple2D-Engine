@@ -133,6 +133,8 @@ void MapEditorModuleContent::onMapOpened(uint32 mapID)
         connect(pEditor, SIGNAL(actionPaste(MapEditor&, const QPoint&)), &m_MappingObject, SLOT(onActionPaste(MapEditor&, const QPoint&)));
 
         connect(pEditor, SIGNAL(changed(uint32)), this, SLOT(_onMapChanged(uint32)));
+
+        connect(pEditor, SIGNAL(setupContextMenu(MapEditor&, QContextMenuEvent*)), &m_MappingObject, SLOT(onContextMenuRequest(MapEditor&, QContextMenuEvent*)));
     }
     catch (const std::bad_alloc& e)
     {

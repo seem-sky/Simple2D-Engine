@@ -20,6 +20,8 @@ namespace MAPPING_MODE
         void paste(MapEditor& editor, const QPoint& pos) {}
         void remove(MapEditor& editor) {}
 
+        void contextMenuRequest(MapEditor& editor, QContextMenuEvent* pEvent) {}
+
         Type getModeType() const { return Type::PRESENTATION; }
 
         QString getModeName() const { return "presentation"; }

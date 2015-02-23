@@ -4,7 +4,7 @@ using namespace MAP;
 using namespace OBJECT;
 using namespace DATABASE::PROTOTYPE;
 
-WorldObject::WorldObject(const DATABASE::DatabaseMgr& DBMgr, uint32 GUID, uint32 ID) : Object(GUID), m_Direction(MAP::MAP_DATA::MapDirection::DOWN), m_DBMgr(DBMgr)
+WorldObject::WorldObject(const DATABASE::DatabaseMgr& DBMgr, uint32 GUID, uint32 ID) : Object(GUID), m_Direction(MAP::MAP_DATA::MapDirection::down), m_DBMgr(DBMgr)
 {
 }
 

@@ -41,6 +41,7 @@ MapEditorModuleMappingMode::MapEditorModuleMappingMode(CACHE::Manager& cacheMgr,
     pLayout->addWidget(m_pMappingMode, 0, 0);
     pLayout->addWidget(m_pModuleTileSelection, 1, 0);
     pLayout->addWidget(m_pModuleWorldObjects, 1, 0);
+    pLayout->addWidget(m_pModuleScriptArea, 1, 0);
 }
 
 void MapEditorModuleMappingMode::setup()
@@ -84,7 +85,7 @@ void MapEditorModuleMappingMode::_onMappingModeChanged(int index)
     case MAPPING_MODE::Type::PRESENTATION:
         break;
     default:
-        throw std::runtime_error("invalid mapping mode detected");
+        throw std::runtime_error("Invalid mapping mode.");
     }
 
     m_MappingObject.setMappingMode(mode);
@@ -95,4 +96,3 @@ void MapEditorModuleMappingMode::_onWorldObjectIndexChanged(int32 index)
 {
     emit changeWorldObjectID(index < 0 ? 0 : index + 1);
 }
-

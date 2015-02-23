@@ -264,7 +264,7 @@
     <ClCompile Include="MapEditorWidgetBrush.cpp" />
     <ClCompile Include="MapEditorWidgetEditor.cpp" />
     <ClCompile Include="MapEditorWidgetObjectMapping.cpp" />
-    <ClCompile Include="MapEditorWidgetScriptArea.cpp" />
+    <ClCompile Include="MappingModeContextMenuAction.cpp" />
     <ClCompile Include="MappingObject.cpp" />
     <ClCompile Include="MapEditor.cpp" />
     <ClCompile Include="MapEditorScene.cpp" />
@@ -318,14 +318,14 @@
     <compile_QT_Files Include="UI\MapEditorModuleBrush.ui" />
     <compile_QT_Files Include="UI\MapEditorModuleContent.ui" />
     <compile_QT_Files Include="UI\MapEditorWidgetObjectMapping.ui" />
-    <compile_QT_Files Include="UI\MapEditorWidgetScriptAreaMapping.ui" />
+    <compile_QT_Files Include="UI\MapEditorModuleScriptAreaMapping.ui" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EditorGlobal.h" />
     <moc_header Include="MapEditorModuleMappingMode.h" />
-    <ClInclude Include="MapEditorModuleScriptArea.h" />
-    <moc_header Include="MapEditorWidgetScriptArea.h" />
+    <moc_header Include="MapEditorModuleScriptArea.h" />
     <moc_header Include="ScriptAreaItem.h" />
+    <moc_header Include="MappingModeContextMenuAction.h" />
     <ClInclude Include="ScriptAreaMappingRevert.h" />
     <ClInclude Include="WorldObjectItem.h" />
     <ClInclude Include="ObjectMappingRevert.h" />

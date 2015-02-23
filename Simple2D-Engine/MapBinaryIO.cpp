@@ -29,7 +29,7 @@ void INPUT::MapBinaryReader::readFile(const QString& fileName, MAP_DATA::MapData
     _readLayer(in, data.getMapLayer(), LayerType::LAYER_FOREGROUND, version);
 
     // load script areas
-    _readScriptAreas(in, data.getScriptAreaData(), version);
+    _readScriptAreas(in, data.getScriptAreaManager(), version);
 
     // load objects
     _readObjects(in, data.getWorldObjectInfoData(), version);
@@ -150,7 +150,7 @@ void OUTPUT::MapBinaryWriter::writeFile(const QString& fileName, const MAP_DATA:
     _writeLayer(out, data.getMapLayer(), MAP::LayerType::LAYER_FOREGROUND);
 
     // store script areas
-    _writeScriptAreas(out, data.getScriptAreaData());
+    _writeScriptAreas(out, data.getScriptAreaManager());
 
     // store objects
     _writeObjects(out, data.getWorldObjectInfoData());

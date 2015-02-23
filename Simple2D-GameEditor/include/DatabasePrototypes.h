@@ -396,7 +396,7 @@ namespace DATABASE
             // map objects
             struct MapObject
             {
-                MapObject() : m_ObjectID(0), m_GUID(0), m_Direction(MAP::MAP_DATA::MapDirection::DOWN), m_Layer(LAYER_MIDDLE) {}
+                MapObject() : m_ObjectID(0), m_GUID(0), m_Direction(MAP::MAP_DATA::MapDirection::down), m_Layer(LAYER_MIDDLE) {}
 
                 bool isEmpty() const { return !m_GUID && !m_ObjectID; }
 

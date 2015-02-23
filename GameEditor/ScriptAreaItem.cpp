@@ -63,33 +63,34 @@ void PointMoveItem::_posModifyEnd(int key)
 
 void PointMoveItem::keyPressEvent(QKeyEvent *pEvent)
 {
+    const int32 speed = 1;
     switch (pEvent->key())
     {
     case Qt::Key_Down:
         if (!pEvent->isAutoRepeat())
             _posModifyStart(pEvent->key());
-        moveBy(0, 1);
+        moveBy(0, speed);
         emit positionChanged(m_Index);
         break;
 
     case Qt::Key_Up:
         if (!pEvent->isAutoRepeat())
             _posModifyStart(pEvent->key());
-        moveBy(0, -1);
+        moveBy(0, -speed);
         emit positionChanged(m_Index);
         break;
 
     case Qt::Key_Left:
         if (!pEvent->isAutoRepeat())
             _posModifyStart(pEvent->key());
-        moveBy(-1, 0);
+        moveBy(-speed, 0);
         emit positionChanged(m_Index);
         break;
 
     case Qt::Key_Right:
         if (!pEvent->isAutoRepeat())
             _posModifyStart(pEvent->key());
-        moveBy(1, 0);
+        moveBy(speed, 0);
         emit positionChanged(m_Index);
         break;
 
@@ -116,24 +117,24 @@ void PointMoveItem::keyReleaseEvent(QKeyEvent *pEvent)
 
 void PointMoveItem::mousePressEvent(QGraphicsSceneMouseEvent *pEvent)
 {
+    QGraphicsObject::mousePressEvent(pEvent);
     if (pEvent->button() == Qt::LeftButton)
         _posModifyStart(pEvent->button());
-    return QGraphicsObject::mousePressEvent(pEvent);
 }
 
 void PointMoveItem::mouseMoveEvent(QGraphicsSceneMouseEvent *pEvent)
 {
+    QGraphicsObject::mouseMoveEvent(pEvent);
     auto itr = m_Pos.find(Qt::LeftButton);
     if (itr != m_Pos.end())
         emit positionChanged(m_Index);
-    return QGraphicsObject::mouseMoveEvent(pEvent);
 }
 
 void PointMoveItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *pEvent)
 {
+    QGraphicsObject::mouseReleaseEvent(pEvent);
     if (pEvent->button() == Qt::LeftButton)
         _posModifyEnd(pEvent->button());
-    return QGraphicsObject::mouseReleaseEvent(pEvent);
 }
 
 /*#####
@@ -142,6 +143,18 @@ void PointMoveItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *pEvent)
 ScriptAreaItem::ScriptAreaItem()
     : QGraphicsObject()
 {}
+
+QVariant ScriptAreaItem::itemChange(GraphicsItemChange change, const QVariant& value)
+{
+    switch (change)
+    {
+    case QGraphicsItem::ItemPositionChange:
+        m_pScriptArea->getArea()->moveBy(value.toPoint().x() - x(), value.toPoint().y() - y());
+        return value;
+        break;
+    }
+    return QGraphicsObject::itemChange(change, value);
+}
 
 void ScriptAreaItem::setup(MAP::SCRIPT_AREA::ScriptArea* pScriptArea)
 {
@@ -152,12 +165,14 @@ void ScriptAreaItem::setup(MAP::SCRIPT_AREA::ScriptArea* pScriptArea)
     }
 
     prepareGeometryChange();
-    m_pScriptArea = pScriptArea;
-    if (!m_pScriptArea)
+    m_pScriptArea = nullptr;
+    if (!m_pScriptArea || m_pScriptArea->isEmpty())
         return;
+
+    m_pScriptArea = pScriptArea;
     auto rect = m_pScriptArea->getArea()->getBoundingRect();
     setPos(QPoint(rect.getX(), rect.getY()));
-    for (uint32 i = 0; i < rect.pointCount(); ++i)
+    for (uint32 i = 0; i < m_pScriptArea->getArea()->pointCount(); ++i)
         _setupPointMoveItem(i);
 }
 

@@ -56,17 +56,10 @@ namespace MAP
                     return m_Area.getPoint(i);
                 }
 
-                void setPoint(uint32 i, const GEOMETRY::Point<int32>& p)
-                {
-                    m_Area.setPoint(i, p);
-                }
-
                 uint32 pointCount() const
                 {
                     return m_Area.pointCount();
                 }
-
-                virtual Data getData() const = 0;
 
             protected:
                 T m_Area;

@@ -26,6 +26,8 @@ namespace MAPPING_MODE
         void paste(MapEditor& editor, const QPoint& pos);
         void remove(MapEditor& editor);
 
+        void contextMenuRequest(MapEditor& editor, QContextMenuEvent* pEvent);
+
         Type getModeType() const { return Type::OBJECT_MAPPING; }
         QString getModeName() const { return "object mapping"; }
 
@@ -33,9 +35,20 @@ namespace MAPPING_MODE
         void onDirectionChanged(MAP::MAP_DATA::MapDirection dir);
         void onIDChanged(uint32 ID);
 
+    private slots:
+        void _onActionCopy(MapEditor& editor, const QPoint& pos);
+        void _onActionPaste(MapEditor& editor, const QPoint& pos);
+        void _onActionCut(MapEditor& editor, const QPoint& pos);
+        void _onActionDelete(MapEditor& editor, const QPoint& pos);
+
+        void _onActionEditLeft(MapEditor& editor, const QPoint& pos);
+        void _onActionEditUp(MapEditor& editor, const QPoint& pos);
+        void _onActionEditRight(MapEditor& editor, const QPoint& pos);
+        void _onActionEditDown(MapEditor& editor, const QPoint& pos);
+
     private:
         uint32 m_ID = 0;
-        MAP::MAP_DATA::MapDirection m_Direction = MAP::MAP_DATA::MapDirection::DOWN;
+        MAP::MAP_DATA::MapDirection m_Direction = MAP::MAP_DATA::MapDirection::down;
 
         bool m_Cut = false;
         std::vector<MAP::MAP_DATA::WorldObjectInfo> m_CopyInfos;

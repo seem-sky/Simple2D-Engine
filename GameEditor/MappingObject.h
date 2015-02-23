@@ -36,6 +36,7 @@ public slots:
     void onActionDelete(MapEditor& editor);
     void onActionKeyPressed(MapEditor& editor, const QPoint& pos, QKeyEvent* pEvent);
     void onActionKeyReleased(MapEditor& editor, const QPoint& pos, QKeyEvent* pEvent);
+    void onContextMenuRequest(MapEditor& editor, QContextMenuEvent* pEvent);
 
 private:
     typedef std::unique_ptr<MAPPING_MODE::Interface> MappingModePtr;

@@ -12,7 +12,10 @@ namespace MAP
             class Interface
             {
             public:
-                Type getType() const;
+                Interface() = default;
+
+                virtual Type getType() const = 0;
+                virtual Data getData() const = 0;
             };
         }
     }

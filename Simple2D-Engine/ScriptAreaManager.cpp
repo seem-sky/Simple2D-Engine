@@ -14,7 +14,7 @@ uint32 Manager::count() const
 
 ScriptArea* Manager::addScriptArea(ScriptArea* pScript)
 {
-    if (!pScript)
+    if (!pScript || pScript->isEmpty())
         return nullptr;
 
     if (hasScriptArea(pScript->getGUID()))
@@ -28,10 +28,19 @@ ScriptArea* Manager::addScriptArea(const Data& data)
 {
     if (!data.isValid())
         return nullptr;
+
+    if (hasScriptArea(data.getGUID()))
+        throw std::runtime_error("GUID already exists.");
+
     m_pScriptAreas.push_back(std::unique_ptr<ScriptArea>(new ScriptArea(data.getGUID())));
     m_pScriptAreas.back()->setArea(data.getAreaData());
     m_pScriptAreas.back()->setAction(data.getActionData());
     return m_pScriptAreas.back().get();
+}
+
+ScriptArea* Manager::addScriptArea(const AREA::Data& area, const ACTION::Data& action)
+{
+    return addScriptArea(Data(_getNewGUID(), area, action));
 }
 
 const ScriptArea* Manager::getScriptArea(MAP::GUID guid) const
@@ -90,7 +99,7 @@ void Manager::removeScriptArea(MAP::GUID guid)
     }
 }
 
-MAP::GUID Manager::getNewGUID() const
+MAP::GUID Manager::_getNewGUID() const
 {
     if (isEmpty())
         return 1;

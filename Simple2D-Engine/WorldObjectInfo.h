@@ -10,10 +10,10 @@ namespace MAP
     {
         enum class MapDirection
         {
-            DOWN,
-            LEFT,
-            UP,
-            RIGHT
+            down,
+            left,
+            up,
+            right
         };
 
         enum class MapObjectLayer
@@ -48,7 +48,7 @@ namespace MAP
             uint32 m_ObjectID = 0;
             GUID m_GUID = 0;
             GEOMETRY::Point<int32> m_Position;
-            MapDirection m_Direction = MapDirection::DOWN;
+            MapDirection m_Direction = MapDirection::down;
             MapObjectLayer m_Layer = MapObjectLayer::MIDDLE;
         };
     }

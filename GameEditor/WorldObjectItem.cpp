@@ -4,11 +4,56 @@
 #include <QtWidgets/QGraphicsSceneMouseEvent>
 #include <QtWidgets/QGraphicsScene>
 #include <QtGui/QPainter>
+#include <QtGlobal.h>
+#include "VisualViewer.h"
 
-WorldObjectItem::WorldObjectItem(MAP::MAP_DATA::WorldObjectInfo& info) : QGraphicsPixmapItem(), QObject(), m_WorldObjectInfo(info)
+WorldObjectItem::WorldObjectItem(MAP::MAP_DATA::WorldObjectInfo& info, const DATABASE::DatabaseMgr& DBMgr)
+    : QGraphicsItem(), QObject(), m_WorldObjectInfo(info), m_DBMgr(DBMgr)
 {
     setFlag(ItemSendsScenePositionChanges);
     m_Flags.setFlag(Flags::DRAW_BOUNDING_RECT);
+    _setup();
+}
+
+QRectF WorldObjectItem::boundingRect() const
+{
+    return QRectF(0, 0, m_Pixmap.width(), m_Pixmap.height());
+}
+
+void WorldObjectItem::_setup()
+{
+    VisualViewer viewer;
+    viewer.setFrameShape(QFrame::NoFrame);
+    viewer.showGrid(false);
+    viewer.setDatabaseMgr(&m_DBMgr);
+    auto pWorldObject = m_DBMgr.getWorldObjectDatabase()->getOriginalPrototype(m_WorldObjectInfo.getID());
+    if (!pWorldObject)
+        throw std::runtime_error("Invalid WorldObject ID.");
+
+    auto &animationModule = pWorldObject->getAnimationModule();
+    for (uint32 i = 0; i < animationModule.getAnimationCount(); ++i)
+    {
+        auto animationInfo = animationModule.getAnimationInfo(i);
+        if (animationInfo.m_AnimationTypeID - 1 == static_cast<uint32>(m_WorldObjectInfo.getDirection()))
+        {
+            viewer.setAnimation(animationInfo);
+            break;
+        }
+    }
+
+    viewer.stopAnimation();
+    viewer.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    viewer.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    // set transparent background
+    viewer.setStyleSheet("background:transparent;");
+    viewer.setAttribute(Qt::WA_TranslucentBackground);
+    viewer.setWindowFlags(Qt::FramelessWindowHint);
+
+    auto rect = viewer.scene()->itemsBoundingRect();
+    viewer.resizeToContent();
+    prepareGeometryChange();
+    m_Pixmap = viewer.grab();
 }
 
 void WorldObjectItem::setEditable(bool editable)
@@ -19,12 +64,15 @@ void WorldObjectItem::setEditable(bool editable)
 
 void WorldObjectItem::paint(QPainter* pPainter, const QStyleOptionGraphicsItem* pOption, QWidget* pWidget /* = 0 */)
 {
-    QGraphicsPixmapItem::paint(pPainter, pOption, pWidget);
+    pPainter->drawPixmap(0, 0, m_Pixmap);
     if (m_Flags.hasFlag(Flags::DRAW_BOUNDING_RECT))
     {
         pPainter->setPen(Qt::red);
         pPainter->drawRect(m_BoundingRect.getX(), m_BoundingRect.getY(), m_BoundingRect.getWidth(), m_BoundingRect.getHeight());
     }
+
+    if (pOption->state & QStyle::State_Selected)
+        highlightSelection(*this, pPainter, pOption);
 }
 
 QPoint WorldObjectItem::_checkMove(QPoint moveTo) const
@@ -75,7 +123,13 @@ QVariant WorldObjectItem::itemChange(GraphicsItemChange change, const QVariant& 
         return value;
     }
 
-    return QGraphicsPixmapItem::itemChange(change, value);
+    return QGraphicsItem::itemChange(change, value);
+}
+
+void WorldObjectItem::setWorldObjectInfo(const MAP::MAP_DATA::WorldObjectInfo& info)
+{
+    m_WorldObjectInfo = info;
+
 }
 
 GEOMETRY::Point<int32> WorldObjectItem::getTopLeftPos() const
@@ -95,7 +149,7 @@ void WorldObjectItem::setTopLeftPos(int32 x, int32 y)
 
 GEOMETRY::Point<int32> WorldObjectItem::getBottomRightPos() const
 {
-    return GEOMETRY::Point<int32>(pos().x() + pixmap().width(), pos().y() + pixmap().height());
+    return GEOMETRY::Point<int32>(pos().x() + m_Pixmap.width(), pos().y() + m_Pixmap.height());
 }
 
 void WorldObjectItem::setBottomRightPos(GEOMETRY::Point<int32> pos)
@@ -105,12 +159,12 @@ void WorldObjectItem::setBottomRightPos(GEOMETRY::Point<int32> pos)
 
 void WorldObjectItem::setBottomRightPos(int32 x, int32 y)
 {
-    setPos(x - pixmap().width(), y - pixmap().height());
+    setPos(x - m_Pixmap.width(), y - m_Pixmap.height());
 }
 
 GEOMETRY::Point<int32> WorldObjectItem::getCenterPos() const
 {
-    return GEOMETRY::Point<int32>(pos().y() + pixmap().height()/2, pos().x() + pixmap().width()/2);
+    return GEOMETRY::Point<int32>(pos().x() + m_Pixmap.width() / 2, pos().y() + m_Pixmap.height() / 2);
 }
 
 void WorldObjectItem::setCenterPos(GEOMETRY::Point<int32> pos)
@@ -120,7 +174,7 @@ void WorldObjectItem::setCenterPos(GEOMETRY::Point<int32> pos)
 
 void WorldObjectItem::setCenterPos(int32 x, int32 y)
 {
-    setPos(x - pixmap().width() / 2, y - pixmap().height() / 2);
+    setPos(x - m_Pixmap.width() / 2, y - m_Pixmap.height() / 2);
 }
 
 int WorldObjectItem::type() const

@@ -19,6 +19,8 @@ namespace MAP
                 virtual bool contains() const = 0;
                 virtual bool intersects() const = 0;
 
+                virtual void moveBy(int32 x, int32 y) = 0;
+                virtual void moveBy(const GEOMETRY::Point<int32>& pos) = 0;
                 virtual GEOMETRY::Point<int32> getPoint(uint32 i) const = 0;
                 virtual void setPoint(uint32 i, const GEOMETRY::Point<int32>& p) = 0;
                 virtual uint32 pointCount() const = 0;

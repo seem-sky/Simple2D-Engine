@@ -133,9 +133,6 @@
     <Filter Include="Map Editor\Modules\Content\Items">
       <UniqueIdentifier>{ce85aaef-470b-4e0e-ac2c-502ab7c82008}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Map Editor\Widgets\Tools\ScriptArea">
-      <UniqueIdentifier>{c6bc637c-7fa8-44a2-b564-8541e9a3148d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Map Editor\Modules\MappingMode">
       <UniqueIdentifier>{567e8ddd-ee12-4b99-a638-b6fca692f0a9}</UniqueIdentifier>
     </Filter>
@@ -171,6 +168,9 @@
     </Filter>
     <Filter Include="Map Editor\Modules\MappingMode\WorldObject">
       <UniqueIdentifier>{ee79f19d-d553-4603-92ab-bc4e9aaec55c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map Editor\Modules\MappingMode\MappingObject\ContextMenu">
+      <UniqueIdentifier>{7a2b73c9-5920-4ec8-a134-dba76f0c31e4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -345,8 +345,8 @@
     <ClCompile Include="MapEditorModuleScriptArea.cpp">
       <Filter>Map Editor\Modules\MappingMode\ScriptArea</Filter>
     </ClCompile>
-    <ClCompile Include="MapEditorWidgetScriptArea.cpp">
-      <Filter>Map Editor\Widgets\Tools\ScriptArea</Filter>
+    <ClCompile Include="MappingModeContextMenuAction.cpp">
+      <Filter>Map Editor\Modules\MappingMode\MappingObject\ContextMenu</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -392,8 +392,8 @@
     <compile_QT_Files Include="UI\MapEditorWidgetObjectMapping.ui">
       <Filter>Map Editor\Widgets\Tools\WorldObject</Filter>
     </compile_QT_Files>
-    <compile_QT_Files Include="UI\MapEditorWidgetScriptAreaMapping.ui">
-      <Filter>Map Editor\Widgets\Tools\ScriptArea</Filter>
+    <compile_QT_Files Include="UI\MapEditorModuleScriptAreaMapping.ui">
+      <Filter>Map Editor\Modules\MappingMode\ScriptArea</Filter>
     </compile_QT_Files>
   </ItemGroup>
   <ItemGroup>
@@ -495,6 +495,12 @@
     <moc_header Include="MapEditor.h">
       <Filter>Map Editor\Modules\Content</Filter>
     </moc_header>
+    <moc_header Include="MapEditorModuleMappingMode.h">
+      <Filter>Map Editor\Modules\MappingMode</Filter>
+    </moc_header>
+    <moc_header Include="ScriptAreaItem.h">
+      <Filter>Map Editor\Modules\Content\Items</Filter>
+    </moc_header>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -564,23 +570,17 @@
     <ClInclude Include="WorldObjectItem.h">
       <Filter>Map Editor\Modules\Content\Items</Filter>
     </ClInclude>
-    <ClInclude Include="ScriptAreaItem.h">
-      <Filter>Map Editor\Modules\Content\Items</Filter>
-    </ClInclude>
     <ClInclude Include="EditorGlobal.h">
       <Filter>EditorCore</Filter>
     </ClInclude>
     <ClInclude Include="ScriptAreaMappingRevert.h">
       <Filter>Map Editor\Modules\MappingMode\MappingObject\MappingMode\ScriptAreaMapping\Revert</Filter>
     </ClInclude>
-    <ClInclude Include="MapEditorModuleMappingMode.h">
-      <Filter>Map Editor\Modules\MappingMode</Filter>
-    </ClInclude>
     <ClInclude Include="MapEditorModuleScriptArea.h">
       <Filter>Map Editor\Modules\MappingMode\ScriptArea</Filter>
     </ClInclude>
-    <ClInclude Include="MapEditorWidgetScriptArea.h">
-      <Filter>Map Editor\Widgets\Tools\ScriptArea</Filter>
+    <ClInclude Include="MappingModeContextMenuAction.h">
+      <Filter>Map Editor\Modules\MappingMode\MappingObject\ContextMenu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

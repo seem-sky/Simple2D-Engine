@@ -21,12 +21,12 @@ Ui_MapEditorWidgetObjectMapping(), ToolWidget(pParent), m_DBMgr(DBMgr)
 MAP::MAP_DATA::MapDirection MapEditorWidgetObjectMapping::_getDirection() const
 {
     if (m_pDirectionDOWN->isChecked())
-        return MAP::MAP_DATA::MapDirection::DOWN;
+        return MAP::MAP_DATA::MapDirection::down;
     if (m_pDirectionUP->isChecked())
-        return MAP::MAP_DATA::MapDirection::UP;
+        return MAP::MAP_DATA::MapDirection::up;
     if (m_pDirectionRIGHT->isChecked())
-        return MAP::MAP_DATA::MapDirection::RIGHT;
-    return MAP::MAP_DATA::MapDirection::LEFT;
+        return MAP::MAP_DATA::MapDirection::right;
+    return MAP::MAP_DATA::MapDirection::left;
 }
 
 void MapEditorWidgetObjectMapping::_onDirectionChanged()

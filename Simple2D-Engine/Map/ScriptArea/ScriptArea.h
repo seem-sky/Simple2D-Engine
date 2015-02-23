@@ -13,8 +13,6 @@ namespace MAP
 {
     namespace SCRIPT_AREA
     {
-        const uint32 MINIMUM_SIZE = TILE_SIZE/2;
-
         enum class TriggerType
         {
             touch,
@@ -45,6 +43,8 @@ namespace MAP
             Data getData() const;
 
             GUID getGUID() const { return m_GUID; }
+
+            bool isEmpty() const;
 
         private:
             GUID m_GUID = 0;

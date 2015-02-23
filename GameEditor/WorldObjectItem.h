@@ -1,22 +1,28 @@
 #ifndef WORLD_OBJECT_ITEM_H
 #define WORLD_OBJECT_ITEM_H
 
-#include <QtWidgets/QGraphicsPixmapItem>
+#include <QtWidgets/QGraphicsItem>
 #include <geometry/Rectangle.h>
 #include <FlagManager.h>
 #include "WorldObjectInfo.h"
 #include <QtWidgets/QMenu>
 
-class WorldObjectItem : public QGraphicsPixmapItem, public QObject
+namespace DATABASE
+{
+    class DatabaseMgr;
+}
+
+class WorldObjectItem : public QGraphicsItem, public QObject
 {
 private:
     QPoint _checkMove(QPoint moveTo) const;
+    void _setup();
 
 protected:
     QVariant itemChange(GraphicsItemChange change, const QVariant& value);
 
 public:
-    WorldObjectItem(MAP::MAP_DATA::WorldObjectInfo& info);
+    WorldObjectItem(MAP::MAP_DATA::WorldObjectInfo& info, const DATABASE::DatabaseMgr& DBMgr);
 
     void setEditable(bool editable = true);
 
@@ -31,6 +37,7 @@ public:
     GEOMETRY::Point<int32> getCenterPos() const;
 
     const MAP::MAP_DATA::WorldObjectInfo& getWorldObjectInfo() const { return m_WorldObjectInfo; }
+    void setWorldObjectInfo(const MAP::MAP_DATA::WorldObjectInfo& info);
 
     GEOMETRY::Rectangle<int32> getWorldObjectBoundingRect() const { return m_BoundingRect; }
     void setWorldObjectBoundingRect(const GEOMETRY::Rectangle<int32>& rect) { m_BoundingRect = rect; }
@@ -48,10 +55,14 @@ public:
     const FlagManager<Flags>& getFlags() const { return m_Flags; }
 
     int type() const;
+    QRectF boundingRect() const;
 
 private:
     MAP::MAP_DATA::WorldObjectInfo& m_WorldObjectInfo;
     GEOMETRY::Rectangle<int32> m_BoundingRect;
     FlagManager<Flags> m_Flags;
+    QPixmap m_Pixmap;
+
+    const DATABASE::DatabaseMgr& m_DBMgr;
 };
 #endif

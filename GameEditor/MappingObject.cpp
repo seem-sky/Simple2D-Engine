@@ -93,3 +93,8 @@ void MappingObject::onActionKeyReleased(MapEditor& editor, const QPoint& pos, QK
 {
     m_pCurrentMappingMode->keyRelease(editor, pos, pEvent);
 }
+
+void MappingObject::onContextMenuRequest(MapEditor& editor, QContextMenuEvent* pEvent)
+{
+    m_pCurrentMappingMode->contextMenuRequest(editor, pEvent);
+}

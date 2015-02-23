@@ -4,10 +4,11 @@
 
 using namespace MAP::SCRIPT_AREA;
 
-ScriptArea::ScriptArea(MAP::GUID guid) : m_GUID(guid)
+ScriptArea::ScriptArea(MAP::GUID guid)
+    : m_GUID(guid)
 {
     if (!m_GUID)
-        throw std::runtime_error("GUID can not be 0.");
+        throw std::runtime_error("GUID not allowed to be 0.");
 }
 
 AREA::Interface* ScriptArea::getArea()
@@ -44,6 +45,11 @@ Data ScriptArea::getData() const
     return Data(getGUID(), m_pArea->getData(), ACTION::Data());
 }
 
+bool ScriptArea::isEmpty() const
+{
+    return !m_GUID || !m_pAction || !m_pArea;
+}
+
 // free functions
 AREA::Interface* AREA::create(const AREA::Data& data)
 {
@@ -51,17 +57,9 @@ AREA::Interface* AREA::create(const AREA::Data& data)
     switch (data.getType())
     {
     case AREA::Type::rect:
-        GEOMETRY::Rectangle<int32> rect;
-        for (uint32 i = 0; i < rect.pointCount(); ++i)
-        {
-            if (data.getPoints().size() <= i)
-                break;
-            rect.setPoint(i, data.getPoints().at(i));
-        }
-        
         // resize to at least minimum size
-        rect.setSize(MINIMUM_SIZE, MINIMUM_SIZE);
-        pArea = std::unique_ptr<AREA::Interface>(new AREA::AreaRect(rect));
+        pArea = std::unique_ptr<AREA::Interface>(new AREA::AreaRect(
+            GEOMETRY::Rectangle<int32>(data.getRectangle().getPosition(), GEOMETRY::Size<int32>(MINIMUM_SIZE, MINIMUM_SIZE))));
         break;
     }
 

@@ -2,4 +2,9 @@
 - animation system redesign
 - database ui redesign
 - script area widget
+- script area edit (mapeditor)
 - world object mapping
+- world object edit (mapeditor)
+- world object QPixmapCache
+- animated tiles
+- redesign Database system

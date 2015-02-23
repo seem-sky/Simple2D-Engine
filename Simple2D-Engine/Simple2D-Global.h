@@ -178,5 +178,10 @@ namespace MAP
 
     typedef uint32 GUID;
     const uint32 TILE_SIZE = 32;
+
+    namespace SCRIPT_AREA
+    {
+        const int32 MINIMUM_SIZE = TILE_SIZE / 2;
+    }
 }
 #endif

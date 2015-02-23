@@ -138,3 +138,6 @@
 /GameEditor/moc_ScriptAreaItem.h
 /GameEditor/moc_MapEditorModuleMappingMode.h
 /GameEditor/moc_MapEditorWidgetScriptArea.h
+/GameEditor/UI/UI_MapEditorModuleScriptAreaMapping.h
+/GameEditor/moc_MapEditorModuleScriptArea.h
+/GameEditor/moc_MappingModeContextMenuAction.h

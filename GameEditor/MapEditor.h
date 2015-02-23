@@ -39,6 +39,16 @@ namespace MAP
     {
         class ScriptArea;
         class Data;
+
+        namespace AREA
+        {
+            class Data;
+        }
+
+        namespace ACTION
+        {
+            class Data;
+        }
     }
 
     namespace REVERT
@@ -109,6 +119,7 @@ public:
     // ScriptAreas
     ScriptAreaItem* addScriptArea(const MAP::SCRIPT_AREA::Data& data);
     ScriptAreaItem* addScriptArea(MAP::SCRIPT_AREA::ScriptArea* pScript);
+    ScriptAreaItem* addScriptArea(const MAP::SCRIPT_AREA::AREA::Data& area, const MAP::SCRIPT_AREA::ACTION::Data& action);
     ScriptAreaItem* getScriptArea(MAP::GUID guid);
     ScriptAreaItem* takeScriptArea(MAP::GUID guid);
     void removeScriptArea(MAP::GUID guid);
@@ -144,6 +155,8 @@ signals:
     void actionKeyRelease(MapEditor& editor, const QPoint& pos, QKeyEvent* pEvent);
 
     void changed(uint32 mapID);
+
+    void setupContextMenu(MapEditor& editor, QContextMenuEvent* pEvent);
 
 private:
     const MappingObject& m_MappingObject;

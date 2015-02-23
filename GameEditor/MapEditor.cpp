@@ -7,15 +7,11 @@
 #include "BrushRevert.h"
 #include "WorldObjectInfo.h"
 #include "BrushRevert.h"
-#include "VisualViewer.h"
 #include "WorldObjectItem.h"
 #include "DelayedDeleteObject.h"
 #include "EditorGlobal.h"
 #include "ScriptAreaItem.h"
 #include <geometry/algorithm.h>
-#include <QtGui/QCursor>
-#include <QtWidgets/QAction>
-#include <QtWidgets/QMenu>
 #include <QtGui/QMouseEvent>
 #include <Core/Cache/Manager.h>
 #include <Map/ScriptArea/AreaData.h>
@@ -59,7 +55,7 @@ void MapEditor::_setupShortcuts()
 WorldObjectItem* MapEditor::_addWorldObject(const DATABASE::PROTOTYPE::WORLD_OBJECT::WorldObjectPrototype* pWorldObject, MAP::MAP_DATA::WorldObjectInfo& info)
 {
     // setup viewer
-    auto pItem = new WorldObjectItem(info);
+    auto pItem = new WorldObjectItem(info, m_DBMgr);
     scene()->addItem(pItem);
     return _setupWorldObject(pWorldObject, pItem, info);
 }
@@ -68,34 +64,6 @@ WorldObjectItem* MapEditor::_setupWorldObject(const DATABASE::PROTOTYPE::WORLD_O
     WorldObjectItem* pItem, const MAP::MAP_DATA::WorldObjectInfo& info)
 {
     pItem->setWorldObjectBoundingRect(pWorldObject->getBoundingRect());
-
-    VisualViewer viewer;
-    viewer.setFrameShape(QFrame::NoFrame);
-    viewer.showGrid(false);
-    viewer.setDatabaseMgr(&m_DBMgr);
-    auto &animationModule = pWorldObject->getAnimationModule();
-    for (uint32 i = 0; i < animationModule.getAnimationCount(); ++i)
-    {
-        auto animationInfo = animationModule.getAnimationInfo(i);
-        if (animationInfo.m_AnimationTypeID - 1 == static_cast<uint32>(info.getDirection()))
-        {
-            viewer.setAnimation(animationInfo);
-            break;
-        }
-    }
-
-    viewer.stopAnimation();
-    viewer.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    viewer.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
-    // set transparent background
-    viewer.setStyleSheet("background:transparent;");
-    viewer.setAttribute(Qt::WA_TranslucentBackground);
-    viewer.setWindowFlags(Qt::FramelessWindowHint);
-
-    auto rect = viewer.scene()->itemsBoundingRect();
-    viewer.resizeToContent();
-    pItem->setPixmap(viewer.grab());
 
     // set flags
     pItem->setEditable(m_MappingObject.getMappingModeType() == MAPPING_MODE::Type::OBJECT_MAPPING);
@@ -182,7 +150,12 @@ WorldObjectItem* MapEditor::getWorldObject(MAP::GUID guid)
 
 ScriptAreaItem* MapEditor::addScriptArea(const MAP::SCRIPT_AREA::Data& data)
 {
-    return _setupScriptArea(m_MapData.getScriptAreaData().addScriptArea(data));
+    return _setupScriptArea(m_MapData.getScriptAreaManager().addScriptArea(data));
+}
+
+ScriptAreaItem* MapEditor::addScriptArea(const MAP::SCRIPT_AREA::AREA::Data& area, const MAP::SCRIPT_AREA::ACTION::Data& action)
+{
+    return _setupScriptArea(m_MapData.getScriptAreaManager().addScriptArea(area, action));
 }
 
 ScriptAreaItem* MapEditor::addScriptArea(MAP::SCRIPT_AREA::ScriptArea* pScript)
@@ -192,7 +165,7 @@ ScriptAreaItem* MapEditor::addScriptArea(MAP::SCRIPT_AREA::ScriptArea* pScript)
 
     try
     {
-        m_MapData.getScriptAreaData().addScriptArea(pScript);
+        m_MapData.getScriptAreaManager().addScriptArea(pScript);
         _setupScriptArea(pScript);
     }
     catch (const std::runtime_error&) {}
@@ -220,7 +193,7 @@ ScriptAreaItem* MapEditor::takeScriptArea(MAP::GUID guid)
     if (auto pAreaItem = getScriptArea(guid))
     {
         scene()->removeItem(pAreaItem);
-        m_MapData.getScriptAreaData().takeScriptArea(guid);
+        m_MapData.getScriptAreaManager().takeScriptArea(guid);
         return pAreaItem;
     }
     return nullptr;
@@ -231,7 +204,7 @@ void MapEditor::removeScriptArea(MAP::GUID guid)
     if (auto pItem = getScriptArea(guid))
     {
         scene()->removeItem(pItem);
-        m_MapData.getScriptAreaData().removeScriptArea(guid);
+        m_MapData.getScriptAreaManager().removeScriptArea(guid);
         new DelayedDeleteObject<ScriptAreaItem>(pItem);
     }
 }
@@ -251,7 +224,7 @@ void MapEditor::_loadMap()
     }
 
     // script areas
-    for (auto& data : m_MapData.getScriptAreaData().getScriptAreas())
+    for (auto& data : m_MapData.getScriptAreaManager().getScriptAreas())
     {
         _setupScriptArea(data.get());
     }
@@ -354,21 +327,7 @@ uint8 MapEditor::getMaximumLayerIndex(MAP::LayerType layerType) const
 
 void MapEditor::contextMenuEvent(QContextMenuEvent* pEvent)
 {
-    if (m_MappingObject.getMappingModeType() != MAPPING_MODE::Type::OBJECT_MAPPING || !scene())
-        return;
-
-    QMenu menu;
-    connect(menu.addAction("paste"), SIGNAL(triggered()), this, SLOT(_onActionPaste()));
-
-    auto selected = scene()->selectedItems();
-    if (!selected.isEmpty())
-    {
-        connect(menu.addAction("copy"), SIGNAL(triggered()), this, SLOT(_onActionCopy()));
-        connect(menu.addAction("cut"), SIGNAL(triggered()), this, SLOT(_onActionCut()));
-        connect(menu.addAction("delete"), SIGNAL(triggered()), this, SLOT(_onActionDelete()));
-    }
-
-    menu.exec(pEvent->globalPos());
+    emit setupContextMenu(*this, pEvent);
 }
 
 void MapEditor::mousePressEvent(QMouseEvent* pEvent)
@@ -470,7 +429,7 @@ void MapEditor::addRevert(MAP::REVERT::Interface* pRevert)
 
 void MapEditor::_scriptAreaPointModified(MAP::GUID guid, uint32 index, QPoint pos)
 {
-    if (auto pArea = m_MapData.getScriptAreaData().getScriptArea(guid))
+    if (auto pArea = m_MapData.getScriptAreaManager().getScriptArea(guid))
     {
         std::unique_ptr<MAP::REVERT::Interface> pRevert(new MAPPING_MODE::SCRIPT_AREA::REVERT::Move(pArea, index, GEOMETRY::Point<int32>(pos.x(), pos.y()), *this));
         addRevert(pRevert.release());

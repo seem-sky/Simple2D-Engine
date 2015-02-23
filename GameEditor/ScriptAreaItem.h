@@ -58,6 +58,9 @@ private:
     void _setupPointMoveItem(uint32 index);
     void _updateEdgePositions();
 
+protected:
+    QVariant itemChange(GraphicsItemChange change, const QVariant& value);
+
 public:
     ScriptAreaItem();
 

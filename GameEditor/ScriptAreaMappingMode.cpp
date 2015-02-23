@@ -18,10 +18,8 @@ void MAPPING_MODE::ScriptArea::press(MapEditor& editor, QMouseEvent* pEvent)
             return;
     }
 
-    Data scriptData(editor.getMapData().getScriptAreaData().getNewGUID(),
-        AREA::Data(GEOMETRY::Rectangle<int32>(GEOMETRY::Point<int32>(pos.x(), pos.y()), GEOMETRY::Size<int32>())),
+    auto pItem = editor.addScriptArea(AREA::Data(GEOMETRY::Rectangle<int32>(GEOMETRY::Point<int32>(pos.x(), pos.y()), GEOMETRY::Size<int32>())),
         ACTION::Data("test"));
-    auto pItem = editor.addScriptArea(scriptData);
     editor.addRevert(new MAPPING_MODE::SCRIPT_AREA::REVERT::Add(pItem->getScriptArea()->getGUID(), editor));
 }
 
@@ -48,4 +46,30 @@ void MAPPING_MODE::ScriptArea::remove(MapEditor& editor)
         }
     }
     editor.addRevert(pRevertContainer.release());
+}
+
+void MAPPING_MODE::ScriptArea::copy(const MapEditor& editor)
+{
+    m_CopyData.clear();
+    m_Offset = GEOMETRY::Point<int32>::maximum();
+    for (auto pItem : editor.scene()->selectedItems())
+    {
+        if (auto pScript = dynamic_cast<ScriptAreaItem*>(pItem->parentItem()))
+        {
+            m_CopyData.push_back(std::make_pair(pScript->getScriptArea()->getArea()->getData(), pScript->getScriptArea()->getAction()->getData()));
+
+            // calculate offset
+            m_Offset.getX() = std::min(int32(pScript->x()), m_Offset.getX());
+            m_Offset.getY() = std::min(int32(pScript->y()), m_Offset.getY());
+        }
+    }
+}
+
+void MAPPING_MODE::ScriptArea::paste(MapEditor& editor, const QPoint& pos)
+{
+    for (auto& data : m_CopyData)
+    {
+        if (auto pItem = editor.addScriptArea(data.first, data.second))
+            pItem->moveBy(m_Offset.getX(), m_Offset.getY());
+    }
 }

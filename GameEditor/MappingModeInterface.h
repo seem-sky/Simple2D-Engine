@@ -24,6 +24,7 @@ namespace MAPPING_MODE
         virtual void remove(MapEditor& editor) = 0;
         virtual void keyPress(MapEditor& editor, const QPoint& pos, QKeyEvent* pEvent) = 0;
         virtual void keyRelease(MapEditor& editor, const QPoint& pos, QKeyEvent* pEvent) = 0;
+        virtual void contextMenuRequest(MapEditor& editor, QContextMenuEvent* pEvent) = 0;
 
         virtual Type getModeType() const = 0;
         virtual QString getModeName() const = 0;

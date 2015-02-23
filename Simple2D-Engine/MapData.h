@@ -26,8 +26,8 @@ namespace MAP
             WorldObjectInfoData& getWorldObjectInfoData() { return m_Objects; }
             const WorldObjectInfoData& getWorldObjectInfoData() const { return m_Objects; }
 
-            SCRIPT_AREA::Manager& getScriptAreaData() { return m_ScriptAreas; }
-            const SCRIPT_AREA::Manager& getScriptAreaData() const { return m_ScriptAreas; }
+            SCRIPT_AREA::Manager& getScriptAreaManager() { return m_ScriptAreas; }
+            const SCRIPT_AREA::Manager& getScriptAreaManager() const { return m_ScriptAreas; }
 
             inline uint32 getMapID() const { return m_MapID; }
 

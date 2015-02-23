@@ -9,18 +9,23 @@ namespace MAP
     {
         class Manager
         {
+        private:
+            GUID _getNewGUID() const;
+
         public:
             Manager() = default;
 
+            ScriptArea* addScriptArea(const AREA::Data& area, const ACTION::Data& action);
             ScriptArea* addScriptArea(ScriptArea* pScript);
             ScriptArea* addScriptArea(const Data& data);
+
             const ScriptArea* getScriptArea(GUID guid) const;
             ScriptArea* getScriptArea(GUID guid);
             const std::vector<std::unique_ptr<ScriptArea>>& getScriptAreas() const;
+
             ScriptArea* takeScriptArea(GUID guid);
             bool hasScriptArea(GUID guid) const;
             void removeScriptArea(GUID guid);
-            GUID getNewGUID() const;
 
             uint32 count() const;
             bool isEmpty() const;
