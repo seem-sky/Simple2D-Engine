@@ -2,16 +2,16 @@
 #define MAP_TREE_H
 
 #include <QtWidgets/QTreeWidget>
-#include "DatabaseMgr.h"
-#include <QtWidgets/QMenu>
+#include <Global.h>
+#include <Database/Derived.h>
 
 class MapTreeItem : public QTreeWidgetItem
 {
 public:
-    MapTreeItem(const DATABASE::PROTOTYPE::MAP_STRUCTURE::MapPrototype& map);
+    MapTreeItem(const database::prototype::Map& map);
     bool operator <(const QTreeWidgetItem& other) const;
 
-    void setup(const DATABASE::PROTOTYPE::MAP_STRUCTURE::MapPrototype& map);
+    void setup(const database::prototype::Map& map);
 };
 
 class MapEditorModuleMapTree : public QTreeWidget
@@ -21,9 +21,10 @@ protected:
     void dropEvent(QDropEvent* pEvent);
 
 public:
-    MapEditorModuleMapTree(DATABASE::DatabaseMgr& DBMgr, QWidget* pParent = nullptr);
+    MapEditorModuleMapTree(database::MapDatabase& mapDB, QWidget* pParent = nullptr);
 
     void reload();
+    void save(const QString& path);
 
 private slots:
     void onContextMenuRequested(const QPoint& pos);
@@ -31,7 +32,6 @@ private slots:
     void onActionEdit();
     void onActionNew();
     void onActionDelete();
-    void onProjectSave();
 
 signals:
     void openMap(uint32 mapID);
@@ -39,8 +39,7 @@ signals:
     void editMap(uint32 mapID);
 
 private:
-    DATABASE::DatabaseMgr& m_DBMgr;
-    std::list<uint32> m_DeletedMaps;
+    database::MapDatabase& m_MapDB;
+    std::list<std::unique_ptr<database::prototype::Map>> m_DeletedMaps;
 };
-
 #endif

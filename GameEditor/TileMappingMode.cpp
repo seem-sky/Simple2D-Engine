@@ -2,13 +2,14 @@
 #include "moc_TileMappingMode.h"
 #include "MapEditor.h"
 #include "MapException.h"
-#include <DatabaseMgr.h>
+#include <Database/Manager.h>
 #include <BrushFactory.h>
 #include "MapEditorWidgetBrush.h"
 
 namespace MAPPING_MODE
 {
-    Tile::Tile(const DATABASE::DatabaseMgr& DBMgr, QObject* pParent) : m_DBMgr(DBMgr), Interface(pParent)
+    Tile::Tile(const database::Manager& DBMgr, QObject* pParent)
+        : m_DBMgr(DBMgr), Interface(pParent)
     {}
 
     void Tile::_finishBrush()
@@ -47,8 +48,8 @@ namespace MAPPING_MODE
                 // if tileSet mapping, set brush size equal tileSet size
                 if (m_BrushInfos.at(static_cast<std::size_t>(brush)).getType() == MAP::BRUSH::BrushInfo::Type::TILE_SET)
                 {
-                    if (auto pTileSet = m_DBMgr.getTileSetDatabase()->getOriginalPrototype(m_BrushInfos.at(static_cast<std::size_t>(brush)).getID()))
-                        m_pCurrentBrush->setBrushSize(pTileSet->getTileSetSize());
+                    if (auto pTileSet = m_DBMgr.getTileSetDatabase().getPrototype(m_BrushInfos.at(static_cast<std::size_t>(brush)).getID()))
+                        m_pCurrentBrush->setBrushSize(pTileSet->getSize());
                 }
 
                 m_pCurrentBrush->start(tilePos);

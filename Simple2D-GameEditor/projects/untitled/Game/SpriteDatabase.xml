@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<DB>
-    <p tRed="0" tGreen="128" tBlue="128" file="tree1.png" path="chars/" ID="1" name="Baum1"/>
-    <p tRed="0" tGreen="128" tBlue="128" file="Char1.png" path="chars/" ID="2" name="Hero1"/>
-    <p tRed="0" tGreen="0" tBlue="0" file="flare1.png" path="animation/flare/" ID="3" name="flare1"/>
-    <p tRed="0" tGreen="0" tBlue="0" file="flare2.png" path="animation/flare/" ID="4" name="flare2"/>
-    <p tRed="0" tGreen="0" tBlue="0" file="flare3.png" path="animation/flare/" ID="5" name="flare3"/>
-    <p tRed="0" tGreen="0" tBlue="0" file="flare4.png" path="animation/flare/" ID="6" name="flare4"/>
-    <p tRed="0" tGreen="0" tBlue="0" file="flare5.png" path="animation/flare/" ID="7" name="flare5"/>
-    <p tRed="0" tGreen="0" tBlue="0" file="flare6.png" path="animation/flare/" ID="8" name="flare6"/>
-    <p tRed="0" tGreen="0" tBlue="0" file="flare7.png" path="animation/flare/" ID="9" name="flare7"/>
-    <p tRed="0" tGreen="0" tBlue="0" file="flare8.png" path="animation/flare/" ID="10" name="flare8"/>
-    <p tRed="0" tGreen="0" tBlue="0" file="flare9.png" path="animation/flare/" ID="11" name="flare9"/>
-    <p tRed="0" tGreen="0" tBlue="0" file="flare10.png" path="animation/flare/" ID="12" name="flare10"/>
-    <p tRed="0" tGreen="0" tBlue="0" file="flare11.png" path="animation/flare/" ID="13" name="flare11"/>
-    <p tRed="0" tGreen="0" tBlue="0" file="flare12.png" path="animation/flare/" ID="14" name="flare12"/>
-    <p tRed="0" tGreen="0" tBlue="0" file="flare13.png" path="animation/flare/" ID="15" name="flare13"/>
-    <p tRed="0" tGreen="0" tBlue="0" file="flare14.png" path="animation/flare/" ID="16" name="flare14"/>
-    <p tRed="0" tGreen="0" tBlue="0" file="flare15.png" path="animation/flare/" ID="17" name="flare15"/>
-    <p tRed="0" tGreen="0" tBlue="0" file="flare16.png" path="animation/flare/" ID="18" name="flare16"/>
-    <p tRed="0" tGreen="0" tBlue="0" file="flare17.png" path="animation/flare/" ID="19" name="flare17"/>
-    <p tRed="0" tGreen="0" tBlue="0" file="flare18.png" path="animation/flare/" ID="20" name="flare18"/>
-    <p tRed="0" tGreen="0" tBlue="0" file="flare19.png" path="animation/flare/" ID="21" name="flare19"/>
-    <p tRed="0" tGreen="0" tBlue="0" file="flare20.png" path="animation/flare/" ID="22" name="flare20"/>
-    <p tRed="0" tGreen="0" tBlue="0" file="flare21.png" path="animation/flare/" ID="23" name="flare21"/>
-    <p tRed="0" tGreen="0" tBlue="0" file="flare22.png" path="animation/flare/" ID="24" name="flare22"/>
-    <p tRed="0" tGreen="0" tBlue="0" file="flare23.png" path="animation/flare/" ID="25" name="flare23"/>
-    <p tRed="0" tGreen="0" tBlue="0" file="flare24.png" path="animation/flare/" ID="26" name="flare24"/>
-    <p tRed="0" tGreen="0" tBlue="0" file="flare25.png" path="animation/flare/" ID="27" name="flare25"/>
-    <p tRed="0" tGreen="128" tBlue="128" file="char1-walk-right-1.png" path="chars/char1/walk-right/" ID="28" name="char1-walk-right-1"/>
-    <p tRed="0" tGreen="128" tBlue="128" file="char1-walk-right-2.png" path="chars/char1/walk-right/" ID="29" name="char1-walk-right-2"/>
-    <p tRed="0" tGreen="128" tBlue="128" file="char1-walk-right-3.png" path="chars/char1/walk-right/" ID="30" name="char1-walk-right-3"/>
-    <p tRed="7" tGreen="146" tBlue="151" file="fallen-tree.png" ID="31" name="fallen-tree"/>
+<DB size="31">
+    <p ID="1" name="Baum1" file="tree1.png" path="chars/" tRed="0" tGreen="128" tBlue="128"/>
+    <p ID="2" name="Hero1" file="Char1.png" path="chars/" tRed="0" tGreen="128" tBlue="128"/>
+    <p ID="3" name="flare1" file="flare1.png" path="animation/flare/" tRed="0" tGreen="0" tBlue="0"/>
+    <p ID="4" name="flare2" file="flare2.png" path="animation/flare/" tRed="0" tGreen="0" tBlue="0"/>
+    <p ID="5" name="flare3" file="flare3.png" path="animation/flare/" tRed="0" tGreen="0" tBlue="0"/>
+    <p ID="6" name="flare4" file="flare4.png" path="animation/flare/" tRed="0" tGreen="0" tBlue="0"/>
+    <p ID="7" name="flare5" file="flare5.png" path="animation/flare/" tRed="0" tGreen="0" tBlue="0"/>
+    <p ID="8" name="flare6" file="flare6.png" path="animation/flare/" tRed="0" tGreen="0" tBlue="0"/>
+    <p ID="9" name="flare7" file="flare7.png" path="animation/flare/" tRed="0" tGreen="0" tBlue="0"/>
+    <p ID="10" name="flare8" file="flare8.png" path="animation/flare/" tRed="0" tGreen="0" tBlue="0"/>
+    <p ID="11" name="flare9" file="flare9.png" path="animation/flare/" tRed="0" tGreen="0" tBlue="0"/>
+    <p ID="12" name="flare10" file="flare10.png" path="animation/flare/" tRed="0" tGreen="0" tBlue="0"/>
+    <p ID="13" name="flare11" file="flare11.png" path="animation/flare/" tRed="0" tGreen="0" tBlue="0"/>
+    <p ID="14" name="flare12" file="flare12.png" path="animation/flare/" tRed="0" tGreen="0" tBlue="0"/>
+    <p ID="15" name="flare13" file="flare13.png" path="animation/flare/" tRed="0" tGreen="0" tBlue="0"/>
+    <p ID="16" name="flare14" file="flare14.png" path="animation/flare/" tRed="0" tGreen="0" tBlue="0"/>
+    <p ID="17" name="flare15" file="flare15.png" path="animation/flare/" tRed="0" tGreen="0" tBlue="0"/>
+    <p ID="18" name="flare16" file="flare16.png" path="animation/flare/" tRed="0" tGreen="0" tBlue="0"/>
+    <p ID="19" name="flare17" file="flare17.png" path="animation/flare/" tRed="0" tGreen="0" tBlue="0"/>
+    <p ID="20" name="flare18" file="flare18.png" path="animation/flare/" tRed="0" tGreen="0" tBlue="0"/>
+    <p ID="21" name="flare19" file="flare19.png" path="animation/flare/" tRed="0" tGreen="0" tBlue="0"/>
+    <p ID="22" name="flare20" file="flare20.png" path="animation/flare/" tRed="0" tGreen="0" tBlue="0"/>
+    <p ID="23" name="flare21" file="flare21.png" path="animation/flare/" tRed="0" tGreen="0" tBlue="0"/>
+    <p ID="24" name="flare22" file="flare22.png" path="animation/flare/" tRed="0" tGreen="0" tBlue="0"/>
+    <p ID="25" name="flare23" file="flare23.png" path="animation/flare/" tRed="0" tGreen="0" tBlue="0"/>
+    <p ID="26" name="flare24" file="flare24.png" path="animation/flare/" tRed="0" tGreen="0" tBlue="0"/>
+    <p ID="27" name="flare25" file="flare25.png" path="animation/flare/" tRed="0" tGreen="0" tBlue="0"/>
+    <p ID="28" name="char1-walk-right-1" file="char1-walk-right-1.png" path="chars/char1/walk-right/" tRed="0" tGreen="128" tBlue="128"/>
+    <p ID="29" name="char1-walk-right-2" file="char1-walk-right-2.png" path="chars/char1/walk-right/" tRed="0" tGreen="128" tBlue="128"/>
+    <p ID="30" name="char1-walk-right-3" file="char1-walk-right-3.png" path="chars/char1/walk-right/" tRed="0" tGreen="128" tBlue="128"/>
+    <p ID="31" name="fallen-tree" file="fallen-tree.png" tRed="7" tGreen="146" tBlue="151"/>
 </DB>

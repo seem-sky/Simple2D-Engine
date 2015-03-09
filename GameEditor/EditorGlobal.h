@@ -2,6 +2,7 @@
 #define EDITOR_GLOBAL_H
 
 #include <QtWidgets/QGraphicsItem>
+#include <QtGui/QPixmap>
 
 namespace MAPPING_MODE
 {
@@ -20,4 +21,19 @@ namespace MAPPING_MODE
         ITEM_MOVE_POINT = QGraphicsItem::UserType + 3
     };
 }
+
+namespace CACHE
+{
+    class Tiles;
+}
+
+namespace database
+{
+    namespace prototype
+    {
+        class TileSet;
+        QPixmap createPixmap(const TileSet* pTileSet, CACHE::Tiles& tileCache);
+    }
+}
+
 #endif

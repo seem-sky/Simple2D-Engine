@@ -1,32 +1,31 @@
 #ifndef MAP_EDITOR_MODULE_WORLD_OBJECTS_H
 #define MAP_EDITOR_MODULE_WORLD_OBJECTS_H
 
-#include "DatabaseModuleDragDrop.h"
+#include "TooltipList.h"
 
-namespace DATABASE
+namespace database
 {
-    class DatabaseMgr;
+    class Manager;
 }
 
 class MapEditorWidgetObjectMapping;
 
-class MapEditorModuleWorldObjects : public DatabaseModuleTooltipList
+class MapEditorModuleWorldObjects : public TooltipList
 {
 private:
-    QWidget* MapEditorModuleWorldObjects::_setupTooltipWidget(uint32 uiPrototypeID);
+    QWidget* _setupTooltipWidget(uint32 uiPrototypeID);
 
 protected:
     void hideEvent(QHideEvent* pEvent);
     void showEvent(QShowEvent* pEvent);
 
 public:
-    MapEditorModuleWorldObjects(const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent = nullptr);
+    MapEditorModuleWorldObjects(const database::Manager& DBMgr, QWidget* pParent = nullptr);
 
     const MapEditorWidgetObjectMapping* getToolWidget() const { return m_pObjectWidget; }
 
 private:
-    const DATABASE::DatabaseMgr& m_DBMgr;
+    const database::Manager& m_DBMgr;
     MapEditorWidgetObjectMapping* m_pObjectWidget = nullptr;
 };
-
 #endif

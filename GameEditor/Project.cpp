@@ -6,23 +6,20 @@ bool Project::load(const QString& path)
     if (isOpen())
         close();
 
-    if (m_DBMgr.loadDatabase(path))
-    {
-        m_projectPath = path;
-        return true;
-    }
-    return false;
+    m_Mgr.load(path);
+    m_projectPath = path;
+    return true;
 }
 
 void Project::close()
 {
     m_projectPath.clear();
-    m_DBMgr.clear();
 }
 
 bool Project::save()
 {
-    return m_DBMgr.saveDatabase(m_projectPath);
+    m_Mgr.save(m_projectPath);
+    return true;
 }
 
 bool Project::createNew(const QString& path)

@@ -3,7 +3,7 @@
 
 using namespace CACHE;
 
-Manager::Manager(const DATABASE::DatabaseMgr& DBMgr)
+Manager::Manager(const database::Manager& DBMgr)
     : m_TileCache(DBMgr), m_AutoTileCache(m_TileCache, DBMgr)
 {}
 

@@ -5,9 +5,9 @@
 #include "ToolWidget.h"
 #include <WorldObjectInfo.h>
 
-namespace DATABASE
+namespace database
 {
-    class DatabaseMgr;
+    class Manager;
 }
 
 class MapEditorWidgetObjectMapping : public ToolWidget, Ui_MapEditorWidgetObjectMapping
@@ -18,7 +18,7 @@ private:
     MAP::MAP_DATA::MapDirection _getDirection() const;
 
 public:
-    MapEditorWidgetObjectMapping(const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent = nullptr);
+    MapEditorWidgetObjectMapping(const database::Manager& DBMgr, QWidget* pParent = nullptr);
 
 private slots:
     void _onDirectionChanged();
@@ -30,7 +30,7 @@ signals:
     void changeDirection(MAP::MAP_DATA::MapDirection dir);
 
 private:
-    const DATABASE::DatabaseMgr& m_DBMgr;
+    const database::Manager& m_DBMgr;
     uint32 m_WorldObjectID = 0;
 };
 #endif

@@ -1,35 +1,59 @@
 #include "Color.h"
-#include <string>
 
-Color::Color(const std::string& colorText)
-{
-    setColor(colorText);
-}
-
-Color::Color(int16 red, int16 green, int16 blue) : m_Red(red), m_Green(green), m_Blue(blue)
+Color::Color(int16 red, int16 green, int16 blue)
+    : m_Red(red), m_Green(green), m_Blue(blue)
 {}
 
-void Color::setColor(const std::string& colorText)
+void Color::setColor(int16 red, int16 green, int16 blue)
 {
-    if (colorText.empty())
-        return;
-
-    clear();
-
-    std::string tempColorText = colorText.substr(colorText.find("R")+1);
-    // setup red
-    m_Red = std::stoi(tempColorText.substr(0, tempColorText.find("G")));
-    tempColorText = tempColorText.substr(tempColorText.find("G")+1);
-    // setup green
-    m_Green = std::stoi(tempColorText.substr(0, tempColorText.find("B")));
-    tempColorText = tempColorText.substr(tempColorText.find("B")+1);
-    // setup blue
-    m_Blue = std::stoi(tempColorText);
+    m_Red = red;
+    m_Green = green;
+    m_Blue = blue;
 }
 
-std::string Color::getColorString() const
+int16 Color::getRed() const
 {
-    if (isValid())
-        return "R" + std::to_string(m_Red) + "G" + std::to_string(m_Green) + "B" + std::to_string(m_Blue);
-    return "";
+    return m_Red;
+}
+
+int16 Color::getGreen() const
+{
+    return m_Green;
+}
+
+int16 Color::getBlue() const
+{
+    return m_Blue;
+}
+
+void Color::setRed(int16 red)
+{
+    m_Red = red;
+}
+
+void Color::setGreen(int16 green)
+{
+    m_Green = green;
+}
+
+void Color::setBlue(int16 blue)
+{
+    m_Blue = blue;
+}
+
+bool Color::isEmpty() const
+{
+    return m_Red < 0 || m_Green < 0 || m_Blue < 0;
+}
+
+void Color::clear()
+{
+    m_Red = -1;
+    m_Green = -1;
+    m_Blue = -1;
+}
+
+bool operator==(const Color& lhs, const Color& rhs)
+{
+    return lhs.getRed() == rhs.getRed() && lhs.getGreen() == rhs.getGreen() && lhs.getBlue() == rhs.getBlue();
 }

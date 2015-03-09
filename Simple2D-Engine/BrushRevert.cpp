@@ -26,8 +26,8 @@ void BrushRevert::revert()
 void BrushRevert::addTile(const MapTileInfo& info)
 {
     // resize bitset if needed
-    m_Check.resize(std::max(m_Check.width(), info.getPosition().getX() + 1),
-        std::max(m_Check.height(), info.getPosition().getY() + 1));
+    m_Check.resize(std::max(m_Check.getWidth(), info.getPosition().getX() + 1),
+        std::max(m_Check.getHeight(), info.getPosition().getY() + 1));
 
     if (m_Check.get(info.getPosition()))
         return;

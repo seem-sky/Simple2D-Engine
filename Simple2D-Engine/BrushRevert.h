@@ -32,7 +32,7 @@ namespace MAP
 
             private:
                 MapTileInfoVec m_Tiles;
-                Bitset2D m_Check;
+                sl::Bitset2D m_Check;
 
                 uint8 m_LayerIndex;
                 LayerType m_LayerType;

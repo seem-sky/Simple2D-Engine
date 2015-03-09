@@ -14,7 +14,7 @@ namespace MAP
             {
             private:
                 void _do(const MapTileInfo& info, MapTileInfoVec& tiles, PointVec<uint32>& borderTiles);
-                void _checkTile(const GEOMETRY::Point<uint32>& pos, Bitset2D& bitset, Bitset2D& borderBitset,
+                void _checkTile(const GEOMETRY::Point<uint32>& pos, sl::Bitset2D& bitset, sl::Bitset2D& borderBitset,
                     PointVec<uint32>& openPositions, MapTileInfoVec& tileInfos, PointVec<uint32>& borderTiles);
 
             public:

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DatabaseModulePrototypeAnimation</class>
+ <widget class="QWidget" name="DatabaseModulePrototypeAnimation">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>358</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout" rowstretch="0,1,0,0,0" columnstretch="1,0,0" rowminimumheight="0,0,0,0,0">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item row="0" column="0">
+    <widget class="database::ui::module::PrototypeBase" name="m_pModuleBase" native="true"/>
+   </item>
+   <item row="0" column="1" rowspan="2" colspan="2">
+    <widget class="PrototypeTooltipList" name="m_pModuleSpriteList"/>
+   </item>
+   <item row="1" column="0" rowspan="3">
+    <widget class="QGraphicsView" name="m_pView"/>
+   </item>
+   <item row="2" column="1">
+    <widget class="QPushButton" name="m_pAddPointAddition">
+     <property name="text">
+      <string>add PointAddition</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="2">
+    <widget class="QPushButton" name="m_pAddRectAddition">
+     <property name="text">
+      <string>add RectAddition</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1" rowspan="2" colspan="2">
+    <widget class="animation::ui::module::SelectedWidget" name="m_pModuleSelection" native="true"/>
+   </item>
+   <item row="4" column="0">
+    <widget class="animation::ui::module::FrameNavigation" name="m_pModuleFrameNavigation" native="true"/>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>database::ui::module::PrototypeBase</class>
+   <extends>QWidget</extends>
+   <header>databasemoduleprototypebase.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PrototypeTooltipList</class>
+   <extends>QListView</extends>
+   <header>prototypetooltiplist.h</header>
+  </customwidget>
+  <customwidget>
+   <class>animation::ui::module::FrameNavigation</class>
+   <extends>QWidget</extends>
+   <header>animationmoduleframenavigation.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>animation::ui::module::SelectedWidget</class>
+   <extends>QWidget</extends>
+   <header>animationmoduleselectedwidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

@@ -2,7 +2,6 @@
 #include "moc_MapEditor.h"
 #include "QtGlobal.h"
 #include "MappingObject.h"
-#include "DatabaseMgr.h"
 #include "MapEditorScene.h"
 #include "BrushRevert.h"
 #include "WorldObjectInfo.h"
@@ -16,12 +15,13 @@
 #include <Core/Cache/Manager.h>
 #include <Map/ScriptArea/AreaData.h>
 #include "ScriptAreaMappingRevert.h"
+#include <Database/Manager.h>
 
 /*#####
 # MapViewer
 #####*/
-MapEditor::MapEditor(uint32 mapID, CACHE::Manager& cacheMgr, const MappingObject& mappingObject, const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent) :
-    QGraphicsView(pParent), m_MapData(DBMgr, mapID), m_DBMgr(DBMgr), m_MappingObject(mappingObject)
+MapEditor::MapEditor(uint32 mapID, CACHE::Manager& cacheMgr, const MappingObject& mappingObject, const database::Manager& DBMgr, QWidget* pParent)
+    : QGraphicsView(pParent), m_MapData(DBMgr, mapID), m_DBMgr(DBMgr), m_MappingObject(mappingObject)
 {
     setScene(new MapEditorScene(cacheMgr, mappingObject, m_MapData, DBMgr));
     scene()->setParent(this);
@@ -52,7 +52,7 @@ void MapEditor::_setupShortcuts()
     pActionDelete->setAutoRepeat(false);
 }
 
-WorldObjectItem* MapEditor::_addWorldObject(const DATABASE::PROTOTYPE::WORLD_OBJECT::WorldObjectPrototype* pWorldObject, MAP::MAP_DATA::WorldObjectInfo& info)
+WorldObjectItem* MapEditor::_addWorldObject(const database::prototype::WorldObject* pWorldObject, MAP::MAP_DATA::WorldObjectInfo& info)
 {
     // setup viewer
     auto pItem = new WorldObjectItem(info, m_DBMgr);
@@ -60,7 +60,7 @@ WorldObjectItem* MapEditor::_addWorldObject(const DATABASE::PROTOTYPE::WORLD_OBJ
     return _setupWorldObject(pWorldObject, pItem, info);
 }
 
-WorldObjectItem* MapEditor::_setupWorldObject(const DATABASE::PROTOTYPE::WORLD_OBJECT::WorldObjectPrototype* pWorldObject,
+WorldObjectItem* MapEditor::_setupWorldObject(const database::prototype::WorldObject* pWorldObject,
     WorldObjectItem* pItem, const MAP::MAP_DATA::WorldObjectInfo& info)
 {
     pItem->setWorldObjectBoundingRect(pWorldObject->getBoundingRect());
@@ -86,7 +86,7 @@ ScriptAreaItem* MapEditor::_setupScriptArea(MAP::SCRIPT_AREA::ScriptArea* script
 
 WorldObjectItem* MapEditor::addWorldObject(uint32 ID, const GEOMETRY::Point<int32>& pos, MAP::MAP_DATA::MapObjectLayer layer, MAP::MAP_DATA::MapDirection direction)
 {
-    if (auto pWorldObject = m_DBMgr.getWorldObjectDatabase()->getOriginalPrototype(ID))
+    if (auto pWorldObject = m_DBMgr.getWorldObjectDatabase().getPrototype(ID))
     {
         // push into ObjectContainer
         auto pInfo = m_MapData.getWorldObjectInfoData().addWorldObject(ID, pos, layer, direction);
@@ -97,7 +97,7 @@ WorldObjectItem* MapEditor::addWorldObject(uint32 ID, const GEOMETRY::Point<int3
 
 WorldObjectItem* MapEditor::addWorldObject(const MAP::MAP_DATA::WorldObjectInfo& info)
 {
-    if (auto pWorldObject = m_DBMgr.getWorldObjectDatabase()->getOriginalPrototype(info.getID()))
+    if (auto pWorldObject = m_DBMgr.getWorldObjectDatabase().getPrototype(info.getID()))
     {
         try
         {
@@ -112,7 +112,7 @@ WorldObjectItem* MapEditor::addWorldObject(const MAP::MAP_DATA::WorldObjectInfo&
 
 void MapEditor::setWorldObject(const MAP::MAP_DATA::WorldObjectInfo& info)
 {
-    if (auto pProto = m_DBMgr.getWorldObjectDatabase()->getOriginalPrototype(info.getID()))
+    if (auto pProto = m_DBMgr.getWorldObjectDatabase().getPrototype(info.getID()))
     {
         for (auto pItem : scene()->items())
         {
@@ -214,12 +214,12 @@ void MapEditor::_loadMap()
     m_MapData.load();
     // setup scene
     auto mapSize = m_MapData.getMapLayer().getSize();
-    scene()->setSceneRect(0, 0, mapSize.getX()*MAP::TILE_SIZE, mapSize.getY()*MAP::TILE_SIZE);
+    scene()->setSceneRect(0, 0, mapSize.getWidth()*MAP::TILE_SIZE, mapSize.getHeight()*MAP::TILE_SIZE);
 
     // world objects
     for (auto& info : m_MapData.getWorldObjectInfoData().getWorldObjects())
     {
-        if (auto pWorldObject = m_DBMgr.getWorldObjectDatabase()->getOriginalPrototype(info->getID()))
+        if (auto pWorldObject = m_DBMgr.getWorldObjectDatabase().getPrototype(info->getID()))
             _addWorldObject(pWorldObject, *info);
     }
 
@@ -246,7 +246,7 @@ void MapEditor::reloadMap()
     {
         m_MapData.reload();
         auto mapSize = pScene->getMapData().getMapLayer().getSize();
-        pScene->setSceneRect(0, 0, mapSize.getX()*MAP::TILE_SIZE, mapSize.getY()*MAP::TILE_SIZE);
+        pScene->setSceneRect(0, 0, mapSize.getWidth()*MAP::TILE_SIZE, mapSize.getHeight()*MAP::TILE_SIZE);
         pScene->update();
     }
 }

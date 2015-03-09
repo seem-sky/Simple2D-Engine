@@ -1,42 +1,41 @@
 #include "MapEditorModuleTileSets.h"
+#include "moc_MapEditorModuleTileSets.h"
 #include "QtGlobal.h"
 #include "Config.h"
 #include <QtGui/QMouseEvent>
 #include <QtGui/QPainter>
 #include <Core/Cache/Manager.h>
-#include "moc_MapEditorModuleTileSets.h"
+#include "DatabaseModel.h"
+#include "EditorGlobal.h"
 
-using namespace DATABASE;
-using namespace PROTOTYPE::TILE_SET;
-
-MapEditorModuleTileSets::MapEditorModuleTileSets(CACHE::Manager& cacheMgr, QWidget* pParent)
-    : DatabaseModuleTooltipList(pParent), m_CacheMgr(cacheMgr)
+MapEditorModuleTileSets::MapEditorModuleTileSets(const database::Manager& DBMgr, CACHE::Manager& cacheMgr, QWidget* pParent)
+    : TooltipList(pParent), m_CacheMgr(cacheMgr), m_DBMgr(DBMgr)
 {
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setDragEnabled(false);
-    setToolTipPosition(ToolTipPosition::TOOLTIP_RIGHT);
+    setToolTipPosition(ToolTipPosition::Right);
     setShowTooltip(true);
     setFrameShape(QFrame::NoFrame);
+    setModel(new database::Model(DBMgr.getTileSetDatabase(), this));
+    resizeColumnToContents(0);
 }
 
 QWidget* MapEditorModuleTileSets::_setupTooltipWidget(uint32 uiPrototypeID)
 {
     auto pLabel = new QLabel(this);
     pLabel->resize(MAP::TILE_SIZE, MAP::TILE_SIZE);
-    if (auto pModel = dynamic_cast<ConstDatabaseModel*>(model()))
+    if (auto pPrototype = m_DBMgr.getTileSetDatabase().getPrototype(uiPrototypeID))
     {
-        if (auto pPrototype = dynamic_cast<const TileSetPrototype*>(pModel->getDatabase()->getPrototype(uiPrototypeID)))
-        {
-            auto pixmap = createPixmap(*pPrototype, m_CacheMgr.getTileCache());
-            pLabel->setPixmap(pixmap);
-            pLabel->resize(pixmap.size());
-        }
+        auto pixmap = database::prototype::createPixmap(pPrototype, m_CacheMgr.getTileCache());
+        pLabel->setPixmap(pixmap);
+        pLabel->resize(pixmap.size());
     }
     return pLabel;
 }
 
 void MapEditorModuleTileSets::mousePressEvent(QMouseEvent* pEvent)
 {
-    DatabaseModuleTooltipList::mousePressEvent(pEvent);
+    TooltipList::mousePressEvent(pEvent);
 
     auto item = indexAt(pEvent->pos());
     if (item.isValid() && (pEvent->button() == Qt::RightButton || pEvent->button() == Qt::LeftButton))

@@ -12,7 +12,7 @@ namespace MAP
             class AutoTile : public Type
             {
             public:
-                AutoTile(uint32 tileID, const DATABASE::DatabaseMgr& DBMgr, Layer& layer, const GEOMETRY::Point<uint32>& pos);
+                AutoTile(uint32 tileID, const database::Manager& DBMgr, Layer& layer, const GEOMETRY::Point<uint32>& pos);
 
                 void setTiles(const MapTileInfoVec& tiles, REVERT::BrushRevert& revert);
             };

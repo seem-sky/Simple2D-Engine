@@ -1,8 +1,16 @@
 #ifndef TEXTURE_PROTOTYPE_FRAME_H
 #define TEXTURE_PROTOTYPE_FRAME_H
 
+#include <Global.h>
 #include <QtWidgets/QFrame>
-#include "DatabasePrototypes.h"
+
+namespace database
+{
+    namespace prototype
+    {
+        class Texture;
+    }
+}
 
 class TexturePrototypeFrame : public QFrame
 {
@@ -12,11 +20,11 @@ protected:
 public:
     TexturePrototypeFrame(QWidget* pParent = nullptr);
 
-    void setPrototype(const DATABASE::PROTOTYPE::TexturePrototype* pPrototype);
+    void setPrototype(const database::prototype::Texture* pPrototype);
     uint32 getID() const;
 
 private:
-    const DATABASE::PROTOTYPE::TexturePrototype* m_pPrototype;
+    const database::prototype::Texture* m_pPrototype;
 };
 
 #endif

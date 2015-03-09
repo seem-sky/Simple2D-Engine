@@ -16,9 +16,9 @@ namespace MAP
     class Layer;
 }
 
-namespace DATABASE
+namespace database
 {
-    class DatabaseMgr;
+    class Manager;
 }
 
 namespace MAPPING_MODE
@@ -31,7 +31,7 @@ namespace MAPPING_MODE
         bool _isTileAlreadySet(const MAP::Layer &layer, const GEOMETRY::Point<uint32>& tilePos, const MAP::BRUSH::BrushInfo& brushInfo);
 
     public:
-        Tile(const DATABASE::DatabaseMgr& DBMgr, QObject* pParent = nullptr);
+        Tile(const database::Manager& DBMgr, QObject* pParent = nullptr);
 
         void press(MapEditor& editor, QMouseEvent* pEvent);
         void release(MapEditor& editor, QMouseEvent* pEvent);
@@ -56,7 +56,7 @@ namespace MAPPING_MODE
         void onBrushInfoChanged(BRUSH::BrushIndex brush, MAP::BRUSH::BrushInfo info);
 
     private:
-        const DATABASE::DatabaseMgr& m_DBMgr;
+        const database::Manager& m_DBMgr;
 
         MAP::BRUSH::BrushPtr m_pCurrentBrush;
         MapEditor* m_pCurrentEditor = nullptr;

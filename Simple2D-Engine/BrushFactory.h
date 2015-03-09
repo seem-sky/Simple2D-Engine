@@ -3,9 +3,9 @@
 
 #include "Brush.h"
 
-namespace DATABASE
+namespace database
 {
-    class DatabaseMgr;
+    class Manager;
 }
 
 namespace MAP
@@ -19,7 +19,7 @@ namespace MAP
         class BrushFactory
         {
         public:
-            static BrushPtr createBrush(const BrushInfo& info, const DATABASE::DatabaseMgr& DBMgr, LayerContainer& mapLayer, LayerType layerType, uint8 layerIndex,
+            static BrushPtr createBrush(const BrushInfo& info, const database::Manager& DBMgr, LayerContainer& mapLayer, LayerType layerType, uint8 layerIndex,
                 const GEOMETRY::Point<uint32>& pos = GEOMETRY::Point<uint32>());
         };
     }

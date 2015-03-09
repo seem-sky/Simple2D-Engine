@@ -6,7 +6,7 @@
 #include "MapEditorWidgetObjectMapping.h"
 #include <QtWidgets/QGridLayout>
 
-MapEditorModuleMappingMode::MapEditorModuleMappingMode(CACHE::Manager& cacheMgr, const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent)
+MapEditorModuleMappingMode::MapEditorModuleMappingMode(CACHE::Manager& cacheMgr, const database::Manager& DBMgr, QWidget* pParent)
     : QWidget(pParent), m_DBMgr(DBMgr), m_CacheMgr(cacheMgr),
     m_pModuleTileSelection(new MapEditorModuleTileSelection(cacheMgr, DBMgr, this)),
     m_pModuleWorldObjects(new MapEditorModuleWorldObjects(DBMgr, this)),
@@ -50,7 +50,8 @@ void MapEditorModuleMappingMode::setup()
     m_pModuleTileSelection->setup();
 
     // setup ModuleWorldObjects
-    m_pModuleWorldObjects->setModel(new DATABASE::ConstDatabaseModel(m_DBMgr, DATABASE::DatabaseType::WORLD_OBJECT_DATABASE));
+    // ToDo:
+    // m_pModuleWorldObjects->setModel(new DATABASE::ConstDatabaseModel(m_DBMgr, DATABASE::DatabaseType::WORLD_OBJECT_DATABASE));
 }
 
 const MappingObject& MapEditorModuleMappingMode::getMappingMode() const

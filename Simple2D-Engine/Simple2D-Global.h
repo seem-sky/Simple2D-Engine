@@ -28,7 +28,7 @@ namespace DATABASE
                 OTHER_BOTTOM_RIGHT = 0x80,
             };
 
-            enum AUTO_TILE_INDEX
+            enum AutoTileIndex
             {
                 // auto tile set
                 INDEX_TOP_LEFT,

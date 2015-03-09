@@ -4,11 +4,6 @@
 #include <QtWidgets/QComboBox>
 #include "MappingObject.h"
 
-namespace DATABASE
-{
-    class DatabaseMgr;
-}
-
 namespace CACHE
 {
     class Manager;
@@ -22,7 +17,7 @@ class MapEditorModuleMappingMode : public QWidget
 {
     Q_OBJECT
 public:
-    MapEditorModuleMappingMode(CACHE::Manager& cacheMgr, const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent = nullptr);
+    MapEditorModuleMappingMode(CACHE::Manager& cacheMgr, const database::Manager& DBMgr, QWidget* pParent = nullptr);
 
     void setup();
 
@@ -43,7 +38,7 @@ private:
     QComboBox* m_pMappingMode = nullptr;
 
     CACHE::Manager& m_CacheMgr;
-    const DATABASE::DatabaseMgr& m_DBMgr;
+    const database::Manager& m_DBMgr;
 
     MappingObject m_MappingObject;
 };

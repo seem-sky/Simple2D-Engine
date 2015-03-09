@@ -5,21 +5,20 @@
 #include "DelayedDeleteObject.h"
 #include <QtCore/QFile>
 #include <QtGui/QDropEvent>
-#include "Config.h"
+#include <QtWidgets/QMenu>
 
-using namespace DATABASE;
-using namespace PROTOTYPE;
-using namespace MAP_STRUCTURE;
+using namespace database;
 
 /*#####
 # MapTreeItem
 #####*/
-MapTreeItem::MapTreeItem(const MapPrototype& map) : QTreeWidgetItem()
+MapTreeItem::MapTreeItem(const prototype::Map& map)
+    : QTreeWidgetItem()
 {
     setup(map);
 }
 
-void MapTreeItem::setup(const MapPrototype& map)
+void MapTreeItem::setup(const prototype::Map& map)
 {
     setData(0, 0, map.getID());
     setData(1, 0, map.getName());
@@ -37,7 +36,8 @@ bool MapTreeItem::operator <(const QTreeWidgetItem& other) const
 /*#####
 # MapTree
 #####*/
-MapEditorModuleMapTree::MapEditorModuleMapTree(DATABASE::DatabaseMgr& DBMgr, QWidget* pParent) : QTreeWidget(pParent), m_DBMgr(DBMgr)
+MapEditorModuleMapTree::MapEditorModuleMapTree(MapDatabase& mapDB, QWidget* pParent)
+    : QTreeWidget(pParent), m_MapDB(mapDB)
 {
     // header labels
     setColumnCount(0);
@@ -59,15 +59,14 @@ void MapEditorModuleMapTree::reload()
 {
     clear();
 
-    auto pMapDB = m_DBMgr.getMapDatabase();
-    uint32 size = pMapDB->getSize();
-    std::list<const MapPrototype*> unsortedMaps;
+    uint32 size = m_MapDB.getSize();
+    std::list<const prototype::Map*> unsortedMaps;
     std::vector<QTreeWidgetItem*> items(size, nullptr);
 
     for (uint32 i = 1; i <= size; ++i)
     {
-        auto pMap = pMapDB->getOriginalPrototype(i);
-        if (!pMap->isValid())
+        auto pMap = m_MapDB.getPrototype(i);
+        if (!pMap || pMap->isEmpty())
             continue;
 
         // create new QTreeWidgetItem
@@ -82,7 +81,7 @@ void MapEditorModuleMapTree::reload()
     }
 
     // insert unsorted items
-    const MapPrototype* pFirstUnsortedMap = nullptr;
+    const prototype::Map* pFirstUnsortedMap = nullptr;
     while (!unsortedMaps.empty())
     {
         auto pMap =* unsortedMaps.begin();
@@ -128,7 +127,7 @@ void MapEditorModuleMapTree::onActionEdit()
 {
     if (auto pItem = dynamic_cast<MapTreeItem*>(currentItem()))
     {
-        if (auto pPrototype = m_DBMgr.getMapDatabase()->getOriginalPrototype(pItem->data(0, 0).toUInt()))
+        if (auto pPrototype = m_MapDB.getPrototype(pItem->data(0, 0).toUInt()))
         {
             MapEditorDialogMapSettings dialog(pPrototype, this);
             if (dialog.exec())
@@ -142,20 +141,21 @@ void MapEditorModuleMapTree::onActionEdit()
 
 void MapEditorModuleMapTree::onActionNew()
 {
-    if (auto pPrototype = m_DBMgr.getMapDatabase()->getNewPrototype())
-    {
-        pPrototype->setFileName("map" + QString::number(pPrototype->getID()) + ".map");
-        MapEditorDialogMapSettings dialog(pPrototype.get(), this);
-        if (dialog.exec())
-        {
-            auto pItem = new MapTreeItem(*pPrototype);
-            if (auto pParent = currentItem())
-                pParent->addChild(pItem);
-            else
-                addTopLevelItem(pItem);
-            m_DBMgr.getMapDatabase()->setPrototype(pPrototype.release());
-        }
-    }
+    // ToDo:
+    //if (auto pPrototype = m_DBMgr.getMapDatabase()->getNewPrototype())
+    //{
+    //    pPrototype->setFileName("map" + QString::number(pPrototype->getID()) + ".map");
+    //    MapEditorDialogMapSettings dialog(pPrototype.get(), this);
+    //    if (dialog.exec())
+    //    {
+    //        auto pItem = new MapTreeItem(*pPrototype);
+    //        if (auto pParent = currentItem())
+    //            pParent->addChild(pItem);
+    //        else
+    //            addTopLevelItem(pItem);
+    //        m_DBMgr.getMapDatabase()->setPrototype(pPrototype.release());
+    //    }
+    //}
 }
 
 void MapEditorModuleMapTree::onActionOpen()
@@ -168,7 +168,8 @@ void MapEditorModuleMapTree::onActionDelete()
 {
     if (auto pItem = currentItem())
     {
-        if (auto pPrototype = m_DBMgr.getMapDatabase()->getOriginalPrototype(pItem->data(0, 0).toUInt()))
+        auto ID = pItem->data(0, 0).toUInt();
+        if (auto pPrototype = m_MapDB.getPrototype(ID))
         {
             if (QMessageBox::Yes == QMessageBox::question(this, "Delete map",
                 "Do you realy want to delete map\n"
@@ -194,23 +195,18 @@ void MapEditorModuleMapTree::onActionDelete()
                 auto pDelayedObject = new DelayedDeleteObject<QTreeWidgetItem>(pItem);
                 pDelayedObject->deleteLater();
 
-                m_DeletedMaps.push_back(pPrototype->getID());
+                m_DeletedMaps.push_back(std::unique_ptr<database::prototype::Map>(m_MapDB.takePrototype(ID)));
             }
         }
     }
 }
 
-void MapEditorModuleMapTree::onProjectSave()
+void MapEditorModuleMapTree::save(const QString& path)
 {
     // delete maps
-    for (auto ID : m_DeletedMaps)
-    {
-        if (auto pMap = m_DBMgr.getMapDatabase()->getOriginalPrototype(ID))
-        {
-            QFile::remove(Config::get()->getProjectDirectory()+"/maps/"+pMap->getFileName());
-            pMap->setFileName("");
-        }
-    }
+    // ToDo: remove parent from database::prototype::Map and store map-tree in seperate file (or something like that)
+    for (auto& pMap : m_DeletedMaps)
+        QFile::remove(path + "/maps/" + pMap->getFileName());
     m_DeletedMaps.clear();
 }
 
@@ -226,7 +222,7 @@ void MapEditorModuleMapTree::dropEvent(QDropEvent* pEvent)
     // update parent ID
     if (pItem)
     {
-        if (auto pMap = m_DBMgr.getMapDatabase()->getOriginalPrototype(pItem->data(0, 0).toUInt()))
+        if (auto pMap = m_MapDB.getPrototype(pItem->data(0, 0).toUInt()))
         {
             uint32 parentID = 0;
             if (pItem->parent())

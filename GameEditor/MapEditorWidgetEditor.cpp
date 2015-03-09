@@ -1,13 +1,14 @@
 #include "MapEditorWidgetEditor.h"
 #include "moc_MapEditorWidgetEditor.h"
 #include "MapEditorModuleMappingMode.h"
+#include "Config.h"
 
-MapEditorWidgetEditor::MapEditorWidgetEditor(DATABASE::DatabaseMgr& databaseMgr, QWidget* pParent)
-    : QWidget(pParent), m_DatabaseMgr(databaseMgr), m_CacheMgr(databaseMgr),
+MapEditorWidgetEditor::MapEditorWidgetEditor(database::Manager& DBMgr, QWidget* pParent)
+    : QWidget(pParent), m_CacheMgr(DBMgr), m_DBMgr(DBMgr),
     // modules
-    m_pModuleMapTree(new MapEditorModuleMapTree(databaseMgr, pParent)),
-    m_pModuleContent(new MapEditorModuleContent(m_CacheMgr, m_pModuleMappingMode->getMappingMode(), databaseMgr, this)),
-    m_pModuleMappingMode(new MapEditorModuleMappingMode(m_CacheMgr, databaseMgr, this))
+    m_pModuleMapTree(new MapEditorModuleMapTree(DBMgr.getMapDatabase(), pParent)),
+    m_pModuleContent(new MapEditorModuleContent(m_CacheMgr, m_pModuleMappingMode->getMappingMode(), DBMgr, this)),
+    m_pModuleMappingMode(new MapEditorModuleMappingMode(m_CacheMgr, DBMgr, this))
 {
     // setup modules
     auto pLayout = new QGridLayout();
@@ -47,4 +48,5 @@ void MapEditorWidgetEditor::projectOpened()
 void MapEditorWidgetEditor::onSaveChanges()
 {
     m_pModuleContent->saveMaps();
+    m_pModuleMapTree->save(Config::get()->getProjectDirectory());
 }

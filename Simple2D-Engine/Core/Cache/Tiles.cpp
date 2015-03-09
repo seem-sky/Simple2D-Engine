@@ -4,13 +4,13 @@
 #include <QtGui/QPainter>
 #include "Config.h"
 #include "QtGlobal.h"
-#include "DatabaseMgr.h"
+#include "Database/Manager.h"
 #include <log/Log.h>
 #include <math.h>
 
 using namespace CACHE;
 
-Tiles::Tiles(const DATABASE::DatabaseMgr& DBMgr) : TileBase(DBMgr)
+Tiles::Tiles(const database::Manager& DBMgr) : TileBase(DBMgr)
 {}
 
 TileCacheInfo Tiles::get(uint32 ID) const
@@ -21,10 +21,10 @@ TileCacheInfo Tiles::get(uint32 ID) const
         return TileCacheInfo(info.getPixmap(), info.getPosition() * MAP::TILE_SIZE);
     }
 
-    if (auto pTexture = m_DBMgr.getTileDatabase()->getOriginalPrototype(ID))
+    if (auto pTexture = m_DBMgr.getTileDatabase().getPrototype(ID))
     {
         QPixmap pixmap;
-        if (createPixmap(Config::get()->getProjectDirectory(), pTexture->getPathName(), pTexture->getTransparencyColor(), pixmap))
+        if (createPixmap(Config::get()->getProjectDirectory() + "/Textures/" + pTexture->getPathName(), pTexture->getTransparencyColor(), pixmap))
         {
             auto info = const_cast<Tiles&>(*this).add(ID, pixmap);
             STANDARD_MESSAGE(std::string("TileCache: ID: ") + std::to_string(pTexture->getID()) + " // name: " + pTexture->getName().toStdString() + " // path: " +

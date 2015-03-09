@@ -4,17 +4,12 @@
 #include "Tiles.h"
 #include "AutoTiles.h"
 
-namespace DATABASE
-{
-    class DatabaseMgr;
-}
-
 namespace CACHE
 {
     class Manager
     {
     public:
-        Manager(const DATABASE::DatabaseMgr& DBMgr);
+        Manager(const database::Manager& DBMgr);
 
         void clear();
 

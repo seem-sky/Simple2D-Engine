@@ -25,7 +25,7 @@ namespace MAP
             bool hasChanges() const;
             REVERT::BrushRevert* takeBrushRevert();
 
-            void setBrushSize(const GEOMETRY::Point<uint32>& size);
+            void setBrushSize(const GEOMETRY::Size<uint32>& size);
 
             void start();
             void start(const GEOMETRY::Point<uint32>& pos);

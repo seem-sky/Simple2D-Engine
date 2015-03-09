@@ -1,77 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Database">
-      <UniqueIdentifier>{1ab761ae-7a2a-4e47-9937-134847639fd2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="EditorCore">
       <UniqueIdentifier>{b46099a1-d6ec-435a-8490-084e174b952f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Database\Modules">
-      <UniqueIdentifier>{e69411a4-dfd2-429e-951e-74e64e56fec9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Database\Dialogs">
-      <UniqueIdentifier>{ae738db1-5e56-47db-969a-81863756b324}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Database\Widgets">
-      <UniqueIdentifier>{3af4b94b-e926-46fe-8356-b67be6f50a3f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Database\Dialogs\Resize">
-      <UniqueIdentifier>{125fb896-75d0-41e5-96ac-cf0660fbd310}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Database\Modules\List">
-      <UniqueIdentifier>{fbf6a93d-bbc8-47a1-9335-807b8530da9c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Database\Widgets\Localisation">
-      <UniqueIdentifier>{a0fa789c-29ca-49da-bfb9-f2b114e0188c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Database\Widgets\TileSet">
-      <UniqueIdentifier>{e7be3c13-129d-4ff5-80e1-2beb0dfdd99b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Database\Widgets\Resources">
-      <UniqueIdentifier>{737ab91d-8733-43c1-a4bb-0730df6a8752}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Database\Modules\Resource">
-      <UniqueIdentifier>{a672485d-ad29-4f1b-aa9c-6eaf954ecf92}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Database\Widgets\Resources\Texture">
-      <UniqueIdentifier>{2110c6c0-727c-4def-a317-0a2d371af565}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Database\Widgets\Resources\Texture\Sprites">
-      <UniqueIdentifier>{5314f60b-ca65-40bb-ac2e-99797fb92bf5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Database\Modules\Resource\Texture">
-      <UniqueIdentifier>{c3358bf6-0c32-4125-b345-a17e5051f14a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Database\Widgets\Resources\Texture\Tile">
-      <UniqueIdentifier>{b20bc60d-25f5-4013-b069-cd205879df1f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Database\Widgets\Animation">
-      <UniqueIdentifier>{193cd3fb-1d03-4902-8b29-709694b364e9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Database\Widgets\Animation\AnimationType">
-      <UniqueIdentifier>{16dc901f-34a4-44a1-a5f1-4f5fe630b2ea}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Database\Modules\TileSet">
-      <UniqueIdentifier>{95380060-38ff-4e26-bb82-04483e16a958}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Database\Modules\DragDrop">
-      <UniqueIdentifier>{2c099fc3-a20a-45ae-8586-e608e70363ea}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Database\Modules\Animation">
-      <UniqueIdentifier>{ee787e78-d774-4f6b-807b-bddbbd084cf4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Database\Modules\Animation\AnimationViewer">
-      <UniqueIdentifier>{a70b866a-d8d7-468f-b3f9-49fb0838b1cc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Database\Widgets\AutoTile">
-      <UniqueIdentifier>{52eda0ea-dfe1-4763-95e4-96756363f84b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Database\Modules\AutoTile">
-      <UniqueIdentifier>{f781df96-9b35-4439-9b88-d6fdf2f53eec}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Database\Modules\Localisation">
-      <UniqueIdentifier>{ac4c61ea-7028-49bc-83f6-64fc7b497b1b}</UniqueIdentifier>
     </Filter>
     <Filter Include="Map Editor">
       <UniqueIdentifier>{11e42f6e-fc88-4336-aabe-5b95f90ce14e}</UniqueIdentifier>
@@ -103,20 +34,8 @@
     <Filter Include="EditorCore\DatabaseModel">
       <UniqueIdentifier>{fdb631f8-7510-4675-a444-b70f58c2eadb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Database\Widgets\WorldObject">
-      <UniqueIdentifier>{6faefc3c-020e-4f1a-b074-8e6940869196}</UniqueIdentifier>
-    </Filter>
     <Filter Include="EditorCore\MainWindow">
       <UniqueIdentifier>{1a1fddbb-68fc-464a-9955-32bdc1d0cb79}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Database\Dialogs\ChoseColor">
-      <UniqueIdentifier>{1afd9a2d-0c9e-48d1-a765-e5ad166928a9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Database\Modules\VisualViewer">
-      <UniqueIdentifier>{7b5280e2-66f5-4030-a79a-62de5c44e968}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Database\Modules\WorldObject">
-      <UniqueIdentifier>{2e619a1c-424f-4fdb-8b3c-555f177389ab}</UniqueIdentifier>
     </Filter>
     <Filter Include="EditorCore\DeactivatedTab">
       <UniqueIdentifier>{cc76231e-7461-484b-8e76-67935d0c650c}</UniqueIdentifier>
@@ -172,6 +91,141 @@
     <Filter Include="Map Editor\Modules\MappingMode\MappingObject\ContextMenu">
       <UniqueIdentifier>{7a2b73c9-5920-4ec8-a134-dba76f0c31e4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="EditorCore\TooltipList">
+      <UniqueIdentifier>{330a79f6-6927-48fd-b591-21f174a1c2fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database">
+      <UniqueIdentifier>{22cde38a-3da2-46c5-a557-4048c318fea5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Dialog">
+      <UniqueIdentifier>{9f112a55-5bd9-4f5c-880a-8647e3f26565}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Dialog\Sections">
+      <UniqueIdentifier>{4253c3a4-39c4-42d8-b260-48fcdc8577f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Module">
+      <UniqueIdentifier>{d8aecebd-8638-49de-9bed-8dcbc6ea01c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Module\List">
+      <UniqueIdentifier>{4c10c60b-cb00-4a05-823d-a6aef30aa38c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Module\Resize">
+      <UniqueIdentifier>{7f7010f6-fba6-4a21-b843-5721c493cd74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Module\Prototype">
+      <UniqueIdentifier>{5df7fbae-14d6-43c8-9ebf-fae72e3aa293}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Module\Prototype\Base">
+      <UniqueIdentifier>{bfe6dbbe-c92b-4b68-99d2-394a82dc8a5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Module\Prototype\Resource">
+      <UniqueIdentifier>{cdfe793b-46c8-49e4-812f-79b68451415b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Module\Prototype\Texture">
+      <UniqueIdentifier>{f82703b3-e425-48c2-a4e6-705a3a5341b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Dialog\Sections\Base">
+      <UniqueIdentifier>{06471b2b-41b2-43f2-9e92-f65a35ca5e65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Module\MassImport">
+      <UniqueIdentifier>{d0909c98-798a-4b03-a80b-a50db8964005}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Dialog\Sections\Tile Section">
+      <UniqueIdentifier>{f7533957-f410-4660-b8a3-5dc07c6ae1b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Dialog\Sections\Tile Section\Tiles">
+      <UniqueIdentifier>{d12c15c0-2f5a-446e-9655-64713763f6bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Dialog\Sections\Tile Section\AutoTiles">
+      <UniqueIdentifier>{b574b268-5acd-44a0-ba34-3079a74e63b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EditorCore\TileDropWidget">
+      <UniqueIdentifier>{8217275a-7832-4892-bf7c-9bf83bc03b59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EditorCore\Helpers">
+      <UniqueIdentifier>{5a45909d-2fc0-485b-9206-fb7bd883b580}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EditorCore\Helpers\PixmapCreator">
+      <UniqueIdentifier>{775487cf-b80c-4483-80a0-37b2d93c6bce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Dialog\Sections\Tile Section\TileSet">
+      <UniqueIdentifier>{ed3ad1f0-519c-42b2-9ec9-0760c7f4f2cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Dialog\Sections\WorldObject">
+      <UniqueIdentifier>{fcd42449-4725-4fca-9b99-bf52d774be79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Module\Prototype\Tile Section">
+      <UniqueIdentifier>{42a45e89-2a6a-4477-8151-26a998b11c2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Module\Prototype\Tile Section\AutoTile">
+      <UniqueIdentifier>{2525a6dd-6aea-42df-846a-2518472ac4ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Module\Prototype\Tile Section\TileSet">
+      <UniqueIdentifier>{6fd2fe6a-322d-41ba-b472-4883cf330777}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Module\Prototype\Tile Section\Tile">
+      <UniqueIdentifier>{112f6648-4a80-448b-b18d-fbb6678d4425}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Module\Prototype\WorldObject Section">
+      <UniqueIdentifier>{e8e1d70d-b6c9-4de4-bf64-f502afbe0a69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Dialog\Sections\Animation">
+      <UniqueIdentifier>{7798f6f6-963b-4101-b140-79a6f22984d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Dialog\Sections\Animation\Animation">
+      <UniqueIdentifier>{c4567dce-43b8-4b33-9a25-217c0b3734fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Dialog\Sections\Animation\AnimationAdditionType">
+      <UniqueIdentifier>{289728d1-b266-4dca-baeb-f02a6815abde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Module\Prototype\Animation">
+      <UniqueIdentifier>{583ba7a9-edec-42b2-a801-793c3efc2508}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Module\Prototype\Animation\Animation">
+      <UniqueIdentifier>{6a57426d-9e66-4a0c-b25e-1b472bb27d26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Module\Prototype\Animation\AnimationAddition">
+      <UniqueIdentifier>{7effbce9-4c73-48bc-9b34-684b8e5f43ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Module\Prototype\Animation\AnimationAdditionType">
+      <UniqueIdentifier>{26bddfc8-8dc4-4b25-92e9-e683c55b6717}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Module\Prototype\Animation\Sprite">
+      <UniqueIdentifier>{83d74536-ff3b-41a9-8989-42e076b08d65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Dialog\Sections\Animation\Sprite">
+      <UniqueIdentifier>{91dc3810-1680-4826-b836-54e105e9739c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Module\Prototype\Animation\AnimationAdditionPoint">
+      <UniqueIdentifier>{2783489e-381c-4ea0-b210-aaaa2f5f062b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Module\Prototype\Animation\AnimationAdditionRect">
+      <UniqueIdentifier>{67790588-5ab1-4de0-9d0b-793e29d47d63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Dialog\Sections\Animation\AnimationAdditionPoint">
+      <UniqueIdentifier>{93a8c59e-bad7-44dd-8b84-7dcc281ec382}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Module\Prototype\Animation\Modules">
+      <UniqueIdentifier>{f809d062-01ed-40ea-ab7b-cac07a410dd1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Module\Prototype\Animation\Modules\FrameNavigation">
+      <UniqueIdentifier>{8831f712-0003-44e4-a274-38b1d3f32225}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EditorCore\GraphicItems">
+      <UniqueIdentifier>{b26c4835-e108-42e4-826a-943d77926c4d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EditorCore\GraphicItems\CrossItem">
+      <UniqueIdentifier>{8ce28be8-8fdf-4a0b-a739-7a7a5f2e6a10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Module\Prototype\Animation\Modules\SelectedItem">
+      <UniqueIdentifier>{9061e435-8492-4391-bb9f-3bee5f80d1c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Module\Prototype\Animation\Modules\SelectedItem\SelectedSprite">
+      <UniqueIdentifier>{e2025b04-0db1-43dd-83dd-18ff570b7676}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\Module\Prototype\Animation\Modules\SelectedItem\SelectedAddition">
+      <UniqueIdentifier>{7cef4317-e371-4f78-b7cd-afe58c2bf302}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainWindow.cpp">
@@ -183,69 +237,6 @@
     <ClCompile Include="Project.cpp">
       <Filter>EditorCore</Filter>
     </ClCompile>
-    <ClCompile Include="DatabaseWidgetLocalisation.cpp">
-      <Filter>Database\Widgets\Localisation</Filter>
-    </ClCompile>
-    <ClCompile Include="DatabaseWidgetTileSet.cpp">
-      <Filter>Database\Widgets\TileSet</Filter>
-    </ClCompile>
-    <ClCompile Include="DatabaseWidgetSprite.cpp">
-      <Filter>Database\Widgets\Resources\Texture\Sprites</Filter>
-    </ClCompile>
-    <ClCompile Include="DatabaseWindow.cpp">
-      <Filter>Database</Filter>
-    </ClCompile>
-    <ClCompile Include="DatabaseDialogResize.cpp">
-      <Filter>Database\Dialogs\Resize</Filter>
-    </ClCompile>
-    <ClCompile Include="DatabaseWidgetBase.cpp">
-      <Filter>Database\Widgets</Filter>
-    </ClCompile>
-    <ClCompile Include="DatabaseModuleList.cpp">
-      <Filter>Database\Modules\List</Filter>
-    </ClCompile>
-    <ClCompile Include="DatabaseModuleTexture.cpp">
-      <Filter>Database\Modules\Resource\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="DatabaseModuleResource.cpp">
-      <Filter>Database\Modules\Resource</Filter>
-    </ClCompile>
-    <ClCompile Include="DatabaseWidgetTexture.cpp">
-      <Filter>Database\Widgets\Resources\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="DatabaseWidgetTile.cpp">
-      <Filter>Database\Widgets\Resources\Texture\Tile</Filter>
-    </ClCompile>
-    <ClCompile Include="DatabaseWidgetRessource.cpp">
-      <Filter>Database\Widgets\Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="DatabaseWidgetAnimationType.cpp">
-      <Filter>Database\Widgets\Animation\AnimationType</Filter>
-    </ClCompile>
-    <ClCompile Include="DatabaseModuleTileSet.cpp">
-      <Filter>Database\Modules\TileSet</Filter>
-    </ClCompile>
-    <ClCompile Include="DatabaseModuleDragDrop.cpp">
-      <Filter>Database\Modules\DragDrop</Filter>
-    </ClCompile>
-    <ClCompile Include="DatabaseModuleAnimation.cpp">
-      <Filter>Database\Modules\Animation</Filter>
-    </ClCompile>
-    <ClCompile Include="DatabaseWidgetAnimation.cpp">
-      <Filter>Database\Widgets\Animation</Filter>
-    </ClCompile>
-    <ClCompile Include="AnimationViewer.cpp">
-      <Filter>Database\Modules\Animation\AnimationViewer</Filter>
-    </ClCompile>
-    <ClCompile Include="DatabaseWidgetAutoTile.cpp">
-      <Filter>Database\Widgets\AutoTile</Filter>
-    </ClCompile>
-    <ClCompile Include="DatabaseModuleAutoTile.cpp">
-      <Filter>Database\Modules\AutoTile</Filter>
-    </ClCompile>
-    <ClCompile Include="DatabaseModuleLocalisation.cpp">
-      <Filter>Database\Modules\Localisation</Filter>
-    </ClCompile>
     <ClCompile Include="MapEditorModuleTiles.cpp">
       <Filter>Map Editor\Modules\MappingMode\TileTabs\Tiles</Filter>
     </ClCompile>
@@ -253,9 +244,6 @@
       <Filter>EditorCore</Filter>
     </ClCompile>
     <ClCompile Include="AbstractPrototypeTable.cpp">
-      <Filter>Map Editor\Modules\MappingMode\TileTabs</Filter>
-    </ClCompile>
-    <ClCompile Include="MapEditorModuleTileSets.cpp">
       <Filter>Map Editor\Modules\MappingMode\TileTabs</Filter>
     </ClCompile>
     <ClCompile Include="MapEditorDialogMapSettings.cpp">
@@ -284,21 +272,6 @@
     </ClCompile>
     <ClCompile Include="MapEditorWidgetEditor.cpp">
       <Filter>Map Editor\Widgets\MapEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="DatabaseModel.cpp">
-      <Filter>EditorCore\DatabaseModel</Filter>
-    </ClCompile>
-    <ClCompile Include="DatabaseWidgetWorldObject.cpp">
-      <Filter>Database\Widgets\WorldObject</Filter>
-    </ClCompile>
-    <ClCompile Include="DatabaseDialogChoseColor.cpp">
-      <Filter>Database\Dialogs\ChoseColor</Filter>
-    </ClCompile>
-    <ClCompile Include="DatabaseModuleVisualViewer.cpp">
-      <Filter>Database\Modules\VisualViewer</Filter>
-    </ClCompile>
-    <ClCompile Include="DatabaseModuleWorldObjectAnimation.cpp">
-      <Filter>Database\Modules\WorldObject</Filter>
     </ClCompile>
     <ClCompile Include="DeactivatedTabWidget.cpp">
       <Filter>EditorCore\DeactivatedTab</Filter>
@@ -348,37 +321,133 @@
     <ClCompile Include="MappingModeContextMenuAction.cpp">
       <Filter>Map Editor\Modules\MappingMode\MappingObject\ContextMenu</Filter>
     </ClCompile>
+    <ClCompile Include="MapEditorModuleTileSets.cpp">
+      <Filter>Map Editor\Modules\MappingMode\TileTabs\Tiles</Filter>
+    </ClCompile>
+    <ClCompile Include="TooltipList.cpp">
+      <Filter>EditorCore\TooltipList</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabaseModel.cpp">
+      <Filter>EditorCore\DatabaseModel</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorGlobal.cpp">
+      <Filter>EditorCore</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabaseDialog.cpp">
+      <Filter>Database\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabaseModuleList.cpp">
+      <Filter>Database\Module\List</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabaseModuleResize.cpp">
+      <Filter>Database\Module\Resize</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabaseModulePrototypeBase.cpp">
+      <Filter>Database\Module\Prototype\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabaseModulePrototypeResource.cpp">
+      <Filter>Database\Module\Prototype\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabaseModulePrototypeTexture.cpp">
+      <Filter>Database\Module\Prototype\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabaseModulePrototypeTile.cpp">
+      <Filter>Database\Module\Prototype\Tile Section\Tile</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabaseModuleMassImport.cpp">
+      <Filter>Database\Module\MassImport</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabaseSectionTile.cpp">
+      <Filter>Database\Dialog\Sections\Tile Section\Tiles</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabaseSectionAutoTile.cpp">
+      <Filter>Database\Dialog\Sections\Tile Section\AutoTiles</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabaseModulePrototypeAutoTile.cpp">
+      <Filter>Database\Module\Prototype\Tile Section\AutoTile</Filter>
+    </ClCompile>
+    <ClCompile Include="TileDropWidget.cpp">
+      <Filter>EditorCore\TileDropWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="HelperTileCreator.cpp">
+      <Filter>EditorCore\Helpers\PixmapCreator</Filter>
+    </ClCompile>
+    <ClCompile Include="PrototypeTooltipList.cpp">
+      <Filter>EditorCore\TooltipList</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabaseSectionTileSet.cpp">
+      <Filter>Database\Dialog\Sections\Tile Section\TileSet</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabaseModulePrototypeTileSet.cpp">
+      <Filter>Database\Module\Prototype\Tile Section\TileSet</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabaseSectionInterface.cpp">
+      <Filter>Database\Dialog\Sections\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabaseModulePrototypeSprite.cpp">
+      <Filter>Database\Module\Prototype\Animation\Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabaseSectionSprite.cpp">
+      <Filter>Database\Dialog\Sections\Animation\Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabaseModulePrototypeAnimationAdditionType.cpp">
+      <Filter>Database\Module\Prototype\Animation\AnimationAdditionType</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabaseSectionAnimationAdditionType.cpp">
+      <Filter>Database\Dialog\Sections\Animation\AnimationAdditionType</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabaseSectionAnimation.cpp">
+      <Filter>Database\Dialog\Sections\Animation\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabaseModulePrototypeAnimationAddition.cpp">
+      <Filter>Database\Module\Prototype\Animation\AnimationAddition</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabaseModulePrototypeAnimation.cpp">
+      <Filter>Database\Module\Prototype\Animation\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="HelperSpriteCreator.cpp">
+      <Filter>EditorCore\Helpers\PixmapCreator</Filter>
+    </ClCompile>
+    <ClCompile Include="ChoseColorDialog.cpp">
+      <Filter>Database\Module\Prototype\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabaseSectionAnimationAdditionPoint.cpp">
+      <Filter>Database\Dialog\Sections\Animation\AnimationAdditionPoint</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabaseModulePrototypeAnimationAdditionPoint.cpp">
+      <Filter>Database\Module\Prototype\Animation\AnimationAdditionPoint</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationAdditionEditorScene.cpp">
+      <Filter>Database\Module\Prototype\Animation\AnimationAddition</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicsCrossItem.cpp">
+      <Filter>EditorCore\GraphicItems\CrossItem</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationModuleSelectedSprite.cpp">
+      <Filter>Database\Module\Prototype\Animation\Modules\SelectedItem\SelectedSprite</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationModuleFrameNavigation.cpp">
+      <Filter>Database\Module\Prototype\Animation\Modules\FrameNavigation</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationModuleSelectedItem.cpp">
+      <Filter>Database\Module\Prototype\Animation\Modules\SelectedItem</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationModuleSelectedAddition.cpp">
+      <Filter>Database\Module\Prototype\Animation\Modules\SelectedItem\SelectedAddition</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationModuleSelectedWidget.cpp">
+      <Filter>Database\Module\Prototype\Animation\Modules\SelectedItem</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationEditorScene.cpp">
+      <Filter>Database\Module\Prototype\Animation\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationEditorItem.cpp">
+      <Filter>Database\Module\Prototype\Animation\Animation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <compile_QT_Files Include="UI\MainWindow.ui">
       <Filter>EditorCore\MainWindow</Filter>
-    </compile_QT_Files>
-    <compile_QT_Files Include="UI\DatabaseModuleTileSet.ui">
-      <Filter>Database\Widgets\TileSet</Filter>
-    </compile_QT_Files>
-    <compile_QT_Files Include="UI\Database.ui">
-      <Filter>Database</Filter>
-    </compile_QT_Files>
-    <compile_QT_Files Include="UI\DatabaseDialogResize.ui">
-      <Filter>Database\Dialogs\Resize</Filter>
-    </compile_QT_Files>
-    <compile_QT_Files Include="UI\DatabaseModuleList.ui">
-      <Filter>Database\Modules\List</Filter>
-    </compile_QT_Files>
-    <compile_QT_Files Include="UI\DatabaseModuleResource.ui">
-      <Filter>Database\Modules\Resource</Filter>
-    </compile_QT_Files>
-    <compile_QT_Files Include="UI\DatabaseModuleTexture.ui">
-      <Filter>Database\Modules\Resource\Texture</Filter>
-    </compile_QT_Files>
-    <compile_QT_Files Include="UI\DatabaseModuleAnimation.ui">
-      <Filter>Database\Modules\Animation</Filter>
-    </compile_QT_Files>
-    <compile_QT_Files Include="UI\DatabaseModuleAutoTile.ui">
-      <Filter>Database\Modules\AutoTile</Filter>
-    </compile_QT_Files>
-    <compile_QT_Files Include="UI\DatabaseModuleLocalisation.ui">
-      <Filter>Database\Modules\Localisation</Filter>
     </compile_QT_Files>
     <compile_QT_Files Include="UI\MapEditorDialogMapSettings.ui">
       <Filter>Map Editor\Dialogs\MapEditorDialogMapSettings</Filter>
@@ -395,6 +464,42 @@
     <compile_QT_Files Include="UI\MapEditorModuleScriptAreaMapping.ui">
       <Filter>Map Editor\Modules\MappingMode\ScriptArea</Filter>
     </compile_QT_Files>
+    <compile_QT_Files Include="UI\DatabaseDialogResize.ui">
+      <Filter>Database\Module\Resize</Filter>
+    </compile_QT_Files>
+    <compile_QT_Files Include="UI\DatabaseModulePrototypeBase.ui">
+      <Filter>Database\Module\Prototype\Base</Filter>
+    </compile_QT_Files>
+    <compile_QT_Files Include="UI\DatabaseModulePrototypeResource.ui">
+      <Filter>Database\Module\Prototype\Resource</Filter>
+    </compile_QT_Files>
+    <compile_QT_Files Include="UI\DatabaseModulePrototypeTexture.ui">
+      <Filter>Database\Module\Prototype\Texture</Filter>
+    </compile_QT_Files>
+    <compile_QT_Files Include="UI\DatabaseModulePrototypeAutoTile.ui">
+      <Filter>Database\Module\Prototype\Tile Section\AutoTile</Filter>
+    </compile_QT_Files>
+    <compile_QT_Files Include="UI\DatabaseModulePrototypeTileSet.ui">
+      <Filter>Database\Module\Prototype\Tile Section\TileSet</Filter>
+    </compile_QT_Files>
+    <compile_QT_Files Include="UI\DatabaseModulePrototypeAnimationAddition.ui">
+      <Filter>Database\Module\Prototype\Animation\AnimationAddition</Filter>
+    </compile_QT_Files>
+    <compile_QT_Files Include="UI\AnimationModuleSelectedSprite.ui">
+      <Filter>Database\Module\Prototype\Animation\Modules\SelectedItem\SelectedSprite</Filter>
+    </compile_QT_Files>
+    <compile_QT_Files Include="UI\AnimationModuleFrameNavigation.ui">
+      <Filter>Database\Module\Prototype\Animation\Modules\FrameNavigation</Filter>
+    </compile_QT_Files>
+    <compile_QT_Files Include="UI\DatabaseModulePrototypeAnimation.ui">
+      <Filter>Database\Module\Prototype\Animation\Animation</Filter>
+    </compile_QT_Files>
+    <compile_QT_Files Include="UI\AnimationModuleSelectedItem.ui">
+      <Filter>Database\Module\Prototype\Animation\Modules\SelectedItem</Filter>
+    </compile_QT_Files>
+    <compile_QT_Files Include="UI\AnimationModuleSelectedAddition.ui">
+      <Filter>Database\Module\Prototype\Animation\Modules\SelectedItem\SelectedAddition</Filter>
+    </compile_QT_Files>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Project.h">
@@ -404,42 +509,6 @@
   <ItemGroup>
     <moc_header Include="MainWindow.h">
       <Filter>EditorCore\MainWindow</Filter>
-    </moc_header>
-    <moc_header Include="DatabaseWindow.h">
-      <Filter>Database</Filter>
-    </moc_header>
-    <moc_header Include="DatabaseDialogResize.h">
-      <Filter>Database\Dialogs\Resize</Filter>
-    </moc_header>
-    <moc_header Include="DatabaseModuleList.h">
-      <Filter>Database\Modules\List</Filter>
-    </moc_header>
-    <moc_header Include="DatabaseWidgetBase.h">
-      <Filter>Database\Widgets</Filter>
-    </moc_header>
-    <moc_header Include="DatabaseWidgetTexture.h">
-      <Filter>Database\Widgets\Resources\Texture</Filter>
-    </moc_header>
-    <moc_header Include="DatabaseModuleTexture.h">
-      <Filter>Database\Modules\Resource\Texture</Filter>
-    </moc_header>
-    <moc_header Include="DatabaseWidgetTile.h">
-      <Filter>Database\Widgets\Resources\Texture\Tile</Filter>
-    </moc_header>
-    <moc_header Include="DatabaseWidgetRessource.h">
-      <Filter>Database\Widgets\Resources</Filter>
-    </moc_header>
-    <moc_header Include="DatabaseModuleTileSet.h">
-      <Filter>Database\Modules\TileSet</Filter>
-    </moc_header>
-    <moc_header Include="DatabaseModuleDragDrop.h">
-      <Filter>Database\Modules\DragDrop</Filter>
-    </moc_header>
-    <moc_header Include="DatabaseModuleAnimation.h">
-      <Filter>Database\Modules\Animation</Filter>
-    </moc_header>
-    <moc_header Include="AnimationViewer.h">
-      <Filter>Database\Modules\Animation\AnimationViewer</Filter>
     </moc_header>
     <moc_header Include="AbstractPrototypeTable.h">
       <Filter>Map Editor\Modules\MappingMode\TileTabs</Filter>
@@ -456,23 +525,11 @@
     <moc_header Include="MapEditorWidgetBrush.h">
       <Filter>Map Editor\Widgets\Tools\Brush</Filter>
     </moc_header>
-    <moc_header Include="MapEditorModuleTileSets.h">
-      <Filter>Map Editor\Modules\MappingMode\TileTabs</Filter>
-    </moc_header>
     <moc_header Include="MapEditorModuleTileSelection.h">
       <Filter>Map Editor\Modules\MappingMode\TileTabs</Filter>
     </moc_header>
     <moc_header Include="MapEditorModuleBrush.h">
       <Filter>Map Editor\Modules\MappingMode\Brush</Filter>
-    </moc_header>
-    <moc_header Include="DatabaseWidgetWorldObject.h">
-      <Filter>Database\Widgets\WorldObject</Filter>
-    </moc_header>
-    <moc_header Include="DatabaseModuleVisualViewer.h">
-      <Filter>Database\Modules\VisualViewer</Filter>
-    </moc_header>
-    <moc_header Include="DatabaseModuleWorldObjectAnimation.h">
-      <Filter>Database\Modules\WorldObject</Filter>
     </moc_header>
     <moc_header Include="DeactivatedTabWidget.h">
       <Filter>EditorCore\DeactivatedTab</Filter>
@@ -501,36 +558,38 @@
     <moc_header Include="ScriptAreaItem.h">
       <Filter>Map Editor\Modules\Content\Items</Filter>
     </moc_header>
+    <moc_header Include="MapEditorModuleScriptArea.h" />
+    <moc_header Include="MappingModeContextMenuAction.h" />
+    <moc_header Include="MapEditorModuleTileSets.h">
+      <Filter>Map Editor\Modules\MappingMode\TileTabs\Tiles</Filter>
+    </moc_header>
+    <moc_header Include="DatabaseDialog.h">
+      <Filter>Database\Dialog</Filter>
+    </moc_header>
+    <moc_header Include="DatabaseModulePrototypeTile.h">
+      <Filter>Database\Module\Prototype\Tile Section\Tile</Filter>
+    </moc_header>
+    <moc_header Include="DatabaseModuleResize.h">
+      <Filter>Database\Module\Resize</Filter>
+    </moc_header>
+    <moc_header Include="DatabaseModuleList.h">
+      <Filter>Database\Module\List</Filter>
+    </moc_header>
+    <moc_header Include="DatabaseSectionTile.h">
+      <Filter>Database\Dialog\Sections\Tile Section\Tiles</Filter>
+    </moc_header>
+    <moc_header Include="TooltipList.h">
+      <Filter>EditorCore\TooltipList</Filter>
+    </moc_header>
+    <moc_header Include="DatabaseSectionSprite.h">
+      <Filter>Database\Dialog\Sections\Animation\Sprite</Filter>
+    </moc_header>
+    <moc_header Include="AnimationAdditionEditorScene.h">
+      <Filter>Database\Module\Prototype\Animation\AnimationAddition</Filter>
+    </moc_header>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
-    <ClInclude Include="DatabaseWidgetLocalisation.h">
-      <Filter>Database\Widgets\Localisation</Filter>
-    </ClInclude>
-    <ClInclude Include="DatabaseWidgetTileSet.h">
-      <Filter>Database\Widgets\TileSet</Filter>
-    </ClInclude>
-    <ClInclude Include="DatabaseWidgetSprite.h">
-      <Filter>Database\Widgets\Resources\Texture\Sprites</Filter>
-    </ClInclude>
-    <ClInclude Include="DatabaseModuleResource.h">
-      <Filter>Database\Modules\Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="DatabaseWidgetAnimationType.h">
-      <Filter>Database\Widgets\Animation\AnimationType</Filter>
-    </ClInclude>
-    <ClInclude Include="DatabaseWidgetAnimation.h">
-      <Filter>Database\Widgets\Animation</Filter>
-    </ClInclude>
-    <ClInclude Include="DatabaseWidgetAutoTile.h">
-      <Filter>Database\Widgets\AutoTile</Filter>
-    </ClInclude>
-    <ClInclude Include="DatabaseModuleAutoTile.h">
-      <Filter>Database\Modules\AutoTile</Filter>
-    </ClInclude>
-    <ClInclude Include="DatabaseModuleLocalisation.h">
-      <Filter>Database\Modules\Localisation</Filter>
-    </ClInclude>
     <ClInclude Include="TexturePrototypeFrame.h">
       <Filter>EditorCore</Filter>
     </ClInclude>
@@ -542,12 +601,6 @@
     </ClInclude>
     <ClInclude Include="MapEditorModuleWorldObjects.h">
       <Filter>Map Editor\Modules\MappingMode\WorldObject</Filter>
-    </ClInclude>
-    <ClInclude Include="DatabaseModel.h">
-      <Filter>EditorCore\DatabaseModel</Filter>
-    </ClInclude>
-    <ClInclude Include="DatabaseDialogChoseColor.h">
-      <Filter>Database\Dialogs\ChoseColor</Filter>
     </ClInclude>
     <ClInclude Include="MappingModeInterface.h">
       <Filter>Map Editor\Modules\MappingMode\MappingObject\MappingMode</Filter>
@@ -576,11 +629,107 @@
     <ClInclude Include="ScriptAreaMappingRevert.h">
       <Filter>Map Editor\Modules\MappingMode\MappingObject\MappingMode\ScriptAreaMapping\Revert</Filter>
     </ClInclude>
-    <ClInclude Include="MapEditorModuleScriptArea.h">
-      <Filter>Map Editor\Modules\MappingMode\ScriptArea</Filter>
+    <ClInclude Include="DatabaseModel.h">
+      <Filter>EditorCore\DatabaseModel</Filter>
     </ClInclude>
-    <ClInclude Include="MappingModeContextMenuAction.h">
-      <Filter>Map Editor\Modules\MappingMode\MappingObject\ContextMenu</Filter>
+    <ClInclude Include="DatabaseModulePrototypeBase.h">
+      <Filter>Database\Module\Prototype\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="DatabaseModulePrototypeResource.h">
+      <Filter>Database\Module\Prototype\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="DatabaseModulePrototypeTexture.h">
+      <Filter>Database\Module\Prototype\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="DatabaseSectionBase.h">
+      <Filter>Database\Dialog\Sections\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="DatabaseModulePrototypeInterface.h">
+      <Filter>Database\Module\Prototype</Filter>
+    </ClInclude>
+    <ClInclude Include="DatabaseModuleMassImport.h">
+      <Filter>Database\Module\MassImport</Filter>
+    </ClInclude>
+    <ClInclude Include="DatabaseSectionAutoTile.h">
+      <Filter>Database\Dialog\Sections\Tile Section\AutoTiles</Filter>
+    </ClInclude>
+    <ClInclude Include="DatabaseModulePrototypeAutoTile.h">
+      <Filter>Database\Module\Prototype\Tile Section\AutoTile</Filter>
+    </ClInclude>
+    <ClInclude Include="TileDropWidget.h">
+      <Filter>EditorCore\TileDropWidget</Filter>
+    </ClInclude>
+    <ClInclude Include="HelperCreatorInterface.h">
+      <Filter>EditorCore\Helpers\PixmapCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="HelperTileCreator.h">
+      <Filter>EditorCore\Helpers\PixmapCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="PrototypeTooltipList.h">
+      <Filter>EditorCore\TooltipList</Filter>
+    </ClInclude>
+    <ClInclude Include="DatabaseSectionTileSet.h">
+      <Filter>Database\Dialog\Sections\Tile Section\TileSet</Filter>
+    </ClInclude>
+    <ClInclude Include="DatabaseModulePrototypeTileSet.h">
+      <Filter>Database\Module\Prototype\Tile Section\TileSet</Filter>
+    </ClInclude>
+    <ClInclude Include="DatabaseSectionInterface.h">
+      <Filter>Database\Dialog\Sections\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="DatabaseModulePrototypeSprite.h">
+      <Filter>Database\Module\Prototype\Animation\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="DatabaseModulePrototypeAnimationAdditionType.h">
+      <Filter>Database\Module\Prototype\Animation\AnimationAdditionType</Filter>
+    </ClInclude>
+    <ClInclude Include="DatabaseSectionAnimationAdditionType.h">
+      <Filter>Database\Dialog\Sections\Animation\AnimationAdditionType</Filter>
+    </ClInclude>
+    <ClInclude Include="DatabaseSectionAnimation.h">
+      <Filter>Database\Dialog\Sections\Animation\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="DatabaseModulePrototypeAnimationAddition.h">
+      <Filter>Database\Module\Prototype\Animation\AnimationAddition</Filter>
+    </ClInclude>
+    <ClInclude Include="DatabaseModulePrototypeAnimation.h">
+      <Filter>Database\Module\Prototype\Animation\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="HelperSpriteCreator.h">
+      <Filter>EditorCore\Helpers\PixmapCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="ChoseColorDialog.h">
+      <Filter>Database\Module\Prototype\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="DatabaseSectionAnimationAdditionPoint.h">
+      <Filter>Database\Dialog\Sections\Animation\AnimationAdditionPoint</Filter>
+    </ClInclude>
+    <ClInclude Include="DatabaseModulePrototypeAnimationAdditionPoint.h">
+      <Filter>Database\Module\Prototype\Animation\AnimationAdditionPoint</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleSelectedSprite.h">
+      <Filter>Database\Module\Prototype\Animation\Modules\SelectedItem\SelectedSprite</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsCrossItem.h">
+      <Filter>EditorCore\GraphicItems\CrossItem</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationModuleFrameNavigation.h">
+      <Filter>Database\Module\Prototype\Animation\Modules\FrameNavigation</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationModuleSelectedItem.h">
+      <Filter>Database\Module\Prototype\Animation\Modules\SelectedItem</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationModuleSelectedAddition.h">
+      <Filter>Database\Module\Prototype\Animation\Modules\SelectedItem\SelectedAddition</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationModuleSelectedWidget.h">
+      <Filter>Database\Module\Prototype\Animation\Modules\SelectedItem</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationEditorScene.h">
+      <Filter>Database\Module\Prototype\Animation\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationEditorItem.h">
+      <Filter>Database\Module\Prototype\Animation\Animation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

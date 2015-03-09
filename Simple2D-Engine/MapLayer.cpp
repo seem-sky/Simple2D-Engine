@@ -1,27 +1,27 @@
 #include "MapLayer.h"
-#include "DatabasePrototypes.h"
+#include "database/Prototype/Derived.h"
 #include "MapException.h"
 
 using namespace MAP;
-using namespace DATABASE::PROTOTYPE::AUTO_TILE;
+using namespace database::prototype;
 
 /*#####
 # Layer
 #####*/
-Layer::Layer(const GEOMETRY::Point<uint32>& size)
+Layer::Layer(const GEOMETRY::Size<uint32>& size)
 {
     _resize(size);
 }
 
-void Layer::_resize(const GEOMETRY::Point<uint32>& size)
+void Layer::_resize(const GEOMETRY::Size<uint32>& size)
 {
     m_Size = size;
-    m_Layer.resize(size.getX(), MapTileVec(size.getY(), MapTile(0, 0)));
+    m_Layer.resize(size.getWidth(), MapTileVec(size.getHeight(), MapTile(0, 0)));
 }
 
 void Layer::_clear()
 {
-    _resize(GEOMETRY::Point<uint32>());
+    _resize(GEOMETRY::Size<uint32>());
 }
 
 MapTileInfo Layer::getMapTile(const GEOMETRY::Point<uint32>& at) const
@@ -131,7 +131,7 @@ void LayerContainer::clear()
         layer._clear();
 }
 
-void LayerContainer::resize(const GEOMETRY::Point<uint32>& size, uint8 uiForegroundLayerSize, uint8 uiBackgroundLayerSize)
+void LayerContainer::resize(const GEOMETRY::Size<uint32>& size, uint8 uiForegroundLayerSize, uint8 uiBackgroundLayerSize)
 {
     m_Size = size;
     for (auto& layer : m_BackgroundLayer)

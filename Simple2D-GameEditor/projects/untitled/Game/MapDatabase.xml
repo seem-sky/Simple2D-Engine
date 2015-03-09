@@ -1,24 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<DB>
-    <p sizeX="500" sizeY="500" backLayer="1" foreLayer="0" file="map1.map" ID="1" name="500er maker vergleich"/>
-    <p sizeX="20" sizeY="20" backLayer="1" foreLayer="0" file="map2.map" ID="2"/>
-    <p sizeX="30" sizeY="30" backLayer="3" foreLayer="3" file="map3.map" ID="3" name="atelier-testmap"/>
-    <p sizeX="18" sizeY="18" backLayer="3" foreLayer="0" file="map4.map" ID="4" name="test2"/>
-    <p sizeX="0" sizeY="0" backLayer="1" foreLayer="0" file="" ID="5"/>
-    <p sizeX="0" sizeY="0" backLayer="1" foreLayer="0" file="" ID="6"/>
-    <p sizeX="0" sizeY="0" backLayer="1" foreLayer="0" file="" ID="7"/>
-    <p sizeX="0" sizeY="0" backLayer="1" foreLayer="0" file="" ID="8"/>
-    <p sizeX="0" sizeY="0" backLayer="1" foreLayer="0" file="" ID="9"/>
-    <p sizeX="0" sizeY="0" backLayer="1" foreLayer="0" file="" ID="10"/>
-    <p sizeX="0" sizeY="0" backLayer="1" foreLayer="0" file="" ID="11"/>
-    <p sizeX="0" sizeY="0" backLayer="1" foreLayer="0" file="" ID="12"/>
-    <p sizeX="0" sizeY="0" backLayer="1" foreLayer="0" file="" ID="13"/>
-    <p sizeX="0" sizeY="0" backLayer="1" foreLayer="0" file="" ID="14"/>
-    <p sizeX="0" sizeY="0" backLayer="1" foreLayer="0" file="" ID="15"/>
-    <p sizeX="0" sizeY="0" backLayer="1" foreLayer="0" file="" ID="16"/>
-    <p sizeX="0" sizeY="0" backLayer="1" foreLayer="0" file="" ID="17"/>
-    <p sizeX="0" sizeY="0" backLayer="1" foreLayer="0" file="" ID="18"/>
-    <p sizeX="0" sizeY="0" backLayer="1" foreLayer="0" file="" ID="19"/>
-    <p sizeX="1000" sizeY="1000" backLayer="10" foreLayer="10" parentID="2" file="map20.map" ID="20" name="blubb"/>
-    <p sizeX="5" sizeY="5" backLayer="1" foreLayer="0" parentID="20" file="map21.map" ID="21" name="jojojojojo"/>
+<DB size="21">
+    <p ID="1" name="500er maker vergleich" file="map1.map" width="500" height="500" layerF="0" layerB="1" parentID="0" script=""/>
+    <p ID="2" file="map2.map" width="20" height="20" layerF="0" layerB="1" parentID="0" script=""/>
+    <p ID="3" name="atelier-testmap" file="map3.map" width="30" height="30" layerF="3" layerB="3" parentID="0" script=""/>
+    <p ID="4" name="test2" file="map4.map" width="18" height="18" layerF="0" layerB="3" parentID="0" script=""/>
+    <p ID="20" name="blubb" file="map20.map" width="1000" height="1000" layerF="10" layerB="10" parentID="2" script=""/>
+    <p ID="21" name="jojojojojo" file="map21.map" width="5" height="5" layerF="0" layerB="1" parentID="20" script=""/>
 </DB>

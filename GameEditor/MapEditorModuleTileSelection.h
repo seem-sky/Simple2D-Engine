@@ -1,16 +1,10 @@
 #ifndef MAP_EDITOR_MODULE_TILE_SELECTION_H
 #define MAP_EDITOR_MODULE_TILE_SELECTION_H
 
-#include "DatabaseMgr.h"
 #include <QtWidgets/QTabWidget>
 #include "MapEditorModuleTiles.h"
 #include "MapEditorWidgetBrush.h"
 #include "MapEditorModuleTileSets.h"
-
-namespace CACHE
-{
-    class Manager;
-}
 
 class MapEditorModuleTileSelection : public QTabWidget
 {
@@ -20,7 +14,7 @@ protected:
     void showEvent(QShowEvent* pEvent);
 
 public:
-    MapEditorModuleTileSelection(CACHE::Manager& cacheMgr, const DATABASE::DatabaseMgr& databaseMgr, QWidget* pParent = nullptr);
+    MapEditorModuleTileSelection(CACHE::Manager& cacheMgr, const database::Manager& dbMgr, QWidget* pParent = nullptr);
 
     void setup();
 
@@ -33,7 +27,7 @@ public slots:
 
 private:
     std::array<AbstractPixmapWidget*, 2> m_SelectedItems;
-    const DATABASE::DatabaseMgr& m_DatabaseMgr;
+    const database::Manager& m_DBMgr;
     CACHE::Manager& m_CacheMgr;
 
     // tabs

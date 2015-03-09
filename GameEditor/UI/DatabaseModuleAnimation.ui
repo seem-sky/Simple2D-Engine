@@ -32,13 +32,6 @@
    <property name="bottomMargin">
     <number>0</number>
    </property>
-   <item row="1" column="0">
-    <widget class="AnimationViewer" name="m_pAniViewer">
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
    <item row="2" column="0" alignment="Qt::AlignBottom">
     <widget class="QFrame" name="frame">
      <property name="frameShape">
@@ -460,6 +453,13 @@
       </spacer>
      </item>
     </layout>
+   </item>
+   <item row="1" column="0">
+    <widget class="AnimationViewer" name="m_pAniViewer">
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

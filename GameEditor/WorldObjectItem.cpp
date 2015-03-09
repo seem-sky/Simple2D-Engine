@@ -5,9 +5,10 @@
 #include <QtWidgets/QGraphicsScene>
 #include <QtGui/QPainter>
 #include <QtGlobal.h>
+#include <Database/Manager.h>
 #include "VisualViewer.h"
 
-WorldObjectItem::WorldObjectItem(MAP::MAP_DATA::WorldObjectInfo& info, const DATABASE::DatabaseMgr& DBMgr)
+WorldObjectItem::WorldObjectItem(MAP::MAP_DATA::WorldObjectInfo& info, const database::Manager& DBMgr)
     : QGraphicsItem(), QObject(), m_WorldObjectInfo(info), m_DBMgr(DBMgr)
 {
     setFlag(ItemSendsScenePositionChanges);
@@ -26,15 +27,15 @@ void WorldObjectItem::_setup()
     viewer.setFrameShape(QFrame::NoFrame);
     viewer.showGrid(false);
     viewer.setDatabaseMgr(&m_DBMgr);
-    auto pWorldObject = m_DBMgr.getWorldObjectDatabase()->getOriginalPrototype(m_WorldObjectInfo.getID());
+    auto pWorldObject = m_DBMgr.getWorldObjectDatabase().getPrototype(m_WorldObjectInfo.getID());
     if (!pWorldObject)
         throw std::runtime_error("Invalid WorldObject ID.");
 
-    auto &animationModule = pWorldObject->getAnimationModule();
-    for (uint32 i = 0; i < animationModule.getAnimationCount(); ++i)
+    auto &animations = pWorldObject->getAnimations();
+    for (uint32 i = 0; i < animations.size(); ++i)
     {
-        auto animationInfo = animationModule.getAnimationInfo(i);
-        if (animationInfo.m_AnimationTypeID - 1 == static_cast<uint32>(m_WorldObjectInfo.getDirection()))
+        auto animationInfo = animations.at(i);
+        if (animationInfo.getAnimationTypeID() - 1 == static_cast<uint32>(m_WorldObjectInfo.getDirection()))
         {
             viewer.setAnimation(animationInfo);
             break;

@@ -37,5 +37,4 @@ private:
 
     QComboBox* m_pVisualTypeBox;
 };
-
 #endif

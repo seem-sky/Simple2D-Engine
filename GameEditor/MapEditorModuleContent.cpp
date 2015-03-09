@@ -4,12 +4,11 @@
 #include <QtWidgets/QMessageBox>
 #include "MapEditor.h"
 #include "WorldObjectItem.h"
-#include <DatabaseMgr.h>
 #include <QtWidgets/QGraphicsItem>
 #include <Core/Cache/Manager.h>
 
-MapEditorModuleContent::MapEditorModuleContent(CACHE::Manager& cacheMgr, const MappingObject& mappingObject, DATABASE::DatabaseMgr& databaseMgr, QWidget* pWidget) :
-    QWidget(pWidget), m_CacheMgr(cacheMgr), m_DBMgr(databaseMgr), m_MappingObject(mappingObject), Ui_MapEditorModuleContent()
+MapEditorModuleContent::MapEditorModuleContent(CACHE::Manager& cacheMgr, const MappingObject& mappingObject, database::Manager& databaseMgr, QWidget* pWidget)
+    : QWidget(pWidget), m_CacheMgr(cacheMgr), m_DBMgr(databaseMgr), m_MappingObject(mappingObject), Ui_MapEditorModuleContent()
 {
     setupUi(this);
 
@@ -34,7 +33,7 @@ void MapEditorModuleContent::_onTabCloseRequested(int index)
         // ask for saving before closing tab
         if (pTab->hasChanged())
         {
-            if (auto pMap = m_DBMgr.getMapDatabase()->getOriginalPrototype(pTab->getMapID()))
+            if (auto pMap = m_DBMgr.getMapDatabase().getPrototype(pTab->getMapID()))
             {
                 QString mapName = pMap->getName();
                 switch (QMessageBox::question(this, "close " + mapName, mapName + " has been changed. Do you want to save changes?",
@@ -113,7 +112,7 @@ void MapEditorModuleContent::onMapOpened(uint32 mapID)
     auto pEditor = new MapEditor(mapID, m_CacheMgr, m_MappingObject, m_DBMgr, this);
     try
     {
-        m_pMapTabs->addTab(pEditor, m_DBMgr.getMapDatabase()->getOriginalPrototype(mapID)->getName());
+        m_pMapTabs->addTab(pEditor, m_DBMgr.getMapDatabase().getPrototype(mapID)->getName());
         m_pMapTabs->setCurrentWidget(pEditor);
         connect(this, SIGNAL(save()), pEditor, SLOT(_onSave()));
         connect(this, SIGNAL(changeMappingMode(MAPPING_MODE::Type)), pEditor, SLOT(onMappingModeChanged(MAPPING_MODE::Type)));
@@ -188,7 +187,7 @@ void MapEditorModuleContent::_onMapChanged(uint32 mapID)
 {
     if (auto pViewer = getTab(mapID))
     {
-        m_pMapTabs->setTabText(m_pMapTabs->indexOf(pViewer), m_DBMgr.getMapDatabase()->getOriginalPrototype(pViewer->getMapID())->getName()
+        m_pMapTabs->setTabText(m_pMapTabs->indexOf(pViewer), m_DBMgr.getMapDatabase().getPrototype(pViewer->getMapID())->getName()
             + (pViewer->hasChanged() ? "*" : ""));
         m_pRevert->setEnabled(pViewer->hasChanged());
     }

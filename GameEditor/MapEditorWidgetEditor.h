@@ -8,11 +8,16 @@
 
 class MapEditorModuleMappingMode;
 
+namespace database
+{
+    class Manager;
+}
+
 class MapEditorWidgetEditor : public QWidget
 {
     Q_OBJECT
 public:
-    MapEditorWidgetEditor(DATABASE::DatabaseMgr& databaseMgr, QWidget* pParent = nullptr);
+    MapEditorWidgetEditor(database::Manager& mgr, QWidget* pParent = nullptr);
 
     void setup();
     void projectOpened();
@@ -21,7 +26,7 @@ public slots:
     void onSaveChanges();
 
 private:
-    DATABASE::DatabaseMgr& m_DatabaseMgr;
+    database::Manager& m_DBMgr;
 
     // cache
     CACHE::Manager m_CacheMgr;

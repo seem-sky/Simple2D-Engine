@@ -1,10 +1,11 @@
 #include "MapEditorDialogMapSettings.h"
 #include "moc_MapEditorDialogMapSettings.h"
+#include "Database/Prototype/Derived.h"
 
-using namespace DATABASE;
-using namespace PROTOTYPE::MAP_STRUCTURE;
+using namespace database;
+using namespace prototype;
 
-MapEditorDialogMapSettings::MapEditorDialogMapSettings(MapPrototype* pPrototype, QWidget* pParent) : QDialog(pParent),
+MapEditorDialogMapSettings::MapEditorDialogMapSettings(Map* pPrototype, QWidget* pParent) : QDialog(pParent),
     Ui_MapEditorDialogMapSettings(), m_pPrototype(pPrototype)
 {
     setupUi(this);
@@ -22,10 +23,10 @@ void MapEditorDialogMapSettings::_setup()
     m_pName->setText(m_pPrototype->getName());
     m_pScriptName->setText(m_pPrototype->getScriptName());
     m_pFileName->setText(m_pPrototype->getFileName());
-    m_pSizeX->setValue(m_pPrototype->getSize().getX());
-    m_pSizeY->setValue(m_pPrototype->getSize().getY());
-    m_pBackgroundLayer->setValue(m_pPrototype->getLayerSize(MAP::LayerType::LAYER_BACKGROUND));
-    m_pForegroundLayer->setValue(m_pPrototype->getLayerSize(MAP::LayerType::LAYER_FOREGROUND));
+    m_pSizeX->setValue(m_pPrototype->getSize().getWidth());
+    m_pSizeY->setValue(m_pPrototype->getSize().getHeight());
+    m_pBackgroundLayer->setValue(m_pPrototype->getLayerCount(MAP::LayerType::LAYER_BACKGROUND));
+    m_pForegroundLayer->setValue(m_pPrototype->getLayerCount(MAP::LayerType::LAYER_FOREGROUND));
 }
 
 void MapEditorDialogMapSettings::_save()
@@ -35,10 +36,9 @@ void MapEditorDialogMapSettings::_save()
 
     m_pPrototype->setName(m_pName->text());
     m_pPrototype->setScriptName(m_pScriptName->text());
-    m_pPrototype->setSizeX(m_pSizeX->value());
-    m_pPrototype->setSizeY(m_pSizeY->value());
-    m_pPrototype->setLayerSize(m_pBackgroundLayer->value(), MAP::LayerType::LAYER_BACKGROUND);
-    m_pPrototype->setLayerSize(m_pForegroundLayer->value(), MAP::LayerType::LAYER_FOREGROUND);
+    m_pPrototype->resize(m_pSizeX->value(), m_pSizeY->value());
+    m_pPrototype->setLayerCount(m_pBackgroundLayer->value(), MAP::LayerType::LAYER_BACKGROUND);
+    m_pPrototype->setLayerCount(m_pForegroundLayer->value(), MAP::LayerType::LAYER_FOREGROUND);
 }
 
 void MapEditorDialogMapSettings::_onAccepted()

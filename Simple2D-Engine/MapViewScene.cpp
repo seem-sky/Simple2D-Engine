@@ -4,15 +4,15 @@
 #include <QtGui/QPainter>
 #include <Core/Cache/Manager.h>
 
-MapViewScene::MapViewScene(CACHE::Manager& cacheMgr, const MAP::MAP_DATA::MapData& mapData, const DATABASE::DatabaseMgr& DBMgr)
+MapViewScene::MapViewScene(CACHE::Manager& cacheMgr, const MAP::MAP_DATA::MapData& mapData, const database::Manager& DBMgr)
     : QGraphicsScene(), m_MapData(mapData), m_DBMgr(DBMgr), m_CacheMgr(cacheMgr)
 {}
 
 GEOMETRY::Point<uint32> MapViewScene::calculateEndTile(const QRect &rect, const GEOMETRY::Point<uint32>& startTile) const
 {
     return GEOMETRY::Point<uint32>(qMin<uint32>(ceil(rect.x() % MAP::TILE_SIZE + rect.width() / MAP::TILE_SIZE) + startTile.getX() + 1,
-        m_MapData.getMapLayer().getSize().getX()),
-        qMin<uint32>(ceil(rect.y() % MAP::TILE_SIZE + rect.height() / MAP::TILE_SIZE) + startTile.getY() + 1, m_MapData.getMapLayer().getSize().getY()));
+        m_MapData.getMapLayer().getSize().getWidth()),
+        qMin<uint32>(ceil(rect.y() % MAP::TILE_SIZE + rect.height() / MAP::TILE_SIZE) + startTile.getY() + 1, m_MapData.getMapLayer().getSize().getHeight()));
 }
 
 GEOMETRY::Point<uint32> MapViewScene::calculateStartTile(const QRect &rect) const
@@ -91,7 +91,7 @@ void MapViewScene::drawLayer(QPainter* painter, const GEOMETRY::Point<uint32> st
             // autotiles
             else
                 paintInfo.addFragment(currentTile, m_CacheMgr.getAutoTileCache().get(tileObj.getMapTile().m_uiAutoTileSetID,
-                    static_cast<DATABASE::PROTOTYPE::AUTO_TILE::AUTO_TILE_INDEX>(tileObj.getMapTile().m_uiTileID)));
+                static_cast<database::prototype::AutoTile::Index>(tileObj.getMapTile().m_uiTileID)));
         }
     }
 

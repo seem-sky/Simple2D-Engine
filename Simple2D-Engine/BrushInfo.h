@@ -1,6 +1,8 @@
 #ifndef BRUSH_INFO_H
 #define BRUSH_INFO_H
 
+#include <Global.h>
+
 namespace MAP
 {
     namespace BRUSH

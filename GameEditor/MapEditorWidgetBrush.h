@@ -11,9 +11,9 @@ namespace MAP
     class Layer;
 }
 
-namespace DATABASE
+namespace database
 {
-    class DatabaseMgr;
+    class Manager;
 }
 
 namespace CACHE
@@ -35,7 +35,7 @@ namespace BRUSH
     {
         Q_OBJECT
     public:
-        MapEditorWidgetBrush(CACHE::Manager& cacheMgr, const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent = nullptr);
+        MapEditorWidgetBrush(CACHE::Manager& cacheMgr, const database::Manager& DBMgr, QWidget* pParent = nullptr);
 
         void clear();
 
@@ -48,8 +48,7 @@ namespace BRUSH
 
     private:
         std::array<MapEditorModuleBrush*, 2> m_pBrushes;
-        const DATABASE::DatabaseMgr& m_DBMgr; 
+        const database::Manager& m_DBMgr; 
     };
 }
-
 #endif

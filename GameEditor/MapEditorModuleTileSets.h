@@ -1,7 +1,7 @@
 #ifndef DATABASE_MODULE_TILE_SETS_H
 #define DATABASE_MODULE_TILE_SETS_H
 
-#include "DatabaseModuleDragDrop.h"
+#include "TooltipList.h"
 #include "MapEditorWidgetBrush.h"
 
 namespace CACHE
@@ -9,7 +9,12 @@ namespace CACHE
     class Manager;
 }
 
-class MapEditorModuleTileSets : public DatabaseModuleTooltipList
+namespace database
+{
+    class Manager;
+}
+
+class MapEditorModuleTileSets : public TooltipList
 {
     Q_OBJECT
 private:
@@ -19,7 +24,7 @@ protected:
     void mousePressEvent(QMouseEvent* pEvent);
 
 public:
-    MapEditorModuleTileSets(CACHE::Manager& cacheMgr, QWidget* pParent = nullptr);
+    MapEditorModuleTileSets(const database::Manager& DBMgr, CACHE::Manager& cacheMgr, QWidget* pParent = nullptr);
 
 signals:
     void selectionChanged(BRUSH::BrushIndex brush, MAP::BRUSH::BrushInfo::Type type, uint32 ID);
@@ -27,6 +32,6 @@ signals:
 
 private:
     CACHE::Manager& m_CacheMgr;
+    const database::Manager& m_DBMgr;
 };
-
 #endif

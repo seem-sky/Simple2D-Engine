@@ -16,6 +16,11 @@ PointMoveItem::PointMoveItem(uint32 index, QGraphicsItem* pItem)
     : QGraphicsObject(pItem), m_Index(index)
 {
     setFlag(QGraphicsItem::ItemIgnoresParentOpacity);
+
+    QPen newPen;
+    newPen.setWidth(1);
+    newPen.setColor(Qt::black);
+    setPen(newPen);
 }
 
 void PointMoveItem::setPen(const QPen& pen)

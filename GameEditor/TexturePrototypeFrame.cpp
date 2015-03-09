@@ -2,10 +2,12 @@
 #include <QtGui/QPainter>
 #include "Config.h"
 #include "QtGlobal.h"
+#include <Database/Prototype/Derived.h>
 
-using namespace DATABASE::PROTOTYPE;
+using namespace database::prototype;
 
-TexturePrototypeFrame::TexturePrototypeFrame(QWidget* pParent) : QFrame(pParent), m_pPrototype(nullptr)
+TexturePrototypeFrame::TexturePrototypeFrame(QWidget* pParent)
+    : QFrame(pParent), m_pPrototype(nullptr)
 {}
 
 void TexturePrototypeFrame::paintEvent(QPaintEvent* pEvent)
@@ -20,7 +22,7 @@ void TexturePrototypeFrame::paintEvent(QPaintEvent* pEvent)
     }
 }
 
-void TexturePrototypeFrame::setPrototype(const TexturePrototype* pPrototype)
+void TexturePrototypeFrame::setPrototype(const Texture* pPrototype)
 {
     m_pPrototype = pPrototype;
     repaint();

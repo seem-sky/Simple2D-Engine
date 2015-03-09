@@ -10,20 +10,20 @@ namespace MAP
     {
         namespace AREA
         {
-            Fill::Fill(Layer& layer, const GEOMETRY::Point<uint32>& pos) : Area(layer, pos)
-            {
-            }
+            Fill::Fill(Layer& layer, const GEOMETRY::Point<uint32>& pos)
+                : Area(layer, pos)
+            {}
 
             void Fill::_do(const MapTileInfo& info, MapTileInfoVec& tiles, PointVec<uint32>& borderTiles)
             {
-                if (getBrushSize() != GEOMETRY::Point<uint32>(1, 1))
+                if (getBrushSize() != GEOMETRY::Size<uint32>(1, 1))
                     WARNING_MESSAGE("Brush size other then 1/1 has no effect in fill mode.");
 
                 tiles.push_back(info);
-                Bitset2D tileBitset, borderBitset;
+                sl::Bitset2D tileBitset, borderBitset;
                 // resize bitset if needed
-                tileBitset.resize(std::max(tileBitset.width(), getStartPosition().getX() + 1),
-                    std::max(tileBitset.height(), getStartPosition().getY() + 1));
+                tileBitset.resize(std::max(tileBitset.getWidth(), getStartPosition().getX() + 1),
+                    std::max(tileBitset.getHeight(), getStartPosition().getY() + 1));
                 tileBitset.set(getStartPosition());
 
                 PointVec<uint32> openPositions{ getStartPosition() };
@@ -39,7 +39,7 @@ namespace MAP
                 }
             }
 
-            void Fill::_checkTile(const GEOMETRY::Point<uint32>& pos, Bitset2D& bitset, Bitset2D& borderBitset,
+            void Fill::_checkTile(const GEOMETRY::Point<uint32>& pos, sl::Bitset2D& bitset, sl::Bitset2D& borderBitset,
                 PointVec<uint32>& openPositions, MapTileInfoVec& tileInfos, PointVec<uint32>& borderTiles)
             {
                 auto mapTileInfo = m_Layer.getMapTile(pos);
@@ -51,8 +51,8 @@ namespace MAP
                         auto borderTile = static_cast<BorderTile>(i);
                         auto mapTileInfo = m_Layer.getBorderTileInfo(pos, borderTile);
                         // resize bitset if needed
-                        bitset.resize(std::max(bitset.width(), mapTileInfo.getPosition().getX() + 1),
-                            std::max(bitset.height(), mapTileInfo.getPosition().getY() + 1));
+                        bitset.resize(std::max(bitset.getWidth(), mapTileInfo.getPosition().getX() + 1),
+                            std::max(bitset.getHeight(), mapTileInfo.getPosition().getY() + 1));
 
                         if (!mapTileInfo.isValid() || bitset.get(mapTileInfo.getPosition()))
                             continue;
@@ -63,8 +63,8 @@ namespace MAP
                         {
                             check = true;
                             // resize bitset if needed
-                            borderBitset.resize(std::max(borderBitset.width(), mapTileInfo.getPosition().getX() + 1),
-                                std::max(borderBitset.height(), mapTileInfo.getPosition().getY() + 1));
+                            borderBitset.resize(std::max(borderBitset.getWidth(), mapTileInfo.getPosition().getX() + 1),
+                                std::max(borderBitset.getHeight(), mapTileInfo.getPosition().getY() + 1));
                             if (mapTileInfo.isAutoTile() && !borderBitset.get(mapTileInfo.getPosition()))
                             {
                                 borderBitset.set(mapTileInfo.getPosition());
@@ -86,8 +86,8 @@ namespace MAP
                 if (check)
                 {
                     // resize bitset if needed
-                    borderBitset.resize(std::max(borderBitset.width(), mapTileInfo.getPosition().getX() + 1),
-                        std::max(borderBitset.height(), mapTileInfo.getPosition().getY() + 1));
+                    borderBitset.resize(std::max(borderBitset.getWidth(), mapTileInfo.getPosition().getX() + 1),
+                        std::max(borderBitset.getHeight(), mapTileInfo.getPosition().getY() + 1));
                     if (!borderBitset.get(mapTileInfo.getPosition()))
                     {
                         borderBitset.set(mapTileInfo.getPosition());

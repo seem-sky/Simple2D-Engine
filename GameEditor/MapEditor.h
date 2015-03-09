@@ -14,19 +14,6 @@ namespace MAPPING_MODE
     enum class Type;
 }
 
-namespace DATABASE
-{
-    class DatabaseMgr;
-
-    namespace PROTOTYPE
-    {
-        namespace WORLD_OBJECT
-        {
-            class WorldObjectPrototype;
-        }
-    }
-}
-
 namespace MAP
 {
     namespace MAP_DATA
@@ -62,6 +49,15 @@ namespace CACHE
     class Manager;
 }
 
+namespace database
+{
+    class Manager;
+    namespace prototype
+    {
+        class WorldObject;
+    }
+}
+
 class WorldObjectItem;
 class ScriptAreaItem;
 class MappingObject;
@@ -74,8 +70,8 @@ class MapEditor : public QGraphicsView
 {
     Q_OBJECT
 private:
-    WorldObjectItem* _addWorldObject(const DATABASE::PROTOTYPE::WORLD_OBJECT::WorldObjectPrototype* pWorldObject, MAP::MAP_DATA::WorldObjectInfo& info);
-    WorldObjectItem* _setupWorldObject(const DATABASE::PROTOTYPE::WORLD_OBJECT::WorldObjectPrototype* pWorldObject, WorldObjectItem* pItem, const MAP::MAP_DATA::WorldObjectInfo& info);
+    WorldObjectItem* _addWorldObject(const database::prototype::WorldObject* pWorldObject, MAP::MAP_DATA::WorldObjectInfo& info);
+    WorldObjectItem* _setupWorldObject(const database::prototype::WorldObject* pWorldObject, WorldObjectItem* pItem, const MAP::MAP_DATA::WorldObjectInfo& info);
 
     ScriptAreaItem* _setupScriptArea(MAP::SCRIPT_AREA::ScriptArea* scriptArea);
 
@@ -91,7 +87,7 @@ protected:
     void keyReleaseEvent(QKeyEvent* pEvent);
 
 public:
-    MapEditor(uint32 mapID, CACHE::Manager& cacheMgr, const MappingObject& mappingObject, const DATABASE::DatabaseMgr& DBMgr, QWidget* pWidget = nullptr);
+    MapEditor(uint32 mapID, CACHE::Manager& cacheMgr, const MappingObject& mappingObject, const database::Manager& DBMgr, QWidget* pWidget = nullptr);
 
     void saveMap();
     void reloadMap();
@@ -160,7 +156,7 @@ signals:
 
 private:
     const MappingObject& m_MappingObject;
-    const DATABASE::DatabaseMgr& m_DBMgr;
+    const database::Manager& m_DBMgr;
     MAP::MAP_DATA::MapData m_MapData;
     std::vector<std::unique_ptr<MAP::REVERT::Interface>> m_Reverts;
 };

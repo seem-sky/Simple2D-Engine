@@ -5,6 +5,8 @@
 #include <QtWidgets/QGraphicsScene>
 #include <QtCore/QTimer>
 #include "GraphicsTextureItem.h"
+#include "Database/Derived.h"
+#include "Animation/FrameData.h"
 
 class AnimationSpriteItem : public GraphicsSpriteItem
 {
@@ -16,12 +18,12 @@ protected:
     void keyPressEvent(QKeyEvent* pEvent);
 
 public:
-    AnimationSpriteItem(const DATABASE::SpriteDatabase* pSpriteDB, uint32 ID);
+    AnimationSpriteItem(const database::SpriteDatabase* pSpriteDB, uint32 ID);
 
-    DATABASE::PROTOTYPE::ANIMATION::Sprite toSprite() const;
+    animation::SpriteData toSprite() const;
 
 private:
-    const DATABASE::SpriteDatabase* m_pSpriteDB;
+    const database::SpriteDatabase* m_pSpriteDB;
 };
 
 class AnimationViewerScene : public QGraphicsScene
@@ -51,7 +53,7 @@ class AnimationViewer : public QGraphicsView
 {
     Q_OBJECT
 private:
-    void _setupFrame(const DATABASE::PROTOTYPE::ANIMATION::Frame& frame);
+    void _setupFrame(const animation::FrameData& frame);
     void _setupTimer();
 
 protected:
@@ -66,8 +68,8 @@ public:
 
     void addGraphicsSpriteItem(AnimationSpriteItem* pItem);
 
-    void setSpriteDatabase(const DATABASE::SpriteDatabase* pSpriteDB);
-    void setAnimation(const DATABASE::PROTOTYPE::ANIMATION::FrameVector* pAnimation);
+    void setSpriteDatabase(const database::SpriteDatabase *pSpriteDB);
+    void setAnimation(const animation::FrameVector* pAnimation);
 
     void showFrame(uint32 index);
     uint32 getCurrentFrame() const { return m_uiCurrentFrameIndex; }
@@ -92,8 +94,7 @@ private:
     Mode m_Mode;
     QTimer m_AnimationTimer;
     uint32 m_uiCurrentFrameIndex;
-    const DATABASE::SpriteDatabase* m_pSpriteDB;
-    const DATABASE::PROTOTYPE::ANIMATION::FrameVector* m_pAnimation;
+    const database::SpriteDatabase* m_pSpriteDB;
+    const animation::FrameVector* m_pAnimation;
 };
-
 #endif

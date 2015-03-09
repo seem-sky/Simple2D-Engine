@@ -7,9 +7,9 @@
 #include "WorldObjectInfo.h"
 #include <QtWidgets/QMenu>
 
-namespace DATABASE
+namespace database
 {
-    class DatabaseMgr;
+    class Manager;
 }
 
 class WorldObjectItem : public QGraphicsItem, public QObject
@@ -22,7 +22,7 @@ protected:
     QVariant itemChange(GraphicsItemChange change, const QVariant& value);
 
 public:
-    WorldObjectItem(MAP::MAP_DATA::WorldObjectInfo& info, const DATABASE::DatabaseMgr& DBMgr);
+    WorldObjectItem(MAP::MAP_DATA::WorldObjectInfo& info, const database::Manager& DBMgr);
 
     void setEditable(bool editable = true);
 
@@ -63,6 +63,6 @@ private:
     FlagManager<Flags> m_Flags;
     QPixmap m_Pixmap;
 
-    const DATABASE::DatabaseMgr& m_DBMgr;
+    const database::Manager& m_DBMgr;
 };
 #endif

@@ -14,9 +14,9 @@ namespace CACHE
         TileCacheInfo _setupAutoTile(uint32 ID);
 
     public:
-        AutoTiles(Tiles& tileCache, const DATABASE::DatabaseMgr& DBMgr);
+        AutoTiles(Tiles& tileCache, const database::Manager& DBMgr);
 
-        TileCacheInfo get(uint32 ID, DATABASE::PROTOTYPE::AUTO_TILE::AUTO_TILE_INDEX index) const;
+        TileCacheInfo get(uint32 ID, database::prototype::AutoTile::Index index) const;
 
     private:
         Tiles& m_TileCache;

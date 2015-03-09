@@ -1,6 +1,5 @@
 #include "MainWindow.h"
 #include "moc_MainWindow.h"
-#include "DatabaseWindow.h"
 #include <QtWidgets/QFileDialog>
 #include <QtCore/QDir>
 #include <QtCore/QTimer>
@@ -9,10 +8,12 @@
 #include <log/FileOutput.h>
 #include <ConsoleOutput.h>
 #include <QtCore/QTime>
+#include "DatabaseDialog.h"
 
 using namespace DATABASE;
 
-MainWindow::MainWindow(QMainWindow* pParent) : QMainWindow(pParent), Ui_MainWindow(), m_pMapEditor(new MapEditorWidgetEditor(m_Project.getDatabaseMgr(), this))
+MainWindow::MainWindow(QMainWindow* pParent)
+    : QMainWindow(pParent), Ui_MainWindow(), m_pMapEditor(new MapEditorWidgetEditor(m_Project.getDatabaseMgr(), this))
 {
     LOG::GlobalLog::get()->setOutputCount(2);
     LOG::GlobalLog::get()->setOutput(0, new LOG::FileOutput("Logfile"));
@@ -66,8 +67,8 @@ void MainWindow::_mapScreenshot()
 
 void MainWindow::_openDatabase()
 {
-    DatabaseWindow pDB(m_Project.getDatabaseMgr(), this);
-    pDB.exec();
+    database::ui::MainDialog dialog(m_Project.getDatabaseMgr(), this);
+    dialog.exec();
 
     // clear map editor and caches
     m_pMapEditor->setup();

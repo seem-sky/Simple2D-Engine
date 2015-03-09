@@ -6,5 +6,15 @@
 - world object mapping
 - world object edit (mapeditor)
 - world object QPixmapCache
+- world object animation info refactoring
 - animated tiles
 - redesign Database system
+- DATABASE::PROTOTYPE::AUTO_TILE refactoring
+- save maptree
+- rename enums (MAP::LayerType)
+- visual viewer DBMgr better solution
+- check map::brush::type code
+- rewrite simple2d-global.h
+- rewrite animation viewer
+- add map manager
+- extend creator usage

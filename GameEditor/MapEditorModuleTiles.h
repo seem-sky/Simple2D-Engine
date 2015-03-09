@@ -32,7 +32,7 @@ private:
     MAP::BRUSH::BrushInfo::Type getType() const { return MAP::BRUSH::BrushInfo::Type::TILE; }
 
 public:
-    MapEditorModuleTiles(CACHE::Manager& cacheMgr, const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent = nullptr);
+    MapEditorModuleTiles(CACHE::Manager& cacheMgr, const database::Manager& DBMgr, QWidget* pParent = nullptr);
 
 private:
     CACHE::Manager& m_CacheMgr;
@@ -53,7 +53,6 @@ private:
     CACHE::Manager& m_CacheMgr;
 };
 
-
 class MapEditorModuleAutoTiles : public AbstractPrototypeTable
 {
 private:
@@ -62,10 +61,9 @@ private:
     MAP::BRUSH::BrushInfo::Type getType() const { return MAP::BRUSH::BrushInfo::Type::AUTO_TILE; }
 
 public:
-    MapEditorModuleAutoTiles(CACHE::Manager& cacheMgr, const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent = nullptr);
+    MapEditorModuleAutoTiles(CACHE::Manager& cacheMgr, const database::Manager& dbMgr, QWidget* pParent = nullptr);
 
 private:
     CACHE::Manager& m_CacheMgr;
 };
-
 #endif

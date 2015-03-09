@@ -16,24 +16,6 @@
     <Filter Include="Database\IO">
       <UniqueIdentifier>{3229efed-d3f8-4a07-9842-eb6e708c0780}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game">
-      <UniqueIdentifier>{df8be9c5-f984-4911-8721-a30152142705}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Scene">
-      <UniqueIdentifier>{31d97a38-a802-46d7-b54a-b183c5072188}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Map\MapObjects">
-      <UniqueIdentifier>{42e367d7-7966-43f9-bccf-dbdf54b71d3a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Player">
-      <UniqueIdentifier>{fd95caed-fe41-48ae-83e4-bf8a5dce356f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Core\KeyInput">
-      <UniqueIdentifier>{b49eb0ea-5af5-487a-a837-fd420f2691fd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Scene\ObjectAnimation">
-      <UniqueIdentifier>{cb9f51f7-c22c-4f96-bd26-22878a5d4201}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Map\IO">
       <UniqueIdentifier>{62360327-8a3b-4849-b41c-355c258ba063}</UniqueIdentifier>
     </Filter>
@@ -67,9 +49,6 @@
     <Filter Include="Map\IO\WorldObjectInfo">
       <UniqueIdentifier>{339abe00-83dc-42c5-a6dc-94c671b07815}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Core\Colission">
-      <UniqueIdentifier>{3d5d863b-98c3-4e67-bff7-dc7b57f326c3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Map\ScriptArea">
       <UniqueIdentifier>{6eac2946-fdd9-4657-9a61-d5ba5dfb3a55}</UniqueIdentifier>
     </Filter>
@@ -88,79 +67,31 @@
     <Filter Include="Map\ScriptArea\Area">
       <UniqueIdentifier>{8ee5ce9e-726d-42f9-8fc2-a851b5ba0c48}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Database new">
+      <UniqueIdentifier>{e239e17c-bbb4-45e3-ba12-1cdbb17e0298}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database new\Database">
+      <UniqueIdentifier>{883e9dd1-9b36-49bd-a84a-4f7ef0ce6faf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database new\Protoype">
+      <UniqueIdentifier>{558f9382-64c5-4a90-9eab-80af78886035}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database new\Manager">
+      <UniqueIdentifier>{95fe7002-98aa-4efc-ad85-da0018783dd1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Animation">
+      <UniqueIdentifier>{645c2c17-898a-4cd3-9a51-2bdc5b68439d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Animation\Addition">
+      <UniqueIdentifier>{72675a2b-1ad4-455e-a7e6-ee188a9cde13}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Simple2D-GameEditor\include\Game.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
     <ClCompile Include="..\Simple2D-GameEditor\include\Color.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="..\Simple2D-GameEditor\include\MapDatabase.cpp">
-      <Filter>Database\Map</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Simple2D-GameEditor\include\MapGrid.cpp">
-      <Filter>Map</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Simple2D-GameEditor\include\WorldObject.cpp">
-      <Filter>Map\MapObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Simple2D-GameEditor\include\DatabaseMgr.cpp">
-      <Filter>Database</Filter>
-    </ClCompile>
-    <ClCompile Include="GameWindow.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
-    <ClCompile Include="SceneMgr.cpp">
-      <Filter>Game\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="GameScene.cpp">
-      <Filter>Game\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Map.cpp">
-      <Filter>Map</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene.cpp">
-      <Filter>Game\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="MapMgr.cpp">
-      <Filter>Map</Filter>
-    </ClCompile>
-    <ClCompile Include="TransformationHolder.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Game\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="Keyboard.cpp">
-      <Filter>Core\KeyInput</Filter>
-    </ClCompile>
-    <ClCompile Include="Player_Game.cpp">
-      <Filter>Game\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="AnimationHolder.cpp">
-      <Filter>Map\MapObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="ObjectAnimationWidget.cpp">
-      <Filter>Map\MapObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Game\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="Entity.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Object.cpp">
-      <Filter>Map\MapObjects</Filter>
-    </ClCompile>
     <ClCompile Include="MapBinaryIO.cpp">
       <Filter>Map\IO</Filter>
-    </ClCompile>
-    <ClCompile Include="Database.cpp">
-      <Filter>Database</Filter>
-    </ClCompile>
-    <ClCompile Include="DatabasePrototypesIO.cpp">
-      <Filter>Database\IO</Filter>
     </ClCompile>
     <ClCompile Include="Config.cpp">
       <Filter>Core</Filter>
@@ -180,17 +111,11 @@
     <ClCompile Include="MapLayer.cpp">
       <Filter>Map\Layer</Filter>
     </ClCompile>
-    <ClCompile Include="..\Simple2D-GameEditor\include\DatabasePrototypes.cpp">
-      <Filter>Database\Protoype</Filter>
-    </ClCompile>
     <ClCompile Include="PrototypeModuleManager.cpp">
       <Filter>Database\Protoype\Modules</Filter>
     </ClCompile>
     <ClCompile Include="PrototypeAnimationModule.cpp">
       <Filter>Database\Protoype\Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="MapViewScene.cpp">
-      <Filter>Map</Filter>
     </ClCompile>
     <ClCompile Include="BrushAreaSingle.cpp">
       <Filter>Map\Brush\Area</Filter>
@@ -267,85 +192,52 @@
     <ClCompile Include="ScriptAreaData.cpp">
       <Filter>Map\ScriptArea</Filter>
     </ClCompile>
+    <ClCompile Include="DatabasePrototypeBase.cpp">
+      <Filter>Database new\Protoype</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabaseManager.cpp">
+      <Filter>Database new\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabasePrototypeDerived.cpp">
+      <Filter>Database new\Protoype</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabasePrototypeXML_Output.cpp">
+      <Filter>Database new\Protoype</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabasePrototypeXML_Input.cpp">
+      <Filter>Database new\Protoype</Filter>
+    </ClCompile>
+    <ClCompile Include="MapViewScene.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabasePrototypeCompare.cpp">
+      <Filter>Database new\Protoype</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationAdditionScene.cpp">
+      <Filter>Animation\Addition</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationAdditionItem.cpp">
+      <Filter>Animation\Addition</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationFrameData.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationSpriteData.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationItemData.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationAdditionData.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Simple2D-GameEditor\include\Application.h">
-      <Filter>Game</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Simple2D-GameEditor\include\Game.h">
-      <Filter>Game</Filter>
-    </ClInclude>
     <ClInclude Include="..\Simple2D-GameEditor\include\Color.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\Simple2D-GameEditor\include\Database.h">
-      <Filter>Database</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Simple2D-GameEditor\include\MapDatabase.h">
-      <Filter>Database\Map</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Simple2D-GameEditor\include\MapGrid.h">
-      <Filter>Map</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Simple2D-GameEditor\include\WorldObject.h">
-      <Filter>Map\MapObjects</Filter>
-    </ClInclude>
     <ClInclude Include="QtGlobal.h">
       <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Simple2D-GameEditor\include\DatabaseMgr.h">
-      <Filter>Database</Filter>
-    </ClInclude>
-    <ClInclude Include="GameWindow.h">
-      <Filter>Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>Game\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneMgr.h">
-      <Filter>Game\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="GameScene.h">
-      <Filter>Game\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Map.h">
-      <Filter>Map</Filter>
-    </ClInclude>
-    <ClInclude Include="Manager.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="MapMgr.h">
-      <Filter>Map</Filter>
-    </ClInclude>
-    <ClInclude Include="TransformationHolder.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Game\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="Keyboard.h">
-      <Filter>Core\KeyInput</Filter>
-    </ClInclude>
-    <ClInclude Include="Player_Game.h">
-      <Filter>Game\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="AnimationHolder.h">
-      <Filter>Map\MapObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="ObjectAnimationWidget.h">
-      <Filter>Map\MapObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Game\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="Entity.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Object.h">
-      <Filter>Map\MapObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="Database_IO.h">
-      <Filter>Database\IO</Filter>
     </ClInclude>
     <ClInclude Include="MapBinaryIO.h">
       <Filter>Map\IO</Filter>
@@ -370,9 +262,6 @@
     </ClInclude>
     <ClInclude Include="MapTile.h">
       <Filter>Map\Layer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Simple2D-GameEditor\include\DatabasePrototypes.h">
-      <Filter>Database\Protoype</Filter>
     </ClInclude>
     <ClInclude Include="PrototypeModuleManager.h">
       <Filter>Database\Protoype\Modules</Filter>
@@ -434,9 +323,6 @@
     <ClInclude Include="WorldObjectInfo.h">
       <Filter>Map\IO\WorldObjectInfo</Filter>
     </ClInclude>
-    <ClInclude Include="Colission.h">
-      <Filter>Core\Colission</Filter>
-    </ClInclude>
     <ClInclude Include="RevertInterface.h">
       <Filter>Map\Brush\Revert</Filter>
     </ClInclude>
@@ -494,9 +380,60 @@
     <ClInclude Include="Map\ScriptArea\Data.h">
       <Filter>Map\ScriptArea</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
+    <ClInclude Include="Database\Base.h">
+      <Filter>Database new\Database</Filter>
+    </ClInclude>
+    <ClInclude Include="Database\Interface.h">
+      <Filter>Database new\Database</Filter>
+    </ClInclude>
+    <ClInclude Include="Database\Prototype\Base.h">
+      <Filter>Database new\Protoype</Filter>
+    </ClInclude>
+    <ClInclude Include="Database\Manager.h">
+      <Filter>Database new\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Database\Prototype\Derived.h">
+      <Filter>Database new\Protoype</Filter>
+    </ClInclude>
+    <ClInclude Include="Database\Derived.h">
+      <Filter>Database new\Database</Filter>
+    </ClInclude>
+    <ClInclude Include="Database\Prototype\XML_Output.h">
+      <Filter>Database new\Protoype</Filter>
+    </ClInclude>
+    <ClInclude Include="Database\Prototype\XML_Input.h">
+      <Filter>Database new\Protoype</Filter>
+    </ClInclude>
+    <ClInclude Include="Database\XML_Input.h">
+      <Filter>Database new\Database</Filter>
+    </ClInclude>
+    <ClInclude Include="Database\Merger.h">
+      <Filter>Database new\Database</Filter>
+    </ClInclude>
+    <ClInclude Include="Database\Prototype\Compare.h">
+      <Filter>Database new\Protoype</Filter>
+    </ClInclude>
+    <ClInclude Include="Database\XML_Output.h">
+      <Filter>Database new\Database</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation\addition\Item.h">
+      <Filter>Animation\Addition</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation\addition\Scene.h">
+      <Filter>Animation\Addition</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation\FrameData.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation\SpriteData.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation\ItemData.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation\AdditionData.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <moc_header Include="VisualViewer.h">

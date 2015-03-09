@@ -5,7 +5,7 @@
 #include "MapData.h"
 
 using namespace MAP;
-using namespace DATABASE::PROTOTYPE::MAP_STRUCTURE;
+using namespace database::prototype;
 
 const uint16 CURRENT_VERSION = 3;
 
@@ -15,6 +15,7 @@ const uint16 CURRENT_VERSION = 3;
 void INPUT::MapBinaryReader::readFile(const QString& fileName, MAP_DATA::MapData& data)
 {
     QFile mapFile(fileName);
+    std::string name = fileName.toStdString();
     if (!mapFile.open(QIODevice::ReadOnly))
         throw std::ios::failure("Unable to open file " + (fileName).toStdString());
 
@@ -78,9 +79,9 @@ void INPUT::MapBinaryReader::_readLayerV1(QDataStream& in, MAP::LayerContainer& 
     GEOMETRY::Point3D<uint32> pos;
     for (pos.getZ() = 0; pos.getZ() < mapLayer.getLayerSize(layer); ++pos.getZ())
     {
-        for (pos.getY() = 0; pos.getY() < mapLayer.getSize().getY(); ++pos.getY())
+        for (pos.getY() = 0; pos.getY() < mapLayer.getSize().getHeight(); ++pos.getY())
         {
-            for (pos.getX() = 0; pos.getX() < mapLayer.getSize().getX(); ++pos.getX())
+            for (pos.getX() = 0; pos.getX() < mapLayer.getSize().getWidth(); ++pos.getX())
             {
                 uint32 uiTile, uiAutoTile;
                 in >> uiTile >> uiAutoTile;
@@ -97,9 +98,9 @@ void INPUT::MapBinaryReader::_readLayerV2(QDataStream& in, LayerContainer& mapLa
     GEOMETRY::Point3D<uint32> pos;
     for (pos.getZ() = 0; pos.getZ() < mapLayer.getLayerSize(layer); ++pos.getZ())
     {
-        for (pos.getY() = 0; pos.getY() < mapLayer.getSize().getY(); ++pos.getY())
+        for (pos.getY() = 0; pos.getY() < mapLayer.getSize().getHeight(); ++pos.getY())
         {
-            for (pos.getX() = 0; pos.getX() < mapLayer.getSize().getX(); ++pos.getX())
+            for (pos.getX() = 0; pos.getX() < mapLayer.getSize().getWidth(); ++pos.getX())
             {
                 MapTile tile;
                 in >> tile.m_uiTileID >> tile.m_uiAutoTileSetID;
@@ -161,9 +162,9 @@ void OUTPUT::MapBinaryWriter::_writeLayer(QDataStream& out, const LayerContainer
     GEOMETRY::Point3D<uint32> pos;
     for (pos.getZ() = 0; pos.getZ() < mapLayer.getLayerSize(layer); ++pos.getZ())
     {
-        for (pos.getY() = 0; pos.getY() < mapLayer.getSize().getY(); ++pos.getY())
+        for (pos.getY() = 0; pos.getY() < mapLayer.getSize().getHeight(); ++pos.getY())
         {
-            for (pos.getX() = 0; pos.getX() < mapLayer.getSize().getX(); ++pos.getX())
+            for (pos.getX() = 0; pos.getX() < mapLayer.getSize().getWidth(); ++pos.getX())
             {
                 auto& tile = mapLayer.getLayer(layer, pos.getZ()).getMapTile(pos.toPoint());
                 out << tile.getMapTile().m_uiTileID << tile.getMapTile().m_uiAutoTileSetID;

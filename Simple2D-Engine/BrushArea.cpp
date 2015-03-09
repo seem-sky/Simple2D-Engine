@@ -1,5 +1,4 @@
 #include "BrushArea.h"
-#include "DatabasePrototypes.h"
 #include "MapException.h"
 #include "MapLayer.h"
 
@@ -22,12 +21,12 @@ namespace MAP
                 catch (const MAP::EXCEPTION::TileOutOfRangeException&) {}
             }
 
-            void Area::setBrushSize(const GEOMETRY::Point<uint32>& size)
+            void Area::setBrushSize(const GEOMETRY::Size<uint32>& size)
             {
                 m_BrushSize = size;
             }
 
-            GEOMETRY::Point<uint32> Area::getBrushSize() const
+            GEOMETRY::Size<uint32> Area::getBrushSize() const
             {
                 return m_BrushSize;
             }

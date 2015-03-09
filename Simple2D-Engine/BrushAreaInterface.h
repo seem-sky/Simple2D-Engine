@@ -4,6 +4,7 @@
 #include "MapTile.h"
 #include <memory>
 #include <Typedefs.h>
+#include <geometry/Size.h>
 
 namespace MAP
 {
@@ -19,8 +20,8 @@ namespace MAP
 
                 virtual void start(MapTileInfoVec& tiles, PointVec<uint32>& borderTiles) = 0;
 
-                virtual void setBrushSize(const GEOMETRY::Point<uint32>& size) = 0;
-                virtual GEOMETRY::Point<uint32> getBrushSize() const = 0;
+                virtual void setBrushSize(const GEOMETRY::Size<uint32>& size) = 0;
+                virtual GEOMETRY::Size<uint32> getBrushSize() const = 0;
             };
             typedef std::unique_ptr<Interface> AreaPtr;
         }

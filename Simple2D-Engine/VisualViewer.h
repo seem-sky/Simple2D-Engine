@@ -5,8 +5,12 @@
 #include <QtWidgets/QGraphicsScene>
 #include <QtWidgets/QGraphicsView>
 #include <QtCore/QTimer>
-#include "DatabaseMgr.h"
-#include "PrototypeAnimationModule.h"
+#include "Database/Prototype/Derived.h"
+
+namespace database
+{
+    class Manager;
+}
 
 class VisualSpriteItem : public QGraphicsItem
 {
@@ -14,7 +18,7 @@ private:
     void _getPixmap(QPixmap& pixmap) const;
 
 public:
-    VisualSpriteItem(const DATABASE::DatabaseMgr& DBMgr, uint32 ID);
+    VisualSpriteItem(const database::Manager& DBMgr, uint32 ID);
 
     virtual void paint(QPainter* pPainter, const QStyleOptionGraphicsItem* pOption, QWidget* pWidget = 0);
 
@@ -24,7 +28,7 @@ public:
 
 private:
     uint32 m_ID;
-    const DATABASE::DatabaseMgr& m_DBMgr;
+    const database::Manager& m_DBMgr;
 };
 
 class VisualViewerScene : public QGraphicsScene
@@ -58,17 +62,17 @@ protected:
 
 public:
     VisualViewer(QWidget *pParent = nullptr);
-    void setDatabaseMgr(const DATABASE::DatabaseMgr* pDBMgr);
+    void setDatabaseMgr(const database::Manager* pDBMgr);
 
     void clear();
 
     void showVisual();
     uint32 getCurrentFrame() const { return m_uiCurrentFrameIndex; }
 
-	void setAnimation(const DATABASE::PROTOTYPE::MODULE::ANIMATION::AnimationInfo& info);
-    void setAnimation(uint32 animationEntry, DATABASE::PROTOTYPE::MODULE::ANIMATION::VisualType type);
+	void setAnimation(const database::prototype::WorldObject::AnimationInfo& info);
+    void setAnimation(uint32 animationEntry, database::prototype::WorldObject::VisualType type);
     inline uint32 getAnimationID() const { return m_AnimationEntry; }
-	inline DATABASE::PROTOTYPE::MODULE::ANIMATION::VisualType getVisualType() const { return m_VisualType; }
+    inline database::prototype::WorldObject::VisualType getVisualType() const { return m_VisualType; }
 
     virtual void startAnimation();
     virtual void stopAnimation();
@@ -82,12 +86,12 @@ private slots:
     void _onFrameExpired();
 
 private:
-    const DATABASE::DatabaseMgr* m_pDBMgr;
+    const database::Manager* m_pDBMgr;
     uint32 m_uiCurrentFrameIndex;
     QTimer m_AnimationTimer;
 
     uint32 m_AnimationEntry;
-	DATABASE::PROTOTYPE::MODULE::ANIMATION::VisualType m_VisualType;
+    database::prototype::WorldObject::VisualType m_VisualType;
 
     bool m_DoAnimation;
 };

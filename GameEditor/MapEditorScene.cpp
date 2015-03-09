@@ -2,7 +2,6 @@
 #include "QtGlobal.h"
 #include "GraphicsTextureItem.h"
 #include "MappingObject.h"
-#include "DatabaseMgr.h"
 #include <QtGui/QKeyEvent>
 #include <QtGui/QPainter>
 #include <QtGui/QPainterPath>
@@ -11,7 +10,7 @@
 /*#####
 # MapViewerScene
 #####*/
-MapEditorScene::MapEditorScene(CACHE::Manager& cacheMgr, const MappingObject& mappingObject, const MAP::MAP_DATA::MapData& mapData, const DATABASE::DatabaseMgr& DBMgr)
+MapEditorScene::MapEditorScene(CACHE::Manager& cacheMgr, const MappingObject& mappingObject, const MAP::MAP_DATA::MapData& mapData, const database::Manager& DBMgr)
     : MapViewScene(cacheMgr, mapData, DBMgr), m_MappingObject(mappingObject)
 {}
 
@@ -67,9 +66,9 @@ void MapEditorScene::_drawDarkRect(QPainter* painter, const QRectF& rect) const
     painter->setOpacity(0.5);
     painter->setBrush(Qt::SolidPattern);
     auto size = getMapData().getMapLayer().getSize();
-    painter->drawRect(rect.x() < 0 ? 0 : rect.x(), rect.y() < 0 ? 0 : rect.y(),
-        rect.width() > size.getX()*MAP::TILE_SIZE ? size.getX()*MAP::TILE_SIZE : rect.width(),
-        rect.height() > size.getY()*MAP::TILE_SIZE ? size.getY()*MAP::TILE_SIZE : rect.height());
+    painter->drawRect(std::max(rect.x(), qreal(0)), std::max(rect.y(), qreal(0)),
+        std::min(rect.width(), qreal(size.getWidth()*MAP::TILE_SIZE)),
+        std::min(rect.height(), qreal(size.getHeight()*MAP::TILE_SIZE)));
 }
 
 void MapEditorScene::_drawGrid(QPainter* painter, const QRectF& rect) const

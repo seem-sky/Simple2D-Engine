@@ -1,42 +1,49 @@
 #include "DatabaseModel.h"
+#include <QtGui/QColor>
 
-using namespace DATABASE;
+using namespace database;
 
-const IDatabase* ConstDatabaseModel::getDatabase() const
+Model::Model(const Interface& db, QObject* pParent)
+    : m_DB(db), QAbstractListModel(pParent)
+{}
+
+int Model::rowCount(const QModelIndex& parent) const
 {
-    return m_DBMgr.getDatabase(m_DBType);
+    return m_DB.getSize();
 }
 
-int ConstDatabaseModel::rowCount(const QModelIndex& parent) const
+enum ColumnName
 {
-    return getSize();
-}
+    ID,
+    name
+};
+const uint32 MODEL_COLUMN_COUNT = 2;
 
-int ConstDatabaseModel::columnCount(const QModelIndex& parent) const
+int Model::columnCount(const QModelIndex& parent) const
 {
     return MODEL_COLUMN_COUNT;
 }
 
-QVariant ConstDatabaseModel::data(const QModelIndex& index, int role) const
+QVariant Model::data(const QModelIndex& index, int role) const
 {
-    if(index.isValid())
+    if (index.isValid())
     {
         switch (role)
         {
             // draw standard entries blue
         case Qt::ForegroundRole:
-            if (getDatabaseType() == DatabaseType::ANIMATION_TYPE_DATABASE && index.row() < PROTOTYPE::ANIMATION::STANDARD_ANIMATION_TYPES)
-                return QVariant(QColor(Qt::blue));
+            // ToDo: standard entries
+            /*if (getDatabaseType() == DatabaseType::ANIMATION_TYPE_DATABASE && index.row() < PROTOTYPE::ANIMATION::STANDARD_ANIMATION_TYPES)
+                return QVariant(QColor(Qt::blue));*/
             return QVariant(QColor(Qt::black));
 
         case Qt::DisplayRole:
-            if (auto pProto = getDatabase()->getPrototype(index.row()+1))
+            switch (index.column())
             {
-                switch(index.column())
-                {
-                case ColumnName::COLUMN_ID: return pProto->getID();
-                case ColumnName::COLUMN_NAME: return pProto->getName();
-                }
+            case ID: return index.row() + 1;
+            case name:
+                if (auto pProto = m_DB.getPrototype(index.row() + 1))
+                    return pProto->getName();
             }
             break;
         }
@@ -44,79 +51,36 @@ QVariant ConstDatabaseModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
-QVariant ConstDatabaseModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant Model::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if(role == Qt::DisplayRole && orientation == Qt::Horizontal)
+    if (role == Qt::DisplayRole && orientation == Qt::Horizontal)
     {
-        switch (section)
+        switch (static_cast<ColumnName>(section))
         {
-        case ColumnName::COLUMN_ID: return tr("ID");
-        case ColumnName::COLUMN_NAME: return tr("Name");
+        case ID: return tr("ID");
+        case name: return tr("Name");
         }
     }
     return QVariant();
 }
 
-Qt::ItemFlags ConstDatabaseModel::flags(const QModelIndex& index) const
+Qt::ItemFlags Model::flags(const QModelIndex& index) const
 {
-    if(!index.isValid())
+    if (!index.isValid())
         return Qt::ItemIsEnabled | Qt::ItemIsDropEnabled;
     return Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsDragEnabled;
 }
 
-bool ConstDatabaseModel::insertRows(int row, int count, const QModelIndex& parent)
+bool Model::insertRows(int row, int count, const QModelIndex& parent)
 {
-    beginInsertRows(parent, row, row+count);
+    beginInsertRows(parent, row, row + count);
     endInsertRows();
     return true;
 }
 
-bool ConstDatabaseModel::removeRows(int row, int count, const QModelIndex& parent)
+bool Model::removeRows(int row, int count, const QModelIndex& parent)
 {
-    beginRemoveRows(parent, row, row+count);
+    beginRemoveRows(parent, row, row + count);
     endRemoveRows();
     return true;
-}
-
-uint32 ConstDatabaseModel::getSize() const
-{
-    return getDatabase()->getSize();
-}
-
-uint32 ConstDatabaseModel::getMaximumSize() const
-{
-    return getDatabase()->getMaximumSize();
-}
-
-const DatabaseMgr& ConstDatabaseModel::getDatabaseMgr() const
-{
-    return m_DBMgr;
-}
-
-DatabaseType ConstDatabaseModel::getDatabaseType() const
-{
-    return m_DBType;
-}
-
-DatabaseMgr& DatabaseModel::getDatabaseMgr()
-{
-    return const_cast<DatabaseMgr&>(ConstDatabaseModel::getDatabaseMgr());
-}
-
-IDatabase* DatabaseModel::getDatabase()
-{
-    return getDatabaseMgr().getDatabase(getDatabaseType());
-}
-
-void DatabaseModel::resize(uint32 size)
-{
-    if (getDatabaseType() == DatabaseType::ANIMATION_TYPE_DATABASE && size < PROTOTYPE::ANIMATION::STANDARD_ANIMATION_TYPES)
-        throw std::runtime_error("Not allowed to remove standard entries.");
-    uint32 uiOldSize = getDatabase()->getSize();
-    if (uiOldSize < size)
-        insertRows(uiOldSize, size-uiOldSize);
-    else if (size < uiOldSize)
-        removeRows(size, uiOldSize-size);
-
-    getDatabase()->resize(size);
 }

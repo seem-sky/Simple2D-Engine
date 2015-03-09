@@ -6,7 +6,7 @@
 #include "PresentationMappingMode.h"
 #include "moc_MappingObject.h"
 
-MappingObject::MappingObject(const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent)
+MappingObject::MappingObject(const database::Manager& DBMgr, QWidget* pParent)
     : QObject(pParent)
 {
     m_MappingModes.push_back(MappingModePtr(new MAPPING_MODE::Tile(DBMgr)));

@@ -28,15 +28,15 @@ namespace MAP
                 const GEOMETRY::Point<uint32>& getStartPosition() const { return m_StartPosition; }
                 void setStartPosition(const GEOMETRY::Point<uint32>& pos) { m_StartPosition = pos; }
 
-                void setBrushSize(const GEOMETRY::Point<uint32>& size);
-                GEOMETRY::Point<uint32> getBrushSize() const;
+                void setBrushSize(const GEOMETRY::Size<uint32>& size);
+                GEOMETRY::Size<uint32> getBrushSize() const;
 
                 void start(MapTileInfoVec& tiles, PointVec<uint32>& borderTiles);
 
             private:
                 GEOMETRY::Point<uint32> m_StartPosition;
                 MapTile m_OldTile;
-                GEOMETRY::Point<uint32> m_BrushSize;
+                GEOMETRY::Size<uint32> m_BrushSize;
 
             protected:
                 const Layer& m_Layer;

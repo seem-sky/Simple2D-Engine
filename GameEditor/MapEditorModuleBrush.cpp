@@ -1,15 +1,15 @@
 #include "MapEditorModuleBrush.h"
+#include "moc_MapEditorModuleBrush.h"
 #include <QtGui/QPainter>
 #include <QtGui/QTextOption>
 #include <Core/Cache/Manager.h>
 #include <QtWidgets/QGraphicsItem>
-#include "moc_MapEditorModuleBrush.h"
+#include "EditorGlobal.h"
 
 using namespace BRUSH;
 using namespace MAP::BRUSH;
-using namespace DATABASE::PROTOTYPE;
 
-MapEditorModuleBrush::MapEditorModuleBrush(CACHE::Manager& cacheMgr, const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent)
+MapEditorModuleBrush::MapEditorModuleBrush(CACHE::Manager& cacheMgr, const database::Manager& DBMgr, QWidget* pParent)
     : QWidget(), Ui_MapEditorModuleBrush(), m_DBMgr(DBMgr), m_CacheMgr(cacheMgr)
 {
     setupUi(this);
@@ -60,7 +60,7 @@ void MapEditorModuleBrush::_update()
     }
     case MAP::BRUSH::BrushInfo::Type::AUTO_TILE:
     {
-        auto info = m_CacheMgr.getAutoTileCache().get(m_BrushInfo.getID(), AUTO_TILE::INDEX_INNER_CENTER);
+        auto info = m_CacheMgr.getAutoTileCache().get(m_BrushInfo.getID(), database::prototype::AutoTile::Index::InnerCenter);
         if (info.isValid())
         {
             QPixmap pixmap(MAP::TILE_SIZE, MAP::TILE_SIZE);
@@ -73,9 +73,9 @@ void MapEditorModuleBrush::_update()
         break;
     }
     case MAP::BRUSH::BrushInfo::Type::TILE_SET:
-        if (auto pTileSet = m_DBMgr.getTileSetDatabase()->getOriginalPrototype(m_BrushInfo.getID()))
+        if (auto pTileSet = m_DBMgr.getTileSetDatabase().getPrototype(m_BrushInfo.getID()))
         {
-            auto pixmap = TILE_SET::createPixmap(*pTileSet, m_CacheMgr.getTileCache());
+            auto pixmap = database::prototype::createPixmap(pTileSet, m_CacheMgr.getTileCache());
             m_pCurrentTile->scene()->addPixmap(pixmap);
         }
         m_pCurrentTile->scene()->addText("tile set", font);
@@ -89,6 +89,8 @@ void MapEditorModuleBrush::_update()
         auto center = rect.center();
         pItem->moveBy(-center.x(), -center.y());
     }
+    auto rect = m_pCurrentTile->scene()->itemsBoundingRect();
+    m_pCurrentTile->centerOn(rect.center());
 }
 
 void MapEditorModuleBrush::setBrushInfo(const BrushInfo& brushInfo)

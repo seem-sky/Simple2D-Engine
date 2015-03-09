@@ -65,7 +65,7 @@ namespace MAP
             return m_RevertInfo && !m_RevertInfo->isEmpty();
         }
 
-        void Brush::setBrushSize(const GEOMETRY::Point<uint32>& size)
+        void Brush::setBrushSize(const GEOMETRY::Size<uint32>& size)
         {
             m_pArea->setBrushSize(size);
         }

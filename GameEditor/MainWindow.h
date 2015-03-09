@@ -2,7 +2,6 @@
 #define MAIN_WINDOW_H
 
 #include "UI/UI_MainWindow.h"
-#include "MapDatabase.h"
 #include "Config.h"
 #include "Project.h"
 #include <QtGui/QMoveEvent>
@@ -31,8 +30,6 @@ private:
 public:
     MainWindow(QMainWindow* parent = 0);
     ~MainWindow(void);
-
-    inline DATABASE::DatabaseMgr& getDatabaseMgr() { return m_Project.getDatabaseMgr(); }
 
 private:
     Project m_Project;

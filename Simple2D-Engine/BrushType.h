@@ -3,9 +3,9 @@
 
 #include "BrushTypeInterface.h"
 
-namespace DATABASE
+namespace database
 {
-    class DatabaseMgr;
+    class Manager;
 }
 
 namespace MAP
@@ -19,7 +19,7 @@ namespace MAP
             class Type : public Interface
             {
             public:
-                Type(uint32 tileID, const DATABASE::DatabaseMgr& DBMgr, Layer& layer, const GEOMETRY::Point<uint32>& pos);
+                Type(uint32 tileID, const database::Manager& DBMgr, Layer& layer, const GEOMETRY::Point<uint32>& pos);
 
                 void setStartPosition(const GEOMETRY::Point<uint32>& pos) { m_StartPosition = pos; }
                 const GEOMETRY::Point<uint32>& getStartPosition() const { return m_StartPosition; }
@@ -33,7 +33,7 @@ namespace MAP
 
             protected:
                 Layer& m_Layer;
-                const DATABASE::DatabaseMgr& m_DBMgr;
+                const database::Manager& m_DBMgr;
             };
         }
     }

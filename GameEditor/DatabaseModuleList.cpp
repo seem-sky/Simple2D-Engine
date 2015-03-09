@@ -1,61 +1,69 @@
 #include "DatabaseModuleList.h"
 #include "moc_DatabaseModuleList.h"
-#include "DatabaseDialogResize.h"
-#include <QtWidgets/QMessageBox>
+#include "DatabaseModel.h"
 
-using namespace DATABASE::PROTOTYPE;
+using namespace database;
+using namespace ui::module;
 
-DatabaseModuleList::DatabaseModuleList(QWidget* pParent) : QWidget(pParent), Ui_DatabaseModuleList()
+List::List(Model* pModel, QWidget* pParent)
+    : List(pParent)
 {
-    setupUi(this);
-    
-    //setup list
-    m_pList->setIndentation(0);
-
-    connect(m_pResizeButton, SIGNAL(clicked()), this, SLOT(_onClickResizeButton()));
+    setup(pModel);
 }
 
-void DatabaseModuleList::_onClickResizeButton()
+List::List(const Interface& DB, QWidget* pParent)
+    : List(pParent)
 {
-    try
-    {
-        DatabaseDialogResize resizeDialog(getDatabaseModel(), this);
-        resizeDialog.exec();
-    }
-    catch (const std::bad_alloc& e)
-    {
-        QMessageBox::information(0, "Resize error.", QString("I'm sorry, but those are too many elements.\n") +
-            QString("The Error-Message is: ") + QString(e.what()), QMessageBox::Ok, QMessageBox::Ok);
-    }
-    catch (const std::runtime_error& e)
-    {
-        QMessageBox::information(0, "Resize error.", e.what(), QMessageBox::Ok, QMessageBox::Ok);
-    }
+    setup(DB);
 }
 
-void DatabaseModuleList::_onSelectionChanged(const QModelIndex& current, const QModelIndex& previous)
+List::List(QWidget* pParent)
+    : QTreeView(pParent)
 {
-    emit selectionChanged();
+    setIndentation(0);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setSelectionMode(QAbstractItemView::SingleSelection);
+    setSelectionBehavior(QAbstractItemView::SelectRows);
 }
 
-const Prototype* DatabaseModuleList::getCurrentPrototype() const
+void List::setup(Model* pModel)
 {
-    // row+1 == prototype ID
-    return getDatabaseModel()->getDatabase()->getPrototype(m_pList->currentIndex().row()+1);
+    setModel(pModel);
+    resizeColumnToContents(0);
+   
+    connect(selectionModel(), SIGNAL(currentRowChanged(const QModelIndex&, const QModelIndex&)), this,
+        SLOT(_onSelectionChanged(const QModelIndex&, const QModelIndex&)));
 }
 
-void DatabaseModuleList::setDatabaseModel(DATABASE::DatabaseModel* pModel)
+void List::setup(const Interface& DB)
 {
-    m_pList->setModel(pModel);
-    connect(m_pList->selectionModel(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
-        this, SLOT(_onSelectionChanged(const QModelIndex&, const QModelIndex&)));
-    m_pList->resizeColumnToContents(0);
-    m_pList->setCurrentIndex(pModel->index(0));
+    setup(new database::Model(DB, parent()));
 }
 
-void DatabaseModuleList::selectItem(uint32 ID)
+uint32 List::getCurrentID() const
 {
-    auto model = m_pList->model()->index(ID, 0);
-    if (model.isValid())
-        m_pList->setCurrentIndex(model);
+    return currentIndex().row() + 1;
+}
+
+void List::_onSelectionChanged(const QModelIndex& current, const QModelIndex& previous)
+{
+    emit selectionChanged(current.isValid() ? current.row() + 1 : 0,
+        previous.isValid() ? previous.row() + 1 : 0);
+}
+
+void List::onSizeChanged(uint32 newSize, uint32 oldSize)
+{
+    if (newSize > oldSize)
+        model()->insertRows(oldSize, newSize - oldSize);
+    else if (oldSize > newSize)
+        model()->removeRows(newSize, oldSize - newSize);
+    if (!oldSize)
+        setCurrentIndex(model()->index(0, 0));
+}
+
+void List::selectPrototype(uint32 ID)
+{
+    auto item = model()->index(ID, 0);
+    if (item.isValid())
+        setCurrentIndex(item);
 }

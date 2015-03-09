@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<DB>
-    <p columns="4" rows="4" ID="1" name="Gras" tiles="1,1,8,11,1,2,9,11,4,3,9,11,5,6,9,11"/>
-    <p columns="3" rows="2" ID="2" name="forest" tiles="55,56,53,54,51,52"/>
+<DB size="2">
+    <p ID="1" name="Gras" columns="4" rows="4" tiles="1,1,8,11,1,2,9,11,4,3,9,11,5,6,9,11"/>
+    <p ID="2" name="forest" columns="3" rows="2" tiles="55,56,53,54,51,52"/>
 </DB>

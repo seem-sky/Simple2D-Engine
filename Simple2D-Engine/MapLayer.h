@@ -2,6 +2,7 @@
 #define MAP_LAYER_H
 
 #include "MapTile.h"
+#include <geometry/Size.h>
 
 namespace MAP
 {
@@ -10,19 +11,19 @@ namespace MAP
     {
         friend class LayerContainer;
     private:
-        void _resize(const GEOMETRY::Point<uint32>& size);
+        void _resize(const GEOMETRY::Size<uint32>& size);
         void _clear();
 
     public:
-        Layer(const GEOMETRY::Point<uint32>& size = GEOMETRY::Point<uint32>());
+        Layer(const GEOMETRY::Size<uint32>& size = GEOMETRY::Size<uint32>());
 
-        inline GEOMETRY::Point<uint32> getSize() const { return m_Size; }
+        inline GEOMETRY::Size<uint32> getSize() const { return m_Size; }
 
         MapTileInfo getMapTile(const GEOMETRY::Point<uint32>& at) const;
         void setMapTile(const GEOMETRY::Point<uint32>& at, MapTile tile);
         void setMapTile(const MapTileInfo& tileInfo);
 
-        inline bool isInMap(const GEOMETRY::Point<uint32>& at) const { return at.getX() < getSize().getX() && at.getY() < getSize().getY(); }
+        inline bool isInMap(const GEOMETRY::Point<uint32>& at) const { return at.getX() < getSize().getWidth() && at.getY() < getSize().getHeight(); }
 
         enum RESULT_FLAG
         {
@@ -37,7 +38,7 @@ namespace MAP
 
     private:
         std::vector<MapTileVec> m_Layer;
-        GEOMETRY::Point<uint32> m_Size;
+        GEOMETRY::Size<uint32> m_Size;
     };
 
     class LayerContainer
@@ -45,21 +46,21 @@ namespace MAP
     public:
         void clear();
 
-        void resize(const GEOMETRY::Point<uint32>& size, uint8 uiForegroundLayerSize, uint8 uiBackgroundLayerSize);
-        inline GEOMETRY::Point<uint32> getSize() const { return m_Size; }
+        void resize(const GEOMETRY::Size<uint32>& size, uint8 uiForegroundLayerSize, uint8 uiBackgroundLayerSize);
+        inline GEOMETRY::Size<uint32> getSize() const { return m_Size; }
         uint8 getLayerSize(LayerType layer) const;
 
         const Layer& getLayer(LayerType layer, uint8 index) const;
         Layer& getLayer(LayerType layer, uint8 index);
 
-        inline bool isInMap(const GEOMETRY::Point<uint32>& at) const { return at.getX() < getSize().getX() && at.getY() < getSize().getY(); }
+        inline bool isInMap(const GEOMETRY::Point<uint32>& at) const { return at.getX() < getSize().getWidth() && at.getY() < getSize().getHeight(); }
 
     private:
         typedef std::vector<Layer> LayerVector;
         LayerVector m_BackgroundLayer;
         LayerVector m_ForegroundLayer;
 
-        GEOMETRY::Point<uint32> m_Size;
+        GEOMETRY::Size<uint32> m_Size;
     };
 }
 #endif

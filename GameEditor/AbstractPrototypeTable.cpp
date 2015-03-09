@@ -88,7 +88,8 @@ void AbstractPixmapWidget::drawSelection()
 /*#####
 # MapEditorModuleTiles
 #####*/
-AbstractPrototypeTable::AbstractPrototypeTable(const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent) : QTableWidget(pParent), m_DBMgr(DBMgr)
+AbstractPrototypeTable::AbstractPrototypeTable(const database::Manager& DBMgr, QWidget* pParent)
+    : QTableWidget(pParent), m_DBMgr(DBMgr)
 {
     // setup header
     auto hHeader = horizontalHeader();

@@ -24,7 +24,7 @@ namespace CACHE
 
         void add(const GEOMETRY::Point<uint32>& pos, const QPixmap& pixmap)
         {
-            m_Bitset.set(pos, true);
+            m_Bitset.set(pos);
             QPainter painter(&m_Texture);
             painter.drawPixmap(pos.getX() * textureWidth, pos.getY() * textureHeight, textureWidth, textureHeight, pixmap);
         }
@@ -56,9 +56,9 @@ namespace CACHE
         GEOMETRY::Point<uint32> getEmptyPosition() const
         {
             GEOMETRY::Point<uint32> pos;
-            for (; pos.getY() < m_Bitset.height(); ++pos.getY())
+            for (; pos.getY() < m_Bitset.getHeight(); ++pos.getY())
             {
-                for (pos.getX() = 0; pos.getX() < m_Bitset.width(); ++pos.getX())
+                for (pos.getX() = 0; pos.getX() < m_Bitset.getWidth(); ++pos.getX())
                 {
                     if (isEmpty(pos))
                         return pos;
@@ -84,7 +84,7 @@ namespace CACHE
 
     private:
         QPixmap m_Texture;
-        Bitset2D m_Bitset;
+        sl::Bitset2D m_Bitset;
     };
 }
 #endif

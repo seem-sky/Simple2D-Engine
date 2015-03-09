@@ -1,7 +1,7 @@
 #ifndef PROJECT_H
 #define PROJECT_H
 
-#include "DatabaseMgr.h"
+#include "Database/Manager.h"
 
 class Project
 {
@@ -15,10 +15,10 @@ public:
 
     inline QString getPath() const { return m_projectPath; }
 
-    DATABASE::DatabaseMgr& getDatabaseMgr() { return m_DBMgr; }
+    database::Manager& getDatabaseMgr() { return m_Mgr; }
 
 private:
     QString m_projectPath;
-    DATABASE::DatabaseMgr m_DBMgr;
+    database::Manager m_Mgr;
 };
 #endif

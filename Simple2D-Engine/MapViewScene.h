@@ -22,14 +22,13 @@ protected:
     GEOMETRY::Point<uint32> calculateEndTile(const QRect& rect, const GEOMETRY::Point<uint32>& startTile) const;
 
 public:
-    MapViewScene(CACHE::Manager& cacheMgr, const MAP::MAP_DATA::MapData& mapData, const DATABASE::DatabaseMgr& DBMgr);
+    MapViewScene(CACHE::Manager& cacheMgr, const MAP::MAP_DATA::MapData& mapData, const database::Manager& DBMgr);
 
     const MAP::MAP_DATA::MapData& getMapData() const { return m_MapData; }
-    const DATABASE::DatabaseMgr& getDatabaseMgr() const { return m_DBMgr; }
 
 private:
     const MAP::MAP_DATA::MapData& m_MapData;
-    const DATABASE::DatabaseMgr& m_DBMgr;
+    const database::Manager& m_DBMgr;
     CACHE::Manager& m_CacheMgr;
 };
 #endif

@@ -7,7 +7,8 @@
 using namespace BRUSH;
 using namespace MAP::BRUSH;
 
-MapEditorWidgetBrush::MapEditorWidgetBrush(CACHE::Manager& cacheMgr, const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent) : ToolWidget(pParent), m_DBMgr(DBMgr)
+MapEditorWidgetBrush::MapEditorWidgetBrush(CACHE::Manager& cacheMgr, const database::Manager& DBMgr, QWidget* pParent)
+    : ToolWidget(pParent), m_DBMgr(DBMgr)
 {
     setWindowFlags(windowFlags() | Qt::MSWindowsFixedSizeDialogHint);
     setWindowTitle("map editor brush");

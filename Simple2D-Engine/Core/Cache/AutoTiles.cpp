@@ -2,12 +2,12 @@
 #include "Simple2D-Global.h"
 #include <math_extensions.h>
 #include <QtGui/QPainter>
-#include "DatabaseMgr.h"
 #include "Tiles.h"
 #include <log/Log.h>
 
 using namespace CACHE;
 using namespace MAP;
+using namespace database::prototype;
 using namespace DATABASE::PROTOTYPE::AUTO_TILE;
 
 // free functions
@@ -81,10 +81,10 @@ void drawOnPixmap(QPainter& painter, const CACHE::TileCacheInfo& info, Position 
     }
 }
 
-void setupMultiInnerEdges(QPainter& painter, const AutoTilePrototype* pAutoTile, CACHE::Tiles& tileCache)
+void setupMultiInnerEdges(QPainter& painter, const AutoTile* pAutoTile, CACHE::Tiles& tileCache)
 {
-    auto innerCenter = tileCache.get(pAutoTile->getTileID(INDEX_INNER_CENTER));
-    auto center = tileCache.get(pAutoTile->getTileID(INDEX_CENTER));
+    auto innerCenter = tileCache.get(pAutoTile->getTileID(AutoTile::Index::InnerCenter));
+    auto center = tileCache.get(pAutoTile->getTileID(AutoTile::Index::Center));
     for (uint32 i = INDEX_INNER_EDGE_TOP_LEFT_BOTTOM_RIGHT; i <= INDEX_INNER_EDGE_BOTTOM_LEFT_BOTTOM_RIGHT; ++i)
     {
         QPixmap tempPix(TILE_SIZE, TILE_SIZE);
@@ -131,7 +131,7 @@ void setupMultiInnerEdges(QPainter& painter, const AutoTilePrototype* pAutoTile,
     }
 }
 
-void setupDoubleSides(QPainter& painter, const AutoTilePrototype* pAutoTile, CACHE::Tiles& tileCache)
+void setupDoubleSides(QPainter& painter, const AutoTile* pAutoTile, CACHE::Tiles& tileCache)
 {
     for (uint32 i = INDEX_SIDE_VERTICAL; i <= INDEX_SIDE_HORIZONTAL; ++i)
     {
@@ -141,12 +141,12 @@ void setupDoubleSides(QPainter& painter, const AutoTilePrototype* pAutoTile, CAC
         switch (i)
         {
         case INDEX_SIDE_VERTICAL:
-            drawOnPixmap(pixmapPainter, tileCache.get(pAutoTile->getTileID(INDEX_RIGHT)), Position::right);
-            drawOnPixmap(pixmapPainter, tileCache.get(pAutoTile->getTileID(INDEX_LEFT)), Position::left);
+            drawOnPixmap(pixmapPainter, tileCache.get(pAutoTile->getTileID(AutoTile::Index::Right)), Position::right);
+            drawOnPixmap(pixmapPainter, tileCache.get(pAutoTile->getTileID(AutoTile::Index::Left)), Position::left);
             break;
         case INDEX_SIDE_HORIZONTAL:
-            drawOnPixmap(pixmapPainter, tileCache.get(pAutoTile->getTileID(INDEX_BOTTOM)), Position::bottom);
-            drawOnPixmap(pixmapPainter, tileCache.get(pAutoTile->getTileID(INDEX_TOP)), Position::top);
+            drawOnPixmap(pixmapPainter, tileCache.get(pAutoTile->getTileID(AutoTile::Index::Bottom)), Position::bottom);
+            drawOnPixmap(pixmapPainter, tileCache.get(pAutoTile->getTileID(AutoTile::Index::Top)), Position::top);
             break;
         }
 
@@ -154,22 +154,22 @@ void setupDoubleSides(QPainter& painter, const AutoTilePrototype* pAutoTile, CAC
     }
 }
 
-void setupCircle(QPainter& painter, const AutoTilePrototype* pAutoTile, CACHE::Tiles& tileCache)
+void setupCircle(QPainter& painter, const AutoTile* pAutoTile, CACHE::Tiles& tileCache)
 {
     QPixmap tempPix(TILE_SIZE, TILE_SIZE);
     tempPix.fill(Qt::transparent);
     QPainter pixmapPainter(&tempPix);
-    drawOnPixmap(pixmapPainter, tileCache.get(pAutoTile->getTileID(INDEX_TOP_LEFT)), Position::topLeft);
-    drawOnPixmap(pixmapPainter, tileCache.get(pAutoTile->getTileID(INDEX_TOP_RIGHT)), Position::topRight);
-    drawOnPixmap(pixmapPainter, tileCache.get(pAutoTile->getTileID(INDEX_BOTTOM_LEFT)), Position::bottomLeft);
-    drawOnPixmap(pixmapPainter, tileCache.get(pAutoTile->getTileID(INDEX_BOTTOM_RIGHT)), Position::bottomRight);
+    drawOnPixmap(pixmapPainter, tileCache.get(pAutoTile->getTileID(AutoTile::Index::TopLeft)), Position::topLeft);
+    drawOnPixmap(pixmapPainter, tileCache.get(pAutoTile->getTileID(AutoTile::Index::TopRight)), Position::topRight);
+    drawOnPixmap(pixmapPainter, tileCache.get(pAutoTile->getTileID(AutoTile::Index::BottomLeft)), Position::bottomLeft);
+    drawOnPixmap(pixmapPainter, tileCache.get(pAutoTile->getTileID(AutoTile::Index::BottomRight)), Position::bottomRight);
     drawOnAtlas(painter, tempPix, INDEX_CIRCLE);
 }
 
-void setupInnerEdges(QPainter& painter, const AutoTilePrototype* pAutoTile, CACHE::Tiles& tileCache)
+void setupInnerEdges(QPainter& painter, const AutoTile* pAutoTile, CACHE::Tiles& tileCache)
 {
-    auto innerCenter = tileCache.get(pAutoTile->getTileID(INDEX_INNER_CENTER));
-    auto center = tileCache.get(pAutoTile->getTileID(INDEX_CENTER));
+    auto innerCenter = tileCache.get(pAutoTile->getTileID(AutoTile::Index::InnerCenter));
+    auto center = tileCache.get(pAutoTile->getTileID(AutoTile::Index::Center));
     for (uint32 i = INDEX_INNER_EDGE_TOP_LEFT; i <= INDEX_INNER_EDGE_BOTTOM_RIGHT; ++i)
     {
         QPixmap tempPix(TILE_SIZE, TILE_SIZE);
@@ -202,9 +202,9 @@ void setupInnerEdges(QPainter& painter, const AutoTilePrototype* pAutoTile, CACH
     }
 }
 
-void setupT_Tiles(QPainter& painter, const AutoTilePrototype* pAutoTile, CACHE::Tiles& tileCache)
+void setupT_Tiles(QPainter& painter, const AutoTile* pAutoTile, CACHE::Tiles& tileCache)
 {
-    auto innerCenter = tileCache.get(pAutoTile->getTileID(INDEX_INNER_CENTER));
+    auto innerCenter = tileCache.get(pAutoTile->getTileID(AutoTile::Index::InnerCenter));
     for (uint32 i = INDEX_T_TOP; i <= INDEX_T_RIGHT; ++i)
     {
         QPixmap tempPix(TILE_SIZE, TILE_SIZE);
@@ -216,29 +216,29 @@ void setupT_Tiles(QPainter& painter, const AutoTilePrototype* pAutoTile, CACHE::
         case INDEX_T_TOP:
         {
             drawOnPixmap(pixmapPainter, innerCenter, Position::bottom);
-            drawOnPixmap(pixmapPainter, tileCache.get(pAutoTile->getTileID(INDEX_TOP)), Position::top);
+            drawOnPixmap(pixmapPainter, tileCache.get(pAutoTile->getTileID(AutoTile::Index::Top)), Position::top);
             break;
         }
         case INDEX_T_BOTTOM:
             drawOnPixmap(pixmapPainter, innerCenter, Position::top);
-            drawOnPixmap(pixmapPainter, tileCache.get(pAutoTile->getTileID(INDEX_BOTTOM)), Position::bottom);
+            drawOnPixmap(pixmapPainter, tileCache.get(pAutoTile->getTileID(AutoTile::Index::Bottom)), Position::bottom);
             break;
         case INDEX_T_LEFT:
             drawOnPixmap(pixmapPainter, innerCenter, Position::right);
-            drawOnPixmap(pixmapPainter, tileCache.get(pAutoTile->getTileID(INDEX_LEFT)), Position::left);
+            drawOnPixmap(pixmapPainter, tileCache.get(pAutoTile->getTileID(AutoTile::Index::Left)), Position::left);
             break;
         case INDEX_T_RIGHT:
             drawOnPixmap(pixmapPainter, innerCenter, Position::left);
-            drawOnPixmap(pixmapPainter, tileCache.get(pAutoTile->getTileID(INDEX_RIGHT)), Position::right);
+            drawOnPixmap(pixmapPainter, tileCache.get(pAutoTile->getTileID(AutoTile::Index::Right)), Position::right);
             break;
         }
         drawOnAtlas(painter, tempPix, i);
     }
 }
 
-void setupY_Tiles(QPainter& painter, const AutoTilePrototype* pAutoTile, CACHE::Tiles& tileCache)
+void setupY_Tiles(QPainter& painter, const AutoTile* pAutoTile, CACHE::Tiles& tileCache)
 {
-    auto innerCenter = tileCache.get(pAutoTile->getTileID(INDEX_INNER_CENTER));
+    auto innerCenter = tileCache.get(pAutoTile->getTileID(AutoTile::Index::InnerCenter));
     for (uint32 i = INDEX_Y_TOP_BOTTOM_LEFT; i <= INDEX_Y_RIGHT_BOTTOM_LEFT; ++i)
     {
         QPixmap tempPix(TILE_SIZE, TILE_SIZE);
@@ -249,7 +249,7 @@ void setupY_Tiles(QPainter& painter, const AutoTilePrototype* pAutoTile, CACHE::
         {
         case INDEX_Y_TOP_BOTTOM_LEFT:
         {
-            auto side = tileCache.get(pAutoTile->getTileID(INDEX_TOP));
+            auto side = tileCache.get(pAutoTile->getTileID(AutoTile::Index::Top));
             drawOnPixmap(pixmapPainter, side, Position::top);
             drawOnPixmap(pixmapPainter, side, Position::bottomRight);
             drawOnPixmap(pixmapPainter, innerCenter, Position::bottomLeft);
@@ -258,7 +258,7 @@ void setupY_Tiles(QPainter& painter, const AutoTilePrototype* pAutoTile, CACHE::
 
         case INDEX_Y_TOP_BOTTOM_RIGHT:
         {
-            auto side = tileCache.get(pAutoTile->getTileID(INDEX_TOP));
+            auto side = tileCache.get(pAutoTile->getTileID(AutoTile::Index::Top));
             drawOnPixmap(pixmapPainter, side, Position::top);
             drawOnPixmap(pixmapPainter, side, Position::bottomLeft);
             drawOnPixmap(pixmapPainter, innerCenter, Position::bottomRight);
@@ -267,7 +267,7 @@ void setupY_Tiles(QPainter& painter, const AutoTilePrototype* pAutoTile, CACHE::
 
         case INDEX_Y_RIGHT_BOTTOM_LEFT:
         {
-            auto side = tileCache.get(pAutoTile->getTileID(INDEX_RIGHT));
+            auto side = tileCache.get(pAutoTile->getTileID(AutoTile::Index::Right));
             drawOnPixmap(pixmapPainter, side, Position::top);
             drawOnPixmap(pixmapPainter, side, Position::bottomRight);
             drawOnPixmap(pixmapPainter, innerCenter, Position::bottomLeft);
@@ -276,7 +276,7 @@ void setupY_Tiles(QPainter& painter, const AutoTilePrototype* pAutoTile, CACHE::
 
         case INDEX_Y_RIGHT_TOP_LEFT:
         {
-            auto side = tileCache.get(pAutoTile->getTileID(INDEX_RIGHT));
+            auto side = tileCache.get(pAutoTile->getTileID(AutoTile::Index::Right));
             drawOnPixmap(pixmapPainter, side, Position::right);
             drawOnPixmap(pixmapPainter, side, Position::bottomLeft);
             drawOnPixmap(pixmapPainter, innerCenter, Position::topLeft);
@@ -285,7 +285,7 @@ void setupY_Tiles(QPainter& painter, const AutoTilePrototype* pAutoTile, CACHE::
 
         case INDEX_Y_LEFT_BOTTOM_RIGHT:
         {
-            auto side = tileCache.get(pAutoTile->getTileID(INDEX_LEFT));
+            auto side = tileCache.get(pAutoTile->getTileID(AutoTile::Index::Left));
             drawOnPixmap(pixmapPainter, side, Position::left);
             drawOnPixmap(pixmapPainter, side, Position::topRight);
             drawOnPixmap(pixmapPainter, innerCenter, Position::bottomRight);
@@ -294,7 +294,7 @@ void setupY_Tiles(QPainter& painter, const AutoTilePrototype* pAutoTile, CACHE::
 
         case INDEX_Y_LEFT_TOP_RIGHT:
         {
-            auto side = tileCache.get(pAutoTile->getTileID(INDEX_LEFT));
+            auto side = tileCache.get(pAutoTile->getTileID(AutoTile::Index::Left));
             drawOnPixmap(pixmapPainter, side, Position::left);
             drawOnPixmap(pixmapPainter, side, Position::bottomRight);
             drawOnPixmap(pixmapPainter, innerCenter, Position::topRight);
@@ -303,7 +303,7 @@ void setupY_Tiles(QPainter& painter, const AutoTilePrototype* pAutoTile, CACHE::
 
         case INDEX_Y_BOTTOM_TOP_LEFT:
         {
-            auto side = tileCache.get(pAutoTile->getTileID(INDEX_BOTTOM));
+            auto side = tileCache.get(pAutoTile->getTileID(AutoTile::Index::Bottom));
             drawOnPixmap(pixmapPainter, side, Position::bottom);
             drawOnPixmap(pixmapPainter, side, Position::topRight);
             drawOnPixmap(pixmapPainter, innerCenter, Position::topLeft);
@@ -312,7 +312,7 @@ void setupY_Tiles(QPainter& painter, const AutoTilePrototype* pAutoTile, CACHE::
         
         case INDEX_Y_BOTTOM_TOP_RIGHT:
         {
-            auto side = tileCache.get(pAutoTile->getTileID(INDEX_BOTTOM));
+            auto side = tileCache.get(pAutoTile->getTileID(AutoTile::Index::Bottom));
             drawOnPixmap(pixmapPainter, side, Position::bottom);
             drawOnPixmap(pixmapPainter, side, Position::topLeft);
             drawOnPixmap(pixmapPainter, innerCenter, Position::topRight);
@@ -324,9 +324,9 @@ void setupY_Tiles(QPainter& painter, const AutoTilePrototype* pAutoTile, CACHE::
     }
 }
 
-void setupCurves(QPainter& painter, const AutoTilePrototype* pAutoTile, CACHE::Tiles& tileCache)
+void setupCurves(QPainter& painter, const AutoTile* pAutoTile, CACHE::Tiles& tileCache)
 {
-    auto innerCenter = tileCache.get(pAutoTile->getTileID(INDEX_INNER_CENTER));
+    auto innerCenter = tileCache.get(pAutoTile->getTileID(AutoTile::Index::InnerCenter));
     for (uint32 i = INDEX_CURVE_TOP_LEFT; i <= INDEX_CURVE_BOTTOM_RIGHT; ++i)
     {
         QPixmap tempPix(TILE_SIZE, TILE_SIZE);
@@ -337,7 +337,7 @@ void setupCurves(QPainter& painter, const AutoTilePrototype* pAutoTile, CACHE::T
         {
         case INDEX_CURVE_TOP_LEFT:
         {
-            CACHE::TileCacheInfo edge = tileCache.get(pAutoTile->getTileID(INDEX_TOP_LEFT));
+            CACHE::TileCacheInfo edge = tileCache.get(pAutoTile->getTileID(AutoTile::Index::TopLeft));
             drawOnPixmap(pixmapPainter, edge, Position::top);
             drawOnPixmap(pixmapPainter, edge, Position::bottomLeft);
             drawOnPixmap(pixmapPainter, innerCenter, Position::bottomRight);
@@ -346,7 +346,7 @@ void setupCurves(QPainter& painter, const AutoTilePrototype* pAutoTile, CACHE::T
 
         case INDEX_CURVE_TOP_RIGHT:
         {
-            CACHE::TileCacheInfo edge = tileCache.get(pAutoTile->getTileID(INDEX_TOP_RIGHT));
+            CACHE::TileCacheInfo edge = tileCache.get(pAutoTile->getTileID(AutoTile::Index::TopLeft));
             drawOnPixmap(pixmapPainter, edge, Position::top);
             drawOnPixmap(pixmapPainter, edge, Position::bottomRight);
             drawOnPixmap(pixmapPainter, innerCenter, Position::bottomLeft);
@@ -355,7 +355,7 @@ void setupCurves(QPainter& painter, const AutoTilePrototype* pAutoTile, CACHE::T
 
         case INDEX_CURVE_BOTTOM_LEFT:
         {
-            CACHE::TileCacheInfo edge = tileCache.get(pAutoTile->getTileID(INDEX_BOTTOM_LEFT));
+            CACHE::TileCacheInfo edge = tileCache.get(pAutoTile->getTileID(AutoTile::Index::BottomLeft));
             drawOnPixmap(pixmapPainter, edge, Position::bottom);
             drawOnPixmap(pixmapPainter, edge, Position::topLeft);
             drawOnPixmap(pixmapPainter, innerCenter, Position::topRight);
@@ -364,7 +364,7 @@ void setupCurves(QPainter& painter, const AutoTilePrototype* pAutoTile, CACHE::T
 
         case INDEX_CURVE_BOTTOM_RIGHT:
         {
-            CACHE::TileCacheInfo edge = tileCache.get(pAutoTile->getTileID(INDEX_BOTTOM_RIGHT));
+            CACHE::TileCacheInfo edge = tileCache.get(pAutoTile->getTileID(AutoTile::Index::BottomRight));
             drawOnPixmap(pixmapPainter, edge, Position::bottom);
             drawOnPixmap(pixmapPainter, edge, Position::topRight);
             drawOnPixmap(pixmapPainter, innerCenter, Position::topLeft);
@@ -376,10 +376,10 @@ void setupCurves(QPainter& painter, const AutoTilePrototype* pAutoTile, CACHE::T
     }
 }
 
-void setupTripleInnerEdges(QPainter& painter, const AutoTilePrototype* pAutoTile, CACHE::Tiles& tileCache)
+void setupTripleInnerEdges(QPainter& painter, const AutoTile* pAutoTile, CACHE::Tiles& tileCache)
 {
-    auto center = tileCache.get(pAutoTile->getTileID(INDEX_CENTER));
-    auto innerCenter = tileCache.get(pAutoTile->getTileID(INDEX_INNER_CENTER));
+    auto center = tileCache.get(pAutoTile->getTileID(AutoTile::Index::Center));
+    auto innerCenter = tileCache.get(pAutoTile->getTileID(AutoTile::Index::InnerCenter));
     for (uint32 i = INDEX_INNER_EDGE_TOP_LEFT_TOP_RIGHT_BOTTOM_LEFT; i <= INDEX_INNER_EDGE_TOP_RIGHT_BOTTOM_LEFT_BOTTOM_RIGHT; ++i)
     {
         QPixmap tempPix(TILE_SIZE, TILE_SIZE);
@@ -413,7 +413,7 @@ void setupTripleInnerEdges(QPainter& painter, const AutoTilePrototype* pAutoTile
     }
 }
 
-void setupSideEnds(QPainter& painter, const AutoTilePrototype* pAutoTile, CACHE::Tiles& tileCache)
+void setupSideEnds(QPainter& painter, const AutoTile* pAutoTile, CACHE::Tiles& tileCache)
 {
     for (uint32 i = INDEX_SIDE_END_TOP; i <= INDEX_SIDE_END_RIGHT; ++i)
     {
@@ -424,23 +424,23 @@ void setupSideEnds(QPainter& painter, const AutoTilePrototype* pAutoTile, CACHE:
         switch (i)
         {
         case INDEX_SIDE_END_TOP:
-            drawOnPixmap(pixmapPainter, tileCache.get(pAutoTile->getTileID(INDEX_TOP_RIGHT)), Position::right);
-            drawOnPixmap(pixmapPainter, tileCache.get(pAutoTile->getTileID(INDEX_TOP_LEFT)), Position::left);
+            drawOnPixmap(pixmapPainter, tileCache.get(pAutoTile->getTileID(AutoTile::Index::TopRight)), Position::right);
+            drawOnPixmap(pixmapPainter, tileCache.get(pAutoTile->getTileID(AutoTile::Index::TopLeft)), Position::left);
             break;
 
         case INDEX_SIDE_END_BOTTOM:
-            drawOnPixmap(pixmapPainter, tileCache.get(pAutoTile->getTileID(INDEX_BOTTOM_RIGHT)), Position::right);
-            drawOnPixmap(pixmapPainter, tileCache.get(pAutoTile->getTileID(INDEX_BOTTOM_LEFT)), Position::left);
+            drawOnPixmap(pixmapPainter, tileCache.get(pAutoTile->getTileID(AutoTile::Index::BottomRight)), Position::right);
+            drawOnPixmap(pixmapPainter, tileCache.get(pAutoTile->getTileID(AutoTile::Index::BottomLeft)), Position::left);
             break;
 
         case INDEX_SIDE_END_LEFT:
-            drawOnPixmap(pixmapPainter, tileCache.get(pAutoTile->getTileID(INDEX_TOP_LEFT)), Position::top);
-            drawOnPixmap(pixmapPainter, tileCache.get(pAutoTile->getTileID(INDEX_BOTTOM_LEFT)), Position::bottom);
+            drawOnPixmap(pixmapPainter, tileCache.get(pAutoTile->getTileID(AutoTile::Index::TopLeft)), Position::top);
+            drawOnPixmap(pixmapPainter, tileCache.get(pAutoTile->getTileID(AutoTile::Index::BottomLeft)), Position::bottom);
             break;
 
         case INDEX_SIDE_END_RIGHT:
-            drawOnPixmap(pixmapPainter, tileCache.get(pAutoTile->getTileID(INDEX_TOP_RIGHT)), Position::top);
-            drawOnPixmap(pixmapPainter, tileCache.get(pAutoTile->getTileID(INDEX_BOTTOM_RIGHT)), Position::bottom);
+            drawOnPixmap(pixmapPainter, tileCache.get(pAutoTile->getTileID(AutoTile::Index::TopRight)), Position::top);
+            drawOnPixmap(pixmapPainter, tileCache.get(pAutoTile->getTileID(AutoTile::Index::BottomRight)), Position::bottom);
             break;
         }
 
@@ -451,18 +451,18 @@ void setupSideEnds(QPainter& painter, const AutoTilePrototype* pAutoTile, CACHE:
 /*#####
 # AutoTiles
 #####*/
-AutoTiles::AutoTiles(Tiles& tileCache, const DATABASE::DatabaseMgr& DBMgr)
+AutoTiles::AutoTiles(Tiles& tileCache, const database::Manager& DBMgr)
     : m_TileCache(tileCache), TileBase(DBMgr)
 {}
 
-TileCacheInfo AutoTiles::get(uint32 ID, AUTO_TILE_INDEX index) const
+TileCacheInfo AutoTiles::get(uint32 ID, AutoTile::Index index) const
 {
     try
     {
-        if (auto pAutoTile = m_DBMgr.getAutoTileDatabase()->getOriginalPrototype(ID))
+        if (auto pAutoTile = m_DBMgr.getAutoTileDatabase().getPrototype(ID))
         {
             // if basic texture return from tile cache
-            if (index < AUTO_TILE_SET_COUNT)
+            if (static_cast<uint32>(index) < AUTO_TILE_SET_COUNT)
                 return m_TileCache.get(pAutoTile->getTileID(index));
 
             if (isEmpty(ID))
@@ -476,8 +476,8 @@ TileCacheInfo AutoTiles::get(uint32 ID, AUTO_TILE_INDEX index) const
             TileCacheInfo info(m_Positions.at(ID - 1).getPixmap(), GEOMETRY::Point<uint32>(m_Positions.at(ID - 1).getPosition().getX() * ATLAS_WIDTH * TILE_SIZE,
                 m_Positions.at(ID - 1).getPosition().getY() * ATLAS_HEIGHT * TILE_SIZE));
             return TileCacheInfo(info.getPixmap(),
-                GEOMETRY::Point<uint32>(info.getPosition().getX() + (index - AUTO_TILE_SET_COUNT) % ATLAS_WIDTH * TILE_SIZE, info.getPosition().getY() +
-                (index - AUTO_TILE_SET_COUNT) / ATLAS_WIDTH * TILE_SIZE));
+                GEOMETRY::Point<uint32>(info.getPosition().getX() + (static_cast<uint32>(index)-AUTO_TILE_SET_COUNT) % ATLAS_WIDTH * TILE_SIZE, info.getPosition().getY() +
+                (static_cast<uint32>(index)-AUTO_TILE_SET_COUNT) / ATLAS_WIDTH * TILE_SIZE));
         }
     }
     catch (const std::runtime_error&) {}
@@ -489,7 +489,7 @@ TileCacheInfo AutoTiles::get(uint32 ID, AUTO_TILE_INDEX index) const
 
 TileCacheInfo AutoTiles::_setupAutoTile(uint32 ID)
 {
-    auto pAutoTile = m_DBMgr.getAutoTileDatabase()->getOriginalPrototype(ID);
+    auto pAutoTile = m_DBMgr.getAutoTileDatabase().getPrototype(ID);
     if (!pAutoTile)
         throw std::runtime_error("Unable to get AutoTilePrototype.");
 

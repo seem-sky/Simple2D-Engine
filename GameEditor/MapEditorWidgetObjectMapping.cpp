@@ -1,9 +1,9 @@
 #include "MapEditorWidgetObjectMapping.h"
 #include "moc_MapEditorWidgetObjectMapping.h"
-#include <DatabaseMgr.h>
+#include <Database/Manager.h>
 
-MapEditorWidgetObjectMapping::MapEditorWidgetObjectMapping(const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent) :
-Ui_MapEditorWidgetObjectMapping(), ToolWidget(pParent), m_DBMgr(DBMgr)
+MapEditorWidgetObjectMapping::MapEditorWidgetObjectMapping(const database::Manager& DBMgr, QWidget* pParent)
+    : Ui_MapEditorWidgetObjectMapping(), ToolWidget(pParent), m_DBMgr(DBMgr)
 {
     setupUi(this);
 
@@ -44,17 +44,18 @@ void MapEditorWidgetObjectMapping::onIndexChanged(int32 index)
 void MapEditorWidgetObjectMapping::_setupViewer()
 {
     m_pViewer->clear();
-    if (auto pPrototype = m_DBMgr.getWorldObjectDatabase()->getOriginalPrototype(m_WorldObjectID))
+    if (auto pPrototype = m_DBMgr.getWorldObjectDatabase().getPrototype(m_WorldObjectID))
     {
-        if (pPrototype->getFlagManager().hasFlag(DATABASE::PROTOTYPE::WORLD_OBJECT::Flags::FLAG_ANIMATION))
-        {
-            auto index = static_cast<uint32>(_getDirection())+1;
-            for (uint32 i = 0; i < pPrototype->getAnimationModule().getAnimationCount(); ++i)
-            {
-                auto& info = pPrototype->getAnimationModule().getAnimationInfo(i);
-                if (info.m_AnimationTypeID == index)
-                    m_pViewer->setAnimation(info);
-            }
-        }
+        // ToDo:
+        //if (pPrototype->getFlagManager().hasFlag(DATABASE::PROTOTYPE::WORLD_OBJECT::Flags::FLAG_ANIMATION))
+        //{
+        //    auto index = static_cast<uint32>(_getDirection())+1;
+        //    for (uint32 i = 0; i < pPrototype->getAnimationModule().getAnimationCount(); ++i)
+        //    {
+        //        auto& info = pPrototype->getAnimationModule().getAnimationInfo(i);
+        //        if (info.m_AnimationTypeID == index)
+        //            m_pViewer->setAnimation(info);
+        //    }
+        //}
     }
 }

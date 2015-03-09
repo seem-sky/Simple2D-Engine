@@ -6,11 +6,6 @@
 #include <Global.h>
 #include "MappingObject.h"
 
-namespace DATABASE
-{
-    class DatabaseMgr;
-}
-
 namespace CACHE
 {
     class Manager;
@@ -22,7 +17,7 @@ class MapEditorModuleContent : public QWidget, Ui_MapEditorModuleContent
 {
     Q_OBJECT
 public:
-    MapEditorModuleContent(CACHE::Manager& cacheMgr, const MappingObject& mappingObject, DATABASE::DatabaseMgr& databaseMgr, QWidget* pWidget = nullptr);
+    MapEditorModuleContent(CACHE::Manager& cacheMgr, const MappingObject& mappingObject, database::Manager& databaseMgr, QWidget* pWidget = nullptr);
 
     MapEditor* getTab(uint32 mapID);
 
@@ -51,7 +46,7 @@ signals:
     void changeMappingMode(MAPPING_MODE::Type mode);
 
 private:
-    DATABASE::DatabaseMgr& m_DBMgr;
+    database::Manager& m_DBMgr;
     CACHE::Manager& m_CacheMgr;
     const MappingObject& m_MappingObject;
 };

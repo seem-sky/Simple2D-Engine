@@ -3,7 +3,6 @@
 
 #include <QtWidgets/QTableWidget>
 #include "TexturePrototypeFrame.h"
-#include "DatabaseMgr.h"
 #include "MapEditorWidgetBrush.h"
 
 class AbstractPixmapWidget : public QWidget
@@ -33,6 +32,11 @@ private:
     uint32 m_ID;
 };
 
+namespace database
+{
+    class Manager;
+}
+
 class AbstractPrototypeTable : public QTableWidget
 {
     Q_OBJECT
@@ -45,7 +49,7 @@ protected:
     void clickItem(BRUSH::BrushIndex brush, AbstractPixmapWidget* pItem);
 
 public:
-    AbstractPrototypeTable(const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent = nullptr);
+    AbstractPrototypeTable(const database::Manager& DBMgr, QWidget* pParent = nullptr);
 
     void setup();
     void clear();
@@ -57,7 +61,6 @@ signals:
     void itemClicked(BRUSH::BrushIndex brush, AbstractPixmapWidget* pWidget);
 
 protected:
-    const DATABASE::DatabaseMgr& m_DBMgr;
+    const database::Manager& m_DBMgr;
 };
-
 #endif

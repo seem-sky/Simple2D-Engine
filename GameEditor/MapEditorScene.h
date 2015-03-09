@@ -43,7 +43,7 @@ protected:
     void keyPressEvent(QKeyEvent *event);
 
 public:
-    MapEditorScene(CACHE::Manager& cacheMgr, const MappingObject& mappingObject, const MAP::MAP_DATA::MapData& mapData, const DATABASE::DatabaseMgr& DBMgr);
+    MapEditorScene(CACHE::Manager& cacheMgr, const MappingObject& mappingObject, const MAP::MAP_DATA::MapData& mapData, const database::Manager& DBMgr);
 
     const MapEditorInfo& getMapEditorInfo() const;
     void setMapEditorInfo(const MapEditorInfo& info);

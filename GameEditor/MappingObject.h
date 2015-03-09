@@ -7,17 +7,16 @@
 #include <memory>
 #include "MappingModeInterface.h"
 
-class MapEditor;
-namespace DATABASE
+namespace database
 {
-    class DatabaseMgr;
+    class Manager;
 }
 
 class MappingObject : public QObject
 {
     Q_OBJECT
 public:
-    MappingObject(const DATABASE::DatabaseMgr& DBMgr, QWidget* pParent);
+    MappingObject(const database::Manager& DBMgr, QWidget* pParent);
 
     void setMappingMode(MAPPING_MODE::Type mode);
     MAPPING_MODE::Type getMappingModeType() const;

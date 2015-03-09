@@ -4,7 +4,7 @@
 #include "TextureAtlas.h"
 #include "TileCacheInfo.h"
 #include "Simple2D-Global.h"
-#include "DatabaseMgr.h"
+#include "database/Manager.h"
 
 namespace CACHE
 {
@@ -41,7 +41,7 @@ namespace CACHE
         }
 
     public:
-        TileBase(const DATABASE::DatabaseMgr& DBMgr)
+        TileBase(const database::Manager& DBMgr)
             : m_DBMgr(DBMgr)
         {}
 
@@ -57,7 +57,7 @@ namespace CACHE
         }
 
     protected:
-        const DATABASE::DatabaseMgr& m_DBMgr;
+        const database::Manager& m_DBMgr;
         std::vector<TextureAtlas<tileWidth, tileHeight>> m_Atlas;
         std::vector<TileCacheInfo> m_Positions;
     };

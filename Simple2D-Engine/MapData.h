@@ -6,9 +6,9 @@
 #include "Map/ScriptArea/Manager.h"
 #include <QtCore/QString>
 
-namespace DATABASE
+namespace database
 {
-    class DatabaseMgr;
+    class Manager;
 }
 
 namespace MAP
@@ -18,7 +18,7 @@ namespace MAP
         class MapData
         {
         public:
-            MapData(const DATABASE::DatabaseMgr& DBMgr, uint32 mapID);
+            MapData(const database::Manager& DBMgr, uint32 mapID);
 
             inline LayerContainer& getMapLayer() { return m_Layer; }
             inline const LayerContainer& getMapLayer() const { return m_Layer; }
@@ -39,7 +39,7 @@ namespace MAP
             void reload();
 
         private:
-            const DATABASE::DatabaseMgr& m_DBMgr;
+            const database::Manager& m_DBMgr;
             const uint32 m_MapID;
             SCRIPT_AREA::Manager m_ScriptAreas;
             LayerContainer m_Layer;

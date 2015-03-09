@@ -1,5 +1,4 @@
-#ifndef QT_GLOBAL_H
-#define QT_GLOBAL_H
+#pragma once
 
 #include <QtGui/QPixmap>
 #include <QtCore/QString>
@@ -8,19 +7,37 @@
 #include <QtGui/QPainter>
 #include <QtCore/QDebug>
 
-namespace DATABASE
+namespace database
 {
-    namespace PROTOTYPE
+    namespace prototype
     {
-        class TexturePrototype;
+        class Texture;
     }
 }
 
 class Color;
 
-bool createPixmap(const QString& path, const QString& fileNamePath, const Color& color, QPixmap& result);
-bool createPixmapFromTexturePrototype(const QString& path, const DATABASE::PROTOTYPE::TexturePrototype* pTexture, QPixmap& result);
+bool createPixmap(const QString& absolutePathName, const Color& color, QPixmap& result);
+bool createPixmapFromTexturePrototype(const QString& path, const database::prototype::Texture* pTexture, QPixmap& result);
 
 void highlightSelection(const QGraphicsItem& item, QPainter* pPainter, const QStyleOptionGraphicsItem* pOption);
 
-#endif
+/*#####
+# DiagonalCross
+#####*/
+class DiagonalCross
+{
+public:
+    void paint(QPainter* pPainter);
+    QRectF boundingRect() const;
+
+    const QPen& getPen() const;
+    void setPen(const QPen& pen);
+
+    void setCrossSize(const QSize& size);
+    QSize getCrossSize() const;
+
+private:
+    QPen m_Pen;
+    QSize m_CrossSize;
+};

@@ -1,35 +1,41 @@
 #ifndef DATABASE_MODULE_LIST_H
 #define DATABASE_MODULE_LIST_H
 
-#include "UI/UI_DatabaseModuleList.h"
-#include "DatabaseModel.h"
+#include <QtWidgets/QTreeView>
+#include <Global.h>
 
-class DatabaseModuleList : public QWidget, Ui_DatabaseModuleList
+namespace database
 {
-    Q_OBJECT
-public:
-    DatabaseModuleList(QWidget* pParent = nullptr);
+    class Model;
+    class Interface;
+    namespace ui
+    {
+        namespace module
+        {
+            class List : public QTreeView
+            {
+                Q_OBJECT
+            public:
+                List(const Interface& DB, QWidget* pParent = nullptr);
+                List(Model* pModel, QWidget* pParent = nullptr);
+                List(QWidget* pParent = nullptr);
 
-    DATABASE::DatabaseModel* getDatabaseModel() const { return dynamic_cast<DATABASE::DatabaseModel*>(m_pList->model()); }
-    void setDatabaseModel(DATABASE::DatabaseModel* pModel);
+                void setup(const Interface& DB);
+                void setup(Model* pModel);
 
-    // data widgets
-    inline void setDataName(const QString& name) { m_pName->setText(name); }
-    inline QString getDataName() const { return m_pName->text(); }
+                void selectPrototype(uint32 ID);
+                uint32 getCurrentID() const;
 
-    inline void setDataID(uint32 uiID) { m_pID->setValue(uiID); }
-    inline uint32 getDataID() const { return m_pID->value(); }
+            private slots:
+                void _onSelectionChanged(const QModelIndex& current, const QModelIndex& previous);
 
-    const DATABASE::PROTOTYPE::Prototype* getCurrentPrototype() const;
+            public slots:
+                void onSizeChanged(uint32 newSize, uint32 oldSize);
 
-    void selectItem(uint32 ID);
-
-private slots:
-    void _onClickResizeButton();
-    void _onSelectionChanged(const QModelIndex& current, const QModelIndex& previous);
-
-signals:
-    void selectionChanged();
-};
-
+            signals:
+                void selectionChanged(uint32 newID, uint32 oldID);
+            };
+        }
+    }
+}
 #endif

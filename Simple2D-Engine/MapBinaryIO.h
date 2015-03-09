@@ -1,7 +1,7 @@
 #ifndef MAP_BINARY_IO_H
 #define MAP_BINARY_IO_H
 
-#include "MapDatabase.h"
+#include "database/Derived.h"
 #include <functional>
 #include <QtCore/QDataStream>
 #include "Simple2D-Global.h"

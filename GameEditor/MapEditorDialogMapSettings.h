@@ -3,7 +3,14 @@
 
 #include <QtWidgets/QDialog>
 #include "UI/UI_MapEditorDialogMapSettings.h"
-#include "DatabasePrototypes.h"
+
+namespace database
+{
+    namespace prototype
+    {
+        class Map;
+    }
+}
 
 class MapEditorDialogMapSettings : public QDialog, Ui_MapEditorDialogMapSettings
 {
@@ -13,13 +20,13 @@ private:
     void _save();
 
 public:
-    MapEditorDialogMapSettings(DATABASE::PROTOTYPE::MAP_STRUCTURE::MapPrototype* pPrototype, QWidget* pParent = nullptr);
+    MapEditorDialogMapSettings(database::prototype::Map* pPrototype, QWidget* pParent = nullptr);
 
 private slots:
     void _onAccepted();
 
 private:
-    DATABASE::PROTOTYPE::MAP_STRUCTURE::MapPrototype* m_pPrototype;
+    database::prototype::Map* m_pPrototype;
 };
 
 #endif
